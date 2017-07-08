@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c6d6a1cb-41d7-401f-885d-de1ac92dc71e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_algebra_1_0_SNAPSHOT.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_numerical_1_0_SNAPSHOT.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_sorting_1_0_SNAPSHOT.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_statistics_1_0_SNAPSHOT.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_11.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -25,12 +18,24 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="WeightedHomogeneousSinglePoint3DTriangulatorTest.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/WeightedHomogeneousSinglePoint3DTriangulatorTest.java">
+      <file leaf-file-name="BuildInfo.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/BuildInfo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="283">
-              <caret line="547" column="25" lean-forward="false" selection-start-line="547" selection-start-column="25" selection-end-line="547" selection-end-column="25" />
+            <state relative-caret-position="669">
+              <caret line="226" column="5" lean-forward="true" selection-start-line="172" selection-start-column="0" selection-end-line="226" selection-end-column="5" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BuildInfoTest.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/BuildInfoTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="480">
+              <caret line="81" column="0" lean-forward="true" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+              <folding>
+                <element signature="method#testGetters#0;class#BuildInfoTest#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -153,8 +158,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="7" />
-    <option name="y" value="67" />
+    <option name="x" value="73" />
+    <option name="y" value="25" />
     <option name="width" value="1440" />
     <option name="height" value="873" />
   </component>
@@ -173,9 +178,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -201,6 +203,18 @@
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="geometry" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -223,13 +237,12 @@
               <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="geometry" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -642,37 +655,37 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="7" y="67" width="1440" height="873" extended-state="0" />
-    <editor active="false" />
+    <frame x="73" y="25" width="1440" height="873" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290653" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290653" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290653" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26037195" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290653" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2639485" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39948782" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39948782" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290653" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290653" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -697,20 +710,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/calib3d/estimators/PROMedSImageOfAbsoluteConicRobustEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="35" column="37" lean-forward="false" selection-start-line="35" selection-start-column="37" selection-end-line="35" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/calib3d/estimators/PROSACImageOfAbsoluteConicRobustEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="28" column="4" lean-forward="true" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/calib3d/estimators/RANSACImageOfAbsoluteConicRobustEstimator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
@@ -813,7 +812,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="30" column="20" lean-forward="true" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -919,7 +917,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="373">
           <caret line="4416" column="32" lean-forward="false" selection-start-line="4416" selection-start-column="32" selection-end-line="4416" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -927,50 +924,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="65025">
           <caret line="4413" column="16" lean-forward="false" selection-start-line="4413" selection-start-column="16" selection-end-line="4413" selection-end-column="16" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#20796#20797#0" expanded="false" />
-            <element signature="e#20851#20852#0" expanded="false" />
-            <element signature="e#21339#21340#0" expanded="false" />
-            <element signature="e#21393#21394#0" expanded="false" />
-            <element signature="e#41677#41678#0" expanded="false" />
-            <element signature="e#41732#41733#0" expanded="false" />
-            <element signature="e#42220#42221#0" expanded="false" />
-            <element signature="e#42274#42275#0" expanded="false" />
-            <element signature="e#63053#63054#0" expanded="false" />
-            <element signature="e#63108#63109#0" expanded="false" />
-            <element signature="e#63596#63597#0" expanded="false" />
-            <element signature="e#63650#63651#0" expanded="false" />
-            <element signature="e#84266#84267#0" expanded="false" />
-            <element signature="e#84321#84322#0" expanded="false" />
-            <element signature="e#84809#84810#0" expanded="false" />
-            <element signature="e#84863#84864#0" expanded="false" />
-            <element signature="e#105353#105354#0" expanded="false" />
-            <element signature="e#105408#105409#0" expanded="false" />
-            <element signature="e#105896#105897#0" expanded="false" />
-            <element signature="e#105950#105951#0" expanded="false" />
-            <element signature="e#125060#125061#0" expanded="false" />
-            <element signature="e#125115#125116#0" expanded="false" />
-            <element signature="e#125603#125604#0" expanded="false" />
-            <element signature="e#125657#125658#0" expanded="false" />
-            <element signature="e#147073#147074#0" expanded="false" />
-            <element signature="e#147128#147129#0" expanded="false" />
-            <element signature="e#147616#147617#0" expanded="false" />
-            <element signature="e#147670#147671#0" expanded="false" />
-            <element signature="e#166460#166461#0" expanded="false" />
-            <element signature="e#166515#166516#0" expanded="false" />
-            <element signature="e#167003#167004#0" expanded="false" />
-            <element signature="e#167057#167058#0" expanded="false" />
-            <element signature="e#186520#186521#0" expanded="false" />
-            <element signature="e#186575#186576#0" expanded="false" />
-            <element signature="e#187063#187064#0" expanded="false" />
-            <element signature="e#187117#187118#0" expanded="false" />
-            <element signature="e#206462#206463#0" expanded="false" />
-            <element signature="e#206517#206518#0" expanded="false" />
-            <element signature="e#207005#207006#0" expanded="false" />
-            <element signature="e#207059#207060#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -985,7 +938,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="253">
           <caret line="2603" column="12" lean-forward="true" selection-start-line="2603" selection-start-column="12" selection-end-line="2603" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1001,7 +953,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="193">
           <caret line="1597" column="56" lean-forward="true" selection-start-line="1597" selection-start-column="56" selection-end-line="1597" selection-end-column="56" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1009,7 +960,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="280">
           <caret line="569" column="25" lean-forward="false" selection-start-line="569" selection-start-column="25" selection-end-line="569" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1017,7 +967,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="148">
           <caret line="1580" column="83" lean-forward="true" selection-start-line="1580" selection-start-column="83" selection-end-line="1580" selection-end-column="83" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1025,7 +974,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="175">
           <caret line="515" column="31" lean-forward="true" selection-start-line="515" selection-start-column="31" selection-end-line="515" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1069,7 +1017,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="58">
           <caret line="1828" column="19" lean-forward="false" selection-start-line="1828" selection-start-column="19" selection-end-line="1828" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1077,7 +1024,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="328">
           <caret line="783" column="36" lean-forward="false" selection-start-line="783" selection-start-column="36" selection-end-line="783" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1085,7 +1031,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="163">
           <caret line="1072" column="29" lean-forward="false" selection-start-line="1072" selection-start-column="29" selection-end-line="1072" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1093,7 +1038,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="705" column="0" lean-forward="true" selection-start-line="705" selection-start-column="0" selection-end-line="705" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1101,7 +1045,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="388">
           <caret line="1393" column="30" lean-forward="false" selection-start-line="1393" selection-start-column="30" selection-end-line="1393" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1109,7 +1052,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="358">
           <caret line="938" column="25" lean-forward="false" selection-start-line="938" selection-start-column="25" selection-end-line="938" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1117,7 +1059,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="280">
           <caret line="896" column="13" lean-forward="true" selection-start-line="896" selection-start-column="13" selection-end-line="896" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1125,15 +1066,47 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="283">
           <caret line="1291" column="20" lean-forward="false" selection-start-line="1291" selection-start-column="20" selection-end-line="1291" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/WeightedHomogeneousSinglePoint3DTriangulatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="283">
-          <caret line="547" column="25" lean-forward="false" selection-start-line="547" selection-start-column="25" selection-end-line="547" selection-end-column="25" />
+          <caret line="547" column="23" lean-forward="false" selection-start-line="547" selection-start-column="23" selection-end-line="547" selection-end-column="23" />
+          <folding>
+            <element signature="e#3519#3528#0" expanded="false" />
+            <element signature="e#3668#3683#0" expanded="false" />
+            <element signature="e#4768#4777#0" expanded="false" />
+            <element signature="e#4837#4852#0" expanded="false" />
+            <element signature="e#13267#13276#0" expanded="false" />
+            <element signature="e#13416#13431#0" expanded="false" />
+            <element signature="e#13835#13844#0" expanded="false" />
+            <element signature="e#13904#13919#0" expanded="false" />
+            <element signature="e#14998#15007#0" expanded="false" />
+            <element signature="e#15147#15162#0" expanded="false" />
+            <element signature="e#15681#15690#0" expanded="false" />
+            <element signature="e#15750#15765#0" expanded="false" />
+            <element signature="e#19665#19674#0" expanded="false" />
+            <element signature="e#19733#19748#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/BuildInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="669">
+          <caret line="226" column="5" lean-forward="true" selection-start-line="172" selection-start-column="0" selection-end-line="226" selection-end-column="5" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/BuildInfoTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="81" column="0" lean-forward="true" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+          <folding>
+            <element signature="method#testGetters#0;class#BuildInfoTest#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
