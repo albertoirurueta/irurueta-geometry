@@ -891,7 +891,8 @@ public class PROSACPoint3DRobustEstimatorTest implements
             ColinearPointsException{
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
+
+        int numValid = 0;
         for(int t = 0; t < TIMES; t++){
             Point3D point = new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -907,6 +908,7 @@ public class PROSACPoint3DRobustEstimatorTest implements
             List<Plane> planes = new ArrayList<Plane>();
             List<Plane> planesWithError = new ArrayList<Plane>();
             Plane plane, planeWithError;
+            boolean failed = false;
             for(int i = 0; i < nPlanes; i++){
                 double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, 
                         MAX_SCORE_ERROR);
@@ -958,7 +960,15 @@ public class PROSACPoint3DRobustEstimatorTest implements
                 planesWithError.add(planeWithError);
                 
                 //check that point is locus of plane without error
+                if (!plane.isLocus(point, ABSOLUTE_ERROR)) {
+                    failed = true;
+                    break;
+                }
                 assertTrue(plane.isLocus(point, ABSOLUTE_ERROR));
+            }
+
+            if (failed) {
+                continue;
             }
             
             PROSACPoint3DRobustEstimator estimator =
@@ -1001,12 +1011,28 @@ public class PROSACPoint3DRobustEstimatorTest implements
             //check correctness of estimation by checking that all planes without
             //error have estimated point as locus
             for(Plane p : planes){
+                if (!p.isLocus(point2, ABSOLUTE_ERROR)) {
+                    failed = true;
+                    break;
+                }
                 assertTrue(p.isLocus(point2, ABSOLUTE_ERROR));
+            }
+
+            if (failed) {
+                continue;
             }
             
             //check that both points are equal
+            if (point.distanceTo(point2) > ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(point.distanceTo(point2), 0.0, ABSOLUTE_ERROR);
+
+            numValid++;
+            break;
         }
+
+        assertTrue(numValid > 0);
     }
     
     private void reset(){
