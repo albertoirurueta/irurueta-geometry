@@ -74,10 +74,8 @@ public class BaseAbsoluteOrientationSlamTwoViewsSparseReconstructor<
     
     /**
      * Updates scene scale and orientation using SLAM data.
-     * @throws CancelledReconstructionException if reconstruction is cancelled.
      */
-    protected void updateScaleAndOrientation() 
-            throws CancelledReconstructionException {
+    protected void updateScaleAndOrientation() {
         if (!isRunning() && !isCancelled() && !hasFailed()) {           
             
             //obtain baseline (camera separation from slam estimator data
@@ -162,7 +160,8 @@ public class BaseAbsoluteOrientationSlamTwoViewsSparseReconstructor<
                             reconstructedPoints3D.get(i));
                 }
             } catch (Exception e) {
-                throw new CancelledReconstructionException(e);
+                mFailed = true;
+                mListener.onFail((R)this);
             }
         }                                
     }    

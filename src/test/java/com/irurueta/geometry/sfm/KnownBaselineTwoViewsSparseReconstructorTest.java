@@ -198,6 +198,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
         assertFalse(reconstructor.isRunning());
         assertFalse(reconstructor.isCancelled());
         assertFalse(reconstructor.hasFailed());
+        assertFalse(reconstructor.isFinished());
         assertEquals(reconstructor.getViewCount(), 0);
         assertNull(reconstructor.getEstimatedFundamentalMatrix());
         assertNull(reconstructor.getEstimatedCamera1());
@@ -513,7 +514,8 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertFalse(mStarted);
             assertFalse(mFinished);
             assertFalse(mCancelled);
-            assertFalse(mFailed);        
+            assertFalse(mFailed);
+            assertFalse(reconstructor.isFinished());
         
             reconstructor.start();
         
@@ -522,6 +524,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertTrue(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertTrue(reconstructor.isFinished());
         
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -950,7 +953,8 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertFalse(mStarted);
             assertFalse(mFinished);
             assertFalse(mCancelled);
-            assertFalse(mFailed);        
+            assertFalse(mFailed);
+            assertFalse(reconstructor.isFinished());
         
             reconstructor.start();
         
@@ -963,6 +967,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertTrue(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertTrue(reconstructor.isFinished());
         
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1405,6 +1410,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertFalse(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertFalse(reconstructor.isFinished());
             
             reconstructor.start();
             
@@ -1413,6 +1419,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertTrue(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertTrue(reconstructor.isFinished());
             
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1852,6 +1859,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertFalse(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertFalse(reconstructor.isFinished());
             
             reconstructor.start();
             
@@ -1860,6 +1868,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertTrue(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertTrue(reconstructor.isFinished());
             
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -2296,6 +2305,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertFalse(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertFalse(reconstructor.isFinished());
             
             reconstructor.start();
             
@@ -2304,6 +2314,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertTrue(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertTrue(reconstructor.isFinished());
             
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -2719,7 +2730,8 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertFalse(mStarted);
             assertFalse(mFinished);
             assertFalse(mCancelled);
-            assertFalse(mFailed);        
+            assertFalse(mFailed);
+            assertFalse(reconstructor.isFinished());
         
             reconstructor.start();
         
@@ -2731,6 +2743,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertTrue(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertTrue(reconstructor.isFinished());
         
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -3180,7 +3193,8 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertFalse(mStarted);
             assertFalse(mFinished);
             assertFalse(mCancelled);
-            assertFalse(mFailed);        
+            assertFalse(mFailed);
+            assertFalse(reconstructor.isFinished());
         
             reconstructor.start();
         
@@ -3192,6 +3206,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertTrue(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertTrue(reconstructor.isFinished());
         
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -3597,7 +3612,8 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertFalse(mStarted);
             assertFalse(mFinished);
             assertFalse(mCancelled);
-            assertFalse(mFailed);        
+            assertFalse(mFailed);
+            assertFalse(reconstructor.isFinished());
         
             reconstructor.start();
         
@@ -3609,6 +3625,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertTrue(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertTrue(reconstructor.isFinished());
         
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -4035,7 +4052,8 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertFalse(mStarted);
             assertFalse(mFinished);
             assertFalse(mCancelled);
-            assertFalse(mFailed);        
+            assertFalse(mFailed);
+            assertFalse(reconstructor.isFinished());
         
             reconstructor.start();
         
@@ -4047,6 +4065,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertTrue(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertTrue(reconstructor.isFinished());
         
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -4465,7 +4484,8 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertFalse(mStarted);
             assertFalse(mFinished);
             assertFalse(mCancelled);
-            assertFalse(mFailed);        
+            assertFalse(mFailed);
+            assertFalse(reconstructor.isFinished());
         
             reconstructor.start();
         
@@ -4477,6 +4497,7 @@ public class KnownBaselineTwoViewsSparseReconstructorTest {
             assertTrue(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertTrue(reconstructor.isFinished());
         
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();

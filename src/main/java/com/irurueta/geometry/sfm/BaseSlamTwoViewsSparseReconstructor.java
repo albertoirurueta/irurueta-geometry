@@ -64,7 +64,7 @@ public class BaseSlamTwoViewsSparseReconstructor<
      * @param accelerationZ linear acceleration along z-axis expressed in meters
      * per squared second (m/s^2).
      */
-    public void updateAccelerometerSample(long timestamp, float accelerationX,
+    public synchronized void updateAccelerometerSample(long timestamp, float accelerationX,
             float accelerationY, float accelerationZ) {
         if (mSlamEstimator != null) {
             mSlamEstimator.updateAccelerometerSample(timestamp, accelerationX, 
@@ -84,7 +84,7 @@ public class BaseSlamTwoViewsSparseReconstructor<
      * @throws IllegalArgumentException if provided array does not have length 
      * 3.
      */
-    public void updateAccelerometerSample(long timestamp, float[] data) 
+    public synchronized void updateAccelerometerSample(long timestamp, float[] data)
             throws IllegalArgumentException {
         if (mSlamEstimator != null) {
             mSlamEstimator.updateAccelerometerSample(timestamp, data);
@@ -103,7 +103,7 @@ public class BaseSlamTwoViewsSparseReconstructor<
      * @param angularSpeedZ angular speed of rotation along z-axis expressed in
      * radians per second (rad/s).
      */
-    public void updateGyroscopeSample(long timestamp, float angularSpeedX, 
+    public synchronized void updateGyroscopeSample(long timestamp, float angularSpeedX,
             float angularSpeedY, float angularSpeedZ) {
         if (mSlamEstimator != null) {
             mSlamEstimator.updateGyroscopeSample(timestamp, angularSpeedX, 
@@ -121,7 +121,7 @@ public class BaseSlamTwoViewsSparseReconstructor<
      * @throws IllegalArgumentException if provided array does not have length 
      * 3.
      */
-    public void updateGyroscopeSample(long timestamp, float[] data)
+    public synchronized void updateGyroscopeSample(long timestamp, float[] data)
             throws IllegalArgumentException {
         if (mSlamEstimator != null) {
             mSlamEstimator.updateGyroscopeSample(timestamp, data);
@@ -131,7 +131,7 @@ public class BaseSlamTwoViewsSparseReconstructor<
     /**
      * Set ups calibration data on SLAM estimator if available.
      */
-    protected void setUpCalibrationData() {
+    protected synchronized void setUpCalibrationData() {
         BaseCalibrationData calibrationData = 
                 mConfiguration.getCalibrationData();
         if (calibrationData != null) {
@@ -141,9 +141,8 @@ public class BaseSlamTwoViewsSparseReconstructor<
     
     /**
      * Update scene scale using SLAM data.
-     * @throws CancelledReconstructionException if reconstruction is cancelled.
      */
-    protected void updateScale() throws CancelledReconstructionException {
+    protected synchronized void updateScale() {
         if (!isRunning() && !isCancelled() && !hasFailed()) {
             //obtain baseline (camera separation from slam estimator data
             double posX = mSlamEstimator.getStatePositionX();
@@ -195,7 +194,8 @@ public class BaseSlamTwoViewsSparseReconstructor<
                             reconstructedPoints3D.get(i));
                 }
             } catch (Exception e) {
-                throw new CancelledReconstructionException(e);
+                mFailed = true;
+                mListener.onFail((R)this);
             }
         }        
     }    

@@ -209,6 +209,7 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
         assertFalse(reconstructor.isRunning());
         assertFalse(reconstructor.isCancelled());
         assertFalse(reconstructor.hasFailed());
+        assertFalse(reconstructor.isFinished());
         assertEquals(reconstructor.getViewCount(), 0);
         assertNull(reconstructor.getEstimatedFundamentalMatrix());
         assertNull(reconstructor.getEstimatedCamera1());
@@ -590,6 +591,7 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
             assertFalse(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertFalse(reconstructor.isFinished());
 
             reconstructor.start();
 
@@ -598,6 +600,7 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
             assertTrue(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertTrue(reconstructor.isFinished());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1160,6 +1163,7 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
             assertFalse(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertFalse(reconstructor.isFinished());
 
             reconstructor.start();
 
@@ -1168,6 +1172,7 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
             assertTrue(mFinished);
             assertFalse(mCancelled);
             assertFalse(mFailed);
+            assertTrue(reconstructor.isFinished());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();

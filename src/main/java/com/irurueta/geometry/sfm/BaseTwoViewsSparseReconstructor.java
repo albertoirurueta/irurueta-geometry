@@ -87,27 +87,57 @@ public abstract class BaseTwoViewsSparseReconstructor<
      * ends, when certain data is needed or when estimation of data has been
      * computed.
      */
-    private BaseTwoViewsSparseReconstructorListener<R> mListener;
-    
+    protected BaseTwoViewsSparseReconstructorListener<R> mListener;
+
+    /**
+     * Indicates whether reconstruction has failed or not.
+     */
+    protected volatile boolean mFailed;
+
     /**
      * Indicates whether reconstruction is running or not.
      */
-    private volatile boolean mRunning;
+    protected volatile boolean mRunning;
     
     /**
      * Indicates whether reconstruction has been cancelled or not.
      */
     private volatile boolean mCancelled;
-    
-    /**
-     * Indicates whether reconstruction has failed or not.
-     */
-    private volatile boolean mFailed;
-    
+
     /**
      * Counter of number of processed views.
      */
     private int mViewCount;
+
+    /**
+     * Indicates whether reconstruction has finished or not.
+     */
+    private boolean mFinished = false;
+
+    /**
+     * Samples on first view.
+     */
+    private List<Sample2D> mFirstViewSamples = null;
+
+    /**
+     * Samples on last processed view (i.e. current view).
+     */
+    private List<Sample2D> mCurrentViewSamples;
+
+    /**
+     * Matches between first and current view.
+     */
+    private List<MatchedSamples> mMatches = new ArrayList<MatchedSamples>();
+
+    /**
+     * Id of first view.
+     */
+    private int mFirstViewId = 0;
+
+    /**
+     * Id of second view.
+     */
+    private int mSecondViewId;
         
     /**
      * Constructor.
@@ -169,6 +199,14 @@ public abstract class BaseTwoViewsSparseReconstructor<
     public synchronized boolean hasFailed() {
         return mFailed;
     }
+
+    /**
+     * Indicates whether the reconstruction has finished.
+     * @return true if reconstruction has finished, false otherwise.
+     */
+    public synchronized boolean isFinished() {
+        return mFinished;
+    }
     
     /**
      * Gets counter of number of processed views.
@@ -208,109 +246,118 @@ public abstract class BaseTwoViewsSparseReconstructor<
      */
     public List<ReconstructedPoint3D> getReconstructedPoints() {
         return mReconstructedPoints;
-    }    
-    
+    }
+
     /**
-     * Starts reconstruction.
-     * If reconstruction has already started and is running, calling this method
-     * has no effect.
-     * @throws FailedReconstructionException if reconstruction fails for some
-     * reason.
-     * @throws CancelledReconstructionException if reconstruction is cancelled.
+     * Process one view of all the available data during the reconstruction.
+     * This method can be called multiple times instead of {@link #start()} to build the reconstruction step by step,
+     * one view at a time.
+     * @return true if more views can be processed, false when reconstruction has finished.
      */
-    public void start() throws FailedReconstructionException,
-            CancelledReconstructionException {
-        synchronized(this) {
+    public synchronized boolean processOneView() {
+        if (mViewCount == 0) {
             if (mRunning) {
                 //already started
-                return;
+                return true;
             }
 
-            reset();            
+            reset();
             mRunning = true;
+
+            mListener.onStart((R)this);
         }
-        
-        mListener.onStart((R)this);
-        
-        List<Sample2D> firstViewSamples = null;
-        List<Sample2D> currentViewSamples;
-        List<MatchedSamples> matches = new ArrayList<MatchedSamples>();
-        int firstViewId = 0, secondViewId;
-        while(mListener.hasMoreViewsAvailable((R)this)) {
-            
-            mEstimatedFundamentalMatrix = null;
-            currentViewSamples = new ArrayList<Sample2D>();
-            mListener.onRequestSamplesForCurrentView((R)this, mViewCount, 
-                    currentViewSamples);
-            
-            if (firstViewSamples == null) {
-                //for first view we simply keep samples (if enough are provided)
-                if(hasEnoughSamples(currentViewSamples)) {
-                    mListener.onSamplesAccepted((R)this, mViewCount, 
-                            currentViewSamples);
-                    firstViewSamples = currentViewSamples;
-                    firstViewId = mViewCount;
-                }
-                
-            } else {
-                        
-                //for second view, check that we have enough samples
-                if (hasEnoughSamples(currentViewSamples)) {
-                
-                    //find matches
-                    matches.clear();
-                    mListener.onRequestMatches((R)this, firstViewSamples,
-                            currentViewSamples, firstViewId, mViewCount, 
-                            matches);
-                    
-                    if (hasEnoughMatches(matches)) {
-                        //if enough matches are retrieved, attempt to compute
-                        //fundamental matrix
-                        if ((mConfiguration.isGeneralSceneAllowed() && 
-                                estimateFundamentalMatrix(matches, firstViewId, 
-                                mViewCount)) ||
-                                (mConfiguration.isPlanarSceneAllowed() &&
-                                estimatePlanarFundamentalMatrix(matches, 
-                                        firstViewId, mViewCount))) {
-                            //fundamental matrix could be estimated
-                            mListener.onSamplesAccepted((R)this, mViewCount, 
-                                    currentViewSamples);
-                            secondViewId = mViewCount;
-                            
-                            mListener.onFundamentalMatrixEstimated((R)this, 
-                                mEstimatedFundamentalMatrix);                            
-                            
-                            if(estimateInitialCamerasAndPoints()) {
-                                //cameras and points have been estimated
-                                mListener.onCamerasEstimated((R)this, 
-                                        firstViewId, secondViewId, 
-                                        mEstimatedCamera1, mEstimatedCamera2);
-                                mListener.onReconstructedPointsEstimated(
-                                        (R)this, matches, mReconstructedPoints);
-                                mListener.onFinish((R)this);
-                                mRunning = false;
-                            } else {
-                                //initial cameras failed
-                                mFailed = true;
-                                mListener.onFail((R)this);
-                            }
-                        } else {
-                            //estimation of fundamental matrix failed
-                            mListener.onSamplesRejected((R)this, mViewCount, 
-                                    currentViewSamples);
-                        }
-                    }
-                }                
+
+        if(!mListener.hasMoreViewsAvailable((R)this)) {
+            return false;
+        }
+
+        mEstimatedFundamentalMatrix = null;
+        mCurrentViewSamples = new ArrayList<Sample2D>();
+        mListener.onRequestSamplesForCurrentView((R)this, mViewCount,
+                mCurrentViewSamples);
+
+        if (mFirstViewSamples == null) {
+            //for first view we simply keep samples (if enough are provided)
+            if(hasEnoughSamples(mCurrentViewSamples)) {
+                mListener.onSamplesAccepted((R)this, mViewCount,
+                        mCurrentViewSamples);
+                mFirstViewSamples = mCurrentViewSamples;
+                mFirstViewId = mViewCount;
             }
-                
-            mViewCount++;    
-            
+
+        } else {
+
+            //for second view, check that we have enough samples
+            if (hasEnoughSamples(mCurrentViewSamples)) {
+
+                //find matches
+                mMatches.clear();
+                mListener.onRequestMatches((R)this, mFirstViewSamples,
+                        mCurrentViewSamples, mFirstViewId, mViewCount,
+                        mMatches);
+
+                if (hasEnoughMatches(mMatches)) {
+                    //if enough matches are retrieved, attempt to compute
+                    //fundamental matrix
+                    if ((mConfiguration.isGeneralSceneAllowed() &&
+                            estimateFundamentalMatrix(mMatches, mFirstViewId,
+                                    mViewCount)) ||
+                            (mConfiguration.isPlanarSceneAllowed() &&
+                                    estimatePlanarFundamentalMatrix(mMatches,
+                                            mFirstViewId, mViewCount))) {
+                        //fundamental matrix could be estimated
+                        mListener.onSamplesAccepted((R)this, mViewCount,
+                                mCurrentViewSamples);
+                        mSecondViewId = mViewCount;
+
+                        mListener.onFundamentalMatrixEstimated((R)this,
+                                mEstimatedFundamentalMatrix);
+
+                        if(estimateInitialCamerasAndPoints()) {
+                            //cameras and points have been estimated
+                            mListener.onCamerasEstimated((R)this,
+                                    mFirstViewId, mSecondViewId,
+                                    mEstimatedCamera1, mEstimatedCamera2);
+                            mListener.onReconstructedPointsEstimated(
+                                    (R)this, mMatches, mReconstructedPoints);
+                            mListener.onFinish((R)this);
+                            mRunning = false;
+                            mFinished = true;
+                        } else {
+                            //initial cameras failed
+                            mFailed = true;
+                            mListener.onFail((R)this);
+                        }
+                    } else {
+                        //estimation of fundamental matrix failed
+                        mListener.onSamplesRejected((R)this, mViewCount,
+                                mCurrentViewSamples);
+                    }
+                }
+            }
+        }
+
+        mViewCount++;
+
+        if (mCancelled) {
+            mListener.onCancel((R)this);
+        }
+
+        return !mFinished;
+    }
+    
+    /**
+     * Starts reconstruction of all available data to reconstruct the whole scene.
+     * If reconstruction has already started and is running, calling this method
+     * has no effect.
+     */
+    public void start() {
+        while(processOneView()) {
             if (mCancelled) {
-                mListener.onCancel((R)this);
                 break;
             }
         }
-    }    
+    }
     
     /**
      * Cancels reconstruction.
@@ -337,6 +384,8 @@ public abstract class BaseTwoViewsSparseReconstructor<
         mEstimatedFundamentalMatrix = null;
         mEstimatedCamera1 = mEstimatedCamera2 = null;
         mReconstructedPoints = null;
+
+        mFinished = false;
     }
     
     /**

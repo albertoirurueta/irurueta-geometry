@@ -44,21 +44,26 @@ public class SlamTwoViewsSparseReconstructor extends
             throws NullPointerException {
         this(new SlamTwoViewsSparseReconstructorConfiguration(), listener);
     }
-    
+
     /**
-     * Starts reconstruction.
-     * If reconstruction has already started and is running, calling this 
-     * method has no effect.
-     * @throws FailedReconstructionException if reconstruction fails for some 
-     * reason.
-     * @throws CancelledReconstructionException if reconstruction is cancelled.
+     * Process one view of all the available data during the reconstruction.
+     * This method can be called multiple times instead of {@link #start()} to build the reconstruction step by step,
+     * one view at a time.
+     * @return true if more views can be processed, false when reconstruction has finished.
      */
     @Override
-    public void start() throws FailedReconstructionException,
-            CancelledReconstructionException {
-        mSlamEstimator = new SlamEstimator();
-        setUpCalibrationData();
-        super.start();
-        updateScale();
-    }    
+    public synchronized boolean processOneView() {
+        if (!mRunning) {
+            mSlamEstimator = new SlamEstimator();
+            setUpCalibrationData();
+        }
+
+        boolean result = super.processOneView();
+
+        if (!result) {
+            updateScale();
+        }
+
+        return result;
+    }
 }
