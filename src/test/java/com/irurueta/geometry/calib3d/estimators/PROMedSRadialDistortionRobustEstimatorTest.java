@@ -1149,7 +1149,8 @@ public class PROMedSRadialDistortionRobustEstimatorTest implements
     public void testEstimate() throws NotSupportedException, LockedException, 
             NotReadyException, RobustEstimatorException, DistortionException{
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
+
+        int numValid = 0;
         for(int j = 0; j < TIMES; j++){
             double k1 = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
             double k2 = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
@@ -1224,13 +1225,25 @@ public class PROMedSRadialDistortionRobustEstimatorTest implements
             assertEquals(distortion2.getK1(), k1, ABSOLUTE_ERROR);
             assertEquals(distortion2.getK2(), k2, ABSOLUTE_ERROR);
             assertEquals(distortion2.getCenter(), center);
-            
+
+            boolean failed = false;
             for(int i = 0; i < nPoints; i++){
+                if (distortedPoints.get(i).distanceTo(distortion2.distort(undistortedPoints.get(i))) > ABSOLUTE_ERROR) {
+                    failed = true;
+                    break;
+                }
                 assertEquals(distortedPoints.get(i).distanceTo(
                         distortion2.distort(undistortedPoints.get(i))), 0.0, 
                         ABSOLUTE_ERROR);
             }
+
+            if (!failed) {
+                numValid++;
+                break;
+            }
         }
+
+        assertTrue(numValid > 0);
     }
         
     private void reset(){
