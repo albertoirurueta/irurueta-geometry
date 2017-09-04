@@ -180,7 +180,7 @@ public abstract class BaseTwoViewsSparseReconstructor<
      * @return true if reconstruction is running, false if reconstruction has
      * stopped for any reason.
      */
-    public synchronized boolean isRunning() {
+    public boolean isRunning() {
         return mRunning;
     }
     
@@ -188,7 +188,7 @@ public abstract class BaseTwoViewsSparseReconstructor<
      * Indicates whether reconstruction has been cancelled or not.
      * @return true if reconstruction has been cancelled, false otherwise.
      */
-    public synchronized boolean isCancelled() {
+    public boolean isCancelled() {
         return mCancelled;
     }
     
@@ -196,7 +196,7 @@ public abstract class BaseTwoViewsSparseReconstructor<
      * Indicates whether reconstruction has failed or not.
      * @return true if reconstruction has failed, false otherwise.
      */
-    public synchronized boolean hasFailed() {
+    public boolean hasFailed() {
         return mFailed;
     }
 
@@ -204,7 +204,7 @@ public abstract class BaseTwoViewsSparseReconstructor<
      * Indicates whether the reconstruction has finished.
      * @return true if reconstruction has finished, false otherwise.
      */
-    public synchronized boolean isFinished() {
+    public boolean isFinished() {
         return mFinished;
     }
     
@@ -254,7 +254,7 @@ public abstract class BaseTwoViewsSparseReconstructor<
      * one view at a time.
      * @return true if more views can be processed, false when reconstruction has finished.
      */
-    public synchronized boolean processOneView() {
+    public boolean processOneView() {
         if (mViewCount == 0) {
             if (mRunning) {
                 //already started
@@ -320,9 +320,11 @@ public abstract class BaseTwoViewsSparseReconstructor<
                                     mEstimatedCamera1, mEstimatedCamera2);
                             mListener.onReconstructedPointsEstimated(
                                     (R)this, mMatches, mReconstructedPoints);
-                            mListener.onFinish((R)this);
-                            mRunning = false;
-                            mFinished = true;
+                            if(postProcessOne()) {
+                                mListener.onFinish((R) this);
+                                mRunning = false;
+                                mFinished = true;
+                            }
                         } else {
                             //initial cameras failed
                             mFailed = true;
@@ -364,7 +366,7 @@ public abstract class BaseTwoViewsSparseReconstructor<
      * If reconstruction has already been cancelled, calling this method has no
      * effect.
      */
-    public synchronized void cancel() {
+    public void cancel() {
         if (mCancelled) {
             //already cancelled
             return;
@@ -374,9 +376,11 @@ public abstract class BaseTwoViewsSparseReconstructor<
     }
     
     /**
-     * Resets this instance so that a new reconstruction can be started.
+     * Resets this instance so that a reconstruction can be started from the beginning without cancelling current one.
      */
-    private void reset() {
+    public void reset() {
+        mFirstViewSamples = mCurrentViewSamples = null;
+
         mCancelled = mFailed = false;
         mViewCount = 0;
         mRunning = false;
@@ -387,7 +391,14 @@ public abstract class BaseTwoViewsSparseReconstructor<
 
         mFinished = false;
     }
-    
+
+    /**
+     * Called when processing one frame is successfully finished. This can be done to estimate scale on those
+     * implementations where scale can be measured or is already known.
+     * @return true if post processing succeeded, false otherwise.
+     */
+    protected abstract boolean postProcessOne();
+
     /**
      * Indicates whether there are enough samples to estimate a fundamental 
      * matrix.

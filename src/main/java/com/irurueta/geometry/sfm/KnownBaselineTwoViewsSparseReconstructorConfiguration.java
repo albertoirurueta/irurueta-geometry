@@ -8,13 +8,15 @@
  */
 package com.irurueta.geometry.sfm;
 
+import java.io.Serializable;
+
 /**
  * Contains configuration for a two view sparse reconstructor assuming that the
  * baseline (separation between cameras) is known.
  */
 public class KnownBaselineTwoViewsSparseReconstructorConfiguration extends 
         BaseTwoViewsSparseReconstructorConfiguration<
-        KnownBaselineTwoViewsSparseReconstructorConfiguration> {
+        KnownBaselineTwoViewsSparseReconstructorConfiguration> implements Serializable {
     
     /**
      * Default camera baseline (expressed in a unit of distance such as meters).

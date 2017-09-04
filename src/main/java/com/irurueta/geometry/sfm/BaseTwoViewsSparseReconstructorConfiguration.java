@@ -16,12 +16,14 @@ import com.irurueta.geometry.epipolar.estimators.PROSACFundamentalMatrixRobustEs
 import com.irurueta.geometry.estimators.ProjectiveTransformation2DRobustEstimator;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 
+import java.io.Serializable;
+
 /**
  * Base class containing configuration for a two view sparse reconstructor.
  * @param <T> an actual implementation of a configuration class.
  */
 public abstract class BaseTwoViewsSparseReconstructorConfiguration<
-        T extends BaseTwoViewsSparseReconstructorConfiguration> {
+        T extends BaseTwoViewsSparseReconstructorConfiguration> implements Serializable {
     /**
      * Default robust fundamental matrix estimator method.
      * This is only used when general scenes are allowed.

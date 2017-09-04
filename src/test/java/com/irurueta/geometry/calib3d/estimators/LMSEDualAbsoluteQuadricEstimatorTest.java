@@ -2597,17 +2597,41 @@ public class LMSEDualAbsoluteQuadricEstimatorTest implements
                     PinholeCameraIntrinsicParameters estimatedIntrinsic = 
                             estimatedMetricCamera.getIntrinsicParameters();
 
+                    if (Math.abs(horizontalFocalLength - estimatedIntrinsic.getHorizontalFocalLength()) >
+                            5*LARGE_ABSOLUTE_ERROR) {
+                        anyFailed = true;
+                        continue;
+                    }
                     assertEquals(horizontalFocalLength, 
                             estimatedIntrinsic.getHorizontalFocalLength(), 
                             5*LARGE_ABSOLUTE_ERROR);
+                    if (Math.abs(verticalFocalLength - estimatedIntrinsic.getVerticalFocalLength()) >
+                            5*LARGE_ABSOLUTE_ERROR) {
+                        anyFailed = true;
+                        continue;
+                    }
                     assertEquals(verticalFocalLength,
                             estimatedIntrinsic.getVerticalFocalLength(),
                             5*LARGE_ABSOLUTE_ERROR);
+                    if (Math.abs(skewness - estimatedIntrinsic.getSkewness()) > 5*LARGE_ABSOLUTE_ERROR) {
+                        anyFailed = true;
+                        continue;
+                    }
                     assertEquals(skewness, estimatedIntrinsic.getSkewness(), 
                             5*LARGE_ABSOLUTE_ERROR);
+                    if (Math.abs(horizontalPrincipalPoint - estimatedIntrinsic.getHorizontalPrincipalPoint()) >
+                            5*LARGE_ABSOLUTE_ERROR) {
+                        anyFailed = true;
+                        continue;
+                    }
                     assertEquals(horizontalPrincipalPoint, 
                             estimatedIntrinsic.getHorizontalPrincipalPoint(), 
                             5*LARGE_ABSOLUTE_ERROR);
+                    if (Math.abs(verticalPrincipalPoint - estimatedIntrinsic.getVerticalPrincipalPoint()) >
+                            5*LARGE_ABSOLUTE_ERROR) {
+                        anyFailed = true;
+                        continue;
+                    }
                     assertEquals(verticalPrincipalPoint,
                             estimatedIntrinsic.getVerticalPrincipalPoint(),
                             5*LARGE_ABSOLUTE_ERROR);   

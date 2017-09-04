@@ -59,18 +59,22 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
      * @return true if more views can be processed, false when reconstruction has finished.
      */
     @Override
-    public synchronized boolean processOneView() {
+    public boolean processOneView() {
         if (!mRunning) {
             mSlamEstimator = new AbsoluteOrientationConstantVelocityModelSlamEstimator();
             setUpCalibrationData();
         }
 
-        boolean result = super.processOneView();
+        return super.processOneView();
+    }
 
-        if (!result) {
-            updateScaleAndOrientation();
-        }
-
-        return result;
+    /**
+     * Called when processing one frame is successfully finished. This can be done to estimate scale on those
+     * implementations where scale can be measured or is already known.
+     * @return true if post processing succeeded, false otherwise.
+     */
+    @Override
+    protected boolean postProcessOne() {
+        return updateScaleAndOrientation();
     }
 }

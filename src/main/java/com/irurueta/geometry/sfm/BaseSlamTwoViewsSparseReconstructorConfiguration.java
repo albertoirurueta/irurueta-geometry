@@ -10,6 +10,8 @@ package com.irurueta.geometry.sfm;
 
 import com.irurueta.geometry.slam.BaseCalibrationData;
 
+import java.io.Serializable;
+
 /**
  * Contains base configuration for a two view sparse reconstructor using SLAM 
  * (Simultaneous Location And Mapping) to determine the scale of the scene
@@ -21,7 +23,7 @@ import com.irurueta.geometry.slam.BaseCalibrationData;
 public abstract class BaseSlamTwoViewsSparseReconstructorConfiguration<
         C extends BaseCalibrationData, 
         T extends BaseSlamTwoViewsSparseReconstructorConfiguration> extends 
-        BaseTwoViewsSparseReconstructorConfiguration<T> {
+        BaseTwoViewsSparseReconstructorConfiguration<T> implements Serializable {
     
     /**
      * Calibration data for accelerometer and gyroscope.

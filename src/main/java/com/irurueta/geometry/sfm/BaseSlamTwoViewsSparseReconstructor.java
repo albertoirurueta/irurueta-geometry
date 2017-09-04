@@ -25,7 +25,7 @@ import java.util.List;
  * @param <R> type of reconstructor.
  * @param <S> type of SLAM estimator.
  */
-public class BaseSlamTwoViewsSparseReconstructor<
+public abstract class BaseSlamTwoViewsSparseReconstructor<
         C extends BaseSlamTwoViewsSparseReconstructorConfiguration,
         R extends BaseSlamTwoViewsSparseReconstructor,
         S extends BaseSlamEstimator> extends 
@@ -64,7 +64,7 @@ public class BaseSlamTwoViewsSparseReconstructor<
      * @param accelerationZ linear acceleration along z-axis expressed in meters
      * per squared second (m/s^2).
      */
-    public synchronized void updateAccelerometerSample(long timestamp, float accelerationX,
+    public void updateAccelerometerSample(long timestamp, float accelerationX,
             float accelerationY, float accelerationZ) {
         if (mSlamEstimator != null) {
             mSlamEstimator.updateAccelerometerSample(timestamp, accelerationX, 
@@ -84,7 +84,7 @@ public class BaseSlamTwoViewsSparseReconstructor<
      * @throws IllegalArgumentException if provided array does not have length 
      * 3.
      */
-    public synchronized void updateAccelerometerSample(long timestamp, float[] data)
+    public void updateAccelerometerSample(long timestamp, float[] data)
             throws IllegalArgumentException {
         if (mSlamEstimator != null) {
             mSlamEstimator.updateAccelerometerSample(timestamp, data);
@@ -103,7 +103,7 @@ public class BaseSlamTwoViewsSparseReconstructor<
      * @param angularSpeedZ angular speed of rotation along z-axis expressed in
      * radians per second (rad/s).
      */
-    public synchronized void updateGyroscopeSample(long timestamp, float angularSpeedX,
+    public void updateGyroscopeSample(long timestamp, float angularSpeedX,
             float angularSpeedY, float angularSpeedZ) {
         if (mSlamEstimator != null) {
             mSlamEstimator.updateGyroscopeSample(timestamp, angularSpeedX, 
@@ -121,7 +121,7 @@ public class BaseSlamTwoViewsSparseReconstructor<
      * @throws IllegalArgumentException if provided array does not have length 
      * 3.
      */
-    public synchronized void updateGyroscopeSample(long timestamp, float[] data)
+    public void updateGyroscopeSample(long timestamp, float[] data)
             throws IllegalArgumentException {
         if (mSlamEstimator != null) {
             mSlamEstimator.updateGyroscopeSample(timestamp, data);
@@ -131,7 +131,7 @@ public class BaseSlamTwoViewsSparseReconstructor<
     /**
      * Set ups calibration data on SLAM estimator if available.
      */
-    protected synchronized void setUpCalibrationData() {
+    protected void setUpCalibrationData() {
         BaseCalibrationData calibrationData = 
                 mConfiguration.getCalibrationData();
         if (calibrationData != null) {
@@ -141,62 +141,65 @@ public class BaseSlamTwoViewsSparseReconstructor<
     
     /**
      * Update scene scale using SLAM data.
+     * @return true if scale was successfully updated, false otherwise.
      */
-    protected synchronized void updateScale() {
-        if (!isRunning() && !isCancelled() && !hasFailed()) {
-            //obtain baseline (camera separation from slam estimator data
-            double posX = mSlamEstimator.getStatePositionX();
-            double posY = mSlamEstimator.getStatePositionY();
-            double posZ = mSlamEstimator.getStatePositionZ();
+    protected boolean updateScale() {
+        //obtain baseline (camera separation from slam estimator data
+        double posX = mSlamEstimator.getStatePositionX();
+        double posY = mSlamEstimator.getStatePositionY();
+        double posZ = mSlamEstimator.getStatePositionZ();
             
-            //to estimate baseline, we assume that first camera is placed at 
-            //world origin
-            double baseline = Math.sqrt(posX*posX + posY*posY + posZ*posZ);
+        //to estimate baseline, we assume that first camera is placed at
+        //world origin
+        double baseline = Math.sqrt(posX*posX + posY*posY + posZ*posZ);
             
-            try{
-                PinholeCamera camera1 = mEstimatedCamera1.getCamera();
-                PinholeCamera camera2 = mEstimatedCamera2.getCamera();
+        try {
+            PinholeCamera camera1 = mEstimatedCamera1.getCamera();
+            PinholeCamera camera2 = mEstimatedCamera2.getCamera();
             
-                camera1.decompose();
-                camera2.decompose();
+            camera1.decompose();
+            camera2.decompose();
+
+            Point3D center1 = camera1.getCameraCenter();
+            Point3D center2 = camera2.getCameraCenter();
             
-                Point3D center1 = camera1.getCameraCenter();
-                Point3D center2 = camera2.getCameraCenter();
+            double estimatedBaseline = center1.distanceTo(center2);
             
-                double estimatedBaseline = center1.distanceTo(center2);
+            double scale = baseline / estimatedBaseline;
             
-                double scale = baseline / estimatedBaseline;
+            MetricTransformation3D scaleTransformation =
+                    new MetricTransformation3D(scale);
             
-                MetricTransformation3D scaleTransformation = 
-                        new MetricTransformation3D(scale);
+            //update scale of cameras
+            scaleTransformation.transform(camera1);
+            scaleTransformation.transform(camera2);
             
-                //update scale of cameras
-                scaleTransformation.transform(camera1);
-                scaleTransformation.transform(camera2);
+            mEstimatedCamera1.setCamera(camera1);
+            mEstimatedCamera2.setCamera(camera2);
             
-                mEstimatedCamera1.setCamera(camera1);
-                mEstimatedCamera2.setCamera(camera2);
-            
-                //update scale of reconstructed points
-                int numPoints = mReconstructedPoints.size();
-                List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
-                for (int i = 0; i < numPoints; i++) {
-                    reconstructedPoints3D.add(mReconstructedPoints.get(i).
-                            getPoint());
-                }
-            
-                scaleTransformation.transformAndOverwritePoints(
-                        reconstructedPoints3D);
-            
-                //set scaled points into result
-                for (int i = 0; i < numPoints; i++) {
-                    mReconstructedPoints.get(i).setPoint(
-                            reconstructedPoints3D.get(i));
-                }
-            } catch (Exception e) {
-                mFailed = true;
-                mListener.onFail((R)this);
+            //update scale of reconstructed points
+            int numPoints = mReconstructedPoints.size();
+            List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
+            for (int i = 0; i < numPoints; i++) {
+                reconstructedPoints3D.add(mReconstructedPoints.get(i).
+                        getPoint());
             }
-        }        
+            
+            scaleTransformation.transformAndOverwritePoints(
+                    reconstructedPoints3D);
+            
+            //set scaled points into result
+            for (int i = 0; i < numPoints; i++) {
+                mReconstructedPoints.get(i).setPoint(
+                        reconstructedPoints3D.get(i));
+            }
+
+            return true;
+        } catch (Exception e) {
+            mFailed = true;
+            mListener.onFail((R)this);
+
+            return false;
+        }
     }    
 }

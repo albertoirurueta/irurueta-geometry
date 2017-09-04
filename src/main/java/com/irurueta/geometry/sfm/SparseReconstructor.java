@@ -64,7 +64,7 @@ public class SparseReconstructor {
      * @return true if reconstruction is running, false if reconstruction has 
      * stopped for any reason.
      */
-    public synchronized boolean isRunning() {
+    public boolean isRunning() {
         return mRunning;
     }
 
@@ -72,7 +72,7 @@ public class SparseReconstructor {
      * Indicates whether reconstruction has been cancelled or not.
      * @return true if reconstruction has been cancelled, false otherwise.
      */
-    public synchronized boolean isCancelled() {
+    public boolean isCancelled() {
         return mCancelled;
     }
     
@@ -80,7 +80,7 @@ public class SparseReconstructor {
      * Indicates whether reconstruction has failed or not.
      * @return true if reconstruction has failed, false otherwise.
      */
-    public synchronized boolean hasFailed() {
+    public boolean hasFailed() {
         return mFailed;
     }    
     
@@ -102,16 +102,14 @@ public class SparseReconstructor {
      */
     public void start() throws FailedReconstructionException, 
             CancelledReconstructionException{
-        synchronized(this) {
-            if (mRunning) {
-                //already started
-                return;
-            }
-            
-            mCancelled = mFailed = false;
-            mViewCount = 0;
-            mRunning = true;
+        if (mRunning) {
+            //already started
+            return;
         }
+            
+        mCancelled = mFailed = false;
+        mViewCount = 0;
+        mRunning = true;
         
         List<Sample2D> tmp;
         List<Sample2D> previousViewSamples = new ArrayList<Sample2D>();
@@ -144,7 +142,7 @@ public class SparseReconstructor {
      * If reconstruction has already been cancelled, calling this method has no 
      * effect.
      */
-    public synchronized void cancel() {
+    public void cancel() {
         if (mCancelled) {
             //already cancelled
             return;

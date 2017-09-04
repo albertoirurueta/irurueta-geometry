@@ -8,12 +8,14 @@
  */
 package com.irurueta.geometry.sfm;
 
+import java.io.Serializable;
+
 /**
  * Contains configuration for a two view sparse reconstructor.
  */
 public class TwoViewsSparseReconstructorConfiguration extends 
         BaseTwoViewsSparseReconstructorConfiguration<
-        TwoViewsSparseReconstructorConfiguration> {
+        TwoViewsSparseReconstructorConfiguration> implements Serializable {
     
 
     /**

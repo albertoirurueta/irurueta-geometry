@@ -52,65 +52,63 @@ public class KnownBaselineTwoViewsSparseReconstructor extends
     }
 
     /**
-     * Process one view of all the available data during the reconstruction.
-     * This method can be called multiple times instead of {@link #start()} to build the reconstruction step by step,
-     * one view at a time.
-     * @return true if more views can be processed, false when reconstruction has finished.
+     * Called when processing one frame is successfully finished. This can be done to estimate scale on those
+     * implementations where scale can be measured or is already known.
+     * @return true if post processing succeeded, false otherwise.
      */
     @Override
-    public synchronized boolean processOneView() {
-        boolean result = super.processOneView();
-        if(!result && !isRunning() && !isCancelled() && !hasFailed()) {
-            try {
-                //reconstruction succeeded, so we update scale of cameras and
-                //reconstructed points
-                double baseline = mConfiguration.getBaseline();
+    protected boolean postProcessOne() {
+        try {
+            //reconstruction succeeded, so we update scale of cameras and
+            //reconstructed points
+            double baseline = mConfiguration.getBaseline();
 
-                PinholeCamera camera1 = mEstimatedCamera1.getCamera();
-                PinholeCamera camera2 = mEstimatedCamera2.getCamera();
+            PinholeCamera camera1 = mEstimatedCamera1.getCamera();
+            PinholeCamera camera2 = mEstimatedCamera2.getCamera();
 
-                camera1.decompose();
-                camera2.decompose();
+            camera1.decompose();
+            camera2.decompose();
 
-                Point3D center1 = camera1.getCameraCenter();
-                Point3D center2 = camera2.getCameraCenter();
+            Point3D center1 = camera1.getCameraCenter();
+            Point3D center2 = camera2.getCameraCenter();
 
-                double estimatedBaseline = center1.distanceTo(center2);
+            double estimatedBaseline = center1.distanceTo(center2);
 
-                double scale = baseline / estimatedBaseline;
+            double scale = baseline / estimatedBaseline;
 
-                MetricTransformation3D scaleTransformation =
-                        new MetricTransformation3D(scale);
+            MetricTransformation3D scaleTransformation =
+                    new MetricTransformation3D(scale);
 
-                //update scale of cameras
-                scaleTransformation.transform(camera1);
-                scaleTransformation.transform(camera2);
+            //update scale of cameras
+            scaleTransformation.transform(camera1);
+            scaleTransformation.transform(camera2);
 
-                mEstimatedCamera1.setCamera(camera1);
-                mEstimatedCamera2.setCamera(camera2);
+            mEstimatedCamera1.setCamera(camera1);
+            mEstimatedCamera2.setCamera(camera2);
 
-                //update scale of reconstructed points
-                int numPoints = mReconstructedPoints.size();
-                List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
-                for (int i = 0; i < numPoints; i++) {
-                    reconstructedPoints3D.add(mReconstructedPoints.get(i).
-                            getPoint());
-                }
-
-                scaleTransformation.transformAndOverwritePoints(
-                        reconstructedPoints3D);
-
-                //set scaled points into result
-                for (int i = 0; i < numPoints; i++) {
-                    mReconstructedPoints.get(i).setPoint(
-                            reconstructedPoints3D.get(i));
-                }
-            } catch (Exception e) {
-                mFailed = true;
-                mListener.onFail(this);
+            //update scale of reconstructed points
+            int numPoints = mReconstructedPoints.size();
+            List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
+            for (int i = 0; i < numPoints; i++) {
+                reconstructedPoints3D.add(mReconstructedPoints.get(i).
+                        getPoint());
             }
-        }
 
-        return result;
+            scaleTransformation.transformAndOverwritePoints(
+                    reconstructedPoints3D);
+
+            //set scaled points into result
+            for (int i = 0; i < numPoints; i++) {
+                mReconstructedPoints.get(i).setPoint(
+                        reconstructedPoints3D.get(i));
+            }
+
+            return true;
+        } catch (Exception e) {
+            mFailed = true;
+            mListener.onFail(this);
+
+            return false;
+        }
     }
 }

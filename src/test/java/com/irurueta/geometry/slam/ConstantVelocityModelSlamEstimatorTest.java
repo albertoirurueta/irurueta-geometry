@@ -5285,7 +5285,7 @@ public class ConstantVelocityModelSlamEstimatorTest implements
     @Test
     public void testPredictionNoMotionWithNoiseAndCalibration() {
         int numSuccess = 0;
-        for (int t = 0; t < REPEAT_TIMES; t++) {
+        for (int t = 0; t < 5*REPEAT_TIMES; t++) {
             UniformRandomizer offsetRandomizer = new UniformRandomizer(
                     new Random());
             GaussianRandomizer noiseRandomizer = new GaussianRandomizer(

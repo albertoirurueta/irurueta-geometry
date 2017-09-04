@@ -372,8 +372,12 @@ public class EuclideanTransformation2DRefinerTest implements
             reset();
             assertEquals(mRefineStart, 0);
             assertEquals(mRefineEnd, 0);
-            
-            if (!refiner.refine(result1)) {
+
+            try {
+                if (!refiner.refine(result1)) {
+                    continue;
+                }
+            } catch (Exception e) {
                 continue;
             }
             

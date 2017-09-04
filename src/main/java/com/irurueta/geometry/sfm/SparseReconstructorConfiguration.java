@@ -18,11 +18,13 @@ import com.irurueta.geometry.estimators.EPnPPointCorrespondencePinholeCameraEsti
 import com.irurueta.geometry.estimators.PinholeCameraRobustEstimator;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 
+import java.io.Serializable;
+
 /**
  *
  * @author albertoirurueta
  */
-public class SparseReconstructorConfiguration {
+public class SparseReconstructorConfiguration implements Serializable {
     
     /**
      * Default robust fundamental matrix estimator method.

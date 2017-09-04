@@ -742,7 +742,8 @@ public class LMedSEuclideanTransformation2DRobustEstimatorTest implements
     
     @Test
     public void testEstimateColinearWithoutRefinement() throws LockedException, 
-            NotReadyException, RobustEstimatorException { 
+            NotReadyException, RobustEstimatorException {
+        int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             //create an euclideantransformation
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -843,11 +844,20 @@ public class LMedSEuclideanTransformation2DRobustEstimatorTest implements
             //that output points are equal to the original output points without
             //error
             Point2D p1, p2;
+            boolean failed = false;
             for (int i = 0; i < nPoints; i++) {
                 p1 = outputPoints.get(i);
                 p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
+                if(p1.distanceTo(p2) > ABSOLUTE_ERROR) {
+                    failed = true;
+                    break;
+                }
                 assertEquals(p1.distanceTo(p2), 0.0,
                         ABSOLUTE_ERROR);
+            }
+
+            if (failed) {
+                continue;
             }
             
             //check paramaters of estimated transformation
@@ -856,8 +866,12 @@ public class LMedSEuclideanTransformation2DRobustEstimatorTest implements
         
             assertEquals(rotation2.getTheta(), rotation.getTheta(), 
                     ABSOLUTE_ERROR);
-            assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);            
+            assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
+
+            numValid++;
         }
+
+        assertTrue(numValid > 0);
     }    
     
     @Test

@@ -2808,115 +2808,45 @@ public class PinholeCameraTest {
     public void testProjectBackProjectDualQuadricAndDualConic() 
             throws DecomposerException, WrongSizeException, 
             CoincidentLinesException, CameraException{
- 
-        //instantiate dual conic from set of lines
-        Matrix m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS, 
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        
-        Line2D line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1), 
-                m.getElementAt(0, 2));
-        Line2D line2 = new Line2D(m.getElementAt(1, 0), m.getElementAt(1, 1),
-                m.getElementAt(1, 2));
-        Line2D line3 = new Line2D(m.getElementAt(2, 0), m.getElementAt(2, 1),
-                m.getElementAt(2, 2));
-        Line2D line4 = new Line2D(m.getElementAt(3, 0), m.getElementAt(3, 1),
-                m.getElementAt(3, 2));
-        Line2D line5 = new Line2D(m.getElementAt(4, 0), m.getElementAt(4, 1),
-                m.getElementAt(4, 2));
-        
-        line1.normalize();
-        line2.normalize();
-        line3.normalize();
-        line4.normalize();
-        line5.normalize();
-                
-        
-        //estimate dual conic that lies inside of provided 5 lines (we need to
-        //ensure that line configuration is not degenerate)
-        Matrix m2 = new Matrix(5, 6);
-        
-        double l1 = line1.getA();
-        double l2 = line1.getB();
-        double l3 = line1.getC();
-        m2.setElementAt(0, 0, l1 * l1);
-        m2.setElementAt(0, 1, 2.0 * l1 * l2);
-        m2.setElementAt(0, 2, l2 * l2);
-        m2.setElementAt(0, 3, 2.0 * l1 * l3);
-        m2.setElementAt(0, 4, 2.0 * l2 * l3);
-        m2.setElementAt(0, 5, l3 * l3);
-        
-        l1 = line2.getA();
-        l2 = line2.getB();
-        l3 = line2.getC();
-        m2.setElementAt(1, 0, l1 * l1);
-        m2.setElementAt(1, 1, 2.0 * l1 * l2);
-        m2.setElementAt(1, 2, l2 * l2);
-        m2.setElementAt(1, 3, 2.0 * l1 * l3);
-        m2.setElementAt(1, 4, 2.0 * l2 * l3);
-        m2.setElementAt(1, 5, l3 * l3);
-        
-        l1 = line3.getA();
-        l2 = line3.getB();
-        l3 = line3.getC();
-        m2.setElementAt(2, 0, l1 * l1);
-        m2.setElementAt(2, 1, 2.0 * l1 * l2);
-        m2.setElementAt(2, 2, l2 * l2);
-        m2.setElementAt(2, 3, 2.0 * l1 * l3);
-        m2.setElementAt(2, 4, 2.0 * l2 * l3);
-        m2.setElementAt(2, 5, l3 * l3);
 
-        l1 = line4.getA();
-        l2 = line4.getB();
-        l3 = line4.getC();
-        m2.setElementAt(3, 0, l1 * l1);
-        m2.setElementAt(3, 1, 2.0 * l1 * l2);
-        m2.setElementAt(3, 2, l2 * l2);
-        m2.setElementAt(3, 3, 2.0 * l1 * l3);
-        m2.setElementAt(3, 4, 2.0 * l2 * l3);
-        m2.setElementAt(3, 5, l3 * l3);
-        
-        l1 = line5.getA();
-        l2 = line5.getB();
-        l3 = line5.getC();
-        m2.setElementAt(4, 0, l1 * l1);
-        m2.setElementAt(4, 1, 2.0 * l1 * l2);
-        m2.setElementAt(4, 2, l2 * l2);
-        m2.setElementAt(4, 3, 2.0 * l1 * l3);
-        m2.setElementAt(4, 4, 2.0 * l2 * l3);
-        m2.setElementAt(4, 5, l3 * l3);
-        
-        while(com.irurueta.algebra.Utils.rank(m2) < 5){
-            m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS, 
+        int numValid = 0;
+        for (int t = 0; t < TIMES; t++) {
+            //instantiate dual conic from set of lines
+            Matrix m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1), 
+            Line2D line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
                     m.getElementAt(0, 2));
-            line2 = new Line2D(m.getElementAt(1, 0), m.getElementAt(1, 1),
+            Line2D line2 = new Line2D(m.getElementAt(1, 0), m.getElementAt(1, 1),
                     m.getElementAt(1, 2));
-            line3 = new Line2D(m.getElementAt(2, 0), m.getElementAt(2, 1),
+            Line2D line3 = new Line2D(m.getElementAt(2, 0), m.getElementAt(2, 1),
                     m.getElementAt(2, 2));
-            line4 = new Line2D(m.getElementAt(3, 0), m.getElementAt(3, 1),
+            Line2D line4 = new Line2D(m.getElementAt(3, 0), m.getElementAt(3, 1),
                     m.getElementAt(3, 2));
-            line5 = new Line2D(m.getElementAt(4, 0), m.getElementAt(4, 1),
+            Line2D line5 = new Line2D(m.getElementAt(4, 0), m.getElementAt(4, 1),
                     m.getElementAt(4, 2));
-        
+
             line1.normalize();
             line2.normalize();
             line3.normalize();
             line4.normalize();
             line5.normalize();
-                
-                
-            l1 = line1.getA();
-            l2 = line1.getB();
-            l3 = line1.getC();
+
+
+            //estimate dual conic that lies inside of provided 5 lines (we need to
+            //ensure that line configuration is not degenerate)
+            Matrix m2 = new Matrix(5, 6);
+
+            double l1 = line1.getA();
+            double l2 = line1.getB();
+            double l3 = line1.getC();
             m2.setElementAt(0, 0, l1 * l1);
             m2.setElementAt(0, 1, 2.0 * l1 * l2);
             m2.setElementAt(0, 2, l2 * l2);
             m2.setElementAt(0, 3, 2.0 * l1 * l3);
             m2.setElementAt(0, 4, 2.0 * l2 * l3);
             m2.setElementAt(0, 5, l3 * l3);
-        
+
             l1 = line2.getA();
             l2 = line2.getB();
             l3 = line2.getC();
@@ -2926,7 +2856,7 @@ public class PinholeCameraTest {
             m2.setElementAt(1, 3, 2.0 * l1 * l3);
             m2.setElementAt(1, 4, 2.0 * l2 * l3);
             m2.setElementAt(1, 5, l3 * l3);
-        
+
             l1 = line3.getA();
             l2 = line3.getB();
             l3 = line3.getC();
@@ -2946,7 +2876,7 @@ public class PinholeCameraTest {
             m2.setElementAt(3, 3, 2.0 * l1 * l3);
             m2.setElementAt(3, 4, 2.0 * l2 * l3);
             m2.setElementAt(3, 5, l3 * l3);
-        
+
             l1 = line5.getA();
             l2 = line5.getB();
             l3 = line5.getC();
@@ -2956,50 +2886,133 @@ public class PinholeCameraTest {
             m2.setElementAt(4, 3, 2.0 * l1 * l3);
             m2.setElementAt(4, 4, 2.0 * l2 * l3);
             m2.setElementAt(4, 5, l3 * l3);
-        }   
-        
-        DualConic dualConic = new DualConic(line1, line2, line3, line4, line5);
-        
-        //check that lines are locus of dual conic
-        assertTrue(dualConic.isLocus(line1, ABSOLUTE_ERROR));
-        assertTrue(dualConic.isLocus(line2, ABSOLUTE_ERROR));
-        assertTrue(dualConic.isLocus(line3, ABSOLUTE_ERROR));
-        assertTrue(dualConic.isLocus(line4, ABSOLUTE_ERROR));
-        assertTrue(dualConic.isLocus(line5, ABSOLUTE_ERROR));
 
-        //instantiate random camera
-        Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE, 
-                MAX_RANDOM_VALUE);        
-        PinholeCamera camera = new PinholeCamera(cameraMatrix);
-        
-        //backproject dual conic into dual quadric
-        DualQuadric dualQuadric = camera.backProject(dualConic);
-        
-        //backproject planes of dual conic
-        Plane plane1 = camera.backProject(line1);
-        Plane plane2 = camera.backProject(line2);
-        Plane plane3 = camera.backProject(line3);
-        Plane plane4 = camera.backProject(line4);
-        Plane plane5 = camera.backProject(line5);
-        
-        //check that backprojected planes are locus of backprojected dual 
-        //quadric
-        assertTrue(dualQuadric.isLocus(plane1));
-        assertTrue(dualQuadric.isLocus(plane2));
-        assertTrue(dualQuadric.isLocus(plane3));
-        assertTrue(dualQuadric.isLocus(plane4));
-        assertTrue(dualQuadric.isLocus(plane5));
-        
-        //project dual quadric into dual conic
-        DualConic dualConic2 = camera.project(dualQuadric);
-        
-        //check that lines are locus of projected dual conic
-        assertTrue(dualConic2.isLocus(line1));
-        assertTrue(dualConic2.isLocus(line2));
-        assertTrue(dualConic2.isLocus(line3));
-        assertTrue(dualConic2.isLocus(line4));
-        assertTrue(dualConic2.isLocus(line5));
+            while (com.irurueta.algebra.Utils.rank(m2) < 5) {
+                m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS,
+                        MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+                line1 = new Line2D(m.getElementAt(0, 0), m.getElementAt(0, 1),
+                        m.getElementAt(0, 2));
+                line2 = new Line2D(m.getElementAt(1, 0), m.getElementAt(1, 1),
+                        m.getElementAt(1, 2));
+                line3 = new Line2D(m.getElementAt(2, 0), m.getElementAt(2, 1),
+                        m.getElementAt(2, 2));
+                line4 = new Line2D(m.getElementAt(3, 0), m.getElementAt(3, 1),
+                        m.getElementAt(3, 2));
+                line5 = new Line2D(m.getElementAt(4, 0), m.getElementAt(4, 1),
+                        m.getElementAt(4, 2));
+
+                line1.normalize();
+                line2.normalize();
+                line3.normalize();
+                line4.normalize();
+                line5.normalize();
+
+
+                l1 = line1.getA();
+                l2 = line1.getB();
+                l3 = line1.getC();
+                m2.setElementAt(0, 0, l1 * l1);
+                m2.setElementAt(0, 1, 2.0 * l1 * l2);
+                m2.setElementAt(0, 2, l2 * l2);
+                m2.setElementAt(0, 3, 2.0 * l1 * l3);
+                m2.setElementAt(0, 4, 2.0 * l2 * l3);
+                m2.setElementAt(0, 5, l3 * l3);
+
+                l1 = line2.getA();
+                l2 = line2.getB();
+                l3 = line2.getC();
+                m2.setElementAt(1, 0, l1 * l1);
+                m2.setElementAt(1, 1, 2.0 * l1 * l2);
+                m2.setElementAt(1, 2, l2 * l2);
+                m2.setElementAt(1, 3, 2.0 * l1 * l3);
+                m2.setElementAt(1, 4, 2.0 * l2 * l3);
+                m2.setElementAt(1, 5, l3 * l3);
+
+                l1 = line3.getA();
+                l2 = line3.getB();
+                l3 = line3.getC();
+                m2.setElementAt(2, 0, l1 * l1);
+                m2.setElementAt(2, 1, 2.0 * l1 * l2);
+                m2.setElementAt(2, 2, l2 * l2);
+                m2.setElementAt(2, 3, 2.0 * l1 * l3);
+                m2.setElementAt(2, 4, 2.0 * l2 * l3);
+                m2.setElementAt(2, 5, l3 * l3);
+
+                l1 = line4.getA();
+                l2 = line4.getB();
+                l3 = line4.getC();
+                m2.setElementAt(3, 0, l1 * l1);
+                m2.setElementAt(3, 1, 2.0 * l1 * l2);
+                m2.setElementAt(3, 2, l2 * l2);
+                m2.setElementAt(3, 3, 2.0 * l1 * l3);
+                m2.setElementAt(3, 4, 2.0 * l2 * l3);
+                m2.setElementAt(3, 5, l3 * l3);
+
+                l1 = line5.getA();
+                l2 = line5.getB();
+                l3 = line5.getC();
+                m2.setElementAt(4, 0, l1 * l1);
+                m2.setElementAt(4, 1, 2.0 * l1 * l2);
+                m2.setElementAt(4, 2, l2 * l2);
+                m2.setElementAt(4, 3, 2.0 * l1 * l3);
+                m2.setElementAt(4, 4, 2.0 * l2 * l3);
+                m2.setElementAt(4, 5, l3 * l3);
+            }
+
+            DualConic dualConic = new DualConic(line1, line2, line3, line4, line5);
+
+            //check that lines are locus of dual conic
+            assertTrue(dualConic.isLocus(line1, ABSOLUTE_ERROR));
+            assertTrue(dualConic.isLocus(line2, ABSOLUTE_ERROR));
+            assertTrue(dualConic.isLocus(line3, ABSOLUTE_ERROR));
+            assertTrue(dualConic.isLocus(line4, ABSOLUTE_ERROR));
+            assertTrue(dualConic.isLocus(line5, ABSOLUTE_ERROR));
+
+            //instantiate random camera
+            Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
+                    PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
+            PinholeCamera camera = new PinholeCamera(cameraMatrix);
+
+            try {
+                //backproject dual conic into dual quadric
+                DualQuadric dualQuadric = camera.backProject(dualConic);
+
+                //backproject planes of dual conic
+                Plane plane1 = camera.backProject(line1);
+                Plane plane2 = camera.backProject(line2);
+                Plane plane3 = camera.backProject(line3);
+                Plane plane4 = camera.backProject(line4);
+                Plane plane5 = camera.backProject(line5);
+
+                //check that backprojected planes are locus of backprojected dual
+                //quadric
+                assertTrue(dualQuadric.isLocus(plane1));
+                assertTrue(dualQuadric.isLocus(plane2));
+                assertTrue(dualQuadric.isLocus(plane3));
+                assertTrue(dualQuadric.isLocus(plane4));
+                assertTrue(dualQuadric.isLocus(plane5));
+
+                //project dual quadric into dual conic
+                DualConic dualConic2 = camera.project(dualQuadric);
+
+                //check that lines are locus of projected dual conic
+                assertTrue(dualConic2.isLocus(line1));
+                assertTrue(dualConic2.isLocus(line2));
+                assertTrue(dualConic2.isLocus(line3));
+                assertTrue(dualConic2.isLocus(line4));
+                assertTrue(dualConic2.isLocus(line5));
+            } catch (CameraException e) {
+                continue;
+            }
+
+            numValid++;
+
+            break;
+        }
+
+        assertTrue(numValid > 0);
     }
     
     @Test
