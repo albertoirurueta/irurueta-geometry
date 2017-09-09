@@ -209,9 +209,7 @@ public abstract class BaseTwoViewsSparseReconstructorConfiguration<
      * This is only used when planar scenes are allowed.
      */
     public static final double DEFAULT_PLANAR_HOMOGRAPHY_THRESHOLD = 1e-3;
-/*            PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.
-            DEFAULT_THRESHOLD;*/
-    
+
     /**
      * Default value indicating that inlier data is kept after robust planar
      * homography estimation.
@@ -370,7 +368,7 @@ public abstract class BaseTwoViewsSparseReconstructorConfiguration<
     private boolean mAllowGeneralScene = DEFAULT_ALLOW_GENERAL_SCENE;
     
     /**
-     * Indicates whether a planr scene (points laying in a 3D plane) is allowed.
+     * Indicates whether a planar scene (points laying in a 3D plane) is allowed.
      * When true, an initial geometry estimation is attempted for planar points.
      */
     private boolean mAllowPlanarScene = DEFAULT_ALLOW_PLANAR_SCENE;
@@ -878,7 +876,7 @@ public abstract class BaseTwoViewsSparseReconstructorConfiguration<
      * points.
      * @param allowGeneralScene true if general scene is allowed, false 
      * otherwise.
-     * @return this insntance so that method can be easily chained.
+     * @return this instance so that method can be easily chained.
      */
     public T setGeneralSceneAllowed(boolean allowGeneralScene) {
         mAllowGeneralScene = allowGeneralScene;
@@ -886,7 +884,7 @@ public abstract class BaseTwoViewsSparseReconstructorConfiguration<
     }
     
     /**
-     * Indicates whether a planr scene (points laying in a 3D plane) is allowed
+     * Indicates whether a planar scene (points laying in a 3D plane) is allowed
      * or not.
      * When true, an initial geometry estimation is attempted for planar points.
      * @return true if planar scene is allowed, false otherwise.
@@ -943,7 +941,7 @@ public abstract class BaseTwoViewsSparseReconstructorConfiguration<
     /**
      * Specifies whether planar homography is refined using all found inliers or
      * not.
-     * This is only used when planar scenes are allwed.
+     * This is only used when planar scenes are allowed.
      * @param refinePlanarHomography true if planar homography must be refined,
      * false otherwise.
      * @return this instance so that method can be easily chained.
@@ -976,7 +974,7 @@ public abstract class BaseTwoViewsSparseReconstructorConfiguration<
     }
             
     /**
-     * Gets confidence of robustly estimated planar homography.. By default this
+     * Gets confidence of robustly estimated planar homography. By default this
      * is 99%.
      * This is only used when planar scenes are allowed.
      * @return confidence of robustly estimated planar homography.
@@ -1060,11 +1058,11 @@ public abstract class BaseTwoViewsSparseReconstructorConfiguration<
      * Specifies whether inlier data is kept after robust planar homography
      * estimation.
      * This is only used when planar scenes are allowed.
-     * @param planarHomographyComputeAndKeepInliers tru if inlier data is kept,
+     * @param planarHomographyComputeAndKeepInliers true if inlier data is kept,
      * false otherwise.
-     * @return this instance so that method can be eaisly chained.
+     * @return this instance so that method can be easily chained.
      */
-    public T setPlanarHomographyComputeandKeepInliers(
+    public T setPlanarHomographyComputeAndKeepInliers(
             boolean planarHomographyComputeAndKeepInliers) {
         mPlanarHomographyComputeAndKeepInliers = 
                 planarHomographyComputeAndKeepInliers;

@@ -680,7 +680,7 @@ public class TwoViewsSparseReconstructorConfigurationTest {
                         DEFAULT_PLANAR_HOMOGRAPHY_COMPUTE_AND_KEEP_INLIERS);
         
         //set new value
-        assertSame(cfg.setPlanarHomographyComputeandKeepInliers(
+        assertSame(cfg.setPlanarHomographyComputeAndKeepInliers(
                 !TwoViewsSparseReconstructorConfiguration.
                 DEFAULT_PLANAR_HOMOGRAPHY_COMPUTE_AND_KEEP_INLIERS), cfg);
         
