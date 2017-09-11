@@ -402,7 +402,7 @@ public abstract class BaseTwoViewsSparseReconstructor<
     /**
      * Indicates whether there are enough samples to estimate a fundamental 
      * matrix.
-     * @param samples samples to check
+     * @param samples samples to check.
      * @return true if there are enough samples, false otherwise.
      */
     private boolean hasEnoughSamples(List<Sample2D> samples) {

@@ -1,168 +1,57 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.sfm.SparseReconstructor
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 12, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package com.irurueta.geometry.sfm;
 
-import java.util.ArrayList;
-import java.util.List;
+package com.irurueta.geometry.sfm;
 
 /**
  * Class in charge of estimating cameras and 3D reconstruction points from
  * sparse image point correspondences.
  */
-public class SparseReconstructor {
-    
-    /**
-     * Listener in charge of handling events such as when reconstruction starts,
-     * ends, when certain data is needed or when estimation of data has been 
-     * computed so that estimated data can be stored.
-     */
-    private SparseReconstructorListener mListener;
-    
-    /**
-     * Indicates whether reconstruction is running or not.
-     */
-    private volatile boolean mRunning;
+public class SparseReconstructor extends BaseSparseReconstructor<SparseReconstructorConfiguration, SparseReconstructor> {
 
     /**
-     * Indicates whether reconstruction has been cancelled or not.
-     */
-    private volatile boolean mCancelled;        
-    
-    /**
-     * Indicates whether reconstruction has failed or not.
-     */
-    private volatile boolean mFailed;
-    
-    /**
-     * Counter of number of processed views.
-     */
-    private int mViewCount;
-    
-    /**
-     * Current fundamental matrix estimation.
-     */
-    private EstimatedFundamentalMatrix mCurrentEstimatedFundamentalMatrix;
-    
-    /**
      * Constructor.
+     * @param configuration configuration for this reconstructor.
+     * @param listener listener in charge of handling events.
+     * @throws NullPointerException if listener or configuration is not
+     * provided.
+     */
+    public SparseReconstructor(SparseReconstructorConfiguration configuration,
+            SparseReconstructorListener listener) throws NullPointerException {
+        super(configuration, listener);
+    }
+
+    /**
+     * Constructor with default configuration.
      * @param listener listener in charge of handling events.
      * @throws NullPointerException if listener is not provided.
      */
-    public SparseReconstructor(SparseReconstructorListener listener) 
+    public SparseReconstructor(SparseReconstructorListener listener)
             throws NullPointerException {
-        mListener = listener;
-    }
-    
-    /**
-     * Indicates whether reconstruction is running or not.
-     * @return true if reconstruction is running, false if reconstruction has 
-     * stopped for any reason.
-     */
-    public boolean isRunning() {
-        return mRunning;
+        this(new SparseReconstructorConfiguration(), listener);
     }
 
     /**
-     * Indicates whether reconstruction has been cancelled or not.
-     * @return true if reconstruction has been cancelled, false otherwise.
+     * Called when processing one frame is successfully finished. This can be done to estimate scale on those
+     * implementations where scale can be measured or is already known.
+     * @return true if post processing succeeded, false otherwise.
      */
-    public boolean isCancelled() {
-        return mCancelled;
-    }
-    
-    /**
-     * Indicates whether reconstruction has failed or not.
-     * @return true if reconstruction has failed, false otherwise.
-     */
-    public boolean hasFailed() {
-        return mFailed;
-    }    
-    
-    /**
-     * Gets counter of number of processed views.
-     * @return counter of number of processed views.
-     */
-    public int getViewCount() {
-        return mViewCount;
-    }
-    
-    /**
-     * Starts reconstruction.
-     * If reconstruction has already started and is running, calling this method
-     * has no effect.
-     * @throws FailedReconstructionException if reconstruction fails for some 
-     * reason.
-     * @throws CancelledReconstructionException if reconstruction is cancelled.
-     */
-    public void start() throws FailedReconstructionException, 
-            CancelledReconstructionException{
-        if (mRunning) {
-            //already started
-            return;
-        }
-            
-        mCancelled = mFailed = false;
-        mViewCount = 0;
-        mRunning = true;
-        
-        List<Sample2D> tmp;
-        List<Sample2D> previousViewSamples = new ArrayList<Sample2D>();
-        List<Sample2D> currentViewSamples = new ArrayList<Sample2D>();
-        while (mListener.hasMoreViewsAvailable(this)) {
-            
-            mCurrentEstimatedFundamentalMatrix = null;
-            currentViewSamples.clear();
-            mListener.onAttemptSamplesForCurrentView(this, mViewCount, 
-                    currentViewSamples);
-            
-            if (mViewCount == 0) {
-                //on first view skip remaining processing
-                tmp = currentViewSamples;
-                currentViewSamples = previousViewSamples;
-                previousViewSamples = tmp;
-                continue;
-            }
-            
-            //determine fundamental matrix with previous samples
-            estimateFundamentalMatrix(previousViewSamples, 
-                            currentViewSamples);
-            //InitialCamerasEstimator
-            mViewCount++;
-        }
-    }
-    
-    /**
-     * Cancels reconstruction.
-     * If reconstruction has already been cancelled, calling this method has no 
-     * effect.
-     */
-    public void cancel() {
-        if (mCancelled) {
-            //already cancelled
-            return;
-        }
-        
-        mCancelled = true;
-    }
-    
-    /**
-     * Gets listener in charge of handling events such as when reconstruction 
-     * starts, ends, when certain data is needed or when estimation of data has
-     * been computed so that estimated data can be stored.
-     * @return listener in charge of handling events.
-     */
-    protected SparseReconstructorListener getListener() {
-        return mListener;
-    }    
-    
-    private void estimateFundamentalMatrix(List<Sample2D> previousSamples,
-            List<Sample2D> currentSamples) {
-        //mCurrentEstimatedFundamentalMatrix
+    @Override
+    protected boolean postProcessOne() {
+        //no need for post processing when computing metric reconstruction
+        return true;
     }
 }

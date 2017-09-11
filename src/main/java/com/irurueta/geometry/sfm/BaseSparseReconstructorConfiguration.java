@@ -247,6 +247,12 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             0.0;
 
     /**
+     * Default aspect ratio for additional cameras.
+     */
+    public static final double DEFAULT_ADDITIONAL_CAMERAS_ASPECT_RATIO = 1.0;
+
+
+    /**
      * Indicates that by default EPnP (Efficient Perspective-n-Point) method is NOT
      * used for additional cameras estimation.
      */
@@ -642,6 +648,11 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     private double mAdditionalCamerasVerticalPrincipalPoint =
             DEFAULT_ADDITIONAL_CAMERAS_VERTICAL_PRINCIPAL_POINT;
+
+    /**
+     * Aspect ratio for additional cameras.
+     */
+    private double mAdditionalCamerasAspectRatio = DEFAULT_ADDITIONAL_CAMERAS_ASPECT_RATIO;
 
     /**
      * Indicates whether EPnP (Efficient Perspective-n-Point) method is used for additional
@@ -1597,6 +1608,25 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setAdditionalCamerasVerticalPrincipalPoint(
             double additionalCamerasVerticalPrincipalPoint) {
         mAdditionalCamerasVerticalPrincipalPoint = additionalCamerasVerticalPrincipalPoint;
+        return (T)this;
+    }
+
+    /**
+     * Gets aspect ratio for additional cameras estimation using DAQ or DIAC methods.
+     * @return aspect ratio for additional cameras using DAQ or DIAC methods.
+     */
+    public double getAdditionalCamerasAspectRatio() {
+        return mAdditionalCamerasAspectRatio;
+    }
+
+    /**
+     * Sets aspect ratio for additional cameras using DAQ or DIAC methods.
+     * @param additionalCamerasAspectRatio aspect ratio for additional cameras using DAQ or DIAC
+     *                                  methods.
+     * @return this instance so that method can be easily chained.
+     */
+    public T setAdditionalCamerasAspectRatio(double additionalCamerasAspectRatio) {
+        mAdditionalCamerasAspectRatio = additionalCamerasAspectRatio;
         return (T)this;
     }
 

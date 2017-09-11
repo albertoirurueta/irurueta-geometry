@@ -108,6 +108,8 @@ public class SparseReconstructorConfigurationTest {
                 SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_HORIZONTAL_PRINCIPAL_POINT, 0.0);
         assertEquals(cfg.getAdditionalCamerasVerticalPrincipalPoint(),
                 SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_VERTICAL_PRINCIPAL_POINT, 0.0);
+        assertEquals(cfg.getAdditionalCamerasAspectRatio(),
+                SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_ASPECT_RATIO, 0.0);
         assertEquals(cfg.getUseEPnPForAdditionalCamerasEstimation(),
                 SparseReconstructorConfiguration.DEFAULT_USE_EPNP_FOR_ADDITIONAL_CAMERAS_ESTIMATION);
         assertEquals(cfg.getUseUPnPForAdditionalCamerasEstimation(),
@@ -231,6 +233,8 @@ public class SparseReconstructorConfigurationTest {
                 SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_HORIZONTAL_PRINCIPAL_POINT, 0.0);
         assertEquals(cfg.getAdditionalCamerasVerticalPrincipalPoint(),
                 SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_VERTICAL_PRINCIPAL_POINT, 0.0);
+        assertEquals(cfg.getAdditionalCamerasAspectRatio(),
+                SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_ASPECT_RATIO, 0.0);
         assertEquals(cfg.getUseEPnPForAdditionalCamerasEstimation(),
                 SparseReconstructorConfiguration.DEFAULT_USE_EPNP_FOR_ADDITIONAL_CAMERAS_ESTIMATION);
         assertEquals(cfg.getUseUPnPForAdditionalCamerasEstimation(),
@@ -858,6 +862,22 @@ public class SparseReconstructorConfigurationTest {
 
         //check correctness
         assertEquals(cfg.getAdditionalCamerasVerticalPrincipalPoint(), 240, 0.0);
+    }
+
+    @Test
+    public void testGetSetAdditionalCamerasAspectRatio() {
+        SparseReconstructorConfiguration cfg =
+                new SparseReconstructorConfiguration();
+
+        //check default value
+        assertEquals(cfg.getAdditionalCamerasAspectRatio(),
+                SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_ASPECT_RATIO, 0.0);
+
+        //set new value
+        assertSame(cfg.setAdditionalCamerasAspectRatio(-1.0), cfg);
+
+        //check correctness
+        assertEquals(cfg.getAdditionalCamerasAspectRatio(), -1.0, 0.0);
     }
 
     @Test

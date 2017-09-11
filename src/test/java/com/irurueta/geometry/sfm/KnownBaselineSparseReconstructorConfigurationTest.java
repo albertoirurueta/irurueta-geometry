@@ -106,6 +106,8 @@ public class KnownBaselineSparseReconstructorConfigurationTest {
                 KnownBaselineSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_HORIZONTAL_PRINCIPAL_POINT, 0.0);
         assertEquals(cfg.getAdditionalCamerasVerticalPrincipalPoint(),
                 KnownBaselineSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_VERTICAL_PRINCIPAL_POINT, 0.0);
+        assertEquals(cfg.getAdditionalCamerasAspectRatio(),
+                KnownBaselineSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_ASPECT_RATIO, 0.0);
         assertEquals(cfg.getUseEPnPForAdditionalCamerasEstimation(),
                 KnownBaselineSparseReconstructorConfiguration.DEFAULT_USE_EPNP_FOR_ADDITIONAL_CAMERAS_ESTIMATION);
         assertEquals(cfg.getUseUPnPForAdditionalCamerasEstimation(),
@@ -231,6 +233,8 @@ public class KnownBaselineSparseReconstructorConfigurationTest {
                 KnownBaselineSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_HORIZONTAL_PRINCIPAL_POINT, 0.0);
         assertEquals(cfg.getAdditionalCamerasVerticalPrincipalPoint(),
                 KnownBaselineSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_VERTICAL_PRINCIPAL_POINT, 0.0);
+        assertEquals(cfg.getAdditionalCamerasAspectRatio(),
+                KnownBaselineSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_ASPECT_RATIO, 0.0);
         assertEquals(cfg.getUseEPnPForAdditionalCamerasEstimation(),
                 KnownBaselineSparseReconstructorConfiguration.DEFAULT_USE_EPNP_FOR_ADDITIONAL_CAMERAS_ESTIMATION);
         assertEquals(cfg.getUseUPnPForAdditionalCamerasEstimation(),
@@ -860,6 +864,22 @@ public class KnownBaselineSparseReconstructorConfigurationTest {
 
         //check correctness
         assertEquals(cfg.getAdditionalCamerasVerticalPrincipalPoint(), 240, 0.0);
+    }
+
+    @Test
+    public void testGetSetAdditionalCamerasAspectRatio() {
+        KnownBaselineSparseReconstructorConfiguration cfg =
+                new KnownBaselineSparseReconstructorConfiguration();
+
+        //check default value
+        assertEquals(cfg.getAdditionalCamerasAspectRatio(),
+                KnownBaselineSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_ASPECT_RATIO, 0.0);
+
+        //set new value
+        assertSame(cfg.setAdditionalCamerasAspectRatio(-1.0), cfg);
+
+        //check correctness
+        assertEquals(cfg.getAdditionalCamerasAspectRatio(), -1.0, 0.0);
     }
 
     @Test

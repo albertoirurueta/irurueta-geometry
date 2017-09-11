@@ -107,6 +107,8 @@ public class SlamSparseReconstructorConfigurationTest {
                 SlamSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_HORIZONTAL_PRINCIPAL_POINT, 0.0);
         assertEquals(cfg.getAdditionalCamerasVerticalPrincipalPoint(),
                 SlamSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_VERTICAL_PRINCIPAL_POINT, 0.0);
+        assertEquals(cfg.getAdditionalCamerasAspectRatio(),
+                SlamSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_ASPECT_RATIO, 0.0);
         assertEquals(cfg.getUseEPnPForAdditionalCamerasEstimation(),
                 SlamSparseReconstructorConfiguration.DEFAULT_USE_EPNP_FOR_ADDITIONAL_CAMERAS_ESTIMATION);
         assertEquals(cfg.getUseUPnPForAdditionalCamerasEstimation(),
@@ -231,6 +233,8 @@ public class SlamSparseReconstructorConfigurationTest {
                 SlamSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_HORIZONTAL_PRINCIPAL_POINT, 0.0);
         assertEquals(cfg.getAdditionalCamerasVerticalPrincipalPoint(),
                 SlamSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_VERTICAL_PRINCIPAL_POINT, 0.0);
+        assertEquals(cfg.getAdditionalCamerasAspectRatio(),
+                SlamSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_ASPECT_RATIO, 0.0);
         assertEquals(cfg.getUseEPnPForAdditionalCamerasEstimation(),
                 SlamSparseReconstructorConfiguration.DEFAULT_USE_EPNP_FOR_ADDITIONAL_CAMERAS_ESTIMATION);
         assertEquals(cfg.getUseUPnPForAdditionalCamerasEstimation(),
@@ -859,6 +863,22 @@ public class SlamSparseReconstructorConfigurationTest {
 
         //check correctness
         assertEquals(cfg.getAdditionalCamerasVerticalPrincipalPoint(), 240, 0.0);
+    }
+
+    @Test
+    public void testGetSetAdditionalCamerasAspectRatio() {
+        SlamSparseReconstructorConfiguration cfg =
+                new SlamSparseReconstructorConfiguration();
+
+        //check default value
+        assertEquals(cfg.getAdditionalCamerasAspectRatio(),
+                SlamSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_ASPECT_RATIO, 0.0);
+
+        //set new value
+        assertSame(cfg.setAdditionalCamerasAspectRatio(-1.0), cfg);
+
+        //check correctness
+        assertEquals(cfg.getAdditionalCamerasAspectRatio(), -1.0, 0.0);
     }
 
     @Test

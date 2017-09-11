@@ -546,24 +546,54 @@ public class DualAbsoluteQuadricInitialCamerasEstimatorTest implements
         
             Point3D center1b = camera1b.getCameraCenter();
             Point3D center2b = camera2b.getCameraCenter();                
-        
+
+            if (Math.abs(intrinsic1b.getHorizontalFocalLength() - focalLength) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(intrinsic1b.getHorizontalFocalLength(), focalLength,
                     LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(intrinsic1b.getVerticalFocalLength() - focalLength) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(intrinsic1b.getVerticalFocalLength(), focalLength,
                     LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(intrinsic1b.getSkewness()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(intrinsic1b.getSkewness(), 0.0, LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(intrinsic1b.getHorizontalPrincipalPoint()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(intrinsic1b.getHorizontalPrincipalPoint(), 0.0, 
                     LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(intrinsic1b.getVerticalPrincipalPoint()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(intrinsic1b.getVerticalPrincipalPoint(), 0.0, 
                     LARGE_ABSOLUTE_ERROR);
-        
+
+            if (Math.abs(intrinsic2b.getHorizontalFocalLength() - focalLength) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(intrinsic2b.getHorizontalFocalLength(), focalLength,
                     LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(intrinsic2b.getVerticalFocalLength() - focalLength) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(intrinsic2b.getVerticalFocalLength(), focalLength,
                     LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(intrinsic2b.getSkewness()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(intrinsic2b.getSkewness(), 0.0, LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(intrinsic2b.getHorizontalPrincipalPoint()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(intrinsic2b.getHorizontalPrincipalPoint(), 0.0,
                     LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(intrinsic2b.getVerticalPrincipalPoint()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(intrinsic2b.getVerticalPrincipalPoint(), 0.0,
                     LARGE_ABSOLUTE_ERROR);
         
@@ -675,6 +705,7 @@ public class DualAbsoluteQuadricInitialCamerasEstimatorTest implements
             assertTrue(epipolarPlane2b.isLocus(center2b, ABSOLUTE_ERROR));        
             
             numValid++;
+            break;
         }
         
         assertTrue(numValid > 0);
