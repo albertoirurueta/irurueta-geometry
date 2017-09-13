@@ -19,7 +19,9 @@ package com.irurueta.geometry.sfm;
 import java.util.List;
 
 /**
- * Created by albertoirurueta on 10/9/17.
+ * Listener to retrieve and store required data to compute a 3D reconstruction from
+ * sparse image point correspondences in multiple views.
+ * @param <R> type of reconstructor.
  */
 public interface BaseSparseReconstructorListener<R extends BaseSparseReconstructor> {
 
@@ -83,27 +85,56 @@ public interface BaseSparseReconstructorListener<R extends BaseSparseReconstruct
 
     /**
      * Notifies when cameras for provided matched pair of views have been
-     * estimated. This event can be used to store points associated to such
-     * view.
+     * estimated. Cameras returned on this event are defined in a metric stratum (i.e. up to scale).
+     * This event can be used to store cameras associated to such view.
      * @param reconstructor reconstructor raising this event.
      * @param previousViewId id of previous view (i.e. first view).
      * @param currentViewId id of current view (i.e. second view).
      * @param previousCamera estimated camera for previous view.
      * @param currentCamera estimated camera for current view.
      */
-    void onCameraEstimated(R reconstructor, int previousViewId, int currentViewId,
+    void onMetricCameraEstimated(R reconstructor, int previousViewId, int currentViewId,
                             EstimatedCamera previousCamera, EstimatedCamera currentCamera);
 
     /**
      * Called when reconstructed points have been estimated from a series of 2D
-     * matches. This event can be used to store reconstructed points and their
-     * associated data.
+     * matches. Reconstructed points returned on this event are defined in a metric stratum (i.e. up to scale).
+     * This event can be used to store reconstructed points and their associated data.
      * @param reconstructor reconstructor raising this event.
      * @param matches 2D matches associated to estimated reconstructed points.
      * @param points reconstructed 3D points.
      */
-    void onReconstructedPointsEstimated(R reconstructor,
-                                        List<MatchedSamples> matches, List<ReconstructedPoint3D> points);
+    void onMetricReconstructedPointsEstimated(R reconstructor, List<MatchedSamples> matches,
+                                        List<ReconstructedPoint3D> points);
+
+    /**
+     * Called when cameras for provided matched pair of views have been estimated in a metric stratum (when possible and
+     * up to a certain accuracy).
+     * Except SparseReconstructor, which can only make estimations in a metric stratum, other reconstructor
+     * implementations either have calibration knowledge to estimate scale, or use SLAM techniques by mixing additional
+     * sensor data (i.e. gyroscope and accelerometer) to estimate such scale.
+     * @param reconstructor reconstructor raising this event.
+     * @param previousViewId id of previous view (i.e. first view).
+     * @param currentViewId id of current view (i.e. second view).
+     * @param scale estimated scale. This will typically converge to 1.0 as more views are processed. The closer this
+     *              value is to one, the more likely the scale of estimated cameras is accurate.
+     * @param previousCamera estimated camera for previous view.
+     * @param currentCamera estimated camera for current view.
+     */
+    void onEuclideanCameraEstimated(R reconstructor, int previousViewId, int currentViewId, double scale,
+                                    EstimatedCamera previousCamera, EstimatedCamera currentCamera);
+
+    /**
+     * Called when reconstructed points have been estimated from a series of 2D matches.
+     * Except SparseReconstructor, which can only make estimations in a metric stratum, other reconstructor
+     * implementations either have calibration knowledge to estimate scale, or use SLAM techniques by mixing additional
+     * sensor data (i.e. gyroscope and accelerometer) to estimate such scale.
+     * @param reconstructor reconstructor raising this event.
+     * @param scale estimated scale. This will typically converge to 1.0 as more views are processed. The closer this
+     *              value is to one, the more likely the scale of estimated cameras is accurate.
+     * @param points reconstructed 3D points.
+     */
+    void onEuclideanReconstructedPointsEstimated(R reconstructor, double scale, List<ReconstructedPoint3D> points);
 
     /**
      * Called when reconstruction starts.

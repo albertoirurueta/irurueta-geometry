@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.irurueta.geometry.sfm;
 
+import com.irurueta.geometry.slam.SlamEstimator;
+
 /**
- * Class in charge of estimating cameras and 3D reconstruction points from
- * sparse image point correspondences.
+ * Estimates cameras and 3D reconstructed points from sparse image point correspondences
+ * in multiple views and using SLAM (with accelerometer and gyroscope data) for overall
+ * scale estimation.
  */
-public class SparseReconstructor extends BaseSparseReconstructor<SparseReconstructorConfiguration, SparseReconstructor> {
+public class SlamSparseReconstructor extends BaseSlamSparseReconstructor<SlamSparseReconstructorConfiguration,
+        SlamSparseReconstructor, SlamEstimator> {
 
     /**
      * Constructor.
@@ -29,19 +32,38 @@ public class SparseReconstructor extends BaseSparseReconstructor<SparseReconstru
      * @throws NullPointerException if listener or configuration is not
      * provided.
      */
-    public SparseReconstructor(SparseReconstructorConfiguration configuration,
-            SparseReconstructorListener listener) throws NullPointerException {
+    public SlamSparseReconstructor(
+            SlamSparseReconstructorConfiguration configuration,
+            SlamSparseReconstructorListener listener)
+            throws NullPointerException {
         super(configuration, listener);
     }
 
     /**
-     * Constructor with default configuration.
+     * Constructor.
      * @param listener listener in charge of handling events.
      * @throws NullPointerException if listener is not provided.
      */
-    public SparseReconstructor(SparseReconstructorListener listener)
+    public SlamSparseReconstructor(
+            SlamSparseReconstructorListener listener)
             throws NullPointerException {
-        this(new SparseReconstructorConfiguration(), listener);
+        this(new SlamSparseReconstructorConfiguration(), listener);
+    }
+
+    /**
+     * Process one view of all the available data during the reconstruction.
+     * This method can be called multiple times instead of {@link #start()} to build the reconstruction step by step,
+     * one view at a time.
+     * @return true if more views can be processed, false when reconstruction has finished.
+     */
+    @Override
+    public boolean processOneView() {
+        if (!mRunning) {
+            mSlamEstimator = new SlamEstimator();
+            setUpCalibrationData();
+        }
+
+        return super.processOneView();
     }
 
     /**
@@ -52,11 +74,6 @@ public class SparseReconstructor extends BaseSparseReconstructor<SparseReconstru
      */
     @Override
     protected boolean postProcessOne(boolean isInitialPairOfViews) {
-        //no need for post processing when computing metric reconstruction
-        mPreviousEuclideanEstimatedCamera = mPreviousMetricEstimatedCamera;
-        mCurrentEuclideanEstimatedCamera = mCurrentMetricEstimatedCamera;
-        mActiveEuclideanReconstructedPoints = mActiveMetricReconstructedPoints;
-        mCurrentScale = DEFAULT_SCALE;
-        return true;
+        return updateScale();
     }
 }

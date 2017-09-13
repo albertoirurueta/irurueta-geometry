@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base classin charge of estimating cameras and 3D reconstructed points from
+ * Base class in charge of estimating cameras and 3D reconstructed points from
  * sparse image point correspondences in two views and also in charge of 
  * estimating overall scene scale and absolute orientation by means of SLAM 
  * (Simultaneous Location And Mapping) using data obtained from sensors like 
  * accelerometers or gyroscopes.
  * NOTE: absolute orientation slam estimators are not very accurate during 
  * estimation of the orientation state, for that reason we take into account
- * the initial orientation
+ * the initial orientation.
  * @param <C> type of configuration.
  * @param <R> type of reconstructor.
  * @param <S> type of SLAM estimator.

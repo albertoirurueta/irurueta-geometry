@@ -51,24 +51,51 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
     public static final int MIN_NUMBER_OF_VIEWS = 2;
 
     /**
+     * Default scale.
+     */
+    protected static final double DEFAULT_SCALE = 1.0;
+
+    /**
      * Current estimated fundamental matrix.
      */
     protected EstimatedFundamentalMatrix mCurrentEstimatedFundamentalMatrix;
 
     /**
-     * Current estimated camera.
+     * Current estimated camera in a metric stratum (i.e. up to scale).
      */
-    protected EstimatedCamera mCurrentEstimatedCamera;
+    protected EstimatedCamera mCurrentMetricEstimatedCamera;
 
     /**
-     * Previous estimated camera.
+     * Previous estimated camera in a metric stratum (i.e. up to scale).
      */
-    protected EstimatedCamera mPreviousEstimatedCamera;
+    protected EstimatedCamera mPreviousMetricEstimatedCamera;
 
     /**
-     * Reconstructed 3D points which still remain active to match next view.
+     * Reconstructed 3D points which still remain active to match next view in a metric stratum (i.e. up to scale).
      */
-    protected List<ReconstructedPoint3D> mActiveReconstructedPoints;
+    protected List<ReconstructedPoint3D> mActiveMetricReconstructedPoints;
+
+    /**
+     * Current estimated scale. This will typically converge to 1.0 as more views are processed.
+     * The closer this value is to one, the more likely the scale of estimated cameras is accurate.
+     */
+    protected double mCurrentScale = DEFAULT_SCALE;
+
+    /**
+     * Current estimated camera in euclidean stratum (i.e. with actual scale).
+     */
+    protected EstimatedCamera mCurrentEuclideanEstimatedCamera;
+
+    /**
+     * Previous estimated camera in euclidean stratum (i.e. with actual scale).
+     */
+    protected EstimatedCamera mPreviousEuclideanEstimatedCamera;
+
+    /**
+     * Reconstructed 3D points which still remain active to match next view in euclidean stratum (i.e. with actual
+     * scale).
+     */
+    protected List<ReconstructedPoint3D> mActiveEuclideanReconstructedPoints;
 
     /**
      * Configuration for this reconstructor.
@@ -219,7 +246,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      * @return current estimated camera.
      */
     public EstimatedCamera getCurrentEstimatedCamera() {
-        return mCurrentEstimatedCamera;
+        return mCurrentMetricEstimatedCamera;
     }
 
     /**
@@ -227,7 +254,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      * @return previous estimated cameras.
      */
     public EstimatedCamera getPreviousEstimatedCamera() {
-        return mPreviousEstimatedCamera;
+        return mPreviousMetricEstimatedCamera;
     }
 
     /**
@@ -235,7 +262,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      * @return active reconstructed 3D points.
      */
     public List<ReconstructedPoint3D> getActiveReconstructedPoints() {
-        return mActiveReconstructedPoints;
+        return mActiveMetricReconstructedPoints;
     }
 
     /**
@@ -260,6 +287,9 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
         }
 
         if(!mListener.hasMoreViewsAvailable((R)this)) {
+            mListener.onFinish((R)this);
+            mRunning = false;
+            mFinished = true;
             return false;
         }
 
@@ -328,8 +358,8 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
         mRunning = false;
 
         mCurrentEstimatedFundamentalMatrix = null;
-        mCurrentEstimatedCamera = mPreviousEstimatedCamera = null;
-        mActiveReconstructedPoints = null;
+        mCurrentMetricEstimatedCamera = mPreviousMetricEstimatedCamera = null;
+        mActiveMetricReconstructedPoints = null;
 
         mFinished = false;
     }
@@ -337,9 +367,10 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
     /**
      * Called when processing one frame is successfully finished. This can be done to estimate scale on
      * those implementations where scale can be measured or is already known.
+     * @param isInitialPairOfViews true if initial pair of views is being processed, false otherwise.
      * @return true if post processing succeeded, false otherwise.
      */
-    protected abstract boolean postProcessOne();
+    protected abstract boolean postProcessOne(boolean isInitialPairOfViews);
 
     /**
      * Processes data for first view.
@@ -384,15 +415,22 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
 
                     if (estimateInitialCamerasAndPoints()) {
                         //cameras and points have been estimated
-                        mListener.onCameraEstimated((R) this,
+                        mListener.onMetricCameraEstimated((R) this,
                                 mPreviousViewId, mCurrentViewId,
-                                mPreviousEstimatedCamera, mCurrentEstimatedCamera);
-                        mListener.onReconstructedPointsEstimated(
-                                (R) this, mMatches, mActiveReconstructedPoints);
-                        if (postProcessOne()) {
-                            mListener.onFinish((R) this);
-                            mRunning = false;
-                            mFinished = true;
+                                mPreviousMetricEstimatedCamera, mCurrentMetricEstimatedCamera);
+                        mListener.onMetricReconstructedPointsEstimated(
+                                (R) this, mMatches, mActiveMetricReconstructedPoints);
+
+                        if (!postProcessOne(false)) {
+                            //something failed
+                            mFailed = true;
+                            mListener.onFail((R)this);
+                        } else {
+                            //post processing succeeded
+                            mListener.onEuclideanCameraEstimated((R)this, mPreviousViewId, mCurrentViewId,
+                                    mCurrentScale, mPreviousEuclideanEstimatedCamera, mCurrentEuclideanEstimatedCamera);
+                            mListener.onEuclideanReconstructedPointsEstimated((R)this, mCurrentScale,
+                                    mActiveEuclideanReconstructedPoints);
                         }
                     } else {
                         //initial cameras failed
@@ -632,25 +670,37 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 }
             }
 
-            mPreviousEstimatedCamera = mCurrentEstimatedCamera;
+            mPreviousMetricEstimatedCamera = mCurrentMetricEstimatedCamera;
 
-            mCurrentEstimatedCamera = new EstimatedCamera();
-            mCurrentEstimatedCamera.setCamera(currentCamera);
-            mCurrentEstimatedCamera.setId(String.valueOf(mCurrentViewId));
-            mCurrentEstimatedCamera.setCovariance(currentCameraCovariance);
+            mCurrentMetricEstimatedCamera = new EstimatedCamera();
+            mCurrentMetricEstimatedCamera.setCamera(currentCamera);
+            mCurrentMetricEstimatedCamera.setId(String.valueOf(mCurrentViewId));
+            mCurrentMetricEstimatedCamera.setCovariance(currentCameraCovariance);
 
 
             //notify camera estimation
-            mListener.onCameraEstimated((R) this,
+            mListener.onMetricCameraEstimated((R) this,
                     mPreviousViewId, mCurrentViewId,
-                    mPreviousEstimatedCamera, mCurrentEstimatedCamera);
+                    mPreviousMetricEstimatedCamera, mCurrentMetricEstimatedCamera);
 
 
             //reconstruct all matches and refine existing reconstructed points
             reconstructAndRefineMatches();
 
             //notify reconstruction update
-            mListener.onReconstructedPointsEstimated((R)this, mMatches, mActiveReconstructedPoints);
+            mListener.onMetricReconstructedPointsEstimated((R)this, mMatches, mActiveMetricReconstructedPoints);
+
+            if (!postProcessOne(false)) {
+                //something failed
+                mFailed = true;
+                mListener.onFail((R)this);
+            } else {
+                //post processing succeeded
+                mListener.onEuclideanCameraEstimated((R)this, mPreviousViewId, mCurrentViewId,
+                        mCurrentScale, mPreviousEuclideanEstimatedCamera, mCurrentEuclideanEstimatedCamera);
+                mListener.onEuclideanReconstructedPointsEstimated((R)this, mCurrentScale,
+                        mActiveEuclideanReconstructedPoints);
+            }
         }
     }
 
@@ -704,7 +754,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 }
             }
 
-            mActiveReconstructedPoints = new ArrayList<>();
+            mActiveMetricReconstructedPoints = new ArrayList<>();
             ReconstructedPoint3D reconstructedPoint;
             int matchPos = 0;
             for (MatchedSamples match : mMatches) {
@@ -737,7 +787,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 }
 
                 //also add current camera which is not yet available on estimated cameras array
-                cameras.add(mCurrentEstimatedCamera.getCamera());
+                cameras.add(mCurrentMetricEstimatedCamera.getCamera());
 
                 if (points.size() < SinglePoint3DTriangulator.MIN_REQUIRED_VIEWS ||
                         points.size() != cameras.size()) {
@@ -775,7 +825,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 reconstructedPoint.setPoint(point3D);
                 reconstructedPoint.setInlier(true);
                 reconstructedPoint.setId(String.valueOf(matchPos));
-                mActiveReconstructedPoints.add(reconstructedPoint);
+                mActiveMetricReconstructedPoints.add(reconstructedPoint);
 
                 matchPos++;
             }
@@ -1529,13 +1579,13 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     intrinsic2.getVerticalPrincipalPoint() + principalPointY);
             camera2.setIntrinsicParameters(intrinsic2);
 
-            mPreviousEstimatedCamera = new EstimatedCamera();
-            mPreviousEstimatedCamera.setCamera(camera1);
-            mPreviousEstimatedCamera.setId(String.valueOf(mPreviousViewId));
+            mPreviousMetricEstimatedCamera = new EstimatedCamera();
+            mPreviousMetricEstimatedCamera.setCamera(camera1);
+            mPreviousMetricEstimatedCamera.setId(String.valueOf(mPreviousViewId));
 
-            mCurrentEstimatedCamera = new EstimatedCamera();
-            mCurrentEstimatedCamera.setCamera(camera2);
-            mCurrentEstimatedCamera.setId(String.valueOf(mCurrentViewId));
+            mCurrentMetricEstimatedCamera = new EstimatedCamera();
+            mCurrentMetricEstimatedCamera.setCamera(camera2);
+            mCurrentMetricEstimatedCamera.setId(String.valueOf(mCurrentViewId));
 
             //fix fundamental matrix to account for principal point different
             //from zero
@@ -1598,7 +1648,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
             cameras.add(camera1);
             cameras.add(camera2);
 
-            mActiveReconstructedPoints = new ArrayList<>();
+            mActiveMetricReconstructedPoints = new ArrayList<>();
             List<Point2D> points = new ArrayList<Point2D>();
             int numPoints = correctedPoints1.size();
             Point3D triangulatedPoint;
@@ -1622,7 +1672,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                         triangulatedPoint);
                 reconstructedPoint.setInlier(front1 && front2);
 
-                mActiveReconstructedPoints.add(reconstructedPoint);
+                mActiveMetricReconstructedPoints.add(reconstructedPoint);
             }
 
             return true;
@@ -1679,11 +1729,11 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
             PinholeCamera camera1 = estimator.getEstimatedLeftCamera();
             PinholeCamera camera2 = estimator.getEstimatedRightCamera();
 
-            mPreviousEstimatedCamera = new EstimatedCamera();
-            mPreviousEstimatedCamera.setCamera(camera1);
+            mPreviousMetricEstimatedCamera = new EstimatedCamera();
+            mPreviousMetricEstimatedCamera.setCamera(camera1);
 
-            mCurrentEstimatedCamera = new EstimatedCamera();
-            mCurrentEstimatedCamera.setCamera(camera2);
+            mCurrentMetricEstimatedCamera = new EstimatedCamera();
+            mCurrentMetricEstimatedCamera.setCamera(camera2);
 
             //store points
             List<Point3D> triangulatedPoints =
@@ -1691,14 +1741,14 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
             BitSet validTriangulatedPoints =
                     estimator.getValidTriangulatedPoints();
 
-            mActiveReconstructedPoints = new ArrayList<ReconstructedPoint3D>();
+            mActiveMetricReconstructedPoints = new ArrayList<ReconstructedPoint3D>();
             int size = triangulatedPoints.size();
             for (int i = 0; i < size; i++) {
                 ReconstructedPoint3D reconstructedPoint =
                         new ReconstructedPoint3D();
                 reconstructedPoint.setPoint(triangulatedPoints.get(i));
                 reconstructedPoint.setInlier(validTriangulatedPoints.get(i));
-                mActiveReconstructedPoints.add(reconstructedPoint);
+                mActiveMetricReconstructedPoints.add(reconstructedPoint);
             }
 
             return true;
@@ -1773,13 +1823,13 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
             PinholeCamera camera1 = estimator.getEstimatedLeftCamera();
             PinholeCamera camera2 = estimator.getEstimatedRightCamera();
 
-            mPreviousEstimatedCamera = new EstimatedCamera();
-            mPreviousEstimatedCamera.setCamera(camera1);
-            mPreviousEstimatedCamera.setId(String.valueOf(mPreviousViewId));
+            mPreviousMetricEstimatedCamera = new EstimatedCamera();
+            mPreviousMetricEstimatedCamera.setCamera(camera1);
+            mPreviousMetricEstimatedCamera.setId(String.valueOf(mPreviousViewId));
 
-            mCurrentEstimatedCamera = new EstimatedCamera();
-            mCurrentEstimatedCamera.setCamera(camera2);
-            mCurrentEstimatedCamera.setId(String.valueOf(mCurrentViewId));
+            mCurrentMetricEstimatedCamera = new EstimatedCamera();
+            mCurrentMetricEstimatedCamera.setCamera(camera2);
+            mCurrentMetricEstimatedCamera.setId(String.valueOf(mCurrentViewId));
 
 
             //store points
@@ -1788,14 +1838,14 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
             BitSet validTriangulatedPoints =
                     estimator.getValidTriangulatedPoints();
 
-            mActiveReconstructedPoints = new ArrayList<ReconstructedPoint3D>();
+            mActiveMetricReconstructedPoints = new ArrayList<ReconstructedPoint3D>();
             int size = triangulatedPoints.size();
             for (int i = 0; i < size; i++) {
                 ReconstructedPoint3D reconstructedPoint =
                         new ReconstructedPoint3D();
                 reconstructedPoint.setPoint(triangulatedPoints.get(i));
                 reconstructedPoint.setInlier(validTriangulatedPoints.get(i));
-                mActiveReconstructedPoints.add(reconstructedPoint);
+                mActiveMetricReconstructedPoints.add(reconstructedPoint);
             }
 
             return true;
