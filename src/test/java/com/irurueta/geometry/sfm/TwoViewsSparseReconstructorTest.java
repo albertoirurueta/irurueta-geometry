@@ -1,19 +1,24 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.sfm.TwoViewsSparseReconstructor
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date April 17, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.sfm;
 
 import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.DecomposerException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.SingularValueDecomposer;
-import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.geometry.CameraException;
 import com.irurueta.geometry.HomogeneousPoint3D;
 import com.irurueta.geometry.InhomogeneousPoint2D;
@@ -47,47 +52,47 @@ import static org.junit.Assert.*;
 
 public class TwoViewsSparseReconstructorTest {
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
-    
-    public static final double MIN_RANDOM_VALUE_PLANAR = -1500.0;
-    public static final double MAX_RANDOM_VALUE_PLANAR = 1500.0;
-    
-    public static final double MIN_FOCAL_LENGTH_ESSENTIAL = 750.0;
-    public static final double MAX_FOCAL_LENGTH_ESSENTIAL = 1500.0;
-    
-    public static final double MIN_FOCAL_LENGTH_DIAC = 1.0;
-    public static final double MAX_FOCAL_LENGTH_DIAC = 100.0;
-    
-    public static final double MIN_PRINCIPAL_POINT_ESSENTIAL = 100.0;
-    public static final double MAX_PRINCIPAL_POINT_ESSENTIAL = 400.0;        
-    
-    public static final double MIN_PRINCIPAL_POINT_DIAC = 10.0;
-    public static final double MAX_PRINCIPAL_POINT_DIAC = 20.0;
-        
-    public static final double MIN_ANGLE_DEGREES = -30.0;
-    public static final double MAX_ANGLE_DEGREES = -15.0;
-    
-    public static final double MIN_CAMERA_SEPARATION_DIAC = 5.0;
-    public static final double MAX_CAMERA_SEPARATION_DIAC = 10.0;
-    
-    public static final double MIN_CAMERA_SEPARATION_ESSENTIAL = 500.0;
-    public static final double MAX_CAMERA_SEPARATION_ESSENTIAL = 1000.0;   
-    
-    public static final int MIN_NUM_POINTS = 25;
-    public static final int MAX_NUM_POINTS = 50;
-    
-    public static final double MIN_LAMBDA_ESSENTIAL = -1000.0;
-    public static final double MAX_LAMBDA_ESSENTIAL = 1000.0;
-    
-    public static final double MIN_LAMBDA_DIAC = 100.0;
-    public static final double MAX_LAMBDA_DIAC = 500.0;    
-    
-    public static final int TIMES = 500;
-    public static final int MAX_TRIES = 5000;
-    
-    public static final double ABSOLUTE_ERROR = 1e-6;
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-3;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
+
+    private static final double MIN_RANDOM_VALUE_PLANAR = -1500.0;
+    private static final double MAX_RANDOM_VALUE_PLANAR = 1500.0;
+
+    private static final double MIN_FOCAL_LENGTH_ESSENTIAL = 750.0;
+    private static final double MAX_FOCAL_LENGTH_ESSENTIAL = 1500.0;
+
+    private static final double MIN_FOCAL_LENGTH_DIAC = 1.0;
+    private static final double MAX_FOCAL_LENGTH_DIAC = 100.0;
+
+    private static final double MIN_PRINCIPAL_POINT_ESSENTIAL = 100.0;
+    private static final double MAX_PRINCIPAL_POINT_ESSENTIAL = 400.0;
+
+    private static final double MIN_PRINCIPAL_POINT_DIAC = 10.0;
+    private static final double MAX_PRINCIPAL_POINT_DIAC = 20.0;
+
+    private static final double MIN_ANGLE_DEGREES = -30.0;
+    private static final double MAX_ANGLE_DEGREES = -15.0;
+
+    private static final double MIN_CAMERA_SEPARATION_DIAC = 5.0;
+    private static final double MAX_CAMERA_SEPARATION_DIAC = 10.0;
+
+    private static final double MIN_CAMERA_SEPARATION_ESSENTIAL = 500.0;
+    private static final double MAX_CAMERA_SEPARATION_ESSENTIAL = 1000.0;
+
+    private static final int MIN_NUM_POINTS = 25;
+    private static final int MAX_NUM_POINTS = 50;
+
+    private static final double MIN_LAMBDA_ESSENTIAL = -1000.0;
+    private static final double MAX_LAMBDA_ESSENTIAL = 1000.0;
+
+    private static final double MIN_LAMBDA_DIAC = 100.0;
+    private static final double MAX_LAMBDA_DIAC = 500.0;
+
+    private static final int TIMES = 500;
+    private static final int MAX_TRIES = 5000;
+
+    private static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
     
     private int mViewCount = 0;
     private EstimatedFundamentalMatrix mEstimatedFundamentalMatrix; 
@@ -220,10 +225,7 @@ public class TwoViewsSparseReconstructorTest {
     
     @Test
     public void testGeneralPointsEssential() 
-            throws InvalidPairOfCamerasException, WrongSizeException, 
-            com.irurueta.algebra.NotReadyException, 
-            com.irurueta.algebra.LockedException, DecomposerException, 
-            com.irurueta.algebra.NotAvailableException, CameraException, 
+            throws InvalidPairOfCamerasException, CameraException,
             FailedReconstructionException, CancelledReconstructionException, 
             NotReadyException, NotAvailableException, AlgebraException {
         
@@ -339,10 +341,10 @@ public class TwoViewsSparseReconstructorTest {
         
             InhomogeneousPoint3D point3D;
             List<InhomogeneousPoint3D> points3D = 
-                    new ArrayList<InhomogeneousPoint3D>();
+                    new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
-            final List<Point2D> projectedPoints1 = new ArrayList<Point2D>();
-            final List<Point2D> projectedPoints2 = new ArrayList<Point2D>();
+            final List<Point2D> projectedPoints1 = new ArrayList<>();
+            final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean front1, front2;
             for (int i = 0; i < numPoints; i++) {
                 //generate points and ensure they lie in front of both cameras
@@ -370,7 +372,9 @@ public class TwoViewsSparseReconstructorTest {
                 points3D.add(point3D);
                 
                 //check that 3D point is in front of both cameras
+                //noinspection all
                 assertTrue(front1);
+                //noinspection all
                 assertTrue(front2);
             
                 //project 3D point into both cameras
@@ -547,7 +551,7 @@ public class TwoViewsSparseReconstructorTest {
             estimatedCamera1.decompose();
             estimatedCamera2.decompose();
         
-            List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
+            List<Point3D> reconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 reconstructedPoints3D.add(
                         mReconstructedPoints.get(i).getPoint());
@@ -663,10 +667,8 @@ public class TwoViewsSparseReconstructorTest {
     }
     
     @Test
-    public void testGeneralPointsDIAC() throws InvalidPairOfCamerasException, 
-            WrongSizeException, com.irurueta.algebra.NotReadyException,
-            com.irurueta.algebra.LockedException, DecomposerException,
-            com.irurueta.algebra.NotAvailableException, CameraException, 
+    public void testGeneralPointsDIAC() throws InvalidPairOfCamerasException,
+            CameraException,
             FailedReconstructionException, CancelledReconstructionException, 
             NotReadyException, NotAvailableException, AlgebraException {
         int numValid = 0;
@@ -782,10 +784,10 @@ public class TwoViewsSparseReconstructorTest {
             
             InhomogeneousPoint3D point3D;
             List<InhomogeneousPoint3D> points3D =
-                    new ArrayList<InhomogeneousPoint3D>();
+                    new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
-            final List<Point2D> projectedPoints1 = new ArrayList<Point2D>();
-            final List<Point2D> projectedPoints2 = new ArrayList<Point2D>();
+            final List<Point2D> projectedPoints1 = new ArrayList<>();
+            final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean front1, front2;
             boolean maxTriesReached = false;
             for (int i = 0; i < numPoints; i++) {
@@ -820,7 +822,9 @@ public class TwoViewsSparseReconstructorTest {
                 points3D.add(point3D);
                 
                 //check that 3D point is in front of both cameras
+                //noinspection all
                 assertTrue(front1);
+                //noinspection all
                 assertTrue(front2);
                 
                 //project 3D point into both cameras
@@ -1005,7 +1009,7 @@ public class TwoViewsSparseReconstructorTest {
             estimatedCamera1.decompose();
             estimatedCamera2.decompose();
             
-            List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
+            List<Point3D> reconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 reconstructedPoints3D.add(
                         mReconstructedPoints.get(i).getPoint());
@@ -1132,10 +1136,8 @@ public class TwoViewsSparseReconstructorTest {
     
     @Test
     public void testGeneralPointsDAQAndEssentialZeroPrincipalPoint() 
-            throws InvalidPairOfCamerasException, WrongSizeException, 
-            com.irurueta.algebra.NotReadyException, 
-            com.irurueta.algebra.LockedException, DecomposerException, 
-            com.irurueta.algebra.NotAvailableException, CameraException, 
+            throws InvalidPairOfCamerasException,
+            CameraException,
             FailedReconstructionException, CancelledReconstructionException, 
             NotReadyException, NotAvailableException, AlgebraException {
         int numValid = 0;
@@ -1251,10 +1253,10 @@ public class TwoViewsSparseReconstructorTest {
             
             InhomogeneousPoint3D point3D;
             List<InhomogeneousPoint3D> points3D =
-                    new ArrayList<InhomogeneousPoint3D>();
+                    new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
-            final List<Point2D> projectedPoints1 = new ArrayList<Point2D>();
-            final List<Point2D> projectedPoints2 = new ArrayList<Point2D>();
+            final List<Point2D> projectedPoints1 = new ArrayList<>();
+            final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean leftFront, rightFront;
             boolean maxTriesReached = false;
             for (int i = 0; i < numPoints; i++) {
@@ -1289,7 +1291,9 @@ public class TwoViewsSparseReconstructorTest {
                 points3D.add(point3D);
                 
                 //check that world point is in front of both cameras
+                //noinspection all
                 assertTrue(leftFront);
+                //noinspection all
                 assertTrue(rightFront);
                 
                 //project world point into both cameras
@@ -1469,7 +1473,7 @@ public class TwoViewsSparseReconstructorTest {
             estimatedCamera1.decompose();
             estimatedCamera2.decompose();
         
-            List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
+            List<Point3D> reconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 reconstructedPoints3D.add(
                         mReconstructedPoints.get(i).getPoint());
@@ -1590,10 +1594,8 @@ public class TwoViewsSparseReconstructorTest {
 
     @Test
     public void testGeneralPointsDAQAndEssential() 
-            throws InvalidPairOfCamerasException, WrongSizeException, 
-            com.irurueta.algebra.NotReadyException, 
-            com.irurueta.algebra.LockedException, DecomposerException, 
-            com.irurueta.algebra.NotAvailableException, CameraException, 
+            throws InvalidPairOfCamerasException,
+            CameraException,
             FailedReconstructionException, CancelledReconstructionException, 
             NotReadyException, NotAvailableException, AlgebraException {
         int numValid = 0;
@@ -1713,10 +1715,10 @@ public class TwoViewsSparseReconstructorTest {
             
             InhomogeneousPoint3D point3D;
             List<InhomogeneousPoint3D> points3D =
-                    new ArrayList<InhomogeneousPoint3D>();
+                    new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
-            final List<Point2D> projectedPoints1 = new ArrayList<Point2D>();
-            final List<Point2D> projectedPoints2 = new ArrayList<Point2D>();
+            final List<Point2D> projectedPoints1 = new ArrayList<>();
+            final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean leftFront, rightFront;
             boolean maxTriesReached = false;
             for (int i = 0; i < numPoints; i++) {
@@ -1751,7 +1753,9 @@ public class TwoViewsSparseReconstructorTest {
                 points3D.add(point3D);
                 
                 //check that world point is in front of both cameras
+                //noinspection all
                 assertTrue(leftFront);
+                //noinspection all
                 assertTrue(rightFront);
                 
                 //project world point into both cameras
@@ -1931,7 +1935,7 @@ public class TwoViewsSparseReconstructorTest {
             estimatedCamera1.decompose();
             estimatedCamera2.decompose();
         
-            List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
+            List<Point3D> reconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 reconstructedPoints3D.add(
                         mReconstructedPoints.get(i).getPoint());
@@ -2051,10 +2055,8 @@ public class TwoViewsSparseReconstructorTest {
     }
     
     @Test
-    public void testGeneralPointsDAQ() throws InvalidPairOfCamerasException, 
-            WrongSizeException, com.irurueta.algebra.NotReadyException, 
-            com.irurueta.algebra.LockedException, DecomposerException, 
-            com.irurueta.algebra.NotAvailableException, CameraException, 
+    public void testGeneralPointsDAQ() throws InvalidPairOfCamerasException,
+            CameraException,
             FailedReconstructionException, CancelledReconstructionException, 
             NotReadyException, NotAvailableException, LockedException, 
             RobustEstimatorException, AlgebraException {
@@ -2174,10 +2176,10 @@ public class TwoViewsSparseReconstructorTest {
                     MAX_NUM_POINTS);
             
             InhomogeneousPoint3D point3D;
-            List<Point3D> points3D = new ArrayList<Point3D>();
+            List<Point3D> points3D = new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
-            final List<Point2D> projectedPoints1 = new ArrayList<Point2D>();
-            final List<Point2D> projectedPoints2 = new ArrayList<Point2D>();
+            final List<Point2D> projectedPoints1 = new ArrayList<>();
+            final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean leftFront, rightFront;
             boolean maxTriesReached = false;
             for (int i = 0; i < numPoints; i++) {
@@ -2212,7 +2214,9 @@ public class TwoViewsSparseReconstructorTest {
                 points3D.add(point3D);
                 
                 //check that world point is in front of both cameras
+                //noinspection all
                 assertTrue(leftFront);
+                //noinspection all
                 assertTrue(rightFront);
                 
                 //project world point into both cameras
@@ -2389,7 +2393,7 @@ public class TwoViewsSparseReconstructorTest {
             PinholeCamera estimatedCamera1 = mEstimatedCamera1.getCamera();
             PinholeCamera estimatedCamera2 = mEstimatedCamera2.getCamera();
             
-            List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
+            List<Point3D> reconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < points3D.size(); i++) {
                 reconstructedPoints3D.add(mReconstructedPoints.get(i).
                         getPoint());
@@ -2456,10 +2460,8 @@ public class TwoViewsSparseReconstructorTest {
         
     @Test
     public void testPlanarPointsEssential() 
-            throws InvalidPairOfCamerasException, WrongSizeException, 
-            com.irurueta.algebra.NotReadyException, 
-            com.irurueta.algebra.LockedException, DecomposerException, 
-            com.irurueta.algebra.NotAvailableException, CameraException, 
+            throws InvalidPairOfCamerasException,
+            CameraException,
             FailedReconstructionException, CancelledReconstructionException, 
             NotReadyException, NotAvailableException, AlgebraException, 
             LockedException, RobustEstimatorException {
@@ -2590,10 +2592,10 @@ public class TwoViewsSparseReconstructorTest {
         
             HomogeneousPoint3D point3D;
             List<HomogeneousPoint3D> points3D = 
-                    new ArrayList<HomogeneousPoint3D>();            
+                    new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
-            final List<Point2D> projectedPoints1 = new ArrayList<Point2D>();
-            final List<Point2D> projectedPoints2 = new ArrayList<Point2D>();
+            final List<Point2D> projectedPoints1 = new ArrayList<>();
+            final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean front1, front2;
             for (int i = 0; i < numPoints; i++) {
                 //generate points and ensure they lie in front of both cameras
@@ -2632,7 +2634,9 @@ public class TwoViewsSparseReconstructorTest {
                 points3D.add(point3D);
                 
                 //check that 3D point is in front of both cameras
+                //noinspection all
                 assertTrue(front1);
+                //noinspection all
                 assertTrue(front2);
             
                 //project 3D point into both cameras
@@ -2814,7 +2818,7 @@ public class TwoViewsSparseReconstructorTest {
             estimatedCamera1.decompose();
             estimatedCamera2.decompose();
         
-            List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
+            List<Point3D> reconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 reconstructedPoints3D.add(
                         mReconstructedPoints.get(i).getPoint());
@@ -2936,10 +2940,8 @@ public class TwoViewsSparseReconstructorTest {
     }
     
     @Test
-    public void testPlanarPointsDIAC() throws InvalidPairOfCamerasException, 
-            WrongSizeException, com.irurueta.algebra.NotReadyException,
-            com.irurueta.algebra.LockedException, DecomposerException,
-            com.irurueta.algebra.NotAvailableException, CameraException, 
+    public void testPlanarPointsDIAC() throws InvalidPairOfCamerasException,
+            CameraException,
             FailedReconstructionException, CancelledReconstructionException, 
             NotReadyException, NotAvailableException, AlgebraException {
         int numValid = 0;
@@ -3070,8 +3072,8 @@ public class TwoViewsSparseReconstructorTest {
         
             HomogeneousPoint3D point3D;
             Point2D projectedPoint1, projectedPoint2;
-            final List<Point2D> projectedPoints1 = new ArrayList<Point2D>();
-            final List<Point2D> projectedPoints2 = new ArrayList<Point2D>();
+            final List<Point2D> projectedPoints1 = new ArrayList<>();
+            final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean front1, front2;
             for (int i = 0; i < numPoints; i++) {
                 //generate points and ensure they lie in front of both cameras
@@ -3109,7 +3111,9 @@ public class TwoViewsSparseReconstructorTest {
                 } while(!front1 || !front2);
                 
                 //check that 3D point is in front of both cameras
+                //noinspection all
                 assertTrue(front1);
+                //noinspection all
                 assertTrue(front2);
             
                 //project 3D point into both cameras
@@ -3291,7 +3295,7 @@ public class TwoViewsSparseReconstructorTest {
             estimatedCamera1.decompose();
             estimatedCamera2.decompose();
         
-            List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
+            List<Point3D> reconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 reconstructedPoints3D.add(
                         mReconstructedPoints.get(i).getPoint());
@@ -3365,10 +3369,8 @@ public class TwoViewsSparseReconstructorTest {
     
     @Test
     public void testPlanarPointsDAQAndEssentialZeroPrincipalPoint() 
-            throws InvalidPairOfCamerasException, WrongSizeException, 
-            com.irurueta.algebra.NotReadyException, 
-            com.irurueta.algebra.LockedException, DecomposerException, 
-            com.irurueta.algebra.NotAvailableException, CameraException, 
+            throws InvalidPairOfCamerasException,
+            CameraException,
             FailedReconstructionException, CancelledReconstructionException, 
             NotReadyException, NotAvailableException, AlgebraException, 
             LockedException, RobustEstimatorException {
@@ -3499,10 +3501,10 @@ public class TwoViewsSparseReconstructorTest {
         
             HomogeneousPoint3D point3D;
             List<HomogeneousPoint3D> points3D = 
-                    new ArrayList<HomogeneousPoint3D>();            
+                    new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
-            final List<Point2D> projectedPoints1 = new ArrayList<Point2D>();
-            final List<Point2D> projectedPoints2 = new ArrayList<Point2D>();
+            final List<Point2D> projectedPoints1 = new ArrayList<>();
+            final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean front1, front2;
             for (int i = 0; i < numPoints; i++) {
                 //generate points and ensure they lie in front of both cameras
@@ -3541,7 +3543,9 @@ public class TwoViewsSparseReconstructorTest {
                 points3D.add(point3D);
                 
                 //check that 3D point is in front of both cameras
+                //noinspection all
                 assertTrue(front1);
+                //noinspection all
                 assertTrue(front2);
             
                 //project 3D point into both cameras
@@ -3723,7 +3727,7 @@ public class TwoViewsSparseReconstructorTest {
             estimatedCamera1.decompose();
             estimatedCamera2.decompose();
         
-            List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
+            List<Point3D> reconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 reconstructedPoints3D.add(
                         mReconstructedPoints.get(i).getPoint());
@@ -3806,10 +3810,8 @@ public class TwoViewsSparseReconstructorTest {
     
     @Test
     public void testPlanarPointsDAQAndEssential() 
-            throws InvalidPairOfCamerasException, WrongSizeException, 
-            com.irurueta.algebra.NotReadyException, 
-            com.irurueta.algebra.LockedException, DecomposerException, 
-            com.irurueta.algebra.NotAvailableException, CameraException, 
+            throws InvalidPairOfCamerasException,
+            CameraException,
             FailedReconstructionException, CancelledReconstructionException, 
             NotReadyException, NotAvailableException, AlgebraException, 
             LockedException, RobustEstimatorException {
@@ -3943,11 +3945,10 @@ public class TwoViewsSparseReconstructorTest {
                     MAX_NUM_POINTS);
         
             HomogeneousPoint3D point3D;
-            List<HomogeneousPoint3D> points3D = 
-                    new ArrayList<HomogeneousPoint3D>();            
+            List<HomogeneousPoint3D> points3D = new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
-            final List<Point2D> projectedPoints1 = new ArrayList<Point2D>();
-            final List<Point2D> projectedPoints2 = new ArrayList<Point2D>();
+            final List<Point2D> projectedPoints1 = new ArrayList<>();
+            final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean front1, front2;
             for (int i = 0; i < numPoints; i++) {
                 //generate points and ensure they lie in front of both cameras
@@ -3986,7 +3987,9 @@ public class TwoViewsSparseReconstructorTest {
                 points3D.add(point3D);
                 
                 //check that 3D point is in front of both cameras
+                //noinspection all
                 assertTrue(front1);
+                //noinspection all
                 assertTrue(front2);
             
                 //project 3D point into both cameras
@@ -4168,7 +4171,7 @@ public class TwoViewsSparseReconstructorTest {
             estimatedCamera1.decompose();
             estimatedCamera2.decompose();
         
-            List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
+            List<Point3D> reconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 reconstructedPoints3D.add(
                         mReconstructedPoints.get(i).getPoint());
@@ -4249,10 +4252,8 @@ public class TwoViewsSparseReconstructorTest {
     
     @Test
     public void testPlanarPointsDAQ() 
-            throws InvalidPairOfCamerasException, WrongSizeException, 
-            com.irurueta.algebra.NotReadyException, 
-            com.irurueta.algebra.LockedException, DecomposerException, 
-            com.irurueta.algebra.NotAvailableException, CameraException, 
+            throws InvalidPairOfCamerasException,
+            CameraException,
             FailedReconstructionException, CancelledReconstructionException, 
             NotReadyException, NotAvailableException, AlgebraException, 
             LockedException, RobustEstimatorException {
@@ -4387,8 +4388,8 @@ public class TwoViewsSparseReconstructorTest {
         
             HomogeneousPoint3D point3D;
             Point2D projectedPoint1, projectedPoint2;
-            final List<Point2D> projectedPoints1 = new ArrayList<Point2D>();
-            final List<Point2D> projectedPoints2 = new ArrayList<Point2D>();
+            final List<Point2D> projectedPoints1 = new ArrayList<>();
+            final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean front1, front2;
             boolean failed = false;
             for (int i = 0; i < numPoints; i++) {
@@ -4432,7 +4433,9 @@ public class TwoViewsSparseReconstructorTest {
                 }
                 
                 //check that 3D point is in front of both cameras
+                //noinspection all
                 assertTrue(front1);
+                //noinspection all
                 assertTrue(front2);
             
                 //project 3D point into both cameras

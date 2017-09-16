@@ -1491,6 +1491,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     /**
      * Specifies whether additional cameras intrinsics are estimated using the Dual Image of
      * Absolute Conic (DIAC).
+     * It is not recommended to enable this setting as it has low accuracy.
      * @param useDIACForAdditionalCamerasIntrinsics true if additional cameras intrinsics are
      *                                              estimated using the Dual Image of Absolute
      *                                              Conic (DIAC), false otherwise.

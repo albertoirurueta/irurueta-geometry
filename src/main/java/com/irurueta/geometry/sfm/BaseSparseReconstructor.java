@@ -242,27 +242,52 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
     }
 
     /**
-     * Gets estimated camera for current view.
-     * @return current estimated camera.
+     * Gets estimated metric camera for current view (i.e. up to scale).
+     * @return current estimated metric camera.
      */
-    public EstimatedCamera getCurrentEstimatedCamera() {
+    public EstimatedCamera getCurrentMetricEstimatedCamera() {
         return mCurrentMetricEstimatedCamera;
     }
 
     /**
-     * Gets estimated camera for previous view.
-     * @return previous estimated cameras.
+     * Gets estimated camera for previous view (i.e. up to scale).
+     * @return previous estimated metric camera.
      */
-    public EstimatedCamera getPreviousEstimatedCamera() {
+    public EstimatedCamera getPreviousMetricEstimatedCamera() {
         return mPreviousMetricEstimatedCamera;
     }
 
     /**
-     * Gets reconstructed 3D points which still remain active to match next view.
-     * @return active reconstructed 3D points.
+     * Gets estimated euclidean camera for current view (i.e. with actual scale).
+     * @return current estimated euclidean camera.
      */
-    public List<ReconstructedPoint3D> getActiveReconstructedPoints() {
+    public EstimatedCamera getCurrentEuclideanEstimatedCamera() {
+        return mCurrentEuclideanEstimatedCamera;
+    }
+
+    /**
+     * Gets estimated euclidean camera for previous view (i.e. with actual scale).
+     * @return previous estimated euclidean camera.
+     */
+    public EstimatedCamera getPreviousEuclideanEstimatedCamera() {
+        return mPreviousEuclideanEstimatedCamera;
+    }
+
+    /**
+     * Gets metric reconstructed 3D points (i.e. up to scale) which still remain active to match next view.
+     * @return active metric reconstructed 3D points.
+     */
+    public List<ReconstructedPoint3D> getActiveMetricReconstructedPoints() {
         return mActiveMetricReconstructedPoints;
+    }
+
+    /**
+     * Gets euclidean reconstructed 3D points (i.e. with actual scale) which still remain active to match next
+     * view.
+     * @return active euclidean reconstructed 3D points.
+     */
+    public List<ReconstructedPoint3D> getActiveEuclideanReconstructedPoints() {
+        return mActiveEuclideanReconstructedPoints;
     }
 
     /**
@@ -293,12 +318,12 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
             return false;
         }
 
-        mCurrentEstimatedFundamentalMatrix = null;
         mCurrentViewSamples = new ArrayList<Sample2D>();
         mListener.onRequestSamplesForCurrentView((R)this, mViewCount,
                 mCurrentViewSamples);
 
         if (mPreviousViewSamples == null) {
+            mCurrentEstimatedFundamentalMatrix = null;
             //for first view we simply keep samples (if enough are provided)
             processFirstView();
         } else {
@@ -409,6 +434,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     mListener.onSamplesAccepted((R) this, mViewCount,
                             mCurrentViewSamples);
                     mCurrentViewId = mViewCount;
+                    mPreviousViewSamples = mCurrentViewSamples;
 
                     mListener.onFundamentalMatrixEstimated((R) this,
                             mCurrentEstimatedFundamentalMatrix);
@@ -453,12 +479,13 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
         //find matches
         mMatches.clear();
         mListener.onRequestMatches((R) this, mPreviousViewSamples,
-                mCurrentViewSamples, mPreviousViewId, mViewCount,
+                mCurrentViewSamples, mCurrentViewId, mViewCount,
                 mMatches);
 
         List<Point3D> points3D = new ArrayList<>();
         List<Point2D> points2D = new ArrayList<>();
         double[] qualityScores = setUpCameraEstimatorMatches(points3D, points2D);
+        boolean samplesRejected = false;
 
         if (hasEnoughSamplesForCameraEstimation(points3D, points2D)) {
             //enough matches available.
@@ -474,95 +501,99 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
 
                     //compute fundamental matrix to estimate intrinsics
                     if((mConfiguration.isGeneralSceneAllowed() &&
-                            estimateFundamentalMatrix(mMatches, mPreviousViewId, mViewCount, false)) ||
+                            estimateFundamentalMatrix(mMatches, mCurrentViewId, mViewCount, false)) ||
                             (mConfiguration.isPlanarSceneAllowed() &&
-                            estimatePlanarFundamentalMatrix(mMatches, mPreviousViewId, mViewCount, false))) {
+                            estimatePlanarFundamentalMatrix(mMatches, mCurrentViewId, mViewCount, false))) {
                         //fundamental matrix could be estimated
-                        mListener.onSamplesAccepted((R)this, mViewCount, mCurrentViewSamples);
-                        mCurrentViewId = mViewCount;
-
                         mListener.onFundamentalMatrixEstimated((R)this, mCurrentEstimatedFundamentalMatrix);
+
+                        //use fundamental matrix to estimate intrinsics using DIAC or DAQ
+                        if (mConfiguration.getUseDIACForAdditionalCamerasIntrinsics()) {
+                            intrinsicParameters = estimateIntrinsicsDIAC();
+                        } else if (mConfiguration.getUseDAQForAdditionalCamerasIntrinsics()) {
+                            intrinsicParameters = estimateIntrinsicsDAQ();
+                        }
 
                     } else {
                         //fundamental matrix estimation failed
-                        mFailed = true;
-                        mListener.onFail((R)this);
-                    }
-
-                    //use fundamental matrix to estimate intrinsics using DIAC or DAQ
-                    if (mConfiguration.getUseDIACForAdditionalCamerasIntrinsics()) {
-                        intrinsicParameters = estimateIntrinsicsDIAC();
-                    } else if (mConfiguration.getUseDAQForAdditionalCamerasIntrinsics()) {
-                        intrinsicParameters = estimateIntrinsicsDAQ();
+                        samplesRejected = true;
+                        mListener.onSamplesRejected((R) this, mViewCount,
+                                mCurrentViewSamples);
                     }
 
                 } else if (mConfiguration.getAdditionalCamerasIntrinsics() != null) {
                     //use configuration provided intrinsics
                     intrinsicParameters = mConfiguration.getAdditionalCamerasIntrinsics();
-                }
 
-                if (intrinsicParameters == null) {
-                    //something failed or bad configuration
-                    mFailed = true;
-                    mListener.onFail((R)this);
+                    if (intrinsicParameters == null) {
+                        //something failed or bad configuration
+                        mFailed = true;
+                        mListener.onFail((R)this);
+                    }
                 }
 
                 try {
-                    //use EPnP for additional cameras estimation
-                    EPnPPointCorrespondencePinholeCameraRobustEstimator cameraEstimator =
-                            EPnPPointCorrespondencePinholeCameraRobustEstimator.create(intrinsicParameters, points3D,
-                                    points2D, qualityScores,
-                                    mConfiguration.getAdditionalCamerasRobustEstimationMethod());
-                    cameraEstimator.setPlanarConfigurationAllowed(
-                            mConfiguration.getAdditionalCamerasAllowPlanarConfiguration());
-                    cameraEstimator.setNullspaceDimension2Allowed(
-                            mConfiguration.getAdditionalCamerasAllowNullspaceDimension2());
-                    cameraEstimator.setNullspaceDimension3Allowed(
-                            mConfiguration.getAdditionalCamerasAllowNullspaceDimension3());
-                    cameraEstimator.setPlanarThreshold(mConfiguration.getAdditionalCamerasPlanarThreshold());
-                    cameraEstimator.setResultRefined(mConfiguration.areAdditionalCamerasRefined());
-                    cameraEstimator.setCovarianceKept(mConfiguration.isAdditionalCamerasCovarianceKept());
-                    cameraEstimator.setFastRefinementUsed(mConfiguration.getAdditionalCamerasUseFastRefinement());
-                    cameraEstimator.setConfidence(mConfiguration.getAdditionalCamerasConfidence());
-                    cameraEstimator.setMaxIterations(mConfiguration.getAdditionalCamerasMaxIterations());
+                    if (intrinsicParameters != null) {
+                        //use EPnP for additional cameras estimation
+                        EPnPPointCorrespondencePinholeCameraRobustEstimator cameraEstimator =
+                                EPnPPointCorrespondencePinholeCameraRobustEstimator.create(intrinsicParameters, points3D,
+                                        points2D, qualityScores,
+                                        mConfiguration.getAdditionalCamerasRobustEstimationMethod());
+                        cameraEstimator.setPlanarConfigurationAllowed(
+                                mConfiguration.getAdditionalCamerasAllowPlanarConfiguration());
+                        cameraEstimator.setNullspaceDimension2Allowed(
+                                mConfiguration.getAdditionalCamerasAllowNullspaceDimension2());
+                        cameraEstimator.setNullspaceDimension3Allowed(
+                                mConfiguration.getAdditionalCamerasAllowNullspaceDimension3());
+                        cameraEstimator.setPlanarThreshold(mConfiguration.getAdditionalCamerasPlanarThreshold());
+                        cameraEstimator.setResultRefined(mConfiguration.areAdditionalCamerasRefined());
+                        cameraEstimator.setCovarianceKept(mConfiguration.isAdditionalCamerasCovarianceKept());
+                        cameraEstimator.setFastRefinementUsed(mConfiguration.getAdditionalCamerasUseFastRefinement());
+                        cameraEstimator.setConfidence(mConfiguration.getAdditionalCamerasConfidence());
+                        cameraEstimator.setMaxIterations(mConfiguration.getAdditionalCamerasMaxIterations());
 
-                    cameraEstimator.setSuggestSkewnessValueEnabled(
-                            mConfiguration.isAdditionalCamerasSuggestSkewnessValueEnabled());
-                    cameraEstimator.setSuggestedSkewnessValue(
-                            mConfiguration.getAdditionalCamerasSuggestedSkewnessValue());
+                        cameraEstimator.setSuggestSkewnessValueEnabled(
+                                mConfiguration.isAdditionalCamerasSuggestSkewnessValueEnabled());
+                        cameraEstimator.setSuggestedSkewnessValue(
+                                mConfiguration.getAdditionalCamerasSuggestedSkewnessValue());
 
-                    cameraEstimator.setSuggestHorizontalFocalLengthEnabled(
-                            mConfiguration.isAdditionalCamerasSuggestHorizontalFocalLengthEnabled());
-                    cameraEstimator.setSuggestedHorizontalFocalLengthValue(
-                            mConfiguration.getAdditionalCamerasSuggestedHorizontalFocalLengthValue());
+                        cameraEstimator.setSuggestHorizontalFocalLengthEnabled(
+                                mConfiguration.isAdditionalCamerasSuggestHorizontalFocalLengthEnabled());
+                        cameraEstimator.setSuggestedHorizontalFocalLengthValue(
+                                mConfiguration.getAdditionalCamerasSuggestedHorizontalFocalLengthValue());
 
-                    cameraEstimator.setSuggestVerticalFocalLengthEnabled(
-                            mConfiguration.isAdditionalCamerasSuggestVerticalFocalLengthEnabled());
-                    cameraEstimator.setSuggestedVerticalFocalLengthValue(
-                            mConfiguration.getAdditionalCamerasSuggestedVerticalFocalLengthValue());
+                        cameraEstimator.setSuggestVerticalFocalLengthEnabled(
+                                mConfiguration.isAdditionalCamerasSuggestVerticalFocalLengthEnabled());
+                        cameraEstimator.setSuggestedVerticalFocalLengthValue(
+                                mConfiguration.getAdditionalCamerasSuggestedVerticalFocalLengthValue());
 
-                    cameraEstimator.setSuggestAspectRatioEnabled(
-                            mConfiguration.isAdditionalCamerasSuggestAspectRatioEnabled());
-                    cameraEstimator.setSuggestedAspectRatioValue(
-                            mConfiguration.getAdditionalCamerasSuggestedAspectRatioValue());
+                        cameraEstimator.setSuggestAspectRatioEnabled(
+                                mConfiguration.isAdditionalCamerasSuggestAspectRatioEnabled());
+                        cameraEstimator.setSuggestedAspectRatioValue(
+                                mConfiguration.getAdditionalCamerasSuggestedAspectRatioValue());
 
-                    cameraEstimator.setSuggestPrincipalPointEnabled(
-                            mConfiguration.isAdditionalCamerasSuggestPrincipalPointEnabled());
-                    cameraEstimator.setSuggestedPrincipalPointValue(
-                            mConfiguration.getAdditionalCamerasSuggestedPrincipalPointValue());
+                        cameraEstimator.setSuggestPrincipalPointEnabled(
+                                mConfiguration.isAdditionalCamerasSuggestPrincipalPointEnabled());
+                        cameraEstimator.setSuggestedPrincipalPointValue(
+                                mConfiguration.getAdditionalCamerasSuggestedPrincipalPointValue());
 
-                    currentCamera = cameraEstimator.estimate();
-                    currentCameraCovariance = cameraEstimator.getCovariance();
+                        currentCamera = cameraEstimator.estimate();
+                        currentCameraCovariance = cameraEstimator.getCovariance();
+
+                        mListener.onSamplesAccepted((R) this, mViewCount, mCurrentViewSamples);
+                        mPreviousViewId = mCurrentViewId;
+                        mCurrentViewId = mViewCount;
+                        mPreviousViewSamples = mCurrentViewSamples;
+                    }
 
                 } catch (Exception e) {
-                    //something failed
-                    mFailed = true;
-                    mListener.onFail((R)this);
+                    //camera estimation failed
+                    samplesRejected = true;
+                    mListener.onSamplesRejected((R) this, mViewCount,
+                            mCurrentViewSamples);
                 }
 
             } else if (mConfiguration.getUseUPnPForAdditionalCamerasEstimation()) {
-                mListener.onSamplesAccepted((R)this, mViewCount, mCurrentViewSamples);
-                mCurrentViewId = mViewCount;
 
                 try {
                     //use UPnP for additional cameras estimation
@@ -614,15 +645,19 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     currentCamera = cameraEstimator.estimate();
                     currentCameraCovariance = cameraEstimator.getCovariance();
 
+                    mListener.onSamplesAccepted((R)this, mViewCount, mCurrentViewSamples);
+                    mPreviousViewId = mCurrentViewId;
+                    mCurrentViewId = mViewCount;
+                    mPreviousViewSamples = mCurrentViewSamples;
+
                 } catch (Exception e) {
-                    //something failed
-                    mFailed = true;
-                    mListener.onFail((R)this);
+                    //camera estimation failed
+                    samplesRejected = true;
+                    mListener.onSamplesRejected((R) this, mViewCount,
+                            mCurrentViewSamples);
                 }
 
             } else {
-                mListener.onSamplesAccepted((R)this, mViewCount, mCurrentViewSamples);
-                mCurrentViewId = mViewCount;
 
                 try {
                     //use DLT for additional cameras estimation
@@ -663,43 +698,51 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     currentCamera = cameraEstimator.estimate();
                     currentCameraCovariance = cameraEstimator.getCovariance();
 
+                    mListener.onSamplesAccepted((R)this, mViewCount, mCurrentViewSamples);
+                    mPreviousViewId = mCurrentViewId;
+                    mCurrentViewId = mViewCount;
+                    mPreviousViewSamples = mCurrentViewSamples;
+
                 } catch (Exception e) {
-                    //something failed
-                    mFailed = true;
-                    mListener.onFail((R)this);
+                    //camera estimation failed
+                    samplesRejected = true;
+                    mListener.onSamplesRejected((R) this, mViewCount,
+                            mCurrentViewSamples);
                 }
             }
 
-            mPreviousMetricEstimatedCamera = mCurrentMetricEstimatedCamera;
+            if (!samplesRejected) {
+                mPreviousMetricEstimatedCamera = mCurrentMetricEstimatedCamera;
 
-            mCurrentMetricEstimatedCamera = new EstimatedCamera();
-            mCurrentMetricEstimatedCamera.setCamera(currentCamera);
-            mCurrentMetricEstimatedCamera.setId(String.valueOf(mCurrentViewId));
-            mCurrentMetricEstimatedCamera.setCovariance(currentCameraCovariance);
-
-
-            //notify camera estimation
-            mListener.onMetricCameraEstimated((R) this,
-                    mPreviousViewId, mCurrentViewId,
-                    mPreviousMetricEstimatedCamera, mCurrentMetricEstimatedCamera);
+                mCurrentMetricEstimatedCamera = new EstimatedCamera();
+                mCurrentMetricEstimatedCamera.setCamera(currentCamera);
+                mCurrentMetricEstimatedCamera.setViewId(mCurrentViewId);
+                mCurrentMetricEstimatedCamera.setCovariance(currentCameraCovariance);
 
 
-            //reconstruct all matches and refine existing reconstructed points
-            reconstructAndRefineMatches();
+                //notify camera estimation
+                mListener.onMetricCameraEstimated((R) this,
+                        mPreviousViewId, mCurrentViewId,
+                        mPreviousMetricEstimatedCamera, mCurrentMetricEstimatedCamera);
 
-            //notify reconstruction update
-            mListener.onMetricReconstructedPointsEstimated((R)this, mMatches, mActiveMetricReconstructedPoints);
 
-            if (!postProcessOne(false)) {
-                //something failed
-                mFailed = true;
-                mListener.onFail((R)this);
-            } else {
-                //post processing succeeded
-                mListener.onEuclideanCameraEstimated((R)this, mPreviousViewId, mCurrentViewId,
-                        mCurrentScale, mPreviousEuclideanEstimatedCamera, mCurrentEuclideanEstimatedCamera);
-                mListener.onEuclideanReconstructedPointsEstimated((R)this, mCurrentScale,
-                        mActiveEuclideanReconstructedPoints);
+                //reconstruct all matches and refine existing reconstructed points
+                reconstructAndRefineMatches();
+
+                //notify reconstruction update
+                mListener.onMetricReconstructedPointsEstimated((R) this, mMatches, mActiveMetricReconstructedPoints);
+
+                if (!postProcessOne(false)) {
+                    //something failed
+                    mFailed = true;
+                    mListener.onFail((R) this);
+                } else {
+                    //post processing succeeded
+                    mListener.onEuclideanCameraEstimated((R) this, mPreviousViewId, mCurrentViewId,
+                            mCurrentScale, mPreviousEuclideanEstimatedCamera, mCurrentEuclideanEstimatedCamera);
+                    mListener.onEuclideanReconstructedPointsEstimated((R) this, mCurrentScale,
+                            mActiveEuclideanReconstructedPoints);
+                }
             }
         }
     }
@@ -769,21 +812,32 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 List<Point2D> points = new ArrayList<>();
                 List<PinholeCamera> cameras = new ArrayList<>();
                 BitSet validSamples = new BitSet(samples.length);
+                PinholeCamera camera = null;
+                Point2D point2D = null;
                 int numValid = 0;
+                int samplesLength = samples.length;
+                int samplesLengthMinusOne = samplesLength - 1;
+                boolean isLast;
                 for (int i = 0; i < samples.length; i++) {
-                    Point2D point2D = samples[i].getPoint();
-                    PinholeCamera camera = estimatedCameras[i].getCamera();
+                    isLast = (i == samplesLengthMinusOne);
+                    point2D = samples[i].getPoint();
 
-                    if (point2D == null || camera == null) {
-                        validSamples.clear(i);
-                        continue;
-                    } else {
-                        validSamples.set(i);
-                        numValid++;
+                    if (!isLast) {
+                        camera = estimatedCameras[i].getCamera();
                     }
 
-                    points.add(point2D);
-                    cameras.add(camera);
+                    if (point2D == null || (camera == null && !isLast)) {
+                        validSamples.clear(i);
+                    } else {
+                        validSamples.set(i);
+
+                        points.add(point2D);
+                        if (!isLast) {
+                            cameras.add(camera);
+                        }
+
+                        numValid++;
+                    }
                 }
 
                 //also add current camera which is not yet available on estimated cameras array
@@ -890,7 +944,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
 
         //pick quality scores
         double[] qualityScores = null;
-        if (qualityScoresRequired) {
+        if (qualityScoresRequired && numMatches > 0) {
             qualityScores = new double[numMatches];
             int j = 0;
             for (i = 0; i < positions.length; i++) {
@@ -1581,11 +1635,11 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
 
             mPreviousMetricEstimatedCamera = new EstimatedCamera();
             mPreviousMetricEstimatedCamera.setCamera(camera1);
-            mPreviousMetricEstimatedCamera.setId(String.valueOf(mPreviousViewId));
+            mPreviousMetricEstimatedCamera.setViewId(mPreviousViewId);
 
             mCurrentMetricEstimatedCamera = new EstimatedCamera();
             mCurrentMetricEstimatedCamera.setCamera(camera2);
-            mCurrentMetricEstimatedCamera.setId(String.valueOf(mCurrentViewId));
+            mCurrentMetricEstimatedCamera.setViewId(mCurrentViewId);
 
             //fix fundamental matrix to account for principal point different
             //from zero
@@ -1825,11 +1879,11 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
 
             mPreviousMetricEstimatedCamera = new EstimatedCamera();
             mPreviousMetricEstimatedCamera.setCamera(camera1);
-            mPreviousMetricEstimatedCamera.setId(String.valueOf(mPreviousViewId));
+            mPreviousMetricEstimatedCamera.setViewId(mPreviousViewId);
 
             mCurrentMetricEstimatedCamera = new EstimatedCamera();
             mCurrentMetricEstimatedCamera.setCamera(camera2);
-            mCurrentMetricEstimatedCamera.setId(String.valueOf(mCurrentViewId));
+            mCurrentMetricEstimatedCamera.setViewId(mCurrentViewId);
 
 
             //store points

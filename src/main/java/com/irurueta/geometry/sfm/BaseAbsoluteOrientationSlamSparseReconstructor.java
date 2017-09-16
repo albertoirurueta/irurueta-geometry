@@ -146,7 +146,7 @@ public abstract class BaseAbsoluteOrientationSlamSparseReconstructor<
 
             mPreviousEuclideanEstimatedCamera = new EstimatedCamera();
             mPreviousEuclideanEstimatedCamera.setCamera(euclideanCamera1);
-            mPreviousEuclideanEstimatedCamera.setId(mPreviousMetricEstimatedCamera.getId());
+            mPreviousEuclideanEstimatedCamera.setViewId(mPreviousMetricEstimatedCamera.getViewId());
             mPreviousEuclideanEstimatedCamera.setQualityScore(mPreviousMetricEstimatedCamera.getQualityScore());
             if (mPreviousMetricEstimatedCamera.getCovariance() != null) {
                 mPreviousEuclideanEstimatedCamera.setCovariance(
@@ -155,7 +155,7 @@ public abstract class BaseAbsoluteOrientationSlamSparseReconstructor<
 
             mCurrentEuclideanEstimatedCamera = new EstimatedCamera();
             mCurrentEuclideanEstimatedCamera.setCamera(euclideanCamera2);
-            mCurrentEuclideanEstimatedCamera.setId(mCurrentMetricEstimatedCamera.getId());
+            mCurrentEuclideanEstimatedCamera.setViewId(mCurrentMetricEstimatedCamera.getViewId());
             mCurrentEuclideanEstimatedCamera.setQualityScore(mCurrentMetricEstimatedCamera.getQualityScore());
             if (mCurrentMetricEstimatedCamera.getCovariance() != null) {
                 mCurrentEuclideanEstimatedCamera.setCovariance(
