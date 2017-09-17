@@ -66,32 +66,29 @@ public class KnownBaselineSparseReconstructor extends
      */
     @Override
     protected boolean postProcessOne(boolean isInitialPairOfViews) {
-        if(!isInitialPairOfViews) {
-            //only post process first pair of views
-            mPreviousEuclideanEstimatedCamera = mPreviousMetricEstimatedCamera;
-            mCurrentEuclideanEstimatedCamera = mCurrentMetricEstimatedCamera;
-            mActiveEuclideanReconstructedPoints = mActiveMetricReconstructedPoints;
-            mCurrentScale = DEFAULT_SCALE;
-            return true;
-        }
-
         try {
-            //reconstruction succeeded, so we update scale of cameras and
-            //reconstructed points
-            double baseline = mConfiguration.getBaseline();
-
             PinholeCamera metricCamera1 = mPreviousMetricEstimatedCamera.getCamera();
             PinholeCamera metricCamera2 = mCurrentMetricEstimatedCamera.getCamera();
 
             metricCamera1.decompose();
             metricCamera2.decompose();
 
-            Point3D center1 = metricCamera1.getCameraCenter();
-            Point3D center2 = metricCamera2.getCameraCenter();
+            double scale;
+            if (isInitialPairOfViews) {
+                //reconstruction succeeded, so we update scale of cameras and
+                //reconstructed points
+                double baseline = mConfiguration.getBaseline();
 
-            double estimatedBaseline = center1.distanceTo(center2);
+                Point3D center1 = metricCamera1.getCameraCenter();
+                Point3D center2 = metricCamera2.getCameraCenter();
 
-            double scale = mCurrentScale = baseline / estimatedBaseline;
+                double estimatedBaseline = center1.distanceTo(center2);
+
+                scale = mCurrentScale = baseline / estimatedBaseline;
+            } else {
+                scale = mCurrentScale;
+            }
+
             double sqrScale = scale * scale;
 
             MetricTransformation3D scaleTransformation =

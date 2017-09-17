@@ -76,8 +76,8 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
     protected List<ReconstructedPoint3D> mActiveMetricReconstructedPoints;
 
     /**
-     * Current estimated scale. This will typically converge to 1.0 as more views are processed.
-     * The closer this value is to one, the more likely the scale of estimated cameras is accurate.
+     * Current estimated scale. This will typically converge to a constant value as more views are processed.
+     * The smaller the variance of estimated scale, the more accurate the scale will be.
      */
     protected double mCurrentScale = DEFAULT_SCALE;
 
@@ -447,7 +447,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                         mListener.onMetricReconstructedPointsEstimated(
                                 (R) this, mMatches, mActiveMetricReconstructedPoints);
 
-                        if (!postProcessOne(false)) {
+                        if (!postProcessOne(true)) {
                             //something failed
                             mFailed = true;
                             mListener.onFail((R)this);

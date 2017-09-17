@@ -116,8 +116,8 @@ public interface BaseSparseReconstructorListener<R extends BaseSparseReconstruct
      * @param reconstructor reconstructor raising this event.
      * @param previousViewId id of previous view (i.e. first view).
      * @param currentViewId id of current view (i.e. second view).
-     * @param scale estimated scale. This will typically converge to 1.0 as more views are processed. The closer this
-     *              value is to one, the more likely the scale of estimated cameras is accurate.
+     * @param scale estimated scale. This will typically converge to a constant value as more views are processed.
+     *              The smaller the variance of estimated scale, the more accurate the scale will be.
      * @param previousCamera estimated camera for previous view.
      * @param currentCamera estimated camera for current view.
      */
@@ -130,8 +130,8 @@ public interface BaseSparseReconstructorListener<R extends BaseSparseReconstruct
      * implementations either have calibration knowledge to estimate scale, or use SLAM techniques by mixing additional
      * sensor data (i.e. gyroscope and accelerometer) to estimate such scale.
      * @param reconstructor reconstructor raising this event.
-     * @param scale estimated scale. This will typically converge to 1.0 as more views are processed. The closer this
-     *              value is to one, the more likely the scale of estimated cameras is accurate.
+     * @param scale estimated scale. This will typically converge to a constant value as more views are processed.
+     *              The smaller the variance of estimated scale, the more accurate the scale will be.
      * @param points reconstructed 3D points.
      */
     void onEuclideanReconstructedPointsEstimated(R reconstructor, double scale, List<ReconstructedPoint3D> points);

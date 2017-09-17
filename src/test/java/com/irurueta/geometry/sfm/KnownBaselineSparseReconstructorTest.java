@@ -16,11 +16,14 @@
 
 package com.irurueta.geometry.sfm;
 
-import com.irurueta.algebra.*;
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.ArrayUtils;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
 import com.irurueta.geometry.*;
 import com.irurueta.geometry.epipolar.FundamentalMatrix;
 import com.irurueta.geometry.epipolar.InvalidPairOfCamerasException;
-import com.irurueta.geometry.estimators.*;
+import com.irurueta.geometry.estimators.MetricTransformation3DRobustEstimator;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.UniformRandomizer;
@@ -32,7 +35,7 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-public class SparseReconstructorTest {
+public class KnownBaselineSparseReconstructorTest {
 
     private static final double MIN_RANDOM_VALUE = -100.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
@@ -96,7 +99,7 @@ public class SparseReconstructorTest {
     private boolean mFailed;
     private boolean mCancelled;
 
-    public SparseReconstructorTest() { }
+    public KnownBaselineSparseReconstructorTest() { }
 
     @BeforeClass
     public static void setUpClass() { }
@@ -122,71 +125,74 @@ public class SparseReconstructorTest {
 
     @Test
     public void testConstructor() {
-        SparseReconstructorConfiguration configuration =
-                new SparseReconstructorConfiguration();
-        SparseReconstructorListener listener =
-                new SparseReconstructorListener() {
+        KnownBaselineSparseReconstructorConfiguration configuration =
+                new KnownBaselineSparseReconstructorConfiguration();
+        KnownBaselineSparseReconstructorListener listener =
+                new KnownBaselineSparseReconstructorListener() {
                     @Override
-                    public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                    public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                         return false;
                     }
 
                     @Override
-                    public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                               List<Sample2D> samples) { }
+                    public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                               int viewId, List<Sample2D> samples) { }
 
                     @Override
-                    public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                    public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                   List<Sample2D> samples) { }
 
                     @Override
-                    public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                    public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                   List<Sample2D> samples) { }
 
                     @Override
-                    public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                 List<Sample2D> samples2, int viewId1, int viewId2,
+                    public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                 List<Sample2D> samples1, List<Sample2D> samples2,
+                                                 int viewId1, int viewId2,
                                                  List<MatchedSamples> matches) { }
 
                     @Override
-                    public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
+                    public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                              EstimatedFundamentalMatrix estimatedFundamentalMatrix) { }
 
                     @Override
-                    public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                        int currentViewId, EstimatedCamera previousCamera,
+                    public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                        int previousViewId, int currentViewId,
+                                                        EstimatedCamera previousCamera,
                                                         EstimatedCamera currentCamera) { }
 
                     @Override
-                    public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
+                    public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                                      List<MatchedSamples> matches,
                                                                      List<ReconstructedPoint3D> points) { }
 
                     @Override
-                    public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                           int currentViewId, double scale,
+                    public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                           int previousViewId, int currentViewId, double scale,
                                                            EstimatedCamera previousCamera,
                                                            EstimatedCamera currentCamera) { }
 
                     @Override
-                    public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor, double scale,
+                    public void onEuclideanReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                        double scale,
                                                                         List<ReconstructedPoint3D> points) { }
 
                     @Override
-                    public void onStart(SparseReconstructor reconstructor) { }
+                    public void onStart(KnownBaselineSparseReconstructor reconstructor) { }
 
                     @Override
-                    public void onFinish(SparseReconstructor reconstructor) { }
+                    public void onFinish(KnownBaselineSparseReconstructor reconstructor) { }
 
                     @Override
-                    public void onCancel(SparseReconstructor reconstructor) { }
+                    public void onCancel(KnownBaselineSparseReconstructor reconstructor) { }
 
                     @Override
-                    public void onFail(SparseReconstructor reconstructor) { }
+                    public void onFail(KnownBaselineSparseReconstructor reconstructor) { }
                 };
 
         //constructor with listener
-        SparseReconstructor reconstructor = new SparseReconstructor(listener);
+        KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(listener);
 
         //check default values
         assertNotNull(reconstructor.getConfiguration());
@@ -205,7 +211,7 @@ public class SparseReconstructorTest {
         assertNull(reconstructor.getActiveEuclideanReconstructedPoints());
 
         //constructor with configuration and listener
-        reconstructor = new SparseReconstructor(configuration, listener);
+        reconstructor = new KnownBaselineSparseReconstructor(configuration, listener);
 
         //check default values
         assertSame(reconstructor.getConfiguration(), configuration);
@@ -233,8 +239,8 @@ public class SparseReconstructorTest {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(InitialCamerasEstimatorMethod.ESSENTIAL_MATRIX);
 
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -271,6 +277,9 @@ public class SparseReconstructorTest {
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
+
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
 
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
@@ -386,15 +395,16 @@ public class SparseReconstructorTest {
                 projectedPoints2.add(projectedPoint2);
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 2;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId,
                                                                    List<Sample2D> samples) {
 
                             samples.clear();
@@ -420,17 +430,18 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) { }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1,
                                                      List<Sample2D> samples2, int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
@@ -447,62 +458,68 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
-                                EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                 EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             mEstimatedMetricCamera1 = previousCamera;
                             mEstimatedMetricCamera2 = currentCamera;
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                         List<MatchedSamples> matches,
+                                                                         List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                int currentViewId, double scale, EstimatedCamera previousCamera,
-                                EstimatedCamera currentCamera) {
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
+                                                               EstimatedCamera currentCamera) {
                             mEstimatedEuclideanCamera1 = previousCamera;
                             mEstimatedEuclideanCamera2 = currentCamera;
                             mScale = scale;
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor,
                                 double scale, List<ReconstructedPoint3D> points) {
                             mEuclideanReconstructedPoints = points;
                             mScale = scale;
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor =
+                    new KnownBaselineSparseReconstructor(configuration, listener);
 
             //check initial values
             reset();
@@ -547,36 +564,61 @@ public class SparseReconstructorTest {
             //certain scale)
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
             estimatedMetricCamera1.decompose();
             estimatedMetricCamera2.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of both cameras
             for (int i = 0; i < numPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
+                Point3D pe = euclideanReconstructedPoints3D.get(i);
+
                 assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
                 assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(pe));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(pe));
             }
 
             Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
             Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
 
+            Point3D euclideanCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D euclideanCenter2 = estimatedEuclideanCamera2.getCameraCenter();
+
+            PinholeCameraIntrinsicParameters euclideanIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+
+            Rotation3D euclideanRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D euclideanRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+
             //transform points and cameras to account for scale change
-            double baseline = center1.distanceTo(center2);
+            baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
             double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
+            assertEquals(mScale, baseline, LARGE_ABSOLUTE_ERROR);
 
             MetricTransformation3D scaleTransformation =
                     new MetricTransformation3D(scale);
@@ -616,6 +658,11 @@ public class SparseReconstructorTest {
                 continue;
             }
             assertTrue(center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center1.equals(euclideanCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR));
 
             assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
@@ -639,9 +686,37 @@ public class SparseReconstructorTest {
             assertEquals(scaledIntrinsic2.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
+            assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+            assertEquals(euclideanIntrinsic2.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+
             assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
             assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
+                    rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+
+            assertTrue(euclideanRotation1.asInhomogeneousMatrix().equals(
+                    rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            assertTrue(euclideanRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             //check that points are correct
@@ -652,8 +727,16 @@ public class SparseReconstructorTest {
                     validPoints = false;
                     break;
                 }
+                if (!points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                    validPoints = false;
+                    break;
+                }
                 assertTrue(points3D.get(i).equals(
                         scaledReconstructionPoints3D.get(i),
+                        LARGE_ABSOLUTE_ERROR));
+                assertTrue(points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -680,8 +763,8 @@ public class SparseReconstructorTest {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(
                     InitialCamerasEstimatorMethod.DUAL_IMAGE_OF_ABSOLUTE_CONIC);
 
@@ -722,6 +805,9 @@ public class SparseReconstructorTest {
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
+
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
 
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
@@ -848,16 +934,16 @@ public class SparseReconstructorTest {
                 continue;
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 2;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                                   List<Sample2D> samples) {
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId, List<Sample2D> samples) {
 
                             samples.clear();
 
@@ -882,18 +968,19 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) { }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                     List<Sample2D> samples2, int viewId1, int viewId2,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1, List<Sample2D> samples2,
+                                                     int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
 
@@ -909,27 +996,31 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                                  EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                            int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             mEstimatedMetricCamera1 = previousCamera;
                             mEstimatedMetricCamera2 = currentCamera;
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                         List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                         List<MatchedSamples> matches,
+                                                                         List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                               int currentViewId, double scale, EstimatedCamera previousCamera,
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
                                                                EstimatedCamera currentCamera) {
                             mEstimatedEuclideanCamera1 = previousCamera;
                             mEstimatedEuclideanCamera2 = currentCamera;
@@ -937,34 +1028,35 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                            double scale, List<ReconstructedPoint3D> points) {
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor,
+                                double scale, List<ReconstructedPoint3D> points) {
                             mEuclideanReconstructedPoints = points;
                             mScale = scale;
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(configuration, listener);
 
             //check initial values
             reset();
@@ -1013,18 +1105,27 @@ public class SparseReconstructorTest {
             //certain scale)
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
             estimatedMetricCamera1.decompose();
             estimatedMetricCamera2.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that most of the points are in front of both cameras
@@ -1032,8 +1133,13 @@ public class SparseReconstructorTest {
             for (int i = 0; i < numPoints; i++) {
                 if (mMetricReconstructedPoints.get(i).isInlier()) {
                     Point3D p = metricReconstructedPoints3D.get(i);
+                    Point3D pe = euclideanReconstructedPoints3D.get(i);
+
                     assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
                     assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+
+                    assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(pe));
+                    assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(pe));
                     valid++;
                 } else {
                     invalid++;
@@ -1045,12 +1151,20 @@ public class SparseReconstructorTest {
             Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
             Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
 
+            Point3D euclideanCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D euclideanCenter2 = estimatedEuclideanCamera2.getCameraCenter();
+
+            PinholeCameraIntrinsicParameters euclideanIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+
             //transform points and cameras to account for scale change
-            double baseline = center1.distanceTo(center2);
+            baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
             double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
+            assertEquals(mScale, baseline, ABSOLUTE_ERROR);
 
             MetricTransformation3D scaleTransformation =
                     new MetricTransformation3D(scale);
@@ -1092,6 +1206,11 @@ public class SparseReconstructorTest {
                 continue;
             }
             assertTrue(center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center1.equals(euclideanCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR));
 
             assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
@@ -1120,6 +1239,28 @@ public class SparseReconstructorTest {
             assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
+            assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+            assertEquals(euclideanIntrinsic2.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
             //check that points are correct
             boolean validPoints = true;
             for (int i = 0; i < numPoints; i++) {
@@ -1128,9 +1269,16 @@ public class SparseReconstructorTest {
                     validPoints = false;
                     break;
                 }
+                if (!points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                    validPoints = false;
+                    break;
+                }
                 assertTrue(points3D.get(i).equals(
                         scaledReconstructionPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
+                assertTrue(points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR));
             }
 
             if (!validPoints) {
@@ -1156,8 +1304,8 @@ public class SparseReconstructorTest {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(
                     InitialCamerasEstimatorMethod.DUAL_ABSOLUTE_QUADRIC_AND_ESSENTIAL_MATRIX);
 
@@ -1197,6 +1345,9 @@ public class SparseReconstructorTest {
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
+
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
 
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
@@ -1323,16 +1474,16 @@ public class SparseReconstructorTest {
                 continue;
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 2;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                                   List<Sample2D> samples) {
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId, List<Sample2D> samples) {
 
                             samples.clear();
 
@@ -1357,18 +1508,19 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) { }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                     List<Sample2D> samples2, int viewId1, int viewId2,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1, List<Sample2D> samples2,
+                                                     int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
 
@@ -1384,27 +1536,30 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                                  EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                            int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             mEstimatedMetricCamera1 = previousCamera;
                             mEstimatedMetricCamera2 = currentCamera;
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                         List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                               int currentViewId, double scale, EstimatedCamera previousCamera,
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
                                                                EstimatedCamera currentCamera) {
                             mEstimatedEuclideanCamera1 = previousCamera;
                             mEstimatedEuclideanCamera2 = currentCamera;
@@ -1412,34 +1567,36 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                            double scale, List<ReconstructedPoint3D> points) {
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor,
+                                double scale, List<ReconstructedPoint3D> points) {
                             mEuclideanReconstructedPoints = points;
                             mScale = scale;
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(configuration,
+                    listener);
 
             //check initial values
             reset();
@@ -1484,36 +1641,61 @@ public class SparseReconstructorTest {
             //certain scale)
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
             estimatedMetricCamera1.decompose();
             estimatedMetricCamera2.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of both cameras
             for (int i = 0; i < numPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
+                Point3D pe = euclideanReconstructedPoints3D.get(i);
+
                 assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
                 assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(pe));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(pe));
             }
 
             Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
             Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
 
+            Point3D euclideanCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D euclideanCenter2 = estimatedEuclideanCamera2.getCameraCenter();
+
+            PinholeCameraIntrinsicParameters euclideanIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+
+            Rotation3D euclideanRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D euclideanRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+
             //transform points and cameras to account for scale change
-            double baseline = center1.distanceTo(center2);
+            baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
             double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
+            assertEquals(mScale, baseline, LARGE_ABSOLUTE_ERROR);
 
             MetricTransformation3D scaleTransformation =
                     new MetricTransformation3D(scale);
@@ -1555,6 +1737,11 @@ public class SparseReconstructorTest {
                 continue;
             }
             assertTrue(center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center1.equals(euclideanCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR));
 
             assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
@@ -1582,9 +1769,36 @@ public class SparseReconstructorTest {
                     intrinsic.getVerticalPrincipalPoint(),
                     LARGE_ABSOLUTE_ERROR);
 
+            assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getSkewness(),
+                    intrinsic.getSkewness(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
+
+            assertEquals(euclideanIntrinsic2.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getSkewness(),
+                    intrinsic.getSkewness(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
+
             assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
             assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
+                    rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+
+            assertTrue(euclideanRotation1.asInhomogeneousMatrix().equals(
+                    rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            assertTrue(euclideanRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             //check that points are correct
@@ -1595,8 +1809,16 @@ public class SparseReconstructorTest {
                     validPoints = false;
                     break;
                 }
+                if (!points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                    validPoints = false;
+                    break;
+                }
                 assertTrue(points3D.get(i).equals(
                         scaledReconstructionPoints3D.get(i),
+                        LARGE_ABSOLUTE_ERROR));
+                assertTrue(points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -1623,8 +1845,8 @@ public class SparseReconstructorTest {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(
                     InitialCamerasEstimatorMethod.DUAL_ABSOLUTE_QUADRIC_AND_ESSENTIAL_MATRIX);
 
@@ -1669,6 +1891,9 @@ public class SparseReconstructorTest {
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
 
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
+
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
             MatrixRotation3D rotation2 = new MatrixRotation3D(alphaEuler2,
@@ -1794,16 +2019,16 @@ public class SparseReconstructorTest {
                 continue;
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 2;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                                   List<Sample2D> samples) {
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId, List<Sample2D> samples) {
 
                             samples.clear();
 
@@ -1828,18 +2053,19 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) { }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                     List<Sample2D> samples2, int viewId1, int viewId2,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1, List<Sample2D> samples2,
+                                                     int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
 
@@ -1855,27 +2081,31 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                                  EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                            int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             mEstimatedMetricCamera1 = previousCamera;
                             mEstimatedMetricCamera2 = currentCamera;
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                         List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                         List<MatchedSamples> matches,
+                                                                         List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                               int currentViewId, double scale, EstimatedCamera previousCamera,
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
                                                                EstimatedCamera currentCamera) {
                             mEstimatedEuclideanCamera1 = previousCamera;
                             mEstimatedEuclideanCamera2 = currentCamera;
@@ -1883,34 +2113,36 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                            double scale, List<ReconstructedPoint3D> points) {
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor, double scale,
+                                List<ReconstructedPoint3D> points) {
                             mEuclideanReconstructedPoints = points;
                             mScale = scale;
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(configuration,
+                    listener);
 
             //check initial values
             reset();
@@ -1955,36 +2187,61 @@ public class SparseReconstructorTest {
             //certain scale)
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
             estimatedMetricCamera1.decompose();
             estimatedMetricCamera2.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of both cameras
             for (int i = 0; i < numPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
+                Point3D pe = euclideanReconstructedPoints3D.get(i);
+
                 assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
                 assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(pe));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(pe));
             }
 
             Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
             Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
 
+            Point3D euclideanCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D euclideanCenter2 = estimatedEuclideanCamera2.getCameraCenter();
+
+            PinholeCameraIntrinsicParameters euclideanIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+
+            Rotation3D euclideanRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D euclideanRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+
             //transform points and cameras to account for scale change
-            double baseline = center1.distanceTo(center2);
+            baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
             double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
+            assertEquals(mScale, baseline, ABSOLUTE_ERROR);
 
             MetricTransformation3D scaleTransformation =
                     new MetricTransformation3D(scale);
@@ -2026,6 +2283,11 @@ public class SparseReconstructorTest {
                 continue;
             }
             assertTrue(center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center1.equals(euclideanCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR));
 
             assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
@@ -2053,9 +2315,36 @@ public class SparseReconstructorTest {
                     intrinsic.getVerticalPrincipalPoint(),
                     LARGE_ABSOLUTE_ERROR);
 
+            assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getSkewness(),
+                    intrinsic.getSkewness(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
+
+            assertEquals(euclideanIntrinsic2.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getSkewness(),
+                    intrinsic.getSkewness(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
+
             assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
             assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
+                    rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+
+            assertTrue(euclideanRotation1.asInhomogeneousMatrix().equals(
+                    rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            assertTrue(euclideanRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             //check that points are correct
@@ -2066,8 +2355,16 @@ public class SparseReconstructorTest {
                     validPoints = false;
                     break;
                 }
+                if (!points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                    validPoints = false;
+                    break;
+                }
                 assertTrue(points3D.get(i).equals(
                         scaledReconstructionPoints3D.get(i),
+                        LARGE_ABSOLUTE_ERROR));
+                assertTrue(points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -2094,8 +2391,8 @@ public class SparseReconstructorTest {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(
                     InitialCamerasEstimatorMethod.DUAL_ABSOLUTE_QUADRIC);
 
@@ -2139,6 +2436,9 @@ public class SparseReconstructorTest {
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
+
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
 
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
@@ -2260,16 +2560,16 @@ public class SparseReconstructorTest {
                 projectedPoints2.add(projectedPoint2);
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 2;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                                   List<Sample2D> samples) {
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId, List<Sample2D> samples) {
 
                             samples.clear();
 
@@ -2294,18 +2594,19 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) { }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                     List<Sample2D> samples2, int viewId1, int viewId2,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1, List<Sample2D> samples2,
+                                                     int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
 
@@ -2321,27 +2622,31 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                                  EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                            int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             mEstimatedMetricCamera1 = previousCamera;
                             mEstimatedMetricCamera2 = currentCamera;
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                         List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                         List<MatchedSamples> matches,
+                                                                         List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                               int currentViewId, double scale, EstimatedCamera previousCamera,
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
                                                                EstimatedCamera currentCamera) {
                             mEstimatedEuclideanCamera1 = previousCamera;
                             mEstimatedEuclideanCamera2 = currentCamera;
@@ -2349,29 +2654,30 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                            double scale, List<ReconstructedPoint3D> points) {
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor, double scale,
+                                List<ReconstructedPoint3D> points) {
                             mEuclideanReconstructedPoints = points;
                             mScale = scale;
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
@@ -2380,7 +2686,8 @@ public class SparseReconstructorTest {
                 continue;
             }
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(configuration,
+                    listener);
 
             //check initial values
             reset();
@@ -2425,10 +2732,13 @@ public class SparseReconstructorTest {
             //certain scale)
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
@@ -2454,10 +2764,18 @@ public class SparseReconstructorTest {
             transformedCamera1.decompose();
             transformedCamera2.decompose();
 
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+
             PinholeCameraIntrinsicParameters transformedIntrinsic1 =
                     transformedCamera1.getIntrinsicParameters();
             PinholeCameraIntrinsicParameters transformedIntrinsic2 =
                     transformedCamera2.getIntrinsicParameters();
+
+            PinholeCameraIntrinsicParameters euclideanIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
 
             assertEquals(transformedIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
@@ -2485,6 +2803,32 @@ public class SparseReconstructorTest {
                     intrinsic.getVerticalPrincipalPoint(),
                     LARGE_ABSOLUTE_ERROR);
 
+            assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getSkewness(),
+                    intrinsic.getSkewness(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(),
+                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(),
+                    LARGE_ABSOLUTE_ERROR);
+
+            assertEquals(euclideanIntrinsic2.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getSkewness(),
+                    intrinsic.getSkewness(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(),
+                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(),
+                    LARGE_ABSOLUTE_ERROR);
+
             numValid++;
 
             if (numValid > 0) {
@@ -2504,8 +2848,8 @@ public class SparseReconstructorTest {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(
                     InitialCamerasEstimatorMethod.ESSENTIAL_MATRIX);
 
@@ -2545,6 +2889,9 @@ public class SparseReconstructorTest {
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
+
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
 
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
@@ -2683,16 +3030,16 @@ public class SparseReconstructorTest {
                 projectedPoints2.add(projectedPoint2);
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 2;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                                   List<Sample2D> samples) {
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId, List<Sample2D> samples) {
 
                             samples.clear();
 
@@ -2717,20 +3064,21 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                     List<Sample2D> samples2, int viewId1, int viewId2,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1, List<Sample2D> samples2,
+                                                     int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
 
@@ -2746,27 +3094,31 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                                  EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                            int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             mEstimatedMetricCamera1 = previousCamera;
                             mEstimatedMetricCamera2 = currentCamera;
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                         List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                         List<MatchedSamples> matches,
+                                                                         List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                               int currentViewId, double scale, EstimatedCamera previousCamera,
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
                                                                EstimatedCamera currentCamera) {
                             mEstimatedEuclideanCamera1 = previousCamera;
                             mEstimatedEuclideanCamera2 = currentCamera;
@@ -2774,34 +3126,36 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                            double scale, List<ReconstructedPoint3D> points) {
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor, double scale,
+                                List<ReconstructedPoint3D> points) {
                             mEuclideanReconstructedPoints = points;
                             mScale = scale;
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(configuration,
+                    listener);
 
             //check initial values
             reset();
@@ -2853,36 +3207,64 @@ public class SparseReconstructorTest {
             //certain scale)
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
             estimatedMetricCamera1.decompose();
             estimatedMetricCamera2.decompose();
 
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of both cameras
             for (int i = 0; i < numPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
+                Point3D pe = euclideanReconstructedPoints3D.get(i);
+
                 assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
                 assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(pe));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(pe));
             }
 
             Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
             Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
 
+            Point3D euclideanCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D euclideanCenter2 = estimatedEuclideanCamera2.getCameraCenter();
+
+            PinholeCameraIntrinsicParameters euclideanIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+
+            Rotation3D euclideanRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D euclideanRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+
             //transform points and cameras to account for scale change
-            double baseline = center1.distanceTo(center2);
+            baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
             double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
+            if (Math.abs(mScale - baseline) > ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(mScale, baseline, ABSOLUTE_ERROR);
 
 
             MetricTransformation3D scaleTransformation =
@@ -2923,6 +3305,11 @@ public class SparseReconstructorTest {
                 continue;
             }
             assertTrue(center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center1.equals(euclideanCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR));
 
 
             assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
@@ -2947,6 +3334,28 @@ public class SparseReconstructorTest {
             assertEquals(scaledIntrinsic2.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
+            assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+            assertEquals(euclideanIntrinsic2.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
             assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
@@ -2957,6 +3366,15 @@ public class SparseReconstructorTest {
             assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), LARGE_ABSOLUTE_ERROR));
 
+            assertTrue(euclideanRotation1.asInhomogeneousMatrix().equals(
+                    rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            if (!euclideanRotation2.asInhomogeneousMatrix().equals(
+                    rotation2.asInhomogeneousMatrix(), LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(euclideanRotation2.asInhomogeneousMatrix().equals(
+                    rotation2.asInhomogeneousMatrix(), LARGE_ABSOLUTE_ERROR));
+
             //check that points are correct
             boolean validPoints = true;
             for (int i = 0; i < numPoints; i++) {
@@ -2965,8 +3383,16 @@ public class SparseReconstructorTest {
                     validPoints = false;
                     break;
                 }
+                if (!points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                    validPoints = false;
+                    break;
+                }
                 assertTrue(points3D.get(i).equals(
                         scaledReconstructionPoints3D.get(i),
+                        LARGE_ABSOLUTE_ERROR));
+                assertTrue(points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -2993,8 +3419,8 @@ public class SparseReconstructorTest {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(
                     InitialCamerasEstimatorMethod.DUAL_IMAGE_OF_ABSOLUTE_CONIC);
 
@@ -3037,6 +3463,9 @@ public class SparseReconstructorTest {
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
+
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
 
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
@@ -3172,16 +3601,16 @@ public class SparseReconstructorTest {
                 projectedPoints2.add(projectedPoint2);
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 2;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                                   List<Sample2D> samples) {
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId, List<Sample2D> samples) {
 
                             samples.clear();
 
@@ -3206,20 +3635,21 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                     List<Sample2D> samples2, int viewId1, int viewId2,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1, List<Sample2D> samples2,
+                                                     int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
 
@@ -3235,27 +3665,31 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                                  EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                            int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             mEstimatedMetricCamera1 = previousCamera;
                             mEstimatedMetricCamera2 = currentCamera;
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                         List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                         List<MatchedSamples> matches,
+                                                                         List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                               int currentViewId, double scale, EstimatedCamera previousCamera,
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
                                                                EstimatedCamera currentCamera) {
                             mEstimatedEuclideanCamera1 = previousCamera;
                             mEstimatedEuclideanCamera2 = currentCamera;
@@ -3263,34 +3697,36 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                            double scale, List<ReconstructedPoint3D> points) {
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor,
+                                double scale, List<ReconstructedPoint3D> points) {
                             mEuclideanReconstructedPoints = points;
                             mScale = scale;
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(configuration,
+                    listener);
 
             //check initial values
             reset();
@@ -3342,18 +3778,27 @@ public class SparseReconstructorTest {
             //certain scale)
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
             estimatedMetricCamera1.decompose();
             estimatedMetricCamera2.decompose();
 
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that most of the points are in front of both cameras
@@ -3361,8 +3806,13 @@ public class SparseReconstructorTest {
             for (int i = 0; i < numPoints; i++) {
                 if (mMetricReconstructedPoints.get(i).isInlier()) {
                     Point3D p = metricReconstructedPoints3D.get(i);
+                    Point3D pe = euclideanReconstructedPoints3D.get(i);
+
                     assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
                     assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+
+                    assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(pe));
+                    assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(pe));
                     valid++;
                 } else {
                     invalid++;
@@ -3378,11 +3828,11 @@ public class SparseReconstructorTest {
             Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
 
             //transform points and cameras to account for scale change
-            double baseline = center1.distanceTo(center2);
+            baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
             double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
+            assertEquals(mScale, baseline, ABSOLUTE_ERROR);
 
 
             MetricTransformation3D scaleTransformation =
@@ -3433,8 +3883,8 @@ public class SparseReconstructorTest {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(
                     InitialCamerasEstimatorMethod.DUAL_ABSOLUTE_QUADRIC_AND_ESSENTIAL_MATRIX);
 
@@ -3474,6 +3924,9 @@ public class SparseReconstructorTest {
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
+
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
 
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
@@ -3612,16 +4065,16 @@ public class SparseReconstructorTest {
                 projectedPoints2.add(projectedPoint2);
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 2;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                                   List<Sample2D> samples) {
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId, List<Sample2D> samples) {
 
                             samples.clear();
 
@@ -3646,20 +4099,21 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                     List<Sample2D> samples2, int viewId1, int viewId2,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1, List<Sample2D> samples2,
+                                                     int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
 
@@ -3675,27 +4129,31 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                                  EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                            int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             mEstimatedMetricCamera1 = previousCamera;
                             mEstimatedMetricCamera2 = currentCamera;
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                         List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                         List<MatchedSamples> matches,
+                                                                         List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                               int currentViewId, double scale, EstimatedCamera previousCamera,
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
                                                                EstimatedCamera currentCamera) {
                             mEstimatedEuclideanCamera1 = previousCamera;
                             mEstimatedEuclideanCamera2 = currentCamera;
@@ -3703,34 +4161,36 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                            double scale, List<ReconstructedPoint3D> points) {
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor,
+                                double scale, List<ReconstructedPoint3D> points) {
                             mEuclideanReconstructedPoints = points;
                             mScale = scale;
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(configuration,
+                    listener);
 
             //check initial values
             reset();
@@ -3782,32 +4242,46 @@ public class SparseReconstructorTest {
             //certain scale)
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
             estimatedMetricCamera1.decompose();
             estimatedMetricCamera2.decompose();
 
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of both cameras
             for (int i = 0; i < numPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
+                Point3D pe = euclideanReconstructedPoints3D.get(i);
+
                 assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
                 assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(pe));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(pe));
             }
 
             Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
             Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
 
             //transform points and cameras to account for scale change
-            double baseline = center1.distanceTo(center2);
+            baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
             double scale = baseline / estimatedBaseline;
@@ -3852,8 +4326,16 @@ public class SparseReconstructorTest {
                     validPoints = false;
                     break;
                 }
+                if (!points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                    validPoints = false;
+                    break;
+                }
                 assertTrue(points3D.get(i).equals(
                         scaledReconstructionPoints3D.get(i),
+                        LARGE_ABSOLUTE_ERROR));
+                assertTrue(points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -3880,8 +4362,8 @@ public class SparseReconstructorTest {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(
                     InitialCamerasEstimatorMethod.DUAL_ABSOLUTE_QUADRIC);
 
@@ -3925,6 +4407,9 @@ public class SparseReconstructorTest {
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
+
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
 
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
@@ -4069,16 +4554,16 @@ public class SparseReconstructorTest {
                 continue;
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 2;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                                   List<Sample2D> samples) {
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId, List<Sample2D> samples) {
 
                             samples.clear();
 
@@ -4103,20 +4588,21 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                     List<Sample2D> samples2, int viewId1, int viewId2,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1, List<Sample2D> samples2,
+                                                     int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
 
@@ -4132,27 +4618,31 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                                  EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                            int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             mEstimatedMetricCamera1 = previousCamera;
                             mEstimatedMetricCamera2 = currentCamera;
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                         List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                         List<MatchedSamples> matches,
+                                                                         List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                               int currentViewId, double scale, EstimatedCamera previousCamera,
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
                                                                EstimatedCamera currentCamera) {
                             mEstimatedEuclideanCamera1 = previousCamera;
                             mEstimatedEuclideanCamera2 = currentCamera;
@@ -4160,34 +4650,35 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                            double scale, List<ReconstructedPoint3D> points) {
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor, double scale,
+                                List<ReconstructedPoint3D> points) {
                             mEuclideanReconstructedPoints = points;
                             mScale = scale;
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(configuration, listener);
 
             //check initial values
             reset();
@@ -4239,13 +4730,19 @@ public class SparseReconstructorTest {
             //certain scale)
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
             estimatedMetricCamera1.decompose();
             estimatedMetricCamera2.decompose();
+
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
             numValid++;
 
@@ -4266,8 +4763,8 @@ public class SparseReconstructorTest {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(InitialCamerasEstimatorMethod.ESSENTIAL_MATRIX);
 
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -4323,6 +4820,9 @@ public class SparseReconstructorTest {
                     center2.getInhomX() + cameraSeparation2,
                     center2.getInhomY() + cameraSeparation2,
                     center2.getInhomZ() + cameraSeparation2);
+
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
 
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
@@ -4447,16 +4947,16 @@ public class SparseReconstructorTest {
                 projectedPoints3.add(projectedPoint3);
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 3;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                                   List<Sample2D> samples) {
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId, List<Sample2D> samples) {
 
                             samples.clear();
 
@@ -4489,30 +4989,31 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) { }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                     List<Sample2D> samples2, int viewId1, int viewId2,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1, List<Sample2D> samples2,
+                                                     int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
 
                             int numCameras = 0;
                             if (mEstimatedMetricCamera1 != null &&
                                     (mEstimatedMetricCamera1.getViewId() == viewId1 ||
-                                        mEstimatedMetricCamera1.getViewId() == viewId2)) {
+                                            mEstimatedMetricCamera1.getViewId() == viewId2)) {
                                 numCameras++;
                             }
                             if (mEstimatedMetricCamera2 != null &&
                                     (mEstimatedMetricCamera2.getViewId() == viewId1 ||
-                                    mEstimatedMetricCamera2.getViewId() == viewId2)) {
+                                            mEstimatedMetricCamera2.getViewId() == viewId2)) {
                                 numCameras++;
                             }
 
@@ -4558,8 +5059,8 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
-                                EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                 EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             if (mEstimatedFundamentalMatrix == null) {
                                 mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
                             } else if (mEstimatedFundamentalMatrix2 == null) {
@@ -4568,8 +5069,10 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             if (mEstimatedMetricCamera2 == null) {
                                 mEstimatedMetricCamera1 = previousCamera;
                                 mEstimatedMetricCamera2 = currentCamera;
@@ -4580,15 +5083,17 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                         List<MatchedSamples> matches,
+                                                                         List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                int currentViewId, double scale, EstimatedCamera previousCamera,
-                                EstimatedCamera currentCamera) {
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
+                                                               EstimatedCamera currentCamera) {
                             if (mEstimatedEuclideanCamera2 == null) {
                                 mEstimatedEuclideanCamera1 = previousCamera;
                                 mEstimatedEuclideanCamera2 = currentCamera;
@@ -4601,8 +5106,9 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                double scale, List<ReconstructedPoint3D> points) {
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor, double scale,
+                                List<ReconstructedPoint3D> points) {
                             if (mEuclideanReconstructedPoints == null) {
                                 mScale = scale;
                             } else {
@@ -4613,27 +5119,28 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(configuration,
+                    listener);
 
             //check initial values
             reset();
@@ -4682,43 +5189,74 @@ public class SparseReconstructorTest {
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
             PinholeCamera estimatedMetricCamera3 = mEstimatedMetricCamera3.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
-            assertSame(mEstimatedMetricCamera3, mEstimatedEuclideanCamera3);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera3, mEstimatedEuclideanCamera3);
+
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
+            PinholeCamera estimatedEuclideanCamera3 = mEstimatedEuclideanCamera3.getCamera();
 
             estimatedMetricCamera1.decompose();
             estimatedMetricCamera2.decompose();
             estimatedMetricCamera3.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+            estimatedEuclideanCamera3.decompose();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
             if (mMetricReconstructedPoints.size() != numPoints) {
                 continue;
             }
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of at least 1st two cameras
             for (int i = 0; i < numPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
+                Point3D pe = euclideanReconstructedPoints3D.get(i);
+
                 assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
                 assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(pe));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(pe));
             }
 
             Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
             Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
 
+            Point3D euclideanCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D euclideanCenter2 = estimatedEuclideanCamera2.getCameraCenter();
+            Point3D euclideanCenter3 = estimatedEuclideanCamera3.getCameraCenter();
+
+            PinholeCameraIntrinsicParameters euclideanIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic3 =
+                    estimatedEuclideanCamera3.getIntrinsicParameters();
+
+            Rotation3D euclideanRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D euclideanRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+            Rotation3D euclideanRotation3 = estimatedEuclideanCamera3.getCameraRotation();
+
             //transform points and cameras to account for scale change
-            double baseline = center1.distanceTo(center2);
+            baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
             double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
-            assertEquals(mScale2, 1.0, 0.0);
+            assertEquals(mScale, baseline, ABSOLUTE_ERROR);
+            assertEquals(mScale2, baseline, ABSOLUTE_ERROR);
 
             MetricTransformation3D scaleTransformation =
                     new MetricTransformation3D(scale);
@@ -4769,6 +5307,15 @@ public class SparseReconstructorTest {
                 continue;
             }
             assertTrue(center3.equals(scaledCenter3, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center1.equals(euclideanCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR));
+            if (!center3.equals(euclideanCenter3, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center3.equals(euclideanCenter3, LARGE_ABSOLUTE_ERROR));
 
             assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
@@ -4803,11 +5350,51 @@ public class SparseReconstructorTest {
             assertEquals(scaledIntrinsic3.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
+            assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+            assertEquals(euclideanIntrinsic2.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+            assertEquals(euclideanIntrinsic3.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic3.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic3.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic3.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic3.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
             assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
             assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
             assertTrue(scaledRotation3.asInhomogeneousMatrix().equals(
+                    rotation3.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+
+            assertTrue(euclideanRotation1.asInhomogeneousMatrix().equals(
+                    rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            assertTrue(euclideanRotation2.asInhomogeneousMatrix().equals(
+                    rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            assertTrue(euclideanRotation3.asInhomogeneousMatrix().equals(
                     rotation3.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             //check that points are correct
@@ -4818,8 +5405,16 @@ public class SparseReconstructorTest {
                     validPoints = false;
                     break;
                 }
+                if (!points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                    validPoints = false;
+                    break;
+                }
                 assertTrue(points3D.get(i).equals(
                         scaledReconstructionPoints3D.get(i),
+                        LARGE_ABSOLUTE_ERROR));
+                assertTrue(points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -4846,8 +5441,8 @@ public class SparseReconstructorTest {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(InitialCamerasEstimatorMethod.ESSENTIAL_MATRIX);
 
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -4902,6 +5497,9 @@ public class SparseReconstructorTest {
                     center2.getInhomX() + cameraSeparation2,
                     center2.getInhomY() + cameraSeparation2,
                     center2.getInhomZ() + cameraSeparation2);
+
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
 
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
@@ -5028,16 +5626,16 @@ public class SparseReconstructorTest {
                 projectedPoints3.add(projectedPoint3);
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 3;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                                   List<Sample2D> samples) {
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId, List<Sample2D> samples) {
 
                             samples.clear();
 
@@ -5070,20 +5668,21 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                     List<Sample2D> samples2, int viewId1, int viewId2,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1, List<Sample2D> samples2,
+                                                     int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
 
@@ -5140,7 +5739,7 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                                  EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             if (mEstimatedFundamentalMatrix == null) {
                                 mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
@@ -5150,8 +5749,10 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                            int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             if (mEstimatedMetricCamera2 == null) {
                                 mEstimatedMetricCamera1 = previousCamera;
                                 mEstimatedMetricCamera2 = currentCamera;
@@ -5162,14 +5763,16 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                         List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                         List<MatchedSamples> matches,
+                                                                         List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                               int currentViewId, double scale, EstimatedCamera previousCamera,
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
                                                                EstimatedCamera currentCamera) {
                             if (mEstimatedEuclideanCamera2 == null) {
                                 mEstimatedEuclideanCamera1 = previousCamera;
@@ -5183,8 +5786,9 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                            double scale, List<ReconstructedPoint3D> points) {
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor, double scale,
+                                List<ReconstructedPoint3D> points) {
                             if (mEuclideanReconstructedPoints == null) {
                                 mScale = scale;
                             } else {
@@ -5195,27 +5799,28 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(configuration,
+                    listener);
 
             //check initial values
             reset();
@@ -5281,39 +5886,70 @@ public class SparseReconstructorTest {
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
             PinholeCamera estimatedMetricCamera3 = mEstimatedMetricCamera3.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
-            assertSame(mEstimatedMetricCamera3, mEstimatedEuclideanCamera3);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera3, mEstimatedEuclideanCamera3);
+
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
+            PinholeCamera estimatedEuclideanCamera3 = mEstimatedEuclideanCamera3.getCamera();
 
             estimatedMetricCamera1.decompose();
             estimatedMetricCamera2.decompose();
             estimatedMetricCamera3.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+            estimatedEuclideanCamera3.decompose();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of at least 1st two cameras
             for (int i = 0; i < numPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
+                Point3D pe = euclideanReconstructedPoints3D.get(i);
+
                 assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
                 assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(pe));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(pe));
             }
 
             Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
             Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
 
+            Point3D euclideanCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D euclideanCenter2 = estimatedEuclideanCamera2.getCameraCenter();
+            Point3D euclideanCenter3 = estimatedEuclideanCamera3.getCameraCenter();
+
+            PinholeCameraIntrinsicParameters euclideanIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic3 =
+                    estimatedEuclideanCamera3.getIntrinsicParameters();
+
+            Rotation3D euclideanRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D euclideanRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+            Rotation3D euclideanRotation3 = estimatedEuclideanCamera3.getCameraRotation();
+
             //transform points and cameras to account for scale change
-            double baseline = center1.distanceTo(center2);
+            baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
             double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
-            assertEquals(mScale2, 1.0, 0.0);
+            assertEquals(mScale, baseline, ABSOLUTE_ERROR);
+            assertEquals(mScale2, baseline, ABSOLUTE_ERROR);
 
             MetricTransformation3D scaleTransformation =
                     new MetricTransformation3D(scale);
@@ -5364,6 +6000,15 @@ public class SparseReconstructorTest {
                 continue;
             }
             assertTrue(center3.equals(scaledCenter3, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center1.equals(euclideanCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR));
+            if (!center3.equals(euclideanCenter3, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center3.equals(euclideanCenter3, LARGE_ABSOLUTE_ERROR));
 
             assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
@@ -5406,11 +6051,59 @@ public class SparseReconstructorTest {
             assertEquals(scaledIntrinsic3.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
+            assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+            assertEquals(euclideanIntrinsic2.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+            if (Math.abs(euclideanIntrinsic3.getHorizontalFocalLength() -
+                    intrinsic.getHorizontalFocalLength()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(euclideanIntrinsic3.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(euclideanIntrinsic3.getVerticalFocalLength() -
+                    intrinsic.getVerticalFocalLength()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(euclideanIntrinsic3.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic3.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic3.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic3.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
             assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
             assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
             assertTrue(scaledRotation3.asInhomogeneousMatrix().equals(
+                    rotation3.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+
+            assertTrue(euclideanRotation1.asInhomogeneousMatrix().equals(
+                    rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            assertTrue(euclideanRotation2.asInhomogeneousMatrix().equals(
+                    rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            assertTrue(euclideanRotation3.asInhomogeneousMatrix().equals(
                     rotation3.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             //check that points are correct
@@ -5421,8 +6114,16 @@ public class SparseReconstructorTest {
                     validPoints = false;
                     break;
                 }
+                if (!points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                    validPoints = false;
+                    break;
+                }
                 assertTrue(points3D.get(i).equals(
                         scaledReconstructionPoints3D.get(i),
+                        LARGE_ABSOLUTE_ERROR));
+                assertTrue(points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -5451,8 +6152,8 @@ public class SparseReconstructorTest {
         for (int t = 0; t < TIMES; t++) {
             reset();
 
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(InitialCamerasEstimatorMethod.ESSENTIAL_MATRIX);
 
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -5512,6 +6213,9 @@ public class SparseReconstructorTest {
                     center2.getInhomX() + cameraSeparation2,
                     center2.getInhomY() + cameraSeparation2,
                     center2.getInhomZ() + cameraSeparation2);
+
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
 
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
@@ -5645,16 +6349,16 @@ public class SparseReconstructorTest {
                 continue;
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 3;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                                   List<Sample2D> samples) {
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId, List<Sample2D> samples) {
 
                             samples.clear();
 
@@ -5687,20 +6391,21 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                     List<Sample2D> samples2, int viewId1, int viewId2,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1, List<Sample2D> samples2,
+                                                     int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
 
@@ -5757,7 +6462,7 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                                  EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             if (mEstimatedFundamentalMatrix == null) {
                                 mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
@@ -5767,8 +6472,10 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                            int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             if (mEstimatedMetricCamera2 == null) {
                                 mEstimatedMetricCamera1 = previousCamera;
                                 mEstimatedMetricCamera2 = currentCamera;
@@ -5779,14 +6486,16 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                         List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                         List<MatchedSamples> matches,
+                                                                         List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                               int currentViewId, double scale, EstimatedCamera previousCamera,
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
                                                                EstimatedCamera currentCamera) {
                             if (mEstimatedEuclideanCamera2 == null) {
                                 mEstimatedEuclideanCamera1 = previousCamera;
@@ -5800,8 +6509,9 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                            double scale, List<ReconstructedPoint3D> points) {
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor, double scale,
+                                List<ReconstructedPoint3D> points) {
                             if (mEuclideanReconstructedPoints == null) {
                                 mScale = scale;
                             } else {
@@ -5812,27 +6522,28 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(configuration,
+                    listener);
 
             //check initial values
             reset();
@@ -5898,33 +6609,55 @@ public class SparseReconstructorTest {
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
             PinholeCamera estimatedMetricCamera3 = mEstimatedMetricCamera3.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
-            assertSame(mEstimatedMetricCamera3, mEstimatedEuclideanCamera3);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera3, mEstimatedEuclideanCamera3);
+
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
+            PinholeCamera estimatedEuclideanCamera3 = mEstimatedEuclideanCamera3.getCamera();
 
             estimatedMetricCamera1.decompose();
             estimatedMetricCamera2.decompose();
             estimatedMetricCamera3.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+            estimatedEuclideanCamera3.decompose();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of at least 1st two cameras
             boolean failed = false;
             for (int i = 0; i < numPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
+                Point3D pe = euclideanReconstructedPoints3D.get(i);
+
                 if (!estimatedMetricCamera1.isPointInFrontOfCamera(p) ||
                         !estimatedMetricCamera2.isPointInFrontOfCamera(p)) {
                     failed = true;
                     break;
                 }
+                if (!estimatedEuclideanCamera1.isPointInFrontOfCamera(p) ||
+                        !estimatedEuclideanCamera2.isPointInFrontOfCamera(p)) {
+                    failed = true;
+                    break;
+                }
+
                 assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
                 assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(pe));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(pe));
             }
 
             if (failed) {
@@ -5934,13 +6667,28 @@ public class SparseReconstructorTest {
             Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
             Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
 
+            Point3D euclideanCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D euclideanCenter2 = estimatedEuclideanCamera2.getCameraCenter();
+            Point3D euclideanCenter3 = estimatedEuclideanCamera3.getCameraCenter();
+
+            PinholeCameraIntrinsicParameters euclideanIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic3 =
+                    estimatedEuclideanCamera3.getIntrinsicParameters();
+
+            Rotation3D euclideanRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D euclideanRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+            Rotation3D euclideanRotation3 = estimatedEuclideanCamera3.getCameraRotation();
+
             //transform points and cameras to account for scale change
-            double baseline = center1.distanceTo(center2);
+            baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
             double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
-            assertEquals(mScale2, 1.0, 0.0);
+            assertEquals(mScale, baseline, ABSOLUTE_ERROR);
+            assertEquals(mScale2, baseline, ABSOLUTE_ERROR);
 
             MetricTransformation3D scaleTransformation =
                     new MetricTransformation3D(scale);
@@ -5980,6 +6728,11 @@ public class SparseReconstructorTest {
                 continue;
             }
             assertTrue(center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center1.equals(euclideanCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR));
 
             assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
@@ -6003,9 +6756,36 @@ public class SparseReconstructorTest {
             assertEquals(scaledIntrinsic2.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
+            assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+            assertEquals(euclideanIntrinsic2.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
             assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
             assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
+                    rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+
+            assertTrue(euclideanRotation1.asInhomogeneousMatrix().equals(
+                    rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            assertTrue(euclideanRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             numValid++;
@@ -6027,8 +6807,8 @@ public class SparseReconstructorTest {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(InitialCamerasEstimatorMethod.ESSENTIAL_MATRIX);
 
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -6084,6 +6864,9 @@ public class SparseReconstructorTest {
                     center2.getInhomY() + cameraSeparation2,
                     center2.getInhomZ() + cameraSeparation2);
 
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
+
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
             MatrixRotation3D rotation2 = new MatrixRotation3D(alphaEuler2,
@@ -6207,16 +6990,16 @@ public class SparseReconstructorTest {
                 projectedPoints3.add(projectedPoint3);
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 3;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                                   List<Sample2D> samples) {
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId, List<Sample2D> samples) {
 
                             samples.clear();
 
@@ -6249,20 +7032,21 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                     List<Sample2D> samples2, int viewId1, int viewId2,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1, List<Sample2D> samples2,
+                                                     int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
 
@@ -6319,7 +7103,7 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                                  EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             if (mEstimatedFundamentalMatrix == null) {
                                 mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
@@ -6329,8 +7113,10 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                            int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             if (mEstimatedMetricCamera2 == null) {
                                 mEstimatedMetricCamera1 = previousCamera;
                                 mEstimatedMetricCamera2 = currentCamera;
@@ -6341,14 +7127,16 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                         List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                         List<MatchedSamples> matches,
+                                                                         List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                               int currentViewId, double scale, EstimatedCamera previousCamera,
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
                                                                EstimatedCamera currentCamera) {
                             if (mEstimatedEuclideanCamera2 == null) {
                                 mEstimatedEuclideanCamera1 = previousCamera;
@@ -6362,8 +7150,9 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                            double scale, List<ReconstructedPoint3D> points) {
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor, double scale,
+                                List<ReconstructedPoint3D> points) {
                             if (mEuclideanReconstructedPoints == null) {
                                 mScale = scale;
                             } else {
@@ -6374,27 +7163,28 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(configuration,
+                    listener);
 
             //check initial values
             reset();
@@ -6442,38 +7232,70 @@ public class SparseReconstructorTest {
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
             PinholeCamera estimatedMetricCamera3 = mEstimatedMetricCamera3.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
-            assertSame(mEstimatedMetricCamera3, mEstimatedEuclideanCamera3);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera3, mEstimatedEuclideanCamera3);
+
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
+            PinholeCamera estimatedEuclideanCamera3 = mEstimatedEuclideanCamera3.getCamera();
 
             estimatedMetricCamera1.decompose();
             estimatedMetricCamera2.decompose();
             estimatedMetricCamera3.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+            estimatedEuclideanCamera3.decompose();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of at least 1st two cameras
             for (int i = 0; i < numPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
+                Point3D pe = euclideanReconstructedPoints3D.get(i);
+
                 assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
                 assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(pe));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(pe));
             }
 
             Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
             Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
 
+            Point3D euclideanCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D euclideanCenter2 = estimatedEuclideanCamera2.getCameraCenter();
+            Point3D euclideanCenter3 = estimatedEuclideanCamera3.getCameraCenter();
+
+            PinholeCameraIntrinsicParameters euclideanIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic3 =
+                    estimatedEuclideanCamera3.getIntrinsicParameters();
+
+            Rotation3D euclideanRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D euclideanRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+            Rotation3D euclideanRotation3 = estimatedEuclideanCamera3.getCameraRotation();
+
             //transform points and cameras to account for scale change
-            double baseline = center1.distanceTo(center2);
+            baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
             double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
+            assertEquals(mScale, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(mScale2, baseline, LARGE_ABSOLUTE_ERROR);
 
             MetricTransformation3D scaleTransformation =
                     new MetricTransformation3D(scale);
@@ -6524,6 +7346,15 @@ public class SparseReconstructorTest {
                 continue;
             }
             assertTrue(center3.equals(scaledCenter3, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center1.equals(euclideanCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR));
+            if (!center3.equals(euclideanCenter3, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center3.equals(euclideanCenter3, LARGE_ABSOLUTE_ERROR));
 
             assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
@@ -6566,11 +7397,59 @@ public class SparseReconstructorTest {
             assertEquals(scaledIntrinsic3.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
+            assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+            assertEquals(euclideanIntrinsic2.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+            if (Math.abs(euclideanIntrinsic3.getHorizontalFocalLength() -
+                    intrinsic.getHorizontalFocalLength()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(euclideanIntrinsic3.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(euclideanIntrinsic3.getVerticalFocalLength() -
+                    intrinsic.getVerticalFocalLength()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(euclideanIntrinsic3.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic3.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic3.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic3.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
             assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
             assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
             assertTrue(scaledRotation3.asInhomogeneousMatrix().equals(
+                    rotation3.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+
+            assertTrue(euclideanRotation1.asInhomogeneousMatrix().equals(
+                    rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            assertTrue(euclideanRotation2.asInhomogeneousMatrix().equals(
+                    rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            assertTrue(euclideanRotation3.asInhomogeneousMatrix().equals(
                     rotation3.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             //check that points are correct
@@ -6581,8 +7460,16 @@ public class SparseReconstructorTest {
                     validPoints = false;
                     break;
                 }
+                if (!points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                    validPoints = false;
+                    break;
+                }
                 assertTrue(points3D.get(i).equals(
                         scaledReconstructionPoints3D.get(i),
+                        LARGE_ABSOLUTE_ERROR));
+                assertTrue(points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -6609,8 +7496,8 @@ public class SparseReconstructorTest {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            SparseReconstructorConfiguration configuration =
-                    new SparseReconstructorConfiguration();
+            KnownBaselineSparseReconstructorConfiguration configuration =
+                    new KnownBaselineSparseReconstructorConfiguration();
             configuration.setInitialCamerasEstimatorMethod(InitialCamerasEstimatorMethod.ESSENTIAL_MATRIX);
 
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -6666,6 +7553,9 @@ public class SparseReconstructorTest {
                     center2.getInhomY() + cameraSeparation2,
                     center2.getInhomZ() + cameraSeparation2);
 
+            double baseline = center1.distanceTo(center2);
+            configuration.setBaseline(baseline);
+
             MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
             MatrixRotation3D rotation2 = new MatrixRotation3D(alphaEuler2,
@@ -6789,16 +7679,16 @@ public class SparseReconstructorTest {
                 projectedPoints3.add(projectedPoint3);
             }
 
-            SparseReconstructorListener listener =
-                    new SparseReconstructorListener() {
+            KnownBaselineSparseReconstructorListener listener =
+                    new KnownBaselineSparseReconstructorListener() {
                         @Override
-                        public boolean hasMoreViewsAvailable(SparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(KnownBaselineSparseReconstructor reconstructor) {
                             return mViewCount < 3;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(SparseReconstructor reconstructor, int viewId,
-                                                                   List<Sample2D> samples) {
+                        public void onRequestSamplesForCurrentView(KnownBaselineSparseReconstructor reconstructor,
+                                                                   int viewId, List<Sample2D> samples) {
 
                             samples.clear();
 
@@ -6831,20 +7721,21 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onSamplesAccepted(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesAccepted(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onSamplesRejected(SparseReconstructor reconstructor, int viewId,
+                        public void onSamplesRejected(KnownBaselineSparseReconstructor reconstructor, int viewId,
                                                       List<Sample2D> samples) {
                             mViewCount++;
                         }
 
                         @Override
-                        public void onRequestMatches(SparseReconstructor reconstructor, List<Sample2D> samples1,
-                                                     List<Sample2D> samples2, int viewId1, int viewId2,
+                        public void onRequestMatches(KnownBaselineSparseReconstructor reconstructor,
+                                                     List<Sample2D> samples1, List<Sample2D> samples2,
+                                                     int viewId1, int viewId2,
                                                      List<MatchedSamples> matches) {
                             matches.clear();
 
@@ -6901,7 +7792,7 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SparseReconstructor reconstructor,
+                        public void onFundamentalMatrixEstimated(KnownBaselineSparseReconstructor reconstructor,
                                                                  EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             if (mEstimatedFundamentalMatrix == null) {
                                 mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
@@ -6911,8 +7802,10 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onMetricCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                            int currentViewId, EstimatedCamera previousCamera, EstimatedCamera currentCamera) {
+                        public void onMetricCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                            int previousViewId, int currentViewId,
+                                                            EstimatedCamera previousCamera,
+                                                            EstimatedCamera currentCamera) {
                             if (mEstimatedMetricCamera2 == null) {
                                 mEstimatedMetricCamera1 = previousCamera;
                                 mEstimatedMetricCamera2 = currentCamera;
@@ -6923,14 +7816,16 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onMetricReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                         List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
+                        public void onMetricReconstructedPointsEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                                         List<MatchedSamples> matches,
+                                                                         List<ReconstructedPoint3D> points) {
                             mMetricReconstructedPoints = points;
                         }
 
                         @Override
-                        public void onEuclideanCameraEstimated(SparseReconstructor reconstructor, int previousViewId,
-                                                               int currentViewId, double scale, EstimatedCamera previousCamera,
+                        public void onEuclideanCameraEstimated(KnownBaselineSparseReconstructor reconstructor,
+                                                               int previousViewId, int currentViewId, double scale,
+                                                               EstimatedCamera previousCamera,
                                                                EstimatedCamera currentCamera) {
                             if (mEstimatedEuclideanCamera2 == null) {
                                 mEstimatedEuclideanCamera1 = previousCamera;
@@ -6944,8 +7839,9 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanReconstructedPointsEstimated(SparseReconstructor reconstructor,
-                                                                            double scale, List<ReconstructedPoint3D> points) {
+                        public void onEuclideanReconstructedPointsEstimated(
+                                KnownBaselineSparseReconstructor reconstructor, double scale,
+                                List<ReconstructedPoint3D> points) {
                             if (mEuclideanReconstructedPoints == null) {
                                 mScale = scale;
                             } else {
@@ -6956,27 +7852,28 @@ public class SparseReconstructorTest {
                         }
 
                         @Override
-                        public void onStart(SparseReconstructor reconstructor) {
+                        public void onStart(KnownBaselineSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SparseReconstructor reconstructor) {
+                        public void onFinish(KnownBaselineSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SparseReconstructor reconstructor) {
+                        public void onCancel(KnownBaselineSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SparseReconstructor reconstructor) {
+                        public void onFail(KnownBaselineSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SparseReconstructor reconstructor = new SparseReconstructor(configuration, listener);
+            KnownBaselineSparseReconstructor reconstructor = new KnownBaselineSparseReconstructor(configuration,
+                    listener);
 
             //check initial values
             reset();
@@ -7024,38 +7921,70 @@ public class SparseReconstructorTest {
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
             PinholeCamera estimatedMetricCamera3 = mEstimatedMetricCamera3.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
-            assertSame(mEstimatedMetricCamera3, mEstimatedEuclideanCamera3);
+            assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
+            assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            assertNotSame(mEstimatedMetricCamera3, mEstimatedEuclideanCamera3);
+
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
+            PinholeCamera estimatedEuclideanCamera3 = mEstimatedEuclideanCamera3.getCamera();
 
             estimatedMetricCamera1.decompose();
             estimatedMetricCamera2.decompose();
             estimatedMetricCamera3.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+            estimatedEuclideanCamera3.decompose();
+
+            assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of at least 1st two cameras
             for (int i = 0; i < numPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
+                Point3D pe = euclideanReconstructedPoints3D.get(i);
+
                 assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
                 assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(pe));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(pe));
             }
 
             Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
             Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
 
+            Point3D euclideanCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D euclideanCenter2 = estimatedEuclideanCamera2.getCameraCenter();
+            Point3D euclideanCenter3 = estimatedEuclideanCamera3.getCameraCenter();
+
+            PinholeCameraIntrinsicParameters euclideanIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters euclideanIntrinsic3 =
+                    estimatedEuclideanCamera3.getIntrinsicParameters();
+
+            Rotation3D euclideanRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D euclideanRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+            Rotation3D euclideanRotation3 = estimatedEuclideanCamera3.getCameraRotation();
+
             //transform points and cameras to account for scale change
-            double baseline = center1.distanceTo(center2);
+            baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
             double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
+            assertEquals(mScale, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(mScale2, baseline, LARGE_ABSOLUTE_ERROR);
 
             MetricTransformation3D scaleTransformation =
                     new MetricTransformation3D(scale);
@@ -7106,6 +8035,15 @@ public class SparseReconstructorTest {
                 continue;
             }
             assertTrue(center3.equals(scaledCenter3, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center1.equals(euclideanCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center2.equals(euclideanCenter2, LARGE_ABSOLUTE_ERROR));
+            if (!center3.equals(euclideanCenter3, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(center3.equals(euclideanCenter3, LARGE_ABSOLUTE_ERROR));
 
             assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
@@ -7156,12 +8094,70 @@ public class SparseReconstructorTest {
             assertEquals(scaledIntrinsic3.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
+            assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic1.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+            assertEquals(euclideanIntrinsic2.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic2.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+            if (Math.abs(euclideanIntrinsic3.getHorizontalFocalLength() -
+                    intrinsic.getHorizontalFocalLength()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(euclideanIntrinsic3.getHorizontalFocalLength(),
+                    intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(euclideanIntrinsic3.getVerticalFocalLength() -
+                    intrinsic.getVerticalFocalLength()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(euclideanIntrinsic3.getVerticalFocalLength(),
+                    intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(euclideanIntrinsic3.getSkewness() -
+                    intrinsic.getSkewness()) > ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(euclideanIntrinsic3.getSkewness(),
+                    intrinsic.getSkewness(), ABSOLUTE_ERROR);
+            if (Math.abs(euclideanIntrinsic3.getHorizontalPrincipalPoint() -
+                    intrinsic.getHorizontalPrincipalPoint()) > ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(euclideanIntrinsic3.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            assertEquals(euclideanIntrinsic3.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+
+
             assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
             assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
             assertTrue(scaledRotation3.asInhomogeneousMatrix().equals(
                     rotation3.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+
+            assertTrue(euclideanRotation1.asInhomogeneousMatrix().equals(
+                    rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            assertTrue(euclideanRotation2.asInhomogeneousMatrix().equals(
+                    rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            assertTrue(euclideanRotation3.asInhomogeneousMatrix().equals(
+                    rotation3.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+
 
             //check that points are correct
             boolean validPoints = true;
@@ -7171,8 +8167,16 @@ public class SparseReconstructorTest {
                     validPoints = false;
                     break;
                 }
+                if (!points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                    validPoints = false;
+                    break;
+                }
                 assertTrue(points3D.get(i).equals(
                         scaledReconstructionPoints3D.get(i),
+                        LARGE_ABSOLUTE_ERROR));
+                assertTrue(points3D.get(i).equals(
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -7189,7 +8193,6 @@ public class SparseReconstructorTest {
 
         assertTrue(numValid > 0);
     }
-
 
     private void reset() {
         mViewCount = 0;
