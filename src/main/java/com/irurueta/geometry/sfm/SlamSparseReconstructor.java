@@ -74,6 +74,6 @@ public class SlamSparseReconstructor extends BaseSlamSparseReconstructor<SlamSpa
      */
     @Override
     protected boolean postProcessOne(boolean isInitialPairOfViews) {
-        return updateScale();
+        return updateScale(isInitialPairOfViews);
     }
 }

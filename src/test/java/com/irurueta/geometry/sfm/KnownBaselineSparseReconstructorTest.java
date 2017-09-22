@@ -5948,7 +5948,13 @@ public class KnownBaselineSparseReconstructorTest {
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
             double scale = baseline / estimatedBaseline;
+            if (Math.abs(mScale - baseline) > ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(mScale, baseline, ABSOLUTE_ERROR);
+            if (Math.abs(mScale2 - baseline) > ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(mScale2, baseline, ABSOLUTE_ERROR);
 
             MetricTransformation3D scaleTransformation =

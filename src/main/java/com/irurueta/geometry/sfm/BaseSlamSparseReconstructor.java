@@ -139,37 +139,43 @@ public abstract class BaseSlamSparseReconstructor<
         BaseCalibrationData calibrationData =
                 mConfiguration.getCalibrationData();
         if (calibrationData != null) {
+            //noinspection all
             mSlamEstimator.setCalibrationData(calibrationData);
         }
     }
 
     /**
      * Update scene scale using SLAM data.
+     * @param isInitialPairOfViews true if initial pair of views is being processed, false otherwise.
      * @return true if scale was successfully updated, false otherwise.
      */
-    protected boolean updateScale() {
-        //obtain baseline (camera separation from slam estimator data
-        double posX = mSlamEstimator.getStatePositionX();
-        double posY = mSlamEstimator.getStatePositionY();
-        double posZ = mSlamEstimator.getStatePositionZ();
-
-        InhomogeneousPoint3D slamPosition = new InhomogeneousPoint3D(posX, posY, posZ);
-
+    protected boolean updateScale(boolean isInitialPairOfViews) {
         try {
             PinholeCamera metricCamera1 = mPreviousMetricEstimatedCamera.getCamera();
             PinholeCamera metricCamera2 = mCurrentMetricEstimatedCamera.getCamera();
 
-            metricCamera1.decompose();
-            metricCamera2.decompose();
+            double scale;
+            if (isInitialPairOfViews) {
+                //obtain baseline (camera separation from slam estimator data
+                double posX = mSlamEstimator.getStatePositionX();
+                double posY = mSlamEstimator.getStatePositionY();
+                double posZ = mSlamEstimator.getStatePositionZ();
 
-            Point3D center1 = metricCamera1.getCameraCenter();
-            Point3D center2 = metricCamera2.getCameraCenter();
+                InhomogeneousPoint3D slamPosition = new InhomogeneousPoint3D(posX, posY, posZ);
 
-            double baseline = center1.distanceTo(slamPosition);
-            double estimatedBaseline = center1.distanceTo(center2);
+                metricCamera1.decompose();
+                metricCamera2.decompose();
 
-            double scale = mCurrentScale = baseline / estimatedBaseline;
-            double sqrScale = scale * scale;
+                Point3D center1 = metricCamera1.getCameraCenter();
+                Point3D center2 = metricCamera2.getCameraCenter();
+
+                double baseline = center1.distanceTo(slamPosition);
+                double estimatedBaseline = center1.distanceTo(center2);
+
+                scale = mCurrentScale = baseline / estimatedBaseline;
+            } else {
+                scale = mCurrentScale;
+            }
 
             MetricTransformation3D scaleTransformation =
                     new MetricTransformation3D(scale);
@@ -177,6 +183,35 @@ public abstract class BaseSlamSparseReconstructor<
             //update scale of cameras
             PinholeCamera euclideanCamera1 = scaleTransformation.transformAndReturnNew(metricCamera1);
             PinholeCamera euclideanCamera2 = scaleTransformation.transformAndReturnNew(metricCamera2);
+
+            if (!isInitialPairOfViews) {
+                euclideanCamera2.decompose();
+                mSlamEstimator.correctWithPositionMeasure(euclideanCamera2.getCameraCenter());
+
+                //adjust scale of current camera
+                double slamPosX = mSlamEstimator.getStatePositionX();
+                double slamPosY = mSlamEstimator.getStatePositionY();
+                double slamPosZ = mSlamEstimator.getStatePositionZ();
+
+                Point3D euclideanCenter2 = euclideanCamera2.getCameraCenter();
+
+                double euclideanPosX = euclideanCenter2.getInhomX();
+                double euclideanPosY = euclideanCenter2.getInhomY();
+                double euclideanPosZ = euclideanCenter2.getInhomZ();
+
+                double scaleVariationX = euclideanPosX / slamPosX;
+                double scaleVariationY = euclideanPosY / slamPosY;
+                double scaleVariationZ = euclideanPosZ / slamPosZ;
+
+                double scaleVariation = (scaleVariationX + scaleVariationY + scaleVariationZ) / 3.0;
+                scale *= scaleVariation;
+                mCurrentScale = scale ;
+                scaleTransformation.setScale(mCurrentScale);
+
+                //update camera
+                scaleTransformation.transform(metricCamera2, euclideanCamera2);
+            }
+            double sqrScale = scale * scale;
 
             mPreviousEuclideanEstimatedCamera = new EstimatedCamera();
             mPreviousEuclideanEstimatedCamera.setCamera(euclideanCamera1);
@@ -198,14 +233,14 @@ public abstract class BaseSlamSparseReconstructor<
 
             //update scale of reconstructed points
             int numPoints = mActiveMetricReconstructedPoints.size();
-            List<Point3D> metricReconstructedPoints3D = new ArrayList<Point3D>();
-            for (int i = 0; i < numPoints; i++) {
-                metricReconstructedPoints3D.add(mActiveMetricReconstructedPoints.get(i).
-                        getPoint());
+            List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            for (ReconstructedPoint3D reconstructedPoint : mActiveMetricReconstructedPoints) {
+                metricReconstructedPoints3D.add(reconstructedPoint.getPoint());
             }
 
-            List<Point3D> euclideanReconstructedPoints3D = scaleTransformation.transformPointsAndReturnNew(
-                    metricReconstructedPoints3D);
+            List<Point3D> euclideanReconstructedPoints3D =
+                    scaleTransformation.transformPointsAndReturnNew(
+                            metricReconstructedPoints3D);
 
             //set scaled points into result
             mActiveEuclideanReconstructedPoints = new ArrayList<>();
@@ -230,6 +265,7 @@ public abstract class BaseSlamSparseReconstructor<
             return true;
         } catch (Exception e) {
             mFailed = true;
+            //noinspection all
             mListener.onFail((R)this);
 
             return false;
