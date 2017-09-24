@@ -16,6 +16,8 @@
 
 package com.irurueta.geometry.sfm;
 
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
 import com.irurueta.geometry.InhomogeneousPoint2D;
 import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
 import com.irurueta.geometry.epipolar.CorrectorType;
@@ -200,6 +202,7 @@ public class ConstantVelocityModelSlamSparseReconstructorConfigurationTest {
                 ConstantVelocityModelSlamSparseReconstructorConfiguration.DEFAULT_POINT_TRIANGULATOR_THRESHOLD,
                 0.0);
         assertNull(cfg.getCalibrationData());
+        assertNotNull(cfg.getCameraPositionCovariance());
     }
 
     @Test
@@ -366,6 +369,7 @@ public class ConstantVelocityModelSlamSparseReconstructorConfigurationTest {
                 ConstantVelocityModelSlamSparseReconstructorConfiguration.DEFAULT_POINT_TRIANGULATOR_THRESHOLD,
                 0.0);
         assertNull(cfg.getCalibrationData());
+        assertNotNull(cfg.getCameraPositionCovariance());
     }
 
     @Test
@@ -1502,5 +1506,37 @@ public class ConstantVelocityModelSlamSparseReconstructorConfigurationTest {
 
         //check correctness
         assertSame(cfg.getCalibrationData(), calibrationData);
+    }
+
+    @Test
+    public void testGetSetCameraPositionVariance() throws AlgebraException {
+        ConstantVelocityModelSlamSparseReconstructorConfiguration cfg =
+                new ConstantVelocityModelSlamSparseReconstructorConfiguration();
+
+        //check default value
+        assertNotNull(cfg.getCameraPositionCovariance());
+
+        //set new value
+        Matrix cov = new Matrix(3,3);
+        assertSame(cfg.setCameraPositionCovariance(cov), cfg);
+
+        //check correctness
+        assertSame(cfg.getCameraPositionCovariance(), cov);
+    }
+
+    @Test
+    public void testSetCameraPositionVariance() {
+        ConstantVelocityModelSlamSparseReconstructorConfiguration cfg =
+                new ConstantVelocityModelSlamSparseReconstructorConfiguration();
+
+        //check default value
+        assertNotNull(cfg.getCameraPositionCovariance());
+
+        //set new value
+        Matrix cov = Matrix.diagonal(new double[]{2.0, 2.0, 2.0});
+        assertSame(cfg.setCameraPositionVariance(2.0), cfg);
+
+        //check correctness
+        assertEquals(cfg.getCameraPositionCovariance(), cov);
     }
 }

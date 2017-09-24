@@ -3949,7 +3949,7 @@ public class TwoViewsSparseReconstructorTest {
             Point2D projectedPoint1, projectedPoint2;
             final List<Point2D> projectedPoints1 = new ArrayList<>();
             final List<Point2D> projectedPoints2 = new ArrayList<>();
-            boolean front1, front2;
+            boolean front1, front2, failed = false;
             for (int i = 0; i < numPoints; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
@@ -3980,10 +3980,16 @@ public class TwoViewsSparseReconstructorTest {
                     front1 = camera1.isPointInFrontOfCamera(point3D);
                     front2 = camera2.isPointInFrontOfCamera(point3D);
                     if (numTry > MAX_TRIES) {
-                        fail("max tries reached");
+                        failed = true;
+                        break;
                     }
                     numTry++;
                 } while(!front1 || !front2);
+
+                if (failed) {
+                    break;
+                }
+
                 points3D.add(point3D);
                 
                 //check that 3D point is in front of both cameras
@@ -4000,7 +4006,11 @@ public class TwoViewsSparseReconstructorTest {
                 projectedPoint2 = new InhomogeneousPoint2D();
                 camera2.project(point3D, projectedPoint2);
                 projectedPoints2.add(projectedPoint2);
-            }                        
+            }
+
+            if (failed) {
+                continue;
+            }
         
             TwoViewsSparseReconstructorListener listener =
                     new TwoViewsSparseReconstructorListener() {

@@ -55,9 +55,6 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
     public static final double MIN_FOCAL_LENGTH_ESSENTIAL = 750.0;
     public static final double MAX_FOCAL_LENGTH_ESSENTIAL = 1500.0;
 
-    public static final double MIN_PRINCIPAL_POINT_ESSENTIAL = 100.0;
-    public static final double MAX_PRINCIPAL_POINT_ESSENTIAL = 400.0;
-
     public static final double MIN_ANGLE_DEGREES = -30.0;
     public static final double MAX_ANGLE_DEGREES = -15.0;
 
@@ -87,7 +84,6 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
     //time between samples expressed in nanoseconds (a typical sensor in Android 
     //delivers a sample every 20ms)
     public static final int DELTA_NANOS = 20000000; //0.02 seconds
-    public static final double DELTA_SECONDS = 0.02; //0.02 seconds;    
 
     public static final float MIN_CALIBRATION_OFFSET = -1e-4f;
     public static final float MAX_CALIBRATION_OFFSET = 1e-4f;

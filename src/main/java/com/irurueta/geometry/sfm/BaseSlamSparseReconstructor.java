@@ -15,8 +15,6 @@
  */
 package com.irurueta.geometry.sfm;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.Matrix;
 import com.irurueta.geometry.*;
 import com.irurueta.geometry.slam.BaseCalibrationData;
 import com.irurueta.geometry.slam.BaseSlamEstimator;
@@ -52,11 +50,6 @@ public abstract class BaseSlamSparseReconstructor<
     private InhomogeneousPoint3D mSlamPosition = new InhomogeneousPoint3D();
 
     /**
-     * Camera position covariance. Used by SLAM estimator.
-     */
-    private Matrix mCovariance;
-
-    /**
      * Constructor.
      * @param configuration configuration for this reconstructor.
      * @param listener listener in charge of handling events.
@@ -66,11 +59,6 @@ public abstract class BaseSlamSparseReconstructor<
     public BaseSlamSparseReconstructor(C configuration,
             L listener) throws NullPointerException {
         super(configuration, listener);
-        try {
-            mCovariance = Matrix.identity(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
-            mCovariance.multiplyByScalar(1e-6);
-        } catch (AlgebraException ignore) { }
     }
 
     /**
@@ -205,7 +193,8 @@ public abstract class BaseSlamSparseReconstructor<
             PinholeCamera euclideanCamera2 = scaleTransformation.transformAndReturnNew(metricCamera2);
 
             euclideanCamera2.decompose(false, true);
-            mSlamEstimator.correctWithPositionMeasure(euclideanCamera2.getCameraCenter(), mCovariance);
+            mSlamEstimator.correctWithPositionMeasure(euclideanCamera2.getCameraCenter(),
+                    mConfiguration.getCameraPositionCovariance());
 
             if (!isInitialPairOfViews) {
 

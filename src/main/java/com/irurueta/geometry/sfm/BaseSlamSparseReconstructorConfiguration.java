@@ -16,6 +16,9 @@
 
 package com.irurueta.geometry.sfm;
 
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.Point3D;
 import com.irurueta.geometry.slam.BaseCalibrationData;
 
 import java.io.Serializable;
@@ -33,6 +36,11 @@ public class BaseSlamSparseReconstructorConfiguration<C extends BaseCalibrationD
         implements Serializable {
 
     /**
+     * Default variance for coordinates of estimated camera positions.
+     */
+    public static final double DEFAULT_CAMERA_POSITION_VARIANCE = 1e-6;
+
+    /**
      * Calibration data for accelerometer and gyroscope.
      * This data is usually captured and estimated in an offline step previous
      * to the actual scene reconstruction.
@@ -43,9 +51,26 @@ public class BaseSlamSparseReconstructorConfiguration<C extends BaseCalibrationD
     private C mCalibrationData;
 
     /**
+     * Matrix containing covariance of measured camera positions.
+     * This should usually be an "almost" diagonal matrix, where diagonal elements
+     * are close to the position estimation error variance.
+     * Values of this matrix are device specific and depends on factors such as
+     * resolution of images, pictures quality, gyroscope and accelerometer accuracy.
+     * This matrix must be a 3x3 symmetric positive definite matrix.
+     */
+    private Matrix mCameraPositionCovariance;
+
+    /**
      * Constructor.
      */
-    public BaseSlamSparseReconstructorConfiguration() { }
+    public BaseSlamSparseReconstructorConfiguration() {
+        //initialize default covariance
+        try {
+            mCameraPositionCovariance = Matrix.identity(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
+                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
+            mCameraPositionCovariance.multiplyByScalar(DEFAULT_CAMERA_POSITION_VARIANCE);
+        } catch (AlgebraException ignore) { }
+    }
 
     /**
      * Gets calibration data for accelerometer and gyroscope.
@@ -72,6 +97,50 @@ public class BaseSlamSparseReconstructorConfiguration<C extends BaseCalibrationD
      */
     public T setCalibrationData(C calibrationData) {
         mCalibrationData = calibrationData;
+        return (T)this;
+    }
+
+    /**
+     * Gets matrix containing covariance of measured camera positions.
+     * This should usually be an "almost" diagonal matrix, where diagonal elements
+     * are close to the position estimation error variance.
+     * Values of this matrix are device specific and depends on factors such as
+     * resolution of images, pictures quality, gyroscope and accelerometer accuracy.
+     * This matrix must be a 3x3 symmetric positive definite matrix.
+     * @return covariance of measured camera positions.
+     */
+    public Matrix getCameraPositionCovariance() {
+        return mCameraPositionCovariance;
+    }
+
+    /**
+     * Sets matrix containing covariance of measured camera positions.
+     * This should usually be an "almost" diagonal matrix, where diagonal elements
+     * are close to the position estimation error variance.
+     * Values of this matrix are device specific and depends on factors such as
+     * resolution of images, pictures quality, gyroscope and accelerometer accuracy.
+     * This matrix must be a 3x3 symmetric positive definite matrix.
+     * @param cameraPositionCovariance covariance of measured camera positions.
+     * @return this instance so that method can be easily chained.
+     * @throws IllegalArgumentException if provided matrix is not 3x3.
+     */
+    public T setCameraPositionCovariance(Matrix cameraPositionCovariance)
+            throws IllegalArgumentException {
+        if (cameraPositionCovariance.getRows() != Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH ||
+                cameraPositionCovariance.getColumns() != Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {
+            throw new IllegalArgumentException();
+        }
+
+        mCameraPositionCovariance = cameraPositionCovariance;
+        return (T)this;
+    }
+
+    public T setCameraPositionVariance(double variance) {
+        try {
+            mCameraPositionCovariance = Matrix.identity(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
+                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
+            mCameraPositionCovariance.multiplyByScalar(variance);
+        } catch (AlgebraException ignore) { }
         return (T)this;
     }
 }
