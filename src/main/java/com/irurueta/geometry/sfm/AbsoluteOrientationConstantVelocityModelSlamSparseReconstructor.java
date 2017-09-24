@@ -31,6 +31,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor ext
         BaseAbsoluteOrientationSlamSparseReconstructor<
         AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorConfiguration,
         AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor,
+        AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorListener,
         AbsoluteOrientationConstantVelocityModelSlamEstimator> {
 
     /**

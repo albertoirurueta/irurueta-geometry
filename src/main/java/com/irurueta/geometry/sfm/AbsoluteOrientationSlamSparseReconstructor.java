@@ -26,7 +26,9 @@ import com.irurueta.geometry.slam.AbsoluteOrientationSlamEstimator;
 public class AbsoluteOrientationSlamSparseReconstructor extends
         BaseAbsoluteOrientationSlamSparseReconstructor<
         AbsoluteOrientationSlamSparseReconstructorConfiguration,
-        AbsoluteOrientationSlamSparseReconstructor, AbsoluteOrientationSlamEstimator> {
+        AbsoluteOrientationSlamSparseReconstructor,
+        AbsoluteOrientationSlamSparseReconstructorListener,
+        AbsoluteOrientationSlamEstimator> {
 
     /**
      * Constructor.

@@ -31,13 +31,15 @@ import java.util.List;
  * the orientation state, for that reason we take into account the initial orientation.
  * @param <C> type of configuration.
  * @param <R> type of reconstructor.
+ * @param <L> type of listener.
  * @param <S> type of SLAM estimator.
  */
 public abstract class BaseAbsoluteOrientationSlamSparseReconstructor<
         C extends BaseSlamSparseReconstructorConfiguration,
         R extends BaseSlamSparseReconstructor,
+        L extends BaseSparseReconstructorListener<R>,
         S extends AbsoluteOrientationBaseSlamEstimator> extends
-        BaseSlamSparseReconstructor<C, R, S> {
+        BaseSlamSparseReconstructor<C, R, L, S> {
 
     /**
      * First sample of orientation received.
@@ -52,8 +54,7 @@ public abstract class BaseAbsoluteOrientationSlamSparseReconstructor<
      * provided.
      */
     public BaseAbsoluteOrientationSlamSparseReconstructor(
-            C configuration,
-            BaseSparseReconstructorListener<R> listener)
+            C configuration, L listener)
             throws NullPointerException {
         super(configuration, listener);
     }

@@ -15,7 +15,8 @@ package com.irurueta.geometry.sfm;
 public class TwoViewsSparseReconstructor extends 
         BaseTwoViewsSparseReconstructor<
         TwoViewsSparseReconstructorConfiguration,
-        TwoViewsSparseReconstructor> {
+        TwoViewsSparseReconstructor,
+        TwoViewsSparseReconstructorListener> {
     
     /**
      * Constructor.

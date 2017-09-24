@@ -23,13 +23,15 @@ import java.util.List;
  * Mapping) using data obtained from sensors like accelerometers or gyroscopes.
  * @param <C> type of configuration.
  * @param <R> type of reconstructor.
+ * @param <L> type of listener.
  * @param <S> type of SLAM estimator.
  */
 public abstract class BaseSlamTwoViewsSparseReconstructor<
         C extends BaseSlamTwoViewsSparseReconstructorConfiguration,
         R extends BaseSlamTwoViewsSparseReconstructor,
+        L extends BaseTwoViewsSparseReconstructorListener<R>,
         S extends BaseSlamEstimator> extends 
-        BaseTwoViewsSparseReconstructor<C, R> {
+        BaseTwoViewsSparseReconstructor<C, R, L> {
     
     /**
      * Slam estimator to estimate position, speed, orientation using 
@@ -45,8 +47,7 @@ public abstract class BaseSlamTwoViewsSparseReconstructor<
      * provided.
      */
     public BaseSlamTwoViewsSparseReconstructor(C configuration, 
-            BaseTwoViewsSparseReconstructorListener<R> listener) 
-            throws NullPointerException {
+            L listener) throws NullPointerException {
         super(configuration, listener);
     }
     

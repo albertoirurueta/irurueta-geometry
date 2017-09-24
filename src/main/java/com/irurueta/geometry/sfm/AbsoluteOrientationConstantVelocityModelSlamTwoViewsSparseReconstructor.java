@@ -24,6 +24,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
         extends BaseAbsoluteOrientationSlamTwoViewsSparseReconstructor<
         AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstructorConfiguration,
         AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstructor,
+        AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstructorListener,
         AbsoluteOrientationConstantVelocityModelSlamEstimator> {
     
     /**

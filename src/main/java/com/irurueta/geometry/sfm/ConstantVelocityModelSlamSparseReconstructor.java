@@ -27,6 +27,7 @@ public class ConstantVelocityModelSlamSparseReconstructor extends
         BaseSlamSparseReconstructor<
         ConstantVelocityModelSlamSparseReconstructorConfiguration,
         ConstantVelocityModelSlamSparseReconstructor,
+        ConstantVelocityModelSlamSparseReconstructorListener,
         ConstantVelocityModelSlamEstimator> {
 
     /**

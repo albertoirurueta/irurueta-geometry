@@ -27,13 +27,15 @@ import java.util.List;
  * the initial orientation.
  * @param <C> type of configuration.
  * @param <R> type of reconstructor.
+ * @param <L> type of listener.
  * @param <S> type of SLAM estimator.
  */
 public abstract class BaseAbsoluteOrientationSlamTwoViewsSparseReconstructor<
         C extends BaseSlamTwoViewsSparseReconstructorConfiguration,
         R extends BaseSlamTwoViewsSparseReconstructor,
+        L extends BaseTwoViewsSparseReconstructorListener<R>,
         S extends AbsoluteOrientationBaseSlamEstimator> extends 
-        BaseSlamTwoViewsSparseReconstructor<C, R, S> {
+        BaseSlamTwoViewsSparseReconstructor<C, R, L, S> {
     
     /**
      * First sample of orientation received.
@@ -48,8 +50,7 @@ public abstract class BaseAbsoluteOrientationSlamTwoViewsSparseReconstructor<
      * provided.
      */
     public BaseAbsoluteOrientationSlamTwoViewsSparseReconstructor(
-            C configuration, 
-            BaseTwoViewsSparseReconstructorListener<R> listener) 
+            C configuration, L listener)
             throws NullPointerException {
         super(configuration, listener);
     }    

@@ -15,6 +15,8 @@
  */
 package com.irurueta.geometry.sfm;
 
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
 import com.irurueta.geometry.*;
 import com.irurueta.geometry.slam.BaseCalibrationData;
 import com.irurueta.geometry.slam.BaseSlamEstimator;
@@ -29,18 +31,30 @@ import java.util.List;
  * from sensors like accelerometers or gyroscopes.
  * @param <C> type of configuration.
  * @param <R> type of reconstructor.
+ * @param <L> type of listener.
  * @param <S> type of SLAM estimator.
  */
 public abstract class BaseSlamSparseReconstructor<
         C extends BaseSlamSparseReconstructorConfiguration,
         R extends BaseSparseReconstructor,
-        S extends BaseSlamEstimator> extends BaseSparseReconstructor<C, R> {
+        L extends BaseSparseReconstructorListener<R>,
+        S extends BaseSlamEstimator> extends BaseSparseReconstructor<C, R, L> {
 
     /**
      * Slam estimator to estimate position, speed, orientation using
      * accelerometer and gyroscope data.
      */
     protected S mSlamEstimator;
+
+    /**
+     * Position estimated by means of SLAM.
+     */
+    private InhomogeneousPoint3D mSlamPosition = new InhomogeneousPoint3D();
+
+    /**
+     * Camera position covariance. Used by SLAM estimator.
+     */
+    private Matrix mCovariance;
 
     /**
      * Constructor.
@@ -50,8 +64,13 @@ public abstract class BaseSlamSparseReconstructor<
      * provided.
      */
     public BaseSlamSparseReconstructor(C configuration,
-            BaseSparseReconstructorListener<R> listener) throws NullPointerException {
+            L listener) throws NullPointerException {
         super(configuration, listener);
+        try {
+            mCovariance = Matrix.identity(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
+                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
+            mCovariance.multiplyByScalar(1e-6);
+        } catch (AlgebraException ignore) { }
     }
 
     /**
@@ -154,22 +173,23 @@ public abstract class BaseSlamSparseReconstructor<
             PinholeCamera metricCamera1 = mPreviousMetricEstimatedCamera.getCamera();
             PinholeCamera metricCamera2 = mCurrentMetricEstimatedCamera.getCamera();
 
+            double slamPosX, slamPosY, slamPosZ;
             double scale;
             if (isInitialPairOfViews) {
                 //obtain baseline (camera separation from slam estimator data
-                double posX = mSlamEstimator.getStatePositionX();
-                double posY = mSlamEstimator.getStatePositionY();
-                double posZ = mSlamEstimator.getStatePositionZ();
+                slamPosX = mSlamEstimator.getStatePositionX();
+                slamPosY = mSlamEstimator.getStatePositionY();
+                slamPosZ = mSlamEstimator.getStatePositionZ();
 
-                InhomogeneousPoint3D slamPosition = new InhomogeneousPoint3D(posX, posY, posZ);
+                mSlamPosition.setInhomogeneousCoordinates(slamPosX, slamPosY, slamPosZ);
 
-                metricCamera1.decompose();
-                metricCamera2.decompose();
+                metricCamera1.decompose(false, true);
+                metricCamera2.decompose(false, true);
 
                 Point3D center1 = metricCamera1.getCameraCenter();
                 Point3D center2 = metricCamera2.getCameraCenter();
 
-                double baseline = center1.distanceTo(slamPosition);
+                double baseline = center1.distanceTo(mSlamPosition);
                 double estimatedBaseline = center1.distanceTo(center2);
 
                 scale = mCurrentScale = baseline / estimatedBaseline;
@@ -184,15 +204,17 @@ public abstract class BaseSlamSparseReconstructor<
             PinholeCamera euclideanCamera1 = scaleTransformation.transformAndReturnNew(metricCamera1);
             PinholeCamera euclideanCamera2 = scaleTransformation.transformAndReturnNew(metricCamera2);
 
+            euclideanCamera2.decompose(false, true);
+            mSlamEstimator.correctWithPositionMeasure(euclideanCamera2.getCameraCenter(), mCovariance);
+
             if (!isInitialPairOfViews) {
-                euclideanCamera2.decompose();
-                mSlamEstimator.correctWithPositionMeasure(euclideanCamera2.getCameraCenter());
+
+                slamPosX = mSlamEstimator.getStatePositionX();
+                slamPosY = mSlamEstimator.getStatePositionY();
+                slamPosZ = mSlamEstimator.getStatePositionZ();
+                mSlamPosition.setInhomogeneousCoordinates(slamPosX, slamPosY, slamPosZ);
 
                 //adjust scale of current camera
-                double slamPosX = mSlamEstimator.getStatePositionX();
-                double slamPosY = mSlamEstimator.getStatePositionY();
-                double slamPosZ = mSlamEstimator.getStatePositionZ();
-
                 Point3D euclideanCenter2 = euclideanCamera2.getCameraCenter();
 
                 double euclideanPosX = euclideanCenter2.getInhomX();
@@ -205,7 +227,7 @@ public abstract class BaseSlamSparseReconstructor<
 
                 double scaleVariation = (scaleVariationX + scaleVariationY + scaleVariationZ) / 3.0;
                 scale *= scaleVariation;
-                mCurrentScale = scale ;
+                mCurrentScale = scale;
                 scaleTransformation.setScale(mCurrentScale);
 
                 //update camera

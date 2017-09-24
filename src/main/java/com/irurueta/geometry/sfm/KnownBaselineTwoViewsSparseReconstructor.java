@@ -23,7 +23,8 @@ import java.util.List;
 public class KnownBaselineTwoViewsSparseReconstructor extends 
         BaseTwoViewsSparseReconstructor<
         KnownBaselineTwoViewsSparseReconstructorConfiguration, 
-        KnownBaselineTwoViewsSparseReconstructor> {
+        KnownBaselineTwoViewsSparseReconstructor,
+        KnownBaselineTwoViewsSparseReconstructorListener> {
         
     /**
      * Constructor.

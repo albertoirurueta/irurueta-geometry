@@ -18,7 +18,8 @@ import com.irurueta.geometry.slam.ConstantVelocityModelSlamEstimator;
 public class ConstantVelocityModelSlamTwoViewsSparseReconstructor extends 
         BaseSlamTwoViewsSparseReconstructor<
         ConstantVelocityModelSlamTwoViewsSparseReconstructorConfiguration,
-        ConstantVelocityModelSlamTwoViewsSparseReconstructor, 
+        ConstantVelocityModelSlamTwoViewsSparseReconstructor,
+        ConstantVelocityModelSlamTwoViewsSparseReconstructorListener,
         ConstantVelocityModelSlamEstimator> {
     
     /**

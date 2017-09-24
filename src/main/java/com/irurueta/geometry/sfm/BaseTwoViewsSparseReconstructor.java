@@ -47,10 +47,12 @@ import java.util.List;
  * sparse image point correspondences in two views.
  * @param <C> type of configuration.
  * @param <R> type of reconstructor.
+ * @param <L> type of listener.
  */
 public abstract class BaseTwoViewsSparseReconstructor<
         C extends BaseTwoViewsSparseReconstructorConfiguration,
-        R extends BaseTwoViewsSparseReconstructor> {
+        R extends BaseTwoViewsSparseReconstructor,
+        L extends BaseTwoViewsSparseReconstructorListener<R>> {
     
     /**
      * Number of views.
@@ -87,7 +89,7 @@ public abstract class BaseTwoViewsSparseReconstructor<
      * ends, when certain data is needed or when estimation of data has been
      * computed.
      */
-    protected BaseTwoViewsSparseReconstructorListener<R> mListener;
+    protected L mListener;
 
     /**
      * Indicates whether reconstruction has failed or not.
@@ -146,10 +148,8 @@ public abstract class BaseTwoViewsSparseReconstructor<
      * @throws NullPointerException if listener or configuration is not 
      * provided.
      */
-    public BaseTwoViewsSparseReconstructor(
-            C configuration, 
-            BaseTwoViewsSparseReconstructorListener<R> listener) 
-            throws NullPointerException {
+    public BaseTwoViewsSparseReconstructor(C configuration,
+            L listener) throws NullPointerException {
         if  (configuration == null || listener == null) {
                 throw new NullPointerException();
         }

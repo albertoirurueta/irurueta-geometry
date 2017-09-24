@@ -23,7 +23,7 @@ import com.irurueta.geometry.slam.SlamEstimator;
  * scale estimation.
  */
 public class SlamSparseReconstructor extends BaseSlamSparseReconstructor<SlamSparseReconstructorConfiguration,
-        SlamSparseReconstructor, SlamEstimator> {
+        SlamSparseReconstructor, SlamSparseReconstructorListener, SlamEstimator> {
 
     /**
      * Constructor.

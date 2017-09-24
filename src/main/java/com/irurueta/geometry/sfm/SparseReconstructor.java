@@ -20,7 +20,9 @@ package com.irurueta.geometry.sfm;
  * Class in charge of estimating cameras and 3D reconstruction points from
  * sparse image point correspondences.
  */
-public class SparseReconstructor extends BaseSparseReconstructor<SparseReconstructorConfiguration, SparseReconstructor> {
+public class SparseReconstructor extends
+        BaseSparseReconstructor<SparseReconstructorConfiguration, SparseReconstructor,
+        SparseReconstructorListener> {
 
     /**
      * Constructor.

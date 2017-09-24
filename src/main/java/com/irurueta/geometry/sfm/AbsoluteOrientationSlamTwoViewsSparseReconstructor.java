@@ -19,6 +19,7 @@ public class AbsoluteOrientationSlamTwoViewsSparseReconstructor extends
         BaseAbsoluteOrientationSlamTwoViewsSparseReconstructor<
         AbsoluteOrientationSlamTwoViewsSparseReconstructorConfiguration,
         AbsoluteOrientationSlamTwoViewsSparseReconstructor,
+        AbsoluteOrientationSlamTwoViewsSparseReconstructorListener,
         AbsoluteOrientationSlamEstimator> {
     
     /**

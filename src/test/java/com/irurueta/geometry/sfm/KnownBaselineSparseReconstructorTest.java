@@ -1068,7 +1068,7 @@ public class KnownBaselineSparseReconstructorTest {
 
             reconstructor.start();
 
-            if (!mFinished) {
+            if (!mFinished || mFailed) {
                 continue;
             }
 
@@ -6615,6 +6615,9 @@ public class KnownBaselineSparseReconstructorTest {
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
             PinholeCamera estimatedMetricCamera3 = mEstimatedMetricCamera3.getCamera();
+            if (mEstimatedMetricCamera3 == null) {
+                continue;
+            }
             assertNotSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
             assertNotSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
             assertNotSame(mEstimatedMetricCamera3, mEstimatedEuclideanCamera3);

@@ -18,7 +18,9 @@ import com.irurueta.geometry.slam.SlamEstimator;
 public class SlamTwoViewsSparseReconstructor extends 
         BaseSlamTwoViewsSparseReconstructor<
         SlamTwoViewsSparseReconstructorConfiguration, 
-        SlamTwoViewsSparseReconstructor, SlamEstimator>{
+        SlamTwoViewsSparseReconstructor,
+        SlamTwoViewsSparseReconstructorListener,
+        SlamEstimator> {
     
     /**
      * Constructor.

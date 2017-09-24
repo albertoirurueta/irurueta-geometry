@@ -41,9 +41,10 @@ import java.util.List;
  * image point correspondences for multiple views.
  * @param <C> type of configuration.
  * @param <R> type of reconstructor.
+ * @param <L> type of listener.
  */
 public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorConfiguration,
-        R extends BaseSparseReconstructor> {
+        R extends BaseSparseReconstructor, L extends BaseSparseReconstructorListener<R>> {
 
     /**
      * Minimum required number of views.
@@ -106,7 +107,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      * Listener in charge of handling events such as when reconstruction starts, ends,
      * when certain data is needed or when estimation of data has been computed.
      */
-    protected BaseSparseReconstructorListener<R> mListener;
+    protected L mListener;
 
     /**
      * Indicates whether reconstruction has failed or not.
@@ -165,8 +166,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      * @throws NullPointerException if listener or configuration is not provided.
      */
     public BaseSparseReconstructor(C configuration,
-            BaseSparseReconstructorListener<R> listener)
-            throws NullPointerException {
+            L listener) throws NullPointerException {
         if (configuration == null || listener == null) {
             throw new NullPointerException();
         }
@@ -536,8 +536,8 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     if (intrinsicParameters != null) {
                         //use EPnP for additional cameras estimation
                         EPnPPointCorrespondencePinholeCameraRobustEstimator cameraEstimator =
-                                EPnPPointCorrespondencePinholeCameraRobustEstimator.create(intrinsicParameters, points3D,
-                                        points2D, qualityScores,
+                                EPnPPointCorrespondencePinholeCameraRobustEstimator.create(intrinsicParameters,
+                                        points3D, points2D, qualityScores,
                                         mConfiguration.getAdditionalCamerasRobustEstimationMethod());
                         cameraEstimator.setPlanarConfigurationAllowed(
                                 mConfiguration.getAdditionalCamerasAllowPlanarConfiguration());

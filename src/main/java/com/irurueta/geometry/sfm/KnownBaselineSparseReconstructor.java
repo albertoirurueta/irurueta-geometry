@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class KnownBaselineSparseReconstructor extends
         BaseSparseReconstructor<KnownBaselineSparseReconstructorConfiguration,
-                KnownBaselineSparseReconstructor> {
+                KnownBaselineSparseReconstructor, KnownBaselineSparseReconstructorListener> {
 
     /**
      * Constructor.
