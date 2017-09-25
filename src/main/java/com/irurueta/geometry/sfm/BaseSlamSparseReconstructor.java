@@ -47,7 +47,7 @@ public abstract class BaseSlamSparseReconstructor<
     /**
      * Position estimated by means of SLAM.
      */
-    private InhomogeneousPoint3D mSlamPosition = new InhomogeneousPoint3D();
+    protected InhomogeneousPoint3D mSlamPosition = new InhomogeneousPoint3D();
 
     /**
      * Constructor.

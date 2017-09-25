@@ -2179,7 +2179,7 @@ public class SlamSparseReconstructorTest {
                     scaleRelativeError);
 
             //check scales
-            double maxScale = Math.min(mScale, mScale2);
+            double maxScale = Math.max(mScale, mScale2);
             scaleRelativeError = RELATIVE_ERROR * maxScale;
             if (Math.abs(mScale - mScale2) > scaleRelativeError) {
                 continue;
@@ -3035,7 +3035,7 @@ public class SlamSparseReconstructorTest {
                     scaleRelativeError);
 
             //check scales
-            double maxScale = Math.min(mScale, mScale2);
+            double maxScale = Math.max(mScale, mScale2);
             scaleRelativeError = RELATIVE_ERROR * maxScale;
             if (Math.abs(mScale - mScale2) > scaleRelativeError) {
                 continue;
@@ -3962,7 +3962,7 @@ public class SlamSparseReconstructorTest {
                     scaleRelativeError);
 
             //check scales
-            double maxScale = Math.min(mScale, mScale2);
+            double maxScale = Math.max(Math.max(mScale, mScale2), mScale3);
             scaleRelativeError = RELATIVE_ERROR * maxScale;
             if (Math.abs(mScale - mScale2) > scaleRelativeError) {
                 continue;

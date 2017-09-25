@@ -84,6 +84,6 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor ext
      */
     @Override
     protected boolean postProcessOne(boolean isInitialPairOfViews) {
-        return updateScaleAndOrientation();
+        return updateScaleAndOrientation(isInitialPairOfViews);
     }
 }

@@ -38,7 +38,7 @@ public class BaseSlamSparseReconstructorConfiguration<C extends BaseCalibrationD
     /**
      * Default variance for coordinates of estimated camera positions.
      */
-    public static final double DEFAULT_CAMERA_POSITION_VARIANCE = 1e-6;
+    private static final double DEFAULT_CAMERA_POSITION_VARIANCE = 1e-6;
 
     /**
      * Calibration data for accelerometer and gyroscope.
@@ -135,6 +135,13 @@ public class BaseSlamSparseReconstructorConfiguration<C extends BaseCalibrationD
         return (T)this;
     }
 
+    /**
+     * Sets independent variance of coordinates of measured camera positions.
+     * When using this method, camera position covariance matrix is set as a diagonal matrix whose diagonal elements
+     * are equal to provided value.
+     * @param variance variance of coordinates of measured camera positions.
+     * @return this instance so that method can be easily chained.
+     */
     public T setCameraPositionVariance(double variance) {
         try {
             mCameraPositionCovariance = Matrix.identity(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,

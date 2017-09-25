@@ -508,7 +508,7 @@ public class AbsoluteOrientationSlamTwoViewsSparseReconstructorTest {
                                     (float) angularSpeedZ);
                             reconstructor.updateOrientationSample(timestamp, 
                                     orientation);
-                            //actualizamos orientación
+                            //update orientation
                             orientation.combine(diffQuaternion);                  
                             timestamp += DELTA_NANOS;
                         }
@@ -1102,7 +1102,7 @@ public class AbsoluteOrientationSlamTwoViewsSparseReconstructorTest {
                                     angularSpeedWithNoise);
                             reconstructor.updateOrientationSample(timestamp, 
                                     orientation);
-                            //actualizamos orientación
+                            //update orientation
                             orientation.combine(diffQuaternion);                  
                             timestamp += DELTA_NANOS;
                         }

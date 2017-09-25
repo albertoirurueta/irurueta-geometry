@@ -80,5 +80,5 @@ public class AbsoluteOrientationSlamSparseReconstructor extends
      */
     @Override
     protected boolean postProcessOne(boolean isInitialPairOfViews) {
-        return updateScaleAndOrientation();
+        return updateScaleAndOrientation(isInitialPairOfViews);
     }}
