@@ -3069,7 +3069,7 @@ public class LMedSUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         int numValidCameras = 0;
         int numValidProjections = 0;
         int numCovariances = 0;
-        for (int t = 0; t < 5*TIMES; t++) {
+        for (int t = 0; t < 50*TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             
             //intrinsic parameters

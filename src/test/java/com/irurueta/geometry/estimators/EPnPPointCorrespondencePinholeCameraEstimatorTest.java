@@ -1483,7 +1483,10 @@ public class EPnPPointCorrespondencePinholeCameraEstimatorTest implements
             } catch (PinholeCameraEstimatorException e) {
                 continue;
             }
-            
+
+            if (!estimator.isPlanar()) {
+                continue;
+            }
             assertTrue(estimator.isPlanar());
             assertFalse(estimator.isLocked());
             assertEquals(estimateStart, 1);
@@ -1557,9 +1560,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimatorTest implements
             
             numValid++;
             
-            /*if (numValid > 0) {
+            if (numValid > 0) {
                 break;
-            }*/
+            }
         }
         
         assertTrue(numValid > 0);

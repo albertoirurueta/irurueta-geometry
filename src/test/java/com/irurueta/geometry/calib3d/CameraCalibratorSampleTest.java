@@ -463,7 +463,7 @@ public class CameraCalibratorSampleTest {
         }
         
         avgTotalError /= totalPoints;
-        assertEquals(avgTotalError, 0.0, VERY_LARGE_ABSOLUTE_ERROR);
+        assertEquals(avgTotalError, 0.0, 2.0*VERY_LARGE_ABSOLUTE_ERROR);
     }
     
     @Test

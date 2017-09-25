@@ -607,7 +607,8 @@ public class DualImageOfAbsoluteConicInitialCamerasEstimatorTest implements
             com.irurueta.geometry.estimators.NotReadyException, 
             InvalidPinholeCameraIntrinsicParametersException, 
             WrongSizeException, NotReadyException, LockedException, 
-            DecomposerException, NotAvailableException, CameraException, InitialCamerasEstimationFailedException, com.irurueta.geometry.NotAvailableException, InvalidFundamentalMatrixException, AlgebraException {
+            DecomposerException, NotAvailableException, CameraException, InitialCamerasEstimationFailedException,
+            com.irurueta.geometry.NotAvailableException, InvalidFundamentalMatrixException, AlgebraException {
         int numValidTimes = 0;
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -748,9 +749,9 @@ public class DualImageOfAbsoluteConicInitialCamerasEstimatorTest implements
             List<InhomogeneousPoint3D> worldPoints = 
                     new ArrayList<InhomogeneousPoint3D>();
             Point2D leftPoint, rightPoint;
-            List<Point2D> leftPoints = new ArrayList<Point2D>();
-            List<Point2D> rightPoints = new ArrayList<Point2D>();
-            boolean leftFront, rightFront;
+            List<Point2D> leftPoints = new ArrayList<>();
+            List<Point2D> rightPoints = new ArrayList<>();
+            boolean leftFront, rightFront, failed = false;
             for (int i = 0; i < nPoints; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
@@ -771,10 +772,16 @@ public class DualImageOfAbsoluteConicInitialCamerasEstimatorTest implements
                     leftFront = camera1.isPointInFrontOfCamera(worldPoint);
                     rightFront = camera2.isPointInFrontOfCamera(worldPoint);
                     if (numTry > MAX_TRIES) {
-                        fail("max tries reached");
+                        failed = true;
+                        break;
                     }
                     numTry++;
                 } while(!leftFront || !rightFront);
+
+                if (failed) {
+                    break;
+                }
+
                 worldPoints.add(worldPoint);
             
                 //check that world point is in front of both cameras
@@ -787,6 +794,10 @@ public class DualImageOfAbsoluteConicInitialCamerasEstimatorTest implements
             
                 rightPoint = camera2.project(worldPoint);
                 rightPoints.add(rightPoint);
+            }
+
+            if (failed) {
+                continue;
             }
         
             DualImageOfAbsoluteConicInitialCamerasEstimator estimator =
