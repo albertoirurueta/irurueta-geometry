@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.sfm.AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstructor
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date June 21, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.sfm;
 
@@ -39,8 +46,6 @@ import com.irurueta.statistics.UniformRandomizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -55,9 +60,6 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
 
     public static final double MIN_FOCAL_LENGTH_ESSENTIAL = 750.0;
     public static final double MAX_FOCAL_LENGTH_ESSENTIAL = 1500.0;
-
-    public static final double MIN_PRINCIPAL_POINT_ESSENTIAL = 100.0;
-    public static final double MAX_PRINCIPAL_POINT_ESSENTIAL = 400.0;
 
     public static final double MIN_ANGLE_DEGREES = -30.0;
     public static final double MAX_ANGLE_DEGREES = -15.0;
@@ -88,7 +90,6 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
     //time between samples expressed in nanoseconds (a typical sensor in Android 
     //delivers a sample every 20ms)
     public static final int DELTA_NANOS = 20000000; //0.02 seconds
-    public static final double DELTA_SECONDS = 0.02; //0.02 seconds;    
 
     public static final float MIN_CALIBRATION_OFFSET = -1e-4f;
     public static final float MAX_CALIBRATION_OFFSET = 1e-4f;
@@ -96,11 +97,8 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
     public static final double ACCELERATION_NOISE_STANDARD_DEVIATION = 1e-4;
     public static final double ANGULAR_SPEED_NOISE_STANDARD_DEVIATION = 1e-4;    
 
-    public static final int N_SENSOR_SAMPLES = 50;
+    private static final int N_SENSOR_SAMPLES = 50;
     
-    public static final Logger LOGGER = Logger.getLogger(
-            AbsoluteOrientationSlamTwoViewsSparseReconstructorTest.class.getSimpleName());
-
     private int mViewCount = 0;
     private EstimatedFundamentalMatrix mEstimatedFundamentalMatrix;
     private EstimatedCamera mEstimatedCamera1;
@@ -418,11 +416,10 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
                     MAX_NUM_POINTS);
 
             InhomogeneousPoint3D point3D;
-            List<InhomogeneousPoint3D> points3D
-                    = new ArrayList<InhomogeneousPoint3D>();
+            List<InhomogeneousPoint3D> points3D = new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
-            final List<Point2D> projectedPoints1 = new ArrayList<Point2D>();
-            final List<Point2D> projectedPoints2 = new ArrayList<Point2D>();
+            final List<Point2D> projectedPoints1 = new ArrayList<>();
+            final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean front1, front2, maxTriesReached = false;
             for (int i = 0; i < numPoints; i++) {
                 //generate points and ensure they lie in front of both cameras
@@ -452,10 +449,6 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
                 if (maxTriesReached) break;
                 
                 points3D.add(point3D);
-
-                //check that 3D point is in front of both cameras
-                assertTrue(front1);
-                assertTrue(front2);
 
                 //project 3D point into both cameras
                 projectedPoint1 = new InhomogeneousPoint2D();
@@ -654,7 +647,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
             estimatedCamera1.decompose();
             estimatedCamera2.decompose();
 
-            List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
+            List<Point3D> reconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 reconstructedPoints3D.add(
                         mReconstructedPoints.get(i).getPoint());
@@ -684,19 +677,6 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
                     estimatedCenter2);
 
             //check cameras are correct
-/*            double maxBaseline = Math.max(estimatedBaseline, baseline);
-            double minBaseline = Math.min(estimatedBaseline, baseline);
-            double absoluteScaleError = RELATIVE_ERROR * maxBaseline;
-            if (Math.abs(estimatedBaseline - baseline) > absoluteScaleError) {
-                continue;
-            }
-            assertEquals(estimatedBaseline, baseline, absoluteScaleError);
-            
-            assertTrue(center1.equals(estimatedCenter1, ABSOLUTE_ERROR));
-            if (!center2.equals(estimatedCenter2, absoluteScaleError)) {
-                continue;
-            }
-            assertTrue(center2.equals(estimatedCenter2, absoluteScaleError));*/
 
             assertEquals(estimatedIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
@@ -747,12 +727,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
             if (!validPoints) {
                 continue;
             }
-            
-/*            double scaleRelativeError = 1.0 - minBaseline / maxBaseline; 
-            LOGGER.log(Level.INFO, 
-                    "Baseline relative error without noise: {0,number,0.000%}",
-                    scaleRelativeError);       */
-            
+
             numValid++;
 
             if (numValid > 0) {
@@ -955,11 +930,10 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
                     MAX_NUM_POINTS);
 
             InhomogeneousPoint3D point3D;
-            List<InhomogeneousPoint3D> points3D
-                    = new ArrayList<InhomogeneousPoint3D>();
+            List<InhomogeneousPoint3D> points3D = new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
-            final List<Point2D> projectedPoints1 = new ArrayList<Point2D>();
-            final List<Point2D> projectedPoints2 = new ArrayList<Point2D>();
+            final List<Point2D> projectedPoints1 = new ArrayList<>();
+            final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean front1, front2, maxTriesReached = false;
             for (int i = 0; i < numPoints; i++) {
                 //generate points and ensure they lie in front of both cameras
@@ -990,10 +964,6 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
                 
                 points3D.add(point3D);
 
-                //check that 3D point is in front of both cameras
-                assertTrue(front1);
-                assertTrue(front2);
-
                 //project 3D point into both cameras
                 projectedPoint1 = new InhomogeneousPoint2D();
                 camera1.project(point3D, projectedPoint1);
@@ -1006,17 +976,12 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
             
             if (maxTriesReached) continue;            
             
-            double accelerationNoiseStandardDeviation = 
-                    ACCELERATION_NOISE_STANDARD_DEVIATION;
-            double angularSpeedNoiseStandardDeviation = 
-                    ANGULAR_SPEED_NOISE_STANDARD_DEVIATION;            
-            
             final GaussianRandomizer accelerationRandomizer =
-                    new GaussianRandomizer(new Random(), 0.0, 
-                    accelerationNoiseStandardDeviation);
+                    new GaussianRandomizer(new Random(), 0.0,
+                            ACCELERATION_NOISE_STANDARD_DEVIATION);
             final GaussianRandomizer angularSpeedRandomizer =
-                    new GaussianRandomizer(new Random(), 0.0, 
-                    angularSpeedNoiseStandardDeviation);                        
+                    new GaussianRandomizer(new Random(), 0.0,
+                            ANGULAR_SPEED_NOISE_STANDARD_DEVIATION);
             
             AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstructorListener listener =
                     new AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstructorListener() {
@@ -1248,7 +1213,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
             estimatedCamera1.decompose();
             estimatedCamera2.decompose();
 
-            List<Point3D> reconstructedPoints3D = new ArrayList<Point3D>();
+            List<Point3D> reconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
                 reconstructedPoints3D.add(
                         mReconstructedPoints.get(i).getPoint());
@@ -1278,19 +1243,6 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
                     estimatedCenter2);
 
             //check cameras are correct
-/*            double maxBaseline = Math.max(estimatedBaseline, baseline);
-            double minBaseline = Math.min(estimatedBaseline, baseline);
-            double absoluteScaleError = RELATIVE_ERROR * maxBaseline;
-            if (Math.abs(estimatedBaseline - baseline) > absoluteScaleError) {
-                continue;
-            }
-            assertEquals(estimatedBaseline, baseline, absoluteScaleError);
-            
-            assertTrue(center1.equals(estimatedCenter1, ABSOLUTE_ERROR));
-            if (!center2.equals(estimatedCenter2, absoluteScaleError)) {
-                continue;
-            }
-            assertTrue(center2.equals(estimatedCenter2, absoluteScaleError));*/
 
             assertEquals(estimatedIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
@@ -1341,12 +1293,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstru
             if (!validPoints) {
                 continue;
             }
-            
-/*            double scaleRelativeError = 1.0 - minBaseline / maxBaseline; 
-            LOGGER.log(Level.INFO, 
-                    "Baseline relative error without noise: {0,number,0.000%}",
-                    scaleRelativeError);       */
-            
+
             numValid++;
 
             if (numValid > 0) {
