@@ -107,6 +107,11 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
     private long mTimestamp;
 
+    private int mSlamDataAvailable;
+    private int mSlamCameraEstimated;
+
+    private PinholeCamera mSlamCamera;
+
     public AbsoluteOrientationSlamSparseReconstructorTest() { }
 
     @BeforeClass
@@ -128,6 +133,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
         mEuclideanReconstructedPoints = null;
         mStarted = mFinished = mFailed = mCancelled = false;
         mTimestamp = 0;
+        mSlamDataAvailable = 0;
+        mSlamCameraEstimated = 0;
+        mSlamCamera = null;
     }
 
     @After
@@ -139,6 +147,18 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                 new AbsoluteOrientationSlamSparseReconstructorConfiguration();
         AbsoluteOrientationSlamSparseReconstructorListener listener =
                 new AbsoluteOrientationSlamSparseReconstructorListener() {
+                    @Override
+                    public void onSlamDataAvailable(AbsoluteOrientationSlamSparseReconstructor reconstructor,
+                                                    double positionX, double positionY, double positionZ,
+                                                    double velocityX, double velocityY, double velocityZ,
+                                                    double accelerationX, double accelerationY, double accelerationZ,
+                                                    double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                    double angularSpeedX, double angularSpeedY, double angularSpeedZ) { }
+
+                    @Override
+                    public void onSlamCameraEstimated(AbsoluteOrientationSlamSparseReconstructor reconstructor,
+                                                      PinholeCamera camera) { }
+
                     @Override
                     public boolean hasMoreViewsAvailable(
                             AbsoluteOrientationSlamSparseReconstructor reconstructor) {
@@ -496,6 +516,23 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             AbsoluteOrientationSlamSparseReconstructorListener listener =
                     new AbsoluteOrientationSlamSparseReconstructorListener() {
                         @Override
+                        public void onSlamDataAvailable(AbsoluteOrientationSlamSparseReconstructor reconstructor,
+                                                        double positionX, double positionY, double positionZ,
+                                                        double velocityX, double velocityY, double velocityZ,
+                                                        double accelerationX, double accelerationY, double accelerationZ,
+                                                        double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                            mSlamDataAvailable++;
+                        }
+
+                        @Override
+                        public void onSlamCameraEstimated(AbsoluteOrientationSlamSparseReconstructor reconstructor,
+                                                          PinholeCamera camera) {
+                            mSlamCameraEstimated++;
+                            mSlamCamera = camera;
+                        }
+
+                        @Override
                         public boolean hasMoreViewsAvailable(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor) {
                             return mViewCount < 2;
@@ -663,6 +700,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1111,6 +1151,23 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             AbsoluteOrientationSlamSparseReconstructorListener listener =
                     new AbsoluteOrientationSlamSparseReconstructorListener() {
                         @Override
+                        public void onSlamDataAvailable(AbsoluteOrientationSlamSparseReconstructor reconstructor,
+                                                        double positionX, double positionY, double positionZ,
+                                                        double velocityX, double velocityY, double velocityZ,
+                                                        double accelerationX, double accelerationY, double accelerationZ,
+                                                        double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                            mSlamDataAvailable++;
+                        }
+
+                        @Override
+                        public void onSlamCameraEstimated(AbsoluteOrientationSlamSparseReconstructor reconstructor,
+                                                          PinholeCamera camera) {
+                            mSlamCameraEstimated++;
+                            mSlamCamera = camera;
+                        }
+
+                        @Override
                         public boolean hasMoreViewsAvailable(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor) {
                             return mViewCount < 2;
@@ -1328,6 +1385,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1823,6 +1883,23 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             AbsoluteOrientationSlamSparseReconstructorListener listener =
                     new AbsoluteOrientationSlamSparseReconstructorListener() {
                         @Override
+                        public void onSlamDataAvailable(AbsoluteOrientationSlamSparseReconstructor reconstructor,
+                                                        double positionX, double positionY, double positionZ,
+                                                        double velocityX, double velocityY, double velocityZ,
+                                                        double accelerationX, double accelerationY, double accelerationZ,
+                                                        double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                            mSlamDataAvailable++;
+                        }
+
+                        @Override
+                        public void onSlamCameraEstimated(AbsoluteOrientationSlamSparseReconstructor reconstructor,
+                                                          PinholeCamera camera) {
+                            mSlamCameraEstimated++;
+                            mSlamCamera = camera;
+                        }
+
+                        @Override
                         public boolean hasMoreViewsAvailable(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor) {
                             return mViewCount < 3;
@@ -2078,6 +2155,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -2628,6 +2708,23 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             AbsoluteOrientationSlamSparseReconstructorListener listener =
                     new AbsoluteOrientationSlamSparseReconstructorListener() {
                         @Override
+                        public void onSlamDataAvailable(AbsoluteOrientationSlamSparseReconstructor reconstructor,
+                                                        double positionX, double positionY, double positionZ,
+                                                        double velocityX, double velocityY, double velocityZ,
+                                                        double accelerationX, double accelerationY, double accelerationZ,
+                                                        double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                            mSlamDataAvailable++;
+                        }
+
+                        @Override
+                        public void onSlamCameraEstimated(AbsoluteOrientationSlamSparseReconstructor reconstructor,
+                                                          PinholeCamera camera) {
+                            mSlamCameraEstimated++;
+                            mSlamCamera = camera;
+                        }
+
+                        @Override
                         public boolean hasMoreViewsAvailable(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor) {
                             return mViewCount < 3;
@@ -2977,6 +3074,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -3568,6 +3668,23 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             AbsoluteOrientationSlamSparseReconstructorListener listener =
                     new AbsoluteOrientationSlamSparseReconstructorListener() {
                         @Override
+                        public void onSlamDataAvailable(AbsoluteOrientationSlamSparseReconstructor reconstructor,
+                                                        double positionX, double positionY, double positionZ,
+                                                        double velocityX, double velocityY, double velocityZ,
+                                                        double accelerationX, double accelerationY, double accelerationZ,
+                                                        double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                            mSlamDataAvailable++;
+                        }
+
+                        @Override
+                        public void onSlamCameraEstimated(AbsoluteOrientationSlamSparseReconstructor reconstructor,
+                                                          PinholeCamera camera) {
+                            mSlamCameraEstimated++;
+                            mSlamCamera = camera;
+                        }
+
+                        @Override
                         public boolean hasMoreViewsAvailable(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor) {
                             return mViewCount < 4;
@@ -3879,6 +3996,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -4201,6 +4321,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
         mStarted = mFinished = mFailed = mCancelled = false;
         mScale = 0.0;
         mTimestamp = 0;
+        mSlamDataAvailable = 0;
+        mSlamCameraEstimated = 0;
+        mSlamCamera = null;
     }
 
     private AbsoluteOrientationSlamCalibrator createFinishedCalibrator(

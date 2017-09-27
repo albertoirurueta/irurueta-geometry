@@ -36,6 +36,19 @@ public class BaseSlamSparseReconstructorConfiguration<C extends BaseCalibrationD
         implements Serializable {
 
     /**
+     * Indicates that by default new available SLAM state is notified each time that a whole set of IMU (Inertial
+     * Measurement Unit) data is received (accelerometer, gyroscope and orientation). SLAM state contains position,
+     * velocity, linear acceleration, orientation and angular speed.
+     */
+    public static final boolean DEFAULT_NOTIFY_SLAM_DATA_AVAILABLE = true;
+
+    /**
+     * Indicates that by default any new camera that can be estimated by means of SLAM using IMU data, will be notified
+     * each time that accelerometer, gyroscope and orientation data is received.
+     */
+    public static final boolean DEFAULT_NOTIFY_ESTIMATED_SLAM_CAMERA = true;
+
+    /**
      * Default variance for coordinates of estimated camera positions.
      */
     private static final double DEFAULT_CAMERA_POSITION_VARIANCE = 1e-6;
@@ -59,6 +72,18 @@ public class BaseSlamSparseReconstructorConfiguration<C extends BaseCalibrationD
      * This matrix must be a 3x3 symmetric positive definite matrix.
      */
     private Matrix mCameraPositionCovariance;
+
+    /**
+     * Indicates whether new available SLAM state is notified each time that a whole set of IMU (Inertial Measurement
+     * Unit) data is received.
+     */
+    private boolean mNotifyAvailableSlamData = DEFAULT_NOTIFY_SLAM_DATA_AVAILABLE;
+
+    /**
+     * Indicates whether any new camera that can be estimated by means of SLAM using IMU data, will be notified each
+     * time that accelerometer, gyroscope and orientation data is received.
+     */
+    private boolean mNotifyEstimatedSlamCamera = DEFAULT_NOTIFY_ESTIMATED_SLAM_CAMERA;
 
     /**
      * Constructor.
@@ -97,6 +122,8 @@ public class BaseSlamSparseReconstructorConfiguration<C extends BaseCalibrationD
      */
     public T setCalibrationData(C calibrationData) {
         mCalibrationData = calibrationData;
+
+        //noinspection all
         return (T)this;
     }
 
@@ -132,6 +159,8 @@ public class BaseSlamSparseReconstructorConfiguration<C extends BaseCalibrationD
         }
 
         mCameraPositionCovariance = cameraPositionCovariance;
+
+        //noinspection all
         return (T)this;
     }
 
@@ -148,6 +177,53 @@ public class BaseSlamSparseReconstructorConfiguration<C extends BaseCalibrationD
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
             mCameraPositionCovariance.multiplyByScalar(variance);
         } catch (AlgebraException ignore) { }
+
+        //noinspection all
+        return (T)this;
+    }
+
+    /**
+     * Indicates whether new available SLAM state is notified each time that a whole set of IMU (Inertial Measurement
+     * Unit) data is received. IMU data contains accelerometer, gyroscope and orientation samples.
+     * @return true if new available SLAM state is notified each time that a whole set of IMU data is received.
+     */
+    public boolean isNotifyAvailableSlamDataEnabled() {
+        return mNotifyAvailableSlamData;
+    }
+
+    /**
+     * Specifies whether new available SLAM state is notified each time that a whole set of IMU (Inertial Measurement
+     * Unit) data is received. IMU data contains accelerometer, gyroscope and orientation samples.
+     * @param notifyAvailableSlamData true is new availabla SLAM state is notified each time that a whole set of IMU
+     *                                data is received, false otherwise.
+     * @return this instance so that method can be easily chained.
+     */
+    public T setNotifyAvailableSlamDataEnabled(boolean notifyAvailableSlamData) {
+        mNotifyAvailableSlamData = notifyAvailableSlamData;
+
+        //noinspection all
+        return (T)this;
+    }
+
+    /**
+     * Indicates whether any new camera that can be estimated by means of SLAM using IMU data, will be notified each
+     * time that accelerometer, gyroscope and orientation data is received.
+     * @return true if any newly estimated camera is notified, false otherwise.
+     */
+    public boolean isNotifyEstimatedSlamCameraEnabled() {
+        return mNotifyEstimatedSlamCamera;
+    }
+
+    /**
+     * Specifies whether any new camera that can be estimated by means of SLAM using IMU data, will be notified each
+     * time that accelerometer, gyroscope and orientation data is received.
+     * @param notifyEstimatedSlamCamera true if any newly estimated camera is notified, false otherwise.
+     * @return this instance so that method can be easily chained.
+     */
+    public T setNotifyEstimatedSlamCameraEnabled(boolean notifyEstimatedSlamCamera) {
+        mNotifyEstimatedSlamCamera = notifyEstimatedSlamCamera;
+
+        //noinspection all
         return (T)this;
     }
 }

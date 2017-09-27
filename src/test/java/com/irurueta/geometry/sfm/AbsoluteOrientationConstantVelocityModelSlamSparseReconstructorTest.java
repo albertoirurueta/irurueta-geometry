@@ -95,6 +95,11 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
 
     private long mTimestamp;
 
+    private int mSlamDataAvailable;
+    private int mSlamCameraEstimated;
+
+    private PinholeCamera mSlamCamera;
+
     public AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest() { }
 
     @BeforeClass
@@ -115,6 +120,9 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
         mEuclideanReconstructedPoints = null;
         mStarted = mFinished = mFailed = mCancelled = false;
         mTimestamp = 0;
+        mSlamDataAvailable = 0;
+        mSlamCameraEstimated = 0;
+        mSlamCamera = null;
     }
 
     @After
@@ -126,6 +134,20 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
                 new AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorConfiguration();
         AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorListener listener =
                 new AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorListener() {
+                    @Override
+                    public void onSlamDataAvailable(
+                            AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor,
+                            double positionX, double positionY, double positionZ,
+                            double velocityX, double velocityY, double velocityZ,
+                            double accelerationX, double accelerationY, double accelerationZ,
+                            double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                            double angularSpeedX, double angularSpeedY, double angularSpeedZ) { }
+
+                    @Override
+                    public void onSlamCameraEstimated(
+                            AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor,
+                            PinholeCamera camera) { }
+
                     @Override
                     public boolean hasMoreViewsAvailable(
                             AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor) {
@@ -481,6 +503,25 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
             AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorListener listener =
                     new AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorListener() {
                         @Override
+                        public void onSlamDataAvailable(
+                                AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                double positionX, double positionY, double positionZ,
+                                double velocityX, double velocityY, double velocityZ,
+                                double accelerationX, double accelerationY, double accelerationZ,
+                                double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                            mSlamDataAvailable++;
+                        }
+
+                        @Override
+                        public void onSlamCameraEstimated(
+                                AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                PinholeCamera camera) {
+                            mSlamCameraEstimated++;
+                            mSlamCamera = camera;
+                        }
+
+                        @Override
                         public boolean hasMoreViewsAvailable(
                                 AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor) {
                             return mViewCount < 2;
@@ -652,6 +693,9 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1046,6 +1090,25 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
             AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorListener listener =
                     new AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorListener() {
                         @Override
+                        public void onSlamDataAvailable(
+                                AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                double positionX, double positionY, double positionZ,
+                                double velocityX, double velocityY, double velocityZ,
+                                double accelerationX, double accelerationY, double accelerationZ,
+                                double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                            mSlamDataAvailable++;
+                        }
+
+                        @Override
+                        public void onSlamCameraEstimated(
+                                AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                PinholeCamera camera) {
+                            mSlamCameraEstimated++;
+                            mSlamCamera = camera;
+                        }
+
+                        @Override
                         public boolean hasMoreViewsAvailable(
                                 AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor) {
                             return mViewCount < 2;
@@ -1262,6 +1325,9 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1702,6 +1768,25 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
             AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorListener listener =
                     new AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorListener() {
                         @Override
+                        public void onSlamDataAvailable(
+                                AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                double positionX, double positionY, double positionZ,
+                                double velocityX, double velocityY, double velocityZ,
+                                double accelerationX, double accelerationY, double accelerationZ,
+                                double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                            mSlamDataAvailable++;
+                        }
+
+                        @Override
+                        public void onSlamCameraEstimated(
+                                AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                PinholeCamera camera) {
+                            mSlamCameraEstimated++;
+                            mSlamCamera = camera;
+                        }
+
+                        @Override
                         public boolean hasMoreViewsAvailable(
                                 AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor) {
                             return mViewCount < 3;
@@ -1961,6 +2046,9 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -2443,6 +2531,20 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
 
             AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorListener listener =
                     new AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorListener() {
+                        @Override
+                        public void onSlamDataAvailable(
+                                AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                double positionX, double positionY, double positionZ,
+                                double velocityX, double velocityY, double velocityZ,
+                                double accelerationX, double accelerationY, double accelerationZ,
+                                double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                double angularSpeedX, double angularSpeedY, double angularSpeedZ) { }
+
+                        @Override
+                        public void onSlamCameraEstimated(
+                                AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                PinholeCamera camera) { }
+
                         @Override
                         public boolean hasMoreViewsAvailable(
                                 AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor) {
@@ -2971,6 +3073,9 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
         mStarted = mFinished = mFailed = mCancelled = false;
         mScale = 0.0;
         mTimestamp = 0;
+        mSlamDataAvailable = 0;
+        mSlamCameraEstimated = 0;
+        mSlamCamera = null;
     }
 
     private AbsoluteOrientationConstantVelocityModelSlamCalibrator createFinishedCalibrator(

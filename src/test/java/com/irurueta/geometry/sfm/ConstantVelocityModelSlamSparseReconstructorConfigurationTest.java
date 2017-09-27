@@ -203,6 +203,10 @@ public class ConstantVelocityModelSlamSparseReconstructorConfigurationTest {
                 0.0);
         assertNull(cfg.getCalibrationData());
         assertNotNull(cfg.getCameraPositionCovariance());
+        assertEquals(cfg.isNotifyAvailableSlamDataEnabled(),
+                ConstantVelocityModelSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_SLAM_DATA_AVAILABLE);
+        assertEquals(cfg.isNotifyEstimatedSlamCameraEnabled(),
+                ConstantVelocityModelSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_ESTIMATED_SLAM_CAMERA);
     }
 
     @Test
@@ -370,6 +374,10 @@ public class ConstantVelocityModelSlamSparseReconstructorConfigurationTest {
                 0.0);
         assertNull(cfg.getCalibrationData());
         assertNotNull(cfg.getCameraPositionCovariance());
+        assertEquals(cfg.isNotifyAvailableSlamDataEnabled(),
+                ConstantVelocityModelSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_SLAM_DATA_AVAILABLE);
+        assertEquals(cfg.isNotifyEstimatedSlamCameraEnabled(),
+                ConstantVelocityModelSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_ESTIMATED_SLAM_CAMERA);
     }
 
     @Test
@@ -1538,5 +1546,41 @@ public class ConstantVelocityModelSlamSparseReconstructorConfigurationTest {
 
         //check correctness
         assertEquals(cfg.getCameraPositionCovariance(), cov);
+    }
+
+    @Test
+    public void testIsSetNotifyAvailableSlamDataEnabled() {
+        ConstantVelocityModelSlamSparseReconstructorConfiguration cfg =
+                new ConstantVelocityModelSlamSparseReconstructorConfiguration();
+
+        //check default value
+        assertEquals(cfg.isNotifyAvailableSlamDataEnabled(),
+                ConstantVelocityModelSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_SLAM_DATA_AVAILABLE);
+
+        //set new value
+        assertSame(cfg.setNotifyAvailableSlamDataEnabled(
+                !ConstantVelocityModelSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_SLAM_DATA_AVAILABLE), cfg);
+
+        //check correctness
+        assertEquals(cfg.isNotifyAvailableSlamDataEnabled(),
+                !ConstantVelocityModelSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_SLAM_DATA_AVAILABLE);
+    }
+
+    @Test
+    public void testIsSetNotifyEstimatedSlamCameraEnabled() {
+        ConstantVelocityModelSlamSparseReconstructorConfiguration cfg =
+                new ConstantVelocityModelSlamSparseReconstructorConfiguration();
+
+        //check default value
+        assertEquals(cfg.isNotifyEstimatedSlamCameraEnabled(),
+                ConstantVelocityModelSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_ESTIMATED_SLAM_CAMERA);
+
+        //set new value
+        assertSame(cfg.setNotifyEstimatedSlamCameraEnabled(
+                !ConstantVelocityModelSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_ESTIMATED_SLAM_CAMERA), cfg);
+
+        //check correctness
+        assertEquals(cfg.isNotifyEstimatedSlamCameraEnabled(),
+                !ConstantVelocityModelSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_ESTIMATED_SLAM_CAMERA);
     }
 }

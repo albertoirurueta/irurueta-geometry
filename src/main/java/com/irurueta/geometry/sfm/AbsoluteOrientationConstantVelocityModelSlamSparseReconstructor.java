@@ -70,6 +70,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor ext
     public boolean processOneView() {
         if (!mRunning) {
             mSlamEstimator = new AbsoluteOrientationConstantVelocityModelSlamEstimator();
+            setUpSlamEstimatorListener();
             setUpCalibrationData();
         }
 

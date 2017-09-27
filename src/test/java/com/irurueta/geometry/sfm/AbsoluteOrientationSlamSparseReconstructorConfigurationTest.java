@@ -202,6 +202,10 @@ public class AbsoluteOrientationSlamSparseReconstructorConfigurationTest {
                 0.0);
         assertNull(cfg.getCalibrationData());
         assertNotNull(cfg.getCameraPositionCovariance());
+        assertEquals(cfg.isNotifyAvailableSlamDataEnabled(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_SLAM_DATA_AVAILABLE);
+        assertEquals(cfg.isNotifyEstimatedSlamCameraEnabled(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_ESTIMATED_SLAM_CAMERA);
     }
 
     @Test
@@ -368,6 +372,10 @@ public class AbsoluteOrientationSlamSparseReconstructorConfigurationTest {
                 0.0);
         assertNull(cfg.getCalibrationData());
         assertNotNull(cfg.getCameraPositionCovariance());
+        assertEquals(cfg.isNotifyAvailableSlamDataEnabled(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_SLAM_DATA_AVAILABLE);
+        assertEquals(cfg.isNotifyEstimatedSlamCameraEnabled(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_ESTIMATED_SLAM_CAMERA);
     }
 
     @Test
@@ -1535,5 +1543,41 @@ public class AbsoluteOrientationSlamSparseReconstructorConfigurationTest {
 
         //check correctness
         assertEquals(cfg.getCameraPositionCovariance(), cov);
+    }
+
+    @Test
+    public void testIsSetNotifyAvailableSlamDataEnabled() {
+        AbsoluteOrientationSlamSparseReconstructorConfiguration cfg =
+                new AbsoluteOrientationSlamSparseReconstructorConfiguration();
+
+        //check default value
+        assertEquals(cfg.isNotifyAvailableSlamDataEnabled(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_SLAM_DATA_AVAILABLE);
+
+        //set new value
+        assertSame(cfg.setNotifyAvailableSlamDataEnabled(
+                !AbsoluteOrientationSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_SLAM_DATA_AVAILABLE), cfg);
+
+        //check correctness
+        assertEquals(cfg.isNotifyAvailableSlamDataEnabled(),
+                !AbsoluteOrientationSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_SLAM_DATA_AVAILABLE);
+    }
+
+    @Test
+    public void testIsSetNotifyEstimatedSlamCameraEnabled() {
+        AbsoluteOrientationSlamSparseReconstructorConfiguration cfg =
+                new AbsoluteOrientationSlamSparseReconstructorConfiguration();
+
+        //check default value
+        assertEquals(cfg.isNotifyEstimatedSlamCameraEnabled(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_ESTIMATED_SLAM_CAMERA);
+
+        //set new value
+        assertSame(cfg.setNotifyEstimatedSlamCameraEnabled(
+                !AbsoluteOrientationSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_ESTIMATED_SLAM_CAMERA), cfg);
+
+        //check correctness
+        assertEquals(cfg.isNotifyEstimatedSlamCameraEnabled(),
+                !AbsoluteOrientationSlamSparseReconstructorConfiguration.DEFAULT_NOTIFY_ESTIMATED_SLAM_CAMERA);
     }
 }

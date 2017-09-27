@@ -60,6 +60,7 @@ public class SlamSparseReconstructor extends BaseSlamSparseReconstructor<SlamSpa
     public boolean processOneView() {
         if (!mRunning) {
             mSlamEstimator = new SlamEstimator();
+            setUpSlamEstimatorListener();
             setUpCalibrationData();
         }
 

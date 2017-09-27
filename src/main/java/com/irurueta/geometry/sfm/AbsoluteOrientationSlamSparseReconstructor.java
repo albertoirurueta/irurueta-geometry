@@ -66,6 +66,7 @@ public class AbsoluteOrientationSlamSparseReconstructor extends
     public boolean processOneView() {
         if (!mRunning) {
             mSlamEstimator = new AbsoluteOrientationSlamEstimator();
+            setUpSlamEstimatorListener();
             setUpCalibrationData();
         }
 

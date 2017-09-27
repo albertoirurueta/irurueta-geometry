@@ -103,6 +103,11 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
     private long mTimestamp;
 
+    private int mSlamDataAvailable;
+    private int mSlamCameraEstimated;
+
+    private PinholeCamera mSlamCamera;
+
     public ConstantVelocityModelSlamSparseReconstructorTest() { }
 
     @BeforeClass
@@ -123,6 +128,9 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
         mEuclideanReconstructedPoints = null;
         mStarted = mFinished = mFailed = mCancelled = false;
         mTimestamp = 0;
+        mSlamDataAvailable = 0;
+        mSlamCameraEstimated = 0;
+        mSlamCamera = null;
     }
 
     @After
@@ -134,6 +142,18 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                 new ConstantVelocityModelSlamSparseReconstructorConfiguration();
         ConstantVelocityModelSlamSparseReconstructorListener listener =
                 new ConstantVelocityModelSlamSparseReconstructorListener() {
+                    @Override
+                    public void onSlamDataAvailable(ConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                                    double positionX, double positionY, double positionZ,
+                                                    double velocityX, double velocityY, double velocityZ,
+                                                    double accelerationX, double accelerationY, double accelerationZ,
+                                                    double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                    double angularSpeedX, double angularSpeedY, double angularSpeedZ) { }
+
+                    @Override
+                    public void onSlamCameraEstimated(ConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                                      PinholeCamera camera) { }
+
                     @Override
                     public boolean hasMoreViewsAvailable(
                             ConstantVelocityModelSlamSparseReconstructor reconstructor) {
@@ -474,6 +494,23 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             ConstantVelocityModelSlamSparseReconstructorListener listener =
                     new ConstantVelocityModelSlamSparseReconstructorListener() {
                         @Override
+                        public void onSlamDataAvailable(ConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                                        double positionX, double positionY, double positionZ,
+                                                        double velocityX, double velocityY, double velocityZ,
+                                                        double accelerationX, double accelerationY, double accelerationZ,
+                                                        double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                            mSlamDataAvailable++;
+                        }
+
+                        @Override
+                        public void onSlamCameraEstimated(ConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                                          PinholeCamera camera) {
+                            mSlamCameraEstimated++;
+                            mSlamCamera = camera;
+                        }
+
+                        @Override
                         public boolean hasMoreViewsAvailable(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor) {
                             return mViewCount < 2;
@@ -640,6 +677,9 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1072,6 +1112,23 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             ConstantVelocityModelSlamSparseReconstructorListener listener =
                     new ConstantVelocityModelSlamSparseReconstructorListener() {
                         @Override
+                        public void onSlamDataAvailable(ConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                                        double positionX, double positionY, double positionZ,
+                                                        double velocityX, double velocityY, double velocityZ,
+                                                        double accelerationX, double accelerationY, double accelerationZ,
+                                                        double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                            mSlamDataAvailable++;
+                        }
+
+                        @Override
+                        public void onSlamCameraEstimated(ConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                                          PinholeCamera camera) {
+                            mSlamCameraEstimated++;
+                            mSlamCamera = camera;
+                        }
+
+                        @Override
                         public boolean hasMoreViewsAvailable(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor) {
                             return mViewCount < 2;
@@ -1278,6 +1335,9 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1755,6 +1815,23 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             ConstantVelocityModelSlamSparseReconstructorListener listener =
                     new ConstantVelocityModelSlamSparseReconstructorListener() {
                         @Override
+                        public void onSlamDataAvailable(ConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                                        double positionX, double positionY, double positionZ,
+                                                        double velocityX, double velocityY, double velocityZ,
+                                                        double accelerationX, double accelerationY, double accelerationZ,
+                                                        double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                            mSlamDataAvailable++;
+                        }
+
+                        @Override
+                        public void onSlamCameraEstimated(ConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                                          PinholeCamera camera) {
+                            mSlamCameraEstimated++;
+                            mSlamCamera = camera;
+                        }
+
+                        @Override
                         public boolean hasMoreViewsAvailable(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor) {
                             return mViewCount < 3;
@@ -2004,6 +2081,9 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -2535,6 +2615,23 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             ConstantVelocityModelSlamSparseReconstructorListener listener =
                     new ConstantVelocityModelSlamSparseReconstructorListener() {
                         @Override
+                        public void onSlamDataAvailable(ConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                                        double positionX, double positionY, double positionZ,
+                                                        double velocityX, double velocityY, double velocityZ,
+                                                        double accelerationX, double accelerationY, double accelerationZ,
+                                                        double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                            mSlamDataAvailable++;
+                        }
+
+                        @Override
+                        public void onSlamCameraEstimated(ConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                                          PinholeCamera camera) {
+                            mSlamCameraEstimated++;
+                            mSlamCamera = camera;
+                        }
+
+                        @Override
                         public boolean hasMoreViewsAvailable(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor) {
                             return mViewCount < 3;
@@ -2873,6 +2970,9 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();

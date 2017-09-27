@@ -66,6 +66,7 @@ public class ConstantVelocityModelSlamSparseReconstructor extends
     public boolean processOneView() {
         if (!mRunning) {
             mSlamEstimator = new ConstantVelocityModelSlamEstimator();
+            setUpSlamEstimatorListener();
             setUpCalibrationData();
         }
 
