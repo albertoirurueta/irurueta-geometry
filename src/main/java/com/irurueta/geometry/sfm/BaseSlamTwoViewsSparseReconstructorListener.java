@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.irurueta.geometry.sfm;
 
 import com.irurueta.algebra.Matrix;
@@ -24,15 +8,15 @@ import com.irurueta.geometry.slam.ConstantVelocityModelSlamEstimator;
 import com.irurueta.geometry.slam.SlamEstimator;
 
 /**
- * Listener to retrieve and store required data to compute a 3D reconstruction from sparse
- * image point correspondences in multiple views.
+ * Listener to retrieve and store required data to compute a 3D reconstruction
+ * from sparse image point correspondences in two views.
  * Implementations of this interface also notify when cameras are estimated due to
- * received IMU (Inertial Measurement Unit) data, which contains accelerometer and gyroscope
- * data and uses a SLAM estimator.
+ * received IMU (Intertial Measurement Unit) data, which contains accelerometer and
+ * gyroscope data and uses a SLAM estimator.
  * @param <R> type of reconstructor.
  */
-public interface BaseSlamSparseReconstructorListener<R extends BaseSlamSparseReconstructor> extends
-        BaseSparseReconstructorListener<R> {
+public interface BaseSlamTwoViewsSparseReconstructorListener<R extends BaseSlamTwoViewsSparseReconstructor>
+        extends BaseTwoViewsSparseReconstructorListener<R> {
 
     /**
      * Called whenever slam data notification is enabled and each time all required samples (accelerometer,
@@ -72,6 +56,8 @@ public interface BaseSlamSparseReconstructorListener<R extends BaseSlamSparseRec
      * This method is called each time all required samples (accelerometer, gyroscope or orientation) are
      * received in order to update SLAM system state to notify a new camera containing
      * current intrinsic parameters, position and orientation.
+     * This method will only be called when using essential method for scene reconstruction and
+     * initial intrinsic parameters are known.
      * @param reconstructor reconstructor raising this event.
      * @param camera current camera estimated using IMU data. This instance and its associated instances (camera center,
      *               rotation and intrinsic parameters) will be reused between consecutive calls to this method.

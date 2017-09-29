@@ -33,7 +33,7 @@ import java.util.List;
 public abstract class BaseAbsoluteOrientationSlamTwoViewsSparseReconstructor<
         C extends BaseSlamTwoViewsSparseReconstructorConfiguration,
         R extends BaseSlamTwoViewsSparseReconstructor,
-        L extends BaseTwoViewsSparseReconstructorListener<R>,
+        L extends BaseSlamTwoViewsSparseReconstructorListener<R>,
         S extends AbsoluteOrientationBaseSlamEstimator> extends 
         BaseSlamTwoViewsSparseReconstructor<C, R, L, S> {
     

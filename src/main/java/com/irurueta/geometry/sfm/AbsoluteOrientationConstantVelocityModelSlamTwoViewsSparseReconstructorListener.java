@@ -15,5 +15,5 @@ package com.irurueta.geometry.sfm;
  * estimation.
  */
 public interface AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstructorListener 
-        extends BaseTwoViewsSparseReconstructorListener<
+        extends BaseSlamTwoViewsSparseReconstructorListener<
         AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstructor> { }

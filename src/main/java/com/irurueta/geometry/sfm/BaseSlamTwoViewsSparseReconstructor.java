@@ -8,9 +8,7 @@
  */
 package com.irurueta.geometry.sfm;
 
-import com.irurueta.geometry.MetricTransformation3D;
-import com.irurueta.geometry.PinholeCamera;
-import com.irurueta.geometry.Point3D;
+import com.irurueta.geometry.*;
 import com.irurueta.geometry.slam.BaseCalibrationData;
 import com.irurueta.geometry.slam.BaseSlamEstimator;
 import java.util.ArrayList;
@@ -29,7 +27,7 @@ import java.util.List;
 public abstract class BaseSlamTwoViewsSparseReconstructor<
         C extends BaseSlamTwoViewsSparseReconstructorConfiguration,
         R extends BaseSlamTwoViewsSparseReconstructor,
-        L extends BaseTwoViewsSparseReconstructorListener<R>,
+        L extends BaseSlamTwoViewsSparseReconstructorListener<R>,
         S extends BaseSlamEstimator> extends 
         BaseTwoViewsSparseReconstructor<C, R, L> {
     
@@ -38,7 +36,22 @@ public abstract class BaseSlamTwoViewsSparseReconstructor<
      * accelerometer and gyroscope data.
      */
     protected S mSlamEstimator;
-    
+
+    /**
+     * Position estimated by means of SLAM. It is reused each time it is notified.
+     */
+    private InhomogeneousPoint3D mSlamPosition = new InhomogeneousPoint3D();
+
+    /**
+     * Camera estimated by means of SLAM. It is reused each time it is notified.
+     */
+    private PinholeCamera mSlamCamera = new PinholeCamera();
+
+    /**
+     * Camera rotation estimated by means of SLAM. It is reused each time it is notified.
+     */
+    private Quaternion mSlamRotation = new Quaternion();
+
     /**
      * Constructor.
      * @param configuration configuration for this reconstructor.
@@ -139,6 +152,31 @@ public abstract class BaseSlamTwoViewsSparseReconstructor<
             mSlamEstimator.setCalibrationData(calibrationData);
         }
     }
+
+    /**
+     * Configures listener of SLAM estimator
+     */
+    protected void setUpSlamEstimatorListener() {
+        mSlamEstimator.setListener(new BaseSlamEstimator.BaseSlamEstimatorListener() {
+            @Override
+            public void onFullSampleReceived(BaseSlamEstimator estimator) { /* not used */ }
+
+            @Override
+            public void onFullSampleProcessed(BaseSlamEstimator estimator) {
+                notifySlamStateIfNeeded();
+                notifySlamCameraIfNeeded();
+            }
+
+            @Override
+            public void onCorrectWithPositionMeasure(BaseSlamEstimator estimator) { /* not used */ }
+
+            @Override
+            public void onCorrectedWithPositionMeasure(BaseSlamEstimator estimator) {
+                notifySlamStateIfNeeded();
+                notifySlamCameraIfNeeded();
+            }
+        });
+    }
     
     /**
      * Update scene scale using SLAM data.
@@ -202,5 +240,83 @@ public abstract class BaseSlamTwoViewsSparseReconstructor<
 
             return false;
         }
-    }    
+    }
+
+    /**
+     * Notifies SLAM state if notification is enabled at configuration time.
+     */
+    private void notifySlamStateIfNeeded() {
+        if (!mConfiguration.isNotifyAvailableSlamDataEnabled()) {
+            return;
+        }
+
+        double positionX = mSlamEstimator.getStatePositionX();
+        double positionY = mSlamEstimator.getStatePositionY();
+        double positionZ = mSlamEstimator.getStatePositionZ();
+
+        double velocityX = mSlamEstimator.getStateVelocityX();
+        double velocityY = mSlamEstimator.getStateVelocityY();
+        double velocityZ = mSlamEstimator.getStateVelocityZ();
+
+        double accelerationX = mSlamEstimator.getStateAccelerationX();
+        double accelerationY = mSlamEstimator.getStateAccelerationY();
+        double accelerationZ = mSlamEstimator.getStateAccelerationZ();
+
+        double quaternionA = mSlamEstimator.getStateQuaternionA();
+        double quaternionB = mSlamEstimator.getStateQuaternionB();
+        double quaternionC = mSlamEstimator.getStateQuaternionC();
+        double quaternionD = mSlamEstimator.getStateQuaternionD();
+
+        double angularSpeedX = mSlamEstimator.getStateAngularSpeedX();
+        double angularSpeedY = mSlamEstimator.getStateAngularSpeedY();
+        double angularSpeedZ = mSlamEstimator.getStateAngularSpeedZ();
+
+        //noinspection all
+        mListener.onSlamDataAvailable((R)this, positionX, positionY, positionZ,
+                velocityX, velocityY, velocityZ,
+                accelerationX, accelerationY, accelerationZ,
+                quaternionA, quaternionB, quaternionC, quaternionD,
+                angularSpeedX, angularSpeedY, angularSpeedZ, mSlamEstimator.getStateCovariance());
+    }
+
+    /**
+     * Notifies estimated camera by means of SLAM if notification is enabled at
+     * configuration time and intrinsics are already available.
+     */
+    private void notifySlamCameraIfNeeded() {
+        if (!mConfiguration.isNotifyEstimatedSlamCameraEnabled()) {
+            return;
+        }
+
+        PinholeCameraIntrinsicParameters intrinsicParameters = null;
+        if (mConfiguration.getInitialIntrinsic1() != null) {
+            intrinsicParameters = mConfiguration.getInitialIntrinsic1();
+        } else if (mConfiguration.getInitialIntrinsic2() != null) {
+            intrinsicParameters = mConfiguration.getInitialIntrinsic2();
+        }
+
+        if (intrinsicParameters == null) {
+            return;
+        }
+
+        double positionX = mSlamEstimator.getStatePositionX();
+        double positionY = mSlamEstimator.getStatePositionY();
+        double positionZ = mSlamEstimator.getStatePositionZ();
+        mSlamPosition.setInhomogeneousCoordinates(positionX, positionY, positionZ);
+
+        double quaternionA = mSlamEstimator.getStateQuaternionA();
+        double quaternionB = mSlamEstimator.getStateQuaternionB();
+        double quaternionC = mSlamEstimator.getStateQuaternionC();
+        double quaternionD = mSlamEstimator.getStateQuaternionD();
+        mSlamRotation.setA(quaternionA);
+        mSlamRotation.setB(quaternionB);
+        mSlamRotation.setC(quaternionC);
+        mSlamRotation.setD(quaternionD);
+
+        mSlamCamera.setIntrinsicAndExtrinsicParameters(intrinsicParameters, mSlamRotation,
+                mSlamPosition);
+
+        //noinspection all
+        mListener.onSlamCameraEstimated((R)this, mSlamCamera);
+    }
 }

@@ -111,6 +111,12 @@ public class SlamTwoViewsSparseReconstructorTest {
     private boolean mFailed;
     private boolean mCancelled;
 
+    private int mSlamDataAvailable;
+    private int mSlamCameraEstimated;
+
+    private PinholeCamera mSlamCamera;
+    private Matrix mSlamCovariance;
+
     public SlamTwoViewsSparseReconstructorTest() { }
 
     @BeforeClass
@@ -126,6 +132,10 @@ public class SlamTwoViewsSparseReconstructorTest {
         mEstimatedCamera1 = mEstimatedCamera2 = null;
         mReconstructedPoints = null;
         mStarted = mFinished = mFailed = mCancelled = false;
+        mSlamDataAvailable = 0;
+        mSlamCameraEstimated = 0;
+        mSlamCamera = null;
+        mSlamCovariance = null;
     }
 
     @After
@@ -137,6 +147,18 @@ public class SlamTwoViewsSparseReconstructorTest {
                 = new SlamTwoViewsSparseReconstructorConfiguration();
         SlamTwoViewsSparseReconstructorListener listener
                 = new SlamTwoViewsSparseReconstructorListener() {
+            @Override
+            public void onSlamDataAvailable(SlamTwoViewsSparseReconstructor reconstructor,
+                                            double positionX, double positionY, double positionZ,
+                                            double velocityX, double velocityY, double velocityZ,
+                                            double accelerationX, double accelerationY, double accelerationZ,
+                                            double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                            double angularSpeedX, double angularSpeedY, double angularSpeedZ,
+                                            Matrix covariance) { }
+
+            @Override
+            public void onSlamCameraEstimated(SlamTwoViewsSparseReconstructor reconstructor, PinholeCamera camera) { }
+
             @Override
             public boolean hasMoreViewsAvailable(
                     SlamTwoViewsSparseReconstructor reconstructor) {
@@ -455,6 +477,25 @@ public class SlamTwoViewsSparseReconstructorTest {
             SlamTwoViewsSparseReconstructorListener listener
                     = new SlamTwoViewsSparseReconstructorListener() {
                 @Override
+                public void onSlamDataAvailable(SlamTwoViewsSparseReconstructor reconstructor,
+                                                double positionX, double positionY, double positionZ,
+                                                double velocityX, double velocityY, double velocityZ,
+                                                double accelerationX, double accelerationY, double accelerationZ,
+                                                double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                double angularSpeedX, double angularSpeedY, double angularSpeedZ,
+                                                Matrix covariance) {
+                    mSlamDataAvailable++;
+                    mSlamCovariance = covariance;
+                }
+
+                @Override
+                public void onSlamCameraEstimated(SlamTwoViewsSparseReconstructor reconstructor,
+                                                  PinholeCamera camera) {
+                    mSlamCameraEstimated++;
+                    mSlamCamera = camera;
+                }
+
+                @Override
                 public boolean hasMoreViewsAvailable(
                         SlamTwoViewsSparseReconstructor reconstructor) {
                     return mViewCount < 2;
@@ -601,6 +642,10 @@ public class SlamTwoViewsSparseReconstructorTest {
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
+            assertNotNull(mSlamCovariance);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -984,6 +1029,25 @@ public class SlamTwoViewsSparseReconstructorTest {
             SlamTwoViewsSparseReconstructorListener listener
                     = new SlamTwoViewsSparseReconstructorListener() {
                 @Override
+                public void onSlamDataAvailable(SlamTwoViewsSparseReconstructor reconstructor,
+                                                double positionX, double positionY, double positionZ,
+                                                double velocityX, double velocityY, double velocityZ,
+                                                double accelerationX, double accelerationY, double accelerationZ,
+                                                double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                double angularSpeedX, double angularSpeedY, double angularSpeedZ,
+                                                Matrix covariance) {
+                    mSlamDataAvailable++;
+                    mSlamCovariance = covariance;
+                }
+
+                @Override
+                public void onSlamCameraEstimated(SlamTwoViewsSparseReconstructor reconstructor,
+                                                  PinholeCamera camera) {
+                    mSlamCameraEstimated++;
+                    mSlamCamera = camera;
+                }
+
+                @Override
                 public boolean hasMoreViewsAvailable(
                         SlamTwoViewsSparseReconstructor reconstructor) {
                     return mViewCount < 2;
@@ -1175,6 +1239,10 @@ public class SlamTwoViewsSparseReconstructorTest {
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
+            assertNotNull(mSlamCovariance);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1321,6 +1389,10 @@ public class SlamTwoViewsSparseReconstructorTest {
         mEstimatedCamera1 = mEstimatedCamera2 = null;
         mReconstructedPoints = null;
         mStarted = mFinished = mCancelled = mFailed = false;
+        mSlamDataAvailable = 0;
+        mSlamCameraEstimated = 0;
+        mSlamCamera = null;
+        mSlamCovariance = null;
     }
 
     private SlamCalibrator createFinishedCalibrator(float accelerationOffsetX,

@@ -57,6 +57,7 @@ public class SlamTwoViewsSparseReconstructor extends
     public boolean processOneView() {
         if (!mRunning) {
             mSlamEstimator = new SlamEstimator();
+            setUpSlamEstimatorListener();
             setUpCalibrationData();
         }
 

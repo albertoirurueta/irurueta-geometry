@@ -14,5 +14,5 @@ package com.irurueta.geometry.sfm;
  * constant velocity model for scale estimation.
  */
 public interface ConstantVelocityModelSlamTwoViewsSparseReconstructorListener 
-        extends BaseTwoViewsSparseReconstructorListener<
+        extends BaseSlamTwoViewsSparseReconstructorListener<
         ConstantVelocityModelSlamTwoViewsSparseReconstructor> { }

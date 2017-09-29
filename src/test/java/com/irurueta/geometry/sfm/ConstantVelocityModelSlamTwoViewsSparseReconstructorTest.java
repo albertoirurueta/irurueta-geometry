@@ -106,6 +106,12 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
     private boolean mFinished;
     private boolean mFailed;
     private boolean mCancelled;
+
+    private int mSlamDataAvailable;
+    private int mSlamCameraEstimated;
+
+    private PinholeCamera mSlamCamera;
+    private Matrix mSlamCovariance;
     
     public ConstantVelocityModelSlamTwoViewsSparseReconstructorTest() { }
     
@@ -121,7 +127,11 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
         mEstimatedFundamentalMatrix = null;
         mEstimatedCamera1 = mEstimatedCamera2 = null;
         mReconstructedPoints = null;
-        mStarted = mFinished = mFailed = mCancelled = false;        
+        mStarted = mFinished = mFailed = mCancelled = false;
+        mSlamDataAvailable = 0;
+        mSlamCameraEstimated = 0;
+        mSlamCamera = null;
+        mSlamCovariance = null;
     }
     
     @After
@@ -133,6 +143,19 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
                 = new ConstantVelocityModelSlamTwoViewsSparseReconstructorConfiguration();
         ConstantVelocityModelSlamTwoViewsSparseReconstructorListener listener =
                 new ConstantVelocityModelSlamTwoViewsSparseReconstructorListener() {
+            @Override
+            public void onSlamDataAvailable(ConstantVelocityModelSlamTwoViewsSparseReconstructor reconstructor,
+                                            double positionX, double positionY, double positionZ,
+                                            double velocityX, double velocityY, double velocityZ,
+                                            double accelerationX, double accelerationY, double accelerationZ,
+                                            double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                            double angularSpeedX, double angularSpeedY, double angularSpeedZ,
+                                            Matrix covariance) { }
+
+            @Override
+            public void onSlamCameraEstimated(ConstantVelocityModelSlamTwoViewsSparseReconstructor reconstructor,
+                                              PinholeCamera camera) { }
+
             @Override
             public boolean hasMoreViewsAvailable(
                     ConstantVelocityModelSlamTwoViewsSparseReconstructor reconstructor) {
@@ -452,6 +475,25 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
             ConstantVelocityModelSlamTwoViewsSparseReconstructorListener listener =
                     new ConstantVelocityModelSlamTwoViewsSparseReconstructorListener() {
                 @Override
+                public void onSlamDataAvailable(ConstantVelocityModelSlamTwoViewsSparseReconstructor reconstructor,
+                                                double positionX, double positionY, double positionZ,
+                                                double velocityX, double velocityY, double velocityZ,
+                                                double accelerationX, double accelerationY, double accelerationZ,
+                                                double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                double angularSpeedX, double angularSpeedY, double angularSpeedZ,
+                                                Matrix covariance) {
+                    mSlamDataAvailable++;
+                    mSlamCovariance = covariance;
+                }
+
+                @Override
+                public void onSlamCameraEstimated(ConstantVelocityModelSlamTwoViewsSparseReconstructor reconstructor,
+                                                  PinholeCamera camera) {
+                    mSlamCameraEstimated++;
+                    mSlamCamera = camera;
+                }
+
+                @Override
                 public boolean hasMoreViewsAvailable(
                         ConstantVelocityModelSlamTwoViewsSparseReconstructor reconstructor) {
                     return mViewCount < 2;
@@ -597,6 +639,10 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
+            assertNotNull(mSlamCovariance);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -980,6 +1026,25 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
             ConstantVelocityModelSlamTwoViewsSparseReconstructorListener listener =
                     new ConstantVelocityModelSlamTwoViewsSparseReconstructorListener() {
                 @Override
+                public void onSlamDataAvailable(ConstantVelocityModelSlamTwoViewsSparseReconstructor reconstructor,
+                                                double positionX, double positionY, double positionZ,
+                                                double velocityX, double velocityY, double velocityZ,
+                                                double accelerationX, double accelerationY, double accelerationZ,
+                                                double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                                double angularSpeedX, double angularSpeedY, double angularSpeedZ,
+                                                Matrix covariance) {
+                    mSlamDataAvailable++;
+                    mSlamCovariance = covariance;
+                }
+
+                @Override
+                public void onSlamCameraEstimated(ConstantVelocityModelSlamTwoViewsSparseReconstructor reconstructor,
+                                                  PinholeCamera camera) {
+                    mSlamCameraEstimated++;
+                    mSlamCamera = camera;
+                }
+
+                @Override
                 public boolean hasMoreViewsAvailable(
                         ConstantVelocityModelSlamTwoViewsSparseReconstructor reconstructor) {
                     return mViewCount < 2;
@@ -1169,6 +1234,10 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
+            assertNotNull(mSlamCovariance);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1315,6 +1384,10 @@ public class ConstantVelocityModelSlamTwoViewsSparseReconstructorTest {
         mEstimatedCamera1 = mEstimatedCamera2 = null;
         mReconstructedPoints = null;
         mStarted = mFinished = mCancelled = mFailed = false;
+        mSlamDataAvailable = 0;
+        mSlamCameraEstimated = 0;
+        mSlamCamera = null;
+        mSlamCovariance = null;
     }
     
     private ConstantVelocityModelSlamCalibrator createFinishedCalibrator(

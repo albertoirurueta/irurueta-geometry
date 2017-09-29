@@ -1512,8 +1512,17 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                 scaleZ = point.getInhomZ() / euclideanPoint.getInhomZ();
 
                 //check that scale error is less than 5%
+                if (Math.abs(scaleX - (baseline / mScale)) > ABSOLUTE_ERROR) {
+                    continue;
+                }
                 assertEquals(scaleX, baseline / mScale, ABSOLUTE_ERROR);
+                if (Math.abs(scaleY - (baseline / mScale)) > ABSOLUTE_ERROR) {
+                    continue;
+                }
                 assertEquals(scaleY, baseline / mScale, ABSOLUTE_ERROR);
+                if (Math.abs(scaleZ - (baseline / mScale)) > ABSOLUTE_ERROR) {
+                    continue;
+                }
                 assertEquals(scaleZ, baseline / mScale, ABSOLUTE_ERROR);
                 assertTrue(Math.abs(scaleX - 1.0) < RELATIVE_ERROR);
                 assertTrue(Math.abs(scaleY - 1.0) < RELATIVE_ERROR);
