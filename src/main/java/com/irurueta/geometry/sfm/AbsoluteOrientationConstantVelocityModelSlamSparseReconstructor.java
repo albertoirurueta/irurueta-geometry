@@ -26,6 +26,7 @@ import com.irurueta.geometry.slam.AbsoluteOrientationConstantVelocityModelSlamEs
  * estimator is not accurate at all on position or orientation estimator.
  * Use AbsoluteOrientationSlamSparseReconstructor if absolute orientation is needed,
  * or SlamSparseReconstructor otherwise to get better accuracy.
+ * @author Alberto Irurueta Carro (alberto@irurueta.com)
  */
 public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor extends
         BaseAbsoluteOrientationSlamSparseReconstructor<

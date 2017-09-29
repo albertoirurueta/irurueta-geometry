@@ -358,7 +358,7 @@ public abstract class BaseSlamSparseReconstructor<
                 velocityX, velocityY, velocityZ,
                 accelerationX, accelerationY, accelerationZ,
                 quaternionA, quaternionB, quaternionC, quaternionD,
-                angularSpeedX, angularSpeedY, angularSpeedZ);
+                angularSpeedX, angularSpeedY, angularSpeedZ, mSlamEstimator.getStateCovariance());
     }
 
     /**

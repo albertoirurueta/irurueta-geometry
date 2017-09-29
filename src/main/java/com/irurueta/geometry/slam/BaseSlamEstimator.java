@@ -235,63 +235,7 @@ public abstract class BaseSlamEstimator<D extends BaseCalibrationData>
         reset(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0);
     }
-    
-    /**
-     * Resets position, linear velocity, linear acceleration, orientation and
-     * angular speed to provided values.
-     * @param statePositionX position along x-axis expressed in meters (m).
-     * @param statePositionY position along y-axis expressed in meters (m).
-     * @param statePositionZ position along z-axis expressed in meters (m).
-     * @param stateVelocityX linear velocity along x-axis expressed in meters 
-     * per second (m/s).
-     * @param stateVelocityY linear velocity along y-axis expressed in meters 
-     * per second (m/s).
-     * @param stateVelocityZ linear velocity along z-axis expressed in meters 
-     * per second (m/s).
-     * @param stateAccelerationX linear acceleration along x-axis expressed in
-     * meters per squared second (m/s^2).
-     * @param stateAccelerationY linear acceleration along y-axis expressed in
-     * meters per squared second (m/s^2).
-     * @param stateAccelerationZ linear acceleration along z-axis expressed in
-     * meters per squared second (m/s^2).
-     * @param stateQuaternionA A value of orientation quaternion.
-     * @param stateQuaternionB B value of orientation quaternion.
-     * @param stateQuaternionC C value of orientation quaternion.
-     * @param stateQuaternionD D value of orientation quaternion.
-     * @param stateAngularSpeedX angular speed along x-axis expressed in radians
-     * per second (rad/s).
-     * @param stateAngularSpeedY angular speed along y-axis expressed in radians
-     * per second (rad/s).
-     * @param stateAngularSpeedZ angular speed along z-axis expressed in radians
-     * per second (rad/s).
-     */
-    protected void reset(double statePositionX, double statePositionY,
-            double statePositionZ, double stateVelocityX, double stateVelocityY,
-            double stateVelocityZ, double stateAccelerationX, 
-            double stateAccelerationY, double stateAccelerationZ, 
-            double stateQuaternionA, double stateQuaternionB, 
-            double stateQuaternionC, double stateQuaternionD, 
-            double stateAngularSpeedX, double stateAngularSpeedY,
-            double stateAngularSpeedZ) {
-        mStatePositionX = statePositionX;
-        mStatePositionY = statePositionY;
-        mStatePositionZ = statePositionZ;
-        mStateVelocityX = stateVelocityX;
-        mStateVelocityY = stateVelocityY;
-        mStateVelocityZ = stateVelocityZ;
-        mStateAccelerationX = stateAccelerationX;
-        mStateAccelerationY = stateAccelerationY;
-        mStateAccelerationZ = stateAccelerationZ;
-        mStateQuaternionA = stateQuaternionA;
-        mStateQuaternionB = stateQuaternionB;
-        mStateQuaternionC = stateQuaternionC;
-        mStateQuaternionD = stateQuaternionD;
-        mStateAngularSpeedX = stateAngularSpeedX;
-        mStateAngularSpeedY = stateAngularSpeedY;
-        mStateAngularSpeedZ = stateAngularSpeedZ;
-        mAccelerometerTimestampNanos = mGyroscopeTimestampNanos = -1;        
-    }
-    
+
     /**
      * Obtains current x-position of the device expressed in meters (m).
      * @return x-position of the device expressed in meters (m).
@@ -582,6 +526,13 @@ public abstract class BaseSlamEstimator<D extends BaseCalibrationData>
         result[1] = mStateAngularSpeedY;
         result[2] = mStateAngularSpeedZ;
     }
+
+    /**
+     * Gets covariance matrix of state variables (position, velocity, acceleration, orientation and angular speed).
+     * Actual meaning of elements in returned matrix will depend on actual implementation of the estimator.
+     * @return covariance matrix of state variables.
+     */
+    public abstract Matrix getStateCovariance();
 
     /**
      * Indicates whether an error occurred during the estimation.
@@ -1080,8 +1031,64 @@ public abstract class BaseSlamEstimator<D extends BaseCalibrationData>
      */
     public void setCalibrationData(D calibrationData) {
         mCalibrationData = calibrationData;
-    }    
-    
+    }
+
+    /**
+     * Resets position, linear velocity, linear acceleration, orientation and
+     * angular speed to provided values.
+     * @param statePositionX position along x-axis expressed in meters (m).
+     * @param statePositionY position along y-axis expressed in meters (m).
+     * @param statePositionZ position along z-axis expressed in meters (m).
+     * @param stateVelocityX linear velocity along x-axis expressed in meters
+     * per second (m/s).
+     * @param stateVelocityY linear velocity along y-axis expressed in meters
+     * per second (m/s).
+     * @param stateVelocityZ linear velocity along z-axis expressed in meters
+     * per second (m/s).
+     * @param stateAccelerationX linear acceleration along x-axis expressed in
+     * meters per squared second (m/s^2).
+     * @param stateAccelerationY linear acceleration along y-axis expressed in
+     * meters per squared second (m/s^2).
+     * @param stateAccelerationZ linear acceleration along z-axis expressed in
+     * meters per squared second (m/s^2).
+     * @param stateQuaternionA A value of orientation quaternion.
+     * @param stateQuaternionB B value of orientation quaternion.
+     * @param stateQuaternionC C value of orientation quaternion.
+     * @param stateQuaternionD D value of orientation quaternion.
+     * @param stateAngularSpeedX angular speed along x-axis expressed in radians
+     * per second (rad/s).
+     * @param stateAngularSpeedY angular speed along y-axis expressed in radians
+     * per second (rad/s).
+     * @param stateAngularSpeedZ angular speed along z-axis expressed in radians
+     * per second (rad/s).
+     */
+    protected void reset(double statePositionX, double statePositionY,
+                         double statePositionZ, double stateVelocityX, double stateVelocityY,
+                         double stateVelocityZ, double stateAccelerationX,
+                         double stateAccelerationY, double stateAccelerationZ,
+                         double stateQuaternionA, double stateQuaternionB,
+                         double stateQuaternionC, double stateQuaternionD,
+                         double stateAngularSpeedX, double stateAngularSpeedY,
+                         double stateAngularSpeedZ) {
+        mStatePositionX = statePositionX;
+        mStatePositionY = statePositionY;
+        mStatePositionZ = statePositionZ;
+        mStateVelocityX = stateVelocityX;
+        mStateVelocityY = stateVelocityY;
+        mStateVelocityZ = stateVelocityZ;
+        mStateAccelerationX = stateAccelerationX;
+        mStateAccelerationY = stateAccelerationY;
+        mStateAccelerationZ = stateAccelerationZ;
+        mStateQuaternionA = stateQuaternionA;
+        mStateQuaternionB = stateQuaternionB;
+        mStateQuaternionC = stateQuaternionC;
+        mStateQuaternionD = stateQuaternionD;
+        mStateAngularSpeedX = stateAngularSpeedX;
+        mStateAngularSpeedY = stateAngularSpeedY;
+        mStateAngularSpeedZ = stateAngularSpeedZ;
+        mAccelerometerTimestampNanos = mGyroscopeTimestampNanos = -1;
+    }
+
     /**
      * Notifies that a full sample has been received and resets flags indicating
      * whether partial samples have been received.

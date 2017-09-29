@@ -179,6 +179,7 @@ public class SlamEstimatorTest implements BaseSlamEstimatorListener {
         assertEquals(estimator.getPositionCovarianceMatrix(), 
                 Matrix.identity(3, 3).multiplyByScalarAndReturnNew(
                         KalmanFilter.DEFAULT_MEASUREMENT_NOISE_VARIANCE));
+        assertNotNull(estimator.getStateCovariance());
     }
     
     @Test

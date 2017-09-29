@@ -200,6 +200,7 @@ public class AbsoluteOrientationSlamEstimatorTest implements
         
         assertEquals(estimator.getAccumulatedOrientationSamples(), 0);
         assertFalse(estimator.isOrientationSampleReceived());
+        assertNotNull(estimator.getStateCovariance());
     }
     
     @Test

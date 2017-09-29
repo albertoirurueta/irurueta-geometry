@@ -199,8 +199,23 @@ public class AbsoluteOrientationSlamEstimator extends
 
         } catch (WrongSizeException ignore) { /* never thrown */ }        
     }
-    
-    
+
+    /**
+     * Gets covariance matrix of state variables (position, velocity, acceleration, orientation and angular speed).
+     * Diagonal elements of matrix returned by this method are in the following order:
+     * position-x, position-y, position-z, quaternion-a, quaternion-b, quaternion-c,
+     * quaternion-d, linear-velocity-x, linear-velocity-y, linear-velocity-z,
+     * linear-acceleration-x, linear-acceleration-y, linear-acceleration-z,
+     * angular-velocity-x, angular-velocity-y, angular-velocity-z
+     * Off-diagonal elements correspond to cross-correlation values of diagonal ones.
+     * @return covariance matrix of state variables.
+     */
+    @Override
+    public Matrix getStateCovariance() {
+        return mKalmanFilter.getStatePre();
+    }
+
+
     /**
      * Updates covariance matrix of position measures.
      * If null is provided, covariance matrix is not updated.

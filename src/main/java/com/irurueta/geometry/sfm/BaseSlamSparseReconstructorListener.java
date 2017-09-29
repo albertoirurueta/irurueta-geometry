@@ -16,7 +16,12 @@
 
 package com.irurueta.geometry.sfm;
 
+import com.irurueta.algebra.Matrix;
 import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.slam.AbsoluteOrientationConstantVelocityModelSlamEstimator;
+import com.irurueta.geometry.slam.AbsoluteOrientationSlamEstimator;
+import com.irurueta.geometry.slam.ConstantVelocityModelSlamEstimator;
+import com.irurueta.geometry.slam.SlamEstimator;
 
 /**
  * Listener to retrieve and store required data to compute a 3D reconstruction from sparse
@@ -49,12 +54,17 @@ public interface BaseSlamSparseReconstructorListener<R extends BaseSlamSparseRec
      * @param angularSpeedX x coordinate of angular speed expressed in radians per second (rad/s).
      * @param angularSpeedY y coordinate of angular speed expressed in radians per second (rad/s).
      * @param angularSpeedZ z coordinate of angular speed expressed in radians per second (rad/s).
+     * @param covariance contains covariance matrix of estimated SLAM state. Matrix meaning will change depending
+     *                       on slam implementation. See: {@link SlamEstimator#getStateCovariance()},
+     *                       {@link ConstantVelocityModelSlamEstimator#getStateCovariance()},
+     *                       {@link AbsoluteOrientationSlamEstimator#getStateCovariance()} or
+     *                       {@link AbsoluteOrientationConstantVelocityModelSlamEstimator#getStateCovariance()}.
      */
     void onSlamDataAvailable(R reconstructor, double positionX, double positionY, double positionZ,
                              double velocityX, double velocityY, double velocityZ,
                              double accelerationX, double accelerationY, double accelerationZ,
                              double quaternionA, double quaternionB, double quaternionC, double quaternionD,
-                             double angularSpeedX, double angularSpeedY, double angularSpeedZ);
+                             double angularSpeedX, double angularSpeedY, double angularSpeedZ, Matrix covariance);
 
     /**
      * Called whenever estimated SLAM camera notification is enabled.

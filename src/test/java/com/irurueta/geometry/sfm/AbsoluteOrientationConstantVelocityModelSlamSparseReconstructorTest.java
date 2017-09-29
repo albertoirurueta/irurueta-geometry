@@ -99,6 +99,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
     private int mSlamCameraEstimated;
 
     private PinholeCamera mSlamCamera;
+    private Matrix mSlamCovariance;
 
     public AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest() { }
 
@@ -123,6 +124,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
         mSlamDataAvailable = 0;
         mSlamCameraEstimated = 0;
         mSlamCamera = null;
+        mSlamCovariance = null;
     }
 
     @After
@@ -141,7 +143,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
                             double velocityX, double velocityY, double velocityZ,
                             double accelerationX, double accelerationY, double accelerationZ,
                             double quaternionA, double quaternionB, double quaternionC, double quaternionD,
-                            double angularSpeedX, double angularSpeedY, double angularSpeedZ) { }
+                            double angularSpeedX, double angularSpeedY, double angularSpeedZ, Matrix covariance) { }
 
                     @Override
                     public void onSlamCameraEstimated(
@@ -509,8 +511,9 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
                                 double velocityX, double velocityY, double velocityZ,
                                 double accelerationX, double accelerationY, double accelerationZ,
                                 double quaternionA, double quaternionB, double quaternionC, double quaternionD,
-                                double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                                double angularSpeedX, double angularSpeedY, double angularSpeedZ, Matrix covariance) {
                             mSlamDataAvailable++;
+                            mSlamCovariance = covariance;
                         }
 
                         @Override
@@ -696,6 +699,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
             assertTrue(mSlamDataAvailable > 0);
             assertTrue(mSlamCameraEstimated > 0);
             assertNotNull(mSlamCamera);
+            assertNotNull(mSlamCovariance);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1096,8 +1100,9 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
                                 double velocityX, double velocityY, double velocityZ,
                                 double accelerationX, double accelerationY, double accelerationZ,
                                 double quaternionA, double quaternionB, double quaternionC, double quaternionD,
-                                double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                                double angularSpeedX, double angularSpeedY, double angularSpeedZ, Matrix covariance) {
                             mSlamDataAvailable++;
+                            mSlamCovariance = covariance;
                         }
 
                         @Override
@@ -1328,6 +1333,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
             assertTrue(mSlamDataAvailable > 0);
             assertTrue(mSlamCameraEstimated > 0);
             assertNotNull(mSlamCamera);
+            assertNotNull(mSlamCovariance);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1774,8 +1780,9 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
                                 double velocityX, double velocityY, double velocityZ,
                                 double accelerationX, double accelerationY, double accelerationZ,
                                 double quaternionA, double quaternionB, double quaternionC, double quaternionD,
-                                double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                                double angularSpeedX, double angularSpeedY, double angularSpeedZ, Matrix covariance) {
                             mSlamDataAvailable++;
+                            mSlamCovariance = covariance;
                         }
 
                         @Override
@@ -2049,6 +2056,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
             assertTrue(mSlamDataAvailable > 0);
             assertTrue(mSlamCameraEstimated > 0);
             assertNotNull(mSlamCamera);
+            assertNotNull(mSlamCovariance);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -2538,12 +2546,18 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
                                 double velocityX, double velocityY, double velocityZ,
                                 double accelerationX, double accelerationY, double accelerationZ,
                                 double quaternionA, double quaternionB, double quaternionC, double quaternionD,
-                                double angularSpeedX, double angularSpeedY, double angularSpeedZ) { }
+                                double angularSpeedX, double angularSpeedY, double angularSpeedZ, Matrix covariance) {
+                            mSlamDataAvailable++;
+                            mSlamCovariance = covariance;
+                        }
 
                         @Override
                         public void onSlamCameraEstimated(
                                 AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor reconstructor,
-                                PinholeCamera camera) { }
+                                PinholeCamera camera) {
+                            mSlamCameraEstimated++;
+                            mSlamCamera = camera;
+                        }
 
                         @Override
                         public boolean hasMoreViewsAvailable(
@@ -2895,6 +2909,10 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
             assertFalse(mCancelled);
             assertFalse(mFailed);
             assertTrue(reconstructor.isFinished());
+            assertTrue(mSlamDataAvailable > 0);
+            assertTrue(mSlamCameraEstimated > 0);
+            assertNotNull(mSlamCamera);
+            assertNotNull(mSlamCovariance);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -3076,6 +3094,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
         mSlamDataAvailable = 0;
         mSlamCameraEstimated = 0;
         mSlamCamera = null;
+        mSlamCovariance = null;
     }
 
     private AbsoluteOrientationConstantVelocityModelSlamCalibrator createFinishedCalibrator(

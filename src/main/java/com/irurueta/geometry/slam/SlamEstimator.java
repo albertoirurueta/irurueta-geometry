@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.slam.SlamEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 10, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.slam;
 
@@ -20,6 +27,7 @@ import java.io.Serializable;
 /**
  * Estimates position, velocity, acceleration, orientation and angular speed
  * using data from accelerometer and gyroscope.
+ * @author Alberto Irurueta Carro (alberto@irurueta.com)
  */
 public class SlamEstimator extends BaseSlamEstimator<SlamCalibrationData> 
         implements Serializable {
@@ -177,7 +185,22 @@ public class SlamEstimator extends BaseSlamEstimator<SlamCalibrationData>
 
         } catch (WrongSizeException ignore) { /* never thrown */ }
     }
-                
+
+    /**
+     * Gets covariance matrix of state variables (position, velocity, acceleration, orientation and angular speed).
+     * Diagonal elements of matrix returned by this method are in the following order:
+     * position-x, position-y, position-z, quaternion-a, quaternion-b, quaternion-c,
+     * quaternion-d, linear-velocity-x, linear-velocity-y, linear-velocity-z,
+     * linear-acceleration-x, linear-acceleration-y, linear-acceleration-z,
+     * angular-velocity-x, angular-velocity-y, angular-velocity-z.
+     * Off-diagonal elements correspond to cross-correlation values of diagonal ones.
+     * @return covariance matrix of state variables.
+     */
+    @Override
+    public Matrix getStateCovariance() {
+        return mKalmanFilter.getStatePre();
+    }
+
     /**
      * Updates covariance matrix of position measures.
      * If null is provided, covariance matrix is not updated.

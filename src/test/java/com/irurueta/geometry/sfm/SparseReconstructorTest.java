@@ -5897,6 +5897,9 @@ public class SparseReconstructorTest {
             //certain scale)
             PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
             PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
+            if (mEstimatedMetricCamera3 == null) {
+                continue;
+            }
             PinholeCamera estimatedMetricCamera3 = mEstimatedMetricCamera3.getCamera();
             assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
             assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);

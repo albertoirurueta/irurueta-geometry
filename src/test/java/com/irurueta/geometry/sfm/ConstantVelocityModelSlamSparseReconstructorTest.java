@@ -107,6 +107,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
     private int mSlamCameraEstimated;
 
     private PinholeCamera mSlamCamera;
+    private Matrix mSlamCovariance;
 
     public ConstantVelocityModelSlamSparseReconstructorTest() { }
 
@@ -131,6 +132,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
         mSlamDataAvailable = 0;
         mSlamCameraEstimated = 0;
         mSlamCamera = null;
+        mSlamCovariance = null;
     }
 
     @After
@@ -148,7 +150,8 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                                                     double velocityX, double velocityY, double velocityZ,
                                                     double accelerationX, double accelerationY, double accelerationZ,
                                                     double quaternionA, double quaternionB, double quaternionC, double quaternionD,
-                                                    double angularSpeedX, double angularSpeedY, double angularSpeedZ) { }
+                                                    double angularSpeedX, double angularSpeedY, double angularSpeedZ,
+                                                    Matrix covariance) { }
 
                     @Override
                     public void onSlamCameraEstimated(ConstantVelocityModelSlamSparseReconstructor reconstructor,
@@ -499,8 +502,10 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                                                         double velocityX, double velocityY, double velocityZ,
                                                         double accelerationX, double accelerationY, double accelerationZ,
                                                         double quaternionA, double quaternionB, double quaternionC, double quaternionD,
-                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ,
+                                                        Matrix covariance) {
                             mSlamDataAvailable++;
+                            mSlamCovariance = covariance;
                         }
 
                         @Override
@@ -680,6 +685,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             assertTrue(mSlamDataAvailable > 0);
             assertTrue(mSlamCameraEstimated > 0);
             assertNotNull(mSlamCamera);
+            assertNotNull(mSlamCovariance);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1117,8 +1123,10 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                                                         double velocityX, double velocityY, double velocityZ,
                                                         double accelerationX, double accelerationY, double accelerationZ,
                                                         double quaternionA, double quaternionB, double quaternionC, double quaternionD,
-                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ,
+                                                        Matrix covariance) {
                             mSlamDataAvailable++;
+                            mSlamCovariance = covariance;
                         }
 
                         @Override
@@ -1338,6 +1346,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             assertTrue(mSlamDataAvailable > 0);
             assertTrue(mSlamCameraEstimated > 0);
             assertNotNull(mSlamCamera);
+            assertNotNull(mSlamCovariance);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1820,8 +1829,10 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                                                         double velocityX, double velocityY, double velocityZ,
                                                         double accelerationX, double accelerationY, double accelerationZ,
                                                         double quaternionA, double quaternionB, double quaternionC, double quaternionD,
-                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ,
+                                                        Matrix covariance) {
                             mSlamDataAvailable++;
+                            mSlamCovariance = covariance;
                         }
 
                         @Override
@@ -2084,6 +2095,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             assertTrue(mSlamDataAvailable > 0);
             assertTrue(mSlamCameraEstimated > 0);
             assertNotNull(mSlamCamera);
+            assertNotNull(mSlamCovariance);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -2620,8 +2632,10 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                                                         double velocityX, double velocityY, double velocityZ,
                                                         double accelerationX, double accelerationY, double accelerationZ,
                                                         double quaternionA, double quaternionB, double quaternionC, double quaternionD,
-                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ) {
+                                                        double angularSpeedX, double angularSpeedY, double angularSpeedZ,
+                                                        Matrix covariance) {
                             mSlamDataAvailable++;
+                            mSlamCovariance = covariance;
                         }
 
                         @Override
@@ -2973,6 +2987,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             assertTrue(mSlamDataAvailable > 0);
             assertTrue(mSlamCameraEstimated > 0);
             assertNotNull(mSlamCamera);
+            assertNotNull(mSlamCovariance);
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -3216,6 +3231,8 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
         mStarted = mFinished = mFailed = mCancelled = false;
         mScale = 0.0;
         mTimestamp = 0;
+        mSlamCamera = null;
+        mSlamCovariance = null;
     }
 
     private ConstantVelocityModelSlamCalibrator createFinishedCalibrator(float accelerationOffsetX,
