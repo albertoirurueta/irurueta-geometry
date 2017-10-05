@@ -108,8 +108,8 @@ public interface BaseSparseReconstructorListener<R extends BaseSparseReconstruct
                                         List<ReconstructedPoint3D> points);
 
     /**
-     * Called when cameras for provided matched pair of views have been estimated in a metric stratum (when possible and
-     * up to a certain accuracy).
+     * Called when cameras for provided matched pair of views have been estimated in an euclidean stratum (when possible
+     * and up to a certain accuracy).
      * Except SparseReconstructor, which can only make estimations in a metric stratum, other reconstructor
      * implementations either have calibration knowledge to estimate scale, or use SLAM techniques by mixing additional
      * sensor data (i.e. gyroscope and accelerometer) to estimate such scale.
