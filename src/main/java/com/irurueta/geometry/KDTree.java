@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 
 /**
- * Implementation of a k-D tree in 2D.
+ * Implementation of a k-D tree in an arbitrary dimension.
  * Once a K-D tree is built for a collection of points, it can later be used to efficiently do certain operations
  * such as point location, nearest points searches, etc.
  */
@@ -360,9 +360,11 @@ public abstract class KDTree<P extends Point> {
     }
 
     /**
-     * Locates near points to provided one up to a certain radius of search defines in a bounding box.
+     * Locates some near points to provided one up to a certain radius of search.
+     * This method only returns up to nmax results, which means that not all points within required
+     * radius are returned if more points than provided nmax value are within such radius.
      * @param pt point to search nearby.
-     * @param r radius of search defining a bounding box.
+     * @param r radius of search.
      * @param list list where indices of found points are stored up to the number of found points.
      * @param nmax maximum number of points to search.
      * @return number of found points.
@@ -424,6 +426,37 @@ public abstract class KDTree<P extends Point> {
             }
         }
         return nret;
+    }
+
+    /**
+     * Locates near points to provided one up to a certain radius of search defined in a bounding box.
+     * @param pt point to search nearby.
+     * @param r radius of search defining a bounding box.
+     * @param plist list where found points are stored up to the number of found points.
+     * @param nmax maximum number of points to search.
+     * @return number of found points.
+     * @throws IllegalArgumentException if radius is negative or maximum number of points to search is zero or negative,
+     * or list where points are stored is not large enough.
+     */
+    public int locateNear(P pt, double r, P[] plist, int nmax) throws IllegalArgumentException {
+        if (r < 0.0) {
+            throw new IllegalArgumentException("radius must be nonnegative");
+        }
+        if (nmax <= 0) {
+            throw new IllegalArgumentException("number of points to search must be at least 1");
+        }
+        if (plist.length < nmax) {
+            throw new IllegalArgumentException("result might not fit into provided list");
+        }
+
+        int[] list = new int[nmax];
+        int result = locateNear(pt, r, list, nmax);
+
+        for (int i = 0; i < result; i++) {
+            plist[i] = mPts[list[i]];
+        }
+
+        return result;
     }
 
     /**
