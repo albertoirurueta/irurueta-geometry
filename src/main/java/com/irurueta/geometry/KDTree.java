@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.irurueta.geometry;
 
 import java.lang.reflect.Array;
@@ -18,7 +34,7 @@ public abstract class KDTree<P extends Point> {
     /**
      * A very large value to consider as the maximum allowed coordinate value.
      */
-    protected static final double BIG = 1e99;
+    protected static final double BIG = Double.MAX_VALUE;
 
     /**
      * Number of tasks that can be queued.
@@ -28,7 +44,7 @@ public abstract class KDTree<P extends Point> {
     /**
      * Array of boxes stored in this tree as its nodes.
      */
-    protected BoxNode[] mBoxes;
+    protected BoxNode<P>[] mBoxes;
 
     /**
      * Indices of points pointing from boxes in the tree to the input collection of points.
@@ -96,7 +112,7 @@ public abstract class KDTree<P extends Point> {
         }
         P lo = createPoint(-BIG);
         P hi = createPoint(BIG);
-        mBoxes[0] = new BoxNode(lo, hi, 0, 0, 0, 0, mNpts - 1);
+        mBoxes[0] = new BoxNode<>(lo, hi, 0, 0, 0, 0, mNpts - 1);
         jbox = 0;
         taskmom[1] = 0;
         taskdim[1] = 0;
@@ -119,9 +135,9 @@ public abstract class KDTree<P extends Point> {
             hi.setInhomogeneousCoordinate(tdim, value);
             lo.setInhomogeneousCoordinate(tdim, value);
 
-            mBoxes[++jbox] = new BoxNode(copyPoint(mBoxes[tmom].getLo()), hi, tmom, 0, 0, ptlo,
+            mBoxes[++jbox] = new BoxNode<>(copyPoint(mBoxes[tmom].getLo()), hi, tmom, 0, 0, ptlo,
                     ptlo + kk);
-            mBoxes[++jbox] = new BoxNode(lo, copyPoint(mBoxes[tmom].getHi()), tmom, 0, 0,
+            mBoxes[++jbox] = new BoxNode<>(lo, copyPoint(mBoxes[tmom].getHi()), tmom, 0, 0,
                     ptlo + kk + 1, pthi);
             mBoxes[tmom].dau1 = jbox - 1;
             mBoxes[tmom].dau2 = jbox;
@@ -181,7 +197,7 @@ public abstract class KDTree<P extends Point> {
      * @param pt point to locate its containing box. Does not need to be contained in input collection.
      * @return smallest box containing the point.
      */
-    public BoxNode locateBox(P pt) {
+    public BoxNode<P> locateBox(P pt) {
         return mBoxes[locateBoxIndex(pt)];
     }
 
@@ -613,7 +629,7 @@ public abstract class KDTree<P extends Point> {
     /**
      * Contains a node of a KD Tree.
      */
-    public class BoxNode extends Box<P> {
+    public static class BoxNode<P extends Point> extends Box<P> {
 
         /**
          * Position of mother node in the list of nodes of a tree.

@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c6d6a1cb-41d7-401f-885d-de1ac92dc71e" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/KDTree3DTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree.java" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree2D.java" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree2D.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree3D.java" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree3D.java" />
@@ -19,132 +21,115 @@
     <option name="PATCH_PATH" value="" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="KDTree.java" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-95">
-                  <caret line="444" column="0" lean-forward="false" selection-start-line="444" selection-start-column="0" selection-end-line="444" selection-end-column="0" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                    <element signature="docComment;field#MIN_PTS#0;class#KDTree#0" expanded="false" />
-                    <element signature="docComment;field#BIG#0;class#KDTree#0" expanded="false" />
-                    <element signature="docComment;field#N_TASKS#0;class#KDTree#0" expanded="false" />
-                    <element signature="docComment;field#mPtIndx#0;class#KDTree#0" expanded="false" />
-                    <element signature="docComment;field#mRPtIndx#0;class#KDTree#0" expanded="false" />
-                    <element signature="docComment;field#mNpts#0;class#KDTree#0" expanded="false" />
-                    <element signature="docComment;field#mPts#0;class#KDTree#0" expanded="false" />
-                    <element signature="docComment;method#KDTree#0;class#KDTree#0" expanded="false" />
-                    <element signature="method#KDTree#0;class#KDTree#0" expanded="false" />
-                    <element signature="docComment;method#distance#0;class#KDTree#0" expanded="false" />
-                    <element signature="method#distance#0;class#KDTree#0" expanded="false" />
-                    <element signature="docComment;method#locateBoxIndex#0;class#KDTree#0" expanded="false" />
-                    <element signature="method#locateBoxIndex#0;class#KDTree#0" expanded="false" />
-                    <element signature="docComment;method#locateBox#0;class#KDTree#0" expanded="false" />
-                    <element signature="docComment;method#nearestIndex#0;class#KDTree#0" expanded="false" />
-                    <element signature="method#nearestIndex#0;class#KDTree#0" expanded="false" />
-                    <element signature="docComment;method#nearestPoint#0;class#KDTree#0" expanded="false" />
-                    <element signature="docComment;method#nNearest#0;class#KDTree#0" expanded="false" />
-                    <element signature="method#nNearest#0;class#KDTree#0" expanded="false" />
-                    <element signature="e#18693#18717#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="KDTree2D.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree2D.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="584">
-                  <caret line="43" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
-                  <folding>
-                    <element signature="e#471#472#0" expanded="true" />
-                    <element signature="e#512#513#0" expanded="true" />
-                    <element signature="e#1213#1214#0" expanded="true" />
-                    <element signature="e#1267#1268#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="KDTree2DTest.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/KDTree2DTest.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="235">
-                  <caret line="805" column="0" lean-forward="true" selection-start-line="805" selection-start-column="0" selection-end-line="805" selection-end-column="0" />
-                  <folding>
-                    <element signature="e#0#32431#0" expanded="true" />
-                    <element signature="imports" expanded="true" />
-                    <element signature="method#testConsructor#0;class#KDTree2DTest#0" expanded="false" />
-                    <element signature="method#testNearestPoint#0;class#KDTree2DTest#0" expanded="false" />
-                    <element signature="method#testNearestPoint2#0;class#KDTree2DTest#0" expanded="false" />
-                    <element signature="method#testNNearest#0;class#KDTree2DTest#0" expanded="false" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="KDTree.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="143">
-                  <caret line="374" column="0" lean-forward="false" selection-start-line="374" selection-start-column="0" selection-end-line="374" selection-end-column="0" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                    <element signature="e#7829#7830#0" expanded="true" />
-                    <element signature="e#7874#7875#0" expanded="true" />
-                    <element signature="e#18693#18717#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="KDTree2DTest.java" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/KDTree2DTest.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="307">
-                  <caret line="968" column="17" lean-forward="true" selection-start-line="968" selection-start-column="17" selection-end-line="968" selection-end-column="17" />
-                  <folding>
-                    <element signature="e#0#32431#0" expanded="true" />
-                    <element signature="imports" expanded="true" />
-                    <element signature="method#testNearestIndex#0;class#KDTree2DTest#0" expanded="false" />
-                    <element signature="method#testNNearest#0;class#KDTree2DTest#0" expanded="false" />
-                    <element signature="method#testNNearest2#0;class#KDTree2DTest#0" expanded="false" />
-                    <element signature="method#testNNearest3#0;class#KDTree2DTest#0" expanded="false" />
-                    <element signature="method#testNNearest4#0;class#KDTree2DTest#0" expanded="false" />
-                    <element signature="method#testNNearest5#0;class#KDTree2DTest#0" expanded="false" />
-                    <element signature="method#testNNearest6#0;class#KDTree2DTest#0" expanded="false" />
-                    <element signature="method#testNNearest7#0;class#KDTree2DTest#0" expanded="false" />
-                    <element signature="method#testNNearest8#0;class#KDTree2DTest#0" expanded="false" />
-                    <element signature="method#testLocateNear#0;class#KDTree2DTest#0" expanded="false" />
-                    <marker date="1508067803000" expanded="true" signature="8549:9651" ph="{...}" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="KDTree3D.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree3D.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="570">
-                  <caret line="42" column="7" lean-forward="false" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="7" />
-                  <folding>
-                    <element signature="e#980#981#0" expanded="true" />
-                    <element signature="e#1048#1049#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="KDTree.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="22" column="12" lean-forward="false" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+              <folding>
+                <element signature="e#0#24055#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="docComment;field#MIN_PTS#0;class#KDTree#0" expanded="false" />
+                <element signature="docComment;field#BIG#0;class#KDTree#0" expanded="false" />
+                <element signature="docComment;field#N_TASKS#0;class#KDTree#0" expanded="false" />
+                <element signature="docComment;field#mPtIndx#0;class#KDTree#0" expanded="false" />
+                <element signature="docComment;field#mRPtIndx#0;class#KDTree#0" expanded="false" />
+                <element signature="docComment;field#mNpts#0;class#KDTree#0" expanded="false" />
+                <element signature="docComment;field#mPts#0;class#KDTree#0" expanded="false" />
+                <element signature="docComment;method#KDTree#0;class#KDTree#0" expanded="false" />
+                <element signature="method#KDTree#0;class#KDTree#0" expanded="false" />
+                <element signature="docComment;method#distance#0;class#KDTree#0" expanded="false" />
+                <element signature="method#distance#0;class#KDTree#0" expanded="false" />
+                <element signature="docComment;method#locateBoxIndex#0;class#KDTree#0" expanded="false" />
+                <element signature="method#locateBoxIndex#0;class#KDTree#0" expanded="false" />
+                <element signature="docComment;method#locateBox#0;class#KDTree#0" expanded="false" />
+                <element signature="e#6627#6628#0" expanded="true" />
+                <element signature="e#6676#6677#0" expanded="true" />
+                <element signature="docComment;method#nearestIndex#0;class#KDTree#0" expanded="false" />
+                <element signature="method#nearestIndex#0;class#KDTree#0" expanded="false" />
+                <element signature="docComment;method#nearestPoint#0;class#KDTree#0" expanded="false" />
+                <element signature="docComment;method#nNearest#0;class#KDTree#0" expanded="false" />
+                <element signature="method#nNearest#0;class#KDTree#0" expanded="false" />
+                <element signature="e#19355#19379#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KDTree2DTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/KDTree2DTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" column="44" lean-forward="false" selection-start-line="10" selection-start-column="44" selection-end-line="10" selection-end-column="44" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#testConsructor#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testDistance#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testLocateBoxIndex#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testLocateBox#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testNearestIndex#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testNearestIndex2#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testNearestPoint#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testNearestPoint2#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testNNearest#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testNNearest2#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testNNearest3#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testNNearest4#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testNNearest5#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testNNearest6#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testNNearest7#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testNNearest8#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testLocateNear#0;class#KDTree2DTest#0" expanded="false" />
+                <element signature="method#testLocateNear2#0;class#KDTree2DTest#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KDTree3DTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/KDTree3DTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1528">
+              <caret line="833" column="40" lean-forward="true" selection-start-line="833" selection-start-column="40" selection-end-line="833" selection-end-column="40" />
+              <folding>
+                <element signature="e#0#34603#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="method#testConstructor#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testDistance#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testLocateBoxIndex#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testLocateBox#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testNearestIndex#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testNearestIndex2#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testNearestPoint#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testNearestPoint2#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testNNearest#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testNNearest2#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testNNearest3#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testNNearest4#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testNNearest5#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testNNearest6#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testNNearest7#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testNNearest8#0;class#KDTree3DTest#0" expanded="false" />
+                <element signature="method#testLocateNear2#0;class#KDTree3DTest#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="KDTree2D.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree2D.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#1909#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -156,7 +141,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>minBaseline</find>
       <find>onRequestSamplesForCurrentView</find>
       <find>setList</find>
       <find>correctWith</find>
@@ -186,6 +170,7 @@
       <find>setInhomogeneousCoo</find>
       <find>mBoxes</find>
       <find>locate(</find>
+      <find>new BoxNo</find>
     </findStrings>
     <replaceStrings>
       <replace>KnownBaselineSparseReconstructorConfiguration</replace>
@@ -215,7 +200,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamSparseReconstructorTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SparseReconstructorTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamSparseReconstructorListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamTwoViewsSparseReconstructorListener.java" />
@@ -265,6 +249,7 @@
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree2D.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree3D.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/KDTree2DTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/KDTree3DTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree.java" />
       </list>
     </option>
@@ -343,21 +328,6 @@
               <item name="irurueta-geometry" type="b2602c69:ProjectViewProjectNode" />
               <item name="irurueta-geometry" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-geometry" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-geometry" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="geometry" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-geometry" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-geometry" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -366,14 +336,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-geometry" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-geometry" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="geometry" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -420,31 +382,6 @@
       <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.KDTree2DTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-    </configuration>
-    <configuration name="KDTree2DTest.testLocateBox" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.irurueta.geometry.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="irurueta-geometry" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="com.irurueta.geometry" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.KDTree2DTest" />
-      <option name="METHOD_NAME" value="testLocateBox" />
-      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -520,6 +457,31 @@
       <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.KDTree2DTest" />
       <option name="METHOD_NAME" value="testNearestIndex" />
       <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration name="KDTree3DTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.irurueta.geometry.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="irurueta-geometry" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.irurueta.geometry" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.KDTree3DTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -731,18 +693,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="JUnit.KDTree2DTest" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testLocateBox" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testNearestIndex" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testLocateNear" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testLocateNear2" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testNearestIndex" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testLocateNear" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testLocateNear2" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.KDTree3DTest" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="JUnit.KDTree2DTest" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testLocateNear2" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testLocateNear" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testNearestIndex" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testLocateBox" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.KDTree3DTest" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testLocateNear2" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testLocateNear" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.KDTree2DTest.testNearestIndex" />
       </list>
     </recent_temporary>
   </component>
@@ -763,39 +725,39 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="KDTree2DTest - 2017.10.15 at 02h 38m 07s.xml">
+    <history-entry file="KDTree2DTest - 2017.10.15 at 19h 28m 38s.xml">
       <configuration name="KDTree2DTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="KDTree2DTest - 2017.10.15 at 02h 38m 25s.xml">
+    <history-entry file="KDTree2DTest - 2017.10.15 at 19h 28m 51s.xml">
       <configuration name="KDTree2DTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="KDTree2DTest - 2017.10.15 at 02h 38m 52s.xml">
-      <configuration name="KDTree2DTest" configurationId="JUnit" />
+    <history-entry file="KDTree3DTest - 2017.10.15 at 18h 37m 12s.xml">
+      <configuration name="KDTree3DTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="KDTree2DTest - 2017.10.15 at 13h 39m 05s.xml">
-      <configuration name="KDTree2DTest" configurationId="JUnit" />
+    <history-entry file="KDTree3DTest - 2017.10.15 at 18h 43m 08s.xml">
+      <configuration name="KDTree3DTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="KDTree2DTest - 2017.10.15 at 13h 42m 14s.xml">
-      <configuration name="KDTree2DTest" configurationId="JUnit" />
+    <history-entry file="KDTree3DTest - 2017.10.15 at 18h 59m 34s.xml">
+      <configuration name="KDTree3DTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="KDTree2DTest - 2017.10.15 at 13h 43m 29s.xml">
-      <configuration name="KDTree2DTest" configurationId="JUnit" />
+    <history-entry file="KDTree3DTest - 2017.10.15 at 19h 00m 49s.xml">
+      <configuration name="KDTree3DTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="KDTree2DTest - 2017.10.15 at 13h 45m 09s.xml">
-      <configuration name="KDTree2DTest" configurationId="JUnit" />
+    <history-entry file="KDTree3DTest - 2017.10.15 at 19h 13m 01s.xml">
+      <configuration name="KDTree3DTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="KDTree2DTest_testLocateNear - 2017.10.15 at 13h 09m 06s.xml">
-      <configuration name="KDTree2DTest.testLocateNear" configurationId="JUnit" />
+    <history-entry file="KDTree3DTest - 2017.10.15 at 19h 19m 43s.xml">
+      <configuration name="KDTree3DTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="KDTree2DTest_testLocateNear - 2017.10.15 at 13h 09m 30s.xml">
-      <configuration name="KDTree2DTest.testLocateNear" configurationId="JUnit" />
+    <history-entry file="KDTree3DTest - 2017.10.15 at 19h 26m 37s.xml">
+      <configuration name="KDTree3DTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="KDTree2DTest_testLocateNear2 - 2017.10.15 at 13h 38m 42s.xml">
-      <configuration name="KDTree2DTest.testLocateNear2" configurationId="JUnit" />
+    <history-entry file="KDTree3DTest - 2017.10.15 at 19h 28m 43s.xml">
+      <configuration name="KDTree3DTest" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="23" width="1440" height="873" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="873" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -811,7 +773,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32260373" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32260373" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32904884" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -850,13 +812,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamTwoViewsSparseReconstructorConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="97" column="58" lean-forward="false" selection-start-line="97" selection-start-column="58" selection-end-line="97" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorConfigurationTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="367">
@@ -1368,7 +1323,7 @@
         <state relative-caret-position="78">
           <caret line="15" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding>
-            <element signature="e#0#13303#0" expanded="true" />
+            <element signature="e#0#13303#0" expanded="false" />
             <element signature="method#testFromToRectangle#0;class#Box2DTest#0" expanded="false" />
             <element signature="method#testGetDistance#0;class#Box2DTest#0" expanded="false" />
           </folding>
@@ -1409,51 +1364,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree3D.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="42" column="7" lean-forward="false" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="7" />
-          <folding>
-            <element signature="e#980#981#0" expanded="true" />
-            <element signature="e#1048#1049#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree2D.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="584">
-          <caret line="43" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+        <state relative-caret-position="225">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding>
-            <element signature="e#471#472#0" expanded="true" />
-            <element signature="e#512#513#0" expanded="true" />
-            <element signature="e#1213#1214#0" expanded="true" />
-            <element signature="e#1267#1268#0" expanded="true" />
+            <element signature="e#0#1909#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree3D.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="374" column="0" lean-forward="false" selection-start-line="374" selection-start-column="0" selection-end-line="374" selection-end-column="0" />
+        <state relative-caret-position="180">
+          <caret line="12" column="20" lean-forward="false" selection-start-line="12" selection-start-column="20" selection-end-line="12" selection-end-column="20" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#7829#7830#0" expanded="true" />
-            <element signature="e#7874#7875#0" expanded="true" />
-            <element signature="e#18693#18717#0" expanded="true" />
+            <element signature="e#1618#1619#0" expanded="true" />
+            <element signature="e#1686#1687#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/KDTree2DTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="968" column="17" lean-forward="true" selection-start-line="968" selection-start-column="17" selection-end-line="968" selection-end-column="17" />
+        <state relative-caret-position="150">
+          <caret line="10" column="44" lean-forward="false" selection-start-line="10" selection-start-column="44" selection-end-line="10" selection-end-column="44" />
           <folding>
-            <element signature="e#0#32431#0" expanded="true" />
             <element signature="imports" expanded="true" />
+            <element signature="method#testConsructor#0;class#KDTree2DTest#0" expanded="false" />
+            <element signature="method#testDistance#0;class#KDTree2DTest#0" expanded="false" />
+            <element signature="method#testLocateBoxIndex#0;class#KDTree2DTest#0" expanded="false" />
+            <element signature="method#testLocateBox#0;class#KDTree2DTest#0" expanded="false" />
             <element signature="method#testNearestIndex#0;class#KDTree2DTest#0" expanded="false" />
+            <element signature="method#testNearestIndex2#0;class#KDTree2DTest#0" expanded="false" />
+            <element signature="method#testNearestPoint#0;class#KDTree2DTest#0" expanded="false" />
+            <element signature="method#testNearestPoint2#0;class#KDTree2DTest#0" expanded="false" />
             <element signature="method#testNNearest#0;class#KDTree2DTest#0" expanded="false" />
             <element signature="method#testNNearest2#0;class#KDTree2DTest#0" expanded="false" />
             <element signature="method#testNNearest3#0;class#KDTree2DTest#0" expanded="false" />
@@ -1463,7 +1408,68 @@
             <element signature="method#testNNearest7#0;class#KDTree2DTest#0" expanded="false" />
             <element signature="method#testNNearest8#0;class#KDTree2DTest#0" expanded="false" />
             <element signature="method#testLocateNear#0;class#KDTree2DTest#0" expanded="false" />
-            <marker date="1508067803000" expanded="true" signature="8549:9651" ph="{...}" />
+            <element signature="method#testLocateNear2#0;class#KDTree2DTest#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/KDTree3DTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1528">
+          <caret line="833" column="40" lean-forward="true" selection-start-line="833" selection-start-column="40" selection-end-line="833" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#34603#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="method#testConstructor#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testDistance#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testLocateBoxIndex#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testLocateBox#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testNearestIndex#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testNearestIndex2#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testNearestPoint#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testNearestPoint2#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testNNearest#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testNNearest2#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testNNearest3#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testNNearest4#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testNNearest5#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testNNearest6#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testNNearest7#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testNNearest8#0;class#KDTree3DTest#0" expanded="false" />
+            <element signature="method#testLocateNear2#0;class#KDTree3DTest#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/KDTree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="22" column="12" lean-forward="false" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#24055#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="docComment;field#MIN_PTS#0;class#KDTree#0" expanded="false" />
+            <element signature="docComment;field#BIG#0;class#KDTree#0" expanded="false" />
+            <element signature="docComment;field#N_TASKS#0;class#KDTree#0" expanded="false" />
+            <element signature="docComment;field#mPtIndx#0;class#KDTree#0" expanded="false" />
+            <element signature="docComment;field#mRPtIndx#0;class#KDTree#0" expanded="false" />
+            <element signature="docComment;field#mNpts#0;class#KDTree#0" expanded="false" />
+            <element signature="docComment;field#mPts#0;class#KDTree#0" expanded="false" />
+            <element signature="docComment;method#KDTree#0;class#KDTree#0" expanded="false" />
+            <element signature="method#KDTree#0;class#KDTree#0" expanded="false" />
+            <element signature="docComment;method#distance#0;class#KDTree#0" expanded="false" />
+            <element signature="method#distance#0;class#KDTree#0" expanded="false" />
+            <element signature="docComment;method#locateBoxIndex#0;class#KDTree#0" expanded="false" />
+            <element signature="method#locateBoxIndex#0;class#KDTree#0" expanded="false" />
+            <element signature="docComment;method#locateBox#0;class#KDTree#0" expanded="false" />
+            <element signature="e#6627#6628#0" expanded="true" />
+            <element signature="e#6676#6677#0" expanded="true" />
+            <element signature="docComment;method#nearestIndex#0;class#KDTree#0" expanded="false" />
+            <element signature="method#nearestIndex#0;class#KDTree#0" expanded="false" />
+            <element signature="docComment;method#nearestPoint#0;class#KDTree#0" expanded="false" />
+            <element signature="docComment;method#nNearest#0;class#KDTree#0" expanded="false" />
+            <element signature="method#nNearest#0;class#KDTree#0" expanded="false" />
+            <element signature="e#19355#19379#0" expanded="true" />
           </folding>
         </state>
       </provider>
