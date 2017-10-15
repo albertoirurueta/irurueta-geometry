@@ -1,8 +1,19 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.Rectangle
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.irurueta.geometry;
 
 import java.io.Serializable;
@@ -14,7 +25,7 @@ import java.io.Serializable;
  * Notice that vertical coordinates are defined from bottom to top, hence,
  * top is a larger value than bottom.
  */
-public class Rectangle implements Serializable{
+public class Rectangle implements Serializable {
     
     /**
      * Constant defining default threshold value used when none is provided
@@ -59,6 +70,14 @@ public class Rectangle implements Serializable{
     public Rectangle(double left, double top, double right, 
             double bottom){
         setBounds(left, top, right, bottom);
+    }
+
+    /**
+     * Constructor from 2D box.
+     * @param box a 2D box.
+     */
+    public Rectangle(Box2D box) {
+        fromBox(box);
     }
     
     /**
@@ -187,6 +206,32 @@ public class Rectangle implements Serializable{
         InhomogeneousPoint2D result = new InhomogeneousPoint2D();
         getCenter(result);
         return result;
+    }
+
+    /**
+     * Sets values of this rectangle from provided 2D box.
+     * @param box a 2D box containing rectangle boundaries.
+     */
+    public final void fromBox(Box2D box) {
+        box.toRectangle(this);
+    }
+
+    /**
+     * Creates a 2D box instance equivalent to this rectangle.
+     * @return a new 2D box instance equivalent to this rectangle.
+     */
+    public Box2D toBox() {
+        Box2D result = new Box2D();
+        toBox(result);
+        return result;
+    }
+
+    /**
+     * Sets values into provided box instance to make it equivalent to this rectangle.
+     * @param result instance where values will be stored.
+     */
+    public void toBox(Box2D result) {
+        result.fromRectangle(this);
     }
     
     /**
@@ -2621,7 +2666,7 @@ public class Rectangle implements Serializable{
             Point2D topLeft, Point2D bottomRight, double threshold){
         return isAtBottomLeftCorner(x, y, topLeft.getInhomX(), 
                 topLeft.getInhomY(), bottomRight.getInhomX(), 
-                bottomRight.getInhomY());
+                bottomRight.getInhomY(), threshold);
     }
     
     /**

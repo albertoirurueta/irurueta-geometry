@@ -100,7 +100,24 @@ public class RectangleTest {
         assertEquals(r.getWidth(), width, ABSOLUTE_ERROR);
         assertEquals(r.getHeight(), height, ABSOLUTE_ERROR);
         assertEquals(r.getArea(), area, ABSOLUTE_ERROR);
-        assertEquals(r.getPerimeter(), perimeter, ABSOLUTE_ERROR);        
+        assertEquals(r.getPerimeter(), perimeter, ABSOLUTE_ERROR);
+
+        //test constructor with box
+        Point2D lo = new InhomogeneousPoint2D(left, bottom);
+        Point2D hi = new InhomogeneousPoint2D(right, top);
+        Box2D box = new Box2D(lo, hi);
+        r = new Rectangle(box);
+
+        //check correctness
+        assertEquals(r.getTopLeft(), topLeft);
+        assertEquals(r.getBottomRight(), bottomRight);
+        assertEquals(r.getCenter(), center);
+        assertEquals(r.getSignedWidth(), signedWidth, ABSOLUTE_ERROR);
+        assertEquals(r.getSignedHeight(), signedHeight, ABSOLUTE_ERROR);
+        assertEquals(r.getWidth(), width, ABSOLUTE_ERROR);
+        assertEquals(r.getHeight(), height, ABSOLUTE_ERROR);
+        assertEquals(r.getArea(), area, ABSOLUTE_ERROR);
+        assertEquals(r.getPerimeter(), perimeter, ABSOLUTE_ERROR);
     }
     
     @Test
@@ -246,6 +263,49 @@ public class RectangleTest {
         
         //check correctness
         assertEquals(r.getCenter(), center);
+    }
+
+    @Test
+    public void testFromToBox() {
+        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        double left = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double top = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double right = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double bottom = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        InhomogeneousPoint2D topLeft = new InhomogeneousPoint2D(left, top);
+        InhomogeneousPoint2D bottomRight = new InhomogeneousPoint2D(right,
+                bottom);
+        Rectangle rectangle = new Rectangle(topLeft, bottomRight);
+
+        double lowX = left;
+        double lowY = bottom;
+        double highX = right;
+        double highY = top;
+        Point2D lo = new InhomogeneousPoint2D(lowX, lowY);
+        Point2D hi = new InhomogeneousPoint2D(highX, highY);
+        Box2D box = new Box2D(lo, hi);
+
+        //from box
+        Rectangle rectangle2 = new Rectangle();
+        rectangle2.fromBox(box);
+
+        //check correctness
+        assertEquals(rectangle.getTopLeft(), rectangle2.getTopLeft());
+        assertEquals(rectangle.getBottomRight(), rectangle2.getBottomRight());
+
+        //to box
+        Box2D box2 = rectangle.toBox();
+
+        Box2D box3 = new Box2D();
+        rectangle.toBox(box3);
+
+        //check correctness
+        assertEquals(box.getLo(), box2.getLo());
+        assertEquals(box.getHi(), box2.getHi());
+        assertEquals(box.getLo(), box3.getLo());
+        assertEquals(box.getHi(), box3.getHi());
     }
     
     @Test
@@ -4912,6 +4972,38 @@ public class RectangleTest {
         assertEquals(Rectangle.getSignedDistanceToBottomSide(insidePoint, left, 
                 top, right, bottom), bottom - insidePoint.getInhomY(), 
                 ABSOLUTE_ERROR);
+
+        //test static method with point coordinates and corners
+        assertEquals(Rectangle.getSignedDistanceToBottomSide(pointAtLeftSide.getInhomX(),
+                pointAtLeftSide.getInhomY(), topLeft, bottomRight),
+                pointAtLeftSide.distanceTo(bottomLeft), ABSOLUTE_ERROR);
+        assertEquals(Rectangle.getSignedDistanceToBottomSide(
+                pointAtTopLeftCorner.getInhomX(), pointAtTopLeftCorner.getInhomY(),
+                topLeft, bottomRight), pointAtTopLeftCorner.distanceTo(bottomLeft), ABSOLUTE_ERROR);
+        assertEquals(Rectangle.getSignedDistanceToBottomSide(pointAtTopSide.getInhomX(),
+                pointAtTopSide.getInhomY(), topLeft, bottomRight),
+                pointAtTopSide.getInhomY() - bottom, ABSOLUTE_ERROR);
+        assertEquals(Rectangle.getSignedDistanceToBottomSide(
+                pointAtTopRightCorner.getInhomX(), pointAtTopRightCorner.getInhomY(),
+                topLeft, bottomRight), pointAtTopRightCorner.distanceTo(bottomRight), ABSOLUTE_ERROR);
+        assertEquals(Rectangle.getSignedDistanceToBottomSide(pointAtRightSide.getInhomX(),
+                pointAtRightSide.getInhomY(), topLeft, bottomRight),
+                pointAtRightSide.distanceTo(bottomRight), ABSOLUTE_ERROR);
+        assertEquals(Rectangle.getSignedDistanceToBottomSide(
+                pointAtBottomRightCorner.getInhomX(), pointAtBottomRightCorner.getInhomY(),
+                topLeft, bottomRight), pointAtBottomRightCorner.distanceTo(bottomRight),
+                ABSOLUTE_ERROR);
+        assertEquals(Rectangle.getSignedDistanceToBottomSide(pointAtBottomSide.getInhomX(),
+                pointAtBottomSide.getInhomY(), topLeft, bottomRight),
+                bottom - pointAtBottomSide.getInhomY(), ABSOLUTE_ERROR);
+        assertEquals(Rectangle.getSignedDistanceToBottomSide(
+                pointAtBottomLeftCorner.getInhomX(), pointAtBottomLeftCorner.getInhomY(),
+                topLeft, bottomRight), pointAtBottomLeftCorner.distanceTo(bottomLeft),
+                ABSOLUTE_ERROR);
+        assertEquals(Rectangle.getSignedDistanceToBottomSide(insidePoint.getInhomX(),
+                insidePoint.getInhomY(), topLeft, bottomRight),
+                bottom - insidePoint.getInhomY(), ABSOLUTE_ERROR);
+
         
         //test static method with point coordinates and corners
         assertEquals(Rectangle.getSignedDistanceToBottomSide(pointAtLeftSide, 

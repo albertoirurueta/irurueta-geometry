@@ -1,11 +1,19 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.InhomogeneousPoint3D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date July 1, 2012
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
@@ -23,27 +31,22 @@ public class InhomogeneousPoint3DTest {
     public static final double MIN_RANDOM_VALUE = 1.0;
     public static final double MAX_RANDOM_VALUE = 100.0;
     
-    public InhomogeneousPoint3DTest() {
-    }
+    public InhomogeneousPoint3DTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void setUpClass() throws Exception { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
+    public static void tearDownClass() throws Exception { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         InhomogeneousPoint3D iPoint = new InhomogeneousPoint3D();
         assertEquals(iPoint.getInhomX(), 0.0, 0.0);
         assertEquals(iPoint.getInhomY(), 0.0, 0.0);
@@ -80,7 +83,7 @@ public class InhomogeneousPoint3DTest {
     }
     
     @Test
-    public void testGettersAndSetters(){
+    public void testGettersAndSetters() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -121,7 +124,7 @@ public class InhomogeneousPoint3DTest {
     }
     
     @Test
-    public void testToHomogeneous(){
+    public void testToHomogeneous() {
         double[] array = new double[INHOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -147,7 +150,7 @@ public class InhomogeneousPoint3DTest {
     }
     
     @Test
-    public void testSetCoordinates(){
+    public void testSetCoordinates() {
         double[] array = new double[INHOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -161,17 +164,17 @@ public class InhomogeneousPoint3DTest {
         //Force IllegalArgumentException
         array = new double[INHOM_COORDS + 1];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        try{
+        try {
             iPoint.setCoordinates(array);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         array = new double[INHOM_COORDS - 1];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        try{
+        try {
             iPoint.setCoordinates(array);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -220,7 +223,7 @@ public class InhomogeneousPoint3DTest {
     }
     
     @Test
-    public void testAsArray(){
+    public void testAsArray() {
         double[] array = new double[INHOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -234,7 +237,7 @@ public class InhomogeneousPoint3DTest {
     }
     
     @Test
-    public void testEquals(){
+    public void testEquals() {
         double[] array = new double[INHOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -302,22 +305,24 @@ public class InhomogeneousPoint3DTest {
         assertFalse(iPoint1.equals((Point3D)hPoint, 0.5));
         
         //Force IllegalArgumentException
-        try{
-            iPoint1.equals(hPoint, -ABSOLUTE_ERROR);
+        boolean value = false;
+        try {
+            value = iPoint1.equals(hPoint, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
-            iPoint1.equals(iPoint1, -ABSOLUTE_ERROR);
+        } catch (IllegalArgumentException ignore) { }
+        try {
+            value = iPoint1.equals(iPoint1, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
-            iPoint1.equals((Point3D)iPoint1, -ABSOLUTE_ERROR);
+        } catch (IllegalArgumentException ignore) { }
+        try {
+            value = iPoint1.equals((Point3D)iPoint1, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}                    
+        } catch (IllegalArgumentException ignore) { }
+        assertFalse(value);
     }
     
     @Test
-    public void testIsAtInfinity(){
+    public void testIsAtInfinity() {
         double[] array = new double[INHOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -363,6 +368,5 @@ public class InhomogeneousPoint3DTest {
         
         iPoint = new InhomogeneousPoint3D(array);
         assertFalse(iPoint.isAtInfinity());
-        
     }
 }

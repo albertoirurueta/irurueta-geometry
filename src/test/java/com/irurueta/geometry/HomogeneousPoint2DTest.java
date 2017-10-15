@@ -1,11 +1,19 @@
-/**
- * @file
- * Thi file contains Unit Tests for
- * com.irurueta.geometry.HomogeneousPoint2D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date June 27, 2012
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
@@ -24,27 +32,22 @@ public class HomogeneousPoint2DTest {
     public static final double MIN_RANDOM_VALUE = 1.0;
     public static final double MAX_RANDOM_VALUE = 100.0;
     
-    public HomogeneousPoint2DTest() {
-    }
+    public HomogeneousPoint2DTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void setUpClass() throws Exception { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
+    public static void tearDownClass() throws Exception { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         HomogeneousPoint2D hPoint = new HomogeneousPoint2D();
         assertEquals(hPoint.getHomX(), 0.0, 0.0);
         assertEquals(hPoint.getHomY(), 0.0, 0.0);
@@ -88,7 +91,7 @@ public class HomogeneousPoint2DTest {
     }
     
     @Test
-    public void testGettersAndSetters(){
+    public void testGettersAndSetters() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -126,7 +129,7 @@ public class HomogeneousPoint2DTest {
     }
     
     @Test
-    public void testToInhomogeneous(){
+    public void testToInhomogeneous() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] array = new double[HOM_COORDS];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -142,7 +145,7 @@ public class HomogeneousPoint2DTest {
     }
     
     @Test
-    public void testSetCoordinates(){
+    public void testSetCoordinates() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] array = new double[HOM_COORDS];
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -155,17 +158,17 @@ public class HomogeneousPoint2DTest {
         //Force IllegalArgumentException
         array = new double[HOM_COORDS + 1];
         hPoint = new HomogeneousPoint2D();
-        try{
+        try {
             hPoint.setCoordinates(array);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         array = new double[HOM_COORDS - 1];
         hPoint = new HomogeneousPoint2D();
-        try{
+        try {
             hPoint.setCoordinates(array);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
 
         
         double x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -211,7 +214,7 @@ public class HomogeneousPoint2DTest {
     }
     
     @Test
-    public void testArray(){
+    public void testArray() {
         double[] array = new double[HOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -226,7 +229,7 @@ public class HomogeneousPoint2DTest {
     }
     
     @Test
-    public void testEquals(){
+    public void testEquals() {
         double[] array = new double[HOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -281,22 +284,24 @@ public class HomogeneousPoint2DTest {
         assertFalse(hPoint.equals((Point2D)iPoint, 0.5));
         
         //Force IllegalArgumentException
-        try{
-            hPoint.equals(hPoint, -ABSOLUTE_ERROR);
+        boolean value = false;
+        try {
+            value = hPoint.equals(hPoint, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
-            hPoint.equals(iPoint, -ABSOLUTE_ERROR);
+        } catch (IllegalArgumentException ignore) { }
+        try {
+            value = hPoint.equals(iPoint, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
-            hPoint.equals((Point2D)iPoint, -ABSOLUTE_ERROR);
+        } catch (IllegalArgumentException ignore) { }
+        try {
+            value = hPoint.equals((Point2D)iPoint, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
+        assertFalse(value);
     }
     
     @Test
-    public void testIsAtInfinity(){
+    public void testIsAtInfinity() {
         HomogeneousPoint2D hPoint = new HomogeneousPoint2D();
         //Sets point at infinity
         hPoint.setW(0.0);
@@ -312,14 +317,14 @@ public class HomogeneousPoint2DTest {
         assertFalse(hPoint.isAtInfinity(4.5));
         
         //Force IllegalArgumentException
-        try{
+        try {
             hPoint.isAtInfinity(-ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testNormalize(){
+    public void testNormalize() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double homX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double homY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -374,7 +379,7 @@ public class HomogeneousPoint2DTest {
         assertTrue(point.isNormalized());
         
         HomogeneousPoint2D point2 = new HomogeneousPoint2D();
-        point.setCoordinates(point);
+        point.setCoordinates(point2);
         assertFalse(point.isNormalized());
         point.normalize();
         assertTrue(point.isNormalized());
