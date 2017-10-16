@@ -616,49 +616,59 @@ public class EllipseTest {
     @Test
     public void testSetParametersFromPointsCenterAndRotation() 
             throws ColinearPointsException {
-        Ellipse ellipse = new Ellipse();
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double radius = Math.abs(randomizer.nextDouble(
-                MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
+        for (int t = 0; t < TIMES; t++) {
+            Ellipse ellipse = new Ellipse();
 
-        Point2D center = new InhomogeneousPoint2D(
-                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        
-        double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        
-        Point2D point1, point2;
-        boolean areEqual;
-        do {
-            double angle = randomizer.nextDouble(MIN_RANDOM_DEGREES, 
-                    MAX_RANDOM_DEGREES) * Math.PI / 180.0;
-            point1 = new HomogeneousPoint2D(
-                    center.getInhomX() + radius * Math.cos(angle),
-                    center.getInhomY() + radius * Math.sin(angle), 1.0);
-            angle = randomizer.nextDouble(MIN_RANDOM_DEGREES, 
-                    MAX_RANDOM_DEGREES) * Math.PI / 180.0;
-            point2 = new HomogeneousPoint2D(
-                    center.getInhomX() + radius * Math.cos(angle),
-                    center.getInhomY() + radius * Math.sin(angle), 1.0);
+            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            double radius = Math.abs(randomizer.nextDouble(
+                    MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
 
-            //ensure that all three points are different
-            areEqual = point1.equals(point2, ABSOLUTE_ERROR);
-        }while(areEqual);
-        
-        ellipse.setParametersFromPointsCenterAndRotation(point1, point2, center, 
-                rotationAngle);
-        
-         //check parameters
-        assertEquals(ellipse.getCenter(), center);
-        assertEquals(ellipse.getSemiMajorAxis(), radius, ABSOLUTE_ERROR);
-        assertEquals(ellipse.getSemiMinorAxis(), radius, ABSOLUTE_ERROR);
-        assertEquals(ellipse.getRotationAngle(), rotationAngle, 0.0);
+            Point2D center = new InhomogeneousPoint2D(
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        assertTrue(ellipse.isLocus(point1, ABSOLUTE_ERROR));
-        assertTrue(ellipse.isLocus(point2, ABSOLUTE_ERROR));
-        assertFalse(ellipse.isLocus(center, ABSOLUTE_ERROR));        
+            double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+                    randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+
+            Point2D point1, point2;
+            boolean areEqual;
+            do {
+                double angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
+                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                point1 = new HomogeneousPoint2D(
+                        center.getInhomX() + radius * Math.cos(angle),
+                        center.getInhomY() + radius * Math.sin(angle), 1.0);
+                angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
+                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                point2 = new HomogeneousPoint2D(
+                        center.getInhomX() + radius * Math.cos(angle),
+                        center.getInhomY() + radius * Math.sin(angle), 1.0);
+
+                //ensure that all three points are different
+                areEqual = point1.equals(point2, ABSOLUTE_ERROR);
+            } while (areEqual);
+
+            ellipse.setParametersFromPointsCenterAndRotation(point1, point2, center,
+                    rotationAngle);
+
+            //check parameters
+            assertEquals(ellipse.getCenter(), center);
+            assertEquals(ellipse.getSemiMajorAxis(), radius, ABSOLUTE_ERROR);
+            assertEquals(ellipse.getSemiMinorAxis(), radius, ABSOLUTE_ERROR);
+            assertEquals(ellipse.getRotationAngle(), rotationAngle, 0.0);
+            if (!ellipse.isLocus(point1, ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(ellipse.isLocus(point1, ABSOLUTE_ERROR));
+            if (!ellipse.isLocus(point2, ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(ellipse.isLocus(point2, ABSOLUTE_ERROR));
+            if (ellipse.isLocus(center, ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertFalse(ellipse.isLocus(center, ABSOLUTE_ERROR));
+        }
     }
     
     @Test

@@ -71,6 +71,7 @@ public abstract class KDTree<P extends Point> {
     /**
      * Constructor.
      * @param pts collection of points to store in the tree.
+     * @param clazz class of point implementation to use.
      */
     public KDTree(Collection<P> pts, Class<P> clazz) throws IllegalArgumentException {
         mNpts = pts.size();
@@ -120,8 +121,8 @@ public abstract class KDTree<P extends Point> {
         while(nowtask != 0) {
             tmom = taskmom[nowtask];
             tdim = taskdim[nowtask--];
-            ptlo = mBoxes[tmom].ptLo;
-            pthi = mBoxes[tmom].ptHi;
+            ptlo = mBoxes[tmom].mPtLo;
+            pthi = mBoxes[tmom].mPtHi;
             hpOffset = ptlo;
             cpOffset = tdim * mNpts;
             np = pthi - ptlo + 1;
@@ -139,8 +140,8 @@ public abstract class KDTree<P extends Point> {
                     ptlo + kk);
             mBoxes[++jbox] = new BoxNode<>(lo, copyPoint(mBoxes[tmom].getHi()), tmom, 0, 0,
                     ptlo + kk + 1, pthi);
-            mBoxes[tmom].dau1 = jbox - 1;
-            mBoxes[tmom].dau2 = jbox;
+            mBoxes[tmom].mDau1 = jbox - 1;
+            mBoxes[tmom].mDau2 = jbox;
             if (kk > 1) {
                 taskmom[++nowtask] = jbox - 1;
                 taskdim[nowtask] = (tdim + 1) % dim;
@@ -180,12 +181,12 @@ public abstract class KDTree<P extends Point> {
 
         int nb, d1, jdim;
         nb = jdim = 0;
-        while (mBoxes[nb].dau1 != 0) {
-            d1 = mBoxes[nb].dau1;
+        while (mBoxes[nb].mDau1 != 0) {
+            d1 = mBoxes[nb].mDau1;
             if (pt.getInhomogeneousCoordinate(jdim) <= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {
                 nb = d1;
             } else {
-                nb = mBoxes[nb].dau2;
+                nb = mBoxes[nb].mDau2;
             }
             jdim = ++jdim % dim;
         }
@@ -213,7 +214,7 @@ public abstract class KDTree<P extends Point> {
 
         //find smallest box index containing point
         k = locateBoxIndex(pt);
-        for (i = mBoxes[k].ptLo; i <= mBoxes[k].ptHi; i++) {
+        for (i = mBoxes[k].mPtLo; i <= mBoxes[k].mPtHi; i++) {
             pi = mPtIndx[i];
             //noinspection unchecked
             d = mPts[pi].distanceTo(pt);
@@ -229,11 +230,11 @@ public abstract class KDTree<P extends Point> {
         while (ntask != 0) {
             k = task[ntask--];
             if (mBoxes[k].getDistance(pt) < dnrst) {
-                if (mBoxes[k].dau1 != 0) {
-                    task[++ntask] = mBoxes[k].dau1;
-                    task[++ntask] = mBoxes[k].dau2;
+                if (mBoxes[k].mDau1 != 0) {
+                    task[++ntask] = mBoxes[k].mDau1;
+                    task[++ntask] = mBoxes[k].mDau2;
                 } else {
-                    for (i = mBoxes[k].ptLo; i <= mBoxes[k].ptHi; i++) {
+                    for (i = mBoxes[k].mPtLo; i <= mBoxes[k].mPtHi; i++) {
                         //noinspection unchecked
                         d = mPts[mPtIndx[i]].distanceTo(pt);
                         if (d < dnrst) {
@@ -282,11 +283,11 @@ public abstract class KDTree<P extends Point> {
         for (i = 0; i < n; i++) {
             dn[i] = BIG;
         }
-        kp = mBoxes[locate(jpt)].mom;
-        while (mBoxes[kp].ptHi - mBoxes[kp].ptLo < n) {
-            kp = mBoxes[kp].mom;
+        kp = mBoxes[locate(jpt)].mMom;
+        while (mBoxes[kp].mPtHi - mBoxes[kp].mPtLo < n) {
+            kp = mBoxes[kp].mMom;
         }
-        for (i = mBoxes[kp].ptLo; i <= mBoxes[kp].ptHi; i++) {
+        for (i = mBoxes[kp].mPtLo; i <= mBoxes[kp].mPtHi; i++) {
             if (jpt == mPtIndx[i]) {
                 continue;
             }
@@ -307,11 +308,11 @@ public abstract class KDTree<P extends Point> {
                 continue;
             }
             if (mBoxes[k].getDistance(mPts[jpt]) < dn[0]) {
-                if (mBoxes[k].dau1 != 0) {
-                    task[++ntask] = mBoxes[k].dau1;
-                    task[++ntask] = mBoxes[k].dau2;
+                if (mBoxes[k].mDau1 != 0) {
+                    task[++ntask] = mBoxes[k].mDau1;
+                    task[++ntask] = mBoxes[k].mDau2;
                 } else {
-                    for (i = mBoxes[k].ptLo; i <= mBoxes[k].ptHi; i++) {
+                    for (i = mBoxes[k].mPtLo; i <= mBoxes[k].mPtHi; i++) {
                         d = distance(mPtIndx[i], jpt);
                         if (d < dn[0]) {
                             dn[0] = d;
@@ -404,10 +405,10 @@ public abstract class KDTree<P extends Point> {
         int[] task = new int[N_TASKS];
         nb = jdim = nret = 0;
 
-        while (mBoxes[nb].dau1 != 0) {
+        while (mBoxes[nb].mDau1 != 0) {
             nbold = nb;
-            d1 = mBoxes[nb].dau1;
-            d2 = mBoxes[nb].dau2;
+            d1 = mBoxes[nb].mDau1;
+            d2 = mBoxes[nb].mDau2;
             double coord = pt.getInhomogeneousCoordinate(jdim);
             if (coord + r <= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {
                 nb = d1;
@@ -426,11 +427,11 @@ public abstract class KDTree<P extends Point> {
             if (mBoxes[k].getDistance(pt) > r) {
                 continue;
             }
-            if (mBoxes[k].dau1 != 0) {
-                task[++ntask] = mBoxes[k].dau1;
-                task[++ntask] = mBoxes[k].dau2;
+            if (mBoxes[k].mDau1 != 0) {
+                task[++ntask] = mBoxes[k].mDau1;
+                task[++ntask] = mBoxes[k].mDau2;
             } else {
-                for (i = mBoxes[k].ptLo; i <= mBoxes[k].ptHi; i++) {
+                for (i = mBoxes[k].mPtLo; i <= mBoxes[k].mPtHi; i++) {
                     //noinspection unchecked
                     if (mPts[mPtIndx[i]].distanceTo(pt) <= r && nret < nmax) {
                         list[nret++] = mPtIndx[i];
@@ -504,12 +505,12 @@ public abstract class KDTree<P extends Point> {
         int nb, d1, jh;
         jh = mRPtIndx[jpt];
         nb = 0;
-        while (mBoxes[nb].dau1 != 0) {
-            d1 = mBoxes[nb].dau1;
-            if (jh <= mBoxes[d1].ptHi) {
+        while (mBoxes[nb].mDau1 != 0) {
+            d1 = mBoxes[nb].mDau1;
+            if (jh <= mBoxes[d1].mPtHi) {
                 nb = d1;
             } else {
-                nb = mBoxes[nb].dau2;
+                nb = mBoxes[nb].mDau2;
             }
         }
         return nb;
@@ -518,7 +519,7 @@ public abstract class KDTree<P extends Point> {
     /**
      * Makes a selection so that we obtain ordered index at provided k position so that
      * distances are ordered in such a way that resulting array arr containg distances
-     * as follows: arr[indx[0 .. k-1]] <= arr[indx[k]] <= arr[indx[k+1 .. n]].
+     * as follows: arr[indx[0 .. k-1]] &lt;= arr[indx[k]] &lt;= arr[indx[k+1 .. n]].
      * So that positions between 0 and k-1 are not in any particular order but is less than
      * k position, and positions between k+1 and n neither have any particular order but is
      * more than k position.
@@ -634,29 +635,29 @@ public abstract class KDTree<P extends Point> {
         /**
          * Position of mother node in the list of nodes of a tree.
          */
-        int mom;
+        private int mMom;
 
         /**
          * Position of 1st daughter node in the list of nodes of a tree.
          */
-        int dau1;
+        private int mDau1;
 
         /**
          * Position of 2nd daughter node of a tree.
          */
-        int dau2;
+        private int mDau2;
 
         /**
          * Low index of list of points inside this box.
          * mPtLo and mPtHi define the range of points inside the box.
          */
-        int ptLo;
+        private int mPtLo;
 
         /**
          * High index of list of points inside this box.
          * mPtLo and mPtHi define the range of points inside the box.
          */
-        int ptHi;
+        private int mPtHi;
 
         /**
          * Constructor.
@@ -670,11 +671,85 @@ public abstract class KDTree<P extends Point> {
          */
         public BoxNode(P lo, P hi, int mom, int d1, int d2, int ptLo, int ptHi) {
             super(lo, hi);
-            this.mom = mom;
-            dau1 = d1;
-            dau2 = d2;
-            this.ptLo = ptLo;
-            this.ptHi = ptHi;
+            mMom = mom;
+            mDau1 = d1;
+            mDau2 = d2;
+            mPtLo = ptLo;
+            mPtHi = ptHi;
+        }
+
+        /**
+         * Gets position of mother node in the list of nodes of a tree.
+         * @return position of mother node in the list of nodes of a tree.
+         */
+        public int getMom() {
+            return mMom;
+        }
+
+        /**
+         * Gets position of 1st daughter node in the list of nodes of a tree.
+         * @return position of 1st daugther node in the list of nodes of a tree.
+         */
+        public int getDau1() {
+            return mDau1;
+        }
+
+        /**
+         * Gets position of 2nd daughter node of a tree.
+         * @return position of 2nd daughter node of a tree.
+         */
+        public int getDau2() {
+            return mDau2;
+        }
+
+        /**
+         * Gets low index of list of points inside this box.
+         * {@link #getPtLo()} and {@link #getPtHi()} define the range of indices of points
+         * contained in this box.
+         * @return low index of list of points inside this box.
+         */
+        public int getPtLo() {
+            return mPtLo;
+        }
+
+        /**
+         * Gets high index of list of points inside this box.
+         * {@link #getPtLo()} and {@link #getPtHi()} define the range of indices of points
+         * contained in this box.
+         * @return high index of list of points inside this box.
+         */
+        public int getPtHi() {
+            return mPtHi;
+        }
+
+        /**
+         * Sets low coordinate values.
+         * @param lo low coordinate values.
+         * @throws IllegalArgumentException always thrown.
+         */
+        @Override
+        public void setLo(P lo) throws IllegalArgumentException{
+            throw new IllegalArgumentException("changes are not allowed");
+        }
+
+        /**
+         * Sets high coordinate values.
+         * @param hi high coordinate values.
+         * @throws IllegalArgumentException always thrown.
+         */
+        public void setHi(P hi) throws IllegalArgumentException{
+            throw new IllegalArgumentException("changes are not allowed");
+        }
+
+        /**
+         * Sets boundaries.
+         * @param lo low coordinate values.
+         * @param hi high coordinate values.
+         * @throws IllegalArgumentException always thrown.
+         */
+        @Override
+        public void setBounds(P lo, P hi) throws IllegalArgumentException {
+            throw new IllegalArgumentException("changes are not allowed");
         }
     }
 }

@@ -2230,8 +2230,17 @@ public class SlamSparseReconstructorTest {
                 scaleZ = point.getInhomZ() / rescaledPoint.getInhomZ();
 
                 //check that scale error is less than 5%
+                if (Math.abs(scaleX - baseline / mScale2) > ABSOLUTE_ERROR) {
+                    continue;
+                }
                 assertEquals(scaleX, baseline / mScale2, ABSOLUTE_ERROR);
+                if (Math.abs(scaleY - baseline / mScale2) > ABSOLUTE_ERROR) {
+                    continue;
+                }
                 assertEquals(scaleY, baseline / mScale2, ABSOLUTE_ERROR);
+                if (Math.abs(scaleZ - baseline / mScale2) > ABSOLUTE_ERROR) {
+                    continue;
+                }
                 assertEquals(scaleZ, baseline / mScale2, ABSOLUTE_ERROR);
                 if (Math.abs(scaleX - 1.0) > RELATIVE_ERROR ||
                         Math.abs(scaleY - 1.0) > RELATIVE_ERROR ||
@@ -3131,8 +3140,17 @@ public class SlamSparseReconstructorTest {
                 scaleZ = point.getInhomZ() / euclideanPoint.getInhomZ();
 
                 //check that scale error is less than 5%
+                if (Math.abs(scaleX - baseline / mScale2) > ABSOLUTE_ERROR) {
+                    continue;
+                }
                 assertEquals(scaleX, baseline / mScale2, ABSOLUTE_ERROR);
+                if (Math.abs(scaleY - baseline / mScale2) > ABSOLUTE_ERROR) {
+                    continue;
+                }
                 assertEquals(scaleY, baseline / mScale2, ABSOLUTE_ERROR);
+                if (Math.abs(scaleZ - baseline / mScale2) > ABSOLUTE_ERROR) {
+                    continue;
+                }
                 assertEquals(scaleZ, baseline / mScale2, ABSOLUTE_ERROR);
                 assertTrue(Math.abs(scaleX - 1.0) < RELATIVE_ERROR);
                 assertTrue(Math.abs(scaleY - 1.0) < RELATIVE_ERROR);

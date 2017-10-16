@@ -970,4 +970,41 @@ public class KDTree2DTest {
             fail("IllegalArgumentException expected but not thrown");
         } catch (IllegalArgumentException ignore) { }
     }
+
+    @Test
+    public void testBoxNode() {
+
+        Point2D lo = Point2D.create();
+        Point2D hi = Point2D.create();
+        int mom = 1;
+        int d1 = 2;
+        int d2 = 3;
+        int ptLo = 4;
+        int ptHi = 5;
+
+        KDTree.BoxNode<Point2D> node = new KDTree.BoxNode<>(lo, hi, mom, d1, d2, ptLo, ptHi);
+
+        //check
+        assertSame(node.getLo(), lo);
+        assertSame(node.getHi(), hi);
+        assertEquals(node.getMom(), mom);
+        assertEquals(node.getDau1(), d1);
+        assertEquals(node.getDau2(), d2);
+        assertEquals(node.getPtLo(), ptLo);
+        assertEquals(node.getPtHi(), ptHi);
+
+        //Force IllegalArgumentException
+        try {
+            node.setLo(hi);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (IllegalArgumentException ignore) { }
+        try {
+            node.setHi(lo);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (IllegalArgumentException ignore) { }
+        try {
+            node.setBounds(hi, lo);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (IllegalArgumentException ignore) { }
+    }
 }

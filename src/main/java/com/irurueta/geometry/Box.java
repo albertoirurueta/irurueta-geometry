@@ -45,7 +45,7 @@ public abstract class Box<P extends Point> implements Serializable {
      * @param hi high coordinate values.
      */
     public Box(P lo, P hi) {
-        setBounds(lo, hi);
+        internalSetBounds(lo, hi);
     }
 
     /**
@@ -85,9 +85,8 @@ public abstract class Box<P extends Point> implements Serializable {
      * @param lo low coordinate values.
      * @param hi high coordinate values.
      */
-    public final void setBounds(P lo, P hi) {
-        mLo = lo;
-        mHi = hi;
+    public void setBounds(P lo, P hi) {
+        internalSetBounds(lo, hi);
     }
 
     /**
@@ -133,5 +132,15 @@ public abstract class Box<P extends Point> implements Serializable {
      */
     private double sqr(double value) {
         return value * value;
+    }
+
+    /**
+     * Internally sets boundaries.
+     * @param lo low coordinate values.
+     * @param hi high coordinate values.
+     */
+    private void internalSetBounds(P lo, P hi) {
+        mLo = lo;
+        mHi = hi;
     }
 }
