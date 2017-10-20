@@ -57,11 +57,6 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
     protected static final double DEFAULT_SCALE = 1.0;
 
     /**
-     * Current estimated fundamental matrix.
-     */
-    protected EstimatedFundamentalMatrix mCurrentEstimatedFundamentalMatrix;
-
-    /**
      * Current estimated camera in a metric stratum (i.e. up to scale).
      */
     protected EstimatedCamera mCurrentMetricEstimatedCamera;
@@ -118,6 +113,11 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      * Indicates whether reconstruction is running or not.
      */
     protected volatile boolean mRunning;
+
+    /**
+     * Current estimated fundamental matrix.
+     */
+    private EstimatedFundamentalMatrix mCurrentEstimatedFundamentalMatrix;
 
     /**
      * Indicates whether reconstruction has been cancelled or not.
@@ -291,6 +291,31 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
     }
 
     /**
+     * Gets current estimated scale. This will typically converge to a constant value as more views are processed.
+     * The smaller the variance of estimated scale, the more accurate the scale will be.
+     * @return current estimated scale.
+     */
+    public double getCurrentScale() {
+        return mCurrentScale;
+    }
+
+    /**
+     * Gets samples on previous view.
+     * @return samples on previous view.
+     */
+    public List<Sample2D> getPreviousViewSamples() {
+        return mPreviousViewSamples;
+    }
+
+    /**
+     * Gets samples on current view.
+     * @return samples on current view.
+     */
+    public List<Sample2D> getCurrentViewSamples() {
+        return mCurrentViewSamples;
+    }
+
+    /**
      * Process one view of all the available data during the reconstruction.
      * This method can be called multiple times instead of {@link #start()} to build the
      * reconstruction step by step, one view at a time.
@@ -308,27 +333,31 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
             reset();
             mRunning = true;
 
+            //noinspection unchecked
             mListener.onStart((R)this);
         }
 
+        //noinspection unchecked
         if(!mListener.hasMoreViewsAvailable((R)this)) {
+            //noinspection unchecked
             mListener.onFinish((R)this);
             mRunning = false;
             mFinished = true;
             return false;
         }
 
-        mCurrentViewSamples = new ArrayList<Sample2D>();
+        mCurrentViewSamples = new ArrayList<>();
+        //noinspection unchecked
         mListener.onRequestSamplesForCurrentView((R)this, mViewCount,
                 mCurrentViewSamples);
 
-        if (mPreviousViewSamples == null) {
+        if (isFirstView()) {
             mCurrentEstimatedFundamentalMatrix = null;
             //for first view we simply keep samples (if enough are provided)
             processFirstView();
         } else {
 
-            if (mCurrentEstimatedFundamentalMatrix == null) {
+            if (isSecondView()) {
                 //for second view, check that we have enough samples
                 processSecondView();
             } else {
@@ -339,10 +368,35 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
         mViewCount++;
 
         if (mCancelled) {
+            //noinspection unchecked
             mListener.onCancel((R)this);
         }
 
         return !mFinished;
+    }
+
+    /**
+     * Indicates whether current view is the first view.
+     * @return true if current view is the first view, false otherwise.
+     */
+    public boolean isFirstView() {
+        return mPreviousViewSamples == null;
+    }
+
+    /**
+     * Indicates whether current view is the second view.
+     * @return true if current view is the second view, false otherwise.
+     */
+    public boolean isSecondView() {
+        return !isFirstView() && mCurrentEstimatedFundamentalMatrix == null;
+    }
+
+    /**
+     * Indicates whether current view is an additional view.
+     * @return true if current view is an additional view, false otherwise.
+     */
+    public boolean isAdditionalView() {
+        return !isFirstView() && !isSecondView();
     }
 
     /**
@@ -402,6 +456,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      */
     private void processFirstView() {
         if(hasEnoughSamplesForFundamentalMatrixEstimation(mCurrentViewSamples)) {
+            //noinspection unchecked
             mListener.onSamplesAccepted((R)this, mViewCount,
                     mCurrentViewSamples);
             mPreviousViewSamples = mCurrentViewSamples;
@@ -417,6 +472,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
 
             //find matches
             mMatches.clear();
+            //noinspection unchecked
             mListener.onRequestMatches((R) this, mPreviousViewSamples,
                     mCurrentViewSamples, mPreviousViewId, mViewCount,
                     mMatches);
@@ -431,40 +487,49 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                                 estimatePlanarFundamentalMatrix(mMatches,
                                         mPreviousViewId, mViewCount, true))) {
                     //fundamental matrix could be estimated
+                    //noinspection unchecked
                     mListener.onSamplesAccepted((R) this, mViewCount,
                             mCurrentViewSamples);
                     mCurrentViewId = mViewCount;
                     mPreviousViewSamples = mCurrentViewSamples;
 
+                    //noinspection unchecked
                     mListener.onFundamentalMatrixEstimated((R) this,
                             mCurrentEstimatedFundamentalMatrix);
 
                     if (estimateInitialCamerasAndPoints()) {
                         //cameras and points have been estimated
+                        //noinspection unchecked
                         mListener.onMetricCameraEstimated((R) this,
                                 mPreviousViewId, mCurrentViewId,
                                 mPreviousMetricEstimatedCamera, mCurrentMetricEstimatedCamera);
+                        //noinspection unchecked
                         mListener.onMetricReconstructedPointsEstimated(
                                 (R) this, mMatches, mActiveMetricReconstructedPoints);
 
                         if (!postProcessOne(true)) {
                             //something failed
                             mFailed = true;
+                            //noinspection unchecked
                             mListener.onFail((R)this);
                         } else {
                             //post processing succeeded
+                            //noinspection unchecked
                             mListener.onEuclideanCameraEstimated((R)this, mPreviousViewId, mCurrentViewId,
                                     mCurrentScale, mPreviousEuclideanEstimatedCamera, mCurrentEuclideanEstimatedCamera);
+                            //noinspection unchecked
                             mListener.onEuclideanReconstructedPointsEstimated((R)this, mCurrentScale,
                                     mActiveEuclideanReconstructedPoints);
                         }
                     } else {
                         //initial cameras failed
                         mFailed = true;
+                        //noinspection unchecked
                         mListener.onFail((R) this);
                     }
                 } else {
                     //estimation of fundamental matrix failed
+                    //noinspection unchecked
                     mListener.onSamplesRejected((R) this, mViewCount,
                             mCurrentViewSamples);
                 }
@@ -478,6 +543,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
     private void processAdditionalView() {
         //find matches
         mMatches.clear();
+        //noinspection unchecked
         mListener.onRequestMatches((R) this, mPreviousViewSamples,
                 mCurrentViewSamples, mCurrentViewId, mViewCount,
                 mMatches);
@@ -505,6 +571,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                             (mConfiguration.isPlanarSceneAllowed() &&
                             estimatePlanarFundamentalMatrix(mMatches, mCurrentViewId, mViewCount, false))) {
                         //fundamental matrix could be estimated
+                        //noinspection unchecked
                         mListener.onFundamentalMatrixEstimated((R)this, mCurrentEstimatedFundamentalMatrix);
 
                         //use fundamental matrix to estimate intrinsics using DIAC or DAQ
@@ -517,6 +584,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     } else {
                         //fundamental matrix estimation failed
                         samplesRejected = true;
+                        //noinspection unchecked
                         mListener.onSamplesRejected((R) this, mViewCount,
                                 mCurrentViewSamples);
                     }
@@ -528,6 +596,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     if (intrinsicParameters == null) {
                         //something failed or bad configuration
                         mFailed = true;
+                        //noinspection unchecked
                         mListener.onFail((R)this);
                     }
                 }
@@ -580,6 +649,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                         currentCamera = cameraEstimator.estimate();
                         currentCameraCovariance = cameraEstimator.getCovariance();
 
+                        //noinspection unchecked
                         mListener.onSamplesAccepted((R) this, mViewCount, mCurrentViewSamples);
                         mPreviousViewId = mCurrentViewId;
                         mCurrentViewId = mViewCount;
@@ -589,6 +659,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 } catch (Exception e) {
                     //camera estimation failed
                     samplesRejected = true;
+                    //noinspection unchecked
                     mListener.onSamplesRejected((R) this, mViewCount,
                             mCurrentViewSamples);
                 }
@@ -645,6 +716,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     currentCamera = cameraEstimator.estimate();
                     currentCameraCovariance = cameraEstimator.getCovariance();
 
+                    //noinspection unchecked
                     mListener.onSamplesAccepted((R)this, mViewCount, mCurrentViewSamples);
                     mPreviousViewId = mCurrentViewId;
                     mCurrentViewId = mViewCount;
@@ -653,6 +725,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 } catch (Exception e) {
                     //camera estimation failed
                     samplesRejected = true;
+                    //noinspection unchecked
                     mListener.onSamplesRejected((R) this, mViewCount,
                             mCurrentViewSamples);
                 }
@@ -698,6 +771,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     currentCamera = cameraEstimator.estimate();
                     currentCameraCovariance = cameraEstimator.getCovariance();
 
+                    //noinspection unchecked
                     mListener.onSamplesAccepted((R)this, mViewCount, mCurrentViewSamples);
                     mPreviousViewId = mCurrentViewId;
                     mCurrentViewId = mViewCount;
@@ -706,6 +780,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 } catch (Exception e) {
                     //camera estimation failed
                     samplesRejected = true;
+                    //noinspection unchecked
                     mListener.onSamplesRejected((R) this, mViewCount,
                             mCurrentViewSamples);
                 }
@@ -721,6 +796,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
 
 
                 //notify camera estimation
+                //noinspection unchecked
                 mListener.onMetricCameraEstimated((R) this,
                         mPreviousViewId, mCurrentViewId,
                         mPreviousMetricEstimatedCamera, mCurrentMetricEstimatedCamera);
@@ -730,16 +806,20 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 reconstructAndRefineMatches();
 
                 //notify reconstruction update
+                //noinspection unchecked
                 mListener.onMetricReconstructedPointsEstimated((R) this, mMatches, mActiveMetricReconstructedPoints);
 
                 if (!postProcessOne(false)) {
                     //something failed
                     mFailed = true;
+                    //noinspection unchecked
                     mListener.onFail((R) this);
                 } else {
                     //post processing succeeded
+                    //noinspection unchecked
                     mListener.onEuclideanCameraEstimated((R) this, mPreviousViewId, mCurrentViewId,
                             mCurrentScale, mPreviousEuclideanEstimatedCamera, mCurrentEuclideanEstimatedCamera);
+                    //noinspection unchecked
                     mListener.onEuclideanReconstructedPointsEstimated((R) this, mCurrentScale,
                             mActiveEuclideanReconstructedPoints);
                 }
@@ -813,7 +893,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 List<PinholeCamera> cameras = new ArrayList<>();
                 BitSet validSamples = new BitSet(samples.length);
                 PinholeCamera camera = null;
-                Point2D point2D = null;
+                Point2D point2D;
                 int numValid = 0;
                 int samplesLength = samples.length;
                 int samplesLengthMinusOne = samplesLength - 1;
@@ -849,7 +929,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     continue;
                 }
 
-                Point3D point3D = null;
+                Point3D point3D;
                 if (robustTriangulator != null) {
                     robustTriangulator.setPointsAndCameras(points, cameras);
                     if(qualityScoresRequired) {
@@ -886,6 +966,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
         } catch (Exception e) {
             //something failed
             mFailed = true;
+            //noinspection all
             mListener.onFail((R)this);
         }
     }
@@ -932,7 +1013,9 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
 
             if (sample == null || sample.getPoint() == null || reconstructedPoint3D == null ||
                     reconstructedPoint3D.getPoint() == null) {
-                positions[i] = -1;
+                if (positions != null) {
+                    positions[i] = -1;
+                }
             } else {
                 points2D.add(sample.getPoint());
                 points3D.add(reconstructedPoint3D.getPoint());
@@ -967,24 +1050,6 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
     private PinholeCameraIntrinsicParameters estimateIntrinsicsDIAC() {
         FundamentalMatrix fundamentalMatrix =
                 mCurrentEstimatedFundamentalMatrix.getFundamentalMatrix();
-
-        //use inlier points used for fundamental matrix estimation
-        List<Sample2D> samples1 = mCurrentEstimatedFundamentalMatrix.getLeftSamples();
-        List<Sample2D> samples2 = mCurrentEstimatedFundamentalMatrix.getRightSamples();
-
-        List<Point2D> points1 = new ArrayList<Point2D>();
-        List<Point2D> points2 = new ArrayList<Point2D>();
-        int length = samples1.size();
-        for (int i = 0; i < length; i++) {
-            Sample2D sample1 = samples1.get(i);
-            Sample2D sample2 = samples2.get(i);
-
-            Point2D point1 = sample1.getPoint();
-            Point2D point2 = sample2.getPoint();
-
-            points1.add(point1);
-            points2.add(point2);
-        }
 
         try {
             KruppaDualImageOfAbsoluteConicEstimator diacEstimator =
@@ -1428,8 +1493,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
 
                 //estimate intrinsic parameters using the Image of Absolute
                 //Conic (IAC)
-                List<Transformation2D> homographies =
-                        new ArrayList<Transformation2D>();
+                List<Transformation2D> homographies = new ArrayList<>();
                 homographies.add(homography);
 
                 ImageOfAbsoluteConicEstimator iacEstimator =
@@ -1438,9 +1502,9 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
 
                 intrinsic1 = intrinsic2 = iac.getIntrinsicParameters();
 
-            } else if (intrinsic1 == null && intrinsic2 != null) {
+            } else if (intrinsic1 == null) { //&& intrinsic2 != null
                 intrinsic1 = intrinsic2;
-            } else if (intrinsic1 != null && intrinsic2 == null) {
+            } else if (intrinsic2 == null) { //&& intrinsic1 != null
                 intrinsic2 = intrinsic1;
             }
             fundamentalMatrixEstimator.setLeftIntrinsics(intrinsic1);
@@ -1658,8 +1722,8 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
             List<Sample2D> samples1 = mCurrentEstimatedFundamentalMatrix.getLeftSamples();
             List<Sample2D> samples2 = mCurrentEstimatedFundamentalMatrix.getRightSamples();
 
-            List<Point2D> points1 = new ArrayList<Point2D>();
-            List<Point2D> points2 = new ArrayList<Point2D>();
+            List<Point2D> points1 = new ArrayList<>();
+            List<Point2D> points2 = new ArrayList<>();
             int length = samples1.size();
             for (int i = 0; i < length; i++) {
                 Sample2D sample1 = samples1.get(i);
@@ -1698,12 +1762,12 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                                 LMSE_INHOMOGENEOUS_TRIANGULATOR);
             }
 
-            List<PinholeCamera> cameras = new ArrayList<PinholeCamera>();
+            List<PinholeCamera> cameras = new ArrayList<>();
             cameras.add(camera1);
             cameras.add(camera2);
 
             mActiveMetricReconstructedPoints = new ArrayList<>();
-            List<Point2D> points = new ArrayList<Point2D>();
+            List<Point2D> points = new ArrayList<>();
             int numPoints = correctedPoints1.size();
             Point3D triangulatedPoint;
             ReconstructedPoint3D reconstructedPoint;
@@ -1749,8 +1813,8 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
         List<Sample2D> samples1 = mCurrentEstimatedFundamentalMatrix.getLeftSamples();
         List<Sample2D> samples2 = mCurrentEstimatedFundamentalMatrix.getRightSamples();
 
-        List<Point2D> points1 = new ArrayList<Point2D>();
-        List<Point2D> points2 = new ArrayList<Point2D>();
+        List<Point2D> points1 = new ArrayList<>();
+        List<Point2D> points2 = new ArrayList<>();
         int length = samples1.size();
         for (int i = 0; i < length; i++) {
             Sample2D sample1 = samples1.get(i);
@@ -1795,7 +1859,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
             BitSet validTriangulatedPoints =
                     estimator.getValidTriangulatedPoints();
 
-            mActiveMetricReconstructedPoints = new ArrayList<ReconstructedPoint3D>();
+            mActiveMetricReconstructedPoints = new ArrayList<>();
             int size = triangulatedPoints.size();
             for (int i = 0; i < size; i++) {
                 ReconstructedPoint3D reconstructedPoint =
@@ -1845,8 +1909,8 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
         List<Sample2D> samples1 = mCurrentEstimatedFundamentalMatrix.getLeftSamples();
         List<Sample2D> samples2 = mCurrentEstimatedFundamentalMatrix.getRightSamples();
 
-        List<Point2D> points1 = new ArrayList<Point2D>();
-        List<Point2D> points2 = new ArrayList<Point2D>();
+        List<Point2D> points1 = new ArrayList<>();
+        List<Point2D> points2 = new ArrayList<>();
         int length = samples1.size();
         for (int i = 0; i < length; i++) {
             Sample2D sample1 = samples1.get(i);
@@ -1892,7 +1956,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
             BitSet validTriangulatedPoints =
                     estimator.getValidTriangulatedPoints();
 
-            mActiveMetricReconstructedPoints = new ArrayList<ReconstructedPoint3D>();
+            mActiveMetricReconstructedPoints = new ArrayList<>();
             int size = triangulatedPoints.size();
             for (int i = 0; i < size; i++) {
                 ReconstructedPoint3D reconstructedPoint =

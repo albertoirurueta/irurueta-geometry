@@ -145,6 +145,8 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
     @Test
     public void testConstructor() {
+        assertEquals(AbsoluteOrientationSlamSparseReconstructor.MIN_NUMBER_OF_VIEWS, 2);
+
         AbsoluteOrientationSlamSparseReconstructorConfiguration configuration =
                 new AbsoluteOrientationSlamSparseReconstructorConfiguration();
         AbsoluteOrientationSlamSparseReconstructorListener listener =
@@ -257,6 +259,12 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
         assertNull(reconstructor.getPreviousEuclideanEstimatedCamera());
         assertNull(reconstructor.getActiveMetricReconstructedPoints());
         assertNull(reconstructor.getActiveEuclideanReconstructedPoints());
+        assertEquals(reconstructor.getCurrentScale(), BaseSparseReconstructor.DEFAULT_SCALE, 0.0);
+        assertNull(reconstructor.getPreviousViewSamples());
+        assertNull(reconstructor.getCurrentViewSamples());
+        assertTrue(reconstructor.isFirstView());
+        assertFalse(reconstructor.isSecondView());
+        assertFalse(reconstructor.isAdditionalView());
 
         //constructor with configuration and listener
         reconstructor = new AbsoluteOrientationSlamSparseReconstructor(
@@ -277,6 +285,12 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
         assertNull(reconstructor.getPreviousEuclideanEstimatedCamera());
         assertNull(reconstructor.getActiveMetricReconstructedPoints());
         assertNull(reconstructor.getActiveEuclideanReconstructedPoints());
+        assertEquals(reconstructor.getCurrentScale(), BaseSparseReconstructor.DEFAULT_SCALE, 0.0);
+        assertNull(reconstructor.getPreviousViewSamples());
+        assertNull(reconstructor.getCurrentViewSamples());
+        assertTrue(reconstructor.isFirstView());
+        assertFalse(reconstructor.isSecondView());
+        assertFalse(reconstructor.isAdditionalView());
     }
 
     @Test
@@ -709,6 +723,27 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertTrue(mSlamCameraEstimated > 0);
             assertNotNull(mSlamCamera);
             assertNotNull(mSlamCovariance);
+            assertFalse(reconstructor.isFirstView());
+            assertFalse(reconstructor.isSecondView());
+            assertTrue(reconstructor.isAdditionalView());
+            assertTrue(reconstructor.getViewCount() > 0);
+            assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
+            assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
+            assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
+            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera2);
+            assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
+            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera1);
+            assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
+            assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
+            assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
+            assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera1);
+            assertNotNull(reconstructor.getActiveMetricReconstructedPoints());
+            assertSame(reconstructor.getActiveMetricReconstructedPoints(), mMetricReconstructedPoints);
+            assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
+            assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
+            assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
+            assertNotNull(reconstructor.getPreviousViewSamples());
+            assertNotNull(reconstructor.getCurrentViewSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1397,6 +1432,27 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertTrue(mSlamCameraEstimated > 0);
             assertNotNull(mSlamCamera);
             assertNotNull(mSlamCovariance);
+            assertFalse(reconstructor.isFirstView());
+            assertFalse(reconstructor.isSecondView());
+            assertTrue(reconstructor.isAdditionalView());
+            assertTrue(reconstructor.getViewCount() > 0);
+            assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
+            assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
+            assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
+            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera2);
+            assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
+            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera1);
+            assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
+            assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
+            assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
+            assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera1);
+            assertNotNull(reconstructor.getActiveMetricReconstructedPoints());
+            assertSame(reconstructor.getActiveMetricReconstructedPoints(), mMetricReconstructedPoints);
+            assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
+            assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
+            assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
+            assertNotNull(reconstructor.getPreviousViewSamples());
+            assertNotNull(reconstructor.getCurrentViewSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -2170,6 +2226,28 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertTrue(mSlamCameraEstimated > 0);
             assertNotNull(mSlamCamera);
             assertNotNull(mSlamCovariance);
+            assertFalse(reconstructor.isFirstView());
+            assertFalse(reconstructor.isSecondView());
+            assertTrue(reconstructor.isAdditionalView());
+            assertTrue(reconstructor.isAdditionalView());
+            assertTrue(reconstructor.getViewCount() > 0);
+            assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
+            assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
+            assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
+            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera3);
+            assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
+            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera2);
+            assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
+            assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera3);
+            assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
+            assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
+            assertNotNull(reconstructor.getActiveMetricReconstructedPoints());
+            assertSame(reconstructor.getActiveMetricReconstructedPoints(), mMetricReconstructedPoints);
+            assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
+            assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
+            assertEquals(reconstructor.getCurrentScale(), mScale2, 0.0);
+            assertNotNull(reconstructor.getPreviousViewSamples());
+            assertNotNull(reconstructor.getCurrentViewSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -3091,6 +3169,28 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertTrue(mSlamDataAvailable > 0);
             assertTrue(mSlamCameraEstimated > 0);
             assertNotNull(mSlamCamera);
+            assertFalse(reconstructor.isFirstView());
+            assertFalse(reconstructor.isSecondView());
+            assertTrue(reconstructor.isAdditionalView());
+            assertTrue(reconstructor.isAdditionalView());
+            assertTrue(reconstructor.getViewCount() > 0);
+            assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
+            assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
+            assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
+            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera3);
+            assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
+            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera2);
+            assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
+            assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera3);
+            assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
+            assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
+            assertNotNull(reconstructor.getActiveMetricReconstructedPoints());
+            assertSame(reconstructor.getActiveMetricReconstructedPoints(), mMetricReconstructedPoints);
+            assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
+            assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
+            assertEquals(reconstructor.getCurrentScale(), mScale2, 0.0);
+            assertNotNull(reconstructor.getPreviousViewSamples());
+            assertNotNull(reconstructor.getCurrentViewSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -4015,6 +4115,28 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertTrue(mSlamDataAvailable > 0);
             assertTrue(mSlamCameraEstimated > 0);
             assertNotNull(mSlamCamera);
+            assertFalse(reconstructor.isFirstView());
+            assertFalse(reconstructor.isSecondView());
+            assertTrue(reconstructor.isAdditionalView());
+            assertTrue(reconstructor.isAdditionalView());
+            assertTrue(reconstructor.getViewCount() > 0);
+            assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
+            assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
+            assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
+            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera4);
+            assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
+            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera3);
+            assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
+            assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera4);
+            assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
+            assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera3);
+            assertNotNull(reconstructor.getActiveMetricReconstructedPoints());
+            assertSame(reconstructor.getActiveMetricReconstructedPoints(), mMetricReconstructedPoints);
+            assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
+            assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
+            assertEquals(reconstructor.getCurrentScale(), mScale3, 0.0);
+            assertNotNull(reconstructor.getPreviousViewSamples());
+            assertNotNull(reconstructor.getCurrentViewSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
