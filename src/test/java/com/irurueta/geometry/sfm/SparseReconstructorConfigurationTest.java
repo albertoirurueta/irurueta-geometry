@@ -134,6 +134,12 @@ public class SparseReconstructorConfigurationTest {
                 SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_CONFIDENCE, 0.0);
         assertEquals(cfg.getAdditionalCamerasMaxIterations(),
                 SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_MAX_ITERATIONS);
+        assertEquals(cfg.getAdditionalCamerasThreshold(),
+                SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_THRESHOLD, 0.0);
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepInliers(),
+                SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepResiduals(),
+                SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_RESIDUALS);
         assertEquals(cfg.isAdditionalCamerasSuggestSkewnessValueEnabled(),
                 SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_SUGGEST_SKEWNESS_VALUE_ENABLED);
         assertEquals(cfg.getAdditionalCamerasSuggestedSkewnessValue(),
@@ -259,6 +265,12 @@ public class SparseReconstructorConfigurationTest {
                 SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_CONFIDENCE, 0.0);
         assertEquals(cfg.getAdditionalCamerasMaxIterations(),
                 SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_MAX_ITERATIONS);
+        assertEquals(cfg.getAdditionalCamerasThreshold(),
+                SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_THRESHOLD, 0.0);
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepInliers(),
+                SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepResiduals(),
+                SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_RESIDUALS);
         assertEquals(cfg.isAdditionalCamerasSuggestSkewnessValueEnabled(),
                 SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_SUGGEST_SKEWNESS_VALUE_ENABLED);
         assertEquals(cfg.getAdditionalCamerasSuggestedSkewnessValue(),
@@ -1088,6 +1100,56 @@ public class SparseReconstructorConfigurationTest {
 
         //check correctness
         assertEquals(cfg.getAdditionalCamerasMaxIterations(), 100);
+    }
+
+    @Test
+    public void testGetSetAdditionalCamerasThreshold() {
+        SparseReconstructorConfiguration cfg =
+                new SparseReconstructorConfiguration();
+
+        //check default value
+        assertEquals(cfg.getAdditionalCamerasThreshold(),
+                SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_THRESHOLD, 0.0);
+
+        //set new value
+        assertSame(cfg.setAdditionalCamerasThreshold(2.0), cfg);
+
+        //check correctness
+        assertEquals(cfg.getAdditionalCamerasThreshold(), 2.0, 0.0);
+    }
+
+    @Test
+    public void testGetSetAdditionalCamerasComputeAndKeepInliers() {
+        SparseReconstructorConfiguration cfg = new SparseReconstructorConfiguration();
+
+        //check default value
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepInliers(),
+                SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_INLIERS);
+
+        //set new value
+        assertSame(cfg.setAdditionalCamerasComputeAndKeepInliers(
+                !SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_INLIERS), cfg);
+
+        //check correctnes
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepInliers(),
+                !SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_INLIERS);
+    }
+
+    @Test
+    public void testGetSetAdditionalCamerasComputeAndKeepResiduals() {
+        SparseReconstructorConfiguration cfg = new SparseReconstructorConfiguration();
+
+        //check default value
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepResiduals(),
+                SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_RESIDUALS);
+
+        //set new value
+        assertSame(cfg.setAdditionalCamerasComputeAndKeepResiduals(
+                !SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_RESIDUALS), cfg);
+
+        //check correctness
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepResiduals(),
+                !SparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_RESIDUALS);
     }
 
     @Test

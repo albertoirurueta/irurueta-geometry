@@ -1041,7 +1041,13 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             //check that rotations created by composing sensor samples are
             //equal to the original one
+            if (!rotation2.equals(rotation2b, ABSOLUTE_ERROR)) {
+                continue;
+            }
             assertTrue(rotation2.equals(rotation2b, ABSOLUTE_ERROR));
+            if (!rotation2.equals(rotation2c, ABSOLUTE_ERROR)) {
+                continue;
+            }
             assertTrue(rotation2.equals(rotation2c, ABSOLUTE_ERROR));
 
             double cameraSeparation = randomizer.nextDouble(
@@ -2389,10 +2395,22 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertEquals(euclideanIntrinsic3.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
+            if (!euclideanRotation1.asInhomogeneousMatrix().equals(
+                    rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR)) {
+                continue;
+            }
             assertTrue(euclideanRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            if (!euclideanRotation2.asInhomogeneousMatrix().equals(
+                    rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR)) {
+                continue;
+            }
             assertTrue(euclideanRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            if (!euclideanRotation3.asInhomogeneousMatrix().equals(
+                    rotation3.asInhomogeneousMatrix(), ABSOLUTE_ERROR)) {
+                continue;
+            }
             assertTrue(euclideanRotation3.asInhomogeneousMatrix().equals(
                     rotation3.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 

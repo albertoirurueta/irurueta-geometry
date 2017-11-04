@@ -1215,6 +1215,7 @@ public class DualImageOfAbsoluteConicInitialCamerasEstimatorTest implements
             List<Point2D> leftPoints = new ArrayList<Point2D>();
             List<Point2D> rightPoints = new ArrayList<Point2D>();
             boolean leftFront, rightFront;
+            boolean failed = false;
             for (int i = 0; i < nPoints; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
@@ -1235,10 +1236,16 @@ public class DualImageOfAbsoluteConicInitialCamerasEstimatorTest implements
                     leftFront = camera1.isPointInFrontOfCamera(worldPoint);
                     rightFront = camera2.isPointInFrontOfCamera(worldPoint);
                     if (numTry > MAX_TRIES) {
-                        fail("max tries reached");
+                        failed = true;
+                        break;
                     }
                     numTry++;
                 } while(!leftFront || !rightFront);
+
+                if (failed) {
+                    break;
+                }
+
                 worldPoints.add(worldPoint);
             
                 //check that world point is in front of both cameras
@@ -1251,6 +1258,10 @@ public class DualImageOfAbsoluteConicInitialCamerasEstimatorTest implements
             
                 rightPoint = camera2.project(worldPoint);
                 rightPoints.add(rightPoint);
+            }
+
+            if (failed) {
+                continue;
             }
         
             PinholeCamera camera1b = new PinholeCamera();
@@ -2511,6 +2522,7 @@ public class DualImageOfAbsoluteConicInitialCamerasEstimatorTest implements
             List<Point2D> leftPoints = new ArrayList<Point2D>();
             List<Point2D> rightPoints = new ArrayList<Point2D>();
             boolean leftFront, rightFront;
+            boolean failed = false;
             for (int i = 0; i < nPoints; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
@@ -2531,10 +2543,15 @@ public class DualImageOfAbsoluteConicInitialCamerasEstimatorTest implements
                     leftFront = camera1.isPointInFrontOfCamera(worldPoint);
                     rightFront = camera2.isPointInFrontOfCamera(worldPoint);
                     if (numTry > MAX_TRIES) {
-                        fail("max tries reached");
+                        failed = true;
+                        break;
                     }
                     numTry++;
                 } while(!leftFront || !rightFront);
+
+                if (failed) {
+                    break;
+                }
                 worldPoints.add(worldPoint);
             
                 //check that world point is in front of both cameras
@@ -2547,6 +2564,10 @@ public class DualImageOfAbsoluteConicInitialCamerasEstimatorTest implements
             
                 rightPoint = camera2.project(worldPoint);
                 rightPoints.add(rightPoint);
+            }
+
+            if (failed) {
+                continue;
             }
         
             PinholeCamera camera1b = new PinholeCamera();

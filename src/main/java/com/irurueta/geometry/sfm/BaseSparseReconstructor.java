@@ -351,21 +351,24 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
         mListener.onRequestSamplesForCurrentView((R)this, mViewCount,
                 mCurrentViewSamples);
 
+        boolean processed;
         if (isFirstView()) {
             mCurrentEstimatedFundamentalMatrix = null;
             //for first view we simply keep samples (if enough are provided)
-            processFirstView();
+            processed = processFirstView();
         } else {
 
             if (isSecondView()) {
                 //for second view, check that we have enough samples
-                processSecondView();
+                processed = processSecondView();
             } else {
-                processAdditionalView();
+                processed = processAdditionalView();
             }
         }
 
-        mViewCount++;
+        if (processed) {
+            mViewCount++;
+        }
 
         if (mCancelled) {
             //noinspection unchecked
@@ -430,7 +433,15 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      * Resets this instance so that a reconstruction can be started from the beginning without cancelling current one.
      */
     public void reset() {
-        mPreviousViewSamples = mCurrentViewSamples = null;
+        if (mPreviousViewSamples != null) {
+            mPreviousViewSamples.clear();
+        }
+        if (mCurrentViewSamples != null) {
+            mCurrentViewSamples.clear();
+        }
+        if (mMatches != null) {
+            mMatches.clear();
+        }
 
         mCancelled = mFailed = false;
         mViewCount = 0;
@@ -439,6 +450,12 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
         mCurrentEstimatedFundamentalMatrix = null;
         mCurrentMetricEstimatedCamera = mPreviousMetricEstimatedCamera = null;
         mActiveMetricReconstructedPoints = null;
+        mCurrentScale = DEFAULT_SCALE;
+        mCurrentEuclideanEstimatedCamera = mPreviousEuclideanEstimatedCamera = null;
+        mActiveEuclideanReconstructedPoints = null;
+
+        mPreviousViewId = 0;
+        mCurrentViewId = 0;
 
         mFinished = false;
     }
@@ -453,21 +470,28 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
 
     /**
      * Processes data for first view.
+     * @return true if view was successfully processed, false otherwise.
      */
-    private void processFirstView() {
+    private boolean processFirstView() {
         if(hasEnoughSamplesForFundamentalMatrixEstimation(mCurrentViewSamples)) {
             //noinspection unchecked
             mListener.onSamplesAccepted((R)this, mViewCount,
                     mCurrentViewSamples);
             mPreviousViewSamples = mCurrentViewSamples;
             mPreviousViewId = mViewCount;
+            return true;
+        } else {
+            //noinspection unchecked
+            mListener.onSamplesRejected((R) this, mViewCount, mCurrentViewSamples);
+            return false;
         }
     }
 
     /**
      * Processes data for second view.
+     * @return true if view was successfully processed, false otherwise.
      */
-    private void processSecondView() {
+    private boolean processSecondView() {
         if (hasEnoughSamplesForFundamentalMatrixEstimation(mCurrentViewSamples)) {
 
             //find matches
@@ -512,6 +536,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                             mFailed = true;
                             //noinspection unchecked
                             mListener.onFail((R)this);
+                            return false;
                         } else {
                             //post processing succeeded
                             //noinspection unchecked
@@ -520,27 +545,35 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                             //noinspection unchecked
                             mListener.onEuclideanReconstructedPointsEstimated((R)this, mCurrentScale,
                                     mActiveEuclideanReconstructedPoints);
+                            return true;
                         }
                     } else {
                         //initial cameras failed
                         mFailed = true;
                         //noinspection unchecked
                         mListener.onFail((R) this);
+                        return false;
                     }
                 } else {
                     //estimation of fundamental matrix failed
                     //noinspection unchecked
                     mListener.onSamplesRejected((R) this, mViewCount,
                             mCurrentViewSamples);
+                    return false;
                 }
             }
         }
+
+        //noinspection unchecked
+        mListener.onSamplesRejected((R) this, mViewCount, mCurrentViewSamples);
+        return false;
     }
 
     /**
      * Processes data for one additional view.
+     * @return true if view was successfully processed, false otherwise.
      */
-    private void processAdditionalView() {
+    private boolean processAdditionalView() {
         //find matches
         mMatches.clear();
         //noinspection unchecked
@@ -553,7 +586,8 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
         double[] qualityScores = setUpCameraEstimatorMatches(points3D, points2D);
         boolean samplesRejected = false;
 
-        if (hasEnoughSamplesForCameraEstimation(points3D, points2D)) {
+        if (hasEnoughSamplesForCameraEstimation(points3D, points2D) &&
+                hasEnoughMatchesForCameraEstimation(mMatches)) {
             //enough matches available.
             PinholeCamera currentCamera = null;
             Matrix currentCameraCovariance = null;
@@ -562,8 +596,9 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 //EPnP requires knowledge of camera intrinsics
 
                 PinholeCameraIntrinsicParameters intrinsicParameters = null;
-                if (mConfiguration.getUseDAQForAdditionalCamerasIntrinsics() ||
-                        mConfiguration.getUseDIACForAdditionalCamerasIntrinsics()) {
+                if ((mConfiguration.getUseDAQForAdditionalCamerasIntrinsics() ||
+                        mConfiguration.getUseDIACForAdditionalCamerasIntrinsics()) &&
+                        hasEnoughMatchesForFundamentalMatrixEstimation(mMatches)) {
 
                     //compute fundamental matrix to estimate intrinsics
                     if((mConfiguration.isGeneralSceneAllowed() &&
@@ -583,10 +618,10 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
 
                     } else {
                         //fundamental matrix estimation failed
-                        samplesRejected = true;
+
                         //noinspection unchecked
-                        mListener.onSamplesRejected((R) this, mViewCount,
-                                mCurrentViewSamples);
+                        mListener.onSamplesRejected((R) this, mViewCount, mCurrentViewSamples);
+                        return false;
                     }
 
                 } else if (mConfiguration.getAdditionalCamerasIntrinsics() != null) {
@@ -598,6 +633,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                         mFailed = true;
                         //noinspection unchecked
                         mListener.onFail((R)this);
+                        return false;
                     }
                 }
 
@@ -620,6 +656,39 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                         cameraEstimator.setFastRefinementUsed(mConfiguration.getAdditionalCamerasUseFastRefinement());
                         cameraEstimator.setConfidence(mConfiguration.getAdditionalCamerasConfidence());
                         cameraEstimator.setMaxIterations(mConfiguration.getAdditionalCamerasMaxIterations());
+
+                        switch (mConfiguration.getAdditionalCamerasRobustEstimationMethod()) {
+                            case LMedS:
+                                ((LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator).
+                                        setStopThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                                break;
+                            case MSAC:
+                                ((MSACEPnPPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator).
+                                        setThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                                break;
+                            case PROMedS:
+                                ((PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator).
+                                        setStopThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                                break;
+                            case PROSAC:
+                                PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator prosacCameraEstimator =
+                                        (PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator;
+                                prosacCameraEstimator.setThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                                prosacCameraEstimator.setComputeAndKeepInliersEnabled(
+                                        mConfiguration.getAdditionalCamerasComputeAndKeepInliers());
+                                prosacCameraEstimator.setComputeAndKeepResidualsEnabled(
+                                        mConfiguration.getAdditionalCamerasComputeAndKeepResiduals());
+                                break;
+                            case RANSAC:
+                                RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator ransacCameraEstimator =
+                                        (RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator;
+                                ransacCameraEstimator.setThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                                ransacCameraEstimator.setComputeAndKeepInliersEnabled(
+                                        mConfiguration.getAdditionalCamerasComputeAndKeepInliers());
+                                ransacCameraEstimator.setComputeAndKeepResidualsEnabled(
+                                        mConfiguration.getAdditionalCamerasComputeAndKeepResiduals());
+                                break;
+                        }
 
                         cameraEstimator.setSuggestSkewnessValueEnabled(
                                 mConfiguration.isAdditionalCamerasSuggestSkewnessValueEnabled());
@@ -659,9 +728,6 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 } catch (Exception e) {
                     //camera estimation failed
                     samplesRejected = true;
-                    //noinspection unchecked
-                    mListener.onSamplesRejected((R) this, mViewCount,
-                            mCurrentViewSamples);
                 }
 
             } else if (mConfiguration.getUseUPnPForAdditionalCamerasEstimation()) {
@@ -681,6 +747,39 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     cameraEstimator.setFastRefinementUsed(mConfiguration.getAdditionalCamerasUseFastRefinement());
                     cameraEstimator.setConfidence(mConfiguration.getAdditionalCamerasConfidence());
                     cameraEstimator.setMaxIterations(mConfiguration.getAdditionalCamerasMaxIterations());
+
+                    switch (mConfiguration.getAdditionalCamerasRobustEstimationMethod()) {
+                        case LMedS:
+                            ((LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator).
+                                    setStopThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                            break;
+                        case MSAC:
+                            ((MSACUPnPPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator).
+                                    setThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                            break;
+                        case PROMedS:
+                            ((PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator).
+                                    setStopThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                            break;
+                        case PROSAC:
+                            PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator prosacCameraEstimator =
+                                    (PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator;
+                            prosacCameraEstimator.setThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                            prosacCameraEstimator.setComputeAndKeepInliersEnabled(
+                                    mConfiguration.getAdditionalCamerasComputeAndKeepInliers());
+                            prosacCameraEstimator.setComputeAndKeepResidualsEnabled(
+                                    mConfiguration.getAdditionalCamerasComputeAndKeepResiduals());
+                            break;
+                        case RANSAC:
+                            RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator ransacCameraEstimator =
+                                    (RANSACUPnPPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator;
+                            ransacCameraEstimator.setThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                            ransacCameraEstimator.setComputeAndKeepInliersEnabled(
+                                    mConfiguration.getAdditionalCamerasComputeAndKeepInliers());
+                            ransacCameraEstimator.setComputeAndKeepResidualsEnabled(
+                                    mConfiguration.getAdditionalCamerasComputeAndKeepResiduals());
+                            break;
+                    }
 
                     cameraEstimator.setSkewness(mConfiguration.getAdditionalCamerasSkewness());
                     cameraEstimator.setHorizontalPrincipalPoint(
@@ -725,9 +824,6 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 } catch (Exception e) {
                     //camera estimation failed
                     samplesRejected = true;
-                    //noinspection unchecked
-                    mListener.onSamplesRejected((R) this, mViewCount,
-                            mCurrentViewSamples);
                 }
 
             } else {
@@ -742,6 +838,39 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     cameraEstimator.setFastRefinementUsed(mConfiguration.getAdditionalCamerasUseFastRefinement());
                     cameraEstimator.setConfidence(mConfiguration.getAdditionalCamerasConfidence());
                     cameraEstimator.setMaxIterations(mConfiguration.getAdditionalCamerasMaxIterations());
+
+                    switch (mConfiguration.getAdditionalCamerasRobustEstimationMethod()) {
+                        case LMedS:
+                            ((LMedSDLTPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator).
+                                    setStopThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                            break;
+                        case MSAC:
+                            ((MSACDLTPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator).
+                                    setThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                            break;
+                        case PROMedS:
+                            ((PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator).
+                                    setStopThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                            break;
+                        case PROSAC:
+                            PROSACDLTPointCorrespondencePinholeCameraRobustEstimator prosacCameraEstimator =
+                                    (PROSACDLTPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator;
+                            prosacCameraEstimator.setThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                            prosacCameraEstimator.setComputeAndKeepInliersEnabled(
+                                    mConfiguration.getAdditionalCamerasComputeAndKeepInliers());
+                            prosacCameraEstimator.setComputeAndKeepResidualsEnabled(
+                                    mConfiguration.getAdditionalCamerasComputeAndKeepResiduals());
+                            break;
+                        case RANSAC:
+                            RANSACDLTPointCorrespondencePinholeCameraRobustEstimator ransacCameraEstimator =
+                                    (RANSACDLTPointCorrespondencePinholeCameraRobustEstimator)cameraEstimator;
+                            ransacCameraEstimator.setThreshold(mConfiguration.getAdditionalCamerasThreshold());
+                            ransacCameraEstimator.setComputeAndKeepInliersEnabled(
+                                    mConfiguration.getAdditionalCamerasComputeAndKeepInliers());
+                            ransacCameraEstimator.setComputeAndKeepResidualsEnabled(
+                                    mConfiguration.getAdditionalCamerasComputeAndKeepResiduals());
+                            break;
+                    }
 
                     cameraEstimator.setSuggestSkewnessValueEnabled(
                             mConfiguration.isAdditionalCamerasSuggestSkewnessValueEnabled());
@@ -780,9 +909,6 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 } catch (Exception e) {
                     //camera estimation failed
                     samplesRejected = true;
-                    //noinspection unchecked
-                    mListener.onSamplesRejected((R) this, mViewCount,
-                            mCurrentViewSamples);
                 }
             }
 
@@ -814,6 +940,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     mFailed = true;
                     //noinspection unchecked
                     mListener.onFail((R) this);
+                    return false;
                 } else {
                     //post processing succeeded
                     //noinspection unchecked
@@ -822,9 +949,14 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     //noinspection unchecked
                     mListener.onEuclideanReconstructedPointsEstimated((R) this, mCurrentScale,
                             mActiveEuclideanReconstructedPoints);
+                    return true;
                 }
             }
         }
+
+        //noinspection unchecked
+        mListener.onSamplesRejected((R) this, mViewCount, mCurrentViewSamples);
+        return false;
     }
 
     /**
@@ -1100,6 +1232,15 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
     private boolean hasEnoughSamplesForCameraEstimation(List<Point3D> points3D, List<Point2D> points2D) {
         return points3D != null && points2D != null && points3D.size() == points2D.size() &&
                 hasEnoughSamplesOrMatchesForCameraEstimation(points3D.size());
+    }
+
+    /**
+     * Indicates whether there are enough matches to estimate an additional camera.
+     * @param matches matches to check.
+     * @return true if there are enough matches, false otherwise.
+     */
+    private boolean hasEnoughMatchesForCameraEstimation(List<MatchedSamples> matches) {
+        return hasEnoughSamplesOrMatchesForCameraEstimation(matches != null ? matches.size() : 0);
     }
 
     /**

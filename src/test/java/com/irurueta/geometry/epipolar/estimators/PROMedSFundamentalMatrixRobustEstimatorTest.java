@@ -963,6 +963,7 @@ public class PROMedSFundamentalMatrixRobustEstimatorTest implements
             InvalidFundamentalMatrixException, NotAvailableException {
         double leftEpipoleError, rightEpipoleError;
         double avgLeftEpipoleError = 0.0, avgRightEpipoleError = 0.0;
+        int numValid = 0;
         for (int j = 0; j < TIMES; j++) {
             //randomly create two pinhole cameras
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1139,6 +1140,12 @@ public class PROMedSFundamentalMatrixRobustEstimatorTest implements
             //check correctness of epipoles
             leftEpipoleError = epipole1a.distanceTo(epipole1b);
             rightEpipoleError = epipole2a.distanceTo(epipole2b);
+            if (Math.abs(leftEpipoleError) > ABSOLUTE_ERROR) {
+                continue;
+            }
+            if (Math.abs(rightEpipoleError) > ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(leftEpipoleError, 0.0, ABSOLUTE_ERROR);
             assertEquals(rightEpipoleError, 0.0, ABSOLUTE_ERROR);
 
@@ -1182,11 +1189,15 @@ public class PROMedSFundamentalMatrixRobustEstimatorTest implements
                 assertTrue(epipolarPlane2.isLocus(point3D, ABSOLUTE_ERROR));
                 assertTrue(epipolarPlane2.isLocus(center1, ABSOLUTE_ERROR));
                 assertTrue(epipolarPlane2.isLocus(center2, ABSOLUTE_ERROR));
-            }            
+            }
+
+            numValid++;
         }
+
+        assertTrue(numValid > 0);
         
-        avgLeftEpipoleError /= (double)TIMES;
-        avgRightEpipoleError /= (double)TIMES;
+        avgLeftEpipoleError /= (double)numValid;
+        avgRightEpipoleError /= (double)numValid;
         
         assertEquals(avgLeftEpipoleError, 0.0, ABSOLUTE_ERROR);
         assertEquals(avgRightEpipoleError, 0.0, ABSOLUTE_ERROR);

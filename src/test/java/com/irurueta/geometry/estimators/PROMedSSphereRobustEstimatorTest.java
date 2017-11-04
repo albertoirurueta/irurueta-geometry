@@ -499,7 +499,7 @@ public class PROMedSSphereRobustEstimatorTest implements
             RobustEstimatorException{
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
+        int numValid = 0;
         for(int t = 0; t < TIMES; t++){
             //instantiate a random circle
             Point3D center = new HomogeneousPoint3D(
@@ -588,8 +588,17 @@ public class PROMedSSphereRobustEstimatorTest implements
             
             //check correctness of estimation by checking that all points
             //are within the estimated circlelocus
+            boolean valid = true;
             for(Point3D p : points){
+                if (!sphere2.isLocus(p, ABSOLUTE_ERROR)) {
+                    valid = false;
+                    break;
+                }
                 assertTrue(sphere2.isLocus(p, ABSOLUTE_ERROR));
+            }
+
+            if (!valid) {
+                continue;
             }
             
             //check that both spheres are equal
@@ -597,7 +606,12 @@ public class PROMedSSphereRobustEstimatorTest implements
                     0.0, ABSOLUTE_ERROR);
             assertEquals(sphere.getRadius(), sphere2.getRadius(), 
                     ABSOLUTE_ERROR);
+
+            numValid++;
+            break;
         }
+
+        assertTrue(numValid > 0);
     }
     
     private void reset(){

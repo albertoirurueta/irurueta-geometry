@@ -22,6 +22,7 @@ import com.irurueta.geometry.epipolar.estimators.FundamentalMatrixEstimatorMetho
 import com.irurueta.geometry.epipolar.estimators.FundamentalMatrixRobustEstimator;
 import com.irurueta.geometry.epipolar.estimators.PROSACFundamentalMatrixRobustEstimator;
 import com.irurueta.geometry.estimators.EPnPPointCorrespondencePinholeCameraEstimator;
+import com.irurueta.geometry.estimators.PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator;
 import com.irurueta.geometry.estimators.PinholeCameraRobustEstimator;
 import com.irurueta.geometry.estimators.ProjectiveTransformation2DRobustEstimator;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
@@ -336,6 +337,23 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public static final int DEFAULT_ADDITIONAL_CAMERAS_MAX_ITERATIONS =
             PinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS;
+
+    /**
+     * Default threshold to determine whether samples for robust pinhole camera estimation are
+     * inliers or not.
+     */
+    public static final double DEFAULT_ADDITIONAL_CAMERAS_THRESHOLD =
+            PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD;
+
+    /**
+     * Default value indicating that inlier data is kept after additional camera estimation.
+     */
+    public static final boolean DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_INLIERS = true;
+
+    /**
+     * Default value indicating that residual data is kept after additional camera estimation.
+     */
+    public static final boolean DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_RESIDUALS = true;
 
     /**
      * Default value indicating that skewness is not suggested during additional cameras
@@ -735,6 +753,21 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             DEFAULT_ADDITIONAL_CAMERAS_MAX_ITERATIONS;
 
     /**
+     * Threshold to determine whether samples for robust pinhole camera estimation are inliers or not.
+     */
+    private double mAdditionalCamerasThreshold = DEFAULT_ADDITIONAL_CAMERAS_THRESHOLD;
+
+    /**
+     * Indicates whether inliers must be kept during additional camera estimation.
+     */
+    private boolean mAdditionalCamerasComputeAndKeepInliers = DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_INLIERS;
+
+    /**
+     * Indicates whether residuals must be computed and kept during additional camera estimation.
+     */
+    private boolean mAdditionalCamerasComputeAndKeepResiduals = DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_RESIDUALS;
+
+    /**
      * Value indicating whether skewness is not suggested during additional cameras
      * estimation.
      */
@@ -855,6 +888,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setNonRobustFundamentalMatrixEstimatorMethod(FundamentalMatrixEstimatorMethod method) {
         mNonRobustFundamentalMatrixEstimatorMethod = method;
+        //noinspection all
         return (T)this;
     }
 
@@ -875,6 +909,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setRobustFundamentalMatrixEstimatorMethod(RobustEstimatorMethod method) {
         mRobustFundamentalMatrixEstimatorMethod = method;
+        //noinspection all
         return (T)this;
     }
 
@@ -895,6 +930,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setFundamentalMatrixRefined(boolean refineFundamentalMatrix) {
         mRefineFundamentalMatrix = refineFundamentalMatrix;
+        //noinspection all
         return (T)this;
     }
 
@@ -916,6 +952,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setFundamentalMatrixCovarianceKept(boolean keepFundamentalMatrixCovariance) {
         mKeepFundamentalMatrixCovariance = keepFundamentalMatrixCovariance;
+        //noinspection all
         return (T)this;
     }
 
@@ -936,6 +973,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setFundamentalMatrixConfidence(double fundamentalMatrixConfidence) {
         mFundamentalMatrixConfidence = fundamentalMatrixConfidence;
+        //noinspection all
         return (T)this;
     }
 
@@ -957,6 +995,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setFundamentalMatrixMaxIterations(int fundamentalMatrixMaxIterations) {
         mFundamentalMatrixMaxIterations = fundamentalMatrixMaxIterations;
+        //noinspection all
         return (T)this;
     }
 
@@ -982,6 +1021,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setFundamentalMatrixThreshold(double fundamentalMatrixThreshold) {
         mFundamentalMatrixThreshold = fundamentalMatrixThreshold;
+        //noinspection all
         return (T)this;
     }
 
@@ -1006,6 +1046,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setFundamentalMatrixComputeAndKeepInliers(
             boolean fundamentalMatrixComputeAndKeepInliers) {
         mFundamentalMatrixComputeAndKeepInliers = fundamentalMatrixComputeAndKeepInliers;
+        //noinspection all
         return (T)this;
     }
 
@@ -1031,6 +1072,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             boolean fundamentalMatrixComputeAndKeepResiduals) {
         mFundamentalMatrixComputeAndKeepResiduals =
                 fundamentalMatrixComputeAndKeepResiduals;
+        //noinspection all
         return (T)this;
     }
 
@@ -1049,6 +1091,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setInitialCamerasEstimatorMethod(InitialCamerasEstimatorMethod method) {
         mInitialCamerasEstimatorMethod = method;
+        //noinspection all
         return (T)this;
     }
 
@@ -1073,6 +1116,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setDaqUseHomogeneousPointTriangulator(
             boolean daqUseHomogeneousPointTriangulator) {
         mDaqUseHomogeneousPointTriangulator = daqUseHomogeneousPointTriangulator;
+        //noinspection all
         return (T)this;
     }
 
@@ -1092,6 +1136,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setInitialCamerasAspectRatio(double initialCamerasAspectRatio) {
         mInitialCamerasAspectRatio = initialCamerasAspectRatio;
+        //noinspection all
         return (T)this;
     }
 
@@ -1114,6 +1159,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setPrincipalPointX(double principalPointX) {
         mPrincipalPointX = principalPointX;
+        //noinspection all
         return (T)this;
     }
 
@@ -1136,6 +1182,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setPrincipalPointY(double principalPointY) {
         mPrincipalPointY = principalPointY;
+        //noinspection all
         return (T)this;
     }
 
@@ -1162,6 +1209,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setInitialCamerasCorrectorType(CorrectorType type) {
         mInitialCamerasCorrectorType = type;
+        //noinspection all
         return (T)this;
     }
 
@@ -1189,6 +1237,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             boolean initialCamerasMarkValidTriangulatedPoints) {
         mInitialCamerasMarkValidTriangulatedPoints =
                 initialCamerasMarkValidTriangulatedPoints;
+        //noinspection all
         return (T)this;
     }
 
@@ -1209,6 +1258,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setInitialIntrinsic1(PinholeCameraIntrinsicParameters initialIntrinsic1) {
         mInitialIntrinsic1 = initialIntrinsic1;
+        //noinspection all
         return (T)this;
     }
 
@@ -1229,6 +1279,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setInitialIntrinsic2(PinholeCameraIntrinsicParameters initialIntrinsic2) {
         mInitialIntrinsic2 = initialIntrinsic2;
+        //noinspection all
         return (T)this;
     }
 
@@ -1251,6 +1302,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setGeneralSceneAllowed(boolean allowGeneralScene) {
         mAllowGeneralScene = allowGeneralScene;
+        //noinspection all
         return (T)this;
     }
 
@@ -1271,6 +1323,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setPlanarSceneAllowed(boolean allowPlanarScene) {
         mAllowPlanarScene = allowPlanarScene;
+        //noinspection all
         return (T)this;
     }
 
@@ -1293,6 +1346,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setRobustPlanarHomographyEstimatorMethod(
             RobustEstimatorMethod robustPlanarHomographyEstimatorMethod) {
         mRobustPlanarHomographyEstimatorMethod = robustPlanarHomographyEstimatorMethod;
+        //noinspection all
         return (T)this;
     }
 
@@ -1314,6 +1368,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setPlanarHomographyRefined(boolean refinePlanarHomography) {
         mRefinePlanarHomography = refinePlanarHomography;
+        //noinspection all
         return (T)this;
     }
 
@@ -1335,6 +1390,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setPlanarHomographyCovarianceKept(boolean keepPlanarHomographyCovariance) {
         mKeepPlanarHomographyCovariance = keepPlanarHomographyCovariance;
+        //noinspection all
         return (T)this;
     }
 
@@ -1356,6 +1412,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setPlanarHomographyConfidence(double planarHomographyConfidence) {
         mPlanarHomographyConfidence = planarHomographyConfidence;
+        //noinspection all
         return (T)this;
     }
 
@@ -1380,6 +1437,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setPlanarHomographyMaxIterations(int planarHomographyMaxIterations) {
         mPlanarHomographyMaxIterations = planarHomographyMaxIterations;
+        //noinspection all
         return (T)this;
     }
 
@@ -1403,6 +1461,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setPlanarHomographyThreshold(double planarHomographyThreshold) {
         mPlanarHomographyThreshold = planarHomographyThreshold;
+        //noinspection all
         return (T)this;
     }
 
@@ -1426,6 +1485,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setPlanarHomographyComputeAndKeepInliers(
             boolean planarHomographyComputeAndKeepInliers) {
         mPlanarHomographyComputeAndKeepInliers = planarHomographyComputeAndKeepInliers;
+        //noinspection all
         return (T)this;
     }
 
@@ -1451,6 +1511,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             boolean planarHomographyComputeAndKeepResiduals) {
         mPlanarHomographyComputeAndKeepResiduals =
                 planarHomographyComputeAndKeepResiduals;
+        //noinspection all
         return (T)this;
     }
 
@@ -1475,6 +1536,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setUseDAQForAdditionalCamerasIntrinics(
             boolean useDAQForAdditionalCamerasIntrinics) {
         mUseDAQForAdditionalCamerasIntrinsics = useDAQForAdditionalCamerasIntrinics;
+        //noinspection all
         return (T)this;
     }
 
@@ -1500,6 +1562,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setUseDIACForAdditionalCamerasIntrinsics(
             boolean useDIACForAdditionalCamerasIntrinsics) {
         mUseDIACForAdditionalCamerasIntrinsics = useDIACForAdditionalCamerasIntrinsics;
+        //noinspection all
         return (T)this;
     }
 
@@ -1524,6 +1587,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setAdditionalCamerasIntrinsics(
             PinholeCameraIntrinsicParameters additionalCamerasIntrinsics) {
         mAdditionalCamerasIntrinsics = additionalCamerasIntrinsics;
+        //noinspection all
         return (T)this;
     }
 
@@ -1546,6 +1610,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setAdditionalCamerasSkewness(double additionalCamerasSkewness) {
         mAdditionalCamerasSkewness = additionalCamerasSkewness;
+        //noinspection all
         return (T)this;
     }
 
@@ -1577,6 +1642,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setAdditionalCamerasHorizontalPrincipalPoint(
             double additionalCamerasHorizontalPrincipalPoint) {
         mAdditionalCamerasHorizontalPrincipalPoint = additionalCamerasHorizontalPrincipalPoint;
+        //noinspection all
         return (T)this;
     }
 
@@ -1609,6 +1675,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setAdditionalCamerasVerticalPrincipalPoint(
             double additionalCamerasVerticalPrincipalPoint) {
         mAdditionalCamerasVerticalPrincipalPoint = additionalCamerasVerticalPrincipalPoint;
+        //noinspection all
         return (T)this;
     }
 
@@ -1628,6 +1695,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setAdditionalCamerasAspectRatio(double additionalCamerasAspectRatio) {
         mAdditionalCamerasAspectRatio = additionalCamerasAspectRatio;
+        //noinspection all
         return (T)this;
     }
 
@@ -1652,6 +1720,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setUseEPnPForAdditionalCamerasEstimation(
             boolean useEPnPForAdditionalCamerasEstimation) {
         mUseEPnPForAdditionalCamerasEstimation = useEPnPForAdditionalCamerasEstimation;
+        //noinspection all
         return (T)this;
     }
 
@@ -1678,6 +1747,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setUseUPnPForAdditionalCamerasEstimation(
             boolean useUPnPForAdditionalCamerasEstimation) {
         mUseUPnPForAdditionalCamerasEstimation = useUPnPForAdditionalCamerasEstimation;
+        //noinspection all
         return (T)this;
     }
 
@@ -1696,6 +1766,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setAdditionalCamerasRobustEstimationMethod(RobustEstimatorMethod method) {
         mAdditionalCamerasRobustEstimationMethod = method;
+        //noinspection all
         return (T)this;
     }
 
@@ -1717,6 +1788,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setAdditionalCamerasAllowPlanarConfiguration(boolean allowPlanarConfiguration) {
         mAdditionalCamerasAllowPlanarConfiguration = allowPlanarConfiguration;
+        //noinspection all
         return (T)this;
     }
 
@@ -1740,6 +1812,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setAdditionalCamerasAllowNullspaceDimension2(
             boolean allowNullspaceDimension2) {
         mAdditionalCamerasAllowNullspaceDimension2 = allowNullspaceDimension2;
+        //noinspection all
         return (T)this;
     }
 
@@ -1763,6 +1836,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setAdditionalCamerasAllowNullspaceDimension3(
             boolean allowNullspaceDimension3) {
         mAdditionalCamerasAllowNullspaceDimension3 = allowNullspaceDimension3;
+        //noinspection all
         return (T)this;
     }
 
@@ -1787,6 +1861,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setAdditionalCamerasPlanarThreshold(
             double additionalCamerasPlanarThreshold) {
         mAdditionalCamerasPlanarThreshold = additionalCamerasPlanarThreshold;
+        //noinspection all
         return (T)this;
     }
 
@@ -1808,6 +1883,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setAdditionalCamerasRefined(boolean refineAdditionalCameras) {
         mRefineAdditionalCameras = refineAdditionalCameras;
+        //noinspection all
         return (T)this;
     }
 
@@ -1828,6 +1904,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setAdditionalCamerasCovarianceKept(boolean keepCovarianceAdditionalCameras) {
         mKeepCovarianceAdditionalCameras = keepCovarianceAdditionalCameras;
+        //noinspection all
         return (T)this;
     }
 
@@ -1851,6 +1928,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setAdditionalCamerasUseFastRefinement(boolean additionalCamerasUseFastRefinement) {
         mAdditionalCamerasUseFastRefinement = additionalCamerasUseFastRefinement;
+        //noinspection all
         return (T)this;
     }
 
@@ -1869,6 +1947,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setAdditionalCamerasConfidence(double additionalCamerasConfidence) {
         mAdditionalCamerasConfidence = additionalCamerasConfidence;
+        //noinspection all
         return (T)this;
     }
 
@@ -1888,6 +1967,67 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setAdditionalCamerasMaxIterations(int additionalCamerasMaxIterations) {
         mAdditionalCamerasMaxIterations = additionalCamerasMaxIterations;
+        //noinspection all
+        return (T)this;
+    }
+
+    /**
+     * Gets threshold to determine whether samples for robust pinhole camera estimation are inliers or not.
+     * @return threshold to determine whether samples for robust pinhole camera estimation are inliers or not.
+     */
+    public double getAdditionalCamerasThreshold() {
+        return mAdditionalCamerasThreshold;
+    }
+
+    /**
+     * Sets threshold to determine whether samples for robust pinhole camera estimation are inliers or not.
+     * @param additionalCamerasThreshold threshold to determine whether samples for robust pinhole camera estimation
+     *                                   are inliers or not.
+     * @return this instance so that method can be easily chained.
+     */
+    public T setAdditionalCamerasThreshold(double additionalCamerasThreshold) {
+        mAdditionalCamerasThreshold = additionalCamerasThreshold;
+        //noinspection all
+        return (T)this;
+    }
+
+    /**
+     * Indicates whether inliers must be kept during additional camera estimation.
+     * @return true if inliers must be kept during additional camera estimation, false
+     * otherwise.
+     */
+    public boolean getAdditionalCamerasComputeAndKeepInliers() {
+        return mAdditionalCamerasComputeAndKeepInliers;
+    }
+
+    /**
+     * Specifies whether inliers must be kept during additional camera estimation.
+     * @param additionalCamerasComputeAndKeepInliers true if inliers must be kept during additional camera estimation,
+     *                                               false otherwise.
+     * @return this instance so that method can be easily chained.
+     */
+    public T setAdditionalCamerasComputeAndKeepInliers(boolean additionalCamerasComputeAndKeepInliers) {
+        mAdditionalCamerasComputeAndKeepInliers = additionalCamerasComputeAndKeepInliers;
+        //noinspection all
+        return (T)this;
+    }
+
+    /**
+     * Indicates whether residuals must be computed and kept during additional camera estimation.
+     * @return true if residuals must be computed and kept, false otherwise.
+     */
+    public boolean getAdditionalCamerasComputeAndKeepResiduals() {
+        return mAdditionalCamerasComputeAndKeepResiduals;
+    }
+
+    /**
+     * Specifies whether residuals must be computed and kept during additional camera estimation.
+     * @param additionalCamerasComputeAndKeepResiduals true if residuals must be computed and kept, false otherwise.
+     * @return this instance so that method can be easily chained.
+     */
+    public T setAdditionalCamerasComputeAndKeepResiduals(boolean additionalCamerasComputeAndKeepResiduals) {
+        mAdditionalCamerasComputeAndKeepResiduals = additionalCamerasComputeAndKeepResiduals;
+        //noinspection all
         return (T)this;
     }
 
@@ -1911,6 +2051,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             boolean additionalCamerasSuggestSkewnessValueEnabled) {
         mAdditionalCamerasSuggestSkewnessValueEnabled =
                 additionalCamerasSuggestSkewnessValueEnabled;
+        //noinspection all
         return (T)this;
     }
 
@@ -1935,6 +2076,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setAdditionalCamerasSuggestedSkewnessValue(
             double additionalCamerasSuggestedSkewnessValue) {
         mAdditionalCamerasSuggestedSkewnessValue = additionalCamerasSuggestedSkewnessValue;
+        //noinspection all
         return (T)this;
     }
 
@@ -1959,6 +2101,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             boolean additionalCamerasSuggestHorizontalFocalLengthEnabled) {
         mAdditionalCamerasSuggestHorizontalFocalLengthEnabled =
                 additionalCamerasSuggestHorizontalFocalLengthEnabled;
+        //noinspection all
         return (T)this;
     }
 
@@ -1984,6 +2127,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             double additionalCamerasSuggestedHorizontalFocalLengthValue) {
         mAdditionalCamerasSuggestedHorizontalFocalLengthValue =
                 additionalCamerasSuggestedHorizontalFocalLengthValue;
+        //noinspection all
         return (T)this;
     }
 
@@ -2008,6 +2152,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             boolean additionalCamerasSuggestVerticalFocalLengthEnabled) {
         mAdditionalCamerasSuggestVerticalFocalLengthEnabled =
                 additionalCamerasSuggestVerticalFocalLengthEnabled;
+        //noinspection all
         return (T)this;
     }
 
@@ -2031,6 +2176,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             double additionalCamerasSuggestedVerticalFocalLengthValue) {
         mAdditionalCamerasSuggestedVerticalFocalLengthValue =
                 additionalCamerasSuggestedVerticalFocalLengthValue;
+        //noinspection all
         return (T)this;
     }
 
@@ -2054,6 +2200,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             boolean additionalCamerasSuggestAspectRatioEnabled) {
         mAdditionalCamerasSuggestAspectRatioEnabled =
                 additionalCamerasSuggestAspectRatioEnabled;
+        //noinspection all
         return (T)this;
     }
 
@@ -2077,6 +2224,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             double additionalCamerasSuggestedAspectRatioValue) {
         mAdditionalCamerasSuggestedAspectRatioValue =
                 additionalCamerasSuggestedAspectRatioValue;
+        //noinspection all
         return (T)this;
     }
 
@@ -2100,6 +2248,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             boolean additionalCamerasSuggestPrincipalPointEnabled) {
         mAdditionalCamerasSuggestPrincipalPointEnabled =
                 additionalCamerasSuggestPrincipalPointEnabled;
+        //noinspection all
         return (T)this;
     }
 
@@ -2123,6 +2272,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
             InhomogeneousPoint2D additionalCamerasSuggestedPrincipalPointValue) {
         mAdditionalCamerasSuggestedPrincipalPointValue =
                 additionalCamerasSuggestedPrincipalPointValue;
+        //noinspection all
         return (T)this;
     }
 
@@ -2144,6 +2294,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setHomogeneousPointTriangulatorUsed(boolean useHomogeneousPointTriangulator) {
         mUseHomogeneousPointTriangulator = useHomogeneousPointTriangulator;
+        //noinspection all
         return (T)this;
     }
 
@@ -2165,6 +2316,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
     public T setRobustPointTriangulatorMethod(
             RobustEstimatorMethod robustPointTriangulatorMethod) {
         mRobustPointTriangulatorMethod = robustPointTriangulatorMethod;
+        //noinspection all
         return (T)this;
     }
 
@@ -2183,6 +2335,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setPointTriangulatorConfidence(double pointTriangulatorConfidence) {
         mPointTriangulatorConfidence = pointTriangulatorConfidence;
+        //noinspection all
         return (T)this;
     }
 
@@ -2205,6 +2358,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setPointTriangulatorMaxIterations(int pointTriangulatorMaxIterations) {
         mPointTriangulatorMaxIterations = pointTriangulatorMaxIterations;
+        //noinspection all
         return (T)this;
     }
 
@@ -2227,6 +2381,7 @@ public abstract class BaseSparseReconstructorConfiguration<T extends BaseSparseR
      */
     public T setPointTriangulatorThreshold(double pointTriangulatorThreshold) {
         mPointTriangulatorThreshold = pointTriangulatorThreshold;
+        //noinspection all
         return (T)this;
     }
 }

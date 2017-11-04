@@ -164,6 +164,15 @@ public class AbsoluteOrientationSlamSparseReconstructorConfigurationTest {
                 0.0);
         assertEquals(cfg.getAdditionalCamerasMaxIterations(),
                 AbsoluteOrientationSlamSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_MAX_ITERATIONS);
+        assertEquals(cfg.getAdditionalCamerasThreshold(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.
+                        DEFAULT_ADDITIONAL_CAMERAS_THRESHOLD, 0.0);
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepInliers(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.
+                        DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepResiduals(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.
+                        DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_RESIDUALS);
         assertEquals(cfg.isAdditionalCamerasSuggestSkewnessValueEnabled(),
                 AbsoluteOrientationSlamSparseReconstructorConfiguration.
                         DEFAULT_ADDITIONAL_CAMERAS_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -334,6 +343,15 @@ public class AbsoluteOrientationSlamSparseReconstructorConfigurationTest {
                 0.0);
         assertEquals(cfg.getAdditionalCamerasMaxIterations(),
                 AbsoluteOrientationSlamSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_MAX_ITERATIONS);
+        assertEquals(cfg.getAdditionalCamerasThreshold(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.
+                        DEFAULT_ADDITIONAL_CAMERAS_THRESHOLD, 0.0);
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepInliers(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.
+                        DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_INLIERS);
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepResiduals(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.
+                        DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_RESIDUALS);
         assertEquals(cfg.isAdditionalCamerasSuggestSkewnessValueEnabled(),
                 AbsoluteOrientationSlamSparseReconstructorConfiguration.
                         DEFAULT_ADDITIONAL_CAMERAS_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -1230,6 +1248,64 @@ public class AbsoluteOrientationSlamSparseReconstructorConfigurationTest {
 
         //check correctness
         assertEquals(cfg.getAdditionalCamerasMaxIterations(), 100);
+    }
+
+    @Test
+    public void testGetSetAdditionalCamerasThreshold() {
+        AbsoluteOrientationSlamSparseReconstructorConfiguration cfg =
+                new AbsoluteOrientationSlamSparseReconstructorConfiguration();
+
+        //check default value
+        assertEquals(cfg.getAdditionalCamerasThreshold(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.DEFAULT_ADDITIONAL_CAMERAS_THRESHOLD, 0.0);
+
+        //set new value
+        assertSame(cfg.setAdditionalCamerasThreshold(2.0), cfg);
+
+        //check correctness
+        assertEquals(cfg.getAdditionalCamerasThreshold(), 2.0, 0.0);
+    }
+
+    @Test
+    public void testGetSetAdditionalCamerasComputeAndKeepInliers() {
+        AbsoluteOrientationSlamSparseReconstructorConfiguration cfg =
+                new AbsoluteOrientationSlamSparseReconstructorConfiguration();
+
+        //check default value
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepInliers(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.
+                        DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_INLIERS);
+
+        //set new value
+        assertSame(cfg.setAdditionalCamerasComputeAndKeepInliers(
+                !AbsoluteOrientationSlamSparseReconstructorConfiguration.
+                        DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_INLIERS), cfg);
+
+        //check correctnes
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepInliers(),
+                !AbsoluteOrientationSlamSparseReconstructorConfiguration.
+                        DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_INLIERS);
+    }
+
+    @Test
+    public void testGetSetAdditionalCamerasComputeAndKeepResiduals() {
+        AbsoluteOrientationSlamSparseReconstructorConfiguration cfg =
+                new AbsoluteOrientationSlamSparseReconstructorConfiguration();
+
+        //check default value
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepResiduals(),
+                AbsoluteOrientationSlamSparseReconstructorConfiguration.
+                        DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_RESIDUALS);
+
+        //set new value
+        assertSame(cfg.setAdditionalCamerasComputeAndKeepResiduals(
+                !AbsoluteOrientationSlamSparseReconstructorConfiguration.
+                        DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_RESIDUALS), cfg);
+
+        //check correctness
+        assertEquals(cfg.getAdditionalCamerasComputeAndKeepResiduals(),
+                !AbsoluteOrientationSlamSparseReconstructorConfiguration.
+                        DEFAULT_ADDITIONAL_CAMERAS_COMPUTE_AND_KEEP_RESIDUALS);
     }
 
     @Test

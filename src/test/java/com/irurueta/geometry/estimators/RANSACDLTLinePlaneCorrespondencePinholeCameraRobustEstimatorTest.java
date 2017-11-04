@@ -4001,7 +4001,7 @@ public class RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             RobustEstimatorException, CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
-        for (int t = 0; t < 5*TIMES; t++) {
+        for (int t = 0; t < 10*TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double horizontalFocalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);

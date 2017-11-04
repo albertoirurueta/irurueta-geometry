@@ -267,6 +267,7 @@ public class LMSEHomogeneousSinglePoint3DTriangulatorTest implements
     @Test
     public void testTriangulate() throws LockedException, NotReadyException, 
             Point3DTriangulationException{
+        int numValid = 0;
         for(int t = 0; t < TIMES; t++){
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
 
@@ -353,8 +354,15 @@ public class LMSEHomogeneousSinglePoint3DTriangulatorTest implements
             assertEquals(triangulateEnd, 1);
             reset();
 
+            if (Math.abs(point3D.distanceTo(triangulated)) > ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(point3D.distanceTo(triangulated), 0.0, ABSOLUTE_ERROR);
+
+            numValid++;
         }
+
+        assertTrue(numValid > 0);
     }
         
     private void reset(){

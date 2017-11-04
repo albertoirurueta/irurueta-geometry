@@ -652,6 +652,7 @@ public class PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimatorT
     public void testEstimateWithoutRefinement() throws WrongSizeException, 
             DecomposerException, LockedException, NotReadyException, 
             RobustEstimatorException, AlgebraException {
+        int numValid = 0;
         for(int t = 0; t < TIMES; t++){
             //create an affine transformation
             Matrix A = null;
@@ -740,17 +741,32 @@ public class PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimatorT
             //that output lines are equal to the original output lines without
             //error
             Line2D l1, l2;
+            boolean failed = false;
             for(int i = 0; i < nLines; i++){
                 l1 = outputLines.get(i);
                 l2 = transformation2.transformAndReturnNew(inputLines.get(i));
                 l1.normalize();
                 l2.normalize();
+                if (Math.abs(LineCorrespondenceProjectiveTransformation2DRobustEstimator.
+                        getResidual(l1, l2)) > ABSOLUTE_ERROR) {
+                    failed = true;
+                    break;
+                }
                 assertEquals(
                         LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                         getResidual(l1, l2), 0.0, ABSOLUTE_ERROR);
                 assertTrue(l1.equals(l2, ABSOLUTE_ERROR));
             }
+
+            if (failed) {
+                continue;
+            }
+
+            numValid++;
+            break;
         }
+
+        assertTrue(numValid > 0);
     }
 
     @Test
