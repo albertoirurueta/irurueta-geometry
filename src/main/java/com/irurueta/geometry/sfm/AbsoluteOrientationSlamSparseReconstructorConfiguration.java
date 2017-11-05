@@ -30,7 +30,7 @@ import java.io.Serializable;
  */
 public class AbsoluteOrientationSlamSparseReconstructorConfiguration extends
         BaseSlamSparseReconstructorConfiguration<AbsoluteOrientationSlamCalibrationData,
-                ConstantVelocityModelSlamSparseReconstructorConfiguration> implements Serializable {
+                AbsoluteOrientationSlamSparseReconstructorConfiguration> implements Serializable {
 
     /**
      * Creates an instance of a multiple views sparse reconstructor configuration with

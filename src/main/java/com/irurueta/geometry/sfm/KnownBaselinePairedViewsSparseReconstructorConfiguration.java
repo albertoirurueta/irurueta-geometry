@@ -19,12 +19,12 @@ package com.irurueta.geometry.sfm;
 import java.io.Serializable;
 
 /**
- * Contains configuration for a multiple view sparse reconstructor assuming that the
- * initial baseline (separation between initial cameras) is known.
+ * Contains configuration for a paired sparse reconstructor assuming that the initial
+ * baseline (separation between initial cameras) is known.
  * @author Alberto Irurueta (alberto@irurueta.com)
  */
-public class KnownBaselineSparseReconstructorConfiguration extends
-        BaseSparseReconstructorConfiguration<KnownBaselineSparseReconstructorConfiguration>
+public class KnownBaselinePairedViewsSparseReconstructorConfiguration extends
+        BasePairedViewsSparseReconstructorConfiguration<KnownBaselinePairedViewsSparseReconstructorConfiguration>
         implements Serializable {
 
     /**
@@ -44,15 +44,15 @@ public class KnownBaselineSparseReconstructorConfiguration extends
     /**
      * Constructor.
      */
-    public KnownBaselineSparseReconstructorConfiguration() { }
+    public KnownBaselinePairedViewsSparseReconstructorConfiguration() { }
 
     /**
-     * Creates an instance of a multiple view sparse reconstructor configuration with
-     * known camera baseline.
+     * Creates an instance of a paired view sparse reconstructor configuration with known
+     * camera baseline.
      * @return configuration instance.
      */
-    public static KnownBaselineSparseReconstructorConfiguration make() {
-        return new KnownBaselineSparseReconstructorConfiguration();
+    public static KnownBaselinePairedViewsSparseReconstructorConfiguration make() {
+        return new KnownBaselinePairedViewsSparseReconstructorConfiguration();
     }
 
     /**
@@ -67,12 +67,12 @@ public class KnownBaselineSparseReconstructorConfiguration extends
 
     /**
      * Sets camera baseline (expressed in a unit of distance such as meters).
-     * Contains the real separation between camera centers so that the real scale
-     * of cameras and reconstructed points can be retrieved.
+     * Contains the real separation between camera centers so that the real scale of
+     * cameras and reconstructed points can be retrieved.
      * @param baseline camera baseline.
      * @return this instance so that methods can be easily chained.
      */
-    public KnownBaselineSparseReconstructorConfiguration setBaseline(double baseline) {
+    public KnownBaselinePairedViewsSparseReconstructorConfiguration setBaseline(double baseline) {
         mBaseline = baseline;
         return this;
     }

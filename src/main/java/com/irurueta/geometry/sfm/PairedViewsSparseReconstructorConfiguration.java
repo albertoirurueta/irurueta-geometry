@@ -16,29 +16,26 @@
 
 package com.irurueta.geometry.sfm;
 
-import com.irurueta.geometry.slam.SlamCalibrationData;
-
 import java.io.Serializable;
 
 /**
- * Contains configuration for a multiple view sparse reconstructor using SLAM (Simultaneous
- * Location And Mapping) to determine the scale of the scene (i.e. the baseline or separation
- * between initial cameras) by fusing both camera data and data from sensors like an
- * accelerometer or gyroscope.
- * This configuration assumes that an orientation relative to the first view will be
- * estimated.
+ * Contains configuration for a paired view sparse reconstructor.
  * @author Alberto Irurueta (alberto@irurueta.com)
  */
-public class SlamSparseReconstructorConfiguration extends
-        BaseSlamSparseReconstructorConfiguration<SlamCalibrationData, SlamSparseReconstructorConfiguration>
+public class PairedViewsSparseReconstructorConfiguration extends
+        BasePairedViewsSparseReconstructorConfiguration<PairedViewsSparseReconstructorConfiguration>
         implements Serializable {
 
     /**
-     * Creates an instance of a multiple views sparse reconstructor configuration with slam
-     * estimation.
+     * Constructor.
+     */
+    public PairedViewsSparseReconstructorConfiguration() { }
+
+    /**
+     * Creates an instance of a sparse reconstructor configuration.
      * @return configuration instance.
      */
-    public static SlamSparseReconstructorConfiguration make() {
-        return new SlamSparseReconstructorConfiguration();
+    public static PairedViewsSparseReconstructorConfiguration make() {
+        return new PairedViewsSparseReconstructorConfiguration();
     }
 }
