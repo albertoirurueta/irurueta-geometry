@@ -16,15 +16,18 @@
 
 package com.irurueta.geometry.sfm;
 
-import com.irurueta.geometry.*;
+import com.irurueta.geometry.MetricTransformation3D;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.geometry.Rotation3D;
 import com.irurueta.geometry.slam.AbsoluteOrientationBaseSlamEstimator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base class in charge of estimating cameras and 3D reconstructed points from sparse
- * image point correspondences in multiple views and also in charge of estimating overall
+ * Base class in charge of estimating pairs of cameras and 3D reconstructed points from sparse
+ * image point correspondences in multiple view pairs and also in charge of estimating overall
  * scene scale and absolute orientation by means of SLAM (Simultaneous Location And Mapping)
  * using data obtained from sensors like accelerometers or gyroscopes.
  * NOTE: absolute orientation slam estimators are not very accurate during estimation of
@@ -34,12 +37,12 @@ import java.util.List;
  * @param <L> type of listener.
  * @param <S> type of SLAM estimator.
  */
-public abstract class BaseAbsoluteOrientationSlamSparseReconstructor<
-        C extends BaseSlamSparseReconstructorConfiguration,
-        R extends BaseSlamSparseReconstructor,
-        L extends BaseSlamSparseReconstructorListener<R>,
+public abstract class BaseAbsoluteOrientationSlamPairedViewsSparseReconstructor<
+        C extends BaseSlamPairedViewsSparseReconstructorConfiguration,
+        R extends BaseSlamPairedViewsSparseReconstructor,
+        L extends BaseSlamPairedViewsSparseReconstructorListener<R>,
         S extends AbsoluteOrientationBaseSlamEstimator> extends
-        BaseSlamSparseReconstructor<C, R, L, S> {
+        BaseSlamPairedViewsSparseReconstructor<C, R, L, S> {
 
     /**
      * First sample of orientation received.
@@ -58,9 +61,8 @@ public abstract class BaseAbsoluteOrientationSlamSparseReconstructor<
      * @throws NullPointerException if listener or configuration is not
      * provided.
      */
-    public BaseAbsoluteOrientationSlamSparseReconstructor(
-            C configuration, L listener)
-            throws NullPointerException {
+    public BaseAbsoluteOrientationSlamPairedViewsSparseReconstructor(
+            C configuration, L listener) throws NullPointerException {
         super(configuration, listener);
     }
 
@@ -206,9 +208,9 @@ public abstract class BaseAbsoluteOrientationSlamSparseReconstructor<
             }
 
             //update scale of reconstructed points
-            int numPoints = mActiveMetricReconstructedPoints.size();
+            int numPoints = mMetricReconstructedPoints.size();
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
-            for (ReconstructedPoint3D reconstructedPoint : mActiveMetricReconstructedPoints) {
+            for (ReconstructedPoint3D reconstructedPoint : mMetricReconstructedPoints) {
                 metricReconstructedPoints3D.add(reconstructedPoint.getPoint());
             }
 
@@ -217,11 +219,11 @@ public abstract class BaseAbsoluteOrientationSlamSparseReconstructor<
                             metricReconstructedPoints3D);
 
             //set scaled points into result
-            mActiveEuclideanReconstructedPoints = new ArrayList<>();
+            mEuclideanReconstructedPoints = new ArrayList<>();
             ReconstructedPoint3D euclideanPoint;
             ReconstructedPoint3D metricPoint;
             for (int i = 0; i < numPoints; i++) {
-                metricPoint = mActiveMetricReconstructedPoints.get(i);
+                metricPoint = mMetricReconstructedPoints.get(i);
 
                 euclideanPoint = new ReconstructedPoint3D();
                 euclideanPoint.setId(metricPoint.getId());
@@ -233,7 +235,7 @@ public abstract class BaseAbsoluteOrientationSlamSparseReconstructor<
                 }
                 euclideanPoint.setColorData(metricPoint.getColorData());
 
-                mActiveEuclideanReconstructedPoints.add(euclideanPoint);
+                mEuclideanReconstructedPoints.add(euclideanPoint);
             }
 
             return true;

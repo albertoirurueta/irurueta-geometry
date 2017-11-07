@@ -16,19 +16,19 @@
 
 package com.irurueta.geometry.sfm;
 
-import com.irurueta.geometry.slam.AbsoluteOrientationSlamEstimator;
+import com.irurueta.geometry.slam.ConstantVelocityModelSlamEstimator;
 
 /**
- * Estimates cameras and 3D reconstructed points from sparse image point correspondences
- * in multiple views and using SLAM (with accelerometer and gyroscope data) with absolute
- * orientation for overall scale and orientation estimation.
+ * Estimates pairs of cameras and 3D reconstructed points from sparse image point
+ * correspondences in multiple view pairs and using SLAM (with accelerometer and gyroscope
+ * data) with constant velocity model for overall scale estimation.
  */
-public class AbsoluteOrientationSlamSparseReconstructor extends
-        BaseAbsoluteOrientationSlamSparseReconstructor<
-        AbsoluteOrientationSlamSparseReconstructorConfiguration,
-        AbsoluteOrientationSlamSparseReconstructor,
-        AbsoluteOrientationSlamSparseReconstructorListener,
-        AbsoluteOrientationSlamEstimator> {
+public class ConstantVelocityModelSlamPairedViewsSparseReconstructor extends
+        BaseSlamPairedViewsSparseReconstructor<
+        ConstantVelocityModelSlamPairedViewsSparseReconstructorConfiguration,
+        ConstantVelocityModelSlamPairedViewsSparseReconstructor,
+        ConstantVelocityModelSlamPairedViewsSparseReconstructorListener,
+        ConstantVelocityModelSlamEstimator> {
 
     /**
      * Constructor.
@@ -37,9 +37,9 @@ public class AbsoluteOrientationSlamSparseReconstructor extends
      * @throws NullPointerException if listener or configuration is not
      * provided.
      */
-    public AbsoluteOrientationSlamSparseReconstructor(
-            AbsoluteOrientationSlamSparseReconstructorConfiguration configuration,
-            AbsoluteOrientationSlamSparseReconstructorListener listener)
+    public ConstantVelocityModelSlamPairedViewsSparseReconstructor(
+            ConstantVelocityModelSlamPairedViewsSparseReconstructorConfiguration configuration,
+            ConstantVelocityModelSlamPairedViewsSparseReconstructorListener listener)
             throws NullPointerException {
         super(configuration, listener);
     }
@@ -47,12 +47,13 @@ public class AbsoluteOrientationSlamSparseReconstructor extends
     /**
      * Constructor.
      * @param listener listener in charge of handling events.
-     * @throws NullPointerException if listener is not provided.
+     * @throws NullPointerException if listener or configuration is not
+     * provided.
      */
-    public AbsoluteOrientationSlamSparseReconstructor(
-            AbsoluteOrientationSlamSparseReconstructorListener listener)
+    public ConstantVelocityModelSlamPairedViewsSparseReconstructor(
+            ConstantVelocityModelSlamPairedViewsSparseReconstructorListener listener)
             throws NullPointerException {
-        this(new AbsoluteOrientationSlamSparseReconstructorConfiguration(),
+        this(new ConstantVelocityModelSlamPairedViewsSparseReconstructorConfiguration(),
                 listener);
     }
 
@@ -63,14 +64,14 @@ public class AbsoluteOrientationSlamSparseReconstructor extends
      * @return true if more views can be processed, false when reconstruction has finished.
      */
     @Override
-    public boolean processOneView() {
+    public boolean processOneViewPair() {
         if (!mRunning) {
-            mSlamEstimator = new AbsoluteOrientationSlamEstimator();
+            mSlamEstimator = new ConstantVelocityModelSlamEstimator();
             setUpSlamEstimatorListener();
             setUpCalibrationData();
         }
 
-        return super.processOneView();
+        return super.processOneViewPair();
     }
 
     /**
@@ -81,6 +82,6 @@ public class AbsoluteOrientationSlamSparseReconstructor extends
      */
     @Override
     protected boolean postProcessOne(boolean isInitialPairOfViews) {
-        return updateScaleAndOrientation(isInitialPairOfViews);
+        return updateScale(isInitialPairOfViews);
     }
 }

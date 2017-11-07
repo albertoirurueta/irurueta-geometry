@@ -381,7 +381,7 @@ public class SparseReconstructorTest {
                         fail("max tries reached");
                     }
                     numTry++;
-                } while(!front1 || !front2);
+                } while (!front1 || !front2);
                 points3D.add(point3D);
 
                 //check that 3D point is in front of both cameras
