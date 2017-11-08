@@ -347,11 +347,7 @@ public abstract class BasePairedViewsSparseReconstructor<
      * @return true if more views can be processed, false when reconstruction has finished.
      */
     public boolean processOneViewPair() {
-        if (mViewCount == 0) {
-            if (mRunning) {
-                //already started
-                return true;
-            }
+        if (mViewCount == 0 && !mRunning) {
 
             reset();
             mRunning = true;
@@ -420,6 +416,11 @@ public abstract class BasePairedViewsSparseReconstructor<
      * This method is useful when all data is available before starting the reconstruction.
      */
     public void start() {
+        if (mRunning) {
+            //already started
+            return;
+        }
+
         while(processOneViewPair()) {
             if (mCancelled) {
                 break;
@@ -801,10 +802,10 @@ public abstract class BasePairedViewsSparseReconstructor<
         }
 
         int count = matches.size();
-        List<Sample2D> leftSamples = new ArrayList<Sample2D>();
-        List<Sample2D> rightSamples = new ArrayList<Sample2D>();
-        List<Point2D> leftPoints = new ArrayList<Point2D>();
-        List<Point2D> rightPoints = new ArrayList<Point2D>();
+        List<Sample2D> leftSamples = new ArrayList<>();
+        List<Sample2D> rightSamples = new ArrayList<>();
+        List<Point2D> leftPoints = new ArrayList<>();
+        List<Point2D> rightPoints = new ArrayList<>();
         double[] qualityScores = new double[count];
         double principalPointX, principalPointY;
         if (mConfiguration.getPairedCamerasEstimatorMethod() ==
@@ -922,8 +923,7 @@ public abstract class BasePairedViewsSparseReconstructor<
 
                 //estimate intrinsic parameters using the Image of Absolute
                 //Conic (IAC)
-                List<Transformation2D> homographies =
-                        new ArrayList<Transformation2D>();
+                List<Transformation2D> homographies = new ArrayList<>();
                 homographies.add(homography);
 
                 ImageOfAbsoluteConicEstimator iacEstimator =
@@ -932,9 +932,9 @@ public abstract class BasePairedViewsSparseReconstructor<
 
                 intrinsic1 = intrinsic2 = iac.getIntrinsicParameters();
 
-            } else if (intrinsic1 == null && intrinsic2 != null) {
+            } else if (intrinsic1 == null) { //&& intrinsic2 != null
                 intrinsic1 = intrinsic2;
-            } else if (intrinsic1 != null && intrinsic2 == null) {
+            } else if (intrinsic2 == null) { //&& intrinsic1 != null
                 intrinsic2 = intrinsic1;
             }
             fundamentalMatrixEstimator.setLeftIntrinsics(intrinsic1);
