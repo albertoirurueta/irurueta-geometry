@@ -4221,6 +4221,7 @@ public class SparseReconstructorTest {
                     front2 = camera2.isPointInFrontOfCamera(point3D);
                     if (numTry > MAX_TRIES) {
                         failed = true;
+                        break;
                     }
                     numTry++;
                 } while(!front1 || !front2);

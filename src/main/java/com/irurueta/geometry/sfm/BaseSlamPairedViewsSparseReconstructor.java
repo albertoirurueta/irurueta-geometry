@@ -25,7 +25,7 @@ import java.util.List;
 public abstract class BaseSlamPairedViewsSparseReconstructor<
         C extends BaseSlamPairedViewsSparseReconstructorConfiguration,
         R extends BaseSlamPairedViewsSparseReconstructor,
-        L extends BaseSlamPairedViewsSparseReconstructorListener,
+        L extends BaseSlamPairedViewsSparseReconstructorListener<R>,
         S extends BaseSlamEstimator> extends BasePairedViewsSparseReconstructor<C, R, L> {
 
     /**

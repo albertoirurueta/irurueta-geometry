@@ -187,7 +187,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      * ends, when certain data is needed or when estimation of data has been computed.
      * @return listener in charge of handling events.
      */
-    public BaseSparseReconstructorListener<R> getListener() {
+    public L getListener() {
         return mListener;
     }
 

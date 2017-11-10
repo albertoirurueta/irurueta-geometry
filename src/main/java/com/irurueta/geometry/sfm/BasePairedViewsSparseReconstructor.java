@@ -45,7 +45,7 @@ import java.util.List;
 public abstract class BasePairedViewsSparseReconstructor<
         C extends BasePairedViewsSparseReconstructorConfiguration,
         R extends BasePairedViewsSparseReconstructor,
-        L extends BasePairedViewsSparseReconstructorListener> {
+        L extends BasePairedViewsSparseReconstructorListener<R>> {
 
     /**
      * Minimum required number of views.
@@ -210,7 +210,7 @@ public abstract class BasePairedViewsSparseReconstructor<
      * been computed.
      * @return listener in charge of handling events.
      */
-    public BasePairedViewsSparseReconstructorListener<R> getListener() {
+    public L getListener() {
         return mListener;
     }
 
@@ -539,7 +539,7 @@ public abstract class BasePairedViewsSparseReconstructor<
                             //something failed
                             mFailed = true;
                             //noinspection unchecked
-                            mListener.onFail((R) this);
+                            mListener.onFail((R)this);
                             return false;
                         } else {
                             //post processing succeeded
@@ -1066,7 +1066,7 @@ public abstract class BasePairedViewsSparseReconstructor<
             boolean result = estimateInitialCamerasAndPointsEssential(intrinsic1,
                     intrinsic2);
             if (!isInitialPairOfViews) {
-                return result && transformMetricPairOfCameras();
+                return result && transformMetricPairOfCamerasAndPoints();
             } else {
                 return result;
             }
@@ -1156,8 +1156,8 @@ public abstract class BasePairedViewsSparseReconstructor<
             List<Sample2D> samples1 = mCurrentEstimatedFundamentalMatrix.getLeftSamples();
             List<Sample2D> samples2 = mCurrentEstimatedFundamentalMatrix.getRightSamples();
 
-            List<Point2D> points1 = new ArrayList<Point2D>();
-            List<Point2D> points2 = new ArrayList<Point2D>();
+            List<Point2D> points1 = new ArrayList<>();
+            List<Point2D> points2 = new ArrayList<>();
             int length = samples1.size();
             for (int i = 0; i < length; i++) {
                 Sample2D sample1 = samples1.get(i);
@@ -1227,11 +1227,7 @@ public abstract class BasePairedViewsSparseReconstructor<
                 mMetricReconstructedPoints.add(reconstructedPoint);
             }
 
-            if (!isInitialPairOfViews) {
-                return transformMetricPairOfCameras();
-            } else {
-                return true;
-            }
+            return isInitialPairOfViews || transformMetricPairOfCamerasAndPoints();
         } catch (Exception e) {
             return false;
         }
@@ -1315,11 +1311,7 @@ public abstract class BasePairedViewsSparseReconstructor<
             }
 
             //for non initial view, transform cameras to new reference
-            if (!isInitialPairOfViews) {
-                return transformMetricPairOfCameras();
-            } else {
-                return true;
-            }
+            return isInitialPairOfViews || transformMetricPairOfCamerasAndPoints();
         } catch (Exception e) {
             return false;
         }
@@ -1353,7 +1345,7 @@ public abstract class BasePairedViewsSparseReconstructor<
             //for non initial view, transform cameras to new reference
             boolean result = estimateInitialCamerasAndPointsEssential(intrinsic1, intrinsic2);
             if (!isInitialPairOfViews) {
-                return result && transformMetricPairOfCameras();
+                return result && transformMetricPairOfCamerasAndPoints();
             } else {
                 return result;
             }
@@ -1430,7 +1422,7 @@ public abstract class BasePairedViewsSparseReconstructor<
             BitSet validTriangulatedPoints =
                     estimator.getValidTriangulatedPoints();
 
-            mMetricReconstructedPoints = new ArrayList<ReconstructedPoint3D>();
+            mMetricReconstructedPoints = new ArrayList<>();
             int size = triangulatedPoints.size();
             for (int i = 0; i < size; i++) {
                 ReconstructedPoint3D reconstructedPoint =
@@ -1480,7 +1472,7 @@ public abstract class BasePairedViewsSparseReconstructor<
      * last kept location and rotation.
      * @return true if cameras were successfully transformed.
      */
-    private boolean transformMetricPairOfCameras() {
+    private boolean transformMetricPairOfCamerasAndPoints() {
         if (mPreviousMetricEstimatedCamera == null || mCurrentMetricEstimatedCamera == null) {
             return false;
         }
@@ -1491,20 +1483,27 @@ public abstract class BasePairedViewsSparseReconstructor<
             return false;
         }
 
+        Rotation3D invRot = mLastMetricCameraRotation.inverseRotationAndReturnNew();
         if (mReferenceTransformation == null) {
             double[] translation = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
             translation[0] = mLastMetricCameraCenter.getInhomX();
             translation[1] = mLastMetricCameraCenter.getInhomY();
             translation[2] = mLastMetricCameraCenter.getInhomZ();
-            mReferenceTransformation = new EuclideanTransformation3D(mLastMetricCameraRotation, translation);
+            mReferenceTransformation = new EuclideanTransformation3D(invRot, translation);
         } else {
-            mReferenceTransformation.setRotation(mLastMetricCameraRotation);
+            mReferenceTransformation.setRotation(invRot);
             mReferenceTransformation.setTranslation(mLastMetricCameraCenter);
         }
 
         try {
             mReferenceTransformation.transform(previousCamera);
             mReferenceTransformation.transform(currentCamera);
+
+            Point3D p;
+            for (ReconstructedPoint3D reconstructedPoint : mMetricReconstructedPoints) {
+                p = reconstructedPoint.getPoint();
+                mReferenceTransformation.transform(p, p);
+            }
             return true;
         } catch (AlgebraException e) {
             return false;
