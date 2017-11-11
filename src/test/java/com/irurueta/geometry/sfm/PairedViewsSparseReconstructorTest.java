@@ -7,9 +7,7 @@ import com.irurueta.algebra.SingularValueDecomposer;
 import com.irurueta.geometry.*;
 import com.irurueta.geometry.epipolar.FundamentalMatrix;
 import com.irurueta.geometry.epipolar.InvalidPairOfCamerasException;
-import com.irurueta.geometry.estimators.MetricTransformation3DRobustEstimator;
 import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.*;
 
@@ -3721,11 +3719,6 @@ public class PairedViewsSparseReconstructorTest {
             assertEquals(mScale, baseline, LARGE_ABSOLUTE_ERROR);
 
             //check cameras
-            PinholeCameraIntrinsicParameters estimatedIntrinsic1 =
-                    estimatedEuclideanCamera1.getIntrinsicParameters();
-            PinholeCameraIntrinsicParameters estimatedIntrinsic2 =
-                    estimatedEuclideanCamera2.getIntrinsicParameters();
-
             Rotation3D estimatedRotation1 = estimatedEuclideanCamera1.getCameraRotation();
 
             assertTrue(center1.equals(estimatedCenter1, ABSOLUTE_ERROR));
@@ -4896,6 +4889,473 @@ public class PairedViewsSparseReconstructorTest {
         }
 
         assertTrue(numValid > 0);
+    }
+
+    @Test
+    public void testCancel() throws GeometryException, AlgebraException {
+        PairedViewsSparseReconstructorConfiguration configuration =
+                new PairedViewsSparseReconstructorConfiguration();
+        configuration.setPairedCamerasEstimatorMethod(InitialCamerasEstimatorMethod.ESSENTIAL_MATRIX);
+        configuration.setIntrinsicParametersKnown(true);
+
+        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        double focalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH_ESSENTIAL,
+                MAX_FOCAL_LENGTH_ESSENTIAL);
+        double aspectRatio = configuration.getPairedCamerasAspectRatio();
+        double skewness = 0.0;
+        double principalPoint = 0.0;
+
+        final PinholeCameraIntrinsicParameters intrinsic =
+                new PinholeCameraIntrinsicParameters(focalLength, focalLength,
+                        principalPoint, principalPoint, skewness);
+        intrinsic.setAspectRatioKeepingHorizontalFocalLength(aspectRatio);
+
+        double alphaEuler1 = 0.0;
+        double betaEuler1 = 0.0;
+        double gammaEuler1 = 0.0;
+        double alphaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        double betaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        double gammaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        double alphaEuler3 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        double betaEuler3 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        double gammaEuler3 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+
+        double cameraSeparation1 = randomizer.nextDouble(
+                MIN_CAMERA_SEPARATION_ESSENTIAL,
+                MAX_CAMERA_SEPARATION_ESSENTIAL);
+        double cameraSeparation2 = randomizer.nextDouble(
+                MIN_CAMERA_SEPARATION_ESSENTIAL,
+                MAX_CAMERA_SEPARATION_ESSENTIAL);
+
+        final Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
+        final Point3D center2 = new InhomogeneousPoint3D(
+                center1.getInhomX() + cameraSeparation1,
+                center1.getInhomY() + cameraSeparation1,
+                center1.getInhomZ() + cameraSeparation1);
+        final Point3D center3 = new InhomogeneousPoint3D(
+                center2.getInhomX() + cameraSeparation2,
+                center2.getInhomY() + cameraSeparation2,
+                center2.getInhomZ() + cameraSeparation2);
+
+        MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
+                betaEuler1, gammaEuler1);
+        MatrixRotation3D rotation2 = new MatrixRotation3D(alphaEuler2,
+                betaEuler2, gammaEuler2);
+        MatrixRotation3D rotation3 = new MatrixRotation3D(alphaEuler3,
+                betaEuler3, gammaEuler3);
+
+        PinholeCamera camera1 = new PinholeCamera(intrinsic, rotation1,
+                center1);
+        PinholeCamera camera2 = new PinholeCamera(intrinsic, rotation2,
+                center2);
+        PinholeCamera camera3 = new PinholeCamera(intrinsic, rotation3,
+                center3);
+
+        //create 3D points laying in front of all cameras
+
+        //1st find an approximate central point by intersecting the axis planes of
+        //all cameras
+        Plane horizontalPlane1 = camera1.getHorizontalAxisPlane();
+        Plane verticalPlane1 = camera1.getVerticalAxisPlane();
+        Plane horizontalPlane2 = camera2.getHorizontalAxisPlane();
+        Plane verticalPlane2 = camera2.getVerticalAxisPlane();
+        Plane horizontalPlane3 = camera3.getHorizontalAxisPlane();
+        Plane verticalPlane3 = camera3.getVerticalAxisPlane();
+        Matrix planesIntersectionMatrixPair1 = new Matrix(
+                Plane.PLANE_NUMBER_PARAMS, Plane.PLANE_NUMBER_PARAMS);
+        Matrix planesIntersectionMatrixPair2 = new Matrix(
+                Plane.PLANE_NUMBER_PARAMS, Plane.PLANE_NUMBER_PARAMS);
+        planesIntersectionMatrixPair1.setElementAt(0, 0, verticalPlane1.getA());
+        planesIntersectionMatrixPair1.setElementAt(0, 1, verticalPlane1.getB());
+        planesIntersectionMatrixPair1.setElementAt(0, 2, verticalPlane1.getC());
+        planesIntersectionMatrixPair1.setElementAt(0, 3, verticalPlane1.getD());
+
+        planesIntersectionMatrixPair1.setElementAt(1, 0,
+                horizontalPlane1.getA());
+        planesIntersectionMatrixPair1.setElementAt(1, 1,
+                horizontalPlane1.getB());
+        planesIntersectionMatrixPair1.setElementAt(1, 2,
+                horizontalPlane1.getC());
+        planesIntersectionMatrixPair1.setElementAt(1, 3,
+                horizontalPlane1.getD());
+
+        planesIntersectionMatrixPair1.setElementAt(2, 0, verticalPlane2.getA());
+        planesIntersectionMatrixPair1.setElementAt(2, 1, verticalPlane2.getB());
+        planesIntersectionMatrixPair1.setElementAt(2, 2, verticalPlane2.getC());
+        planesIntersectionMatrixPair1.setElementAt(2, 3, verticalPlane2.getD());
+
+        planesIntersectionMatrixPair1.setElementAt(3, 0,
+                horizontalPlane2.getA());
+        planesIntersectionMatrixPair1.setElementAt(3, 1,
+                horizontalPlane2.getB());
+        planesIntersectionMatrixPair1.setElementAt(3, 2,
+                horizontalPlane2.getC());
+        planesIntersectionMatrixPair1.setElementAt(3, 3,
+                horizontalPlane2.getD());
+
+
+
+        planesIntersectionMatrixPair2.setElementAt(0, 0, verticalPlane2.getA());
+        planesIntersectionMatrixPair2.setElementAt(0, 1, verticalPlane2.getB());
+        planesIntersectionMatrixPair2.setElementAt(0, 2, verticalPlane2.getC());
+        planesIntersectionMatrixPair2.setElementAt(0, 3, verticalPlane2.getD());
+
+        planesIntersectionMatrixPair2.setElementAt(1, 0,
+                horizontalPlane2.getA());
+        planesIntersectionMatrixPair2.setElementAt(1, 1,
+                horizontalPlane2.getB());
+        planesIntersectionMatrixPair2.setElementAt(1, 2,
+                horizontalPlane2.getC());
+        planesIntersectionMatrixPair2.setElementAt(1, 3,
+                horizontalPlane2.getD());
+
+        planesIntersectionMatrixPair2.setElementAt(2, 0, verticalPlane3.getA());
+        planesIntersectionMatrixPair2.setElementAt(2, 1, verticalPlane3.getB());
+        planesIntersectionMatrixPair2.setElementAt(2, 2, verticalPlane3.getC());
+        planesIntersectionMatrixPair2.setElementAt(2, 3, verticalPlane3.getD());
+
+        planesIntersectionMatrixPair2.setElementAt(3, 0,
+                horizontalPlane3.getA());
+        planesIntersectionMatrixPair2.setElementAt(3, 1,
+                horizontalPlane3.getB());
+        planesIntersectionMatrixPair2.setElementAt(3, 2,
+                horizontalPlane3.getC());
+        planesIntersectionMatrixPair2.setElementAt(3, 2,
+                horizontalPlane3.getD());
+
+        SingularValueDecomposer decomposerPair1 = new SingularValueDecomposer(
+                planesIntersectionMatrixPair1);
+        decomposerPair1.decompose();
+        Matrix vPair1 = decomposerPair1.getV();
+
+        SingularValueDecomposer decomposerPair2 = new SingularValueDecomposer(
+                planesIntersectionMatrixPair2);
+        decomposerPair2.decompose();
+        Matrix vPair2 = decomposerPair2.getV();
+
+        HomogeneousPoint3D centralCommonPointPair1 = new HomogeneousPoint3D(
+                vPair1.getElementAt(0, 3),
+                vPair1.getElementAt(1, 3),
+                vPair1.getElementAt(2, 3),
+                vPair1.getElementAt(3, 3));
+
+        HomogeneousPoint3D centralCommonPointPair2 = new HomogeneousPoint3D(
+                vPair2.getElementAt(0, 3),
+                vPair2.getElementAt(1, 3),
+                vPair2.getElementAt(2, 3),
+                vPair2.getElementAt(3, 3));
+
+        double lambdaX, lambdaY, lambdaZ;
+
+        final int numPointsPair1 = randomizer.nextInt(MIN_NUM_POINTS, MAX_NUM_POINTS);
+        final int numPointsPair2 = randomizer.nextInt(MIN_NUM_POINTS, MAX_NUM_POINTS);
+
+        InhomogeneousPoint3D point3D;
+        Point2D projectedPoint1, projectedPoint2, projectedPoint3;
+        final List<Point2D> projectedPoints1 = new ArrayList<>();
+        final List<Point2D> projectedPoints2a = new ArrayList<>();
+        final List<Point2D> projectedPoints2b = new ArrayList<>();
+        final List<Point2D> projectedPoints3 = new ArrayList<>();
+        boolean front1, front2, front3;
+        for (int i = 0; i < numPointsPair1; i++) {
+            //generate points and ensure they lie in front of both cameras
+            int numTry = 0;
+            do {
+                lambdaX = randomizer.nextDouble(
+                        MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                lambdaY = randomizer.nextDouble(
+                        MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                lambdaZ = randomizer.nextDouble(
+                        MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+
+                point3D = new InhomogeneousPoint3D(
+                        centralCommonPointPair1.getInhomX() + lambdaX,
+                        centralCommonPointPair1.getInhomY() + lambdaY,
+                        centralCommonPointPair1.getInhomZ() + lambdaZ);
+
+                front1 = camera1.isPointInFrontOfCamera(point3D);
+                front2 = camera2.isPointInFrontOfCamera(point3D);
+                front3 = camera3.isPointInFrontOfCamera(point3D);
+                if (numTry > MAX_TRIES) {
+                    fail("max tries reached");
+                }
+                numTry++;
+            } while (!front1 || !front2 || !front3);
+
+            //check that 3D point is in front of 1st pair of cameras
+            //noinspection all
+            assertTrue(front1);
+            //noinspection all
+            assertTrue(front2);
+            //noinspection all
+            assertTrue(front3);
+
+            //project 3D point into 1st pair of cameras
+            projectedPoint1 = new InhomogeneousPoint2D();
+            camera1.project(point3D, projectedPoint1);
+            projectedPoints1.add(projectedPoint1);
+
+            projectedPoint2 = new InhomogeneousPoint2D();
+            camera2.project(point3D, projectedPoint2);
+            projectedPoints2a.add(projectedPoint2);
+        }
+
+        for (int i = 0; i < numPointsPair2; i++) {
+            //generate points and ensure they lie in front of both cameras
+            int numTry = 0;
+            do {
+                lambdaX = randomizer.nextDouble(
+                        MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                lambdaY = randomizer.nextDouble(
+                        MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                lambdaZ = randomizer.nextDouble(
+                        MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+
+                point3D = new InhomogeneousPoint3D(
+                        center2.getInhomX() + centralCommonPointPair2.getInhomX() + lambdaX,
+                        center2.getInhomY() + centralCommonPointPair2.getInhomY() + lambdaY,
+                        center2.getInhomZ() + centralCommonPointPair2.getInhomZ() + lambdaZ);
+
+                front1 = camera1.isPointInFrontOfCamera(point3D);
+                front2 = camera2.isPointInFrontOfCamera(point3D);
+                front3 = camera3.isPointInFrontOfCamera(point3D);
+                if (numTry > MAX_TRIES) {
+                    fail("max tries reached");
+                }
+                numTry++;
+            } while (!front1 || !front2 || !front3);
+
+            //check that 3D point is in front of 2nd pair of cameras
+            //noinspection all
+            assertTrue(front1);
+            //noinspection all
+            assertTrue(front2);
+            //noinspection all
+            assertTrue(front3);
+
+            //project 3D point into 2nd pair of cameras
+            projectedPoint2 = new InhomogeneousPoint2D();
+            camera2.project(point3D, projectedPoint2);
+            projectedPoints2b.add(projectedPoint2);
+
+            projectedPoint3 = new InhomogeneousPoint2D();
+            camera3.project(point3D, projectedPoint3);
+            projectedPoints3.add(projectedPoint3);
+        }
+
+        PairedViewsSparseReconstructorListener listener =
+                new PairedViewsSparseReconstructorListener() {
+
+                    @Override
+                    public double onBaselineRequested(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                                                      int viewId2, EstimatedCamera metricCamera1, EstimatedCamera metricCamera2) {
+                        int viewCount = reconstructor.getViewCount();
+                        if (viewCount == 0) {
+                            return center1.distanceTo(center2);
+                        } else if (viewCount == 2) {
+                            return center2.distanceTo(center3);
+                        }
+
+                        return 1.0;
+                    }
+
+                    @Override
+                    public boolean hasMoreViewsAvailable(PairedViewsSparseReconstructor reconstructor) {
+                        reconstructor.cancel();
+                        return mViewCount < 4; //3 views = 2 view pairs (2 images * 2 views --> 4 view counts)
+                    }
+
+                    @Override
+                    public void onRequestSamplesForCurrentViewPair(PairedViewsSparseReconstructor reconstructor,
+                                                                   int viewId1, int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+
+                        samples1.clear();
+                        samples2.clear();
+
+                        int viewCount = reconstructor.getViewCount();
+
+                        Sample2D sample1, sample2;
+                        if(viewCount == 0) {
+                            //first view pair
+                            for (int i = 0; i < numPointsPair1; i++) {
+                                sample1 = new Sample2D();
+                                sample1.setPoint(projectedPoints1.get(i));
+                                sample1.setViewId(viewId1);
+                                samples1.add(sample1);
+
+                                sample2 = new Sample2D();
+                                sample2.setPoint(projectedPoints2a.get(i));
+                                sample2.setViewId(viewId2);
+                                samples2.add(sample2);
+                            }
+
+                        } else if (viewCount == 2){
+                            //second view pair
+                            for (int i = 0; i < numPointsPair2; i++) {
+                                sample1 = new Sample2D();
+                                sample1.setPoint(projectedPoints2b.get(i));
+                                sample1.setViewId(viewId1);
+                                samples1.add(sample1);
+
+                                sample2 = new Sample2D();
+                                sample2.setPoint(projectedPoints3.get(i));
+                                sample2.setViewId(viewId2);
+                                samples2.add(sample2);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onSamplesAccepted(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                                                  int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        mViewCount += 2;
+                    }
+
+                    @Override
+                    public void onSamplesRejected(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                                                  int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        mViewCount += 2;
+                    }
+
+                    @Override
+                    public void onRequestMatches(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                                                 int viewId2, List<Sample2D> samples1, List<Sample2D> samples2,
+                                                 List<MatchedSamples> matches) {
+                        matches.clear();
+
+                        int viewCount = reconstructor.getViewCount();
+                        int numPoints;
+                        if (viewCount == 0) {
+                            //first view pair
+                            numPoints = numPointsPair1;
+                        } else {
+                            //second view pair
+                            numPoints = numPointsPair2;
+                        }
+
+                        MatchedSamples match;
+                        for (int i = 0; i < numPoints; i++) {
+                            match = new MatchedSamples();
+                            match.setSamples(new Sample2D[]{
+                                    samples1.get(i), samples2.get(i)
+                            });
+                            match.setViewIds(new int[]{viewId1, viewId2});
+                            matches.add(match);
+                        }
+                    }
+
+                    @Override
+                    public void onFundamentalMatrixEstimated(PairedViewsSparseReconstructor reconstructor,
+                                                             int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
+
+                        int viewCount = reconstructor.getViewCount();
+                        if (viewCount == 0) {
+                            mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
+                        } else if (viewCount == 2) {
+                            mEstimatedFundamentalMatrix2 = estimatedFundamentalMatrix;
+                        }
+                    }
+
+                    @Override
+                    public void onEuclideanCameraPairEstimated(PairedViewsSparseReconstructor reconstructor,
+                                                               int viewId1, int viewId2, double scale, EstimatedCamera camera1,
+                                                               EstimatedCamera camera2) {
+
+                        int viewCount = reconstructor.getViewCount();
+                        if (viewCount == 0) {
+                            mEstimatedEuclideanCamera1 = camera1;
+                            mEstimatedEuclideanCamera2 = camera2;
+                            mScale = scale;
+                        } else if (viewCount == 2) {
+                            mEstimatedEuclideanCamera2b = camera1;
+                            mEstimatedEuclideanCamera3 = camera2;
+                            mScale2 = scale;
+                        }
+                    }
+
+                    @Override
+                    public void onEuclideanReconstructedPointsEstimated(
+                            PairedViewsSparseReconstructor reconstructor, int viewId1, int viewId2, double scale,
+                            List<ReconstructedPoint3D> points) {
+
+                        int viewCount = reconstructor.getViewCount();
+                        if (viewCount == 0) {
+                            mEuclideanReconstructedPoints = points;
+                            mScale = scale;
+                        } else if (viewCount == 2) {
+                            mEuclideanReconstructedPoints2 = points;
+                            mScale2 = scale;
+                        }
+                    }
+
+                    @Override
+                    public PinholeCameraIntrinsicParameters onIntrinsicParametersRequested(
+                            PairedViewsSparseReconstructor reconstructor, int viewId) {
+                        return intrinsic;
+                    }
+
+                    @Override
+                    public void onStart(PairedViewsSparseReconstructor reconstructor) {
+                        mStarted = true;
+                    }
+
+                    @Override
+                    public void onFinish(PairedViewsSparseReconstructor reconstructor) {
+                        mFinished = true;
+                    }
+
+                    @Override
+                    public void onCancel(PairedViewsSparseReconstructor reconstructor) {
+                        mCancelled = true;
+                    }
+
+                    @Override
+                    public void onFail(PairedViewsSparseReconstructor reconstructor) {
+                        mFailed = true;
+                    }
+                };
+
+        PairedViewsSparseReconstructor reconstructor = new PairedViewsSparseReconstructor(configuration, listener);
+
+        //check initial values
+        reset();
+        assertFalse(mStarted);
+        assertFalse(mFinished);
+        assertFalse(mCancelled);
+        assertFalse(mFailed);
+        assertFalse(reconstructor.isFinished());
+
+        reconstructor.start();
+
+        //check correctness
+        assertTrue(mStarted);
+        assertFalse(mFinished);
+        assertTrue(mCancelled);
+        assertFalse(mFailed);
+        assertFalse(reconstructor.isFinished());
+        assertFalse(reconstructor.isFirstViewPair());
+        assertTrue(reconstructor.isAdditionalViewPair());
+        assertTrue(reconstructor.getViewCount() > 0);
+        assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
+        assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
+        assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
+        assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
+        assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
+        assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
+        assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
+        assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera1);
+        assertNotNull(reconstructor.getMetricReconstructedPoints());
+        assertNotNull(reconstructor.getEuclideanReconstructedPoints());
+        assertSame(reconstructor.getEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
+        assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
+        assertNotNull(reconstructor.getPreviousViewSamples());
+        assertNotNull(reconstructor.getCurrentViewSamples());
     }
 
 

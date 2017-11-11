@@ -137,16 +137,6 @@ public abstract class BasePairedViewsSparseReconstructor<
     protected int mCurrentViewId;
 
     /**
-     * Center of current metric camera on last view pair.
-     */
-    protected Point3D mLastMetricCameraCenter;
-
-    /**
-     * Rotation of current metric camera on last view pair.
-     */
-    protected Rotation3D mLastMetricCameraRotation;
-
-    /**
      * Center of current euclidean camera on last view pair.
      */
     protected Point3D mLastEuclideanCameraCenter;
@@ -155,6 +145,16 @@ public abstract class BasePairedViewsSparseReconstructor<
      * Rotation of current euclidean camera on last view pair.
      */
     protected Rotation3D mLastEuclideanCameraRotation;
+
+    /**
+     * Center of current metric camera on last view pair.
+     */
+    private Point3D mLastMetricCameraCenter;
+
+    /**
+     * Rotation of current metric camera on last view pair.
+     */
+    private Rotation3D mLastMetricCameraRotation;
 
     /**
      * Current estimated fundamental matrix.
