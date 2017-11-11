@@ -38,6 +38,8 @@ import java.util.List;
  * image point correspondences in pairs of views.
  * Views are processed in pairs so that fundamental matrix is estimated and pairs of
  * cameras and reconstructed points are computed.
+ * Because view pairs are processed separately, the scale of each view pair is
+ * estimated individually, hence the scale will need to be
  * @param <C> type of configuration.
  * @param <R> type of reconstructor.
  * @param <L> type of listener.
@@ -71,6 +73,14 @@ public abstract class BasePairedViewsSparseReconstructor<
      * Reconstructed 3D points for current pair of views in a metric stratum (i.e. up to scale).
      */
     protected List<ReconstructedPoint3D> mMetricReconstructedPoints;
+
+    /**
+     * Transformation to set reference frame on estimated pair of euclidean cameras.
+     * This is used when estimating new pair of euclidean cameras to transform such pair to
+     * the location and rotation of last estimasted euclidean camera so that the first camera
+     * of the pair is not referred to the world origin.
+     */
+    protected MetricTransformation3D mReferenceEuclideanTransformation;
 
     /**
      * Current estimated scale. This will typically converge to a constant value as more views are processed.
@@ -117,6 +127,36 @@ public abstract class BasePairedViewsSparseReconstructor<
     protected volatile boolean mRunning;
 
     /**
+     * Id of previous view.
+     */
+    protected int mPreviousViewId = 0;
+
+    /**
+     * Id of current view.
+     */
+    protected int mCurrentViewId;
+
+    /**
+     * Center of current metric camera on last view pair.
+     */
+    protected Point3D mLastMetricCameraCenter;
+
+    /**
+     * Rotation of current metric camera on last view pair.
+     */
+    protected Rotation3D mLastMetricCameraRotation;
+
+    /**
+     * Center of current euclidean camera on last view pair.
+     */
+    protected Point3D mLastEuclideanCameraCenter;
+
+    /**
+     * Rotation of current euclidean camera on last view pair.
+     */
+    protected Rotation3D mLastEuclideanCameraRotation;
+
+    /**
      * Current estimated fundamental matrix.
      */
     private EstimatedFundamentalMatrix mCurrentEstimatedFundamentalMatrix;
@@ -153,32 +193,12 @@ public abstract class BasePairedViewsSparseReconstructor<
     private List<MatchedSamples> mMatches = new ArrayList<>();
 
     /**
-     * Id of previous view.
-     */
-    private int mPreviousViewId = 0;
-
-    /**
-     * Id of current view.
-     */
-    private int mCurrentViewId;
-
-    /**
-     * Center of current metric camera on last view pair.
-     */
-    private Point3D mLastMetricCameraCenter;
-
-    /**
-     * Rotation of current metric camera on last view pair.
-     */
-    private Rotation3D mLastMetricCameraRotation;
-
-    /**
-     * Transformation to set reference frame on estimated pair of cameras.
-     * This is used when estimating new pair of cameras to transform such pair to
-     * the location and rotation of last estimated camera so that the first camera of
+     * Transformation to set reference frame on estimated pair of metric cameras.
+     * This is used when estimating new pair of metric cameras to transform such pair to
+     * the location and rotation of last estimated metric camera so that the first camera of
      * the pair is not referred to the world origin.
      */
-    private EuclideanTransformation3D mReferenceTransformation;
+    private EuclideanTransformation3D mReferenceMetricTransformation;
 
     /**
      * Constructor.
@@ -265,22 +285,6 @@ public abstract class BasePairedViewsSparseReconstructor<
     }
 
     /**
-     * Gets estimated metric camera for current view (i.e. up to scale).
-     * @return current estimated metric camera.
-     */
-    public EstimatedCamera getCurrentMetricEstimatedCamera() {
-        return mCurrentMetricEstimatedCamera;
-    }
-
-    /**
-     * Gets estimated camera for previous view (i.e. up to scale).
-     * @return previous estimated metric camera.
-     */
-    public EstimatedCamera getPreviousMetricEstimatedCamera() {
-        return mPreviousMetricEstimatedCamera;
-    }
-
-    /**
      * Gets estimated euclidean camera for current view (i.e. with actual scale).
      * @return current estimated euclidean camera.
      */
@@ -294,14 +298,6 @@ public abstract class BasePairedViewsSparseReconstructor<
      */
     public EstimatedCamera getPreviousEuclideanEstimatedCamera() {
         return mPreviousEuclideanEstimatedCamera;
-    }
-
-    /**
-     * Gets metric reconstructed 3D points (i.e. up to scale) for current pair of views.
-     * @return active metric reconstructed 3D points.
-     */
-    public List<ReconstructedPoint3D> getMetricReconstructedPoints() {
-        return mMetricReconstructedPoints;
     }
 
     /**
@@ -473,6 +469,79 @@ public abstract class BasePairedViewsSparseReconstructor<
     }
 
     /**
+     * Gets estimated metric camera for current view (i.e. up to scale).
+     * @return current estimated metric camera.
+     */
+    protected EstimatedCamera getCurrentMetricEstimatedCamera() {
+        return mCurrentMetricEstimatedCamera;
+    }
+
+    /**
+     * Gets estimated camera for previous view (i.e. up to scale).
+     * @return previous estimated metric camera.
+     */
+    protected EstimatedCamera getPreviousMetricEstimatedCamera() {
+        return mPreviousMetricEstimatedCamera;
+    }
+
+    /**
+     * Gets metric reconstructed 3D points (i.e. up to scale) for current pair of views.
+     * @return active metric reconstructed 3D points.
+     */
+    protected List<ReconstructedPoint3D> getMetricReconstructedPoints() {
+        return mMetricReconstructedPoints;
+    }
+
+    /**
+     * Transforms metric cameras on current pair of views so that they are referred to
+     * last kept location and rotation.
+     * @param isInitialPairOfViews true if initial pair of views is being processed, false otherwise.
+     * @return true if cameras were successfully transformed.
+     */
+    protected boolean transformMetricPairOfCamerasAndPoints(boolean isInitialPairOfViews) {
+        if (isInitialPairOfViews) {
+            //initial pair does not need transformation
+            return true;
+        }
+
+        if (mPreviousMetricEstimatedCamera == null || mCurrentMetricEstimatedCamera == null) {
+            return false;
+        }
+
+        PinholeCamera previousMetricCamera = mPreviousMetricEstimatedCamera.getCamera();
+        PinholeCamera currentMetricCamera = mCurrentMetricEstimatedCamera.getCamera();
+        if (previousMetricCamera == null || currentMetricCamera == null) {
+            return false;
+        }
+
+        Rotation3D invRot = mLastMetricCameraRotation.inverseRotationAndReturnNew();
+        if (mReferenceMetricTransformation == null) {
+            double[] translation = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+            translation[0] = mLastMetricCameraCenter.getInhomX();
+            translation[1] = mLastMetricCameraCenter.getInhomY();
+            translation[2] = mLastMetricCameraCenter.getInhomZ();
+            mReferenceMetricTransformation = new EuclideanTransformation3D(invRot, translation);
+        } else {
+            mReferenceMetricTransformation.setRotation(invRot);
+            mReferenceMetricTransformation.setTranslation(mLastMetricCameraCenter);
+        }
+
+        try {
+            mReferenceMetricTransformation.transform(previousMetricCamera);
+            mReferenceMetricTransformation.transform(currentMetricCamera);
+
+            Point3D p;
+            for (ReconstructedPoint3D metricReconstructedPoint : mMetricReconstructedPoints) {
+                p = metricReconstructedPoint.getPoint();
+                mReferenceMetricTransformation.transform(p, p);
+            }
+            return true;
+        } catch (AlgebraException e) {
+            return false;
+        }
+    }
+
+    /**
      * Processes data for the first view pair.
      * @return true if view pair was successfully processed, false otherwise.
      */
@@ -526,22 +595,13 @@ public abstract class BasePairedViewsSparseReconstructor<
                             mCurrentEstimatedFundamentalMatrix);
 
                     if(estimatePairOfCamerasAndPoints(isInitialPairOfViews)) {
-                        //cameras and points have been estimated
-                        //noinspection unchecked
-                        mListener.onMetricCameraPairEstimated((R)this,
-                                mPreviousViewId, mCurrentViewId,
-                                mPreviousMetricEstimatedCamera, mCurrentMetricEstimatedCamera);
-                        //noinspection unchecked
-                        mListener.onMetricReconstructedPointsEstimated((R)this,
-                                mPreviousViewId, mCurrentViewId, mMatches,
-                                mMetricReconstructedPoints);
-                        if(!postProcessOne(isInitialPairOfViews)) {
+                        /*if(!postProcessOne(isInitialPairOfViews)) {
                             //something failed
                             mFailed = true;
                             //noinspection unchecked
                             mListener.onFail((R)this);
                             return false;
-                        } else {
+                        } else {*/
                             //post processing succeeded
                             //noinspection unchecked
                             mListener.onEuclideanCameraPairEstimated((R)this,
@@ -553,7 +613,7 @@ public abstract class BasePairedViewsSparseReconstructor<
                                     mPreviousViewId, mCurrentViewId, mCurrentScale,
                                     mEuclideanReconstructedPoints);
                             return true;
-                        }
+                        //}
                     } else {
                         //pair of cameras estimation failed
                         mFailed = true;
@@ -1063,13 +1123,8 @@ public abstract class BasePairedViewsSparseReconstructor<
                     intrinsicZeroPrincipalPoint1, intrinsicZeroPrincipalPoint2,
                     intrinsic1, intrinsic2);
 
-            boolean result = estimateInitialCamerasAndPointsEssential(intrinsic1,
-                    intrinsic2);
-            if (!isInitialPairOfViews) {
-                return result && transformMetricPairOfCamerasAndPoints();
-            } else {
-                return result;
-            }
+            return estimateInitialCamerasAndPointsEssential(intrinsic1, intrinsic2) &&
+                    transformMetricPairOfCamerasAndPoints(isInitialPairOfViews);
         } catch (Exception e) {
             return false;
         }
@@ -1227,7 +1282,7 @@ public abstract class BasePairedViewsSparseReconstructor<
                 mMetricReconstructedPoints.add(reconstructedPoint);
             }
 
-            return isInitialPairOfViews || transformMetricPairOfCamerasAndPoints();
+            return transformMetricPairOfCamerasAndPoints(isInitialPairOfViews);
         } catch (Exception e) {
             return false;
         }
@@ -1310,8 +1365,7 @@ public abstract class BasePairedViewsSparseReconstructor<
                 mMetricReconstructedPoints.add(reconstructedPoint);
             }
 
-            //for non initial view, transform cameras to new reference
-            return isInitialPairOfViews || transformMetricPairOfCamerasAndPoints();
+            return transformMetricPairOfCamerasAndPoints(isInitialPairOfViews);
         } catch (Exception e) {
             return false;
         }
@@ -1343,12 +1397,8 @@ public abstract class BasePairedViewsSparseReconstructor<
 
         if (intrinsic1 != null && intrinsic2 != null) {
             //for non initial view, transform cameras to new reference
-            boolean result = estimateInitialCamerasAndPointsEssential(intrinsic1, intrinsic2);
-            if (!isInitialPairOfViews) {
-                return result && transformMetricPairOfCamerasAndPoints();
-            } else {
-                return result;
-            }
+            return estimateInitialCamerasAndPointsEssential(intrinsic1, intrinsic2) &&
+                    transformMetricPairOfCamerasAndPoints(isInitialPairOfViews);
         } else {
             //missing intrinsic parameters
 
@@ -1444,68 +1494,46 @@ public abstract class BasePairedViewsSparseReconstructor<
      * @return true if camera and rotation were successfully kept, false otherwise.
      */
     private boolean keepLastCenterAndRotation() {
-        if (mCurrentMetricEstimatedCamera == null) {
+        //keep last metric center and rotation
+        if (mCurrentMetricEstimatedCamera == null || mCurrentEuclideanEstimatedCamera == null) {
             return false;
         }
-        PinholeCamera camera = mCurrentMetricEstimatedCamera.getCamera();
-        if (camera == null) {
+
+        PinholeCamera metricCamera = mCurrentMetricEstimatedCamera.getCamera();
+        if (metricCamera == null) {
             return false;
         }
 
         try {
             //decompose camera if needed
-            if (!camera.isCameraCenterAvailable() || !camera.isCameraRotationAvailable()) {
-                camera.decompose();
+            if (!metricCamera.isCameraCenterAvailable() || !metricCamera.isCameraRotationAvailable()) {
+                metricCamera.decompose();
             }
 
-            mLastMetricCameraCenter = camera.getCameraCenter();
-            mLastMetricCameraRotation = camera.getCameraRotation();
+            mLastMetricCameraCenter = metricCamera.getCameraCenter();
+            mLastMetricCameraRotation = metricCamera.getCameraRotation();
 
-            return true;
         } catch (GeometryException e) {
             return false;
         }
-    }
 
-    /**
-     * Transforms metric cameras on current pair of views so that they are referred to
-     * last kept location and rotation.
-     * @return true if cameras were successfully transformed.
-     */
-    private boolean transformMetricPairOfCamerasAndPoints() {
-        if (mPreviousMetricEstimatedCamera == null || mCurrentMetricEstimatedCamera == null) {
+        //keep last euclidean center and rotation
+        PinholeCamera euclideanCamera = mCurrentEuclideanEstimatedCamera.getCamera();
+        if (euclideanCamera == null) {
             return false;
-        }
-
-        PinholeCamera previousCamera = mPreviousMetricEstimatedCamera.getCamera();
-        PinholeCamera currentCamera = mCurrentMetricEstimatedCamera.getCamera();
-        if (previousCamera == null || currentCamera == null) {
-            return false;
-        }
-
-        Rotation3D invRot = mLastMetricCameraRotation.inverseRotationAndReturnNew();
-        if (mReferenceTransformation == null) {
-            double[] translation = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
-            translation[0] = mLastMetricCameraCenter.getInhomX();
-            translation[1] = mLastMetricCameraCenter.getInhomY();
-            translation[2] = mLastMetricCameraCenter.getInhomZ();
-            mReferenceTransformation = new EuclideanTransformation3D(invRot, translation);
-        } else {
-            mReferenceTransformation.setRotation(invRot);
-            mReferenceTransformation.setTranslation(mLastMetricCameraCenter);
         }
 
         try {
-            mReferenceTransformation.transform(previousCamera);
-            mReferenceTransformation.transform(currentCamera);
-
-            Point3D p;
-            for (ReconstructedPoint3D reconstructedPoint : mMetricReconstructedPoints) {
-                p = reconstructedPoint.getPoint();
-                mReferenceTransformation.transform(p, p);
+            //decompose camera if needed
+            if (!euclideanCamera.isCameraCenterAvailable() || !euclideanCamera.isCameraRotationAvailable()) {
+                euclideanCamera.decompose();
             }
+
+            mLastEuclideanCameraCenter = euclideanCamera.getCameraCenter();
+            mLastEuclideanCameraRotation = euclideanCamera.getCameraRotation();
+
             return true;
-        } catch (AlgebraException e) {
+        } catch (GeometryException e) {
             return false;
         }
     }

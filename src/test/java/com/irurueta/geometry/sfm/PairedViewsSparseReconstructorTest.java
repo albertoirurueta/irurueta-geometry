@@ -66,16 +66,10 @@ public class PairedViewsSparseReconstructorTest {
     private int mViewCount = 0;
     private EstimatedFundamentalMatrix mEstimatedFundamentalMatrix;
     private EstimatedFundamentalMatrix mEstimatedFundamentalMatrix2;
-    private EstimatedCamera mEstimatedMetricCamera1;
-    private EstimatedCamera mEstimatedMetricCamera2;
-    private EstimatedCamera mEstimatedMetricCamera2b;
-    private EstimatedCamera mEstimatedMetricCamera3;
     private EstimatedCamera mEstimatedEuclideanCamera1;
     private EstimatedCamera mEstimatedEuclideanCamera2;
     private EstimatedCamera mEstimatedEuclideanCamera2b;
     private EstimatedCamera mEstimatedEuclideanCamera3;
-    private List<ReconstructedPoint3D> mMetricReconstructedPoints;
-    private List<ReconstructedPoint3D> mMetricReconstructedPoints2;
     private List<ReconstructedPoint3D> mEuclideanReconstructedPoints;
     private List<ReconstructedPoint3D> mEuclideanReconstructedPoints2;
 
@@ -99,11 +93,8 @@ public class PairedViewsSparseReconstructorTest {
     public void setUp() {
         mViewCount = 0;
         mEstimatedFundamentalMatrix = mEstimatedFundamentalMatrix2 = null;
-        mEstimatedMetricCamera1 = mEstimatedMetricCamera2 =
-                mEstimatedMetricCamera3 = null;
         mEstimatedEuclideanCamera1 = mEstimatedEuclideanCamera2
                 = mEstimatedEuclideanCamera3 = null;
-        mMetricReconstructedPoints = null;
         mEuclideanReconstructedPoints = null;
         mStarted = mFinished = mFailed = mCancelled = false;
     }
@@ -119,6 +110,11 @@ public class PairedViewsSparseReconstructorTest {
                 new PairedViewsSparseReconstructorConfiguration();
         PairedViewsSparseReconstructorListener listener =
                 new PairedViewsSparseReconstructorListener() {
+                    @Override
+                    public double onBaselineRequested(PairedViewsSparseReconstructor reconstructor, int viewId1, int viewId2, EstimatedCamera metricCamera1, EstimatedCamera metricCamera2) {
+                        return 1.0;
+                    }
+
                     @Override
                     public boolean hasMoreViewsAvailable(PairedViewsSparseReconstructor reconstructor) {
                         return false;
@@ -143,14 +139,6 @@ public class PairedViewsSparseReconstructorTest {
                     @Override
                     public void onFundamentalMatrixEstimated(PairedViewsSparseReconstructor reconstructor, int viewId1,
                         int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) { }
-
-                    @Override
-                    public void onMetricCameraPairEstimated(PairedViewsSparseReconstructor reconstructor, int viewId1,
-                        int viewId2, EstimatedCamera camera1, EstimatedCamera camera2) { }
-
-                    @Override
-                    public void onMetricReconstructedPointsEstimated(PairedViewsSparseReconstructor reconstructor,
-                        int viewId1, int viewId2, List<MatchedSamples> matches, List<ReconstructedPoint3D> points) { }
 
                     @Override
                     public void onEuclideanCameraPairEstimated(PairedViewsSparseReconstructor reconstructor,
@@ -268,8 +256,8 @@ public class PairedViewsSparseReconstructorTest {
                     MIN_CAMERA_SEPARATION_ESSENTIAL,
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
-            Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
-            Point3D center2 = new InhomogeneousPoint3D(
+            final Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
+            final Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
@@ -389,6 +377,13 @@ public class PairedViewsSparseReconstructorTest {
 
             PairedViewsSparseReconstructorListener listener =
                     new PairedViewsSparseReconstructorListener() {
+
+                @Override
+                public double onBaselineRequested(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                        int viewId2, EstimatedCamera metricCamera1, EstimatedCamera metricCamera2) {
+                    return center1.distanceTo(center2);
+                }
+
                 @Override
                 public boolean hasMoreViewsAvailable(PairedViewsSparseReconstructor reconstructor) {
                     return mViewCount < 2;
@@ -447,19 +442,6 @@ public class PairedViewsSparseReconstructorTest {
                 public void onFundamentalMatrixEstimated(PairedViewsSparseReconstructor reconstructor,
                         int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                     mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
-                }
-
-                @Override
-                public void onMetricCameraPairEstimated(PairedViewsSparseReconstructor reconstructor, int viewId1,
-                        int viewId2, EstimatedCamera camera1, EstimatedCamera camera2) {
-                    mEstimatedMetricCamera1 = camera1;
-                    mEstimatedMetricCamera2 = camera2;
-                }
-
-                @Override
-                public void onMetricReconstructedPointsEstimated(PairedViewsSparseReconstructor reconstructor,
-                        int viewId1, int viewId2, List<MatchedSamples> matches, List<ReconstructedPoint3D> points) {
-                    mMetricReconstructedPoints = points;
                 }
 
                 @Override
@@ -529,15 +511,12 @@ public class PairedViewsSparseReconstructorTest {
             assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
             assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
             assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
-            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera2);
             assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
-            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera1);
             assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
             assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
             assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
             assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera1);
             assertNotNull(reconstructor.getMetricReconstructedPoints());
-            assertSame(reconstructor.getMetricReconstructedPoints(), mMetricReconstructedPoints);
             assertNotNull(reconstructor.getEuclideanReconstructedPoints());
             assertSame(reconstructor.getEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
@@ -566,117 +545,91 @@ public class PairedViewsSparseReconstructorTest {
                             mEstimatedFundamentalMatrix.getFundamentalMatrix().
                                     getInternalMatrix(), ABSOLUTE_ERROR));
 
-            //check that reconstructed points are in a metric stratum (up to a
-            //certain scale)
-            PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
-            PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
-            estimatedMetricCamera1.decompose();
-            estimatedMetricCamera2.decompose();
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
-
-            List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
-                metricReconstructedPoints3D.add(
-                        mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of both cameras
             for (int i = 0; i < numPoints; i++) {
-                Point3D p = metricReconstructedPoints3D.get(i);
-                assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
-                assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+                Point3D p = euclideanReconstructedPoints3D.get(i);
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(p));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(p));
             }
 
-            Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
-            Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
+            Point3D estimatedCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D estimatedCenter2 = estimatedEuclideanCamera2.getCameraCenter();
 
-            //transform points and cameras to account for scale change
+            //check scale
             double baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
-            double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
 
-            MetricTransformation3D scaleTransformation =
-                    new MetricTransformation3D(scale);
-
-            PinholeCamera scaledCamera1 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera1);
-            PinholeCamera scaledCamera2 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera2);
-
-            List<Point3D> scaledReconstructionPoints3D = scaleTransformation.
-                    transformPointsAndReturnNew(metricReconstructedPoints3D);
-
-            scaledCamera1.decompose();
-            scaledCamera2.decompose();
-
-            Point3D scaledCenter1 = scaledCamera1.getCameraCenter();
-            Point3D scaledCenter2 = scaledCamera2.getCameraCenter();
-
-            PinholeCameraIntrinsicParameters scaledIntrinsic1 =
-                    scaledCamera1.getIntrinsicParameters();
-            PinholeCameraIntrinsicParameters scaledIntrinsic2 =
-                    scaledCamera2.getIntrinsicParameters();
-
-            Rotation3D scaledRotation1 = scaledCamera1.getCameraRotation();
-            Rotation3D scaledRotation2 = scaledCamera2.getCameraRotation();
-
-            double scaledBaseline = scaledCenter1.distanceTo(scaledCenter2);
-
-            //check cameras are correct
-            if(Math.abs(scaledBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
+            if(Math.abs(estimatedBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(scaledBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(mScale, baseline, LARGE_ABSOLUTE_ERROR);
 
-            assertTrue(center1.equals(scaledCenter1, ABSOLUTE_ERROR));
-            if(!center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR)) {
+            //check cameras
+            PinholeCameraIntrinsicParameters estimatedIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters estimatedIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+
+            Rotation3D estimatedRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D estimatedRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+
+            assertTrue(center1.equals(estimatedCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(estimatedCenter2, LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
-            assertTrue(center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center2.equals(estimatedCenter2, LARGE_ABSOLUTE_ERROR));
 
-            assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getSkewness(),
+            assertEquals(estimatedIntrinsic1.getSkewness(),
                     intrinsic.getSkewness(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getHorizontalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic1.getHorizontalPrincipalPoint(),
                     intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getVerticalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic1.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
-            assertEquals(scaledIntrinsic2.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getSkewness(),
+            assertEquals(estimatedIntrinsic2.getSkewness(),
                     intrinsic.getSkewness(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getHorizontalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic2.getHorizontalPrincipalPoint(),
                     intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getVerticalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic2.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
-            assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
+            assertTrue(estimatedRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
-            assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
+            assertTrue(estimatedRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             //check that points are correct
             boolean validPoints = true;
             for (int i = 0; i < numPoints; i++) {
                 if (!points3D.get(i).equals(
-                        scaledReconstructionPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
                     validPoints = false;
                     break;
                 }
                 assertTrue(points3D.get(i).equals(
-                        scaledReconstructionPoints3D.get(i),
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -741,8 +694,8 @@ public class PairedViewsSparseReconstructorTest {
                     MIN_CAMERA_SEPARATION_DIAC,
                     MAX_CAMERA_SEPARATION_DIAC);
 
-            Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
-            Point3D center2 = new InhomogeneousPoint3D(
+            final Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
+            final Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
@@ -874,6 +827,12 @@ public class PairedViewsSparseReconstructorTest {
             PairedViewsSparseReconstructorListener listener =
                     new PairedViewsSparseReconstructorListener() {
                         @Override
+                        public double onBaselineRequested(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, EstimatedCamera metricCamera1, EstimatedCamera metricCamera2) {
+                            return center1.distanceTo(center2);
+                        }
+
+                        @Override
                         public boolean hasMoreViewsAvailable(PairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 2;
                         }
@@ -932,20 +891,6 @@ public class PairedViewsSparseReconstructorTest {
                         public void onFundamentalMatrixEstimated(PairedViewsSparseReconstructor reconstructor,
                                 int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
-                        }
-
-                        @Override
-                        public void onMetricCameraPairEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, EstimatedCamera camera1, EstimatedCamera camera2) {
-                            mEstimatedMetricCamera1 = camera1;
-                            mEstimatedMetricCamera2 = camera2;
-                        }
-
-                        @Override
-                        public void onMetricReconstructedPointsEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, List<MatchedSamples> matches,
-                                List<ReconstructedPoint3D> points) {
-                            mMetricReconstructedPoints = points;
                         }
 
                         @Override
@@ -1021,15 +966,12 @@ public class PairedViewsSparseReconstructorTest {
             assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
             assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
             assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
-            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera2);
             assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
-            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera1);
             assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
             assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
             assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
             assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera1);
             assertNotNull(reconstructor.getMetricReconstructedPoints());
-            assertSame(reconstructor.getMetricReconstructedPoints(), mMetricReconstructedPoints);
             assertNotNull(reconstructor.getEuclideanReconstructedPoints());
             assertSame(reconstructor.getEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
@@ -1058,31 +1000,25 @@ public class PairedViewsSparseReconstructorTest {
                             mEstimatedFundamentalMatrix.getFundamentalMatrix().
                                     getInternalMatrix(), ABSOLUTE_ERROR));
 
-            //check that reconstructed points are in a metric stratum (up to a
-            //certain scale)
-            PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
-            PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
-            estimatedMetricCamera1.decompose();
-            estimatedMetricCamera2.decompose();
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
-
-            List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
-                metricReconstructedPoints3D.add(
-                        mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that most of the points are in front of both cameras
             int valid = 0, invalid = 0;
             for (int i = 0; i < numPoints; i++) {
-                if (mMetricReconstructedPoints.get(i).isInlier()) {
-                    Point3D p = metricReconstructedPoints3D.get(i);
-                    assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
-                    assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+                if (mEuclideanReconstructedPoints.get(i).isInlier()) {
+                    Point3D p = euclideanReconstructedPoints3D.get(i);
+                    assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(p));
+                    assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(p));
                     valid++;
                 } else {
                     invalid++;
@@ -1091,94 +1027,72 @@ public class PairedViewsSparseReconstructorTest {
 
             assertTrue(valid >= invalid);
 
-            Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
-            Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
+            Point3D estimatedCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D estimatedCenter2 = estimatedEuclideanCamera2.getCameraCenter();
 
-            //transform points and cameras to account for scale change
+            //check scale
             double baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
-            double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
 
-            MetricTransformation3D scaleTransformation =
-                    new MetricTransformation3D(scale);
-
-            PinholeCamera scaledCamera1 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera1);
-            PinholeCamera scaledCamera2 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera2);
-
-            List<Point3D> scaledReconstructionPoints3D = scaleTransformation.
-                    transformPointsAndReturnNew(metricReconstructedPoints3D);
-
-            scaledCamera1.decompose();
-            scaledCamera2.decompose();
-
-            Point3D scaledCenter1 = new InhomogeneousPoint3D(
-                    scaledCamera1.getCameraCenter());
-            Point3D scaledCenter2 = new InhomogeneousPoint3D(
-                    scaledCamera2.getCameraCenter());
-
-            PinholeCameraIntrinsicParameters scaledIntrinsic1 =
-                    scaledCamera1.getIntrinsicParameters();
-            PinholeCameraIntrinsicParameters scaledIntrinsic2 =
-                    scaledCamera2.getIntrinsicParameters();
-
-            Rotation3D scaledRotation1 = scaledCamera1.getCameraRotation();
-            Rotation3D scaledRotation2 = scaledCamera2.getCameraRotation();
-
-            double scaledBaseline = scaledCenter1.distanceTo(scaledCenter2);
-
-            //check cameras are correct
-            if(Math.abs(scaledBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
+            if(Math.abs(estimatedBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(scaledBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(mScale, baseline, LARGE_ABSOLUTE_ERROR);
 
-            assertTrue(center1.equals(scaledCenter1, ABSOLUTE_ERROR));
-            if(!center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR)) {
+            //check cameras
+            PinholeCameraIntrinsicParameters estimatedIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters estimatedIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+
+            Rotation3D estimatedRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D estimatedRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+
+            assertTrue(center1.equals(estimatedCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(estimatedCenter2, LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
-            assertTrue(center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center2.equals(estimatedCenter2, LARGE_ABSOLUTE_ERROR));
 
-            assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getSkewness(),
+            assertEquals(estimatedIntrinsic1.getSkewness(),
                     intrinsic.getSkewness(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getHorizontalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic1.getHorizontalPrincipalPoint(),
                     intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getVerticalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic1.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
-            assertEquals(scaledIntrinsic2.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getSkewness(),
+            assertEquals(estimatedIntrinsic2.getSkewness(),
                     intrinsic.getSkewness(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getHorizontalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic2.getHorizontalPrincipalPoint(),
                     intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getVerticalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic2.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
-            assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
+            assertTrue(estimatedRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
-            assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
+            assertTrue(estimatedRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             //check that points are correct
             boolean validPoints = true;
             for (int i = 0; i < numPoints; i++) {
                 if (!points3D.get(i).equals(
-                        scaledReconstructionPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
                     validPoints = false;
                     break;
                 }
                 assertTrue(points3D.get(i).equals(
-                        scaledReconstructionPoints3D.get(i),
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -1241,8 +1155,8 @@ public class PairedViewsSparseReconstructorTest {
                     MIN_CAMERA_SEPARATION_ESSENTIAL,
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
-            Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
-            Point3D center2 = new InhomogeneousPoint3D(
+            final Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
+            final Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
@@ -1374,6 +1288,13 @@ public class PairedViewsSparseReconstructorTest {
 
             PairedViewsSparseReconstructorListener listener =
                     new PairedViewsSparseReconstructorListener() {
+
+                        @Override
+                        public double onBaselineRequested(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                                                          int viewId2, EstimatedCamera metricCamera1, EstimatedCamera metricCamera2) {
+                            return center1.distanceTo(center2);
+                        }
+
                         @Override
                         public boolean hasMoreViewsAvailable(PairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 2;
@@ -1433,20 +1354,6 @@ public class PairedViewsSparseReconstructorTest {
                         public void onFundamentalMatrixEstimated(PairedViewsSparseReconstructor reconstructor,
                                 int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
-                        }
-
-                        @Override
-                        public void onMetricCameraPairEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, EstimatedCamera camera1, EstimatedCamera camera2) {
-                            mEstimatedMetricCamera1 = camera1;
-                            mEstimatedMetricCamera2 = camera2;
-                        }
-
-                        @Override
-                        public void onMetricReconstructedPointsEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, List<MatchedSamples> matches,
-                                List<ReconstructedPoint3D> points) {
-                            mMetricReconstructedPoints = points;
                         }
 
                         @Override
@@ -1518,15 +1425,12 @@ public class PairedViewsSparseReconstructorTest {
             assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
             assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
             assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
-            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera2);
             assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
-            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera1);
             assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
             assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
             assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
             assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera1);
             assertNotNull(reconstructor.getMetricReconstructedPoints());
-            assertSame(reconstructor.getMetricReconstructedPoints(), mMetricReconstructedPoints);
             assertNotNull(reconstructor.getEuclideanReconstructedPoints());
             assertSame(reconstructor.getEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
@@ -1555,123 +1459,91 @@ public class PairedViewsSparseReconstructorTest {
                             mEstimatedFundamentalMatrix.getFundamentalMatrix().
                                     getInternalMatrix(), ABSOLUTE_ERROR));
 
-            //check that reconstructed points are in a metric stratum (up to a
-            //certain scale)
-            PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
-            PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
-            estimatedMetricCamera1.decompose();
-            estimatedMetricCamera2.decompose();
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
-
-            List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
-                metricReconstructedPoints3D.add(
-                        mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of both cameras
             for (int i = 0; i < numPoints; i++) {
-                Point3D p = metricReconstructedPoints3D.get(i);
-                assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
-                assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+                Point3D p = euclideanReconstructedPoints3D.get(i);
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(p));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(p));
             }
 
-            Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
-            Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
+            Point3D estimatedCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D estimatedCenter2 = estimatedEuclideanCamera2.getCameraCenter();
 
-            //transform points and cameras to account for scale change
+            //check scale
             double baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
-            double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
 
-            MetricTransformation3D scaleTransformation =
-                    new MetricTransformation3D(scale);
-
-            PinholeCamera scaledCamera1 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera1);
-            PinholeCamera scaledCamera2 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera2);
-
-            List<Point3D> scaledReconstructionPoints3D = scaleTransformation.
-                    transformPointsAndReturnNew(metricReconstructedPoints3D);
-
-            scaledCamera1.decompose();
-            scaledCamera2.decompose();
-
-            Point3D scaledCenter1 = new InhomogeneousPoint3D(
-                    scaledCamera1.getCameraCenter());
-            Point3D scaledCenter2 = new InhomogeneousPoint3D(
-                    scaledCamera2.getCameraCenter());
-
-            PinholeCameraIntrinsicParameters scaledIntrinsic1 =
-                    scaledCamera1.getIntrinsicParameters();
-            PinholeCameraIntrinsicParameters scaledIntrinsic2 =
-                    scaledCamera2.getIntrinsicParameters();
-
-            Rotation3D scaledRotation1 = scaledCamera1.getCameraRotation();
-            Rotation3D scaledRotation2 = scaledCamera2.getCameraRotation();
-
-            double scaledBaseline = scaledCenter1.distanceTo(scaledCenter2);
-
-            //check cameras are correct
-            if(Math.abs(scaledBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
+            if(Math.abs(estimatedBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(scaledBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(mScale, baseline, LARGE_ABSOLUTE_ERROR);
 
-            assertTrue(center1.equals(scaledCenter1, ABSOLUTE_ERROR));
-            if(!center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR)) {
+            //check cameras
+            PinholeCameraIntrinsicParameters estimatedIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters estimatedIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+
+            Rotation3D estimatedRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D estimatedRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+
+            assertTrue(center1.equals(estimatedCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(estimatedCenter2, LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
-            assertTrue(center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center2.equals(estimatedCenter2, LARGE_ABSOLUTE_ERROR));
 
-            assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getSkewness(),
+            assertEquals(estimatedIntrinsic1.getSkewness(),
                     intrinsic.getSkewness(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getHorizontalPrincipalPoint(),
-                    intrinsic.getHorizontalPrincipalPoint(),
-                    LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getVerticalPrincipalPoint(),
-                    intrinsic.getVerticalPrincipalPoint(),
-                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedIntrinsic1.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedIntrinsic1.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
 
-            assertEquals(scaledIntrinsic2.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getSkewness(),
+            assertEquals(estimatedIntrinsic2.getSkewness(),
                     intrinsic.getSkewness(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getHorizontalPrincipalPoint(),
-                    intrinsic.getHorizontalPrincipalPoint(),
-                    LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getVerticalPrincipalPoint(),
-                    intrinsic.getVerticalPrincipalPoint(),
-                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedIntrinsic2.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedIntrinsic2.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
 
-            assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
+            assertTrue(estimatedRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
-            assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
+            assertTrue(estimatedRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             //check that points are correct
             boolean validPoints = true;
             for (int i = 0; i < numPoints; i++) {
                 if (!points3D.get(i).equals(
-                        scaledReconstructionPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
                     validPoints = false;
                     break;
                 }
                 assertTrue(points3D.get(i).equals(
-                        scaledReconstructionPoints3D.get(i),
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -1738,8 +1610,8 @@ public class PairedViewsSparseReconstructorTest {
                     MIN_CAMERA_SEPARATION_ESSENTIAL,
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
-            Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
-            Point3D center2 = new InhomogeneousPoint3D(
+            final Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
+            final Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
@@ -1871,6 +1743,13 @@ public class PairedViewsSparseReconstructorTest {
 
             PairedViewsSparseReconstructorListener listener =
                     new PairedViewsSparseReconstructorListener() {
+
+                        @Override
+                        public double onBaselineRequested(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, EstimatedCamera metricCamera1, EstimatedCamera metricCamera2) {
+                            return center1.distanceTo(center2);
+                        }
+
                         @Override
                         public boolean hasMoreViewsAvailable(PairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 2;
@@ -1930,20 +1809,6 @@ public class PairedViewsSparseReconstructorTest {
                         public void onFundamentalMatrixEstimated(PairedViewsSparseReconstructor reconstructor,
                                 int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
-                        }
-
-                        @Override
-                        public void onMetricCameraPairEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, EstimatedCamera camera1, EstimatedCamera camera2) {
-                            mEstimatedMetricCamera1 = camera1;
-                            mEstimatedMetricCamera2 = camera2;
-                        }
-
-                        @Override
-                        public void onMetricReconstructedPointsEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, List<MatchedSamples> matches,
-                                List<ReconstructedPoint3D> points) {
-                            mMetricReconstructedPoints = points;
                         }
 
                         @Override
@@ -2015,15 +1880,12 @@ public class PairedViewsSparseReconstructorTest {
             assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
             assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
             assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
-            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera2);
             assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
-            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera1);
             assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
             assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
             assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
             assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera1);
             assertNotNull(reconstructor.getMetricReconstructedPoints());
-            assertSame(reconstructor.getMetricReconstructedPoints(), mMetricReconstructedPoints);
             assertNotNull(reconstructor.getEuclideanReconstructedPoints());
             assertSame(reconstructor.getEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
@@ -2052,123 +1914,91 @@ public class PairedViewsSparseReconstructorTest {
                             mEstimatedFundamentalMatrix.getFundamentalMatrix().
                                     getInternalMatrix(), ABSOLUTE_ERROR));
 
-            //check that reconstructed points are in a metric stratum (up to a
-            //certain scale)
-            PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
-            PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
-            estimatedMetricCamera1.decompose();
-            estimatedMetricCamera2.decompose();
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
-
-            List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
-                metricReconstructedPoints3D.add(
-                        mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of both cameras
             for (int i = 0; i < numPoints; i++) {
-                Point3D p = metricReconstructedPoints3D.get(i);
-                assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
-                assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+                Point3D p = euclideanReconstructedPoints3D.get(i);
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(p));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(p));
             }
 
-            Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
-            Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
+            Point3D estimatedCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D estimatedCenter2 = estimatedEuclideanCamera2.getCameraCenter();
 
-            //transform points and cameras to account for scale change
+            //check scale
             double baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
-            double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
 
-            MetricTransformation3D scaleTransformation =
-                    new MetricTransformation3D(scale);
-
-            PinholeCamera scaledCamera1 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera1);
-            PinholeCamera scaledCamera2 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera2);
-
-            List<Point3D> scaledReconstructionPoints3D = scaleTransformation.
-                    transformPointsAndReturnNew(metricReconstructedPoints3D);
-
-            scaledCamera1.decompose();
-            scaledCamera2.decompose();
-
-            Point3D scaledCenter1 = new InhomogeneousPoint3D(
-                    scaledCamera1.getCameraCenter());
-            Point3D scaledCenter2 = new InhomogeneousPoint3D(
-                    scaledCamera2.getCameraCenter());
-
-            PinholeCameraIntrinsicParameters scaledIntrinsic1 =
-                    scaledCamera1.getIntrinsicParameters();
-            PinholeCameraIntrinsicParameters scaledIntrinsic2 =
-                    scaledCamera2.getIntrinsicParameters();
-
-            Rotation3D scaledRotation1 = scaledCamera1.getCameraRotation();
-            Rotation3D scaledRotation2 = scaledCamera2.getCameraRotation();
-
-            double scaledBaseline = scaledCenter1.distanceTo(scaledCenter2);
-
-            //check cameras are correct
-            if(Math.abs(scaledBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
+            if(Math.abs(estimatedBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(scaledBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(mScale, baseline, LARGE_ABSOLUTE_ERROR);
 
-            assertTrue(center1.equals(scaledCenter1, ABSOLUTE_ERROR));
-            if(!center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR)) {
+            //check cameras
+            PinholeCameraIntrinsicParameters estimatedIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters estimatedIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+
+            Rotation3D estimatedRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D estimatedRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+
+            assertTrue(center1.equals(estimatedCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(estimatedCenter2, LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
-            assertTrue(center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center2.equals(estimatedCenter2, LARGE_ABSOLUTE_ERROR));
 
-            assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getSkewness(),
+            assertEquals(estimatedIntrinsic1.getSkewness(),
                     intrinsic.getSkewness(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getHorizontalPrincipalPoint(),
-                    intrinsic.getHorizontalPrincipalPoint(),
-                    LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getVerticalPrincipalPoint(),
-                    intrinsic.getVerticalPrincipalPoint(),
-                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedIntrinsic1.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedIntrinsic1.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
 
-            assertEquals(scaledIntrinsic2.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getSkewness(),
+            assertEquals(estimatedIntrinsic2.getSkewness(),
                     intrinsic.getSkewness(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getHorizontalPrincipalPoint(),
-                    intrinsic.getHorizontalPrincipalPoint(),
-                    LARGE_ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getVerticalPrincipalPoint(),
-                    intrinsic.getVerticalPrincipalPoint(),
-                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedIntrinsic2.getHorizontalPrincipalPoint(),
+                    intrinsic.getHorizontalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedIntrinsic2.getVerticalPrincipalPoint(),
+                    intrinsic.getVerticalPrincipalPoint(), LARGE_ABSOLUTE_ERROR);
 
-            assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
+            assertTrue(estimatedRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
-            assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
+            assertTrue(estimatedRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             //check that points are correct
             boolean validPoints = true;
             for (int i = 0; i < numPoints; i++) {
                 if (!points3D.get(i).equals(
-                        scaledReconstructionPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
                     validPoints = false;
                     break;
                 }
                 assertTrue(points3D.get(i).equals(
-                        scaledReconstructionPoints3D.get(i),
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -2236,8 +2066,8 @@ public class PairedViewsSparseReconstructorTest {
                     MIN_CAMERA_SEPARATION_ESSENTIAL,
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
-            Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
-            Point3D center2 = new InhomogeneousPoint3D(
+            final Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
+            final Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
@@ -2309,8 +2139,6 @@ public class PairedViewsSparseReconstructorTest {
                     MAX_NUM_POINTS);
 
             InhomogeneousPoint3D point3D;
-            List<Point3D> points3D =
-                    new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
             final List<Point2D> projectedPoints1 = new ArrayList<>();
             final List<Point2D> projectedPoints2 = new ArrayList<>();
@@ -2345,8 +2173,6 @@ public class PairedViewsSparseReconstructorTest {
                     break;
                 }
 
-                points3D.add(point3D);
-
                 //check that 3D point is in front of both cameras
                 //noinspection all
                 assertTrue(leftFront);
@@ -2365,6 +2191,13 @@ public class PairedViewsSparseReconstructorTest {
 
             PairedViewsSparseReconstructorListener listener =
                     new PairedViewsSparseReconstructorListener() {
+
+                        @Override
+                        public double onBaselineRequested(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                                                          int viewId2, EstimatedCamera metricCamera1, EstimatedCamera metricCamera2) {
+                            return center1.distanceTo(center2);
+                        }
+
                         @Override
                         public boolean hasMoreViewsAvailable(PairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 2;
@@ -2424,20 +2257,6 @@ public class PairedViewsSparseReconstructorTest {
                         public void onFundamentalMatrixEstimated(PairedViewsSparseReconstructor reconstructor,
                                 int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
-                        }
-
-                        @Override
-                        public void onMetricCameraPairEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, EstimatedCamera camera1, EstimatedCamera camera2) {
-                            mEstimatedMetricCamera1 = camera1;
-                            mEstimatedMetricCamera2 = camera2;
-                        }
-
-                        @Override
-                        public void onMetricReconstructedPointsEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, List<MatchedSamples> matches,
-                                List<ReconstructedPoint3D> points) {
-                            mMetricReconstructedPoints = points;
                         }
 
                         @Override
@@ -2508,15 +2327,12 @@ public class PairedViewsSparseReconstructorTest {
             assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
             assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
             assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
-            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera2);
             assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
-            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera1);
             assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
             assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
             assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
             assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera1);
             assertNotNull(reconstructor.getMetricReconstructedPoints());
-            assertSame(reconstructor.getMetricReconstructedPoints(), mMetricReconstructedPoints);
             assertNotNull(reconstructor.getEuclideanReconstructedPoints());
             assertSame(reconstructor.getEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
@@ -2545,70 +2361,41 @@ public class PairedViewsSparseReconstructorTest {
                             mEstimatedFundamentalMatrix.getFundamentalMatrix().
                                     getInternalMatrix(), ABSOLUTE_ERROR));
 
-            //check that reconstructed points are in a metric stratum (up to a
-            //certain scale)
-            PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
-            PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
-            estimatedMetricCamera1.decompose();
-            estimatedMetricCamera2.decompose();
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            //check cameras
+            PinholeCameraIntrinsicParameters estimatedIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters estimatedIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
 
-            List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
-            for (int i = 0; i < numPoints; i++) {
-                metricReconstructedPoints3D.add(
-                        mMetricReconstructedPoints.get(i).getPoint());
-            }
-
-            MetricTransformation3DRobustEstimator transformationEstimator =
-                    MetricTransformation3DRobustEstimator.create(
-                            metricReconstructedPoints3D, points3D,
-                            RobustEstimatorMethod.LMedS);
-
-            MetricTransformation3D transformation =
-                    transformationEstimator.estimate();
-
-            PinholeCamera transformedCamera1 =
-                    transformation.transformAndReturnNew(estimatedMetricCamera1);
-            PinholeCamera transformedCamera2 =
-                    transformation.transformAndReturnNew(estimatedMetricCamera2);
-
-            //check cameras intrinsics are correct (rotation, center and points
-            //might contain large errors and for that reason we do not checked)
-            transformedCamera1.decompose();
-            transformedCamera2.decompose();
-
-            PinholeCameraIntrinsicParameters transformedIntrinsic1 =
-                    transformedCamera1.getIntrinsicParameters();
-            PinholeCameraIntrinsicParameters transformedIntrinsic2 =
-                    transformedCamera2.getIntrinsicParameters();
-
-            assertEquals(transformedIntrinsic1.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(transformedIntrinsic1.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(transformedIntrinsic1.getSkewness(),
+            assertEquals(estimatedIntrinsic1.getSkewness(),
                     intrinsic.getSkewness(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(transformedIntrinsic1.getHorizontalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic1.getHorizontalPrincipalPoint(),
                     intrinsic.getHorizontalPrincipalPoint(),
                     LARGE_ABSOLUTE_ERROR);
-            assertEquals(transformedIntrinsic1.getVerticalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic1.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(),
                     LARGE_ABSOLUTE_ERROR);
 
-            assertEquals(transformedIntrinsic2.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(transformedIntrinsic2.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(transformedIntrinsic2.getSkewness(),
+            assertEquals(estimatedIntrinsic2.getSkewness(),
                     intrinsic.getSkewness(), LARGE_ABSOLUTE_ERROR);
-            assertEquals(transformedIntrinsic2.getHorizontalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic2.getHorizontalPrincipalPoint(),
                     intrinsic.getHorizontalPrincipalPoint(),
                     LARGE_ABSOLUTE_ERROR);
-            assertEquals(transformedIntrinsic2.getVerticalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic2.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(),
                     LARGE_ABSOLUTE_ERROR);
 
@@ -2665,8 +2452,8 @@ public class PairedViewsSparseReconstructorTest {
                     MIN_CAMERA_SEPARATION_ESSENTIAL,
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
-            Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
-            Point3D center2 = new InhomogeneousPoint3D(
+            final Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
+            final Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
@@ -2810,6 +2597,13 @@ public class PairedViewsSparseReconstructorTest {
 
             PairedViewsSparseReconstructorListener listener =
                     new PairedViewsSparseReconstructorListener() {
+
+                        @Override
+                        public double onBaselineRequested(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                                                          int viewId2, EstimatedCamera metricCamera1, EstimatedCamera metricCamera2) {
+                            return center1.distanceTo(center2);
+                        }
+
                         @Override
                         public boolean hasMoreViewsAvailable(PairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 2;
@@ -2869,20 +2663,6 @@ public class PairedViewsSparseReconstructorTest {
                         public void onFundamentalMatrixEstimated(PairedViewsSparseReconstructor reconstructor,
                                 int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
-                        }
-
-                        @Override
-                        public void onMetricCameraPairEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, EstimatedCamera camera1, EstimatedCamera camera2) {
-                            mEstimatedMetricCamera1 = camera1;
-                            mEstimatedMetricCamera2 = camera2;
-                        }
-
-                        @Override
-                        public void onMetricReconstructedPointsEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, List<MatchedSamples> matches,
-                                List<ReconstructedPoint3D> points) {
-                            mMetricReconstructedPoints = points;
                         }
 
                         @Override
@@ -2960,15 +2740,12 @@ public class PairedViewsSparseReconstructorTest {
             assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
             assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
             assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
-            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera2);
             assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
-            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera1);
             assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
             assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
             assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
             assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera1);
             assertNotNull(reconstructor.getMetricReconstructedPoints());
-            assertSame(reconstructor.getMetricReconstructedPoints(), mMetricReconstructedPoints);
             assertNotNull(reconstructor.getEuclideanReconstructedPoints());
             assertSame(reconstructor.getEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
@@ -3001,122 +2778,91 @@ public class PairedViewsSparseReconstructorTest {
                             mEstimatedFundamentalMatrix.getFundamentalMatrix().
                                     getInternalMatrix(), ABSOLUTE_ERROR));
 
-            //check that reconstructed points are in a metric stratum (up to a
-            //certain scale)
-            PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
-            PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
 
-            estimatedMetricCamera1.decompose();
-            estimatedMetricCamera2.decompose();
-
-            List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
-                metricReconstructedPoints3D.add(
-                        mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of both cameras
             for (int i = 0; i < numPoints; i++) {
-                Point3D p = metricReconstructedPoints3D.get(i);
-                assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
-                assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+                Point3D p = euclideanReconstructedPoints3D.get(i);
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(p));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(p));
             }
 
-            Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
-            Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
+            Point3D estimatedCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D estimatedCenter2 = estimatedEuclideanCamera2.getCameraCenter();
 
-            //transform points and cameras to account for scale change
+            //check scale
             double baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
-            double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
 
-            MetricTransformation3D scaleTransformation =
-                    new MetricTransformation3D(scale);
-
-            PinholeCamera scaledCamera1 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera1);
-            PinholeCamera scaledCamera2 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera2);
-
-            List<Point3D> scaledReconstructionPoints3D = scaleTransformation.
-                    transformPointsAndReturnNew(metricReconstructedPoints3D);
-
-            scaledCamera1.decompose();
-            scaledCamera2.decompose();
-
-            Point3D scaledCenter1 = scaledCamera1.getCameraCenter();
-            Point3D scaledCenter2 = scaledCamera2.getCameraCenter();
-
-            PinholeCameraIntrinsicParameters scaledIntrinsic1 =
-                    scaledCamera1.getIntrinsicParameters();
-            PinholeCameraIntrinsicParameters scaledIntrinsic2 =
-                    scaledCamera2.getIntrinsicParameters();
-
-            Rotation3D scaledRotation1 = scaledCamera1.getCameraRotation();
-            Rotation3D scaledRotation2 = scaledCamera2.getCameraRotation();
-
-            double scaledBaseline = scaledCenter1.distanceTo(scaledCenter2);
-
-            //check cameras are correct
-            if(Math.abs(scaledBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
+            if(Math.abs(estimatedBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(scaledBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(mScale, baseline, LARGE_ABSOLUTE_ERROR);
 
-            assertTrue(center1.equals(scaledCenter1, ABSOLUTE_ERROR));
-            if(!center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR)) {
+            //check cameras
+            PinholeCameraIntrinsicParameters estimatedIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters estimatedIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+
+            Rotation3D estimatedRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D estimatedRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+
+            assertTrue(center1.equals(estimatedCenter1, ABSOLUTE_ERROR));
+            if (!center2.equals(estimatedCenter2, LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
-            assertTrue(center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center2.equals(estimatedCenter2, LARGE_ABSOLUTE_ERROR));
 
-            assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getSkewness(),
+            assertEquals(estimatedIntrinsic1.getSkewness(),
                     intrinsic.getSkewness(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getHorizontalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic1.getHorizontalPrincipalPoint(),
                     intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getVerticalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic1.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
-            assertEquals(scaledIntrinsic2.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getSkewness(),
+            assertEquals(estimatedIntrinsic2.getSkewness(),
                     intrinsic.getSkewness(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getHorizontalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic2.getHorizontalPrincipalPoint(),
                     intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getVerticalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic2.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
-            assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
+            assertTrue(estimatedRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
-
-            if(!scaledRotation2.asInhomogeneousMatrix().equals(
-                    rotation2.asInhomogeneousMatrix(), LARGE_ABSOLUTE_ERROR)) {
-                continue;
-            }
-            assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
-                    rotation2.asInhomogeneousMatrix(), LARGE_ABSOLUTE_ERROR));
+            assertTrue(estimatedRotation2.asInhomogeneousMatrix().equals(
+                    rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             //check that points are correct
             boolean validPoints = true;
             for (int i = 0; i < numPoints; i++) {
                 if (!points3D.get(i).equals(
-                        scaledReconstructionPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
                     validPoints = false;
                     break;
                 }
                 assertTrue(points3D.get(i).equals(
-                        scaledReconstructionPoints3D.get(i),
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -3183,8 +2929,8 @@ public class PairedViewsSparseReconstructorTest {
                     MIN_CAMERA_SEPARATION_ESSENTIAL,
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
-            Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
-            Point3D center2 = new InhomogeneousPoint3D(
+            final Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
+            final Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
@@ -3325,6 +3071,13 @@ public class PairedViewsSparseReconstructorTest {
 
             PairedViewsSparseReconstructorListener listener =
                     new PairedViewsSparseReconstructorListener() {
+
+                        @Override
+                        public double onBaselineRequested(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, EstimatedCamera metricCamera1, EstimatedCamera metricCamera2) {
+                            return center1.distanceTo(center2);
+                        }
+
                         @Override
                         public boolean hasMoreViewsAvailable(PairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 2;
@@ -3332,7 +3085,7 @@ public class PairedViewsSparseReconstructorTest {
 
                         @Override
                         public void onRequestSamplesForCurrentViewPair(PairedViewsSparseReconstructor reconstructor,
-                                                                       int viewId1, int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                                int viewId1, int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
 
                             samples1.clear();
                             samples2.clear();
@@ -3384,20 +3137,6 @@ public class PairedViewsSparseReconstructorTest {
                         public void onFundamentalMatrixEstimated(PairedViewsSparseReconstructor reconstructor,
                                                                  int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
-                        }
-
-                        @Override
-                        public void onMetricCameraPairEstimated(PairedViewsSparseReconstructor reconstructor,
-                                                                int viewId1, int viewId2, EstimatedCamera camera1, EstimatedCamera camera2) {
-                            mEstimatedMetricCamera1 = camera1;
-                            mEstimatedMetricCamera2 = camera2;
-                        }
-
-                        @Override
-                        public void onMetricReconstructedPointsEstimated(PairedViewsSparseReconstructor reconstructor,
-                                                                         int viewId1, int viewId2, List<MatchedSamples> matches,
-                                                                         List<ReconstructedPoint3D> points) {
-                            mMetricReconstructedPoints = points;
                         }
 
                         @Override
@@ -3478,15 +3217,12 @@ public class PairedViewsSparseReconstructorTest {
             assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
             assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
             assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
-            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera2);
             assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
-            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera1);
             assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
             assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
             assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
             assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera1);
             assertNotNull(reconstructor.getMetricReconstructedPoints());
-            assertSame(reconstructor.getMetricReconstructedPoints(), mMetricReconstructedPoints);
             assertNotNull(reconstructor.getEuclideanReconstructedPoints());
             assertSame(reconstructor.getEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
@@ -3519,31 +3255,25 @@ public class PairedViewsSparseReconstructorTest {
                             mEstimatedFundamentalMatrix.getFundamentalMatrix().
                                     getInternalMatrix(), ABSOLUTE_ERROR));
 
-            //check that reconstructed points are in a metric stratum (up to a
-            //certain scale)
-            PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
-            PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
 
-            estimatedMetricCamera1.decompose();
-            estimatedMetricCamera2.decompose();
-
-            List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
-                metricReconstructedPoints3D.add(
-                        mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that most of the points are in front of both cameras
             int valid = 0, invalid = 0;
             for (int i = 0; i < numPoints; i++) {
-                if (mMetricReconstructedPoints.get(i).isInlier()) {
-                    Point3D p = metricReconstructedPoints3D.get(i);
-                    assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
-                    assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+                if (mEuclideanReconstructedPoints.get(i).isInlier()) {
+                    Point3D p = euclideanReconstructedPoints3D.get(i);
+                    assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(p));
+                    assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(p));
                     valid++;
                 } else {
                     invalid++;
@@ -3555,43 +3285,24 @@ public class PairedViewsSparseReconstructorTest {
             }
             assertTrue(valid >= invalid);
 
-            Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
-            Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
+            Point3D estimatedCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D estimatedCenter2 = estimatedEuclideanCamera2.getCameraCenter();
 
-            //transform points and cameras to account for scale change
+            //check scale
             double baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
-            double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
 
-            MetricTransformation3D scaleTransformation =
-                    new MetricTransformation3D(scale);
-
-            PinholeCamera scaledCamera1 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera1);
-            PinholeCamera scaledCamera2 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera2);
-
-            scaledCamera1.decompose();
-            scaledCamera2.decompose();
-
-            Point3D scaledCenter1 = new InhomogeneousPoint3D(
-                    scaledCamera1.getCameraCenter());
-            Point3D scaledCenter2 = new InhomogeneousPoint3D(
-                    scaledCamera2.getCameraCenter());
-
-            Rotation3D scaledRotation1 = scaledCamera1.getCameraRotation();
-
-            double scaledBaseline = scaledCenter1.distanceTo(scaledCenter2);
-
-            //check cameras are correct
-            if(Math.abs(scaledBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
+            if(Math.abs(estimatedBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(scaledBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(mScale, baseline, LARGE_ABSOLUTE_ERROR);
 
-            assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
+            //check cameras
+            Rotation3D estimatedRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+
+            assertTrue(estimatedRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             numValid++;
@@ -3647,8 +3358,8 @@ public class PairedViewsSparseReconstructorTest {
                     MIN_CAMERA_SEPARATION_ESSENTIAL,
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
-            Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
-            Point3D center2 = new InhomogeneousPoint3D(
+            final Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
+            final Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
@@ -3792,6 +3503,13 @@ public class PairedViewsSparseReconstructorTest {
 
             PairedViewsSparseReconstructorListener listener =
                     new PairedViewsSparseReconstructorListener() {
+
+                        @Override
+                        public double onBaselineRequested(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, EstimatedCamera metricCamera1, EstimatedCamera metricCamera2) {
+                            return center1.distanceTo(center2);
+                        }
+
                         @Override
                         public boolean hasMoreViewsAvailable(PairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 2;
@@ -3851,20 +3569,6 @@ public class PairedViewsSparseReconstructorTest {
                         public void onFundamentalMatrixEstimated(PairedViewsSparseReconstructor reconstructor,
                                 int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
-                        }
-
-                        @Override
-                        public void onMetricCameraPairEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, EstimatedCamera camera1, EstimatedCamera camera2) {
-                            mEstimatedMetricCamera1 = camera1;
-                            mEstimatedMetricCamera2 = camera2;
-                        }
-
-                        @Override
-                        public void onMetricReconstructedPointsEstimated(PairedViewsSparseReconstructor reconstructor,
-                                                                         int viewId1, int viewId2, List<MatchedSamples> matches,
-                                                                         List<ReconstructedPoint3D> points) {
-                            mMetricReconstructedPoints = points;
                         }
 
                         @Override
@@ -3945,15 +3649,12 @@ public class PairedViewsSparseReconstructorTest {
             assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
             assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
             assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
-            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera2);
             assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
-            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera1);
             assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
             assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
             assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
             assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera1);
             assertNotNull(reconstructor.getMetricReconstructedPoints());
-            assertSame(reconstructor.getMetricReconstructedPoints(), mMetricReconstructedPoints);
             assertNotNull(reconstructor.getEuclideanReconstructedPoints());
             assertSame(reconstructor.getEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
@@ -3986,83 +3687,62 @@ public class PairedViewsSparseReconstructorTest {
                             mEstimatedFundamentalMatrix.getFundamentalMatrix().
                                     getInternalMatrix(), LARGE_ABSOLUTE_ERROR));
 
-            //check that reconstructed points are in a metric stratum (up to a
-            //certain scale)
-            PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
-            PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
 
-            estimatedMetricCamera1.decompose();
-            estimatedMetricCamera2.decompose();
-
-            List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
             for (int i = 0; i < numPoints; i++) {
-                metricReconstructedPoints3D.add(
-                        mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3D.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
             //check that all points are in front of both cameras
             for (int i = 0; i < numPoints; i++) {
-                Point3D p = metricReconstructedPoints3D.get(i);
-                assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
-                assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
+                Point3D p = euclideanReconstructedPoints3D.get(i);
+                assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(p));
+                assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(p));
             }
 
-            Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
-            Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
+            Point3D estimatedCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D estimatedCenter2 = estimatedEuclideanCamera2.getCameraCenter();
 
-            //transform points and cameras to account for scale change
+            //check scale
             double baseline = center1.distanceTo(center2);
             double estimatedBaseline = estimatedCenter1.distanceTo(
                     estimatedCenter2);
-            double scale = baseline / estimatedBaseline;
-            assertEquals(mScale, 1.0, 0.0);
 
-            MetricTransformation3D scaleTransformation =
-                    new MetricTransformation3D(scale);
-
-            PinholeCamera scaledCamera1 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera1);
-            PinholeCamera scaledCamera2 =
-                    scaleTransformation.transformAndReturnNew(estimatedMetricCamera2);
-
-            List<Point3D> scaledReconstructionPoints3D = scaleTransformation.
-                    transformPointsAndReturnNew(metricReconstructedPoints3D);
-
-            scaledCamera1.decompose();
-            scaledCamera2.decompose();
-
-            Point3D scaledCenter1 = scaledCamera1.getCameraCenter();
-            Point3D scaledCenter2 = scaledCamera2.getCameraCenter();
-
-            Rotation3D scaledRotation1 = scaledCamera1.getCameraRotation();
-
-            double scaledBaseline = scaledCenter1.distanceTo(scaledCenter2);
-
-            //check cameras are correct
-            if(Math.abs(scaledBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
+            if(Math.abs(estimatedBaseline - baseline) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(scaledBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedBaseline, baseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(mScale, baseline, LARGE_ABSOLUTE_ERROR);
 
-            assertTrue(center1.equals(scaledCenter1, LARGE_ABSOLUTE_ERROR));
+            //check cameras
+            PinholeCameraIntrinsicParameters estimatedIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters estimatedIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
 
-            assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
+            Rotation3D estimatedRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+
+            assertTrue(center1.equals(estimatedCenter1, ABSOLUTE_ERROR));
+
+            assertTrue(estimatedRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             //check that points are correct
             boolean validPoints = true;
             for (int i = 0; i < numPoints; i++) {
                 if (!points3D.get(i).equals(
-                        scaledReconstructionPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
+                        euclideanReconstructedPoints3D.get(i), LARGE_ABSOLUTE_ERROR)) {
                     validPoints = false;
                     break;
                 }
                 assertTrue(points3D.get(i).equals(
-                        scaledReconstructionPoints3D.get(i),
+                        euclideanReconstructedPoints3D.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -4129,8 +3809,8 @@ public class PairedViewsSparseReconstructorTest {
                     MIN_CAMERA_SEPARATION_ESSENTIAL,
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
-            Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
-            Point3D center2 = new InhomogeneousPoint3D(
+            final Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
+            final Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
@@ -4281,6 +3961,13 @@ public class PairedViewsSparseReconstructorTest {
 
             PairedViewsSparseReconstructorListener listener =
                     new PairedViewsSparseReconstructorListener() {
+
+                        @Override
+                        public double onBaselineRequested(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                                                          int viewId2, EstimatedCamera metricCamera1, EstimatedCamera metricCamera2) {
+                            return center1.distanceTo(center2);
+                        }
+
                         @Override
                         public boolean hasMoreViewsAvailable(PairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 2;
@@ -4340,20 +4027,6 @@ public class PairedViewsSparseReconstructorTest {
                         public void onFundamentalMatrixEstimated(PairedViewsSparseReconstructor reconstructor,
                                 int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
-                        }
-
-                        @Override
-                        public void onMetricCameraPairEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, EstimatedCamera camera1, EstimatedCamera camera2) {
-                            mEstimatedMetricCamera1 = camera1;
-                            mEstimatedMetricCamera2 = camera2;
-                        }
-
-                        @Override
-                        public void onMetricReconstructedPointsEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, List<MatchedSamples> matches,
-                                List<ReconstructedPoint3D> points) {
-                            mMetricReconstructedPoints = points;
                         }
 
                         @Override
@@ -4431,15 +4104,12 @@ public class PairedViewsSparseReconstructorTest {
             assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
             assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
             assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
-            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera2);
             assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
-            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera1);
             assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
             assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2);
             assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
             assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera1);
             assertNotNull(reconstructor.getMetricReconstructedPoints());
-            assertSame(reconstructor.getMetricReconstructedPoints(), mMetricReconstructedPoints);
             assertNotNull(reconstructor.getEuclideanReconstructedPoints());
             assertSame(reconstructor.getEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
@@ -4472,17 +4142,11 @@ public class PairedViewsSparseReconstructorTest {
                             mEstimatedFundamentalMatrix.getFundamentalMatrix().
                                     getInternalMatrix(), LARGE_ABSOLUTE_ERROR));
 
-            //check that reconstructed points are in a metric stratum (up to a
-            //certain scale)
-            PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
-            PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
 
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
-
-            estimatedMetricCamera1.decompose();
-            estimatedMetricCamera2.decompose();
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
 
             numValid++;
 
@@ -4543,12 +4207,12 @@ public class PairedViewsSparseReconstructorTest {
                     MIN_CAMERA_SEPARATION_ESSENTIAL,
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
-            Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
-            Point3D center2 = new InhomogeneousPoint3D(
+            final Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
+            final Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation1,
                     center1.getInhomY() + cameraSeparation1,
                     center1.getInhomZ() + cameraSeparation1);
-            Point3D center3 = new InhomogeneousPoint3D(
+            final Point3D center3 = new InhomogeneousPoint3D(
                     center2.getInhomX() + cameraSeparation2,
                     center2.getInhomY() + cameraSeparation2,
                     center2.getInhomZ() + cameraSeparation2);
@@ -4670,7 +4334,6 @@ public class PairedViewsSparseReconstructorTest {
 
             final int numPointsPair1 = randomizer.nextInt(MIN_NUM_POINTS, MAX_NUM_POINTS);
             final int numPointsPair2 = randomizer.nextInt(MIN_NUM_POINTS, MAX_NUM_POINTS);
-//            int numPoints = numPointsPair1 + numPointsPair2;
 
             InhomogeneousPoint3D point3D;
             List<InhomogeneousPoint3D> points3DPair1 = new ArrayList<>();
@@ -4773,6 +4436,20 @@ public class PairedViewsSparseReconstructorTest {
 
             PairedViewsSparseReconstructorListener listener =
                     new PairedViewsSparseReconstructorListener() {
+
+                        @Override
+                        public double onBaselineRequested(PairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, EstimatedCamera metricCamera1, EstimatedCamera metricCamera2) {
+                            int viewCount = reconstructor.getViewCount();
+                            if (viewCount == 0) {
+                                return center1.distanceTo(center2);
+                            } else if (viewCount == 2) {
+                                return center2.distanceTo(center3);
+                            }
+
+                            return 1.0;
+                        }
+
                         @Override
                         public boolean hasMoreViewsAvailable(PairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 4; //3 views = 2 view pairs (2 images * 2 views --> 4 view counts)
@@ -4870,33 +4547,6 @@ public class PairedViewsSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onMetricCameraPairEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, EstimatedCamera camera1, EstimatedCamera camera2) {
-
-                            int viewCount = reconstructor.getViewCount();
-                            if (viewCount == 0) {
-                                mEstimatedMetricCamera1 = camera1;
-                                mEstimatedMetricCamera2 = camera2;
-                            } else if (viewCount == 2) {
-                                mEstimatedMetricCamera2b = camera1;
-                                mEstimatedMetricCamera3 = camera2;
-                            }
-                        }
-
-                        @Override
-                        public void onMetricReconstructedPointsEstimated(PairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, List<MatchedSamples> matches,
-                                List<ReconstructedPoint3D> points) {
-
-                            int viewCount = reconstructor.getViewCount();
-                            if (viewCount == 0) {
-                                mMetricReconstructedPoints = points;
-                            } else if (viewCount == 2) {
-                                mMetricReconstructedPoints2 = points;
-                            }
-                        }
-
-                        @Override
                         public void onEuclideanCameraPairEstimated(PairedViewsSparseReconstructor reconstructor,
                                 int viewId1, int viewId2, double scale, EstimatedCamera camera1,
                                 EstimatedCamera camera2) {
@@ -4980,18 +4630,14 @@ public class PairedViewsSparseReconstructorTest {
             assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
             assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix2);
             assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
-            assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera3);
             assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
-            assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera2b);
             assertNotNull(reconstructor.getCurrentEuclideanEstimatedCamera());
             assertSame(reconstructor.getCurrentEuclideanEstimatedCamera(), mEstimatedEuclideanCamera3);
             assertNotNull(reconstructor.getPreviousEuclideanEstimatedCamera());
             assertSame(reconstructor.getPreviousEuclideanEstimatedCamera(), mEstimatedEuclideanCamera2b);
             assertNotNull(reconstructor.getMetricReconstructedPoints());
-            assertSame(reconstructor.getMetricReconstructedPoints(), mMetricReconstructedPoints2);
             assertNotNull(reconstructor.getEuclideanReconstructedPoints());
             assertSame(reconstructor.getEuclideanReconstructedPoints(), mEuclideanReconstructedPoints2);
-            assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
             assertEquals(reconstructor.getCurrentScale(), mScale2, 0.0);
             assertNotNull(reconstructor.getPreviousViewSamples());
             assertNotNull(reconstructor.getCurrentViewSamples());
@@ -5036,49 +4682,42 @@ public class PairedViewsSparseReconstructorTest {
                             mEstimatedFundamentalMatrix2.getFundamentalMatrix().
                                     getInternalMatrix(), ABSOLUTE_ERROR));
 
+            //check that reconstructed points are in euclidean stratum (up to a certain scale)
+            PinholeCamera estimatedEuclideanCamera1 = mEstimatedEuclideanCamera1.getCamera();
+            PinholeCamera estimatedEuclideanCamera2 = mEstimatedEuclideanCamera2.getCamera();
+            PinholeCamera estimatedEuclideanCamera2b = mEstimatedEuclideanCamera2b.getCamera();
+            PinholeCamera estimatedEuclideanCamera3 = mEstimatedEuclideanCamera3.getCamera();
 
-            //check that reconstructed points are in a metric stratum (up to a
-            //certain scale)
-            PinholeCamera estimatedMetricCamera1 = mEstimatedMetricCamera1.getCamera();
-            PinholeCamera estimatedMetricCamera2 = mEstimatedMetricCamera2.getCamera();
-            PinholeCamera estimatedMetricCamera2b = mEstimatedMetricCamera2b.getCamera();
-            PinholeCamera estimatedMetricCamera3 = mEstimatedMetricCamera3.getCamera();
-            assertSame(mEstimatedMetricCamera1, mEstimatedEuclideanCamera1);
-            assertSame(mEstimatedMetricCamera2, mEstimatedEuclideanCamera2);
-            assertSame(mEstimatedMetricCamera2b, mEstimatedEuclideanCamera2b);
-            assertSame(mEstimatedMetricCamera3, mEstimatedEuclideanCamera3);
+            estimatedEuclideanCamera1.decompose();
+            estimatedEuclideanCamera2.decompose();
+            estimatedEuclideanCamera2b.decompose();
+            estimatedEuclideanCamera3.decompose();
 
-            estimatedMetricCamera1.decompose();
-            estimatedMetricCamera2.decompose();
-            estimatedMetricCamera2b.decompose();
-            estimatedMetricCamera3.decompose();
-
-            assertSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
-            assertSame(mMetricReconstructedPoints2, mEuclideanReconstructedPoints2);
-
-            List<Point3D> metricReconstructedPoints3DPair1 = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3DPair1 = new ArrayList<>();
             for (int i = 0; i < numPointsPair1; i++) {
-                metricReconstructedPoints3DPair1.add(
-                        mMetricReconstructedPoints.get(i).getPoint());
+                euclideanReconstructedPoints3DPair1.add(
+                        mEuclideanReconstructedPoints.get(i).getPoint());
             }
 
-            List<Point3D> metricReconstructedPoints3DPair2 = new ArrayList<>();
+            List<Point3D> euclideanReconstructedPoints3DPair2 = new ArrayList<>();
             for (int i = 0; i < numPointsPair2; i++) {
-                metricReconstructedPoints3DPair2.add(
-                        mMetricReconstructedPoints2.get(i).getPoint());
+                euclideanReconstructedPoints3DPair2.add(
+                        mEuclideanReconstructedPoints2.get(i).getPoint());
             }
 
             //check that most points are in front of all cameras
             int numValidPoints = 0, numInvalidPoints = 0;
             for (int i = 0; i < numPointsPair1; i++) {
-                Point3D p = metricReconstructedPoints3DPair1.get(i);
-                if(estimatedMetricCamera1.isPointInFrontOfCamera(p) &&
-                        estimatedMetricCamera2.isPointInFrontOfCamera(p) &&
-                        estimatedMetricCamera3.isPointInFrontOfCamera(p)) {
+                Point3D p = euclideanReconstructedPoints3DPair1.get(i);
+                if(estimatedEuclideanCamera1.isPointInFrontOfCamera(p) &&
+                        estimatedEuclideanCamera2.isPointInFrontOfCamera(p) &&
+                        //estimatedEuclideanCamera2b.isPointInFrontOfCamera(p) &&
+                        estimatedEuclideanCamera3.isPointInFrontOfCamera(p)) {
 
-                    assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
-                    assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
-                    assertTrue(estimatedMetricCamera3.isPointInFrontOfCamera(p));
+                    assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(p));
+                    assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(p));
+                    //assertTrue(estimatedEuclideanCamera2b.isPointInFrontOfCamera(p));
+                    assertTrue(estimatedEuclideanCamera3.isPointInFrontOfCamera(p));
 
                     numValidPoints++;
                 } else {
@@ -5091,14 +4730,16 @@ public class PairedViewsSparseReconstructorTest {
             numValidPoints = 0;
             numInvalidPoints = 0;
             for (int i = 0; i < numPointsPair2; i++) {
-                Point3D p = metricReconstructedPoints3DPair2.get(i);
-                if(estimatedMetricCamera1.isPointInFrontOfCamera(p) &&
-                        estimatedMetricCamera2.isPointInFrontOfCamera(p) &&
-                        estimatedMetricCamera3.isPointInFrontOfCamera(p)) {
+                Point3D p = euclideanReconstructedPoints3DPair2.get(i);
+                if(estimatedEuclideanCamera1.isPointInFrontOfCamera(p) &&
+                        estimatedEuclideanCamera2.isPointInFrontOfCamera(p) &&
+                        estimatedEuclideanCamera2b.isPointInFrontOfCamera(p) &&
+                        estimatedEuclideanCamera3.isPointInFrontOfCamera(p)) {
 
-                    assertTrue(estimatedMetricCamera1.isPointInFrontOfCamera(p));
-                    assertTrue(estimatedMetricCamera2.isPointInFrontOfCamera(p));
-                    assertTrue(estimatedMetricCamera3.isPointInFrontOfCamera(p));
+                    assertTrue(estimatedEuclideanCamera1.isPointInFrontOfCamera(p));
+                    assertTrue(estimatedEuclideanCamera2.isPointInFrontOfCamera(p));
+                    assertTrue(estimatedEuclideanCamera2b.isPointInFrontOfCamera(p));
+                    assertTrue(estimatedEuclideanCamera3.isPointInFrontOfCamera(p));
 
                     numValidPoints++;
                 } else {
@@ -5108,168 +4749,122 @@ public class PairedViewsSparseReconstructorTest {
 
             assertTrue(numValidPoints > numInvalidPoints);
 
-            Point3D estimatedCenter1 = estimatedMetricCamera1.getCameraCenter();
-            Point3D estimatedCenter2 = estimatedMetricCamera2.getCameraCenter();
-            Point3D estimatedCenter2b = estimatedMetricCamera2b.getCameraCenter();
-            Point3D estimatedCenter3 = estimatedMetricCamera3.getCameraCenter();
+            Point3D estimatedCenter1 = estimatedEuclideanCamera1.getCameraCenter();
+            Point3D estimatedCenter2 = estimatedEuclideanCamera2.getCameraCenter();
+            Point3D estimatedCenter2b = estimatedEuclideanCamera2b.getCameraCenter();
+            Point3D estimatedCenter3 = estimatedEuclideanCamera3.getCameraCenter();
 
-            //transform points and cameras to account for scale change
+            //check scale
             double baseline1 = center1.distanceTo(center2);
             double estimatedBaseline1 = estimatedCenter1.distanceTo(
                     estimatedCenter2);
-            double scale1 = baseline1 / estimatedBaseline1;
-
             double baseline2 = center2.distanceTo(center3);
-            double estimatedBaseline2 = estimatedCenter2b.distanceTo(
+            double estimatedBaseline2 = estimatedCenter2.distanceTo(
                     estimatedCenter3);
-            double scale2 = baseline2 / estimatedBaseline2;
 
-            assertEquals(mScale, 1.0, 0.0);
-            assertEquals(mScale2, 1.0, 0.0);
-
-            MetricTransformation3D scaleTransformation1 =
-                    new MetricTransformation3D(scale1);
-            MetricTransformation3D transformation2 =
-                    new MetricTransformation3D(
-                            new double[]{
-                                    scale1 * estimatedCenter2b.getInhomX(),
-                                    scale1 * estimatedCenter2b.getInhomY(),
-                                    scale1 * estimatedCenter2b.getInhomY()}).
-                            combineAndReturnNew(new MetricTransformation3D(scale2).
-                                    combineAndReturnNew(new MetricTransformation3D(
-                                            new double[]{
-                                                    -estimatedCenter2b.getInhomX(),
-                                                    -estimatedCenter2b.getInhomY(),
-                                                    -estimatedCenter2b.getInhomZ()
-                                            })));
-
-            PinholeCamera scaledCamera1 =
-                    scaleTransformation1.transformAndReturnNew(estimatedMetricCamera1);
-            PinholeCamera scaledCamera2 =
-                    scaleTransformation1.transformAndReturnNew(estimatedMetricCamera2);
-            PinholeCamera scaledCamera2b =
-                    scaleTransformation1.transformAndReturnNew(estimatedMetricCamera2b);
-            PinholeCamera scaledCamera3 =
-                    transformation2.transformAndReturnNew(estimatedMetricCamera3);
-
-            List<Point3D> scaledReconstructionPoints3DPair1 = scaleTransformation1.
-                    transformPointsAndReturnNew(metricReconstructedPoints3DPair1);
-            List<Point3D> scaledReconstructionPoints3DPair2 = transformation2.
-                    transformPointsAndReturnNew(metricReconstructedPoints3DPair2);
-
-            scaledCamera1.decompose();
-            scaledCamera2.decompose();
-            scaledCamera2b.decompose();
-            scaledCamera3.decompose();
-
-            Point3D scaledCenter1 = scaledCamera1.getCameraCenter();
-            Point3D scaledCenter2 = scaledCamera2.getCameraCenter();
-            Point3D scaledCenter2b = scaledCamera2b.getCameraCenter();
-            Point3D scaledCenter3 = scaledCamera3.getCameraCenter();
-
-            PinholeCameraIntrinsicParameters scaledIntrinsic1 =
-                    scaledCamera1.getIntrinsicParameters();
-            PinholeCameraIntrinsicParameters scaledIntrinsic2 =
-                    scaledCamera2.getIntrinsicParameters();
-            PinholeCameraIntrinsicParameters scaledIntrinsic2b =
-                    scaledCamera2b.getIntrinsicParameters();
-            PinholeCameraIntrinsicParameters scaledIntrinsic3 =
-                    scaledCamera3.getIntrinsicParameters();
-
-            Rotation3D scaledRotation1 = scaledCamera1.getCameraRotation();
-            Rotation3D scaledRotation2 = scaledCamera2.getCameraRotation();
-            Rotation3D scaledRotation2b = scaledCamera2b.getCameraRotation();
-            Rotation3D scaledRotation3 = scaledCamera3.getCameraRotation();
-
-            double scaledBaseline1 = scaledCenter1.distanceTo(scaledCenter2);
-            double scaledBaseline2 = scaledCenter2b.distanceTo(scaledCenter3);
-
-            //check cameras are correct
-            if(Math.abs(scaledBaseline1 - baseline1) > LARGE_ABSOLUTE_ERROR) {
+            if(Math.abs(estimatedBaseline1 - baseline1) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(scaledBaseline1, baseline1, LARGE_ABSOLUTE_ERROR);
-            if(Math.abs(scaledBaseline2 - baseline2) > LARGE_ABSOLUTE_ERROR) {
+            assertEquals(estimatedBaseline1, baseline1, LARGE_ABSOLUTE_ERROR);
+            assertEquals(mScale, baseline1, LARGE_ABSOLUTE_ERROR);
+
+            if(Math.abs(estimatedBaseline2 - baseline2) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(scaledBaseline2, baseline2, LARGE_ABSOLUTE_ERROR);
+            assertEquals(estimatedBaseline2, baseline2, LARGE_ABSOLUTE_ERROR);
+            assertEquals(mScale2, baseline2, LARGE_ABSOLUTE_ERROR);
 
-            assertTrue(center1.equals(scaledCenter1, ABSOLUTE_ERROR));
-            if(!center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR)) {
+            //check cameras
+            PinholeCameraIntrinsicParameters estimatedIntrinsic1 =
+                    estimatedEuclideanCamera1.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters estimatedIntrinsic2 =
+                    estimatedEuclideanCamera2.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters estimatedIntrinsic2b =
+                    estimatedEuclideanCamera2b.getIntrinsicParameters();
+            PinholeCameraIntrinsicParameters estimatedIntrinsic3 =
+                    estimatedEuclideanCamera3.getIntrinsicParameters();
+
+            Rotation3D estimatedRotation1 = estimatedEuclideanCamera1.getCameraRotation();
+            Rotation3D estimatedRotation2 = estimatedEuclideanCamera2.getCameraRotation();
+            Rotation3D estimatedRotation2b = estimatedEuclideanCamera2b.getCameraRotation();
+            Rotation3D estimatedRotation3 = estimatedEuclideanCamera3.getCameraRotation();
+
+            assertTrue(center1.equals(estimatedCenter1, ABSOLUTE_ERROR));
+            if(!center2.equals(estimatedCenter2, LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
-            assertTrue(center2.equals(scaledCenter2, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center2.equals(estimatedCenter2, LARGE_ABSOLUTE_ERROR));
 
-            assertTrue(scaledCenter2.equals(scaledCenter2b, ABSOLUTE_ERROR));
+            assertTrue(estimatedCenter2.equals(estimatedCenter2b, ABSOLUTE_ERROR));
 
-            if (!center3.equals(scaledCenter3, LARGE_ABSOLUTE_ERROR)) {
+            if (!center3.equals(estimatedCenter3, LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
-            assertTrue(center3.equals(scaledCenter3, LARGE_ABSOLUTE_ERROR));
+            assertTrue(center3.equals(estimatedCenter3, LARGE_ABSOLUTE_ERROR));
 
-            assertEquals(scaledIntrinsic1.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic1.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getSkewness(),
+            assertEquals(estimatedIntrinsic1.getSkewness(),
                     intrinsic.getSkewness(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getHorizontalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic1.getHorizontalPrincipalPoint(),
                     intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic1.getVerticalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic1.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
-            assertEquals(scaledIntrinsic2.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic2.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getSkewness(),
+            assertEquals(estimatedIntrinsic2.getSkewness(),
                     intrinsic.getSkewness(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getHorizontalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic2.getHorizontalPrincipalPoint(),
                     intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2.getVerticalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic2.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
-            assertEquals(scaledIntrinsic2b.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic2b.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2b.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic2b.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2b.getSkewness(),
+            assertEquals(estimatedIntrinsic2b.getSkewness(),
                     intrinsic.getSkewness(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2b.getHorizontalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic2b.getHorizontalPrincipalPoint(),
                     intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic2b.getVerticalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic2b.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
-            assertEquals(scaledIntrinsic3.getHorizontalFocalLength(),
+            assertEquals(estimatedIntrinsic3.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic3.getVerticalFocalLength(),
+            assertEquals(estimatedIntrinsic3.getVerticalFocalLength(),
                     intrinsic.getVerticalFocalLength(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic3.getSkewness(),
+            assertEquals(estimatedIntrinsic3.getSkewness(),
                     intrinsic.getSkewness(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic3.getHorizontalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic3.getHorizontalPrincipalPoint(),
                     intrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-            assertEquals(scaledIntrinsic3.getVerticalPrincipalPoint(),
+            assertEquals(estimatedIntrinsic3.getVerticalPrincipalPoint(),
                     intrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
 
-            assertTrue(scaledRotation1.asInhomogeneousMatrix().equals(
+            assertTrue(estimatedRotation1.asInhomogeneousMatrix().equals(
                     rotation1.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
-            assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
+            assertTrue(estimatedRotation2.asInhomogeneousMatrix().equals(
                     rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
-            assertTrue(scaledRotation2.asInhomogeneousMatrix().equals(
-                    scaledRotation2b.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
-            assertTrue(scaledRotation3.asInhomogeneousMatrix().equals(
+            assertTrue(estimatedRotation2.asInhomogeneousMatrix().equals(
+                    estimatedRotation2b.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
+            assertTrue(estimatedRotation3.asInhomogeneousMatrix().equals(
                     rotation3.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
 
             //check that points are correct
             boolean validPoints = true;
             for(int i = 0; i < numPointsPair1; i++) {
                 if (!points3DPair1.get(i).equals(
-                        scaledReconstructionPoints3DPair1.get(i), LARGE_ABSOLUTE_ERROR)) {
+                        euclideanReconstructedPoints3DPair1.get(i), LARGE_ABSOLUTE_ERROR)) {
                     validPoints = false;
                     break;
                 }
                 assertTrue(points3DPair1.get(i).equals(
-                        scaledReconstructionPoints3DPair1.get(i),
+                        euclideanReconstructedPoints3DPair1.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -5279,12 +4874,12 @@ public class PairedViewsSparseReconstructorTest {
 
             for(int i = 0; i < numPointsPair2; i++) {
                 if (!points3DPair2.get(i).equals(
-                        scaledReconstructionPoints3DPair2.get(i), LARGE_ABSOLUTE_ERROR)) {
+                        euclideanReconstructedPoints3DPair2.get(i), LARGE_ABSOLUTE_ERROR)) {
                     validPoints = false;
                     break;
                 }
                 assertTrue(points3DPair2.get(i).equals(
-                        scaledReconstructionPoints3DPair2.get(i),
+                        euclideanReconstructedPoints3DPair2.get(i),
                         LARGE_ABSOLUTE_ERROR));
             }
 
@@ -5307,11 +4902,8 @@ public class PairedViewsSparseReconstructorTest {
     private void reset() {
         mViewCount = 0;
         mEstimatedFundamentalMatrix = mEstimatedFundamentalMatrix2 = null;
-        mEstimatedMetricCamera1 = mEstimatedMetricCamera2 =
-                mEstimatedMetricCamera3 = null;
         mEstimatedEuclideanCamera1 = mEstimatedEuclideanCamera2
                 = mEstimatedEuclideanCamera3 = null;
-        mMetricReconstructedPoints = null;
         mEuclideanReconstructedPoints = null;
         mStarted = mFinished = mFailed = mCancelled = false;
         mScale = 0.0;

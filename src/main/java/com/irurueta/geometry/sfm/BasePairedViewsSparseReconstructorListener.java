@@ -86,49 +86,18 @@ public interface BasePairedViewsSparseReconstructorListener<
                                       EstimatedFundamentalMatrix estimatedFundamentalMatrix);
 
     /**
-     * Notifies when a pair of cameras for provided matched pair of views have been
-     * estimated. Cameras returned on this event are defined in a metric stratum (i.e.
-     * up to scale).
-     * This event can be used to store cameras associated to such view pair.
-     * @param reconstructor reconstructor raising this event.
-     * @param viewId1 id of previous view (i.e. 1st view).
-     * @param viewId2 id of current view (i.e. 2nd view).
-     * @param camera1 estimated metric camera for previous view (i.e. 1st view).
-     * @param camera2 estimated metric camera for current view (i.e. 2nd view).
-     */
-    void onMetricCameraPairEstimated(R reconstructor, int viewId1, int viewId2,
-                                     EstimatedCamera camera1, EstimatedCamera camera2);
-
-    /**
-     * Called when reconstructed points have been estimated from a series of 2D matches
-     * in a pair of views. Reconstructed points returned on this event are defined in a
-     * metric stratum (i.e. up to scale).
-     * This event can be used to store reconstructed points and their associated data.
-     * @param reconstructor reconstructor raising this event.
-     * @param viewId1 id of previous view (i.e. 1st view).
-     * @param viewId2 id of current view (i.e. 2nd view).
-     * @param matches 2D matches associated to estimated reconstructed points.
-     * @param points reconstructed 3D points for the pair of views.
-     */
-    void onMetricReconstructedPointsEstimated(R reconstructor, int viewId1, int viewId2,
-                                              List<MatchedSamples> matches,
-                                              List<ReconstructedPoint3D> points);
-
-    /**
      * Called when cameras for provided matched pair of views have been estimated in an
-     * euclidean stratum (when possible and up to a certain accuracy).
-     * Except PairedViewsSparseReconstructor, which can only make estimations in a metric
-     * stratum, other reconstructor implementations either have calibration knowledge to
-     * estimate scale, or use SLAM techniques by mixing additional sensor data (i.e.
-     * gyroscope and accelerometer) to estimate such scale.
+     * euclidean stratum (up to certain translation and rotation).
+     * Implementations using SLAM techniques by mixing additional sensor data (i.e.
+     * gyroscope and accelerometer) to estimate scale of each view pair, might also have
+     * some inaccuracies in estimated scale.
      * @param reconstructor reconstructor raising this event.
      * @param viewId1 id of previous view (i.e. 1st view).
      * @param viewId2 id of current view (i.e. 2nd view).
-     * @param scale estimated scale. This will typically converge to a constant value as
-     *              more views are processed. The smaller the variance of estimated scale,
-     *              the more accurate the scale will be.
-     * @param camera1 estimated metric camera for previous view (i.e. 1st view).
-     * @param camera2 estimated metric camera for current view (i.e. 2nd view).
+     * @param scale estimated scale. When using SLAM this is estimated up to a certain
+     *                 accuracy.
+     * @param camera1 estimated euclidean camera for previous view (i.e. 1st view).
+     * @param camera2 estimated euclidean camera for current view (i.e. 2nd view).
      */
     void onEuclideanCameraPairEstimated(R reconstructor, int viewId1, int viewId2,
                                         double scale, EstimatedCamera camera1,
@@ -136,18 +105,13 @@ public interface BasePairedViewsSparseReconstructorListener<
 
     /**
      * Called when reconstructed points have been estimated from a series of 2D matches in a
-     * pair of views.
-     * Except PairedViewsSparseReconstructor, which can only make estimations in a metric
-     * stratum, other reconstructor implementations either have calibration knowledge to
-     * estimate scale, or use SLAM techniques by mixing additional sensor data (i.e.
-     * gyroscope and accelerometer) to estimate such scale.
+     * pair of views in an euclidean stratum (up to certain translation and rotation).
      * @param reconstructor reconstructor raising this event.
      * @param viewId1 id of previous view (i.e. 1st view).
      * @param viewId2 id of current view (i.e. 2nd view).
-     * @param scale estimated scale. This will typically converge to a constant value as
-     *              more views are processed. The smaller the variance of estimated scale,
-     *              the more accurate the scale will be.
-     * @param points reconstructed 3D points.
+     * @param scale estimated scale. When using SLAM this is estimated up to a certain
+     *                 accuracy.
+     * @param points reconstructed 3D points in euclidean space.
      */
     void onEuclideanReconstructedPointsEstimated(R reconstructor,
                                                  int viewId1, int viewId2, double scale,
