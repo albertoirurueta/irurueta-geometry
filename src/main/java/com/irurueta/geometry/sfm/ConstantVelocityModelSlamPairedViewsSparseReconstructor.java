@@ -82,6 +82,7 @@ public class ConstantVelocityModelSlamPairedViewsSparseReconstructor extends
      */
     @Override
     protected boolean postProcessOne(boolean isInitialPairOfViews) {
-        return updateScale(isInitialPairOfViews);
+        //return updateScale(isInitialPairOfViews);
+        return true;
     }
 }

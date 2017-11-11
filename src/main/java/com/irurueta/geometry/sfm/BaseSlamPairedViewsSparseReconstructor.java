@@ -15,12 +15,12 @@
  */
 package com.irurueta.geometry.sfm;
 
+import com.irurueta.algebra.AlgebraException;
 import com.irurueta.geometry.*;
 import com.irurueta.geometry.slam.BaseCalibrationData;
 import com.irurueta.geometry.slam.BaseSlamEstimator;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class BaseSlamPairedViewsSparseReconstructor<
         C extends BaseSlamPairedViewsSparseReconstructorConfiguration,
@@ -177,11 +177,158 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
     }
 
     /**
+     * Transforms metric cameras on current pair of views so that they are referred to
+     * last kept location and rotation and upgrades cameras from metric stratum to
+     * euclidean stratum.
+     * @param isInitialPairOfViews true if initial pair of views is being processed, false otherwise.
+     * @return true if cameras were successfully transformed.
+     */
+    @Override
+    protected boolean transformPairOfCamerasAndPoints(boolean isInitialPairOfViews) {
+        PinholeCamera previousMetricCamera = mPreviousMetricEstimatedCamera.getCamera();
+        PinholeCamera currentMetricCamera = mCurrentMetricEstimatedCamera.getCamera();
+        if (previousMetricCamera == null || currentMetricCamera == null) {
+            return false;
+        }
+
+        mCurrentScale = estimateCurrentScale(isInitialPairOfViews);
+        if (mFailed) {
+            return false;
+        }
+
+        double sqrScale = mCurrentScale * mCurrentScale;
+
+        MetricTransformation3D scaleTransformation = new MetricTransformation3D(mCurrentScale);
+
+        if (isInitialPairOfViews) {
+            //first pair of views does not require setting translation and rotation
+            mReferenceEuclideanTransformation = scaleTransformation;
+        } else {
+            //additional pairs also need to translate and rotate
+            Rotation3D invRot = mLastEuclideanCameraRotation.inverseRotationAndReturnNew();
+            double[] translation = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+            translation[0] = mLastEuclideanCameraCenter.getInhomX();
+            translation[1] = mLastEuclideanCameraCenter.getInhomY();
+            translation[2] = mLastEuclideanCameraCenter.getInhomZ();
+            mReferenceEuclideanTransformation = scaleTransformation.
+                    combineAndReturnNew(new MetricTransformation3D(invRot, translation, 1.0));
+            mReferenceEuclideanTransformation.setRotation(invRot);
+            mReferenceEuclideanTransformation.setTranslation(mLastEuclideanCameraCenter);
+        }
+
+        try {
+            //transform cameras
+            PinholeCamera previousEuclideanCamera = mReferenceEuclideanTransformation.
+                    transformAndReturnNew(previousMetricCamera);
+            PinholeCamera currentEuclideanCamera = mReferenceEuclideanTransformation.
+                    transformAndReturnNew(currentMetricCamera);
+
+            mPreviousEuclideanEstimatedCamera = new EstimatedCamera();
+            mPreviousEuclideanEstimatedCamera.setCamera(previousEuclideanCamera);
+            mPreviousEuclideanEstimatedCamera.setViewId(mPreviousMetricEstimatedCamera.getViewId());
+            mPreviousEuclideanEstimatedCamera.setQualityScore(mPreviousMetricEstimatedCamera.getQualityScore());
+            if (mPreviousMetricEstimatedCamera.getCovariance() != null) {
+                mPreviousEuclideanEstimatedCamera.setCovariance(
+                        mPreviousMetricEstimatedCamera.getCovariance().multiplyByScalarAndReturnNew(sqrScale));
+            }
+
+            mCurrentEuclideanEstimatedCamera = new EstimatedCamera();
+            mCurrentEuclideanEstimatedCamera.setCamera(currentEuclideanCamera);
+            mCurrentEuclideanEstimatedCamera.setViewId(mCurrentMetricEstimatedCamera.getViewId());
+            mCurrentEuclideanEstimatedCamera.setQualityScore(mCurrentMetricEstimatedCamera.getQualityScore());
+            if (mCurrentMetricEstimatedCamera.getCovariance() != null) {
+                mCurrentEuclideanEstimatedCamera.setCovariance(
+                        mCurrentMetricEstimatedCamera.getCovariance().multiplyByScalarAndReturnNew(sqrScale));
+            }
+
+            //transform points
+            mEuclideanReconstructedPoints = new ArrayList<>();
+            ReconstructedPoint3D euclideanReconstructedPoint;
+            Point3D metricPoint, euclideanPoint;
+            for (ReconstructedPoint3D metricReconstructedPoint : mMetricReconstructedPoints) {
+                metricPoint = metricReconstructedPoint.getPoint();
+                euclideanPoint = mReferenceEuclideanTransformation.transformAndReturnNew(
+                        metricPoint);
+                euclideanReconstructedPoint = new ReconstructedPoint3D();
+                euclideanReconstructedPoint.setPoint(euclideanPoint);
+                euclideanReconstructedPoint.setInlier(metricReconstructedPoint.isInlier());
+                euclideanReconstructedPoint.setId(metricReconstructedPoint.getId());
+                euclideanReconstructedPoint.setColorData(metricReconstructedPoint.getColorData());
+                if (metricReconstructedPoint.getCovariance() != null) {
+                    euclideanReconstructedPoint.setCovariance(metricReconstructedPoint.getCovariance().
+                            multiplyByScalarAndReturnNew(sqrScale));
+                }
+                euclideanReconstructedPoint.setQualityScore(metricReconstructedPoint.getQualityScore());
+                mEuclideanReconstructedPoints.add(euclideanReconstructedPoint);
+            }
+
+        } catch (AlgebraException e) {
+            return false;
+        }
+
+        return super.transformPairOfCamerasAndPoints(isInitialPairOfViews);
+    }
+
+    /**
+     * Estimates current scale using SLAM data.
+     * @param isInitialPairOfViews true if initial pair of views is being processed, false otherwise.
+     * @return estimated scale.
+     */
+    private double estimateCurrentScale(boolean isInitialPairOfViews) {
+        try {
+
+            double slamPosX = mSlamEstimator.getStatePositionX();
+            double slamPosY = mSlamEstimator.getStatePositionY();
+            double slamPosZ = mSlamEstimator.getStatePositionZ();
+
+            mSlamPosition.setInhomogeneousCoordinates(slamPosX, slamPosY, slamPosZ);
+
+            PinholeCamera metricCamera1 = mPreviousMetricEstimatedCamera.getCamera();
+            PinholeCamera metricCamera2 = mCurrentMetricEstimatedCamera.getCamera();
+
+            if (!metricCamera1.isCameraCenterAvailable()) {
+                metricCamera1.decompose(false, true);
+            }
+            if (!metricCamera2.isCameraCenterAvailable()) {
+                metricCamera2.decompose(false, true);
+            }
+
+            Point3D metricCenter1 = metricCamera1.getCameraCenter();
+            Point3D metricCenter2 = metricCamera2.getCameraCenter();
+
+            double euclideanBaseline;
+            if (isInitialPairOfViews) {
+                //initially metric center is at world origin
+                euclideanBaseline = metricCenter1.distanceTo(mSlamPosition);
+            } else {
+                //use center of last euclidean camera from previous view pair
+                PinholeCamera euclideanCamera2 = mCurrentEuclideanEstimatedCamera.getCamera();
+                if (!euclideanCamera2.isCameraCenterAvailable()) {
+                    euclideanCamera2.decompose(false, true);
+                }
+
+                Point3D euclideanCenter2 = euclideanCamera2.getCameraCenter();
+                euclideanBaseline = euclideanCenter2.distanceTo(mSlamPosition);
+            }
+
+            double metricBaseline = metricCenter1.distanceTo(metricCenter2);
+
+            return euclideanBaseline / metricBaseline;
+        } catch (Exception e) {
+            mFailed = true;
+            //noinspection all
+            mListener.onFail((R)this);
+            return DEFAULT_SCALE;
+        }
+
+    }
+
+    /**
      * Update scene scale using SLAM data.
      * @param isInitialPairOfViews true if initial pair of views is being processed, false otherwise.
      * @return true if scale was successfully updated, false otherwise.
      */
-    protected boolean updateScale(boolean isInitialPairOfViews) {
+    /*protected boolean updateScale(boolean isInitialPairOfViews) {
         try {
             PinholeCamera metricCamera1 = mPreviousMetricEstimatedCamera.getCamera();
             PinholeCamera metricCamera2 = mCurrentMetricEstimatedCamera.getCamera();
@@ -312,7 +459,7 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
 
             return false;
         }
-    }
+    }*/
 
     /**
      * Notifies SLAM state if notification is enabled at configuration time.
@@ -378,6 +525,9 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
                 }
 
                 intrinsicParameters = camera.getIntrinsicParameters();
+            } else if (mConfiguration.areIntrinsicParametersKnown()) {
+                //noinspection unchecked
+                intrinsicParameters = mListener.onIntrinsicParametersRequested((R)this, mCurrentViewId);
             }
 
             if (intrinsicParameters == null) {

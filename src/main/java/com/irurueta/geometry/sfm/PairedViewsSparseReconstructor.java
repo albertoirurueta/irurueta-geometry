@@ -60,7 +60,7 @@ public class PairedViewsSparseReconstructor extends BasePairedViewsSparseReconst
      * @return true if cameras were successfully transformed.
      */
     @Override
-    protected boolean transformMetricPairOfCamerasAndPoints(boolean isInitialPairOfViews) {
+    protected boolean transformPairOfCamerasAndPoints(boolean isInitialPairOfViews) {
         PinholeCamera previousMetricCamera = mPreviousMetricEstimatedCamera.getCamera();
         PinholeCamera currentMetricCamera = mCurrentMetricEstimatedCamera.getCamera();
         if (previousMetricCamera == null || currentMetricCamera == null) {
@@ -139,7 +139,7 @@ public class PairedViewsSparseReconstructor extends BasePairedViewsSparseReconst
             return false;
         }
 
-        return super.transformMetricPairOfCamerasAndPoints(isInitialPairOfViews);
+        return super.transformPairOfCamerasAndPoints(isInitialPairOfViews);
     }
 
     /**
@@ -150,11 +150,6 @@ public class PairedViewsSparseReconstructor extends BasePairedViewsSparseReconst
      */
     @Override
     protected boolean postProcessOne(boolean isInitialPairOfViews) {
-        //no need for post processing when computing metric reconstruction
-/*        mPreviousEuclideanEstimatedCamera = mPreviousMetricEstimatedCamera;
-        mCurrentEuclideanEstimatedCamera = mCurrentMetricEstimatedCamera;
-        mEuclideanReconstructedPoints = mMetricReconstructedPoints;
-        mCurrentScale = DEFAULT_SCALE;*/
         return true;
     }
 }

@@ -493,12 +493,13 @@ public abstract class BasePairedViewsSparseReconstructor<
     }
 
     /**
-     * Transforms metric cameras on current pair of views so that they are referred to
-     * last kept location and rotation.
+     * Transforms cameras on current pair of views so that they are referred to
+     * last kept location and rotation and upgrades cameras from metric stratum to
+     * euclidean stratum.
      * @param isInitialPairOfViews true if initial pair of views is being processed, false otherwise.
      * @return true if cameras were successfully transformed.
      */
-    protected boolean transformMetricPairOfCamerasAndPoints(boolean isInitialPairOfViews) {
+    protected boolean transformPairOfCamerasAndPoints(boolean isInitialPairOfViews) {
         if (isInitialPairOfViews) {
             //initial pair does not need transformation
             return true;
@@ -1124,7 +1125,7 @@ public abstract class BasePairedViewsSparseReconstructor<
                     intrinsic1, intrinsic2);
 
             return estimateInitialCamerasAndPointsEssential(intrinsic1, intrinsic2) &&
-                    transformMetricPairOfCamerasAndPoints(isInitialPairOfViews);
+                    transformPairOfCamerasAndPoints(isInitialPairOfViews);
         } catch (Exception e) {
             return false;
         }
@@ -1282,7 +1283,7 @@ public abstract class BasePairedViewsSparseReconstructor<
                 mMetricReconstructedPoints.add(reconstructedPoint);
             }
 
-            return transformMetricPairOfCamerasAndPoints(isInitialPairOfViews);
+            return transformPairOfCamerasAndPoints(isInitialPairOfViews);
         } catch (Exception e) {
             return false;
         }
@@ -1365,7 +1366,7 @@ public abstract class BasePairedViewsSparseReconstructor<
                 mMetricReconstructedPoints.add(reconstructedPoint);
             }
 
-            return transformMetricPairOfCamerasAndPoints(isInitialPairOfViews);
+            return transformPairOfCamerasAndPoints(isInitialPairOfViews);
         } catch (Exception e) {
             return false;
         }
@@ -1398,7 +1399,7 @@ public abstract class BasePairedViewsSparseReconstructor<
         if (intrinsic1 != null && intrinsic2 != null) {
             //for non initial view, transform cameras to new reference
             return estimateInitialCamerasAndPointsEssential(intrinsic1, intrinsic2) &&
-                    transformMetricPairOfCamerasAndPoints(isInitialPairOfViews);
+                    transformPairOfCamerasAndPoints(isInitialPairOfViews);
         } else {
             //missing intrinsic parameters
 
