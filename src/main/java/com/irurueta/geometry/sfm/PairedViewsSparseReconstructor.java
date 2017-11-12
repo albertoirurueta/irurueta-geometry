@@ -71,11 +71,9 @@ public class PairedViewsSparseReconstructor extends BasePairedViewsSparseReconst
                 mPreviousMetricEstimatedCamera, mCurrentMetricEstimatedCamera);
         double sqrScale = mCurrentScale * mCurrentScale;
 
-        MetricTransformation3D scaleTransformation = new MetricTransformation3D(mCurrentScale);
-
         if (isInitialPairOfViews) {
             //first pair of views does not require setting translation and rotation
-            mReferenceEuclideanTransformation = scaleTransformation;
+            mReferenceEuclideanTransformation = new MetricTransformation3D(mCurrentScale);
         } else {
              //additional pairs also need to translate and rotate
             Rotation3D invRot = mLastEuclideanCameraRotation.inverseRotationAndReturnNew();
@@ -83,10 +81,7 @@ public class PairedViewsSparseReconstructor extends BasePairedViewsSparseReconst
             translation[0] = mLastEuclideanCameraCenter.getInhomX();
             translation[1] = mLastEuclideanCameraCenter.getInhomY();
             translation[2] = mLastEuclideanCameraCenter.getInhomZ();
-            mReferenceEuclideanTransformation = scaleTransformation.
-                    combineAndReturnNew(new MetricTransformation3D(invRot, translation, 1.0));
-            mReferenceEuclideanTransformation.setRotation(invRot);
-            mReferenceEuclideanTransformation.setTranslation(mLastEuclideanCameraCenter);
+            mReferenceEuclideanTransformation = new MetricTransformation3D(invRot, translation, mCurrentScale);
         }
 
         try {

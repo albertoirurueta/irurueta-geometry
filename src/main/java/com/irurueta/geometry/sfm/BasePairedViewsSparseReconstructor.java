@@ -139,7 +139,7 @@ public abstract class BasePairedViewsSparseReconstructor<
     /**
      * Center of current euclidean camera on last view pair.
      */
-    protected Point3D mLastEuclideanCameraCenter;
+    protected Point3D mLastEuclideanCameraCenter = new InhomogeneousPoint3D();
 
     /**
      * Rotation of current euclidean camera on last view pair.
@@ -1397,7 +1397,6 @@ public abstract class BasePairedViewsSparseReconstructor<
         }
 
         if (intrinsic1 != null && intrinsic2 != null) {
-            //for non initial view, transform cameras to new reference
             return estimateInitialCamerasAndPointsEssential(intrinsic1, intrinsic2) &&
                     transformPairOfCamerasAndPoints(isInitialPairOfViews);
         } else {
