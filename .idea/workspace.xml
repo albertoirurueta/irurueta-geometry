@@ -2,10 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c6d6a1cb-41d7-401f-885d-de1ac92dc71e" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BasePairedViewsSparseReconstructor.java" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BasePairedViewsSparseReconstructor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamPairedViewsSparseReconstructor.java" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamPairedViewsSparseReconstructor.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/PairedViewsSparseReconstructor.java" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/PairedViewsSparseReconstructor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/slam/BaseSlamEstimator.java" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/slam/BaseSlamEstimator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/AbsoluteOrientationConstantVelocityModelSlamEstimatorTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/AbsoluteOrientationConstantVelocityModelSlamEstimatorTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/AbsoluteOrientationSlamEstimatorTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/AbsoluteOrientationSlamEstimatorTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/ConstantVelocityModelSlamEstimatorTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/ConstantVelocityModelSlamEstimatorTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/SlamEstimatorTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/SlamEstimatorTest.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,37 +40,12 @@
           <file leaf-file-name="SlamPairedViewsSparseReconstructorTest.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="290">
-                  <caret line="2299" column="0" lean-forward="true" selection-start-line="2299" selection-start-column="0" selection-end-line="2299" selection-end-column="0" />
+                <state relative-caret-position="162">
+                  <caret line="710" column="54" lean-forward="false" selection-start-line="710" selection-start-column="54" selection-end-line="710" selection-end-column="54" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="method#testConstructor#0;class#SlamPairedViewsSparseReconstructorTest#0" expanded="false" />
-                    <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews#0;class#SlamPairedViewsSparseReconstructorTest#0" expanded="false" />
-                    <element signature="e#28556#28557#0" expanded="true" />
-                    <element signature="e#28627#28628#0" expanded="true" />
-                    <element signature="e#28759#28760#0" expanded="true" />
-                    <element signature="e#28831#28832#0" expanded="true" />
-                    <element signature="e#28963#28964#0" expanded="true" />
-                    <element signature="e#29036#29037#0" expanded="true" />
-                    <element signature="e#29166#29167#0" expanded="true" />
-                    <element signature="e#29236#29237#0" expanded="true" />
                     <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseTwoViews#0;class#SlamPairedViewsSparseReconstructorTest#0" expanded="false" />
-                    <element signature="e#58127#58128#0" expanded="true" />
-                    <element signature="e#58198#58199#0" expanded="true" />
-                    <element signature="e#58330#58331#0" expanded="true" />
-                    <element signature="e#58402#58403#0" expanded="true" />
-                    <element signature="e#58534#58535#0" expanded="true" />
-                    <element signature="e#58607#58608#0" expanded="true" />
-                    <element signature="e#58737#58738#0" expanded="true" />
-                    <element signature="e#58807#58808#0" expanded="true" />
-                    <element signature="e#98557#98558#0" expanded="true" />
-                    <element signature="e#98628#98629#0" expanded="true" />
-                    <element signature="e#98760#98761#0" expanded="true" />
-                    <element signature="e#98832#98833#0" expanded="true" />
-                    <element signature="e#98964#98965#0" expanded="true" />
-                    <element signature="e#99037#99038#0" expanded="true" />
-                    <element signature="e#99167#99168#0" expanded="true" />
-                    <element signature="e#99237#99238#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -74,8 +54,8 @@
           <file leaf-file-name="BaseSlamPairedViewsSparseReconstructor.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamPairedViewsSparseReconstructor.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1290">
-                  <caret line="280" column="0" lean-forward="false" selection-start-line="280" selection-start-column="0" selection-end-line="280" selection-end-column="0" />
+                <state relative-caret-position="60">
+                  <caret line="18" column="31" lean-forward="true" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
                   <folding>
                     <element signature="docComment;method#BaseSlamPairedViewsSparseReconstructor#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
                     <element signature="method#BaseSlamPairedViewsSparseReconstructor#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
@@ -86,20 +66,8 @@
                     <element signature="docComment;method#setUpCalibrationData#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
                     <element signature="docComment;method#setUpSlamEstimatorListener#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
                     <element signature="docComment;method#notifySlamStateIfNeeded#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
-                    <element signature="method#notifySlamStateIfNeeded#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
                     <element signature="docComment;method#notifySlamCameraIfNeeded#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
-                    <element signature="method#notifySlamCameraIfNeeded#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="MetricTransformation3D.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/MetricTransformation3D.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-836">
-                  <caret line="99" column="11" lean-forward="false" selection-start-line="99" selection-start-column="11" selection-end-line="99" selection-end-column="11" />
-                  <folding />
                 </state>
               </provider>
             </entry>
@@ -108,11 +76,11 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="PairedViewsSparseReconstructorTest.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="PairedViewsSparseReconstructorTest.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/PairedViewsSparseReconstructorTest.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-493">
-                  <caret line="4720" column="0" lean-forward="false" selection-start-line="4720" selection-start-column="0" selection-end-line="4720" selection-end-column="0" />
+                <state relative-caret-position="227">
+                  <caret line="4890" column="0" lean-forward="false" selection-start-line="4890" selection-start-column="0" selection-end-line="4890" selection-end-column="0" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="method#testConstructor#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
@@ -134,16 +102,17 @@
           <file leaf-file-name="PairedViewsSparseReconstructor.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/PairedViewsSparseReconstructor.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="268">
-                  <caret line="83" column="111" lean-forward="true" selection-start-line="83" selection-start-column="12" selection-end-line="83" selection-end-column="111" />
+                <state relative-caret-position="456">
+                  <caret line="143" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
                   <folding>
                     <element signature="imports" expanded="true" />
+                    <element signature="method#transformPairOfCamerasAndPoints#0;class#PairedViewsSparseReconstructor#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="SlamSparseReconstructorTest.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="SlamSparseReconstructorTest.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamSparseReconstructorTest.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="141">
@@ -152,14 +121,6 @@
                     <element signature="imports" expanded="true" />
                     <element signature="method#testConstructor#0;class#SlamSparseReconstructorTest#0" expanded="false" />
                     <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
-                    <element signature="e#31613#31614#0" expanded="true" />
-                    <element signature="e#31684#31685#0" expanded="true" />
-                    <element signature="e#31805#31806#0" expanded="true" />
-                    <element signature="e#31877#31878#0" expanded="true" />
-                    <element signature="e#31998#31999#0" expanded="true" />
-                    <element signature="e#32071#32072#0" expanded="true" />
-                    <element signature="e#32190#32191#0" expanded="true" />
-                    <element signature="e#32260#32261#0" expanded="true" />
                     <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseTwoViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
                     <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseThreeViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
                     <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseFourViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
@@ -169,37 +130,13 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="SlamSparseReconstructor.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SlamSparseReconstructor.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="194">
-                  <caret line="63" column="18" lean-forward="true" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="BaseSlamSparseReconstructor.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamSparseReconstructor.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="610">
-                  <caret line="246" column="48" lean-forward="true" selection-start-line="246" selection-start-column="16" selection-end-line="246" selection-end-column="48" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="BasePairedViewsSparseReconstructor.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BasePairedViewsSparseReconstructor.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="630">
-                  <caret line="1531" column="38" lean-forward="false" selection-start-line="1531" selection-start-column="12" selection-end-line="1531" selection-end-column="38" />
+                <state relative-caret-position="148">
+                  <caret line="1514" column="0" lean-forward="false" selection-start-line="1514" selection-start-column="0" selection-end-line="1514" selection-end-column="0" />
                   <folding>
                     <element signature="imports" expanded="true" />
-                    <element signature="method#cancel#0;class#BasePairedViewsSparseReconstructor#0" expanded="false" />
-                    <element signature="method#reset#0;class#BasePairedViewsSparseReconstructor#0" expanded="false" />
-                    <element signature="e#17919#17920#0" expanded="true" />
-                    <element signature="e#17963#17964#0" expanded="true" />
                     <element signature="docComment;method#postProcessOne#0;class#BasePairedViewsSparseReconstructor#0" expanded="false" />
                     <element signature="docComment;method#hasEnoughSamples#0;class#BasePairedViewsSparseReconstructor#0" expanded="false" />
                     <element signature="docComment;method#hasEnoughMatches#0;class#BasePairedViewsSparseReconstructor#0" expanded="false" />
@@ -228,18 +165,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>intrinsic1</find>
-      <find>asArray</find>
-      <find>postProcess</find>
-      <find>processOne</find>
-      <find>mPreviousViewSamples</find>
-      <find>onReques</find>
-      <find>onSamplesAcc</find>
-      <find>estimatePlanarFundamentalMatrix</find>
-      <find>mRunning</find>
-      <find>mFailed</find>
-      <find>MIN_CAMERA_SEPARATION_DIAC</find>
-      <find>isFirst</find>
       <find>getListe</find>
       <find>isAdditio</find>
       <find>mLastMetricCameraCenter</find>
@@ -251,13 +176,25 @@
       <find>mCurrentEuclideanEstimatedCamera</find>
       <find>keepLast</find>
       <find>onSlamCameraEstimated</find>
-      <find>mSlamPosition</find>
       <find>mCameraPositionCovariance</find>
       <find>transformPairOfCamerasAndPoints</find>
       <find>onRequestSamplesForCurrentViewPair</find>
       <find>keep</find>
-      <find>mLastEuclideanCameraCenter</find>
       <find>mSlamEstimator</find>
+      <find>cancel</find>
+      <find>reset()</find>
+      <find>mSlamPosition</find>
+      <find>mLastEuclideanCameraCenter</find>
+      <find>correctWithPositionMeasure</find>
+      <find>processFul</find>
+      <find>update</find>
+      <find>mLastViewPairTimestamp</find>
+      <find>reset</find>
+      <find>reset(</find>
+      <find>testRes</find>
+      <find>testRese</find>
+      <find>testReset</find>
+      <find>correct</find>
     </findStrings>
     <replaceStrings>
       <replace>KnownBaselineSparseReconstructorConfiguration</replace>
@@ -287,11 +224,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/PairedViewsSparseReconstructorConfiguration.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorConfiguration.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/KnownBaselineSparseReconstructorConfiguration.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamPairedViewsSparseReconstructorConfiguration.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SlamSparseReconstructorConfiguration.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/KnownBaselinePairedViewsSparseReconstructorConfiguration.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/ConstantVelocityModelSlamPairedViewsSparseReconstructorConfiguration.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamSparseReconstructorConfiguration.java" />
@@ -334,10 +266,15 @@
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructor.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/ConstantVelocityModelSlamPairedViewsSparseReconstructor.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewSparseReconstructorTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/PairedViewsSparseReconstructor.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BasePairedViewsSparseReconstructor.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamPairedViewsSparseReconstructor.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/PairedViewsSparseReconstructor.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/slam/BaseSlamEstimator.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/SlamEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/ConstantVelocityModelSlamEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/AbsoluteOrientationSlamEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/AbsoluteOrientationConstantVelocityModelSlamEstimatorTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamPairedViewsSparseReconstructor.java" />
       </list>
     </option>
   </component>
@@ -348,7 +285,7 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="11" />
     <option name="y" value="23" />
     <option name="width" value="1440" />
@@ -391,10 +328,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -456,12 +389,16 @@
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="geometry" type="462c0819:PsiDirectoryNode" />
-              <item name="sfm" type="462c0819:PsiDirectoryNode" />
+              <item name="slam" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -489,7 +426,57 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews">
+  <component name="RunManager" selected="JUnit.PairedViewsSparseReconstructorTest">
+    <configuration name="AbsoluteOrientationSlamEstimatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.irurueta.geometry.slam.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="irurueta-geometry" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.irurueta.geometry.slam" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.slam.AbsoluteOrientationSlamEstimatorTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration name="ConstantVelocityModelSlamEstimatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.irurueta.geometry.slam.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="irurueta-geometry" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.irurueta.geometry.slam" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.slam.ConstantVelocityModelSlamEstimatorTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
     <configuration name="PairedViewsSparseReconstructorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -515,20 +502,20 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="PairedViewsSparseReconstructorTest.testCancel" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SlamEstimatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="com.irurueta.geometry.sfm.*" />
+          <option name="PATTERN" value="com.irurueta.geometry.slam.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <module name="irurueta-geometry" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="com.irurueta.geometry.sfm" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.sfm.PairedViewsSparseReconstructorTest" />
-      <option name="METHOD_NAME" value="testCancel" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="PACKAGE_NAME" value="com.irurueta.geometry.slam" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.slam.SlamEstimatorTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -554,56 +541,6 @@
       <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.sfm.SlamPairedViewsSparseReconstructorTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-    </configuration>
-    <configuration name="SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.irurueta.geometry.sfm.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="irurueta-geometry" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="com.irurueta.geometry.sfm" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.sfm.SlamPairedViewsSparseReconstructorTest" />
-      <option name="METHOD_NAME" value="testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-    </configuration>
-    <configuration name="SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.irurueta.geometry.sfm.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="irurueta-geometry" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="com.irurueta.geometry.sfm" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.sfm.SlamPairedViewsSparseReconstructorTest" />
-      <option name="METHOD_NAME" value="testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews" />
-      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -814,19 +751,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.PairedViewsSparseReconstructorTest" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.PairedViewsSparseReconstructorTest.testCancel" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.SlamPairedViewsSparseReconstructorTest" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.SlamPairedViewsSparseReconstructorTest" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.SlamEstimatorTest" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.ConstantVelocityModelSlamEstimatorTest" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.AbsoluteOrientationSlamEstimatorTest" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.PairedViewsSparseReconstructorTest" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.PairedViewsSparseReconstructorTest" />
         <item index="1" class="java.lang.String" itemvalue="JUnit.SlamPairedViewsSparseReconstructorTest" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.PairedViewsSparseReconstructorTest" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.PairedViewsSparseReconstructorTest.testCancel" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.AbsoluteOrientationSlamEstimatorTest" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.ConstantVelocityModelSlamEstimatorTest" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.SlamEstimatorTest" />
       </list>
     </recent_temporary>
   </component>
@@ -847,40 +784,39 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="SlamPairedViewsSparseReconstructorTest_testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews - 2017.11.12 at 13h 34m 38s.xml">
-      <configuration name="SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" configurationId="JUnit" />
+    <history-entry file="AbsoluteOrientationSlamEstimatorTest - 2017.11.13 at 23h 02m 23s.xml">
+      <configuration name="AbsoluteOrientationSlamEstimatorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SlamPairedViewsSparseReconstructorTest_testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews - 2017.11.12 at 13h 35m 08s.xml">
-      <configuration name="SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" configurationId="JUnit" />
+    <history-entry file="ConstantVelocityModelSlamEstimatorTest - 2017.11.13 at 22h 59m 46s.xml">
+      <configuration name="ConstantVelocityModelSlamEstimatorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SlamPairedViewsSparseReconstructorTest_testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews - 2017.11.12 at 13h 36m 39s.xml">
-      <configuration name="SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" configurationId="JUnit" />
+    <history-entry file="PairedViewsSparseReconstructorTest - 2017.11.13 at 23h 11m 04s.xml">
+      <configuration name="PairedViewsSparseReconstructorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SlamPairedViewsSparseReconstructorTest_testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews - 2017.11.12 at 13h 37m 11s.xml">
-      <configuration name="SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" configurationId="JUnit" />
+    <history-entry file="SlamEstimatorTest - 2017.11.13 at 22h 54m 29s.xml">
+      <configuration name="SlamEstimatorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SlamPairedViewsSparseReconstructorTest_testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews - 2017.11.12 at 13h 37m 35s.xml">
-      <configuration name="SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" configurationId="JUnit" />
+    <history-entry file="SlamEstimatorTest - 2017.11.13 at 22h 58m 06s.xml">
+      <configuration name="SlamEstimatorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SlamPairedViewsSparseReconstructorTest_testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews - 2017.11.12 at 13h 37m 45s.xml">
-      <configuration name="SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" configurationId="JUnit" />
+    <history-entry file="SlamPairedViewsSparseReconstructorTest - 2017.11.13 at 22h 47m 18s.xml">
+      <configuration name="SlamPairedViewsSparseReconstructorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SlamPairedViewsSparseReconstructorTest_testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews - 2017.11.12 at 13h 38m 41s.xml">
-      <configuration name="SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" configurationId="JUnit" />
+    <history-entry file="SlamPairedViewsSparseReconstructorTest - 2017.11.13 at 22h 47m 36s.xml">
+      <configuration name="SlamPairedViewsSparseReconstructorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SlamPairedViewsSparseReconstructorTest_testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews - 2017.11.12 at 13h 40m 40s.xml">
-      <configuration name="SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" configurationId="JUnit" />
+    <history-entry file="SlamPairedViewsSparseReconstructorTest - 2017.11.13 at 22h 50m 44s.xml">
+      <configuration name="SlamPairedViewsSparseReconstructorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SlamPairedViewsSparseReconstructorTest_testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews - 2017.11.12 at 13h 41m 47s.xml">
-      <configuration name="SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" configurationId="JUnit" />
+    <history-entry file="SlamPairedViewsSparseReconstructorTest - 2017.11.13 at 23h 04m 11s.xml">
+      <configuration name="SlamPairedViewsSparseReconstructorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SlamPairedViewsSparseReconstructorTest_testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews - 2017.11.12 at 13h 42m 41s.xml">
-      <configuration name="SlamPairedViewsSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews" configurationId="JUnit" />
+    <history-entry file="SlamPairedViewsSparseReconstructorTest - 2017.11.13 at 23h 09m 22s.xml">
+      <configuration name="SlamPairedViewsSparseReconstructorTest" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="11" y="23" width="1440" height="877" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -896,12 +832,11 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32474965" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286445" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38235295" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38235295" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -910,6 +845,7 @@
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286445" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -955,7 +891,7 @@
           <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="743" />
+      <option name="time" value="762" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -964,48 +900,7 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseTwoViewsSparseReconstructorListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-376">
-          <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseTwoViewsSparseReconstructor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="702">
-          <caret line="1196" column="49" lean-forward="false" selection-start-line="1196" selection-start-column="49" selection-end-line="1196" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSparseReconstructorListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="702">
-          <caret line="136" column="113" lean-forward="false" selection-start-line="136" selection-start-column="80" selection-end-line="136" selection-end-column="113" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SparseReconstructorListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="15" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/KnownBaselineSparseReconstructorListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="14" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/KnownBaselinePairedViewsSparseReconstructorListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="24" column="0" lean-forward="true" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/KnownBaselinePairedViewsSparseReconstructorListener.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamSparseReconstructorListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -1122,31 +1017,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6066">
           <caret line="482" column="16" lean-forward="false" selection-start-line="482" selection-start-column="16" selection-end-line="482" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/KnownBaselinePairedViewsSparseReconstructor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1069">
-          <caret line="147" column="17" lean-forward="true" selection-start-line="147" selection-start-column="17" selection-end-line="147" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/KnownBaselinePairedViewsSparseReconstructorConfigurationTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="25" column="13" lean-forward="false" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/KnownBaselinePairedViewsSparseReconstructor.java" />
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/KnownBaselinePairedViewsSparseReconstructorConfigurationTest.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/KnownBaselineSparseReconstructor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="257">
           <caret line="69" column="9" lean-forward="true" selection-start-line="69" selection-start-column="9" selection-end-line="69" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1154,7 +1033,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
           <caret line="124" column="12" lean-forward="true" selection-start-line="124" selection-start-column="12" selection-end-line="124" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1182,7 +1060,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="23" column="79" lean-forward="false" selection-start-line="23" selection-start-column="79" selection-end-line="23" selection-end-column="79" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1217,7 +1094,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="32" column="44" lean-forward="false" selection-start-line="32" selection-start-column="44" selection-end-line="32" selection-end-column="44" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1229,27 +1105,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/slam/SlamEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="218" column="0" lean-forward="false" selection-start-line="218" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SlamSparseReconstructor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="63" column="18" lean-forward="true" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamSparseReconstructorConfiguration.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="94" column="37" lean-forward="false" selection-start-line="94" selection-start-column="12" selection-end-line="94" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1257,7 +1116,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-786">
           <caret line="34" column="13" lean-forward="false" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1265,7 +1123,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="32" column="37" lean-forward="true" selection-start-line="32" selection-start-column="37" selection-end-line="32" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1273,7 +1130,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="185">
           <caret line="32" column="38" lean-forward="false" selection-start-line="32" selection-start-column="38" selection-end-line="32" selection-end-column="38" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1289,67 +1145,131 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="31" column="17" lean-forward="false" selection-start-line="31" selection-start-column="17" selection-end-line="31" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/MetricTransformation3D.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1260">
+          <caret line="99" column="11" lean-forward="false" selection-start-line="99" selection-start-column="11" selection-end-line="99" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/HomogeneousPoint3D.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="326" column="0" lean-forward="false" selection-start-line="326" selection-start-column="0" selection-end-line="326" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.11/junit-4.11.jar!/org/junit/internal/runners/model/ReflectiveCallable.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/slam/SlamEstimator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2411">
+          <caret line="282" column="29" lean-forward="false" selection-start-line="282" selection-start-column="19" selection-end-line="282" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/Quaternion.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-458">
+          <caret line="22" column="13" lean-forward="false" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/slam/BaseSlamEstimator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="904" column="0" lean-forward="false" selection-start-line="904" selection-start-column="0" selection-end-line="904" selection-end-column="0" />
+        <state relative-caret-position="-505">
+          <caret line="230" column="22" lean-forward="false" selection-start-line="230" selection-start-column="22" selection-end-line="230" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/PairedViewsSparseReconstructor.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/ConstantVelocityModelSlamEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="83" column="111" lean-forward="true" selection-start-line="83" selection-start-column="12" selection-end-line="83" selection-end-column="111" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/PairedViewsSparseReconstructorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-493">
-          <caret line="4720" column="0" lean-forward="false" selection-start-line="4720" selection-start-column="0" selection-end-line="4720" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#testConstructor#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsEssentialTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsDIACTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsDAQAndEssentialZeroPrincipalPointTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsDAQAndEssentialTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsDAQTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testPlanarPointsEssentialTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testPlanarPointsDIACTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testPlanarPointsDAQAndEssentialZeroPrincipalPointTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testPlanarPointsDAQTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testCancel#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/MetricTransformation3D.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-836">
-          <caret line="99" column="11" lean-forward="false" selection-start-line="99" selection-start-column="11" selection-end-line="99" selection-end-column="11" />
+        <state relative-caret-position="161">
+          <caret line="218" column="9" lean-forward="true" selection-start-line="218" selection-start-column="9" selection-end-line="218" selection-end-column="9" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/SlamEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="295" column="0" lean-forward="true" selection-start-line="213" selection-start-column="0" selection-end-line="295" selection-end-column="0" />
+          <folding>
+            <element signature="method#testResetPosition#0;class#SlamEstimatorTest#0" expanded="false" />
+            <element signature="method#testResetVelocity#0;class#SlamEstimatorTest#0" expanded="false" />
+            <element signature="method#testResetPositionAndVelocity#0;class#SlamEstimatorTest#0" expanded="false" />
+            <element signature="method#testResetAcceleration#0;class#SlamEstimatorTest#0" expanded="false" />
+            <element signature="method#testResetOrientation#0;class#SlamEstimatorTest#0" expanded="false" />
+            <element signature="method#testResetAngularSpeed#0;class#SlamEstimatorTest#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/AbsoluteOrientationConstantVelocityModelSlamEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="240" column="73" lean-forward="false" selection-start-line="240" selection-start-column="73" selection-end-line="240" selection-end-column="73" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/slam/AbsoluteOrientationSlamEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1041">
+          <caret line="240" column="16" lean-forward="false" selection-start-line="240" selection-start-column="16" selection-end-line="240" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="710" column="54" lean-forward="false" selection-start-line="710" selection-start-column="54" selection-end-line="710" selection-end-column="54" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#testConstructor#0;class#SlamPairedViewsSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseTwoViews#0;class#SlamPairedViewsSparseReconstructorTest#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamPairedViewsSparseReconstructor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="18" column="31" lean-forward="true" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
+          <folding>
+            <element signature="docComment;method#BaseSlamPairedViewsSparseReconstructor#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
+            <element signature="method#BaseSlamPairedViewsSparseReconstructor#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
+            <element signature="docComment;method#updateAccelerometerSample#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
+            <element signature="docComment;method#updateAccelerometerSample#1;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
+            <element signature="docComment;method#updateGyroscopeSample#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
+            <element signature="docComment;method#updateGyroscopeSample#1;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
+            <element signature="docComment;method#setUpCalibrationData#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
+            <element signature="docComment;method#setUpSlamEstimatorListener#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
+            <element signature="docComment;method#notifySlamStateIfNeeded#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
+            <element signature="docComment;method#notifySlamCameraIfNeeded#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BasePairedViewsSparseReconstructor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="1531" column="38" lean-forward="false" selection-start-line="1531" selection-start-column="12" selection-end-line="1531" selection-end-column="38" />
+        <state relative-caret-position="148">
+          <caret line="1514" column="0" lean-forward="false" selection-start-line="1514" selection-start-column="0" selection-end-line="1514" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#cancel#0;class#BasePairedViewsSparseReconstructor#0" expanded="false" />
-            <element signature="method#reset#0;class#BasePairedViewsSparseReconstructor#0" expanded="false" />
-            <element signature="e#17919#17920#0" expanded="true" />
-            <element signature="e#17963#17964#0" expanded="true" />
             <element signature="docComment;method#postProcessOne#0;class#BasePairedViewsSparseReconstructor#0" expanded="false" />
             <element signature="docComment;method#hasEnoughSamples#0;class#BasePairedViewsSparseReconstructor#0" expanded="false" />
             <element signature="docComment;method#hasEnoughMatches#0;class#BasePairedViewsSparseReconstructor#0" expanded="false" />
@@ -1365,19 +1285,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamSparseReconstructor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="610">
-          <caret line="246" column="48" lean-forward="true" selection-start-line="246" selection-start-column="16" selection-end-line="246" selection-end-column="48" />
+        <state relative-caret-position="456">
+          <caret line="246" column="48" lean-forward="false" selection-start-line="246" selection-start-column="16" selection-end-line="246" selection-end-column="48" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/HomogeneousPoint3D.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SlamSparseReconstructor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="326" column="0" lean-forward="false" selection-start-line="326" selection-start-column="0" selection-end-line="326" selection-end-column="0" />
-          <folding>
-            <element signature="e#9156#9157#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="194">
+          <caret line="63" column="18" lean-forward="false" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1389,14 +1307,6 @@
             <element signature="imports" expanded="true" />
             <element signature="method#testConstructor#0;class#SlamSparseReconstructorTest#0" expanded="false" />
             <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
-            <element signature="e#31613#31614#0" expanded="true" />
-            <element signature="e#31684#31685#0" expanded="true" />
-            <element signature="e#31805#31806#0" expanded="true" />
-            <element signature="e#31877#31878#0" expanded="true" />
-            <element signature="e#31998#31999#0" expanded="true" />
-            <element signature="e#32071#32072#0" expanded="true" />
-            <element signature="e#32190#32191#0" expanded="true" />
-            <element signature="e#32260#32261#0" expanded="true" />
             <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseTwoViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
             <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseThreeViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
             <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseFourViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
@@ -1405,68 +1315,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.11/junit-4.11.jar!/org/junit/internal/runners/model/ReflectiveCallable.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/PairedViewsSparseReconstructor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="2299" column="0" lean-forward="true" selection-start-line="2299" selection-start-column="0" selection-end-line="2299" selection-end-column="0" />
+        <state relative-caret-position="456">
+          <caret line="143" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#testConstructor#0;class#SlamPairedViewsSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews#0;class#SlamPairedViewsSparseReconstructorTest#0" expanded="false" />
-            <element signature="e#28556#28557#0" expanded="true" />
-            <element signature="e#28627#28628#0" expanded="true" />
-            <element signature="e#28759#28760#0" expanded="true" />
-            <element signature="e#28831#28832#0" expanded="true" />
-            <element signature="e#28963#28964#0" expanded="true" />
-            <element signature="e#29036#29037#0" expanded="true" />
-            <element signature="e#29166#29167#0" expanded="true" />
-            <element signature="e#29236#29237#0" expanded="true" />
-            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseTwoViews#0;class#SlamPairedViewsSparseReconstructorTest#0" expanded="false" />
-            <element signature="e#58127#58128#0" expanded="true" />
-            <element signature="e#58198#58199#0" expanded="true" />
-            <element signature="e#58330#58331#0" expanded="true" />
-            <element signature="e#58402#58403#0" expanded="true" />
-            <element signature="e#58534#58535#0" expanded="true" />
-            <element signature="e#58607#58608#0" expanded="true" />
-            <element signature="e#58737#58738#0" expanded="true" />
-            <element signature="e#58807#58808#0" expanded="true" />
-            <element signature="e#98557#98558#0" expanded="true" />
-            <element signature="e#98628#98629#0" expanded="true" />
-            <element signature="e#98760#98761#0" expanded="true" />
-            <element signature="e#98832#98833#0" expanded="true" />
-            <element signature="e#98964#98965#0" expanded="true" />
-            <element signature="e#99037#99038#0" expanded="true" />
-            <element signature="e#99167#99168#0" expanded="true" />
-            <element signature="e#99237#99238#0" expanded="true" />
+            <element signature="method#transformPairOfCamerasAndPoints#0;class#PairedViewsSparseReconstructor#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamPairedViewsSparseReconstructor.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/PairedViewsSparseReconstructorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1290">
-          <caret line="280" column="0" lean-forward="false" selection-start-line="280" selection-start-column="0" selection-end-line="280" selection-end-column="0" />
+        <state relative-caret-position="227">
+          <caret line="4890" column="0" lean-forward="false" selection-start-line="4890" selection-start-column="0" selection-end-line="4890" selection-end-column="0" />
           <folding>
-            <element signature="docComment;method#BaseSlamPairedViewsSparseReconstructor#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
-            <element signature="method#BaseSlamPairedViewsSparseReconstructor#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
-            <element signature="docComment;method#updateAccelerometerSample#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
-            <element signature="docComment;method#updateAccelerometerSample#1;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
-            <element signature="docComment;method#updateGyroscopeSample#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
-            <element signature="docComment;method#updateGyroscopeSample#1;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
-            <element signature="docComment;method#setUpCalibrationData#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
-            <element signature="docComment;method#setUpSlamEstimatorListener#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
-            <element signature="docComment;method#notifySlamStateIfNeeded#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
-            <element signature="method#notifySlamStateIfNeeded#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
-            <element signature="docComment;method#notifySlamCameraIfNeeded#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
-            <element signature="method#notifySlamCameraIfNeeded#0;class#BaseSlamPairedViewsSparseReconstructor#0" expanded="false" />
+            <element signature="imports" expanded="true" />
+            <element signature="method#testConstructor#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsDIACTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsDAQAndEssentialZeroPrincipalPointTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsDAQAndEssentialTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsDAQTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testPlanarPointsEssentialTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testPlanarPointsDIACTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testPlanarPointsDAQAndEssentialZeroPrincipalPointTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testPlanarPointsDAQTwoViews#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testCancel#0;class#PairedViewsSparseReconstructorTest#0" expanded="false" />
           </folding>
         </state>
       </provider>

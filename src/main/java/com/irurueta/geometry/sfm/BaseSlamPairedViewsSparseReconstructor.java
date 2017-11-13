@@ -16,7 +16,6 @@
 package com.irurueta.geometry.sfm;
 
 import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.Matrix;
 import com.irurueta.geometry.*;
 import com.irurueta.geometry.slam.BaseCalibrationData;
 import com.irurueta.geometry.slam.BaseSlamEstimator;
@@ -51,6 +50,16 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
     private Quaternion mSlamRotation = new Quaternion();
 
     /**
+     * Last SLAM timestamp.
+     */
+    private long mLastTimestamp = -1;
+
+    /**
+     * Last view pair SLAM timestamp.
+     */
+    private long mLastViewPairTimestamp = -1;
+
+    /**
      * Constructor.
      * @param configuration configuration for this reconstructor.
      * @param listener listener in charge of handling events.
@@ -78,10 +87,15 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
      */
     public void updateAccelerometerSample(long timestamp, float accelerationX,
                                           float accelerationY, float accelerationZ) {
-        if (mSlamEstimator != null) {
-            mSlamEstimator.updateAccelerometerSample(timestamp, accelerationX,
-                    accelerationY, accelerationZ);
+        if (mLastViewPairTimestamp < 0) {
+            mLastViewPairTimestamp = timestamp;
         }
+
+        if (mSlamEstimator != null) {
+            mSlamEstimator.updateAccelerometerSample(timestamp - mLastViewPairTimestamp,
+                    accelerationX, accelerationY, accelerationZ);
+        }
+        mLastTimestamp = timestamp;
     }
 
     /**
@@ -98,9 +112,15 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
      */
     public void updateAccelerometerSample(long timestamp, float[] data)
             throws IllegalArgumentException {
-        if (mSlamEstimator != null) {
-            mSlamEstimator.updateAccelerometerSample(timestamp, data);
+        if (mLastViewPairTimestamp < 0) {
+            mLastViewPairTimestamp = timestamp;
         }
+
+        if (mSlamEstimator != null) {
+            mSlamEstimator.updateAccelerometerSample(timestamp - mLastViewPairTimestamp,
+                    data);
+        }
+        mLastTimestamp = timestamp;
     }
 
     /**
@@ -117,10 +137,15 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
      */
     public void updateGyroscopeSample(long timestamp, float angularSpeedX,
                                       float angularSpeedY, float angularSpeedZ) {
-        if (mSlamEstimator != null) {
-            mSlamEstimator.updateGyroscopeSample(timestamp, angularSpeedX,
-                    angularSpeedY, angularSpeedZ);
+        if (mLastViewPairTimestamp < 0) {
+            mLastViewPairTimestamp = timestamp;
         }
+
+        if (mSlamEstimator != null) {
+            mSlamEstimator.updateGyroscopeSample(timestamp - mLastViewPairTimestamp,
+                    angularSpeedX, angularSpeedY, angularSpeedZ);
+        }
+        mLastTimestamp = timestamp;
     }
 
     /**
@@ -135,9 +160,24 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
      */
     public void updateGyroscopeSample(long timestamp, float[] data)
             throws IllegalArgumentException {
-        if (mSlamEstimator != null) {
-            mSlamEstimator.updateGyroscopeSample(timestamp, data);
+        if (mLastViewPairTimestamp < 0) {
+            mLastViewPairTimestamp = timestamp;
         }
+
+        if (mSlamEstimator != null) {
+            mSlamEstimator.updateGyroscopeSample(timestamp - mLastViewPairTimestamp,
+                    data);
+        }
+        mLastTimestamp = timestamp;
+    }
+
+    /**
+     * Resets this instance so that a reconstruction can be started from the beginning without cancelling current one.
+     */
+    @Override
+    public void reset() {
+        super.reset();
+        mLastTimestamp = mLastViewPairTimestamp = -1;
     }
 
     /**
@@ -186,35 +226,30 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
      */
     @Override
     protected boolean transformPairOfCamerasAndPoints(boolean isInitialPairOfViews) {
-        if (!super.transformPairOfCamerasAndPoints(isInitialPairOfViews)) {
-            return false;
-        }
-
         PinholeCamera previousMetricCamera = mPreviousMetricEstimatedCamera.getCamera();
         PinholeCamera currentMetricCamera = mCurrentMetricEstimatedCamera.getCamera();
         if (previousMetricCamera == null || currentMetricCamera == null) {
             return false;
         }
 
-        mCurrentScale = estimateCurrentScale(isInitialPairOfViews);
-        if (mFailed) {
-            return false;
-        }
-
+        mCurrentScale = estimateCurrentScale();
         double sqrScale = mCurrentScale * mCurrentScale;
 
-//        if (isInitialPairOfViews) {
-            //first pair of views does not require setting translation and rotation
+        if (isInitialPairOfViews) {
+            /// /first pair of views does not require setting translation and rotation
             mReferenceEuclideanTransformation = new MetricTransformation3D(mCurrentScale);
-/*        } else {
+        } else {
             //additional pairs also need to translate and rotate
             Rotation3D invRot = mLastEuclideanCameraRotation.inverseRotationAndReturnNew();
             double[] translation = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
             translation[0] = mLastEuclideanCameraCenter.getInhomX();
             translation[1] = mLastEuclideanCameraCenter.getInhomY();
             translation[2] = mLastEuclideanCameraCenter.getInhomZ();
-            mReferenceEuclideanTransformation = new MetricTransformation3D(invRot, translation, mCurrentScale);
-        }*/
+            mReferenceEuclideanTransformation = new MetricTransformation3D(invRot,
+                    translation, mCurrentScale);
+            mReferenceEuclideanTransformation.setRotation(invRot);
+            mReferenceEuclideanTransformation.setTranslation(mLastEuclideanCameraCenter);
+        }
 
         try {
             //transform cameras
@@ -225,20 +260,26 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
 
             mPreviousEuclideanEstimatedCamera = new EstimatedCamera();
             mPreviousEuclideanEstimatedCamera.setCamera(previousEuclideanCamera);
-            mPreviousEuclideanEstimatedCamera.setViewId(mPreviousMetricEstimatedCamera.getViewId());
-            mPreviousEuclideanEstimatedCamera.setQualityScore(mPreviousMetricEstimatedCamera.getQualityScore());
+            mPreviousEuclideanEstimatedCamera.setViewId(
+                    mPreviousMetricEstimatedCamera.getViewId());
+            mPreviousEuclideanEstimatedCamera.setQualityScore(
+                    mPreviousMetricEstimatedCamera.getQualityScore());
             if (mPreviousMetricEstimatedCamera.getCovariance() != null) {
                 mPreviousEuclideanEstimatedCamera.setCovariance(
-                        mPreviousMetricEstimatedCamera.getCovariance().multiplyByScalarAndReturnNew(sqrScale));
+                        mPreviousMetricEstimatedCamera.getCovariance().
+                                multiplyByScalarAndReturnNew(sqrScale));
             }
 
             mCurrentEuclideanEstimatedCamera = new EstimatedCamera();
             mCurrentEuclideanEstimatedCamera.setCamera(currentEuclideanCamera);
-            mCurrentEuclideanEstimatedCamera.setViewId(mCurrentMetricEstimatedCamera.getViewId());
-            mCurrentEuclideanEstimatedCamera.setQualityScore(mCurrentMetricEstimatedCamera.getQualityScore());
+            mCurrentEuclideanEstimatedCamera.setViewId(
+                    mCurrentMetricEstimatedCamera.getViewId());
+            mCurrentEuclideanEstimatedCamera.setQualityScore(
+                    mCurrentMetricEstimatedCamera.getQualityScore());
             if (mCurrentMetricEstimatedCamera.getCovariance() != null) {
                 mCurrentEuclideanEstimatedCamera.setCovariance(
-                        mCurrentMetricEstimatedCamera.getCovariance().multiplyByScalarAndReturnNew(sqrScale));
+                        mCurrentMetricEstimatedCamera.getCovariance().
+                                multiplyByScalarAndReturnNew(sqrScale));
             }
 
             //transform points
@@ -253,12 +294,15 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
                 euclideanReconstructedPoint.setPoint(euclideanPoint);
                 euclideanReconstructedPoint.setInlier(metricReconstructedPoint.isInlier());
                 euclideanReconstructedPoint.setId(metricReconstructedPoint.getId());
-                euclideanReconstructedPoint.setColorData(metricReconstructedPoint.getColorData());
+                euclideanReconstructedPoint.setColorData(
+                        metricReconstructedPoint.getColorData());
                 if (metricReconstructedPoint.getCovariance() != null) {
-                    euclideanReconstructedPoint.setCovariance(metricReconstructedPoint.getCovariance().
+                    euclideanReconstructedPoint.setCovariance(
+                            metricReconstructedPoint.getCovariance().
                             multiplyByScalarAndReturnNew(sqrScale));
                 }
-                euclideanReconstructedPoint.setQualityScore(metricReconstructedPoint.getQualityScore());
+                euclideanReconstructedPoint.setQualityScore(
+                        metricReconstructedPoint.getQualityScore());
                 mEuclideanReconstructedPoints.add(euclideanReconstructedPoint);
             }
 
@@ -266,86 +310,58 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
             return false;
         }
 
-        return true;
+        return super.transformPairOfCamerasAndPoints(isInitialPairOfViews);
     }
 
     /**
      * Estimates current scale using SLAM data.
-     * @param isInitialPairOfViews true if initial pair of views is being processed, false otherwise.
      * @return estimated scale.
      */
-    private double estimateCurrentScale(boolean isInitialPairOfViews) {
-
+    private double estimateCurrentScale() {
         try {
             PinholeCamera metricCamera1 = mPreviousMetricEstimatedCamera.getCamera();
             PinholeCamera metricCamera2 = mCurrentMetricEstimatedCamera.getCamera();
 
+            if (!metricCamera1.isCameraCenterAvailable()) {
+                metricCamera1.decompose(false, true);
+            }
             if (!metricCamera2.isCameraCenterAvailable()) {
                 metricCamera2.decompose(false, true);
             }
+
+            Point3D metricCenter1 = metricCamera1.getCameraCenter();
             Point3D metricCenter2 = metricCamera2.getCameraCenter();
-            Point3D euclideanCenter2;
 
-            double slamPosX, slamPosY, slamPosZ;
-            double scale;
-            if (isInitialPairOfViews) {
-                //obtain baseline (camera separation from slam estimator data)
-                slamPosX = mSlamEstimator.getStatePositionX();
-                slamPosY = mSlamEstimator.getStatePositionY();
-                slamPosZ = mSlamEstimator.getStatePositionZ();
+            //obtain baseline (camera separation from slam estimator data)
+            double slamPosX = mSlamEstimator.getStatePositionX();
+            double slamPosY = mSlamEstimator.getStatePositionY();
+            double slamPosZ = mSlamEstimator.getStatePositionZ();
 
-                mSlamPosition.setInhomogeneousCoordinates(slamPosX, slamPosY, slamPosZ);
+            mSlamPosition.setInhomogeneousCoordinates(slamPosX, slamPosY, slamPosZ);
 
-                if (!metricCamera1.isCameraCenterAvailable()) {
-                    metricCamera1.decompose(false, true);
-                }
+            //we assume that euclidean center of 1st camera is at origin because by the time
+            //this method is called, metric cameras have not yet been orientation and position
+            // transformed
+            double euclideanBaseline = Math.sqrt(
+                    slamPosX * slamPosX +
+                    slamPosY * slamPosY +
+                    slamPosZ * slamPosZ);
+            double metricBaseline = metricCenter1.distanceTo(metricCenter2);
 
-                Point3D metricCenter1 = metricCamera1.getCameraCenter();
+            //because when we call reset in SLAM estimator, timestamp is lost, we keep
+            //track of last timestamp to be subtracted on subsequent update calls
+            mLastViewPairTimestamp = mLastTimestamp;
 
-                double euclideanBaseline = mLastEuclideanCameraCenter.distanceTo(mSlamPosition);
-//                double euclideanBaseline = metricCenter1.distanceTo(mSlamPosition);
-                double metricBaseline = metricCenter1.distanceTo(metricCenter2);
+            //reset linear velocity and orientation and keep other slam state parameters
+            mSlamEstimator.resetPositionAndVelocity();
 
-                scale = mCurrentScale =  euclideanBaseline / metricBaseline;
-            } else {
-                scale = mCurrentScale;
-            }
-
-            MetricTransformation3D scaleTransformation =
-                    new MetricTransformation3D(scale);
-            euclideanCenter2 = scaleTransformation.transformAndReturnNew(metricCenter2);
-            mSlamEstimator.correctWithPositionMeasure(euclideanCenter2,
-                    mConfiguration.getCameraPositionCovariance());
-
-            if (!isInitialPairOfViews) {
-                slamPosX = mSlamEstimator.getStatePositionX();
-                slamPosY = mSlamEstimator.getStatePositionY();
-                slamPosZ = mSlamEstimator.getStatePositionZ();
-                mSlamPosition.setInhomogeneousCoordinates(slamPosX, slamPosY, slamPosZ);
-
-                //adjust scale of current camera
-                double euclideanPosX = euclideanCenter2.getInhomX();
-                double euclideanPosY = euclideanCenter2.getInhomY();
-                double euclideanPosZ = euclideanCenter2.getInhomZ();
-
-                double scaleVariationX = euclideanPosX / slamPosX;
-                double scaleVariationY = euclideanPosY / slamPosY;
-                double scaleVariationZ = euclideanPosZ / slamPosZ;
-
-                double scaleVariation = (scaleVariationX + scaleVariationY + scaleVariationZ) / 3.0;
-                scale *= scaleVariation;
-                mCurrentScale = scale;
-            }
-
-            return scale;
-
+            return euclideanBaseline / metricBaseline;
         } catch (Exception e) {
             mFailed = true;
             //noinspection all
             mListener.onFail((R)this);
             return DEFAULT_SCALE;
         }
-
     }
 
     /**
@@ -356,9 +372,16 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
             return;
         }
 
-        double positionX = mSlamEstimator.getStatePositionX();
-        double positionY = mSlamEstimator.getStatePositionY();
-        double positionZ = mSlamEstimator.getStatePositionZ();
+        double lastPosX = mLastEuclideanCameraCenter != null ?
+                mLastEuclideanCameraCenter.getInhomX() : 0.0;
+        double lastPosY = mLastEuclideanCameraCenter != null ?
+                mLastEuclideanCameraCenter.getInhomY() : 0.0;
+        double lastPosZ = mLastEuclideanCameraCenter != null ?
+                mLastEuclideanCameraCenter.getInhomZ() : 0.0;
+
+        double positionX = lastPosX + mSlamEstimator.getStatePositionX();
+        double positionY = lastPosY + mSlamEstimator.getStatePositionY();
+        double positionZ = lastPosZ + mSlamEstimator.getStatePositionZ();
 
         double velocityX = mSlamEstimator.getStateVelocityX();
         double velocityY = mSlamEstimator.getStateVelocityY();
@@ -421,9 +444,16 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
                 return;
             }
 
-            double positionX = mSlamEstimator.getStatePositionX();
-            double positionY = mSlamEstimator.getStatePositionY();
-            double positionZ = mSlamEstimator.getStatePositionZ();
+            double lastPosX = mLastEuclideanCameraCenter != null ?
+                    mLastEuclideanCameraCenter.getInhomX() : 0.0;
+            double lastPosY = mLastEuclideanCameraCenter != null ?
+                    mLastEuclideanCameraCenter.getInhomY() : 0.0;
+            double lastPosZ = mLastEuclideanCameraCenter != null ?
+                    mLastEuclideanCameraCenter.getInhomZ() : 0.0;
+
+            double positionX = lastPosX + mSlamEstimator.getStatePositionX();
+            double positionY = lastPosY + mSlamEstimator.getStatePositionY();
+            double positionZ = lastPosZ + mSlamEstimator.getStatePositionZ();
             mSlamPosition.setInhomogeneousCoordinates(positionX, positionY, positionZ);
 
             double quaternionA = mSlamEstimator.getStateQuaternionA();

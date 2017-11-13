@@ -215,7 +215,96 @@ public class ConstantVelocityModelSlamEstimatorTest implements
         //check correctness
         assertSame(estimator.getCalibrationData(), data);
     }
-    
+
+    @Test
+    public void testResetPosition() {
+        ConstantVelocityModelSlamEstimator estimator =
+                new ConstantVelocityModelSlamEstimator();
+
+        estimator.resetPosition();
+
+        assertEquals(estimator.getStatePositionX(), 0.0, 0.0);
+        assertEquals(estimator.getStatePositionY(), 0.0, 0.0);
+        assertEquals(estimator.getStatePositionZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
+    }
+
+    @Test
+    public void testResetVelocity() {
+        ConstantVelocityModelSlamEstimator estimator =
+                new ConstantVelocityModelSlamEstimator();
+
+        estimator.resetVelocity();
+
+        assertEquals(estimator.getStateVelocityX(), 0.0, 0.0);
+        assertEquals(estimator.getStateVelocityY(), 0.0, 0.0);
+        assertEquals(estimator.getStateVelocityZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
+    }
+
+    @Test
+    public void testResetPositionAndVelocity() {
+        ConstantVelocityModelSlamEstimator estimator =
+                new ConstantVelocityModelSlamEstimator();
+
+        estimator.resetPositionAndVelocity();
+
+        assertEquals(estimator.getStatePositionX(), 0.0, 0.0);
+        assertEquals(estimator.getStatePositionY(), 0.0, 0.0);
+        assertEquals(estimator.getStatePositionZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getStateVelocityX(), 0.0, 0.0);
+        assertEquals(estimator.getStateVelocityY(), 0.0, 0.0);
+        assertEquals(estimator.getStateVelocityZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
+    }
+
+    @Test
+    public void testResetAcceleration() {
+        ConstantVelocityModelSlamEstimator estimator =
+                new ConstantVelocityModelSlamEstimator();
+
+        estimator.resetAcceleration();
+
+        assertEquals(estimator.getStateAccelerationX(), 0.0, 0.0);
+        assertEquals(estimator.getStateAccelerationY(), 0.0, 0.0);
+        assertEquals(estimator.getStateAccelerationZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
+    }
+
+    @Test
+    public void testResetOrientation() {
+        ConstantVelocityModelSlamEstimator estimator =
+                new ConstantVelocityModelSlamEstimator();
+
+        estimator.resetOrientation();
+
+        assertEquals(estimator.getStateQuaternionA(), 1.0, 0.0);
+        assertEquals(estimator.getStateQuaternionB(), 0.0, 0.0);
+        assertEquals(estimator.getStateQuaternionC(), 0.0, 0.0);
+        assertEquals(estimator.getStateQuaternionD(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
+    }
+
+    @Test
+    public void testResetAngularSpeed() {
+        ConstantVelocityModelSlamEstimator estimator =
+                new ConstantVelocityModelSlamEstimator();
+
+        estimator.resetAngularSpeed();
+
+        assertEquals(estimator.getStateAngularSpeedX(), 0.0, 0.0);
+        assertEquals(estimator.getStateAngularSpeedY(), 0.0, 0.0);
+        assertEquals(estimator.getStateAngularSpeedZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
+    }
+
     @Test
     public void testReset() {
         ConstantVelocityModelSlamEstimator estimator = 

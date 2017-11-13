@@ -224,7 +224,68 @@ public abstract class BaseSlamEstimator<D extends BaseCalibrationData>
     public BaseSlamEstimator() {
         reset();
     }
-    
+
+    /**
+     * Resets position and timestamp to zero while keeping other state parameters.
+     */
+    public final void resetPosition() {
+        reset(0.0, 0.0, 0.0, mStateVelocityX, mStateVelocityY, mStateVelocityZ,
+                mStateAccelerationX, mStateAccelerationY, mStateAccelerationZ,
+                mStateQuaternionA, mStateQuaternionB, mStateQuaternionC, mStateQuaternionD,
+                mStateAngularSpeedX, mStateAngularSpeedY, mStateAngularSpeedZ);
+    }
+
+    /**
+     * Resets linear velocity and timestamp to zero while keeping other state parameters.
+     */
+    public final void resetVelocity() {
+        reset(mStatePositionX, mStatePositionY, mStatePositionZ, 0.0, 0.0, 0.0,
+                mStateAccelerationX, mStateAccelerationY, mStateAccelerationZ,
+                mStateQuaternionA, mStateQuaternionB, mStateQuaternionC, mStateQuaternionD,
+                mStateAngularSpeedX, mStateAngularSpeedY, mStateAngularSpeedZ);
+    }
+
+    /**
+     * Resets position, linear velocity and timestamp to zero while keeping other state parameters.
+     */
+    public final void resetPositionAndVelocity() {
+        reset(0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                mStateAccelerationX, mStateAccelerationY, mStateAccelerationZ,
+                mStateQuaternionA, mStateQuaternionB, mStateQuaternionC, mStateQuaternionD,
+                mStateAngularSpeedX, mStateAngularSpeedY, mStateAngularSpeedZ);
+    }
+
+    /**
+     * Resets acceleration and timestamp to zero while keeping other state parameters.
+     */
+    public final void resetAcceleration() {
+        reset(mStatePositionX, mStatePositionY, mStatePositionZ,
+                mStateVelocityX, mStateVelocityY, mStateVelocityZ, 0.0, 0.0, 0.0,
+                mStateQuaternionA, mStateQuaternionB, mStateQuaternionC, mStateQuaternionD,
+                mStateAngularSpeedX, mStateAngularSpeedY, mStateAngularSpeedZ);
+    }
+
+    /**
+     * Resets orientation and timestamp to zero while keeping other state parameters.
+     */
+    public final void resetOrientation() {
+        reset(mStatePositionX, mStatePositionY, mStatePositionZ,
+                mStateVelocityX, mStateVelocityY, mStateVelocityZ,
+                mStateAccelerationX, mStateAccelerationY, mStateAccelerationZ,
+                1.0, 0.0, 0.0, 0.0, mStateAngularSpeedX, mStateAngularSpeedY, mStateAngularSpeedZ);
+    }
+
+    /**
+     * Resets angular speed and timestamp to zero while keeping other state parameters.
+     */
+    public final void resetAngularSpeed() {
+        reset(mStatePositionX, mStatePositionY, mStatePositionZ,
+                mStateVelocityX, mStateVelocityY, mStateVelocityZ,
+                mStateAccelerationX, mStateAccelerationY, mStateAccelerationZ,
+                mStateQuaternionA, mStateQuaternionB, mStateQuaternionC, mStateQuaternionD,
+                0.0, 0.0, 0.0);
+    }
+
     /**
      * Resets position, linear velocity, linear acceleration, orientation and
      * angular speed of the device to zero.

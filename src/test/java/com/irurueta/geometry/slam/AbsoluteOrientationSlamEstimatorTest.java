@@ -234,6 +234,95 @@ public class AbsoluteOrientationSlamEstimatorTest implements
         //check correctness
         assertSame(estimator.getCalibrationData(), data);
     }
+
+    @Test
+    public void testResetPosition() {
+        AbsoluteOrientationSlamEstimator estimator =
+                new AbsoluteOrientationSlamEstimator();
+
+        estimator.resetPosition();
+
+        assertEquals(estimator.getStatePositionX(), 0.0, 0.0);
+        assertEquals(estimator.getStatePositionY(), 0.0, 0.0);
+        assertEquals(estimator.getStatePositionZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
+    }
+
+    @Test
+    public void testResetVelocity() {
+        AbsoluteOrientationSlamEstimator estimator =
+                new AbsoluteOrientationSlamEstimator();
+
+        estimator.resetVelocity();
+
+        assertEquals(estimator.getStateVelocityX(), 0.0, 0.0);
+        assertEquals(estimator.getStateVelocityY(), 0.0, 0.0);
+        assertEquals(estimator.getStateVelocityZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
+    }
+
+    @Test
+    public void testResetPositionAndVelocity() {
+        AbsoluteOrientationSlamEstimator estimator =
+                new AbsoluteOrientationSlamEstimator();
+
+        estimator.resetPositionAndVelocity();
+
+        assertEquals(estimator.getStatePositionX(), 0.0, 0.0);
+        assertEquals(estimator.getStatePositionY(), 0.0, 0.0);
+        assertEquals(estimator.getStatePositionZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getStateVelocityX(), 0.0, 0.0);
+        assertEquals(estimator.getStateVelocityY(), 0.0, 0.0);
+        assertEquals(estimator.getStateVelocityZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
+    }
+
+    @Test
+    public void testResetAcceleration() {
+        AbsoluteOrientationSlamEstimator estimator =
+                new AbsoluteOrientationSlamEstimator();
+
+        estimator.resetAcceleration();
+
+        assertEquals(estimator.getStateAccelerationX(), 0.0, 0.0);
+        assertEquals(estimator.getStateAccelerationY(), 0.0, 0.0);
+        assertEquals(estimator.getStateAccelerationZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
+    }
+
+    @Test
+    public void testResetOrientation() {
+        AbsoluteOrientationSlamEstimator estimator =
+                new AbsoluteOrientationSlamEstimator();
+
+        estimator.resetOrientation();
+
+        assertEquals(estimator.getStateQuaternionA(), 1.0, 0.0);
+        assertEquals(estimator.getStateQuaternionB(), 0.0, 0.0);
+        assertEquals(estimator.getStateQuaternionC(), 0.0, 0.0);
+        assertEquals(estimator.getStateQuaternionD(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
+    }
+
+    @Test
+    public void testResetAngularSpeed() {
+        AbsoluteOrientationSlamEstimator estimator =
+                new AbsoluteOrientationSlamEstimator();
+
+        estimator.resetAngularSpeed();
+
+        assertEquals(estimator.getStateAngularSpeedX(), 0.0, 0.0);
+        assertEquals(estimator.getStateAngularSpeedY(), 0.0, 0.0);
+        assertEquals(estimator.getStateAngularSpeedZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
+    }
     
     @Test
     public void testReset() {
