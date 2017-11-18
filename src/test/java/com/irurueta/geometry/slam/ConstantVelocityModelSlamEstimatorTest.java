@@ -331,7 +331,9 @@ public class ConstantVelocityModelSlamEstimatorTest implements
         
         assertEquals(estimator.getStateAngularSpeedX(), 0.0, 0.0);
         assertEquals(estimator.getStateAngularSpeedY(), 0.0, 0.0);
-        assertEquals(estimator.getStateAngularSpeedZ(), 0.0, 0.0);        
+        assertEquals(estimator.getStateAngularSpeedZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
     }
     
     @Test
@@ -7486,7 +7488,7 @@ public class ConstantVelocityModelSlamEstimatorTest implements
     @Test
     public void testPredictionVariableAngularSpeedWithNoiseAndCalibration() {
         int numSuccess = 0;
-        for(int t = 0; t < REPEAT_TIMES; t++) {
+        for(int t = 0; t < 2*REPEAT_TIMES; t++) {
             UniformRandomizer offsetRandomizer = new UniformRandomizer(
                     new Random());
             GaussianRandomizer noiseRandomizer = new GaussianRandomizer(

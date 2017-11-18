@@ -350,7 +350,9 @@ public class AbsoluteOrientationSlamEstimatorTest implements
         
         assertEquals(estimator.getStateAngularSpeedX(), 0.0, 0.0);
         assertEquals(estimator.getStateAngularSpeedY(), 0.0, 0.0);
-        assertEquals(estimator.getStateAngularSpeedZ(), 0.0, 0.0);        
+        assertEquals(estimator.getStateAngularSpeedZ(), 0.0, 0.0);
+
+        assertEquals(estimator.getMostRecentTimestampNanos(), -1);
     }
     
     @Test
