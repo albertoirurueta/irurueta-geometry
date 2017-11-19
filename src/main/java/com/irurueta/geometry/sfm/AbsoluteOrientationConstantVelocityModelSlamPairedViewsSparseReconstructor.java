@@ -33,7 +33,7 @@ public class AbsoluteOrientationConstantVelocityModelSlamPairedViewsSparseRecons
                 AbsoluteOrientationConstantVelocityModelSlamPairedViewsSparseReconstructorConfiguration,
                 AbsoluteOrientationConstantVelocityModelSlamPairedViewsSparseReconstructor,
                 AbsoluteOrientationConstantVelocityModelSlamPairedViewsSparseReconstructorListener,
-                AbsoluteOrientationConstantVelocityModelSlamEstimator>{
+                AbsoluteOrientationConstantVelocityModelSlamEstimator> {
 
     /**
      * Constructor.
