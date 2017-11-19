@@ -6,9 +6,7 @@ import com.irurueta.algebra.SingularValueDecomposer;
 import com.irurueta.geometry.*;
 import com.irurueta.geometry.epipolar.FundamentalMatrix;
 import com.irurueta.geometry.epipolar.InvalidPairOfCamerasException;
-import com.irurueta.geometry.slam.SlamCalibrationData;
-import com.irurueta.geometry.slam.SlamCalibrator;
-import com.irurueta.geometry.slam.SlamEstimator;
+import com.irurueta.geometry.slam.*;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.*;
@@ -21,7 +19,7 @@ import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 
-public class SlamPairedViewsSparseReconstructorTest {
+public class AbsoluteOrientationSlamPairedViewsSparseReconstructorTest {
 
     private static final double MIN_FOCAL_LENGTH_ESSENTIAL = 750.0;
     private static final double MAX_FOCAL_LENGTH_ESSENTIAL = 1500.0;
@@ -65,7 +63,7 @@ public class SlamPairedViewsSparseReconstructorTest {
     private static final int N_SENSOR_SAMPLES = 50;
 
     private static final Logger LOGGER = Logger.getLogger(
-            SlamSparseReconstructorTest.class.getSimpleName());
+            AbsoluteOrientationSlamPairedViewsSparseReconstructorTest.class.getSimpleName());
 
     private int mViewCount = 0;
     private EstimatedFundamentalMatrix mEstimatedFundamentalMatrix;
@@ -98,7 +96,7 @@ public class SlamPairedViewsSparseReconstructorTest {
     private PinholeCamera mSlamCamera;
     private Matrix mSlamCovariance;
 
-    public SlamPairedViewsSparseReconstructorTest() { }
+    public AbsoluteOrientationSlamPairedViewsSparseReconstructorTest() { }
 
     @BeforeClass
     public static void setUpClass() { }
@@ -127,79 +125,89 @@ public class SlamPairedViewsSparseReconstructorTest {
 
     @Test
     public void testConstructor() {
-        assertEquals(SlamPairedViewsSparseReconstructor.MIN_NUMBER_OF_VIEWS, 2);
+        assertEquals(AbsoluteOrientationSlamPairedViewsSparseReconstructor.MIN_NUMBER_OF_VIEWS,
+                2);
 
-        SlamPairedViewsSparseReconstructorConfiguration configuration =
-                new SlamPairedViewsSparseReconstructorConfiguration();
-        SlamPairedViewsSparseReconstructorListener listener =
-                new SlamPairedViewsSparseReconstructorListener() {
+        AbsoluteOrientationSlamPairedViewsSparseReconstructorConfiguration configuration =
+                new AbsoluteOrientationSlamPairedViewsSparseReconstructorConfiguration();
+        AbsoluteOrientationSlamPairedViewsSparseReconstructorListener listener =
+                new AbsoluteOrientationSlamPairedViewsSparseReconstructorListener() {
                     @Override
-                    public void onSlamDataAvailable(SlamPairedViewsSparseReconstructor reconstructor, double positionX,
-                            double positionY, double positionZ, double velocityX, double velocityY, double velocityZ,
-                            double accelerationX, double accelerationY, double accelerationZ, double quaternionA,
-                            double quaternionB, double quaternionC, double quaternionD, double angularSpeedX,
-                            double angularSpeedY, double angularSpeedZ, Matrix covariance) { }
+                    public void onSlamDataAvailable(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
+                                                    double positionX, double positionY, double positionZ,
+                                                    double velocityX, double velocityY, double velocityZ,
+                                                    double accelerationX, double accelerationY, double accelerationZ,
+                                                    double quaternionA, double quaternionB, double quaternionC,
+                                                    double quaternionD, double angularSpeedX, double angularSpeedY,
+                                                    double angularSpeedZ, Matrix covariance) { }
 
                     @Override
-                    public void onSlamCameraEstimated(SlamPairedViewsSparseReconstructor reconstructor,
+                    public void onSlamCameraEstimated(
+                            AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
                             PinholeCamera camera) { }
 
                     @Override
-                    public boolean hasMoreViewsAvailable(SlamPairedViewsSparseReconstructor reconstructor) {
+                    public boolean hasMoreViewsAvailable(
+                            AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                         return false;
                     }
 
                     @Override
-                    public void onRequestSamplesForCurrentViewPair(SlamPairedViewsSparseReconstructor reconstructor,
-                            int viewId1, int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) { }
-
-                    @Override
-                    public void onSamplesAccepted(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                    public void onRequestSamplesForCurrentViewPair(
+                            AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
                             int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) { }
 
                     @Override
-                    public void onSamplesRejected(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                            int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) { }
+                    public void onSamplesAccepted(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
+                                                  int viewId1, int viewId2, List<Sample2D> samples1,
+                                                  List<Sample2D> samples2) { }
 
                     @Override
-                    public void onRequestMatches(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                            int viewId2, List<Sample2D> samples1, List<Sample2D> samples2,
-                            List<MatchedSamples> matches) { }
+                    public void onSamplesRejected(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
+                                                  int viewId1, int viewId2, List<Sample2D> samples1,
+                                                  List<Sample2D> samples2) { }
 
                     @Override
-                    public void onFundamentalMatrixEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                            int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) { }
+                    public void onRequestMatches(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
+                                                 int viewId1, int viewId2, List<Sample2D> samples1,
+                                                 List<Sample2D> samples2, List<MatchedSamples> matches) { }
 
                     @Override
-                    public void onEuclideanCameraPairEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                            int viewId1, int viewId2, double scale, EstimatedCamera camera1,
-                            EstimatedCamera camera2) { }
+                    public void onFundamentalMatrixEstimated(
+                            AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                            int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) { }
+
+                    @Override
+                    public void onEuclideanCameraPairEstimated(
+                            AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                            int viewId2, double scale, EstimatedCamera camera1, EstimatedCamera camera2) { }
 
                     @Override
                     public void onEuclideanReconstructedPointsEstimated(
-                            SlamPairedViewsSparseReconstructor reconstructor, int viewId1, int viewId2, double scale,
-                            List<ReconstructedPoint3D> points) { }
+                            AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                            int viewId2, double scale, List<ReconstructedPoint3D> points) { }
 
                     @Override
                     public PinholeCameraIntrinsicParameters onIntrinsicParametersRequested(
-                            SlamPairedViewsSparseReconstructor reconstructor, int viewId) {
+                            AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId) {
                         return null;
                     }
 
                     @Override
-                    public void onStart(SlamPairedViewsSparseReconstructor reconstructor) { }
+                    public void onStart(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) { }
 
                     @Override
-                    public void onFinish(SlamPairedViewsSparseReconstructor reconstructor) { }
+                    public void onFinish(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) { }
 
                     @Override
-                    public void onCancel(SlamPairedViewsSparseReconstructor reconstructor) { }
+                    public void onCancel(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) { }
 
                     @Override
-                    public void onFail(SlamPairedViewsSparseReconstructor reconstructor) { }
+                    public void onFail(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) { }
                 };
 
-        SlamPairedViewsSparseReconstructor reconstructor = new SlamPairedViewsSparseReconstructor(listener);
+        AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor =
+                new AbsoluteOrientationSlamPairedViewsSparseReconstructor(listener);
 
         //check default values
         assertNotNull(reconstructor.getConfiguration());
@@ -223,7 +231,7 @@ public class SlamPairedViewsSparseReconstructorTest {
         assertFalse(reconstructor.isAdditionalViewPair());
 
         //constructor with configuration and listener
-        reconstructor = new SlamPairedViewsSparseReconstructor(configuration, listener);
+        reconstructor = new AbsoluteOrientationSlamPairedViewsSparseReconstructor(configuration, listener);
 
         //check default values
         assertSame(reconstructor.getConfiguration(), configuration);
@@ -258,8 +266,8 @@ public class SlamPairedViewsSparseReconstructorTest {
             GaussianRandomizer noiseRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ACCELERATION_NOISE_STANDARD_DEVIATION);
 
-            SlamPairedViewsSparseReconstructorConfiguration configuration =
-                    new SlamPairedViewsSparseReconstructorConfiguration();
+            AbsoluteOrientationSlamPairedViewsSparseReconstructorConfiguration configuration =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructorConfiguration();
             configuration.setPairedCamerasEstimatorMethod(
                     InitialCamerasEstimatorMethod.ESSENTIAL_MATRIX);
             configuration.setIntrinsicParametersKnown(true);
@@ -272,11 +280,11 @@ public class SlamPairedViewsSparseReconstructorTest {
             float angularOffsetY = 0.0f;
             float angularOffsetZ = 0.0f;
 
-            SlamCalibrator calibrator = createFinishedCalibrator(
+            AbsoluteOrientationSlamCalibrator calibrator = createFinishedCalibrator(
                     accelerationOffsetX, accelerationOffsetY,
                     accelerationOffsetZ, angularOffsetX, angularOffsetY,
                     angularOffsetZ, noiseRandomizer);
-            SlamCalibrationData calibrationData
+            AbsoluteOrientationSlamCalibrationData calibrationData
                     = calibrator.getCalibrationData();
             configuration.setCalibrationData(calibrationData);
 
@@ -293,9 +301,12 @@ public class SlamPairedViewsSparseReconstructorTest {
             intrinsic.setAspectRatioKeepingHorizontalFocalLength(aspectRatio);
 
 
-            double alphaEuler1 = 0.0;
-            double betaEuler1 = 0.0;
-            double gammaEuler1 = 0.0;
+            double alphaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double betaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double gammaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
             double alphaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
                     MAX_ANGLE_DEGREES) * Math.PI / 180.0;
             double betaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
@@ -303,11 +314,13 @@ public class SlamPairedViewsSparseReconstructorTest {
             double gammaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
                     MAX_ANGLE_DEGREES) * Math.PI / 180.0;
 
-            MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
+            final MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
             MatrixRotation3D rotation2 = new MatrixRotation3D(alphaEuler2,
                     betaEuler2, gammaEuler2);
-            AxisRotation3D axisRotation2 = new AxisRotation3D(rotation2);
+            AxisRotation3D axisRotation2 = new AxisRotation3D(
+                    rotation1.inverseRotationAndReturnNew().
+                            combineAndReturnNew(rotation2));
 
             double axisX = axisRotation2.getAxisX();
             double axisY = axisRotation2.getAxisY();
@@ -316,7 +329,7 @@ public class SlamPairedViewsSparseReconstructorTest {
 
             AxisRotation3D diffRotation = new AxisRotation3D(axisX, axisY,
                     axisZ, angle / N_SENSOR_SAMPLES);
-            Quaternion diffQuaternion = new Quaternion(diffRotation);
+            final Quaternion diffQuaternion = new Quaternion(diffRotation);
 
             //angular speeds (roll, pitch, yaw) on x, y, z axes
             double[] angularSpeeds = diffQuaternion.toEulerAngles();
@@ -343,11 +356,15 @@ public class SlamPairedViewsSparseReconstructorTest {
                     MIN_CAMERA_SEPARATION_ESSENTIAL,
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
+            EuclideanTransformation3D rotationTransformation =
+                    new EuclideanTransformation3D(rotation1);
             Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
             Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
+            center1 = rotationTransformation.transformAndReturnNew(center1);
+            center2 = rotationTransformation.transformAndReturnNew(center2);
 
             double baseline = center1.distanceTo(center2);
 
@@ -425,7 +442,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             Point2D projectedPoint1, projectedPoint2;
             final List<Point2D> projectedPoints1 = new ArrayList<>();
             final List<Point2D> projectedPoints2 = new ArrayList<>();
-            boolean front1, front2;
+            boolean front1, front2, maxTriesReached = false;
             for (int i = 0; i < numPoints; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
@@ -441,14 +458,19 @@ public class SlamPairedViewsSparseReconstructorTest {
                             centralCommonPoint.getInhomX() + lambdaX,
                             centralCommonPoint.getInhomY() + lambdaY,
                             centralCommonPoint.getInhomZ() + lambdaZ);
+                    rotationTransformation.transform(point3D);
 
                     front1 = camera1.isPointInFrontOfCamera(point3D);
                     front2 = camera2.isPointInFrontOfCamera(point3D);
                     if (numTry > MAX_TRIES) {
-                        fail("max tries reached");
+                        maxTriesReached = true;
+                        break;
                     }
                     numTry++;
                 } while(!front1 || !front2);
+
+                if (maxTriesReached) break;
+
                 points3D.add(point3D);
 
                 //check that 3D point is in front of both cameras
@@ -467,34 +489,39 @@ public class SlamPairedViewsSparseReconstructorTest {
                 projectedPoints2.add(projectedPoint2);
             }
 
-            SlamPairedViewsSparseReconstructorListener listener =
-                    new SlamPairedViewsSparseReconstructorListener() {
+            if (maxTriesReached) continue;
+
+            AbsoluteOrientationSlamPairedViewsSparseReconstructorListener listener =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructorListener() {
                         @Override
-                        public void onSlamDataAvailable(SlamPairedViewsSparseReconstructor reconstructor,
-                                double positionX, double positionY, double positionZ, double velocityX,
-                                double velocityY, double velocityZ, double accelerationX, double accelerationY,
-                                double accelerationZ, double quaternionA, double quaternionB, double quaternionC,
-                                double quaternionD, double angularSpeedX, double angularSpeedY, double angularSpeedZ,
-                                Matrix covariance) {
+                        public void onSlamDataAvailable(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, double positionX,
+                                double positionY, double positionZ, double velocityX, double velocityY,
+                                double velocityZ, double accelerationX, double accelerationY, double accelerationZ,
+                                double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                double angularSpeedX, double angularSpeedY, double angularSpeedZ, Matrix covariance) {
                             mSlamDataAvailable++;
                             mSlamCovariance = covariance;
                         }
 
                         @Override
-                        public void onSlamCameraEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                                                          PinholeCamera camera) {
+                        public void onSlamCameraEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
+                                PinholeCamera camera) {
                             mSlamCameraEstimated++;
                             mSlamCamera = camera;
                         }
 
                         @Override
-                        public boolean hasMoreViewsAvailable(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 2;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentViewPair(SlamPairedViewsSparseReconstructor reconstructor,
-                                int viewId1, int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        public void onRequestSamplesForCurrentViewPair(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
 
                             samples1.clear();
                             samples2.clear();
@@ -516,6 +543,7 @@ public class SlamPairedViewsSparseReconstructorTest {
                             //are obtained during a period of 1 second between 1st
                             //and 2nd view (50 samples * 0.02 s/sample = 1 second)
                             mTimestamp = 0;
+                            Quaternion orientation = new Quaternion(rotation1);
                             for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                                 reconstructor.updateAccelerometerSample(mTimestamp,
                                         (float) accelerationX, (float) accelerationY,
@@ -523,24 +551,31 @@ public class SlamPairedViewsSparseReconstructorTest {
                                 reconstructor.updateGyroscopeSample(mTimestamp,
                                         (float) angularSpeedX, (float) angularSpeedY,
                                         (float) angularSpeedZ);
+                                reconstructor.updateOrientationSample(mTimestamp,
+                                        orientation);
+                                //update orientation
+                                orientation.combine(diffQuaternion);
                                 mTimestamp += DELTA_NANOS;
                             }
                         }
 
                         @Override
-                        public void onSamplesAccepted(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                        public void onSamplesAccepted(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
                                 int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
                             mViewCount += 2;
                         }
 
                         @Override
-                        public void onSamplesRejected(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                        public void onSamplesRejected(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
                                 int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
                             mViewCount += 2;
                         }
 
                         @Override
-                        public void onRequestMatches(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                        public void onRequestMatches(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
                                 int viewId2, List<Sample2D> samples1, List<Sample2D> samples2,
                                 List<MatchedSamples> matches) {
 
@@ -558,13 +593,15 @@ public class SlamPairedViewsSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SlamPairedViewsSparseReconstructor reconstructor,
+                        public void onFundamentalMatrixEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
                                 int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
                         }
 
                         @Override
-                        public void onEuclideanCameraPairEstimated(SlamPairedViewsSparseReconstructor reconstructor,
+                        public void onEuclideanCameraPairEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
                                 int viewId1, int viewId2, double scale, EstimatedCamera camera1,
                                 EstimatedCamera camera2) {
                             mEstimatedEuclideanCamera1 = camera1;
@@ -574,40 +611,41 @@ public class SlamPairedViewsSparseReconstructorTest {
 
                         @Override
                         public void onEuclideanReconstructedPointsEstimated(
-                                SlamPairedViewsSparseReconstructor reconstructor, int viewId1, int viewId2,
-                                double scale, List<ReconstructedPoint3D> points) {
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, double scale, List<ReconstructedPoint3D> points) {
                             mEuclideanReconstructedPoints = points;
                             mScale = scale;
                         }
 
                         @Override
-                        public PinholeCameraIntrinsicParameters onIntrinsicParametersRequested(SlamPairedViewsSparseReconstructor reconstructor, int viewId) {
+                        public PinholeCameraIntrinsicParameters onIntrinsicParametersRequested(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId) {
                             return intrinsic;
                         }
 
                         @Override
-                        public void onStart(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onStart(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onFinish(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onCancel(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onFail(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SlamPairedViewsSparseReconstructor reconstructor =
-                    new SlamPairedViewsSparseReconstructor(configuration, listener);
+            AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructor(configuration, listener);
 
             //check initial values
             reset();
@@ -829,8 +867,8 @@ public class SlamPairedViewsSparseReconstructorTest {
             GaussianRandomizer noiseRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ACCELERATION_NOISE_STANDARD_DEVIATION);
 
-            SlamPairedViewsSparseReconstructorConfiguration configuration =
-                    new SlamPairedViewsSparseReconstructorConfiguration();
+            AbsoluteOrientationSlamPairedViewsSparseReconstructorConfiguration configuration =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructorConfiguration();
             configuration.setPairedCamerasEstimatorMethod(
                     InitialCamerasEstimatorMethod.ESSENTIAL_MATRIX);
             configuration.setIntrinsicParametersKnown(true);
@@ -849,11 +887,11 @@ public class SlamPairedViewsSparseReconstructorTest {
             float angularOffsetZ = offsetRandomizer.nextFloat(
                     MIN_CALIBRATION_OFFSET, MAX_CALIBRATION_OFFSET);
 
-            SlamCalibrator calibrator = createFinishedCalibrator(
+            AbsoluteOrientationSlamCalibrator calibrator = createFinishedCalibrator(
                     accelerationOffsetX, accelerationOffsetY,
                     accelerationOffsetZ, angularOffsetX, angularOffsetY,
                     angularOffsetZ, noiseRandomizer);
-            SlamCalibrationData calibrationData
+            AbsoluteOrientationSlamCalibrationData calibrationData
                     = calibrator.getCalibrationData();
             configuration.setCalibrationData(calibrationData);
 
@@ -870,9 +908,12 @@ public class SlamPairedViewsSparseReconstructorTest {
             intrinsic.setAspectRatioKeepingHorizontalFocalLength(aspectRatio);
 
 
-            double alphaEuler1 = 0.0;
-            double betaEuler1 = 0.0;
-            double gammaEuler1 = 0.0;
+            double alphaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double betaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double gammaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
             double alphaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
                     MAX_ANGLE_DEGREES) * Math.PI / 180.0;
             double betaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
@@ -880,11 +921,13 @@ public class SlamPairedViewsSparseReconstructorTest {
             double gammaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
                     MAX_ANGLE_DEGREES) * Math.PI / 180.0;
 
-            MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
+            final MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
             MatrixRotation3D rotation2 = new MatrixRotation3D(alphaEuler2,
                     betaEuler2, gammaEuler2);
-            AxisRotation3D axisRotation2 = new AxisRotation3D(rotation2);
+            AxisRotation3D axisRotation2 = new AxisRotation3D(
+                    rotation1.inverseRotationAndReturnNew().
+                            combineAndReturnNew(rotation2));
 
             double axisX = axisRotation2.getAxisX();
             double axisY = axisRotation2.getAxisY();
@@ -893,7 +936,7 @@ public class SlamPairedViewsSparseReconstructorTest {
 
             AxisRotation3D diffRotation = new AxisRotation3D(axisX, axisY,
                     axisZ, angle / N_SENSOR_SAMPLES);
-            Quaternion diffQuaternion = new Quaternion(diffRotation);
+            final Quaternion diffQuaternion = new Quaternion(diffRotation);
 
             //angular speeds (roll, pitch, yaw) on x, y, z axes
             double[] angularSpeeds = diffQuaternion.toEulerAngles();
@@ -920,11 +963,15 @@ public class SlamPairedViewsSparseReconstructorTest {
                     MIN_CAMERA_SEPARATION_ESSENTIAL,
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
+            EuclideanTransformation3D rotationTransformation =
+                    new EuclideanTransformation3D(rotation1);
             Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
             Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
                     center1.getInhomY() + cameraSeparation,
                     center1.getInhomZ() + cameraSeparation);
+            center1 = rotationTransformation.transformAndReturnNew(center1);
+            center2 = rotationTransformation.transformAndReturnNew(center2);
 
             double baseline = center1.distanceTo(center2);
 
@@ -1002,7 +1049,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             Point2D projectedPoint1, projectedPoint2;
             final List<Point2D> projectedPoints1 = new ArrayList<>();
             final List<Point2D> projectedPoints2 = new ArrayList<>();
-            boolean front1, front2;
+            boolean front1, front2, maxTriesReached = false;
             for (int i = 0; i < numPoints; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
@@ -1018,14 +1065,19 @@ public class SlamPairedViewsSparseReconstructorTest {
                             centralCommonPoint.getInhomX() + lambdaX,
                             centralCommonPoint.getInhomY() + lambdaY,
                             centralCommonPoint.getInhomZ() + lambdaZ);
+                    rotationTransformation.transform(point3D);
 
                     front1 = camera1.isPointInFrontOfCamera(point3D);
                     front2 = camera2.isPointInFrontOfCamera(point3D);
                     if (numTry > MAX_TRIES) {
-                        fail("max tries reached");
+                        maxTriesReached = true;
+                        break;
                     }
                     numTry++;
                 } while(!front1 || !front2);
+
+                if (maxTriesReached) break;
+
                 points3D.add(point3D);
 
                 //check that 3D point is in front of both cameras
@@ -1044,6 +1096,8 @@ public class SlamPairedViewsSparseReconstructorTest {
                 projectedPoints2.add(projectedPoint2);
             }
 
+            if (maxTriesReached) continue;
+
             final GaussianRandomizer accelerationRandomizer =
                     new GaussianRandomizer(new Random(), 0.0,
                             ACCELERATION_NOISE_STANDARD_DEVIATION);
@@ -1051,34 +1105,37 @@ public class SlamPairedViewsSparseReconstructorTest {
                     new GaussianRandomizer(new Random(), 0.0,
                             ANGULAR_SPEED_NOISE_STANDARD_DEVIATION);
 
-            SlamPairedViewsSparseReconstructorListener listener =
-                    new SlamPairedViewsSparseReconstructorListener() {
+            AbsoluteOrientationSlamPairedViewsSparseReconstructorListener listener =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructorListener() {
                         @Override
-                        public void onSlamDataAvailable(SlamPairedViewsSparseReconstructor reconstructor,
-                                                        double positionX, double positionY, double positionZ, double velocityX,
-                                                        double velocityY, double velocityZ, double accelerationX, double accelerationY,
-                                                        double accelerationZ, double quaternionA, double quaternionB, double quaternionC,
-                                                        double quaternionD, double angularSpeedX, double angularSpeedY, double angularSpeedZ,
-                                                        Matrix covariance) {
+                        public void onSlamDataAvailable(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, double positionX,
+                                double positionY, double positionZ, double velocityX, double velocityY,
+                                double velocityZ, double accelerationX, double accelerationY, double accelerationZ,
+                                double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                double angularSpeedX, double angularSpeedY, double angularSpeedZ, Matrix covariance) {
                             mSlamDataAvailable++;
                             mSlamCovariance = covariance;
                         }
 
                         @Override
-                        public void onSlamCameraEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                                                          PinholeCamera camera) {
+                        public void onSlamCameraEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
+                                PinholeCamera camera) {
                             mSlamCameraEstimated++;
                             mSlamCamera = camera;
                         }
 
                         @Override
-                        public boolean hasMoreViewsAvailable(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 2;
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentViewPair(SlamPairedViewsSparseReconstructor reconstructor,
-                                                                       int viewId1, int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        public void onRequestSamplesForCurrentViewPair(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
 
                             samples1.clear();
                             samples2.clear();
@@ -1112,6 +1169,8 @@ public class SlamPairedViewsSparseReconstructorTest {
 
                             float[] accelerationWithNoise = new float[3];
                             float[] angularSpeedWithNoise = new float[3];
+
+                            Quaternion orientation = new Quaternion(rotation1);
                             for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                                 noiseAccelerationX =
                                         accelerationRandomizer.nextFloat();
@@ -1151,26 +1210,33 @@ public class SlamPairedViewsSparseReconstructorTest {
                                         accelerationWithNoise);
                                 reconstructor.updateGyroscopeSample(mTimestamp,
                                         angularSpeedWithNoise);
+                                reconstructor.updateOrientationSample(mTimestamp,
+                                        orientation);
+                                //update orientation
+                                orientation.combine(diffQuaternion);
                                 mTimestamp += DELTA_NANOS;
                             }
                         }
 
                         @Override
-                        public void onSamplesAccepted(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                                                      int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        public void onSamplesAccepted(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
                             mViewCount += 2;
                         }
 
                         @Override
-                        public void onSamplesRejected(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                                                      int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        public void onSamplesRejected(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
                             mViewCount += 2;
                         }
 
                         @Override
-                        public void onRequestMatches(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                                                     int viewId2, List<Sample2D> samples1, List<Sample2D> samples2,
-                                                     List<MatchedSamples> matches) {
+                        public void onRequestMatches(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2,
+                                List<MatchedSamples> matches) {
 
                             matches.clear();
 
@@ -1186,15 +1252,16 @@ public class SlamPairedViewsSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                                                                 int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
+                        public void onFundamentalMatrixEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
                         }
 
                         @Override
-                        public void onEuclideanCameraPairEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                                                                   int viewId1, int viewId2, double scale, EstimatedCamera camera1,
-                                                                   EstimatedCamera camera2) {
+                        public void onEuclideanCameraPairEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, double scale, EstimatedCamera camera1, EstimatedCamera camera2) {
                             mEstimatedEuclideanCamera1 = camera1;
                             mEstimatedEuclideanCamera2 = camera2;
                             mScale = scale;
@@ -1202,40 +1269,41 @@ public class SlamPairedViewsSparseReconstructorTest {
 
                         @Override
                         public void onEuclideanReconstructedPointsEstimated(
-                                SlamPairedViewsSparseReconstructor reconstructor, int viewId1, int viewId2,
-                                double scale, List<ReconstructedPoint3D> points) {
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, double scale, List<ReconstructedPoint3D> points) {
                             mEuclideanReconstructedPoints = points;
                             mScale = scale;
                         }
 
                         @Override
-                        public PinholeCameraIntrinsicParameters onIntrinsicParametersRequested(SlamPairedViewsSparseReconstructor reconstructor, int viewId) {
+                        public PinholeCameraIntrinsicParameters onIntrinsicParametersRequested(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId) {
                             return intrinsic;
                         }
 
                         @Override
-                        public void onStart(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onStart(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onFinish(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onCancel(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onFail(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SlamPairedViewsSparseReconstructor reconstructor =
-                    new SlamPairedViewsSparseReconstructor(configuration, listener);
+            AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructor(configuration, listener);
 
             //check initial values
             reset();
@@ -1455,8 +1523,8 @@ public class SlamPairedViewsSparseReconstructorTest {
             GaussianRandomizer noiseRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ACCELERATION_NOISE_STANDARD_DEVIATION);
 
-            SlamPairedViewsSparseReconstructorConfiguration configuration =
-                    new SlamPairedViewsSparseReconstructorConfiguration();
+            AbsoluteOrientationSlamPairedViewsSparseReconstructorConfiguration configuration =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructorConfiguration();
             configuration.setPairedCamerasEstimatorMethod(
                     InitialCamerasEstimatorMethod.ESSENTIAL_MATRIX);
             configuration.setIntrinsicParametersKnown(true);
@@ -1469,11 +1537,11 @@ public class SlamPairedViewsSparseReconstructorTest {
             float angularOffsetY = 0.0f;
             float angularOffsetZ = 0.0f;
 
-            SlamCalibrator calibrator = createFinishedCalibrator(
+            AbsoluteOrientationSlamCalibrator calibrator = createFinishedCalibrator(
                     accelerationOffsetX, accelerationOffsetY,
                     accelerationOffsetZ, angularOffsetX, angularOffsetY,
                     angularOffsetZ, noiseRandomizer);
-            SlamCalibrationData calibrationData
+            AbsoluteOrientationSlamCalibrationData calibrationData
                     = calibrator.getCalibrationData();
             configuration.setCalibrationData(calibrationData);
 
@@ -1490,9 +1558,12 @@ public class SlamPairedViewsSparseReconstructorTest {
             intrinsic.setAspectRatioKeepingHorizontalFocalLength(aspectRatio);
 
 
-            double alphaEuler1 = 0.0;
-            double betaEuler1 = 0.0;
-            double gammaEuler1 = 0.0;
+            double alphaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double betaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double gammaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
             double alphaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
                     MAX_ANGLE_DEGREES) * Math.PI / 180.0;
             double betaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
@@ -1506,11 +1577,13 @@ public class SlamPairedViewsSparseReconstructorTest {
             double gammaEuler3 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
                     MAX_ANGLE_DEGREES) * Math.PI / 180.0;
 
-            MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
+            final MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
-            MatrixRotation3D rotation2 = new MatrixRotation3D(alphaEuler2,
+            final MatrixRotation3D rotation2 = new MatrixRotation3D(alphaEuler2,
                     betaEuler2, gammaEuler2);
-            AxisRotation3D axisRotation2 = new AxisRotation3D(rotation2);
+            AxisRotation3D axisRotation2 = new AxisRotation3D(
+                    rotation1.inverseRotationAndReturnNew().
+                            combineAndReturnNew(rotation2));
             MatrixRotation3D rotation3 = new MatrixRotation3D(alphaEuler3,
                     betaEuler3, gammaEuler3);
 
@@ -1529,7 +1602,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             final double angularSpeed2X = angularSpeeds[0];
             final double angularSpeed2Y = angularSpeeds[1];
             final double angularSpeed2Z = angularSpeeds[2];
-            Quaternion diffRotation2 = new Quaternion(angularSpeed2X,
+            final Quaternion diffRotation2 = new Quaternion(angularSpeed2X,
                     angularSpeed2Y, angularSpeed2Z);
 
             //number of samples (50 samples * 0.02 s/sample = 1 second)
@@ -1560,7 +1633,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             final double angularSpeed3X = angularSpeeds[0];
             final double angularSpeed3Y = angularSpeeds[1];
             final double angularSpeed3Z = angularSpeeds[2];
-            diffRotation2 = new Quaternion(angularSpeed3X, angularSpeed3Y,
+            final Quaternion diffRotation3 = new Quaternion(angularSpeed3X, angularSpeed3Y,
                     angularSpeed3Z);
 
             //number of samples (50 samples * 0.02 s/sample = 1 second), starting from
@@ -1569,7 +1642,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             MatrixRotation3D rotation3c = new MatrixRotation3D(rotation2c);
             for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                 rotation3b.combine(diffRotation);
-                rotation3c.combine(diffRotation2);
+                rotation3c.combine(diffRotation3);
             }
 
             //check that rotations created by composing sensor samples are equal
@@ -1585,6 +1658,8 @@ public class SlamPairedViewsSparseReconstructorTest {
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
 
+            EuclideanTransformation3D rotationTransformation =
+                    new EuclideanTransformation3D(rotation1);
             Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
             Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
@@ -1594,6 +1669,9 @@ public class SlamPairedViewsSparseReconstructorTest {
                     center2.getInhomX() + cameraSeparation2,
                     center2.getInhomY() + cameraSeparation2,
                     center2.getInhomZ() + cameraSeparation2);
+            center1 = rotationTransformation.transformAndReturnNew(center1);
+            center2 = rotationTransformation.transformAndReturnNew(center2);
+            center3 = rotationTransformation.transformAndReturnNew(center3);
 
             double baseline = center1.distanceTo(center2);
             double baseline2 = center2.distanceTo(center3);
@@ -1727,7 +1805,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             final List<Point2D> projectedPoints2a = new ArrayList<>();
             final List<Point2D> projectedPoints2b = new ArrayList<>();
             final List<Point2D> projectedPoints3 = new ArrayList<>();
-            boolean front1, front2, front3;
+            boolean front1, front2, front3, failed = false;
             for (int i = 0; i < numPointsPair1; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
@@ -1743,15 +1821,21 @@ public class SlamPairedViewsSparseReconstructorTest {
                             centralCommonPointPair1.getInhomX() + lambdaX,
                             centralCommonPointPair1.getInhomY() + lambdaY,
                             centralCommonPointPair1.getInhomZ() + lambdaZ);
+                    rotationTransformation.transform(point3D);
 
                     front1 = camera1.isPointInFrontOfCamera(point3D);
                     front2 = camera2.isPointInFrontOfCamera(point3D);
                     front3 = camera3.isPointInFrontOfCamera(point3D);
                     if (numTry > MAX_TRIES) {
-                        fail("max tries reached");
+                        failed = true;
+                        break;
                     }
                     numTry++;
                 } while (!front1 || !front2 || !front3);
+
+                if (failed) {
+                    break;
+                }
 
                 //check that 3D point is in front of 1st pair of cameras
                 //noinspection all
@@ -1773,6 +1857,10 @@ public class SlamPairedViewsSparseReconstructorTest {
                 projectedPoints2a.add(projectedPoint2);
             }
 
+            if (failed) {
+                continue;
+            }
+
             for (int i = 0; i < numPointsPair2; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
@@ -1788,15 +1876,21 @@ public class SlamPairedViewsSparseReconstructorTest {
                             center2.getInhomX() + centralCommonPointPair2.getInhomX() + lambdaX,
                             center2.getInhomY() + centralCommonPointPair2.getInhomY() + lambdaY,
                             center2.getInhomZ() + centralCommonPointPair2.getInhomZ() + lambdaZ);
+                    rotationTransformation.transform(point3D);
 
                     front1 = camera1.isPointInFrontOfCamera(point3D);
                     front2 = camera2.isPointInFrontOfCamera(point3D);
                     front3 = camera3.isPointInFrontOfCamera(point3D);
                     if (numTry > MAX_TRIES) {
-                        fail("max tries reached");
+                        failed = true;
+                        break;
                     }
                     numTry++;
                 } while (!front1 || !front2 || !front3);
+
+                if (failed) {
+                    break;
+                }
 
                 //check that 3D point is in front of 2nd pair of cameras
                 //noinspection all
@@ -1818,34 +1912,41 @@ public class SlamPairedViewsSparseReconstructorTest {
                 projectedPoints3.add(projectedPoint3);
             }
 
-            SlamPairedViewsSparseReconstructorListener listener =
-                    new SlamPairedViewsSparseReconstructorListener() {
+            if (failed) {
+                continue;
+            }
+
+            AbsoluteOrientationSlamPairedViewsSparseReconstructorListener listener =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructorListener() {
                         @Override
-                        public void onSlamDataAvailable(SlamPairedViewsSparseReconstructor reconstructor,
-                                                        double positionX, double positionY, double positionZ, double velocityX,
-                                                        double velocityY, double velocityZ, double accelerationX, double accelerationY,
-                                                        double accelerationZ, double quaternionA, double quaternionB, double quaternionC,
-                                                        double quaternionD, double angularSpeedX, double angularSpeedY, double angularSpeedZ,
-                                                        Matrix covariance) {
+                        public void onSlamDataAvailable(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, double positionX,
+                                double positionY, double positionZ, double velocityX, double velocityY,
+                                double velocityZ, double accelerationX, double accelerationY, double accelerationZ,
+                                double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                double angularSpeedX, double angularSpeedY, double angularSpeedZ, Matrix covariance) {
                             mSlamDataAvailable++;
                             mSlamCovariance = covariance;
                         }
 
                         @Override
-                        public void onSlamCameraEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                                                          PinholeCamera camera) {
+                        public void onSlamCameraEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
+                                PinholeCamera camera) {
                             mSlamCameraEstimated++;
                             mSlamCamera = camera;
                         }
 
                         @Override
-                        public boolean hasMoreViewsAvailable(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 4; //3 views = 2 view pairs (2 images * 2 views --> 4 view counts)
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentViewPair(SlamPairedViewsSparseReconstructor reconstructor,
-                                                                       int viewId1, int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        public void onRequestSamplesForCurrentViewPair(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
 
                             samples1.clear();
                             samples2.clear();
@@ -1871,6 +1972,7 @@ public class SlamPairedViewsSparseReconstructorTest {
                                 //are obtained during a period of 1 second between 1st
                                 //and 2nd view (50 samples * 0.02 s/sample = 1 second)
                                 mTimestamp = 0;
+                                Quaternion orientation = new Quaternion(rotation1);
                                 for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                                     reconstructor.updateAccelerometerSample(mTimestamp,
                                             (float) accelerationX, (float) accelerationY,
@@ -1878,6 +1980,10 @@ public class SlamPairedViewsSparseReconstructorTest {
                                     reconstructor.updateGyroscopeSample(mTimestamp,
                                             (float) angularSpeed2X, (float) angularSpeed2Y,
                                             (float) angularSpeed2Z);
+                                    reconstructor.updateOrientationSample(mTimestamp,
+                                            orientation);
+                                    //update orientation
+                                    orientation.combine(diffRotation2);
                                     mTimestamp += DELTA_NANOS;
                                 }
 
@@ -1898,6 +2004,7 @@ public class SlamPairedViewsSparseReconstructorTest {
                                 //assume the following accelerator and gyroscope samples
                                 //are obtained during a period of 1 second between 2nd
                                 //and 3rd view (50 samples * 0.02 s/sample = 1 second)
+                                Quaternion orientation = new Quaternion(rotation2);
                                 for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                                     reconstructor.updateAccelerometerSample(mTimestamp,
                                             (float) accelerationX2, (float) accelerationY2,
@@ -1905,27 +2012,34 @@ public class SlamPairedViewsSparseReconstructorTest {
                                     reconstructor.updateGyroscopeSample(mTimestamp,
                                             (float) angularSpeed3X, (float) angularSpeed3Y,
                                             (float) angularSpeed3Z);
+                                    reconstructor.updateOrientationSample(mTimestamp,
+                                            orientation);
+                                    //update orientation
+                                    orientation.combine(diffRotation3);
                                     mTimestamp += DELTA_NANOS;
                                 }
                             }
                         }
 
                         @Override
-                        public void onSamplesAccepted(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                                                      int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        public void onSamplesAccepted(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
                             mViewCount += 2;
                         }
 
                         @Override
-                        public void onSamplesRejected(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                                                      int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        public void onSamplesRejected(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
                             mViewCount += 2;
                         }
 
                         @Override
-                        public void onRequestMatches(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                                                     int viewId2, List<Sample2D> samples1, List<Sample2D> samples2,
-                                                     List<MatchedSamples> matches) {
+                        public void onRequestMatches(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2,
+                                List<MatchedSamples> matches) {
                             matches.clear();
 
                             int viewCount = reconstructor.getViewCount();
@@ -1951,8 +2065,9 @@ public class SlamPairedViewsSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                                                                 int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
+                        public void onFundamentalMatrixEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             int viewCount = reconstructor.getViewCount();
                             if (viewCount == 0) {
                                 mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
@@ -1962,9 +2077,9 @@ public class SlamPairedViewsSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanCameraPairEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                                                                   int viewId1, int viewId2, double scale, EstimatedCamera camera1,
-                                                                   EstimatedCamera camera2) {
+                        public void onEuclideanCameraPairEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, double scale, EstimatedCamera camera1, EstimatedCamera camera2) {
 
                             int viewCount = reconstructor.getViewCount();
                             if (viewCount == 0) {
@@ -1980,8 +2095,8 @@ public class SlamPairedViewsSparseReconstructorTest {
 
                         @Override
                         public void onEuclideanReconstructedPointsEstimated(
-                                SlamPairedViewsSparseReconstructor reconstructor, int viewId1, int viewId2,
-                                double scale, List<ReconstructedPoint3D> points) {
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, double scale, List<ReconstructedPoint3D> points) {
 
                             int viewCount = reconstructor.getViewCount();
                             if (viewCount == 0) {
@@ -1994,33 +2109,34 @@ public class SlamPairedViewsSparseReconstructorTest {
                         }
 
                         @Override
-                        public PinholeCameraIntrinsicParameters onIntrinsicParametersRequested(SlamPairedViewsSparseReconstructor reconstructor, int viewId) {
+                        public PinholeCameraIntrinsicParameters onIntrinsicParametersRequested(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId) {
                             return intrinsic;
                         }
 
                         @Override
-                        public void onStart(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onStart(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onFinish(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onCancel(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onFail(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SlamPairedViewsSparseReconstructor reconstructor =
-                    new SlamPairedViewsSparseReconstructor(configuration, listener);
+            AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructor(configuration, listener);
 
             //check initial values
             reset();
@@ -2393,8 +2509,8 @@ public class SlamPairedViewsSparseReconstructorTest {
             GaussianRandomizer noiseRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ACCELERATION_NOISE_STANDARD_DEVIATION);
 
-            SlamPairedViewsSparseReconstructorConfiguration configuration =
-                    new SlamPairedViewsSparseReconstructorConfiguration();
+            AbsoluteOrientationSlamPairedViewsSparseReconstructorConfiguration configuration =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructorConfiguration();
             configuration.setPairedCamerasEstimatorMethod(
                     InitialCamerasEstimatorMethod.ESSENTIAL_MATRIX);
             configuration.setIntrinsicParametersKnown(true);
@@ -2413,11 +2529,11 @@ public class SlamPairedViewsSparseReconstructorTest {
             float angularOffsetZ = offsetRandomizer.nextFloat(
                     MIN_CALIBRATION_OFFSET, MAX_CALIBRATION_OFFSET);
 
-            SlamCalibrator calibrator = createFinishedCalibrator(
+            AbsoluteOrientationSlamCalibrator calibrator = createFinishedCalibrator(
                     accelerationOffsetX, accelerationOffsetY,
                     accelerationOffsetZ, angularOffsetX, angularOffsetY,
                     angularOffsetZ, noiseRandomizer);
-            SlamCalibrationData calibrationData
+            AbsoluteOrientationSlamCalibrationData calibrationData
                     = calibrator.getCalibrationData();
             configuration.setCalibrationData(calibrationData);
 
@@ -2434,9 +2550,12 @@ public class SlamPairedViewsSparseReconstructorTest {
             intrinsic.setAspectRatioKeepingHorizontalFocalLength(aspectRatio);
 
 
-            double alphaEuler1 = 0.0;
-            double betaEuler1 = 0.0;
-            double gammaEuler1 = 0.0;
+            double alphaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double betaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double gammaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
             double alphaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
                     MAX_ANGLE_DEGREES) * Math.PI / 180.0;
             double betaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
@@ -2450,11 +2569,13 @@ public class SlamPairedViewsSparseReconstructorTest {
             double gammaEuler3 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
                     MAX_ANGLE_DEGREES) * Math.PI / 180.0;
 
-            MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
+            final MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
-            MatrixRotation3D rotation2 = new MatrixRotation3D(alphaEuler2,
+            final MatrixRotation3D rotation2 = new MatrixRotation3D(alphaEuler2,
                     betaEuler2, gammaEuler2);
-            AxisRotation3D axisRotation2 = new AxisRotation3D(rotation2);
+            AxisRotation3D axisRotation2 = new AxisRotation3D(
+                    rotation1.inverseRotationAndReturnNew().
+                            combineAndReturnNew(rotation2));
             MatrixRotation3D rotation3 = new MatrixRotation3D(alphaEuler3,
                     betaEuler3, gammaEuler3);
 
@@ -2473,7 +2594,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             final double angularSpeed2X = angularSpeeds[0];
             final double angularSpeed2Y = angularSpeeds[1];
             final double angularSpeed2Z = angularSpeeds[2];
-            Quaternion diffRotation2 = new Quaternion(angularSpeed2X,
+            final Quaternion diffRotation2 = new Quaternion(angularSpeed2X,
                     angularSpeed2Y, angularSpeed2Z);
 
             //number of samples (50 samples * 0.02 s/sample = 1 second)
@@ -2504,7 +2625,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             final double angularSpeed3X = angularSpeeds[0];
             final double angularSpeed3Y = angularSpeeds[1];
             final double angularSpeed3Z = angularSpeeds[2];
-            diffRotation2 = new Quaternion(angularSpeed3X, angularSpeed3Y,
+            final Quaternion diffRotation3 = new Quaternion(angularSpeed3X, angularSpeed3Y,
                     angularSpeed3Z);
 
             //number of samples (50 samples * 0.02 s/sample = 1 second), starting from
@@ -2513,7 +2634,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             MatrixRotation3D rotation3c = new MatrixRotation3D(rotation2c);
             for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                 rotation3b.combine(diffRotation);
-                rotation3c.combine(diffRotation2);
+                rotation3c.combine(diffRotation3);
             }
 
             //check that rotations created by composing sensor samples are equal
@@ -2529,6 +2650,8 @@ public class SlamPairedViewsSparseReconstructorTest {
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
 
+            EuclideanTransformation3D rotationTransformation =
+                    new EuclideanTransformation3D(rotation1);
             Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
             Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
@@ -2538,6 +2661,9 @@ public class SlamPairedViewsSparseReconstructorTest {
                     center2.getInhomX() + cameraSeparation2,
                     center2.getInhomY() + cameraSeparation2,
                     center2.getInhomZ() + cameraSeparation2);
+            center1 = rotationTransformation.transformAndReturnNew(center1);
+            center2 = rotationTransformation.transformAndReturnNew(center2);
+            center3 = rotationTransformation.transformAndReturnNew(center3);
 
             double baseline = center1.distanceTo(center2);
             double baseline2 = center2.distanceTo(center3);
@@ -2671,7 +2797,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             final List<Point2D> projectedPoints2a = new ArrayList<>();
             final List<Point2D> projectedPoints2b = new ArrayList<>();
             final List<Point2D> projectedPoints3 = new ArrayList<>();
-            boolean front1, front2, front3;
+            boolean front1, front2, front3, failed = false;
             for (int i = 0; i < numPointsPair1; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
@@ -2687,15 +2813,21 @@ public class SlamPairedViewsSparseReconstructorTest {
                             centralCommonPointPair1.getInhomX() + lambdaX,
                             centralCommonPointPair1.getInhomY() + lambdaY,
                             centralCommonPointPair1.getInhomZ() + lambdaZ);
+                    rotationTransformation.transform(point3D);
 
                     front1 = camera1.isPointInFrontOfCamera(point3D);
                     front2 = camera2.isPointInFrontOfCamera(point3D);
                     front3 = camera3.isPointInFrontOfCamera(point3D);
                     if (numTry > MAX_TRIES) {
-                        fail("max tries reached");
+                        failed = true;
+                        break;
                     }
                     numTry++;
                 } while (!front1 || !front2 || !front3);
+
+                if (failed) {
+                    break;
+                }
 
                 //check that 3D point is in front of 1st pair of cameras
                 //noinspection all
@@ -2715,6 +2847,10 @@ public class SlamPairedViewsSparseReconstructorTest {
                 projectedPoint2 = new InhomogeneousPoint2D();
                 camera2.project(point3D, projectedPoint2);
                 projectedPoints2a.add(projectedPoint2);
+            }
+
+            if (failed) {
+                continue;
             }
 
             for (int i = 0; i < numPointsPair2; i++) {
@@ -2737,10 +2873,15 @@ public class SlamPairedViewsSparseReconstructorTest {
                     front2 = camera2.isPointInFrontOfCamera(point3D);
                     front3 = camera3.isPointInFrontOfCamera(point3D);
                     if (numTry > MAX_TRIES) {
-                        fail("max tries reached");
+                        failed = true;
+                        break;
                     }
                     numTry++;
                 } while (!front1 || !front2 || !front3);
+
+                if (failed) {
+                    break;
+                }
 
                 //check that 3D point is in front of 2nd pair of cameras
                 //noinspection all
@@ -2762,6 +2903,10 @@ public class SlamPairedViewsSparseReconstructorTest {
                 projectedPoints3.add(projectedPoint3);
             }
 
+            if (failed) {
+                continue;
+            }
+
             final GaussianRandomizer accelerationRandomizer =
                     new GaussianRandomizer(new Random(), 0.0,
                             ACCELERATION_NOISE_STANDARD_DEVIATION);
@@ -2769,34 +2914,37 @@ public class SlamPairedViewsSparseReconstructorTest {
                     new GaussianRandomizer(new Random(), 0.0,
                             ANGULAR_SPEED_NOISE_STANDARD_DEVIATION);
 
-            SlamPairedViewsSparseReconstructorListener listener =
-                    new SlamPairedViewsSparseReconstructorListener() {
+            AbsoluteOrientationSlamPairedViewsSparseReconstructorListener listener =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructorListener() {
                         @Override
-                        public void onSlamDataAvailable(SlamPairedViewsSparseReconstructor reconstructor,
-                                                        double positionX, double positionY, double positionZ, double velocityX,
-                                                        double velocityY, double velocityZ, double accelerationX, double accelerationY,
-                                                        double accelerationZ, double quaternionA, double quaternionB, double quaternionC,
-                                                        double quaternionD, double angularSpeedX, double angularSpeedY, double angularSpeedZ,
-                                                        Matrix covariance) {
+                        public void onSlamDataAvailable(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, double positionX,
+                                double positionY, double positionZ, double velocityX, double velocityY,
+                                double velocityZ, double accelerationX, double accelerationY, double accelerationZ,
+                                double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                double angularSpeedX, double angularSpeedY, double angularSpeedZ, Matrix covariance) {
                             mSlamDataAvailable++;
                             mSlamCovariance = covariance;
                         }
 
                         @Override
-                        public void onSlamCameraEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                                                          PinholeCamera camera) {
+                        public void onSlamCameraEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
+                                PinholeCamera camera) {
                             mSlamCameraEstimated++;
                             mSlamCamera = camera;
                         }
 
                         @Override
-                        public boolean hasMoreViewsAvailable(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 4; //3 views = 2 view pairs (2 images * 2 views --> 4 view counts)
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentViewPair(SlamPairedViewsSparseReconstructor reconstructor,
-                                                                       int viewId1, int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        public void onRequestSamplesForCurrentViewPair(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
 
                             samples1.clear();
                             samples2.clear();
@@ -2834,6 +2982,8 @@ public class SlamPairedViewsSparseReconstructorTest {
 
                                 float[] accelerationWithNoise = new float[3];
                                 float[] angularSpeedWithNoise = new float[3];
+
+                                Quaternion orientation = new Quaternion(rotation1);
                                 for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                                     noiseAccelerationX =
                                             accelerationRandomizer.nextFloat();
@@ -2873,6 +3023,10 @@ public class SlamPairedViewsSparseReconstructorTest {
                                             accelerationWithNoise);
                                     reconstructor.updateGyroscopeSample(mTimestamp,
                                             angularSpeedWithNoise);
+                                    reconstructor.updateOrientationSample(mTimestamp,
+                                            orientation);
+                                    //update orientation
+                                    orientation.combine(diffRotation2);
                                     mTimestamp += DELTA_NANOS;
                                 }
 
@@ -2893,6 +3047,7 @@ public class SlamPairedViewsSparseReconstructorTest {
                                 //assume the following accelerator and gyroscope samples
                                 //are obtained during a period of 1 second between 2nd
                                 //and 3rd view (50 samples * 0.02 s/sample = 1 second)
+                                Quaternion orientation = new Quaternion(rotation2);
                                 for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                                     reconstructor.updateAccelerometerSample(mTimestamp,
                                             (float) accelerationX2, (float) accelerationY2,
@@ -2900,27 +3055,34 @@ public class SlamPairedViewsSparseReconstructorTest {
                                     reconstructor.updateGyroscopeSample(mTimestamp,
                                             (float) angularSpeed3X, (float) angularSpeed3Y,
                                             (float) angularSpeed3Z);
+                                    reconstructor.updateOrientationSample(mTimestamp,
+                                            orientation);
+                                    //update orientation
+                                    orientation.combine(diffRotation3);
                                     mTimestamp += DELTA_NANOS;
                                 }
                             }
                         }
 
                         @Override
-                        public void onSamplesAccepted(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                                                      int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        public void onSamplesAccepted(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
                             mViewCount += 2;
                         }
 
                         @Override
-                        public void onSamplesRejected(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                                                      int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        public void onSamplesRejected(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
                             mViewCount += 2;
                         }
 
                         @Override
-                        public void onRequestMatches(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                                                     int viewId2, List<Sample2D> samples1, List<Sample2D> samples2,
-                                                     List<MatchedSamples> matches) {
+                        public void onRequestMatches(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2,
+                                List<MatchedSamples> matches) {
                             matches.clear();
 
                             int viewCount = reconstructor.getViewCount();
@@ -2946,8 +3108,9 @@ public class SlamPairedViewsSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                                                                 int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
+                        public void onFundamentalMatrixEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             int viewCount = reconstructor.getViewCount();
                             if (viewCount == 0) {
                                 mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
@@ -2957,9 +3120,9 @@ public class SlamPairedViewsSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanCameraPairEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                                                                   int viewId1, int viewId2, double scale, EstimatedCamera camera1,
-                                                                   EstimatedCamera camera2) {
+                        public void onEuclideanCameraPairEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, double scale, EstimatedCamera camera1, EstimatedCamera camera2) {
 
                             int viewCount = reconstructor.getViewCount();
                             if (viewCount == 0) {
@@ -2975,8 +3138,8 @@ public class SlamPairedViewsSparseReconstructorTest {
 
                         @Override
                         public void onEuclideanReconstructedPointsEstimated(
-                                SlamPairedViewsSparseReconstructor reconstructor, int viewId1, int viewId2,
-                                double scale, List<ReconstructedPoint3D> points) {
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, double scale, List<ReconstructedPoint3D> points) {
 
                             int viewCount = reconstructor.getViewCount();
                             if (viewCount == 0) {
@@ -2989,33 +3152,34 @@ public class SlamPairedViewsSparseReconstructorTest {
                         }
 
                         @Override
-                        public PinholeCameraIntrinsicParameters onIntrinsicParametersRequested(SlamPairedViewsSparseReconstructor reconstructor, int viewId) {
+                        public PinholeCameraIntrinsicParameters onIntrinsicParametersRequested(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId) {
                             return intrinsic;
                         }
 
                         @Override
-                        public void onStart(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onStart(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onFinish(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onCancel(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onFail(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SlamPairedViewsSparseReconstructor reconstructor =
-                    new SlamPairedViewsSparseReconstructor(configuration, listener);
+            AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructor(configuration, listener);
 
             //check initial values
             reset();
@@ -3386,8 +3550,8 @@ public class SlamPairedViewsSparseReconstructorTest {
             GaussianRandomizer noiseRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ACCELERATION_NOISE_STANDARD_DEVIATION);
 
-            SlamPairedViewsSparseReconstructorConfiguration configuration =
-                    new SlamPairedViewsSparseReconstructorConfiguration();
+            AbsoluteOrientationSlamPairedViewsSparseReconstructorConfiguration configuration =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructorConfiguration();
             configuration.setPairedCamerasEstimatorMethod(
                     InitialCamerasEstimatorMethod.ESSENTIAL_MATRIX);
             configuration.setIntrinsicParametersKnown(true);
@@ -3400,11 +3564,11 @@ public class SlamPairedViewsSparseReconstructorTest {
             float angularOffsetY = 0.0f;
             float angularOffsetZ = 0.0f;
 
-            SlamCalibrator calibrator = createFinishedCalibrator(
+            AbsoluteOrientationSlamCalibrator calibrator = createFinishedCalibrator(
                     accelerationOffsetX, accelerationOffsetY,
                     accelerationOffsetZ, angularOffsetX, angularOffsetY,
                     angularOffsetZ, noiseRandomizer);
-            SlamCalibrationData calibrationData
+            AbsoluteOrientationSlamCalibrationData calibrationData
                     = calibrator.getCalibrationData();
             configuration.setCalibrationData(calibrationData);
 
@@ -3421,9 +3585,12 @@ public class SlamPairedViewsSparseReconstructorTest {
             intrinsic.setAspectRatioKeepingHorizontalFocalLength(aspectRatio);
 
 
-            double alphaEuler1 = 0.0;
-            double betaEuler1 = 0.0;
-            double gammaEuler1 = 0.0;
+            double alphaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double betaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double gammaEuler1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
             double alphaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
                     MAX_ANGLE_DEGREES) * Math.PI / 180.0;
             double betaEuler2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
@@ -3443,12 +3610,15 @@ public class SlamPairedViewsSparseReconstructorTest {
             double gammaEuler4 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
                     MAX_ANGLE_DEGREES) * Math.PI / 180.0;
 
-            MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
+            final MatrixRotation3D rotation1 = new MatrixRotation3D(alphaEuler1,
                     betaEuler1, gammaEuler1);
-            MatrixRotation3D rotation2 = new MatrixRotation3D(alphaEuler2,
+            final MatrixRotation3D rotation2 = new MatrixRotation3D(alphaEuler2,
                     betaEuler2, gammaEuler2);
-            AxisRotation3D axisRotation2 = new AxisRotation3D(rotation2);
-            MatrixRotation3D rotation3 = new MatrixRotation3D(alphaEuler3,
+            AxisRotation3D axisRotation2 = new AxisRotation3D(
+                    rotation1.inverseRotationAndReturnNew().
+                            combineAndReturnNew(rotation2));
+
+            final MatrixRotation3D rotation3 = new MatrixRotation3D(alphaEuler3,
                     betaEuler3, gammaEuler3);
             MatrixRotation3D rotation4 = new MatrixRotation3D(alphaEuler4,
                     betaEuler4, gammaEuler4);
@@ -3468,7 +3638,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             final double angularSpeed2X = angularSpeeds[0];
             final double angularSpeed2Y = angularSpeeds[1];
             final double angularSpeed2Z = angularSpeeds[2];
-            Quaternion diffRotation2 = new Quaternion(angularSpeed2X,
+            final Quaternion diffRotation2 = new Quaternion(angularSpeed2X,
                     angularSpeed2Y, angularSpeed2Z);
 
             //number of samples (50 samples * 0.02 s/sample = 1 second)
@@ -3499,7 +3669,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             final double angularSpeed3X = angularSpeeds[0];
             final double angularSpeed3Y = angularSpeeds[1];
             final double angularSpeed3Z = angularSpeeds[2];
-            diffRotation2 = new Quaternion(angularSpeed3X, angularSpeed3Y,
+            final Quaternion diffRotation3 = new Quaternion(angularSpeed3X, angularSpeed3Y,
                     angularSpeed3Z);
 
             //number of samples (50 samples * 0.02 s/sample = 1 second), starting from
@@ -3508,7 +3678,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             MatrixRotation3D rotation3c = new MatrixRotation3D(rotation2c);
             for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                 rotation3b.combine(diffRotation);
-                rotation3c.combine(diffRotation2);
+                rotation3c.combine(diffRotation3);
             }
 
             //check that rotations created by composing sensor samples are equal
@@ -3531,7 +3701,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             final double angularSpeed4X = angularSpeeds[0];
             final double angularSpeed4Y = angularSpeeds[1];
             final double angularSpeed4Z = angularSpeeds[2];
-            diffRotation2 = new Quaternion(angularSpeed4X, angularSpeed4Y,
+            final Quaternion diffRotation4 = new Quaternion(angularSpeed4X, angularSpeed4Y,
                     angularSpeed4Z);
 
             //number of samples (50 samples * 0.02 s/sample = 1 second), starting from
@@ -3540,7 +3710,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             MatrixRotation3D rotation4c = new MatrixRotation3D(rotation3c);
             for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                 rotation4b.combine(diffRotation);
-                rotation4c.combine(diffRotation2);
+                rotation4c.combine(diffRotation4);
             }
 
             //check that rotations created by composing sensor samples are equal
@@ -3558,6 +3728,8 @@ public class SlamPairedViewsSparseReconstructorTest {
                     MIN_CAMERA_SEPARATION_ESSENTIAL,
                     MAX_CAMERA_SEPARATION_ESSENTIAL);
 
+            EuclideanTransformation3D rotationTransformation =
+                    new EuclideanTransformation3D(rotation1);
             Point3D center1 = new InhomogeneousPoint3D(0.0, 0.0, 0.0);
             Point3D center2 = new InhomogeneousPoint3D(
                     center1.getInhomX() + cameraSeparation,
@@ -3571,6 +3743,10 @@ public class SlamPairedViewsSparseReconstructorTest {
                     center3.getInhomX() + cameraSeparation3,
                     center3.getInhomY() + cameraSeparation3,
                     center3.getInhomZ() + cameraSeparation3);
+            center1 = rotationTransformation.transformAndReturnNew(center1);
+            center2 = rotationTransformation.transformAndReturnNew(center2);
+            center3 = rotationTransformation.transformAndReturnNew(center3);
+            center4 = rotationTransformation.transformAndReturnNew(center4);
 
             double baseline = center1.distanceTo(center2);
             double baseline2 = center2.distanceTo(center3);
@@ -3761,7 +3937,7 @@ public class SlamPairedViewsSparseReconstructorTest {
             final List<Point2D> projectedPoints3 = new ArrayList<>();
             final List<Point2D> projectedPoints3b = new ArrayList<>();
             final List<Point2D> projectedPoints4 = new ArrayList<>();
-            boolean front1, front2, front3, front4;
+            boolean front1, front2, front3, front4, failed = false;
             for (int i = 0; i < numPointsPair1; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
@@ -3777,15 +3953,21 @@ public class SlamPairedViewsSparseReconstructorTest {
                             centralCommonPointPair1.getInhomX() + lambdaX,
                             centralCommonPointPair1.getInhomY() + lambdaY,
                             centralCommonPointPair1.getInhomZ() + lambdaZ);
+                    rotationTransformation.transform(point3D);
 
                     front1 = camera1.isPointInFrontOfCamera(point3D);
                     front2 = camera2.isPointInFrontOfCamera(point3D);
                     front3 = camera3.isPointInFrontOfCamera(point3D);
                     if (numTry > MAX_TRIES) {
-                        fail("max tries reached");
+                        failed = true;
+                        break;
                     }
                     numTry++;
                 } while (!front1 || !front2 || !front3);
+
+                if (failed) {
+                    break;
+                }
 
                 //check that 3D point is in front of 1st pair of cameras
                 //noinspection all
@@ -3805,6 +3987,10 @@ public class SlamPairedViewsSparseReconstructorTest {
                 projectedPoint2 = new InhomogeneousPoint2D();
                 camera2.project(point3D, projectedPoint2);
                 projectedPoints2a.add(projectedPoint2);
+            }
+
+            if (failed) {
+                continue;
             }
 
             for (int i = 0; i < numPointsPair2; i++) {
@@ -3827,10 +4013,15 @@ public class SlamPairedViewsSparseReconstructorTest {
                     front2 = camera2.isPointInFrontOfCamera(point3D);
                     front3 = camera3.isPointInFrontOfCamera(point3D);
                     if (numTry > MAX_TRIES) {
-                        fail("max tries reached");
+                        failed = true;
+                        break;
                     }
                     numTry++;
                 } while (!front1 || !front2 || !front3);
+
+                if (failed) {
+                    break;
+                }
 
                 //check that 3D point is in front of 2nd pair of cameras
                 //noinspection all
@@ -3852,7 +4043,10 @@ public class SlamPairedViewsSparseReconstructorTest {
                 projectedPoints3.add(projectedPoint3);
             }
 
-            boolean failed = false;
+            if (failed) {
+                continue;
+            }
+
             for (int i = 0; i < numPointsPair3; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
@@ -3908,34 +4102,37 @@ public class SlamPairedViewsSparseReconstructorTest {
                 continue;
             }
 
-            SlamPairedViewsSparseReconstructorListener listener =
-                    new SlamPairedViewsSparseReconstructorListener() {
+            AbsoluteOrientationSlamPairedViewsSparseReconstructorListener listener =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructorListener() {
                         @Override
-                        public void onSlamDataAvailable(SlamPairedViewsSparseReconstructor reconstructor,
-                                                        double positionX, double positionY, double positionZ, double velocityX,
-                                                        double velocityY, double velocityZ, double accelerationX, double accelerationY,
-                                                        double accelerationZ, double quaternionA, double quaternionB, double quaternionC,
-                                                        double quaternionD, double angularSpeedX, double angularSpeedY, double angularSpeedZ,
-                                                        Matrix covariance) {
+                        public void onSlamDataAvailable(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, double positionX,
+                                double positionY, double positionZ, double velocityX, double velocityY,
+                                double velocityZ, double accelerationX, double accelerationY, double accelerationZ,
+                                double quaternionA, double quaternionB, double quaternionC, double quaternionD,
+                                double angularSpeedX, double angularSpeedY, double angularSpeedZ, Matrix covariance) {
                             mSlamDataAvailable++;
                             mSlamCovariance = covariance;
                         }
 
                         @Override
-                        public void onSlamCameraEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                                                          PinholeCamera camera) {
+                        public void onSlamCameraEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
+                                PinholeCamera camera) {
                             mSlamCameraEstimated++;
                             mSlamCamera = camera;
                         }
 
                         @Override
-                        public boolean hasMoreViewsAvailable(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public boolean hasMoreViewsAvailable(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             return mViewCount < 6; //4 views = 3 view pairs (2 images * 3 views --> 6 view counts)
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentViewPair(SlamPairedViewsSparseReconstructor reconstructor,
-                                                                       int viewId1, int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        public void onRequestSamplesForCurrentViewPair(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
 
                             samples1.clear();
                             samples2.clear();
@@ -3961,6 +4158,7 @@ public class SlamPairedViewsSparseReconstructorTest {
                                 //are obtained during a period of 1 second between 1st
                                 //and 2nd view (50 samples * 0.02 s/sample = 1 second)
                                 mTimestamp = 0;
+                                Quaternion orientation = new Quaternion(rotation1);
                                 for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                                     reconstructor.updateAccelerometerSample(mTimestamp,
                                             (float) accelerationX, (float) accelerationY,
@@ -3968,6 +4166,10 @@ public class SlamPairedViewsSparseReconstructorTest {
                                     reconstructor.updateGyroscopeSample(mTimestamp,
                                             (float) angularSpeed2X, (float) angularSpeed2Y,
                                             (float) angularSpeed2Z);
+                                    reconstructor.updateOrientationSample(mTimestamp,
+                                            orientation);
+                                    //update orientation
+                                    orientation.combine(diffRotation2);
                                     mTimestamp += DELTA_NANOS;
                                 }
 
@@ -3988,6 +4190,7 @@ public class SlamPairedViewsSparseReconstructorTest {
                                 //assume the following accelerator and gyroscope samples
                                 //are obtained during a period of 1 second between 2nd
                                 //and 3rd view (50 samples * 0.02 s/sample = 1 second)
+                                Quaternion orientation = new Quaternion(rotation2);
                                 for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                                     reconstructor.updateAccelerometerSample(mTimestamp,
                                             (float) accelerationX2, (float) accelerationY2,
@@ -3995,6 +4198,10 @@ public class SlamPairedViewsSparseReconstructorTest {
                                     reconstructor.updateGyroscopeSample(mTimestamp,
                                             (float) angularSpeed3X, (float) angularSpeed3Y,
                                             (float) angularSpeed3Z);
+                                    reconstructor.updateOrientationSample(mTimestamp,
+                                            orientation);
+                                    //update orientation
+                                    orientation.combine(diffRotation3);
                                     mTimestamp += DELTA_NANOS;
                                 }
                             } else if (viewCount == 4) {
@@ -4014,6 +4221,7 @@ public class SlamPairedViewsSparseReconstructorTest {
                                 //assume the following accelerator and gyroscope samples
                                 //are obtained during a period of 1 second between 3rd
                                 //and 4th view (50 samples * 0.02 s/sample = 1 second)
+                                Quaternion orientation = new Quaternion(rotation3);
                                 for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                                     reconstructor.updateAccelerometerSample(mTimestamp,
                                             (float) accelerationX3, (float) accelerationY3,
@@ -4021,27 +4229,34 @@ public class SlamPairedViewsSparseReconstructorTest {
                                     reconstructor.updateGyroscopeSample(mTimestamp,
                                             (float) angularSpeed4X, (float) angularSpeed4Y,
                                             (float) angularSpeed4Z);
+                                    reconstructor.updateOrientationSample(mTimestamp,
+                                            orientation);
+                                    //update orientation
+                                    orientation.combine(diffRotation4);
                                     mTimestamp += DELTA_NANOS;
                                 }
                             }
                         }
 
                         @Override
-                        public void onSamplesAccepted(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                                                      int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        public void onSamplesAccepted(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
                             mViewCount += 2;
                         }
 
                         @Override
-                        public void onSamplesRejected(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                                                      int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
+                        public void onSamplesRejected(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2) {
                             mViewCount += 2;
                         }
 
                         @Override
-                        public void onRequestMatches(SlamPairedViewsSparseReconstructor reconstructor, int viewId1,
-                                                     int viewId2, List<Sample2D> samples1, List<Sample2D> samples2,
-                                                     List<MatchedSamples> matches) {
+                        public void onRequestMatches(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, List<Sample2D> samples1, List<Sample2D> samples2,
+                                List<MatchedSamples> matches) {
                             matches.clear();
 
                             int viewCount = reconstructor.getViewCount();
@@ -4070,8 +4285,9 @@ public class SlamPairedViewsSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onFundamentalMatrixEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                                                                 int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
+                        public void onFundamentalMatrixEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
+                                int viewId1, int viewId2, EstimatedFundamentalMatrix estimatedFundamentalMatrix) {
                             int viewCount = reconstructor.getViewCount();
                             if (viewCount == 0) {
                                 mEstimatedFundamentalMatrix = estimatedFundamentalMatrix;
@@ -4083,9 +4299,10 @@ public class SlamPairedViewsSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onEuclideanCameraPairEstimated(SlamPairedViewsSparseReconstructor reconstructor,
-                                                                   int viewId1, int viewId2, double scale, EstimatedCamera camera1,
-                                                                   EstimatedCamera camera2) {
+                        public void onEuclideanCameraPairEstimated(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor,
+                                int viewId1, int viewId2, double scale, EstimatedCamera camera1,
+                                EstimatedCamera camera2) {
 
                             int viewCount = reconstructor.getViewCount();
                             if (viewCount == 0) {
@@ -4104,8 +4321,8 @@ public class SlamPairedViewsSparseReconstructorTest {
 
                         @Override
                         public void onEuclideanReconstructedPointsEstimated(
-                                SlamPairedViewsSparseReconstructor reconstructor, int viewId1, int viewId2,
-                                double scale, List<ReconstructedPoint3D> points) {
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId1,
+                                int viewId2, double scale, List<ReconstructedPoint3D> points) {
 
                             int viewCount = reconstructor.getViewCount();
                             if (viewCount == 0) {
@@ -4121,33 +4338,34 @@ public class SlamPairedViewsSparseReconstructorTest {
                         }
 
                         @Override
-                        public PinholeCameraIntrinsicParameters onIntrinsicParametersRequested(SlamPairedViewsSparseReconstructor reconstructor, int viewId) {
+                        public PinholeCameraIntrinsicParameters onIntrinsicParametersRequested(
+                                AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor, int viewId) {
                             return intrinsic;
                         }
 
                         @Override
-                        public void onStart(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onStart(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mStarted = true;
                         }
 
                         @Override
-                        public void onFinish(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onFinish(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mFinished = true;
                         }
 
                         @Override
-                        public void onCancel(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onCancel(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mCancelled = true;
                         }
 
                         @Override
-                        public void onFail(SlamPairedViewsSparseReconstructor reconstructor) {
+                        public void onFail(AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor) {
                             mFailed = true;
                         }
                     };
 
-            SlamPairedViewsSparseReconstructor reconstructor =
-                    new SlamPairedViewsSparseReconstructor(configuration, listener);
+            AbsoluteOrientationSlamPairedViewsSparseReconstructor reconstructor =
+                    new AbsoluteOrientationSlamPairedViewsSparseReconstructor(configuration, listener);
 
             //check initial values
             reset();
@@ -4652,7 +4870,6 @@ public class SlamPairedViewsSparseReconstructorTest {
         assertTrue(numValid > 0);
     }
 
-
     private void reset() {
         mViewCount = 0;
         mEstimatedFundamentalMatrix = mEstimatedFundamentalMatrix2 =
@@ -4668,11 +4885,13 @@ public class SlamPairedViewsSparseReconstructorTest {
         mSlamCamera = null;
     }
 
-    private SlamCalibrator createFinishedCalibrator(float accelerationOffsetX,
-                                                    float accelerationOffsetY, float accelerationOffsetZ,
-                                                    float angularOffsetX, float angularOffsetY, float angularOffsetZ,
-                                                    GaussianRandomizer noiseRandomizer) {
-        SlamCalibrator calibrator = SlamEstimator.createCalibrator();
+    private AbsoluteOrientationSlamCalibrator createFinishedCalibrator(
+            float accelerationOffsetX, float accelerationOffsetY,
+            float accelerationOffsetZ, float angularOffsetX,
+            float angularOffsetY, float angularOffsetZ,
+            GaussianRandomizer noiseRandomizer) {
+        AbsoluteOrientationSlamCalibrator calibrator =
+                AbsoluteOrientationSlamEstimator.createCalibrator();
         calibrator.setConvergenceThreshold(ABSOLUTE_ERROR);
         calibrator.setMaxNumSamples(MAX_CALIBRATION_SAMPLES);
 
@@ -4683,8 +4902,9 @@ public class SlamPairedViewsSparseReconstructorTest {
 
         double accelerationX, accelerationY, accelerationZ;
         double angularX, angularY, angularZ;
+        Quaternion orientation = new Quaternion();
 
-        for (int i = 0; i < MAX_CALIBRATION_SAMPLES; i++) {
+        for(int i = 0; i < MAX_CALIBRATION_SAMPLES; i++) {
             accelerationNoiseX = noiseRandomizer.nextFloat();
             accelerationNoiseY = noiseRandomizer.nextFloat();
             accelerationNoiseZ = noiseRandomizer.nextFloat();
@@ -4701,14 +4921,13 @@ public class SlamPairedViewsSparseReconstructorTest {
             angularY = angularOffsetY + angularNoiseY;
             angularZ = angularOffsetZ + angularNoiseZ;
 
-            calibrator.updateAccelerometerSample(timestamp, (float) accelerationX,
-                    (float) accelerationY, (float) accelerationZ);
-            calibrator.updateGyroscopeSample(timestamp, (float) angularX, (float) angularY,
-                    (float) angularZ);
+            calibrator.updateAccelerometerSample(timestamp, (float)accelerationX,
+                    (float)accelerationY, (float)accelerationZ);
+            calibrator.updateGyroscopeSample(timestamp, (float)angularX, (float)angularY,
+                    (float)angularZ);
+            calibrator.updateOrientationSample(timestamp, orientation);
 
-            if (calibrator.isFinished()) {
-                break;
-            }
+            if(calibrator.isFinished()) break;
 
             timestamp += DELTA_NANOS;
         }

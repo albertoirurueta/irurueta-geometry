@@ -37,7 +37,12 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
     /**
      * Position estimated by means of SLAM. It is reused each time it is notified.
      */
-    protected InhomogeneousPoint3D mSlamPosition = new InhomogeneousPoint3D();
+    private InhomogeneousPoint3D mSlamPosition = new InhomogeneousPoint3D();
+
+    /**
+     * Inverse euclidean camera rotation. This is reused for memory efficiency.
+     */
+    private Rotation3D mInvEuclideanCameraRotation;
 
     /**
      * Camera estimated by means of SLAM. It is reused each time it is notified.
@@ -181,6 +186,17 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
     }
 
     /**
+     * Indicates whether implementations of a reconstructor uses absolute orientation or
+     * not.
+     * @return true if absolute orientation is used, false, otherwise.
+     */
+    @Override
+    protected boolean hasAbsoluteOrientation() {
+        return false;
+    }
+
+
+    /**
      * Configures calibration data on SLAM estimator if available.
      */
     protected void setUpCalibrationData() {
@@ -222,10 +238,12 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
      * last kept location and rotation and upgrades cameras from metric stratum to
      * euclidean stratum.
      * @param isInitialPairOfViews true if initial pair of views is being processed, false otherwise.
+     * @param hasAbsoluteOrientation true if absolute orientation is required, false otherwise.
      * @return true if cameras were successfully transformed.
      */
     @Override
-    protected boolean transformPairOfCamerasAndPoints(boolean isInitialPairOfViews) {
+    protected boolean transformPairOfCamerasAndPoints(boolean isInitialPairOfViews,
+                                                      boolean hasAbsoluteOrientation) {
         PinholeCamera previousMetricCamera = mPreviousMetricEstimatedCamera.getCamera();
         PinholeCamera currentMetricCamera = mCurrentMetricEstimatedCamera.getCamera();
         if (previousMetricCamera == null || currentMetricCamera == null) {
@@ -235,19 +253,22 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
         mCurrentScale = estimateCurrentScale();
         double sqrScale = mCurrentScale * mCurrentScale;
 
-        if (isInitialPairOfViews) {
-            /// /first pair of views does not require setting translation and rotation
-            mReferenceEuclideanTransformation = new MetricTransformation3D(mCurrentScale);
-        } else {
+        mReferenceEuclideanTransformation = new MetricTransformation3D(mCurrentScale);
+        if (hasAbsoluteOrientation) {
+            mInvEuclideanCameraRotation = mLastEuclideanCameraRotation.inverseRotationAndReturnNew();
+            if (isInitialPairOfViews) {
+                mReferenceEuclideanTransformation.setRotation(mInvEuclideanCameraRotation);
+            }
+        }
+
+        if (!isInitialPairOfViews) {
             //additional pairs also need to translate and rotate
-            Rotation3D invRot = mLastEuclideanCameraRotation.inverseRotationAndReturnNew();
-            double[] translation = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
-            translation[0] = mLastEuclideanCameraCenter.getInhomX();
-            translation[1] = mLastEuclideanCameraCenter.getInhomY();
-            translation[2] = mLastEuclideanCameraCenter.getInhomZ();
-            mReferenceEuclideanTransformation = new MetricTransformation3D(invRot,
-                    translation, mCurrentScale);
-            mReferenceEuclideanTransformation.setRotation(invRot);
+            if (mInvEuclideanCameraRotation == null) {
+                mInvEuclideanCameraRotation = mLastEuclideanCameraRotation.inverseRotationAndReturnNew();
+            } else {
+                mLastEuclideanCameraRotation.inverseRotation(mInvEuclideanCameraRotation);
+            }
+            mReferenceEuclideanTransformation.setRotation(mInvEuclideanCameraRotation);
             mReferenceEuclideanTransformation.setTranslation(mLastEuclideanCameraCenter);
         }
 
@@ -310,7 +331,7 @@ public abstract class BaseSlamPairedViewsSparseReconstructor<
             return false;
         }
 
-        return super.transformPairOfCamerasAndPoints(isInitialPairOfViews);
+        return super.transformPairOfCamerasAndPoints(isInitialPairOfViews, hasAbsoluteOrientation);
     }
 
     /**

@@ -78,15 +78,4 @@ public class AbsoluteOrientationConstantVelocityModelSlamPairedViewsSparseRecons
 
         return super.processOneViewPair();
     }
-
-    /**
-     * Called when processing one frame is successfully finished. This can be done to estimate scale on those
-     * implementations where scale can be measured or is already known.
-     * @param isInitialPairOfViews true if initial pair of views is being processed, false otherwise.
-     * @return true if post processing succeeded, false otherwise.
-     */
-    @Override
-    protected boolean postProcessOne(boolean isInitialPairOfViews) {
-        return updateScaleAndOrientation(isInitialPairOfViews);
-    }
 }

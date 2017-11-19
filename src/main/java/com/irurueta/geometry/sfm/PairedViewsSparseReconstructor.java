@@ -54,13 +54,25 @@ public class PairedViewsSparseReconstructor extends BasePairedViewsSparseReconst
     }
 
     /**
+     * Indicates whether implementations of a reconstructor uses absolute orientation or
+     * not.
+     * @return true if absolute orientation is used, false, otherwise.
+     */
+    @Override
+    protected boolean hasAbsoluteOrientation() {
+        return false;
+    }
+
+    /**
      * Transforms metric cameras on current pair of views so that they are referred to
      * last kept location and rotation.
      * @param isInitialPairOfViews true if initial pair of views is being processed, false otherwise.
+     * @param hasAbsoluteOrientation true if absolute orientation is required, false otherwise.
      * @return true if cameras were successfully transformed.
      */
     @Override
-    protected boolean transformPairOfCamerasAndPoints(boolean isInitialPairOfViews) {
+    protected boolean transformPairOfCamerasAndPoints(boolean isInitialPairOfViews,
+                                                      boolean hasAbsoluteOrientation) {
         PinholeCamera previousMetricCamera = mPreviousMetricEstimatedCamera.getCamera();
         PinholeCamera currentMetricCamera = mCurrentMetricEstimatedCamera.getCamera();
         if (previousMetricCamera == null || currentMetricCamera == null) {
@@ -139,17 +151,6 @@ public class PairedViewsSparseReconstructor extends BasePairedViewsSparseReconst
             return false;
         }
 
-        return super.transformPairOfCamerasAndPoints(isInitialPairOfViews);
-    }
-
-    /**
-     * Called when processing one frame is successfully finished. This can be done to estimate scale on those
-     * implementations where scale can be measured or is already known.
-     * @param isInitialPairOfViews true if initial pair of views is being processed, false otherwise.
-     * @return true if post processing succeeded, false otherwise.
-     */
-    @Override
-    protected boolean postProcessOne(boolean isInitialPairOfViews) {
-        return true;
+        return super.transformPairOfCamerasAndPoints(isInitialPairOfViews, hasAbsoluteOrientation);
     }
 }

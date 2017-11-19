@@ -157,6 +157,11 @@ public abstract class BasePairedViewsSparseReconstructor<
     private Rotation3D mLastMetricCameraRotation;
 
     /**
+     * Inverse metric camera rotation. This is reused for memory efficiency.
+     */
+    private Rotation3D mInvMetricCameraRotation;
+
+    /**
      * Current estimated fundamental matrix.
      */
     private EstimatedFundamentalMatrix mCurrentEstimatedFundamentalMatrix;
@@ -497,9 +502,11 @@ public abstract class BasePairedViewsSparseReconstructor<
      * last kept location and rotation and upgrades cameras from metric stratum to
      * euclidean stratum.
      * @param isInitialPairOfViews true if initial pair of views is being processed, false otherwise.
+     * @param hasAbsoluteOrientation true if absolute orientation is required, false otherwise.
      * @return true if cameras were successfully transformed.
      */
-    protected boolean transformPairOfCamerasAndPoints(boolean isInitialPairOfViews) {
+    protected boolean transformPairOfCamerasAndPoints(boolean isInitialPairOfViews,
+                                                      boolean hasAbsoluteOrientation) {
         if (isInitialPairOfViews) {
             //initial pair does not need transformation
             return true;
@@ -515,15 +522,17 @@ public abstract class BasePairedViewsSparseReconstructor<
             return false;
         }
 
-        Rotation3D invRot = mLastMetricCameraRotation.inverseRotationAndReturnNew();
-        if (mReferenceMetricTransformation == null) {
-            double[] translation = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
-            translation[0] = mLastMetricCameraCenter.getInhomX();
-            translation[1] = mLastMetricCameraCenter.getInhomY();
-            translation[2] = mLastMetricCameraCenter.getInhomZ();
-            mReferenceMetricTransformation = new EuclideanTransformation3D(invRot, translation);
+        if (mInvMetricCameraRotation == null) {
+            mInvMetricCameraRotation = mLastMetricCameraRotation.inverseRotationAndReturnNew();
         } else {
-            mReferenceMetricTransformation.setRotation(invRot);
+            mLastMetricCameraRotation.inverseRotation(mInvMetricCameraRotation);
+        }
+
+        if (mReferenceMetricTransformation == null) {
+            mReferenceMetricTransformation = new EuclideanTransformation3D(mInvMetricCameraRotation);
+            mReferenceMetricTransformation.setTranslation(mLastMetricCameraCenter);
+        } else {
+            mReferenceMetricTransformation.setRotation(mInvMetricCameraRotation);
             mReferenceMetricTransformation.setTranslation(mLastMetricCameraCenter);
         }
 
@@ -596,25 +605,16 @@ public abstract class BasePairedViewsSparseReconstructor<
                             mCurrentEstimatedFundamentalMatrix);
 
                     if(estimatePairOfCamerasAndPoints(isInitialPairOfViews)) {
-                        /*if(!postProcessOne(isInitialPairOfViews)) {
-                            //something failed
-                            mFailed = true;
-                            //noinspection unchecked
-                            mListener.onFail((R)this);
-                            return false;
-                        } else {*/
-                            //post processing succeeded
-                            //noinspection unchecked
-                            mListener.onEuclideanCameraPairEstimated((R)this,
-                                    mPreviousViewId, mCurrentViewId, mCurrentScale,
-                                    mPreviousEuclideanEstimatedCamera,
-                                    mCurrentEuclideanEstimatedCamera);
-                            //noinspection unchecked
-                            mListener.onEuclideanReconstructedPointsEstimated((R)this,
-                                    mPreviousViewId, mCurrentViewId, mCurrentScale,
-                                    mEuclideanReconstructedPoints);
-                            return true;
-                        //}
+                        //noinspection unchecked
+                        mListener.onEuclideanCameraPairEstimated((R)this,
+                                mPreviousViewId, mCurrentViewId, mCurrentScale,
+                                mPreviousEuclideanEstimatedCamera,
+                                mCurrentEuclideanEstimatedCamera);
+                        //noinspection unchecked
+                        mListener.onEuclideanReconstructedPointsEstimated((R)this,
+                                mPreviousViewId, mCurrentViewId, mCurrentScale,
+                                mEuclideanReconstructedPoints);
+                        return true;
                     } else {
                         //pair of cameras estimation failed
                         mFailed = true;
@@ -641,14 +641,11 @@ public abstract class BasePairedViewsSparseReconstructor<
     }
 
     /**
-     * Called when processing one frame is successfully finished. This can be done to
-     * estimate scale on those implementations where scale can be measured or is
-     * already known.
-     * @param isInitialPairOfViews true if initial pair of views is being processed,
-     *                             false otherwise.
-     * @return true if post processing succeeded, false otherwise.
+     * Indicates whether implementations of a reconstructor uses absolute orientation or
+     * not.
+     * @return true if absolute orientation is used, false, otherwise.
      */
-    protected abstract boolean postProcessOne(boolean isInitialPairOfViews);
+    protected abstract boolean hasAbsoluteOrientation();
 
     /**
      * Indicates whether there are enough samples to estimate a fundamental
@@ -1125,7 +1122,8 @@ public abstract class BasePairedViewsSparseReconstructor<
                     intrinsic1, intrinsic2);
 
             return estimateInitialCamerasAndPointsEssential(intrinsic1, intrinsic2) &&
-                    transformPairOfCamerasAndPoints(isInitialPairOfViews);
+                    transformPairOfCamerasAndPoints(isInitialPairOfViews,
+                    hasAbsoluteOrientation());
         } catch (Exception e) {
             return false;
         }
@@ -1283,7 +1281,8 @@ public abstract class BasePairedViewsSparseReconstructor<
                 mMetricReconstructedPoints.add(reconstructedPoint);
             }
 
-            return transformPairOfCamerasAndPoints(isInitialPairOfViews);
+            return transformPairOfCamerasAndPoints(isInitialPairOfViews,
+                    hasAbsoluteOrientation());
         } catch (Exception e) {
             return false;
         }
@@ -1366,7 +1365,8 @@ public abstract class BasePairedViewsSparseReconstructor<
                 mMetricReconstructedPoints.add(reconstructedPoint);
             }
 
-            return transformPairOfCamerasAndPoints(isInitialPairOfViews);
+            return transformPairOfCamerasAndPoints(isInitialPairOfViews,
+                    hasAbsoluteOrientation());
         } catch (Exception e) {
             return false;
         }
@@ -1398,7 +1398,8 @@ public abstract class BasePairedViewsSparseReconstructor<
 
         if (intrinsic1 != null && intrinsic2 != null) {
             return estimateInitialCamerasAndPointsEssential(intrinsic1, intrinsic2) &&
-                    transformPairOfCamerasAndPoints(isInitialPairOfViews);
+                    transformPairOfCamerasAndPoints(isInitialPairOfViews,
+                    hasAbsoluteOrientation());
         } else {
             //missing intrinsic parameters
 
