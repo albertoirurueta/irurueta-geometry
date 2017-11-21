@@ -1337,7 +1337,7 @@ public class SlamPairedViewsSparseReconstructorTest {
                 continue;
             }
             assertEquals(estimatedBaseline, baseline, absoluteScaleError);
-            assertEquals(mScale, estimatedBaseline, LARGE_ABSOLUTE_ERROR);
+            assertEquals(mScale, estimatedBaseline, 5*LARGE_ABSOLUTE_ERROR);
 
             //check cameras
             assertTrue(center1.equals(euclideanCenter1, ABSOLUTE_ERROR));

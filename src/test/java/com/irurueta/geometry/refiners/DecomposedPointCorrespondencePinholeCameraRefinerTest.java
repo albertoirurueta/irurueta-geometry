@@ -1004,7 +1004,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
             throws LockedException, NotReadyException, RobustEstimatorException, 
             RefinerException {
         int numValid = 0;
-        for (int t = 0; t < 5*TIMES; t++) {
+        for (int t = 0; t < 10*TIMES; t++) {
             RANSACDLTPointCorrespondencePinholeCameraRobustEstimator estimator =
                     createRobustEstimator();
             

@@ -359,7 +359,8 @@ public class Polygon2DTest {
     @Test
     public void testIsLocusGetShortestDistanceAndClosestPoint() 
             throws NotEnoughVerticesException, TriangulatorException{
-        
+
+        int numValid = 0;
         for(int t = 0; t < TIMES; t++){
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
@@ -431,6 +432,9 @@ public class Polygon2DTest {
                 
         
             assertFalse(polygon.isLocus(notLocusPoint));
+            if(polygon.isLocus(notLocusPoint, ABSOLUTE_ERROR)) {
+                continue;
+            }
             assertFalse(polygon.isLocus(notLocusPoint, ABSOLUTE_ERROR));
         
             //not locus point is at distance dist from polygon
@@ -467,7 +471,11 @@ public class Polygon2DTest {
             try{
                 polygon.isLocus(locusPoint, -ABSOLUTE_ERROR);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}        
+            }catch(IllegalArgumentException e){}
+
+            numValid++;
         }
+
+        assertTrue(numValid > 0);
     }
 }

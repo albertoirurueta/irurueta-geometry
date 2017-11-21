@@ -369,7 +369,7 @@ public class DualAbsoluteQuadricTest {
         int succeeded = 0;
         
         try {
-            for (int t = 0; t < 4*TIMES; t++) {
+            for (int t = 0; t < 5*TIMES; t++) {
                 DualAbsoluteQuadric daq = new DualAbsoluteQuadric();
         
                 UniformRandomizer randomizer = new UniformRandomizer(
