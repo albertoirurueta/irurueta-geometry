@@ -7396,7 +7396,7 @@ public class SlamEstimatorTest implements BaseSlamEstimatorListener {
     @Test
     public void testPredictionVariableAngularSpeedWithNoiseAndCalibration() {
         int numSuccess = 0;
-        for(int t = 0; t < REPEAT_TIMES; t++) {
+        for(int t = 0; t < 2*REPEAT_TIMES; t++) {
             UniformRandomizer offsetRandomizer = new UniformRandomizer(
                     new Random());
             GaussianRandomizer noiseRandomizer = new GaussianRandomizer(

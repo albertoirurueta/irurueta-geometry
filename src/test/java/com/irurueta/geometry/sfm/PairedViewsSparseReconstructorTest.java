@@ -4788,6 +4788,9 @@ public class PairedViewsSparseReconstructorTest {
             }
             assertTrue(center2.equals(estimatedCenter2, LARGE_ABSOLUTE_ERROR));
 
+            if (!estimatedCenter2.equals(estimatedCenter2b, ABSOLUTE_ERROR)) {
+                continue;
+            }
             assertTrue(estimatedCenter2.equals(estimatedCenter2b, ABSOLUTE_ERROR));
 
             if (!center3.equals(estimatedCenter3, LARGE_ABSOLUTE_ERROR)) {

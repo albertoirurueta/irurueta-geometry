@@ -2797,7 +2797,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+        for (int t = 0; t < 5*TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             
             //intrinsic parameters

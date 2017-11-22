@@ -6103,6 +6103,9 @@ public class SparseReconstructorTest {
             assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
             assertNotSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
             assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
+            if(mEstimatedEuclideanCamera3 == null) {
+                continue;
+            }
             assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera3);
             assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
             assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera2);
