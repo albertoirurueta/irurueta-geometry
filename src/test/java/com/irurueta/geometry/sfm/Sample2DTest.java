@@ -42,6 +42,7 @@ public class Sample2DTest {
         assertNull(s.getId());
         assertEquals(s.getViewId(), 0);
         assertNull(s.getPoint());
+        assertNull(s.getReconstructedPoint());
         assertEquals(s.getQualityScore(), Sample2D.DEFAULT_QUALITY_SCORE, 0.0);
         assertNull(s.getCovariance());
         assertNull(s.getColorData());
@@ -88,6 +89,21 @@ public class Sample2DTest {
         
         //check correctness
         assertSame(s.getPoint(), p);
+    }
+
+    @Test
+    public void testGetSetReconstructedPoint() {
+        Sample2D s = new Sample2D();
+
+        //check default value
+        assertNull(s.getReconstructedPoint());
+
+        //set new value
+        ReconstructedPoint3D reconstructedPoint3D = new ReconstructedPoint3D();
+        s.setReconstructedPoint(reconstructedPoint3D);
+
+        //check correctness
+        assertSame(s.getReconstructedPoint(), reconstructedPoint3D);
     }
     
     @Test

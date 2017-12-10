@@ -37,6 +37,11 @@ public class Sample2D implements Serializable {
      * 2D sampled point coordinates.
      */
     private Point2D mPoint;
+
+    /**
+     * 3D reconstructed point.
+     */
+    private ReconstructedPoint3D mReconstructedPoint;
     
     /**
      * Quality score of sampled point. The larger the value, the
@@ -114,6 +119,22 @@ public class Sample2D implements Serializable {
      */
     public void setPoint(Point2D point) {
         mPoint = point;
+    }
+
+    /**
+     * Gets 3D reconstructed point.
+     * @return 3D reconstructed point.
+     */
+    public ReconstructedPoint3D getReconstructedPoint() {
+        return mReconstructedPoint;
+    }
+
+    /**
+     * Sets 3D reconstructed point.
+     * @param reconstructedPoint 3D reconstructed point.
+     */
+    public void setReconstructedPoint(ReconstructedPoint3D reconstructedPoint) {
+        mReconstructedPoint = reconstructedPoint;
     }
 
     /**

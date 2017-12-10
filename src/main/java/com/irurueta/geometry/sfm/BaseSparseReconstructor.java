@@ -135,14 +135,24 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
     private boolean mFinished = false;
 
     /**
-     * Samples on previous view.
+     * All samples (tracked and non tracked) on previous view.
      */
-    private List<Sample2D> mPreviousViewSamples = null;
+    private List<Sample2D> mAllPreviousViewSamples;
 
     /**
-     * Samples on last processed view (i.e. current view).
+     * Tracked samples on previous view.
      */
-    private List<Sample2D> mCurrentViewSamples;
+    private List<Sample2D> mPreviousViewTrackedSamples;
+
+    /**
+     * Tracked samples on last processed view (i.e. current view).
+     */
+    private List<Sample2D> mCurrentViewTrackedSamples;
+
+    /**
+     * New samples on las processed view (i.e. current view).
+     */
+    private List<Sample2D> mCurrentViewNewlySpawnedSamples;
 
     /**
      * Active matches between current and previous views.
@@ -152,7 +162,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
     /**
      * Id of previous view.
      */
-    private int mPreviousViewId = 0;
+    private int mPreviousViewId;
 
     /**
      * Id of current view.
@@ -300,19 +310,27 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
     }
 
     /**
-     * Gets samples on previous view.
-     * @return samples on previous view.
+     * Gets tracked samples on previous view.
+     * @return tracked samples on previous view.
      */
-    public List<Sample2D> getPreviousViewSamples() {
-        return mPreviousViewSamples;
+    public List<Sample2D> getPreviousViewTrackedSamples() {
+        return mPreviousViewTrackedSamples;
     }
 
     /**
-     * Gets samples on current view.
-     * @return samples on current view.
+     * Gets tracked samples (from previous view) on current view.
+     * @return tracked samples on current view
      */
-    public List<Sample2D> getCurrentViewSamples() {
-        return mCurrentViewSamples;
+    public List<Sample2D> getCurrentViewTrackedSamples() {
+        return mCurrentViewTrackedSamples;
+    }
+
+    /**
+     * Gets new samples (not tracked) on current view.
+     * @return new samples on current view.
+     */
+    public List<Sample2D> getCurrentViewNewlySpawnedSamples() {
+        return mCurrentViewNewlySpawnedSamples;
     }
 
     /**
@@ -346,10 +364,13 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
             return false;
         }
 
-        mCurrentViewSamples = new ArrayList<>();
+        mPreviousViewTrackedSamples = new ArrayList<>();
+        mCurrentViewTrackedSamples = new ArrayList<>();
+        mCurrentViewNewlySpawnedSamples = new ArrayList<>();
         //noinspection unchecked
-        mListener.onRequestSamplesForCurrentView((R)this, mViewCount,
-                mCurrentViewSamples);
+        mListener.onRequestSamples((R)this, mPreviousViewId, mViewCount,
+                mPreviousViewTrackedSamples, mCurrentViewTrackedSamples,
+                mCurrentViewNewlySpawnedSamples);
 
         boolean processed;
         if (isFirstView()) {
@@ -383,7 +404,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      * @return true if current view is the first view, false otherwise.
      */
     public boolean isFirstView() {
-        return mPreviousViewSamples == null;
+        return mViewCount == 0 || mPreviousViewTrackedSamples == null || mPreviousViewTrackedSamples.size() == 0;
     }
 
     /**
@@ -433,11 +454,14 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      * Resets this instance so that a reconstruction can be started from the beginning without cancelling current one.
      */
     public void reset() {
-        if (mPreviousViewSamples != null) {
-            mPreviousViewSamples.clear();
+        if (mPreviousViewTrackedSamples != null) {
+            mPreviousViewTrackedSamples.clear();
         }
-        if (mCurrentViewSamples != null) {
-            mCurrentViewSamples.clear();
+        if (mCurrentViewTrackedSamples != null) {
+            mCurrentViewTrackedSamples.clear();
+        }
+        if (mCurrentViewNewlySpawnedSamples != null) {
+            mCurrentViewNewlySpawnedSamples.clear();
         }
         if (mMatches != null) {
             mMatches.clear();
@@ -473,16 +497,27 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      * @return true if view was successfully processed, false otherwise.
      */
     private boolean processFirstView() {
-        if(hasEnoughSamplesForFundamentalMatrixEstimation(mCurrentViewSamples)) {
+        if(hasEnoughSamplesForFundamentalMatrixEstimation(
+                mCurrentViewTrackedSamples)) {
             //noinspection unchecked
             mListener.onSamplesAccepted((R)this, mViewCount,
-                    mCurrentViewSamples);
-            mPreviousViewSamples = mCurrentViewSamples;
+                    mPreviousViewTrackedSamples, mCurrentViewTrackedSamples);
+            if (mAllPreviousViewSamples == null) {
+                mAllPreviousViewSamples = new ArrayList<>();
+            } else {
+                mAllPreviousViewSamples.clear();
+            }
+
+            mAllPreviousViewSamples.addAll(mCurrentViewTrackedSamples);
+            mAllPreviousViewSamples.addAll(mCurrentViewNewlySpawnedSamples);
+
+            mPreviousViewTrackedSamples = mCurrentViewTrackedSamples;
             mPreviousViewId = mViewCount;
             return true;
         } else {
             //noinspection unchecked
-            mListener.onSamplesRejected((R) this, mViewCount, mCurrentViewSamples);
+            mListener.onSamplesRejected((R) this, mViewCount,
+                    mPreviousViewTrackedSamples, mCurrentViewTrackedSamples);
             return false;
         }
     }
@@ -492,14 +527,16 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      * @return true if view was successfully processed, false otherwise.
      */
     private boolean processSecondView() {
-        if (hasEnoughSamplesForFundamentalMatrixEstimation(mCurrentViewSamples)) {
+        if (hasEnoughSamplesForFundamentalMatrixEstimation(
+                mCurrentViewTrackedSamples)) {
 
             //find matches
             mMatches.clear();
+
+            //matching is up to listener implementation
             //noinspection unchecked
-            mListener.onRequestMatches((R) this, mPreviousViewSamples,
-                    mCurrentViewSamples, mPreviousViewId, mViewCount,
-                    mMatches);
+            mListener.onRequestMatches((R) this, mAllPreviousViewSamples, mPreviousViewTrackedSamples,
+                    mCurrentViewTrackedSamples, mPreviousViewId, mViewCount, mMatches);
 
             if (hasEnoughMatchesForFundamentalMatrixEstimation(mMatches)) {
                 //if enough matches are retrieved, attempt to compute
@@ -513,9 +550,17 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     //fundamental matrix could be estimated
                     //noinspection unchecked
                     mListener.onSamplesAccepted((R) this, mViewCount,
-                            mCurrentViewSamples);
+                            mPreviousViewTrackedSamples,
+                            mCurrentViewTrackedSamples);
+
+                    mAllPreviousViewSamples.clear();
+                    mAllPreviousViewSamples.addAll(mCurrentViewTrackedSamples);
+                    mAllPreviousViewSamples.addAll(mCurrentViewNewlySpawnedSamples);
+
+                    mPreviousViewTrackedSamples = mCurrentViewTrackedSamples;
+                    mPreviousViewId = mCurrentViewId;
                     mCurrentViewId = mViewCount;
-                    mPreviousViewSamples = mCurrentViewSamples;
+
 
                     //noinspection unchecked
                     mListener.onFundamentalMatrixEstimated((R) this,
@@ -558,14 +603,15 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     //estimation of fundamental matrix failed
                     //noinspection unchecked
                     mListener.onSamplesRejected((R) this, mViewCount,
-                            mCurrentViewSamples);
+                            mPreviousViewTrackedSamples, mCurrentViewTrackedSamples);
                     return false;
                 }
             }
         }
 
         //noinspection unchecked
-        mListener.onSamplesRejected((R) this, mViewCount, mCurrentViewSamples);
+        mListener.onSamplesRejected((R) this, mViewCount,
+                mPreviousViewTrackedSamples, mCurrentViewTrackedSamples);
         return false;
     }
 
@@ -576,9 +622,10 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
     private boolean processAdditionalView() {
         //find matches
         mMatches.clear();
+
         //noinspection unchecked
-        mListener.onRequestMatches((R) this, mPreviousViewSamples,
-                mCurrentViewSamples, mCurrentViewId, mViewCount,
+        mListener.onRequestMatches((R) this, mAllPreviousViewSamples, mPreviousViewTrackedSamples,
+                mCurrentViewTrackedSamples, mCurrentViewId, mViewCount,
                 mMatches);
 
         List<Point3D> points3D = new ArrayList<>();
@@ -620,7 +667,8 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                         //fundamental matrix estimation failed
 
                         //noinspection unchecked
-                        mListener.onSamplesRejected((R) this, mViewCount, mCurrentViewSamples);
+                        mListener.onSamplesRejected((R) this, mViewCount, mPreviousViewTrackedSamples,
+                                mCurrentViewTrackedSamples);
                         return false;
                     }
 
@@ -719,10 +767,16 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                         currentCameraCovariance = cameraEstimator.getCovariance();
 
                         //noinspection unchecked
-                        mListener.onSamplesAccepted((R) this, mViewCount, mCurrentViewSamples);
+                        mListener.onSamplesAccepted((R) this, mViewCount, mPreviousViewTrackedSamples,
+                                mCurrentViewTrackedSamples);
+
+                        mAllPreviousViewSamples.clear();
+                        mAllPreviousViewSamples.addAll(mCurrentViewTrackedSamples);
+                        mAllPreviousViewSamples.addAll(mCurrentViewNewlySpawnedSamples);
+
+                        mPreviousViewTrackedSamples = mCurrentViewTrackedSamples;
                         mPreviousViewId = mCurrentViewId;
                         mCurrentViewId = mViewCount;
-                        mPreviousViewSamples = mCurrentViewSamples;
                     }
 
                 } catch (Exception e) {
@@ -816,10 +870,16 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     currentCameraCovariance = cameraEstimator.getCovariance();
 
                     //noinspection unchecked
-                    mListener.onSamplesAccepted((R)this, mViewCount, mCurrentViewSamples);
+                    mListener.onSamplesAccepted((R) this, mViewCount, mPreviousViewTrackedSamples,
+                            mCurrentViewTrackedSamples);
+
+                    mAllPreviousViewSamples.clear();
+                    mAllPreviousViewSamples.addAll(mCurrentViewTrackedSamples);
+                    mAllPreviousViewSamples.addAll(mCurrentViewNewlySpawnedSamples);
+
+                    mPreviousViewTrackedSamples = mCurrentViewTrackedSamples;
                     mPreviousViewId = mCurrentViewId;
                     mCurrentViewId = mViewCount;
-                    mPreviousViewSamples = mCurrentViewSamples;
 
                 } catch (Exception e) {
                     //camera estimation failed
@@ -901,10 +961,16 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     currentCameraCovariance = cameraEstimator.getCovariance();
 
                     //noinspection unchecked
-                    mListener.onSamplesAccepted((R)this, mViewCount, mCurrentViewSamples);
+                    mListener.onSamplesAccepted((R) this, mViewCount, mPreviousViewTrackedSamples,
+                            mCurrentViewTrackedSamples);
+
+                    mAllPreviousViewSamples.clear();
+                    mAllPreviousViewSamples.addAll(mCurrentViewTrackedSamples);
+                    mAllPreviousViewSamples.addAll(mCurrentViewNewlySpawnedSamples);
+
+                    mPreviousViewTrackedSamples = mCurrentViewTrackedSamples;
                     mPreviousViewId = mCurrentViewId;
                     mCurrentViewId = mViewCount;
-                    mPreviousViewSamples = mCurrentViewSamples;
 
                 } catch (Exception e) {
                     //camera estimation failed
@@ -955,13 +1021,14 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
         }
 
         //noinspection unchecked
-        mListener.onSamplesRejected((R) this, mViewCount, mCurrentViewSamples);
+        mListener.onSamplesRejected((R) this, mViewCount, mPreviousViewTrackedSamples, mCurrentViewTrackedSamples);
         return false;
     }
 
     /**
      * Reconstructs new 3D points or refines existing ones taking into account existing matches and estimated cameras
      */
+    @SuppressWarnings("ConstantConditions")
     private void reconstructAndRefineMatches() {
         if (mMatches == null || mMatches.isEmpty()) {
             return;
@@ -1091,6 +1158,8 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                 reconstructedPoint.setPoint(point3D);
                 reconstructedPoint.setInlier(true);
                 reconstructedPoint.setId(String.valueOf(matchPos));
+                match.setReconstructedPoint(reconstructedPoint);
+
                 mActiveMetricReconstructedPoints.add(reconstructedPoint);
 
                 matchPos++;
@@ -1910,6 +1979,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
             mActiveMetricReconstructedPoints = new ArrayList<>();
             List<Point2D> points = new ArrayList<>();
             int numPoints = correctedPoints1.size();
+
             Point3D triangulatedPoint;
             ReconstructedPoint3D reconstructedPoint;
             for (int i = 0; i < numPoints; i++) {
@@ -1929,9 +1999,14 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                         triangulatedPoint);
                 boolean front2 = camera2.isPointInFrontOfCamera(
                         triangulatedPoint);
-                reconstructedPoint.setInlier(front1 && front2);
+                boolean inlier = front1 && front2;
+                reconstructedPoint.setInlier(inlier);
 
                 mActiveMetricReconstructedPoints.add(reconstructedPoint);
+
+                if (inlier) {
+                    mMatches.get(i).setReconstructedPoint(reconstructedPoint);
+                }
             }
 
             return true;
@@ -2001,13 +2076,16 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     estimator.getValidTriangulatedPoints();
 
             mActiveMetricReconstructedPoints = new ArrayList<>();
-            int size = triangulatedPoints.size();
-            for (int i = 0; i < size; i++) {
-                ReconstructedPoint3D reconstructedPoint =
-                        new ReconstructedPoint3D();
+            int triangulatedPointsSize = triangulatedPoints.size();
+            for (int i = 0; i < triangulatedPointsSize; i++) {
+                ReconstructedPoint3D reconstructedPoint = new ReconstructedPoint3D();
                 reconstructedPoint.setPoint(triangulatedPoints.get(i));
                 reconstructedPoint.setInlier(validTriangulatedPoints.get(i));
                 mActiveMetricReconstructedPoints.add(reconstructedPoint);
+
+                if(validTriangulatedPoints.get(i)) {
+                    mMatches.get(i).setReconstructedPoint(reconstructedPoint);
+                }
             }
 
             return true;
@@ -2098,13 +2176,20 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
                     estimator.getValidTriangulatedPoints();
 
             mActiveMetricReconstructedPoints = new ArrayList<>();
-            int size = triangulatedPoints.size();
-            for (int i = 0; i < size; i++) {
-                ReconstructedPoint3D reconstructedPoint =
-                        new ReconstructedPoint3D();
+            int triangulatedPointsSize = triangulatedPoints.size();
+            int matchesSize = mMatches.size();
+            for (int i = 0, j = 0; i < triangulatedPointsSize && j < matchesSize; i++) {
+                if(!validTriangulatedPoints.get(i)) {
+                    continue;
+                }
+
+                ReconstructedPoint3D reconstructedPoint = new ReconstructedPoint3D();
                 reconstructedPoint.setPoint(triangulatedPoints.get(i));
                 reconstructedPoint.setInlier(validTriangulatedPoints.get(i));
                 mActiveMetricReconstructedPoints.add(reconstructedPoint);
+
+                mMatches.get(j).setReconstructedPoint(reconstructedPoint);
+                j++;
             }
 
             return true;

@@ -36,10 +36,17 @@ public interface BaseSparseReconstructorListener<R extends BaseSparseReconstruct
     /**
      * Called when samples containing points of interest for current view must be retrieved.
      * @param reconstructor reconstructor raising this event.
-     * @param viewId id of view where points will be used.
-     * @param samples samples containing points of interest for current view to test.
+     * @param previousViewId id of previous view.
+     * @param currentViewId id of current view.
+     * @param previousViewTrackedSamples tracked samples from previous view.
+     * @param currentViewTrackedSamples tracked samples from previous view containing points of interest on
+     *                                  current view.
+     * @param currentViewNewlySpawnedSamples new created samples containing points of interest on current view.
      */
-    void onRequestSamplesForCurrentView(R reconstructor, int viewId, List<Sample2D> samples);
+    void onRequestSamples(R reconstructor, int previousViewId, int currentViewId,
+                          List<Sample2D> previousViewTrackedSamples,
+                          List<Sample2D> currentViewTrackedSamples,
+                          List<Sample2D> currentViewNewlySpawnedSamples);
 
     /**
      * Called when requested samples have been accepted.
@@ -47,30 +54,47 @@ public interface BaseSparseReconstructorListener<R extends BaseSparseReconstruct
      * not.
      * @param reconstructor reconstructor raising this event.
      * @param viewId id of view whose samples have been accepted.
-     * @param samples accepted samples.
+     * @param previousViewTrackedSamples accepted tracked samples on previous view.
+     *                                   Might be null on first view.
+     * @param currentViewTrackedSamples accepted tracked samples on current view.
      */
-    void onSamplesAccepted(R reconstructor, int viewId, List<Sample2D> samples);
+    void onSamplesAccepted(R reconstructor, int viewId,
+                           List<Sample2D> previousViewTrackedSamples,
+                           List<Sample2D> currentViewTrackedSamples);
 
     /**
      * Called when requested samples have been rejected.
      * This method can be used to remove provided samples.
      * @param reconstructor reconstructor raising this event.
      * @param viewId id of view whose samples have been rejected.
-     * @param samples rejected samples.
+     * @param previousViewTrackedSamples rejected samples on previous view.
+     *                                   Might be null on first view.
+     * @param currentViewTrackedSamples rejected samples on current view.
      */
-    void onSamplesRejected(R reconstructor, int viewId, List<Sample2D> samples);
+    void onSamplesRejected(R reconstructor, int viewId,
+                           List<Sample2D> previousViewTrackedSamples,
+                           List<Sample2D> currentViewTrackedSamples);
 
     /**
      * Finds matches for provided samples.
+     * Typically implementations will need to search for closest points of tracked
+     * points in previous view within the whole list of samples in previous view.
+     * The implementation might choose to search for other matches or even include
+     * samples from previous views to increase the accuracy of reconstructed
+     * points.
      * @param reconstructor reconstructor raising this event.
-     * @param samples1 samples on first view.
-     * @param samples2 samples on second view.
-     * @param viewId1 id of first view.
-     * @param viewId2 id of second view.
+     * @param allPreviousViewSamples all samples on previous views.
+     * @param previousViewTrackedSamples tracked samples on previous view.
+     * @param currentViewTrackedSamples tracked samples on current view.
+     * @param previousViewId id of previous view.
+     * @param currentViewId id of current view.
      * @param matches instance where matches must be stored.
      */
-    void onRequestMatches(R reconstructor, List<Sample2D> samples1,
-                          List<Sample2D> samples2, int viewId1, int viewId2,
+    void onRequestMatches(R reconstructor,
+                          List<Sample2D> allPreviousViewSamples,
+                          List<Sample2D> previousViewTrackedSamples,
+                          List<Sample2D> currentViewTrackedSamples,
+                          int previousViewId, int currentViewId,
                           List<MatchedSamples> matches);
 
     /**

@@ -58,6 +58,9 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
     private static final double ABSOLUTE_ERROR = 1e-6;
     private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
 
+    private static final int MIN_TRACKED_POINTS = 10;
+    private static final double NEAREST_THRESHOLD = 1e-6;
+
     //5% of relative error in scale estimation
     private static final double RELATIVE_ERROR = 0.1;
 
@@ -166,25 +169,27 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                     }
 
                     @Override
-                    public void onRequestSamplesForCurrentView(
+                    public void onRequestSamples(
                             ConstantVelocityModelSlamSparseReconstructor reconstructor,
-                            int viewId, List<Sample2D> samples) { }
+                            int previousViewId, int currentViewId,
+                            List<Sample2D> previousViewTrackedSamples, List<Sample2D> currentViewTrackedSamples,
+                            List<Sample2D> currentViewNewlySpawnedSamples) { }
 
                     @Override
                     public void onSamplesAccepted(
                             ConstantVelocityModelSlamSparseReconstructor reconstructor, int viewId,
-                            List<Sample2D> samples) { }
+                            List<Sample2D> previousViewTrackedSamples, List<Sample2D> currentViewTrackedSamples) { }
 
                     @Override
                     public void onSamplesRejected(
                             ConstantVelocityModelSlamSparseReconstructor reconstructor, int viewId,
-                            List<Sample2D> samples) { }
+                            List<Sample2D> previousViewTrackedSamples, List<Sample2D> currentViewTrackedSamples) { }
 
                     @Override
                     public void onRequestMatches(
                             ConstantVelocityModelSlamSparseReconstructor reconstructor,
-                            List<Sample2D> samples1, List<Sample2D> samples2,
-                            int viewId1, int viewId2,
+                            List<Sample2D> allPreviousViewSamples, List<Sample2D> previousViewTrackedSamples,
+                            List<Sample2D> currentViewTrackedSamples, int previousViewId, int currentViewId,
                             List<MatchedSamples> matches) { }
 
                     @Override
@@ -254,8 +259,9 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
         assertNull(reconstructor.getActiveMetricReconstructedPoints());
         assertNull(reconstructor.getActiveEuclideanReconstructedPoints());
         assertEquals(reconstructor.getCurrentScale(), BaseSparseReconstructor.DEFAULT_SCALE, 0.0);
-        assertNull(reconstructor.getPreviousViewSamples());
-        assertNull(reconstructor.getCurrentViewSamples());
+        assertNull(reconstructor.getPreviousViewTrackedSamples());
+        assertNull(reconstructor.getCurrentViewTrackedSamples());
+        assertNull(reconstructor.getCurrentViewNewlySpawnedSamples());
         assertTrue(reconstructor.isFirstView());
         assertFalse(reconstructor.isSecondView());
         assertFalse(reconstructor.isAdditionalView());
@@ -279,8 +285,9 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
         assertNull(reconstructor.getActiveMetricReconstructedPoints());
         assertNull(reconstructor.getActiveEuclideanReconstructedPoints());
         assertEquals(reconstructor.getCurrentScale(), BaseSparseReconstructor.DEFAULT_SCALE, 0.0);
-        assertNull(reconstructor.getPreviousViewSamples());
-        assertNull(reconstructor.getCurrentViewSamples());
+        assertNull(reconstructor.getPreviousViewTrackedSamples());
+        assertNull(reconstructor.getCurrentViewTrackedSamples());
+        assertNull(reconstructor.getCurrentViewNewlySpawnedSamples());
         assertTrue(reconstructor.isFirstView());
         assertFalse(reconstructor.isSecondView());
         assertFalse(reconstructor.isAdditionalView());
@@ -457,17 +464,18 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
             double lambdaX, lambdaY, lambdaZ;
 
-            final int numPoints = randomizer.nextInt(MIN_NUM_POINTS,
+            final int numPoints1 = randomizer.nextInt(MIN_NUM_POINTS,
+                    MAX_NUM_POINTS);
+            final int numPoints2 = randomizer.nextInt(MIN_NUM_POINTS,
                     MAX_NUM_POINTS);
 
             InhomogeneousPoint3D point3D;
-            List<InhomogeneousPoint3D> points3D =
-                    new ArrayList<>();
+            List<InhomogeneousPoint3D> points3D1 = new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
             final List<Point2D> projectedPoints1 = new ArrayList<>();
             final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean front1, front2;
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
                 do {
@@ -490,7 +498,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                     }
                     numTry++;
                 } while(!front1 || !front2);
-                points3D.add(point3D);
+                points3D1.add(point3D);
 
                 //check that 3D point is in front of both cameras
                 //noinspection all
@@ -506,6 +514,41 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                 projectedPoint2 = new InhomogeneousPoint2D();
                 camera2.project(point3D, projectedPoint2);
                 projectedPoints2.add(projectedPoint2);
+            }
+
+            Point2D projectedPoint2b;
+            final List<Point2D> projectedPoints2b = new ArrayList<>();
+            for (int i = 0; i < numPoints2; i++) {
+                //generate points and ensure they lie in front of both cameras
+                int numTry = 0;
+                do {
+                    lambdaX = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaY = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaZ = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+
+                    point3D = new InhomogeneousPoint3D(
+                            centralCommonPoint.getInhomX() + lambdaX,
+                            centralCommonPoint.getInhomY() + lambdaY,
+                            centralCommonPoint.getInhomZ() + lambdaZ);
+
+                    front2 = camera2.isPointInFrontOfCamera(point3D);
+                    if (numTry > MAX_TRIES) {
+                        fail("max tries reached");
+                    }
+                    numTry++;
+                } while(!front2);
+                points3D1.add(point3D);
+
+                //check that 3D point is in front of both cameras
+                //noinspection all
+                assertTrue(front2);
+
+                projectedPoint2b = new InhomogeneousPoint2D();
+                camera2.project(point3D, projectedPoint2b);
+                projectedPoints2b.add(projectedPoint2b);
             }
 
             ConstantVelocityModelSlamSparseReconstructorListener listener =
@@ -536,29 +579,47 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(
-                                ConstantVelocityModelSlamSparseReconstructor reconstructor,
-                                int viewId, List<Sample2D> samples) {
+                        public void onRequestSamples(ConstantVelocityModelSlamSparseReconstructor reconstructor,
+                                                     int previousViewId, int currentViewId,
+                                                     List<Sample2D> previousViewTrackedSamples,
+                                                     List<Sample2D> currentViewTrackedSamples,
+                                                     List<Sample2D> currentViewNewlySpawnedSamples) {
 
-                            samples.clear();
+                            previousViewTrackedSamples.clear();
+                            currentViewTrackedSamples.clear();
+                            currentViewNewlySpawnedSamples.clear();
 
                             Sample2D sample;
                             if (mViewCount == 0) {
                                 //first view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints1.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
                                 }
-
                             } else {
                                 //second view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints1.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints2.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                //spawned samples
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewNewlySpawnedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -580,30 +641,37 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                         @Override
                         public void onSamplesAccepted(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) {
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
                             mViewCount++;
                         }
 
                         @Override
                         public void onSamplesRejected(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) { }
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
+                            mViewCount++;
+                        }
 
                         @Override
                         public void onRequestMatches(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor,
-                                List<Sample2D> samples1,
-                                List<Sample2D> samples2, int viewId1, int viewId2,
+                                List<Sample2D> allPreviousViewSamples,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                int previousViewId, int currentViewId,
                                 List<MatchedSamples> matches) {
+
                             matches.clear();
 
                             MatchedSamples match;
-                            for (int i = 0; i < numPoints; i++) {
+                            for (int i = 0; i < numPoints1; i++) {
                                 match = new MatchedSamples();
                                 match.setSamples(new Sample2D[]{
-                                        samples1.get(i), samples2.get(i)
+                                        previousViewTrackedSamples.get(i), currentViewTrackedSamples.get(i)
                                 });
-                                match.setViewIds(new int[]{viewId1, viewId2});
+                                match.setViewIds(new int[]{previousViewId, currentViewId});
                                 matches.add(match);
                             }
                         }
@@ -719,8 +787,9 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
             assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
-            assertNotNull(reconstructor.getPreviousViewSamples());
-            assertNotNull(reconstructor.getCurrentViewSamples());
+            assertNotNull(reconstructor.getPreviousViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewNewlySpawnedSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -764,7 +833,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
             List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
                 euclideanReconstructedPoints3D.add(
@@ -772,7 +841,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             }
 
             //check that all points are in front of both cameras
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
                 Point3D pe = euclideanReconstructedPoints3D.get(i);
 
@@ -847,8 +916,8 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
             int numValidPoints = 0;
             double scaleX, scaleY, scaleZ;
-            for (int i = 0; i < numPoints; i++) {
-                Point3D point = points3D.get(i);
+            for (int i = 0; i < numPoints1; i++) {
+                Point3D point = points3D1.get(i);
                 Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i);
 
                 //check metric points
@@ -1092,17 +1161,18 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
             double lambdaX, lambdaY, lambdaZ;
 
-            final int numPoints = randomizer.nextInt(MIN_NUM_POINTS,
+            final int numPoints1 = randomizer.nextInt(MIN_NUM_POINTS,
+                    MAX_NUM_POINTS);
+            final int numPoints2 = randomizer.nextInt(MIN_NUM_POINTS,
                     MAX_NUM_POINTS);
 
             InhomogeneousPoint3D point3D;
-            List<InhomogeneousPoint3D> points3D =
-                    new ArrayList<>();
+            List<InhomogeneousPoint3D> points3D1 = new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
             final List<Point2D> projectedPoints1 = new ArrayList<>();
             final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean front1, front2;
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
                 do {
@@ -1125,7 +1195,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                     }
                     numTry++;
                 } while(!front1 || !front2);
-                points3D.add(point3D);
+                points3D1.add(point3D);
 
                 //check that 3D point is in front of both cameras
                 //noinspection all
@@ -1141,6 +1211,40 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                 projectedPoint2 = new InhomogeneousPoint2D();
                 camera2.project(point3D, projectedPoint2);
                 projectedPoints2.add(projectedPoint2);
+            }
+
+            Point2D projectedPoint2b;
+            final List<Point2D> projectedPoints2b = new ArrayList<>();
+            for (int i = 0; i < numPoints2; i++) {
+                //generate points and ensure they lie in front of both cameras
+                int numTry = 0;
+                do {
+                    lambdaX = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaY = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaZ = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+
+                    point3D = new InhomogeneousPoint3D(
+                            centralCommonPoint.getInhomX() + lambdaX,
+                            centralCommonPoint.getInhomY() + lambdaY,
+                            centralCommonPoint.getInhomZ() + lambdaZ);
+
+                    front2 = camera2.isPointInFrontOfCamera(point3D);
+                    if (numTry > MAX_TRIES) {
+                        fail("max tries reached");
+                    }
+                    numTry++;
+                } while(!front2);
+
+                //check that 3D point is in front of both cameras
+                //noinspection all
+                assertTrue(front2);
+
+                projectedPoint2b = new InhomogeneousPoint2D();
+                camera2.project(point3D, projectedPoint2b);
+                projectedPoints2b.add(projectedPoint2b);
             }
 
             final GaussianRandomizer accelerationRandomizer =
@@ -1178,29 +1282,48 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(
+                        public void onRequestSamples(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor,
-                                int viewId, List<Sample2D> samples) {
+                                int previousViewId, int currentViewId,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                List<Sample2D> currentViewNewlySpawnedSamples) {
 
-                            samples.clear();
+                            previousViewTrackedSamples.clear();
+                            currentViewTrackedSamples.clear();
+                            currentViewNewlySpawnedSamples.clear();
 
                             Sample2D sample;
                             if (mViewCount == 0) {
                                 //first view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints1.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
                                 }
-
                             } else {
                                 //second view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints1.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints2.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                //spawned samples
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewNewlySpawnedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -1266,30 +1389,36 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                         @Override
                         public void onSamplesAccepted(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) {
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
                             mViewCount++;
                         }
 
                         @Override
                         public void onSamplesRejected(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) { }
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
+                            mViewCount++;
+                        }
 
                         @Override
                         public void onRequestMatches(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor,
-                                List<Sample2D> samples1,
-                                List<Sample2D> samples2, int viewId1, int viewId2,
+                                List<Sample2D> allPreviousViewSamples,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                int previousViewId, int currentViewId,
                                 List<MatchedSamples> matches) {
                             matches.clear();
 
                             MatchedSamples match;
-                            for (int i = 0; i < numPoints; i++) {
+                            for (int i = 0; i < numPoints1; i++) {
                                 match = new MatchedSamples();
                                 match.setSamples(new Sample2D[]{
-                                        samples1.get(i), samples2.get(i)
+                                        previousViewTrackedSamples.get(i), currentViewTrackedSamples.get(i)
                                 });
-                                match.setViewIds(new int[]{viewId1, viewId2});
+                                match.setViewIds(new int[]{previousViewId, currentViewId});
                                 matches.add(match);
                             }
                         }
@@ -1401,8 +1530,9 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
             assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
-            assertNotNull(reconstructor.getPreviousViewSamples());
-            assertNotNull(reconstructor.getCurrentViewSamples());
+            assertNotNull(reconstructor.getPreviousViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewNewlySpawnedSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1446,7 +1576,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
             List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
                 euclideanReconstructedPoints3D.add(
@@ -1454,7 +1584,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             }
 
             //check that all points are in front of both cameras
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
                 Point3D pe = euclideanReconstructedPoints3D.get(i);
 
@@ -1529,8 +1659,8 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
             int numValidPoints = 0;
             double scaleX, scaleY, scaleZ;
-            for (int i = 0; i < numPoints; i++) {
-                Point3D point = points3D.get(i);
+            for (int i = 0; i < numPoints1; i++) {
+                Point3D point = points3D1.get(i);
                 Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i);
 
                 //check metric points
@@ -1830,18 +1960,21 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
             double lambdaX, lambdaY, lambdaZ;
 
-            final int numPoints = randomizer.nextInt(MIN_NUM_POINTS,
+            final int numPoints1 = randomizer.nextInt(MIN_NUM_POINTS,
                     MAX_NUM_POINTS);
+            final int numPoints2 = randomizer.nextInt(MIN_NUM_POINTS,
+                    MAX_NUM_POINTS);
+            final int start = randomizer.nextInt(0,
+                    numPoints1 - MIN_TRACKED_POINTS);
 
             InhomogeneousPoint3D point3D;
-            List<InhomogeneousPoint3D> points3D =
-                    new ArrayList<>();
+            List<InhomogeneousPoint3D> points3D1 = new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2, projectedPoint3;
             final List<Point2D> projectedPoints1 = new ArrayList<>();
             final List<Point2D> projectedPoints2 = new ArrayList<>();
             final List<Point2D> projectedPoints3 = new ArrayList<>();
             boolean front1, front2;
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
                 do {
@@ -1864,7 +1997,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                     }
                     numTry++;
                 } while(!front1 || !front2);
-                points3D.add(point3D);
+                points3D1.add(point3D);
 
                 //check that 3D point is in front of both cameras
                 //noinspection all
@@ -1884,6 +2017,47 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                 projectedPoint3 = new InhomogeneousPoint2D();
                 camera3.project(point3D, projectedPoint3);
                 projectedPoints3.add(projectedPoint3);
+            }
+
+            List<InhomogeneousPoint3D> points3D2 = new ArrayList<>();
+            Point2D projectedPoint2b, projectedPoint3b;
+            final List<Point2D> projectedPoints2b = new ArrayList<>();
+            final List<Point2D> projectedPoints3b = new ArrayList<>();
+            for (int i = 0; i < numPoints2; i++) {
+                //generate points and ensure they lie in front of both cameras
+                int numTry = 0;
+                do {
+                    lambdaX = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaY = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaZ = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+
+                    point3D = new InhomogeneousPoint3D(
+                            centralCommonPoint.getInhomX() + lambdaX,
+                            centralCommonPoint.getInhomY() + lambdaY,
+                            centralCommonPoint.getInhomZ() + lambdaZ);
+
+                    front2 = camera2.isPointInFrontOfCamera(point3D);
+                    if (numTry > MAX_TRIES) {
+                        fail("max tries reached");
+                    }
+                    numTry++;
+                } while(!front2);
+                points3D2.add(point3D);
+
+                //check that 3D point is in front of both cameras
+                //noinspection all
+                assertTrue(front2);
+
+                projectedPoint2b = new InhomogeneousPoint2D();
+                camera2.project(point3D, projectedPoint2b);
+                projectedPoints2b.add(projectedPoint2b);
+
+                projectedPoint3b = new InhomogeneousPoint2D();
+                camera3.project(point3D, projectedPoint3b);
+                projectedPoints3b.add(projectedPoint3b);
             }
 
             ConstantVelocityModelSlamSparseReconstructorListener listener =
@@ -1914,29 +2088,48 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(
+                        public void onRequestSamples(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor,
-                                int viewId, List<Sample2D> samples) {
+                                int previousViewId, int currentViewId,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                List<Sample2D> currentViewNewlySpawnedSamples) {
 
-                            samples.clear();
+                            previousViewTrackedSamples.clear();
+                            currentViewTrackedSamples.clear();
+                            currentViewNewlySpawnedSamples.clear();
 
                             Sample2D sample;
                             if (mViewCount == 0) {
                                 //first view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints1.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
                                 }
-
                             } else if (mEstimatedFundamentalMatrix == null) {
                                 //second view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints1.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints2.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                //spawned samples
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewNewlySpawnedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -1955,11 +2148,33 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
                             } else {
                                 //third view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = start; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+
+                                for (int i = start; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints3.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints3b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -1980,32 +2195,38 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                         @Override
                         public void onSamplesAccepted(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) {
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
                             mViewCount++;
                         }
 
                         @Override
                         public void onSamplesRejected(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) { }
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
+                            mViewCount++;
+                        }
 
                         @Override
                         public void onRequestMatches(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor,
-                                List<Sample2D> samples1,
-                                List<Sample2D> samples2, int viewId1, int viewId2,
+                                List<Sample2D> allPreviousViewSamples,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                int previousViewId, int currentViewId,
                                 List<MatchedSamples> matches) {
                             matches.clear();
 
                             int numCameras = 0;
                             if (mEstimatedMetricCamera1 != null &&
-                                    (mEstimatedMetricCamera1.getViewId() == viewId1 ||
-                                            mEstimatedMetricCamera1.getViewId() == viewId2)) {
+                                    (mEstimatedMetricCamera1.getViewId() == previousViewId ||
+                                            mEstimatedMetricCamera1.getViewId() == currentViewId)) {
                                 numCameras++;
                             }
                             if (mEstimatedMetricCamera2 != null &&
-                                    (mEstimatedMetricCamera2.getViewId() == viewId1 ||
-                                            mEstimatedMetricCamera2.getViewId() == viewId2)) {
+                                    (mEstimatedMetricCamera2.getViewId() == previousViewId ||
+                                            mEstimatedMetricCamera2.getViewId() == currentViewId)) {
                                 numCameras++;
                             }
 
@@ -2016,30 +2237,49 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
                                 int pos = 0;
                                 if (mEstimatedMetricCamera1 != null &&
-                                        (mEstimatedMetricCamera1.getViewId() == viewId1 ||
-                                                mEstimatedMetricCamera1.getViewId() == viewId2)) {
+                                        (mEstimatedMetricCamera1.getViewId() == previousViewId ||
+                                                mEstimatedMetricCamera1.getViewId() == currentViewId)) {
                                     estimatedCameras[pos] = mEstimatedMetricCamera1;
                                     pos++;
                                 }
                                 if (mEstimatedMetricCamera2 != null &&
-                                        (mEstimatedMetricCamera2.getViewId() == viewId1 ||
-                                                mEstimatedMetricCamera2.getViewId() == viewId2)) {
+                                        (mEstimatedMetricCamera2.getViewId() == previousViewId ||
+                                                mEstimatedMetricCamera2.getViewId() == currentViewId)) {
                                     estimatedCameras[pos] = mEstimatedMetricCamera2;
                                 }
                             }
 
+                            List<Point2D> allPreviousPoints = new ArrayList<>();
+                            for (Sample2D sample : allPreviousViewSamples) {
+                                allPreviousPoints.add(sample.getPoint());
+                            }
+                            KDTree2D tree = new KDTree2D(allPreviousPoints);
+
+                            //search previous view tracked samples within tree
+                            int numTrackedSamples = previousViewTrackedSamples.size();
+                            Point2D point, nearestPoint;
+                            int nearestIndex;
                             MatchedSamples match;
-                            for (int i = 0; i < numPoints; i++) {
+                            for (int i = 0; i < numTrackedSamples; i++) {
+                                Sample2D previousSample = previousViewTrackedSamples.get(i);
+                                point = previousSample.getPoint();
+                                nearestIndex = tree.nearestIndex(point);
+                                nearestPoint = allPreviousPoints.get(nearestIndex);
+                                Sample2D nearestSample = allPreviousViewSamples.get(nearestIndex);
+
+                                if (point.distanceTo(nearestPoint) > NEAREST_THRESHOLD) {
+                                    continue;
+                                }
+
+                                Sample2D currentSample = currentViewTrackedSamples.get(i);
+
                                 match = new MatchedSamples();
                                 match.setSamples(new Sample2D[]{
-                                        samples1.get(i), samples2.get(i)
+                                        previousSample, currentSample
                                 });
-                                match.setViewIds(new int[]{viewId1, viewId2});
+                                match.setViewIds(new int[]{previousViewId, currentViewId});
 
-                                if (mMetricReconstructedPoints != null) {
-                                    match.setReconstructedPoint(
-                                            mMetricReconstructedPoints.get(i));
-                                }
+                                match.setReconstructedPoint(nearestSample.getReconstructedPoint());
 
                                 if (estimatedCameras != null) {
                                     match.setCameras(estimatedCameras);
@@ -2181,8 +2421,9 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
             assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale2, 0.0);
-            assertNotNull(reconstructor.getPreviousViewSamples());
-            assertNotNull(reconstructor.getCurrentViewSamples());
+            assertNotNull(reconstructor.getPreviousViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewNewlySpawnedSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -2231,13 +2472,15 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
             assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
-            if (mMetricReconstructedPoints.size() != numPoints) {
+            int numReconstructedPoints = numPoints1 - start + numPoints2;
+
+            if (mMetricReconstructedPoints.size() != numReconstructedPoints) {
                 continue;
             }
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
             List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numReconstructedPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
                 euclideanReconstructedPoints3D.add(
@@ -2245,7 +2488,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             }
 
             //check that all points are in front of both cameras
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numReconstructedPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
                 Point3D pe = euclideanReconstructedPoints3D.get(i);
 
@@ -2341,13 +2584,70 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
             int numValidPoints = 0;
             double scaleX, scaleY, scaleZ;
-            for (int i = 0; i < numPoints; i++) {
-                Point3D point = points3D.get(i);
-                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i);
+            for (int i = start; i < numPoints1; i++) {
+                Point3D point = points3D1.get(i);
+                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i - start);
 
                 //check metric points
                 Point3D rescaledPoint = Point3D.create();
-                scaleTransformation.transform(metricReconstructedPoints3D.get(i),
+                scaleTransformation.transform(metricReconstructedPoints3D.get(i - start),
+                        rescaledPoint);
+
+                assertTrue(euclideanPoint.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR));
+
+                scaleX = point.getInhomX() / rescaledPoint.getInhomX();
+                scaleY = point.getInhomY() / rescaledPoint.getInhomY();
+                scaleZ = point.getInhomZ() / rescaledPoint.getInhomZ();
+
+                //check that scale error is less than 5%
+                if (Math.abs(scaleX - baseline / mScale2) > ABSOLUTE_ERROR) {
+                    continue;
+                }
+                assertEquals(scaleX, baseline / mScale2, ABSOLUTE_ERROR);
+
+                if (Math.abs(scaleY - baseline / mScale2) > ABSOLUTE_ERROR) {
+                    continue;
+                }
+                assertEquals(scaleY, baseline / mScale2, ABSOLUTE_ERROR);
+
+                if (Math.abs(scaleZ - baseline / mScale2) > ABSOLUTE_ERROR) {
+                    continue;
+                }
+                assertEquals(scaleZ, baseline / mScale2, ABSOLUTE_ERROR);
+                if (Math.abs(scaleX - 1.0) > RELATIVE_ERROR ||
+                        Math.abs(scaleY - 1.0) > RELATIVE_ERROR ||
+                        Math.abs(scaleZ - 1.0) > RELATIVE_ERROR) {
+                    continue;
+                }
+                rescaledPoint.setInhomogeneousCoordinates(
+                        rescaledPoint.getInhomX() * baseline / mScale2,
+                        rescaledPoint.getInhomY() * baseline / mScale2,
+                        rescaledPoint.getInhomZ() * baseline / mScale2);
+                if (point.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR)) {
+                    numValidPoints++;
+                }
+
+                //check euclidean points
+                scaleX = point.getInhomX() / euclideanPoint.getInhomX();
+                scaleY = point.getInhomY() / euclideanPoint.getInhomY();
+                scaleZ = point.getInhomZ() / euclideanPoint.getInhomZ();
+
+                //check that scale error is less than 5%
+                assertEquals(scaleX, baseline / mScale2, ABSOLUTE_ERROR);
+                assertEquals(scaleY, baseline / mScale2, ABSOLUTE_ERROR);
+                assertEquals(scaleZ, baseline / mScale2, ABSOLUTE_ERROR);
+                assertTrue(Math.abs(scaleX - 1.0) < RELATIVE_ERROR);
+                assertTrue(Math.abs(scaleY - 1.0) < RELATIVE_ERROR);
+                assertTrue(Math.abs(scaleZ - 1.0) < RELATIVE_ERROR);
+            }
+
+            for (int i = 0; i < numPoints2; i++) {
+                Point3D point = points3D2.get(i);
+                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i + numPoints1 - start);
+
+                //check metric points
+                Point3D rescaledPoint = Point3D.create();
+                scaleTransformation.transform(metricReconstructedPoints3D.get(i + numPoints1 - start),
                         rescaledPoint);
 
                 assertTrue(euclideanPoint.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR));
@@ -2659,18 +2959,21 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
             double lambdaX, lambdaY, lambdaZ;
 
-            final int numPoints = randomizer.nextInt(MIN_NUM_POINTS,
+            final int numPoints1 = randomizer.nextInt(MIN_NUM_POINTS,
                     MAX_NUM_POINTS);
+            final int numPoints2 = randomizer.nextInt(MIN_NUM_POINTS,
+                    MAX_NUM_POINTS);
+            final int start = randomizer.nextInt(0,
+                    numPoints1 - MIN_TRACKED_POINTS);
 
             InhomogeneousPoint3D point3D;
-            List<InhomogeneousPoint3D> points3D =
-                    new ArrayList<>();
+            List<InhomogeneousPoint3D> points3D1 = new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2, projectedPoint3;
             final List<Point2D> projectedPoints1 = new ArrayList<>();
             final List<Point2D> projectedPoints2 = new ArrayList<>();
             final List<Point2D> projectedPoints3 = new ArrayList<>();
             boolean front1, front2;
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
                 do {
@@ -2693,7 +2996,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                     }
                     numTry++;
                 } while(!front1 || !front2);
-                points3D.add(point3D);
+                points3D1.add(point3D);
 
                 //check that 3D point is in front of both cameras
                 //noinspection all
@@ -2713,6 +3016,47 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                 projectedPoint3 = new InhomogeneousPoint2D();
                 camera3.project(point3D, projectedPoint3);
                 projectedPoints3.add(projectedPoint3);
+            }
+
+            List<InhomogeneousPoint3D> points3D2 = new ArrayList<>();
+            Point2D projectedPoint2b, projectedPoint3b;
+            final List<Point2D> projectedPoints2b = new ArrayList<>();
+            final List<Point2D> projectedPoints3b = new ArrayList<>();
+            for (int i = 0; i < numPoints2; i++) {
+                //generate points and ensure they lie in front of both cameras
+                int numTry = 0;
+                do {
+                    lambdaX = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaY = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaZ = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+
+                    point3D = new InhomogeneousPoint3D(
+                            centralCommonPoint.getInhomX() + lambdaX,
+                            centralCommonPoint.getInhomY() + lambdaY,
+                            centralCommonPoint.getInhomZ() + lambdaZ);
+
+                    front2 = camera2.isPointInFrontOfCamera(point3D);
+                    if (numTry > MAX_TRIES) {
+                        fail("max tries reached");
+                    }
+                    numTry++;
+                } while(!front2);
+                points3D2.add(point3D);
+
+                //check that 3D point is in front of both cameras
+                //noinspection all
+                assertTrue(front2);
+
+                projectedPoint2b = new InhomogeneousPoint2D();
+                camera2.project(point3D, projectedPoint2b);
+                projectedPoints2b.add(projectedPoint2b);
+
+                projectedPoint3b = new InhomogeneousPoint2D();
+                camera3.project(point3D, projectedPoint3b);
+                projectedPoints3b.add(projectedPoint3b);
             }
 
             final GaussianRandomizer accelerationRandomizer =
@@ -2750,30 +3094,48 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(
+                        public void onRequestSamples(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor,
-                                int viewId,
-                                List<Sample2D> samples) {
+                                int previousViewId, int currentViewId,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                List<Sample2D> currentViewNewlySpawnedSamples) {
 
-                            samples.clear();
+                            previousViewTrackedSamples.clear();
+                            currentViewTrackedSamples.clear();
+                            currentViewNewlySpawnedSamples.clear();
 
                             Sample2D sample;
                             if (mViewCount == 0) {
                                 //first view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints1.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
                                 }
-
                             } else if (mEstimatedFundamentalMatrix == null) {
                                 //second view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints1.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints2.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                //spawned samples
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewNewlySpawnedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -2836,11 +3198,33 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
                             } else {
                                 //third view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = start; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+
+                                for (int i = start; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints3.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints3b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -2905,32 +3289,38 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
                         @Override
                         public void onSamplesAccepted(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) {
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
                             mViewCount++;
                         }
 
                         @Override
                         public void onSamplesRejected(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) { }
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
+                            mViewCount++;
+                        }
 
                         @Override
                         public void onRequestMatches(
                                 ConstantVelocityModelSlamSparseReconstructor reconstructor,
-                                List<Sample2D> samples1,
-                                List<Sample2D> samples2, int viewId1, int viewId2,
+                                List<Sample2D> allPreviousViewSamples,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                int previousViewId, int currentViewId,
                                 List<MatchedSamples> matches) {
                             matches.clear();
 
                             int numCameras = 0;
                             if (mEstimatedMetricCamera1 != null &&
-                                    (mEstimatedMetricCamera1.getViewId() == viewId1 ||
-                                            mEstimatedMetricCamera1.getViewId() == viewId2)) {
+                                    (mEstimatedMetricCamera1.getViewId() == previousViewId ||
+                                            mEstimatedMetricCamera1.getViewId() == currentViewId)) {
                                 numCameras++;
                             }
                             if (mEstimatedMetricCamera2 != null &&
-                                    (mEstimatedMetricCamera2.getViewId() == viewId1 ||
-                                            mEstimatedMetricCamera2.getViewId() == viewId2)) {
+                                    (mEstimatedMetricCamera2.getViewId() == previousViewId ||
+                                            mEstimatedMetricCamera2.getViewId() == currentViewId)) {
                                 numCameras++;
                             }
 
@@ -2941,30 +3331,49 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
                                 int pos = 0;
                                 if (mEstimatedMetricCamera1 != null &&
-                                        (mEstimatedMetricCamera1.getViewId() == viewId1 ||
-                                                mEstimatedMetricCamera1.getViewId() == viewId2)) {
+                                        (mEstimatedMetricCamera1.getViewId() == previousViewId ||
+                                                mEstimatedMetricCamera1.getViewId() == currentViewId)) {
                                     estimatedCameras[pos] = mEstimatedMetricCamera1;
                                     pos++;
                                 }
                                 if (mEstimatedMetricCamera2 != null &&
-                                        (mEstimatedMetricCamera2.getViewId() == viewId1 ||
-                                                mEstimatedMetricCamera2.getViewId() == viewId2)) {
+                                        (mEstimatedMetricCamera2.getViewId() == previousViewId ||
+                                                mEstimatedMetricCamera2.getViewId() == currentViewId)) {
                                     estimatedCameras[pos] = mEstimatedMetricCamera2;
                                 }
                             }
 
+                            List<Point2D> allPreviousPoints = new ArrayList<>();
+                            for (Sample2D sample : allPreviousViewSamples) {
+                                allPreviousPoints.add(sample.getPoint());
+                            }
+                            KDTree2D tree = new KDTree2D(allPreviousPoints);
+
+                            //search previous view tracked samples within tree
+                            int numTrackedSamples = previousViewTrackedSamples.size();
+                            Point2D point, nearestPoint;
+                            int nearestIndex;
                             MatchedSamples match;
-                            for (int i = 0; i < numPoints; i++) {
+                            for (int i = 0; i < numTrackedSamples; i++) {
+                                Sample2D previousSample = previousViewTrackedSamples.get(i);
+                                point = previousSample.getPoint();
+                                nearestIndex = tree.nearestIndex(point);
+                                nearestPoint = allPreviousPoints.get(nearestIndex);
+                                Sample2D nearestSample = allPreviousViewSamples.get(nearestIndex);
+
+                                if (point.distanceTo(nearestPoint) > NEAREST_THRESHOLD) {
+                                    continue;
+                                }
+
+                                Sample2D currentSample = currentViewTrackedSamples.get(i);
+
                                 match = new MatchedSamples();
                                 match.setSamples(new Sample2D[]{
-                                        samples1.get(i), samples2.get(i)
+                                        previousSample, currentSample
                                 });
-                                match.setViewIds(new int[]{viewId1, viewId2});
+                                match.setViewIds(new int[]{previousViewId, currentViewId});
 
-                                if (mMetricReconstructedPoints != null) {
-                                    match.setReconstructedPoint(
-                                            mMetricReconstructedPoints.get(i));
-                                }
+                                match.setReconstructedPoint(nearestSample.getReconstructedPoint());
 
                                 if (estimatedCameras != null) {
                                     match.setCameras(estimatedCameras);
@@ -3106,8 +3515,9 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
             assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale2, 0.0);
-            assertNotNull(reconstructor.getPreviousViewSamples());
-            assertNotNull(reconstructor.getCurrentViewSamples());
+            assertNotNull(reconstructor.getPreviousViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewNewlySpawnedSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -3156,13 +3566,15 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
             assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
-            if (mMetricReconstructedPoints.size() != numPoints) {
+            int numReconstructedPoints = numPoints1 - start + numPoints2;
+
+            if (mMetricReconstructedPoints.size() != numReconstructedPoints) {
                 continue;
             }
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
             List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numReconstructedPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
                 euclideanReconstructedPoints3D.add(
@@ -3170,7 +3582,7 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
             }
 
             //check that all points are in front of both cameras
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numReconstructedPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
                 Point3D pe = euclideanReconstructedPoints3D.get(i);
 
@@ -3266,13 +3678,68 @@ public class ConstantVelocityModelSlamSparseReconstructorTest {
 
             int numValidPoints = 0;
             double scaleX, scaleY, scaleZ;
-            for (int i = 0; i < numPoints; i++) {
-                Point3D point = points3D.get(i);
-                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i);
+            for (int i = start; i < numPoints1; i++) {
+                Point3D point = points3D1.get(i);
+                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i - start);
 
                 //check metric points
                 Point3D rescaledPoint = Point3D.create();
-                scaleTransformation.transform(metricReconstructedPoints3D.get(i),
+                scaleTransformation.transform(metricReconstructedPoints3D.get(i - start),
+                        rescaledPoint);
+
+                assertTrue(euclideanPoint.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR));
+
+                scaleX = point.getInhomX() / rescaledPoint.getInhomX();
+                scaleY = point.getInhomY() / rescaledPoint.getInhomY();
+                scaleZ = point.getInhomZ() / rescaledPoint.getInhomZ();
+
+                //check that scale error is less than 5%
+                if (Math.abs(scaleX - baseline / mScale2) > ABSOLUTE_ERROR) {
+                    continue;
+                }
+                if (Math.abs(scaleY - baseline / mScale2) > ABSOLUTE_ERROR) {
+                    continue;
+                }
+                if (Math.abs(scaleZ - baseline / mScale2) > ABSOLUTE_ERROR) {
+                    continue;
+                }
+                assertEquals(scaleX, baseline / mScale2, ABSOLUTE_ERROR);
+                assertEquals(scaleY, baseline / mScale2, ABSOLUTE_ERROR);
+                assertEquals(scaleZ, baseline / mScale2, ABSOLUTE_ERROR);
+                if (Math.abs(scaleX - 1.0) > RELATIVE_ERROR ||
+                        Math.abs(scaleY - 1.0) > RELATIVE_ERROR ||
+                        Math.abs(scaleZ - 1.0) > RELATIVE_ERROR) {
+                    continue;
+                }
+                rescaledPoint.setInhomogeneousCoordinates(
+                        rescaledPoint.getInhomX() * baseline / mScale2,
+                        rescaledPoint.getInhomY() * baseline / mScale2,
+                        rescaledPoint.getInhomZ() * baseline / mScale2);
+                if (point.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR)) {
+                    numValidPoints++;
+                }
+
+                //check euclidean points
+                scaleX = point.getInhomX() / euclideanPoint.getInhomX();
+                scaleY = point.getInhomY() / euclideanPoint.getInhomY();
+                scaleZ = point.getInhomZ() / euclideanPoint.getInhomZ();
+
+                //check that scale error is less than 5%
+                assertEquals(scaleX, baseline / mScale2, ABSOLUTE_ERROR);
+                assertEquals(scaleY, baseline / mScale2, ABSOLUTE_ERROR);
+                assertEquals(scaleZ, baseline / mScale2, ABSOLUTE_ERROR);
+                assertTrue(Math.abs(scaleX - 1.0) < RELATIVE_ERROR);
+                assertTrue(Math.abs(scaleY - 1.0) < RELATIVE_ERROR);
+                assertTrue(Math.abs(scaleZ - 1.0) < RELATIVE_ERROR);
+            }
+
+            for (int i = 0; i < numPoints2; i++) {
+                Point3D point = points3D2.get(i);
+                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i + numPoints1 - start);
+
+                //check metric points
+                Point3D rescaledPoint = Point3D.create();
+                scaleTransformation.transform(metricReconstructedPoints3D.get(i + numPoints1 - start),
                         rescaledPoint);
 
                 assertTrue(euclideanPoint.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR));

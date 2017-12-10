@@ -58,6 +58,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
     private static final double ABSOLUTE_ERROR = 1e-6;
     private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
 
+    private static final int MIN_TRACKED_POINTS = 10;
+    private static final double NEAREST_THRESHOLD = 1e-6;
+
     //5% of relative error in scale estimation
     private static final double RELATIVE_ERROR = 0.05;
 
@@ -171,25 +174,28 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                     }
 
                     @Override
-                    public void onRequestSamplesForCurrentView(
+                    public void onRequestSamples(
                             AbsoluteOrientationSlamSparseReconstructor reconstructor,
-                            int viewId, List<Sample2D> samples) { }
+                            int previousViewId, int currentViewId,
+                            List<Sample2D> previousViewTrackedSamples, List<Sample2D> currentViewTrackedSamples,
+                            List<Sample2D> currentViewNewlySpawnedSamples) { }
 
                     @Override
                     public void onSamplesAccepted(
                             AbsoluteOrientationSlamSparseReconstructor reconstructor, int viewId,
-                            List<Sample2D> samples) { }
+                            List<Sample2D> previousViewTrackedSamples, List<Sample2D> currentViewTrackedSamples) { }
 
                     @Override
                     public void onSamplesRejected(
                             AbsoluteOrientationSlamSparseReconstructor reconstructor, int viewId,
-                            List<Sample2D> samples) { }
+                            List<Sample2D> previousViewTrackedSamples, List<Sample2D> currentViewTrackedSamples) { }
 
                     @Override
                     public void onRequestMatches(
                             AbsoluteOrientationSlamSparseReconstructor reconstructor,
-                            List<Sample2D> samples1, List<Sample2D> samples2,
-                            int viewId1, int viewId2,
+                            List<Sample2D> allPreviousViewSamples,
+                            List<Sample2D> previousViewTrackedSamples, List<Sample2D> currentViewTrackedSamples,
+                            int previousViewId, int currentViewId,
                             List<MatchedSamples> matches) { }
 
                     @Override
@@ -260,8 +266,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
         assertNull(reconstructor.getActiveMetricReconstructedPoints());
         assertNull(reconstructor.getActiveEuclideanReconstructedPoints());
         assertEquals(reconstructor.getCurrentScale(), BaseSparseReconstructor.DEFAULT_SCALE, 0.0);
-        assertNull(reconstructor.getPreviousViewSamples());
-        assertNull(reconstructor.getCurrentViewSamples());
+        assertNull(reconstructor.getPreviousViewTrackedSamples());
+        assertNull(reconstructor.getCurrentViewTrackedSamples());
+        assertNull(reconstructor.getCurrentViewNewlySpawnedSamples());
         assertTrue(reconstructor.isFirstView());
         assertFalse(reconstructor.isSecondView());
         assertFalse(reconstructor.isAdditionalView());
@@ -286,8 +293,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
         assertNull(reconstructor.getActiveMetricReconstructedPoints());
         assertNull(reconstructor.getActiveEuclideanReconstructedPoints());
         assertEquals(reconstructor.getCurrentScale(), BaseSparseReconstructor.DEFAULT_SCALE, 0.0);
-        assertNull(reconstructor.getPreviousViewSamples());
-        assertNull(reconstructor.getCurrentViewSamples());
+        assertNull(reconstructor.getPreviousViewTrackedSamples());
+        assertNull(reconstructor.getCurrentViewTrackedSamples());
+        assertNull(reconstructor.getCurrentViewNewlySpawnedSamples());
         assertTrue(reconstructor.isFirstView());
         assertFalse(reconstructor.isSecondView());
         assertFalse(reconstructor.isAdditionalView());
@@ -473,17 +481,18 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             double lambdaX, lambdaY, lambdaZ;
 
-            final int numPoints = randomizer.nextInt(MIN_NUM_POINTS,
+            final int numPoints1 = randomizer.nextInt(MIN_NUM_POINTS,
+                    MAX_NUM_POINTS);
+            final int numPoints2 = randomizer.nextInt(MIN_NUM_POINTS,
                     MAX_NUM_POINTS);
 
             InhomogeneousPoint3D point3D;
-            List<InhomogeneousPoint3D> points3D =
-                    new ArrayList<>();
+            List<InhomogeneousPoint3D> points3D1 = new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
             final List<Point2D> projectedPoints1 = new ArrayList<>();
             final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean front1, front2, maxTriesReached = false;
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
                 do {
@@ -510,7 +519,7 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
                 if (maxTriesReached) break;
 
-                points3D.add(point3D);
+                points3D1.add(point3D);
 
                 //check that 3D point is in front of both cameras
                 //noinspection all
@@ -526,6 +535,47 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                 projectedPoint2 = new InhomogeneousPoint2D();
                 camera2.project(point3D, projectedPoint2);
                 projectedPoints2.add(projectedPoint2);
+            }
+
+            if (maxTriesReached) continue;
+
+            Point2D projectedPoint2b;
+            final List<Point2D> projectedPoints2b = new ArrayList<>();
+            for (int i = 0; i < numPoints2; i++) {
+                //generate points and ensure they lie in front of both cameras
+                int numTry = 0;
+                do {
+                    lambdaX = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaY = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaZ = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+
+                    point3D = new InhomogeneousPoint3D(
+                            centralCommonPoint.getInhomX() + lambdaX,
+                            centralCommonPoint.getInhomY() + lambdaY,
+                            centralCommonPoint.getInhomZ() + lambdaZ);
+
+                    front2 = camera2.isPointInFrontOfCamera(point3D);
+                    if (numTry > MAX_TRIES) {
+                        maxTriesReached = true;
+                        break;
+                    }
+                    numTry++;
+                } while(!front2);
+
+                if (maxTriesReached) break;
+
+                points3D1.add(point3D);
+
+                //check that 3D point is in front of both cameras
+                //noinspection all
+                assertTrue(front2);
+
+                projectedPoint2b = new InhomogeneousPoint2D();
+                camera2.project(point3D, projectedPoint2b);
+                projectedPoints2b.add(projectedPoint2b);
             }
 
             if (maxTriesReached) continue;
@@ -558,29 +608,48 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(
+                        public void onRequestSamples(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor,
-                                int viewId, List<Sample2D> samples) {
+                                int previousViewId, int currentViewId,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                List<Sample2D> currentViewNewlySpawnedSamples) {
 
-                            samples.clear();
+                            previousViewTrackedSamples.clear();
+                            currentViewTrackedSamples.clear();
+                            currentViewNewlySpawnedSamples.clear();
 
                             Sample2D sample;
                             if (mViewCount == 0) {
                                 //first view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints1.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
                                 }
-
                             } else {
                                 //second view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints1.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints2.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                //spawned samples
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewNewlySpawnedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -607,30 +676,36 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                         @Override
                         public void onSamplesAccepted(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) {
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
                             mViewCount++;
                         }
 
                         @Override
                         public void onSamplesRejected(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) { }
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
+                            mViewCount++;
+                        }
 
                         @Override
                         public void onRequestMatches(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor,
-                                List<Sample2D> samples1,
-                                List<Sample2D> samples2, int viewId1, int viewId2,
+                                List<Sample2D> allPreviousViewSamples,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                int previousViewId, int currentViewId,
                                 List<MatchedSamples> matches) {
                             matches.clear();
 
                             MatchedSamples match;
-                            for (int i = 0; i < numPoints; i++) {
+                            for (int i = 0; i < numPoints1; i++) {
                                 match = new MatchedSamples();
                                 match.setSamples(new Sample2D[]{
-                                        samples1.get(i), samples2.get(i)
+                                        previousViewTrackedSamples.get(i), currentViewTrackedSamples.get(i)
                                 });
-                                match.setViewIds(new int[]{viewId1, viewId2});
+                                match.setViewIds(new int[]{previousViewId, currentViewId});
                                 matches.add(match);
                             }
                         }
@@ -742,8 +817,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
             assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
-            assertNotNull(reconstructor.getPreviousViewSamples());
-            assertNotNull(reconstructor.getCurrentViewSamples());
+            assertNotNull(reconstructor.getPreviousViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewNewlySpawnedSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -787,7 +863,7 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
             List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
                 euclideanReconstructedPoints3D.add(
@@ -795,7 +871,7 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             }
 
             //check that all points are in front of both cameras
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
                 Point3D pe = euclideanReconstructedPoints3D.get(i);
 
@@ -871,8 +947,8 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             int numValidPoints = 0;
             double scaleX, scaleY, scaleZ;
-            for (int i = 0; i < numPoints; i++) {
-                Point3D point = points3D.get(i);
+            for (int i = 0; i < numPoints1; i++) {
+                Point3D point = points3D1.get(i);
                 Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i);
 
                 //check metric points
@@ -1131,17 +1207,18 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             double lambdaX, lambdaY, lambdaZ;
 
-            final int numPoints = randomizer.nextInt(MIN_NUM_POINTS,
+            final int numPoints1 = randomizer.nextInt(MIN_NUM_POINTS,
+                    MAX_NUM_POINTS);
+            final int numPoints2 = randomizer.nextInt(MIN_NUM_POINTS,
                     MAX_NUM_POINTS);
 
             InhomogeneousPoint3D point3D;
-            List<InhomogeneousPoint3D> points3D =
-                    new ArrayList<>();
+            List<InhomogeneousPoint3D> points3D1 = new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2;
             final List<Point2D> projectedPoints1 = new ArrayList<>();
             final List<Point2D> projectedPoints2 = new ArrayList<>();
             boolean front1, front2, maxTriesReached = false;
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
                 do {
@@ -1168,7 +1245,7 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
                 if (maxTriesReached) break;
 
-                points3D.add(point3D);
+                points3D1.add(point3D);
 
                 //check that 3D point is in front of both cameras
                 //noinspection all
@@ -1184,6 +1261,45 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                 projectedPoint2 = new InhomogeneousPoint2D();
                 camera2.project(point3D, projectedPoint2);
                 projectedPoints2.add(projectedPoint2);
+            }
+
+            if (maxTriesReached) continue;
+
+            Point2D projectedPoint2b;
+            final List<Point2D> projectedPoints2b = new ArrayList<>();
+            for (int i = 0; i < numPoints2; i++) {
+                //generate points and ensure they lie in front of both cameras
+                int numTry = 0;
+                do {
+                    lambdaX = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaY = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaZ = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+
+                    point3D = new InhomogeneousPoint3D(
+                            centralCommonPoint.getInhomX() + lambdaX,
+                            centralCommonPoint.getInhomY() + lambdaY,
+                            centralCommonPoint.getInhomZ() + lambdaZ);
+
+                    front2 = camera2.isPointInFrontOfCamera(point3D);
+                    if (numTry > MAX_TRIES) {
+                        maxTriesReached = true;
+                        break;
+                    }
+                    numTry++;
+                } while(!front2);
+
+                if (maxTriesReached) break;
+
+                //check that 3D point is in front of both cameras
+                //noinspection all
+                assertTrue(front2);
+
+                projectedPoint2b = new InhomogeneousPoint2D();
+                camera2.project(point3D, projectedPoint2b);
+                projectedPoints2b.add(projectedPoint2b);
             }
 
             if (maxTriesReached) continue;
@@ -1223,30 +1339,48 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(
+                        public void onRequestSamples(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor,
-                                int viewId,
-                                List<Sample2D> samples) {
+                                int previousViewId, int currentViewId,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                List<Sample2D> currentViewNewlySpawnedSamples) {
 
-                            samples.clear();
+                            previousViewTrackedSamples.clear();
+                            currentViewTrackedSamples.clear();
+                            currentViewNewlySpawnedSamples.clear();
 
                             Sample2D sample;
                             if (mViewCount == 0) {
                                 //first view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints1.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
                                 }
-
                             } else {
                                 //second view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints1.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints2.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                //spawned samples
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewNewlySpawnedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -1318,30 +1452,36 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                         @Override
                         public void onSamplesAccepted(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) {
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
                             mViewCount++;
                         }
 
                         @Override
                         public void onSamplesRejected(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) { }
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
+                            mViewCount++;
+                        }
 
                         @Override
                         public void onRequestMatches(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor,
-                                List<Sample2D> samples1,
-                                List<Sample2D> samples2, int viewId1, int viewId2,
+                                List<Sample2D> allPreviousViewSamples,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                int previousViewId, int currentViewId,
                                 List<MatchedSamples> matches) {
                             matches.clear();
 
                             MatchedSamples match;
-                            for (int i = 0; i < numPoints; i++) {
+                            for (int i = 0; i < numPoints1; i++) {
                                 match = new MatchedSamples();
                                 match.setSamples(new Sample2D[]{
-                                        samples1.get(i), samples2.get(i)
+                                        previousViewTrackedSamples.get(i), currentViewTrackedSamples.get(i)
                                 });
-                                match.setViewIds(new int[]{viewId1, viewId2});
+                                match.setViewIds(new int[]{previousViewId, currentViewId});
                                 matches.add(match);
                             }
                         }
@@ -1457,8 +1597,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
             assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale, 0.0);
-            assertNotNull(reconstructor.getPreviousViewSamples());
-            assertNotNull(reconstructor.getCurrentViewSamples());
+            assertNotNull(reconstructor.getPreviousViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewNewlySpawnedSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix.normalize();
@@ -1502,7 +1643,7 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
             List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
                 euclideanReconstructedPoints3D.add(
@@ -1510,7 +1651,7 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             }
 
             //check that all points are in front of both cameras
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
                 Point3D pe = euclideanReconstructedPoints3D.get(i);
 
@@ -1586,8 +1727,8 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             int numValidPoints = 0;
             double scaleX, scaleY, scaleZ;
-            for (int i = 0; i < numPoints; i++) {
-                Point3D point = points3D.get(i);
+            for (int i = 0; i < numPoints1; i++) {
+                Point3D point = points3D1.get(i);
                 Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i);
 
                 //check metric points
@@ -1889,18 +2030,21 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             double lambdaX, lambdaY, lambdaZ;
 
-            final int numPoints = randomizer.nextInt(MIN_NUM_POINTS,
+            final int numPoints1 = randomizer.nextInt(MIN_NUM_POINTS,
                     MAX_NUM_POINTS);
+            final int numPoints2 = randomizer.nextInt(MIN_NUM_POINTS,
+                    MAX_NUM_POINTS);
+            final int start = randomizer.nextInt(0,
+                    numPoints1 - MIN_TRACKED_POINTS);
 
             InhomogeneousPoint3D point3D;
-            List<InhomogeneousPoint3D> points3D =
-                    new ArrayList<>();
+            List<InhomogeneousPoint3D> points3D1 = new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2, projectedPoint3;
             final List<Point2D> projectedPoints1 = new ArrayList<>();
             final List<Point2D> projectedPoints2 = new ArrayList<>();
             final List<Point2D> projectedPoints3 = new ArrayList<>();
             boolean front1, front2, maxTriesReached = false;
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
                 do {
@@ -1927,7 +2071,7 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
                 if (maxTriesReached) break;
 
-                points3D.add(point3D);
+                points3D1.add(point3D);
 
                 //check that 3D point is in front of both cameras
                 //noinspection all
@@ -1947,6 +2091,53 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                 projectedPoint3 = new InhomogeneousPoint2D();
                 camera3.project(point3D, projectedPoint3);
                 projectedPoints3.add(projectedPoint3);
+            }
+
+            if (maxTriesReached) continue;
+
+            List<InhomogeneousPoint3D> points3D2 = new ArrayList<>();
+            Point2D projectedPoint2b, projectedPoint3b;
+            final List<Point2D> projectedPoints2b = new ArrayList<>();
+            final List<Point2D> projectedPoints3b = new ArrayList<>();
+            for (int i = 0; i < numPoints2; i++) {
+                //generate points and ensure they lie in front of both cameras
+                int numTry = 0;
+                do {
+                    lambdaX = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaY = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaZ = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+
+                    point3D = new InhomogeneousPoint3D(
+                            centralCommonPoint.getInhomX() + lambdaX,
+                            centralCommonPoint.getInhomY() + lambdaY,
+                            centralCommonPoint.getInhomZ() + lambdaZ);
+
+                    front2 = camera2.isPointInFrontOfCamera(point3D);
+                    if (numTry > MAX_TRIES) {
+                        maxTriesReached = true;
+                        break;
+                    }
+                    numTry++;
+                } while(!front2);
+
+                if (maxTriesReached) break;
+
+                points3D2.add(point3D);
+
+                //check that 3D point is in front of both cameras
+                //noinspection all
+                assertTrue(front2);
+
+                projectedPoint2b = new InhomogeneousPoint2D();
+                camera2.project(point3D, projectedPoint2b);
+                projectedPoints2b.add(projectedPoint2b);
+
+                projectedPoint3b = new InhomogeneousPoint2D();
+                camera3.project(point3D, projectedPoint3b);
+                projectedPoints3b.add(projectedPoint3b);
             }
 
             if (maxTriesReached) continue;
@@ -1979,29 +2170,48 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(
+                        public void onRequestSamples(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor,
-                                int viewId, List<Sample2D> samples) {
+                                int previousViewId, int currentViewId,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                List<Sample2D> currentViewNewlySpawnedSamples) {
 
-                            samples.clear();
+                            previousViewTrackedSamples.clear();
+                            currentViewTrackedSamples.clear();
+                            currentViewNewlySpawnedSamples.clear();
 
                             Sample2D sample;
                             if (mViewCount == 0) {
                                 //first view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints1.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
                                 }
-
                             } else if (mEstimatedFundamentalMatrix == null) {
                                 //second view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints1.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints2.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                //spawned samples
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewNewlySpawnedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -2025,11 +2235,33 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
                             } else {
                                 //third view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = start; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+
+                                for (int i = start; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints3.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints3b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -2055,32 +2287,38 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                         @Override
                         public void onSamplesAccepted(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) {
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
                             mViewCount++;
                         }
 
                         @Override
                         public void onSamplesRejected(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) { }
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
+                            mViewCount++;
+                        }
 
                         @Override
                         public void onRequestMatches(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor,
-                                List<Sample2D> samples1,
-                                List<Sample2D> samples2, int viewId1, int viewId2,
+                                List<Sample2D> allPreviousViewSamples,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                int previousViewId, int currentViewId,
                                 List<MatchedSamples> matches) {
                             matches.clear();
 
                             int numCameras = 0;
                             if (mEstimatedMetricCamera1 != null &&
-                                    (mEstimatedMetricCamera1.getViewId() == viewId1 ||
-                                            mEstimatedMetricCamera1.getViewId() == viewId2)) {
+                                    (mEstimatedMetricCamera1.getViewId() == previousViewId ||
+                                            mEstimatedMetricCamera1.getViewId() == currentViewId)) {
                                 numCameras++;
                             }
                             if (mEstimatedMetricCamera2 != null &&
-                                    (mEstimatedMetricCamera2.getViewId() == viewId1 ||
-                                            mEstimatedMetricCamera2.getViewId() == viewId2)) {
+                                    (mEstimatedMetricCamera2.getViewId() == previousViewId ||
+                                            mEstimatedMetricCamera2.getViewId() == currentViewId)) {
                                 numCameras++;
                             }
 
@@ -2091,30 +2329,49 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
                                 int pos = 0;
                                 if (mEstimatedMetricCamera1 != null &&
-                                        (mEstimatedMetricCamera1.getViewId() == viewId1 ||
-                                                mEstimatedMetricCamera1.getViewId() == viewId2)) {
+                                        (mEstimatedMetricCamera1.getViewId() == previousViewId ||
+                                                mEstimatedMetricCamera1.getViewId() == currentViewId)) {
                                     estimatedCameras[pos] = mEstimatedMetricCamera1;
                                     pos++;
                                 }
                                 if (mEstimatedMetricCamera2 != null &&
-                                        (mEstimatedMetricCamera2.getViewId() == viewId1 ||
-                                                mEstimatedMetricCamera2.getViewId() == viewId2)) {
+                                        (mEstimatedMetricCamera2.getViewId() == previousViewId ||
+                                                mEstimatedMetricCamera2.getViewId() == currentViewId)) {
                                     estimatedCameras[pos] = mEstimatedMetricCamera2;
                                 }
                             }
 
+                            List<Point2D> allPreviousPoints = new ArrayList<>();
+                            for (Sample2D sample : allPreviousViewSamples) {
+                                allPreviousPoints.add(sample.getPoint());
+                            }
+                            KDTree2D tree = new KDTree2D(allPreviousPoints);
+
+                            //search previous view tracked samples within tree
+                            int numTrackedSamples = previousViewTrackedSamples.size();
+                            Point2D point, nearestPoint;
+                            int nearestIndex;
                             MatchedSamples match;
-                            for (int i = 0; i < numPoints; i++) {
+                            for (int i = 0; i < numTrackedSamples; i++) {
+                                Sample2D previousSample = previousViewTrackedSamples.get(i);
+                                point = previousSample.getPoint();
+                                nearestIndex = tree.nearestIndex(point);
+                                nearestPoint = allPreviousPoints.get(nearestIndex);
+                                Sample2D nearestSample = allPreviousViewSamples.get(nearestIndex);
+
+                                if (point.distanceTo(nearestPoint) > NEAREST_THRESHOLD) {
+                                    continue;
+                                }
+
+                                Sample2D currentSample = currentViewTrackedSamples.get(i);
+
                                 match = new MatchedSamples();
                                 match.setSamples(new Sample2D[]{
-                                        samples1.get(i), samples2.get(i)
+                                        previousSample, currentSample
                                 });
-                                match.setViewIds(new int[]{viewId1, viewId2});
+                                match.setViewIds(new int[]{previousViewId, currentViewId});
 
-                                if (mMetricReconstructedPoints != null) {
-                                    match.setReconstructedPoint(
-                                            mMetricReconstructedPoints.get(i));
-                                }
+                                match.setReconstructedPoint(nearestSample.getReconstructedPoint());
 
                                 if (estimatedCameras != null) {
                                     match.setCameras(estimatedCameras);
@@ -2252,8 +2509,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
             assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale2, 0.0);
-            assertNotNull(reconstructor.getPreviousViewSamples());
-            assertNotNull(reconstructor.getCurrentViewSamples());
+            assertNotNull(reconstructor.getPreviousViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewNewlySpawnedSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -2302,13 +2560,15 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
-            if (mMetricReconstructedPoints.size() != numPoints) {
+            int numReconstructedPoints = numPoints1 - start + numPoints2;
+
+            if (mMetricReconstructedPoints.size() != numReconstructedPoints) {
                 continue;
             }
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
             List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numReconstructedPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
                 euclideanReconstructedPoints3D.add(
@@ -2316,7 +2576,7 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             }
 
             //check that all points are in front of both cameras
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numReconstructedPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
                 Point3D pe = euclideanReconstructedPoints3D.get(i);
 
@@ -2426,13 +2686,59 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             int numValidPoints = 0;
             double scaleX, scaleY, scaleZ;
-            for (int i = 0; i < numPoints; i++) {
-                Point3D point = points3D.get(i);
-                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i);
+            for (int i = start; i < numPoints1; i++) {
+                Point3D point = points3D1.get(i);
+                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i - start);
 
                 //check metric points
                 Point3D rescaledPoint = Point3D.create();
-                scaleAndOrientationTransformation.transform(metricReconstructedPoints3D.get(i),
+                scaleAndOrientationTransformation.transform(metricReconstructedPoints3D.get(i - start),
+                        rescaledPoint);
+
+                assertTrue(euclideanPoint.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR));
+
+                scaleX = point.getInhomX() / rescaledPoint.getInhomX();
+                scaleY = point.getInhomY() / rescaledPoint.getInhomY();
+                scaleZ = point.getInhomZ() / rescaledPoint.getInhomZ();
+
+                //check that scale error is less than 5%
+                assertEquals(scaleX, baseline / mScale2, ABSOLUTE_ERROR);
+                assertEquals(scaleY, baseline / mScale2, ABSOLUTE_ERROR);
+                assertEquals(scaleZ, baseline / mScale2, ABSOLUTE_ERROR);
+                if (Math.abs(scaleX - 1.0) > RELATIVE_ERROR ||
+                        Math.abs(scaleY - 1.0) > RELATIVE_ERROR ||
+                        Math.abs(scaleZ - 1.0) > RELATIVE_ERROR) {
+                    continue;
+                }
+                rescaledPoint.setInhomogeneousCoordinates(
+                        rescaledPoint.getInhomX() * baseline / mScale2,
+                        rescaledPoint.getInhomY() * baseline / mScale2,
+                        rescaledPoint.getInhomZ() * baseline / mScale2);
+                if (point.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR)) {
+                    numValidPoints++;
+                }
+
+                //check euclidean points
+                scaleX = point.getInhomX() / euclideanPoint.getInhomX();
+                scaleY = point.getInhomY() / euclideanPoint.getInhomY();
+                scaleZ = point.getInhomZ() / euclideanPoint.getInhomZ();
+
+                //check that scale error is less than 5%
+                assertEquals(scaleX, baseline / mScale2, ABSOLUTE_ERROR);
+                assertEquals(scaleY, baseline / mScale2, ABSOLUTE_ERROR);
+                assertEquals(scaleZ, baseline / mScale2, ABSOLUTE_ERROR);
+                assertTrue(Math.abs(scaleX - 1.0) < RELATIVE_ERROR);
+                assertTrue(Math.abs(scaleY - 1.0) < RELATIVE_ERROR);
+                assertTrue(Math.abs(scaleZ - 1.0) < RELATIVE_ERROR);
+            }
+
+            for (int i = 0; i < numPoints2; i++) {
+                Point3D point = points3D2.get(i);
+                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i + numPoints1 - start);
+
+                //check metric points
+                Point3D rescaledPoint = Point3D.create();
+                scaleAndOrientationTransformation.transform(metricReconstructedPoints3D.get(i + numPoints1 - start),
                         rescaledPoint);
 
                 assertTrue(euclideanPoint.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR));
@@ -2744,18 +3050,21 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             double lambdaX, lambdaY, lambdaZ;
 
-            final int numPoints = randomizer.nextInt(MIN_NUM_POINTS,
+            final int numPoints1 = randomizer.nextInt(MIN_NUM_POINTS,
                     MAX_NUM_POINTS);
+            final int numPoints2 = randomizer.nextInt(MIN_NUM_POINTS,
+                    MAX_NUM_POINTS);
+            final int start = randomizer.nextInt(0,
+                    numPoints1 - MIN_TRACKED_POINTS);
 
             InhomogeneousPoint3D point3D;
-            List<InhomogeneousPoint3D> points3D =
-                    new ArrayList<>();
+            List<InhomogeneousPoint3D> points3D1 = new ArrayList<>();
             Point2D projectedPoint1, projectedPoint2, projectedPoint3;
             final List<Point2D> projectedPoints1 = new ArrayList<>();
             final List<Point2D> projectedPoints2 = new ArrayList<>();
             final List<Point2D> projectedPoints3 = new ArrayList<>();
             boolean front1, front2, maxTriesReached = false;
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
                 do {
@@ -2782,7 +3091,7 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
                 if (maxTriesReached) break;
 
-                points3D.add(point3D);
+                points3D1.add(point3D);
 
                 //check that 3D point is in front of both cameras
                 //noinspection all
@@ -2802,6 +3111,53 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                 projectedPoint3 = new InhomogeneousPoint2D();
                 camera3.project(point3D, projectedPoint3);
                 projectedPoints3.add(projectedPoint3);
+            }
+
+            if (maxTriesReached) continue;
+
+            List<InhomogeneousPoint3D> points3D2 = new ArrayList<>();
+            Point2D projectedPoint2b, projectedPoint3b;
+            final List<Point2D> projectedPoints2b = new ArrayList<>();
+            final List<Point2D> projectedPoints3b = new ArrayList<>();
+            for (int i = 0; i < numPoints2; i++) {
+                //generate points and ensure they lie in front of both cameras
+                int numTry = 0;
+                do {
+                    lambdaX = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaY = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaZ = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+
+                    point3D = new InhomogeneousPoint3D(
+                            centralCommonPoint.getInhomX() + lambdaX,
+                            centralCommonPoint.getInhomY() + lambdaY,
+                            centralCommonPoint.getInhomZ() + lambdaZ);
+
+                    front2 = camera2.isPointInFrontOfCamera(point3D);
+                    if (numTry > MAX_TRIES) {
+                        maxTriesReached = true;
+                        break;
+                    }
+                    numTry++;
+                } while(!front2);
+
+                if (maxTriesReached) break;
+
+                points3D2.add(point3D);
+
+                //check that 3D point is in front of both cameras
+                //noinspection all
+                assertTrue(front2);
+
+                projectedPoint2b = new InhomogeneousPoint2D();
+                camera2.project(point3D, projectedPoint2b);
+                projectedPoints2b.add(projectedPoint2b);
+
+                projectedPoint3b = new InhomogeneousPoint2D();
+                camera3.project(point3D, projectedPoint3b);
+                projectedPoints3b.add(projectedPoint3b);
             }
 
             if (maxTriesReached) continue;
@@ -2841,29 +3197,48 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(
+                        public void onRequestSamples(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor,
-                                int viewId, List<Sample2D> samples) {
+                                int previousViewId, int currentViewId,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                List<Sample2D> currentViewNewlySpawnedSamples) {
 
-                            samples.clear();
+                            previousViewTrackedSamples.clear();
+                            currentViewTrackedSamples.clear();
+                            currentViewNewlySpawnedSamples.clear();
 
                             Sample2D sample;
                             if (mViewCount == 0) {
                                 //first view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints1.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
                                 }
-
                             } else if (mEstimatedFundamentalMatrix == null) {
                                 //second view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints1.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints2.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                //spawned samples
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewNewlySpawnedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -2932,11 +3307,33 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
                             } else {
                                 //third view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = start; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+
+                                for (int i = start; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints3.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints3b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -3007,32 +3404,38 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                         @Override
                         public void onSamplesAccepted(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) {
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
                             mViewCount++;
                         }
 
                         @Override
                         public void onSamplesRejected(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) { }
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
+                            mViewCount++;
+                        }
 
                         @Override
                         public void onRequestMatches(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor,
-                                List<Sample2D> samples1,
-                                List<Sample2D> samples2, int viewId1, int viewId2,
+                                List<Sample2D> allPreviousViewSamples,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                int previousViewId, int currentViewId,
                                 List<MatchedSamples> matches) {
                             matches.clear();
 
                             int numCameras = 0;
                             if (mEstimatedMetricCamera1 != null &&
-                                    (mEstimatedMetricCamera1.getViewId() == viewId1 ||
-                                            mEstimatedMetricCamera1.getViewId() == viewId2)) {
+                                    (mEstimatedMetricCamera1.getViewId() == previousViewId ||
+                                            mEstimatedMetricCamera1.getViewId() == currentViewId)) {
                                 numCameras++;
                             }
                             if (mEstimatedMetricCamera2 != null &&
-                                    (mEstimatedMetricCamera2.getViewId() == viewId1 ||
-                                            mEstimatedMetricCamera2.getViewId() == viewId2)) {
+                                    (mEstimatedMetricCamera2.getViewId() == previousViewId ||
+                                            mEstimatedMetricCamera2.getViewId() == currentViewId)) {
                                 numCameras++;
                             }
 
@@ -3043,30 +3446,49 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
                                 int pos = 0;
                                 if (mEstimatedMetricCamera1 != null &&
-                                        (mEstimatedMetricCamera1.getViewId() == viewId1 ||
-                                                mEstimatedMetricCamera1.getViewId() == viewId2)) {
+                                        (mEstimatedMetricCamera1.getViewId() == previousViewId ||
+                                                mEstimatedMetricCamera1.getViewId() == currentViewId)) {
                                     estimatedCameras[pos] = mEstimatedMetricCamera1;
                                     pos++;
                                 }
                                 if (mEstimatedMetricCamera2 != null &&
-                                        (mEstimatedMetricCamera2.getViewId() == viewId1 ||
-                                                mEstimatedMetricCamera2.getViewId() == viewId2)) {
+                                        (mEstimatedMetricCamera2.getViewId() == previousViewId ||
+                                                mEstimatedMetricCamera2.getViewId() == currentViewId)) {
                                     estimatedCameras[pos] = mEstimatedMetricCamera2;
                                 }
                             }
 
+                            List<Point2D> allPreviousPoints = new ArrayList<>();
+                            for (Sample2D sample : allPreviousViewSamples) {
+                                allPreviousPoints.add(sample.getPoint());
+                            }
+                            KDTree2D tree = new KDTree2D(allPreviousPoints);
+
+                            //search previous view tracked samples within tree
+                            int numTrackedSamples = previousViewTrackedSamples.size();
+                            Point2D point, nearestPoint;
+                            int nearestIndex;
                             MatchedSamples match;
-                            for (int i = 0; i < numPoints; i++) {
+                            for (int i = 0; i < numTrackedSamples; i++) {
+                                Sample2D previousSample = previousViewTrackedSamples.get(i);
+                                point = previousSample.getPoint();
+                                nearestIndex = tree.nearestIndex(point);
+                                nearestPoint = allPreviousPoints.get(nearestIndex);
+                                Sample2D nearestSample = allPreviousViewSamples.get(nearestIndex);
+
+                                if (point.distanceTo(nearestPoint) > NEAREST_THRESHOLD) {
+                                    continue;
+                                }
+
+                                Sample2D currentSample = currentViewTrackedSamples.get(i);
+
                                 match = new MatchedSamples();
                                 match.setSamples(new Sample2D[]{
-                                        samples1.get(i), samples2.get(i)
+                                        previousSample, currentSample
                                 });
-                                match.setViewIds(new int[]{viewId1, viewId2});
+                                match.setViewIds(new int[]{previousViewId, currentViewId});
 
-                                if (mMetricReconstructedPoints != null) {
-                                    match.setReconstructedPoint(
-                                            mMetricReconstructedPoints.get(i));
-                                }
+                                match.setReconstructedPoint(nearestSample.getReconstructedPoint());
 
                                 if (estimatedCameras != null) {
                                     match.setCameras(estimatedCameras);
@@ -3207,8 +3629,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
             assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale2, 0.0);
-            assertNotNull(reconstructor.getPreviousViewSamples());
-            assertNotNull(reconstructor.getCurrentViewSamples());
+            assertNotNull(reconstructor.getPreviousViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewNewlySpawnedSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -3257,13 +3680,15 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
-            if (mMetricReconstructedPoints.size() != numPoints) {
+            int numReconstructedPoints = numPoints1 - start + numPoints2;
+
+            if (mMetricReconstructedPoints.size() != numReconstructedPoints) {
                 continue;
             }
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
             List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numReconstructedPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
                 euclideanReconstructedPoints3D.add(
@@ -3271,7 +3696,7 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             }
 
             //check that all points are in front of both cameras
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numReconstructedPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
                 Point3D pe = euclideanReconstructedPoints3D.get(i);
 
@@ -3369,13 +3794,59 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             int numValidPoints = 0;
             double scaleX, scaleY, scaleZ;
-            for (int i = 0; i < numPoints; i++) {
-                Point3D point = points3D.get(i);
-                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i);
+            for (int i = start; i < numPoints1; i++) {
+                Point3D point = points3D1.get(i);
+                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i - start);
 
                 //check metric points
                 Point3D rescaledPoint = Point3D.create();
-                scaleAndOrientationTransformation.transform(metricReconstructedPoints3D.get(i),
+                scaleAndOrientationTransformation.transform(metricReconstructedPoints3D.get(i - start),
+                        rescaledPoint);
+
+                assertTrue(euclideanPoint.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR));
+
+                scaleX = point.getInhomX() / rescaledPoint.getInhomX();
+                scaleY = point.getInhomY() / rescaledPoint.getInhomY();
+                scaleZ = point.getInhomZ() / rescaledPoint.getInhomZ();
+
+                //check that scale error is less than 5%
+                assertEquals(scaleX, baseline / mScale2, LARGE_ABSOLUTE_ERROR);
+                assertEquals(scaleY, baseline / mScale2, LARGE_ABSOLUTE_ERROR);
+                assertEquals(scaleZ, baseline / mScale2, LARGE_ABSOLUTE_ERROR);
+                if (Math.abs(scaleX - 1.0) > RELATIVE_ERROR ||
+                        Math.abs(scaleY - 1.0) > RELATIVE_ERROR ||
+                        Math.abs(scaleZ - 1.0) > RELATIVE_ERROR) {
+                    continue;
+                }
+                rescaledPoint.setInhomogeneousCoordinates(
+                        rescaledPoint.getInhomX() * baseline / mScale2,
+                        rescaledPoint.getInhomY() * baseline / mScale2,
+                        rescaledPoint.getInhomZ() * baseline / mScale2);
+                if (point.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR)) {
+                    numValidPoints++;
+                }
+
+                //check euclidean points
+                scaleX = point.getInhomX() / euclideanPoint.getInhomX();
+                scaleY = point.getInhomY() / euclideanPoint.getInhomY();
+                scaleZ = point.getInhomZ() / euclideanPoint.getInhomZ();
+
+                //check that scale error is less than 5%
+                assertEquals(scaleX, baseline / mScale2, ABSOLUTE_ERROR);
+                assertEquals(scaleY, baseline / mScale2, ABSOLUTE_ERROR);
+                assertEquals(scaleZ, baseline / mScale2, ABSOLUTE_ERROR);
+                assertTrue(Math.abs(scaleX - 1.0) < RELATIVE_ERROR);
+                assertTrue(Math.abs(scaleY - 1.0) < RELATIVE_ERROR);
+                assertTrue(Math.abs(scaleZ - 1.0) < RELATIVE_ERROR);
+            }
+
+            for (int i = 0; i < numPoints2; i++) {
+                Point3D point = points3D2.get(i);
+                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i + numPoints1 - start);
+
+                //check metric points
+                Point3D rescaledPoint = Point3D.create();
+                scaleAndOrientationTransformation.transform(metricReconstructedPoints3D.get(i + numPoints1 - start),
                         rescaledPoint);
 
                 assertTrue(euclideanPoint.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR));
@@ -3729,20 +4200,25 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             double lambdaX, lambdaY, lambdaZ;
 
-            final int numPoints = randomizer.nextInt(MIN_NUM_POINTS,
+            final int numPoints1 = randomizer.nextInt(MIN_NUM_POINTS,
                     MAX_NUM_POINTS);
+            final int numPoints2 = randomizer.nextInt(MIN_NUM_POINTS,
+                    MAX_NUM_POINTS);
+            final int numPoints3 = randomizer.nextInt(MIN_NUM_POINTS,
+                    MAX_NUM_POINTS);
+            final int numPoints4 = randomizer.nextInt(MIN_NUM_POINTS,
+                    MAX_NUM_POINTS);
+            final int start1 = randomizer.nextInt(0,
+                    numPoints1 - MIN_TRACKED_POINTS);
+            final int start2 = randomizer.nextInt(0, numPoints2 - MIN_TRACKED_POINTS);
 
             InhomogeneousPoint3D point3D;
-            List<InhomogeneousPoint3D> points3D =
-                    new ArrayList<>();
-            Point2D projectedPoint1, projectedPoint2, projectedPoint3,
-                    projectedPoint4;
+            Point2D projectedPoint1, projectedPoint2, projectedPoint3;
             final List<Point2D> projectedPoints1 = new ArrayList<>();
             final List<Point2D> projectedPoints2 = new ArrayList<>();
             final List<Point2D> projectedPoints3 = new ArrayList<>();
-            final List<Point2D> projectedPoints4 = new ArrayList<>();
             boolean front1, front2, maxTriesReached = false;
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numPoints1; i++) {
                 //generate points and ensure they lie in front of both cameras
                 int numTry = 0;
                 do {
@@ -3769,8 +4245,6 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
                 if (maxTriesReached) break;
 
-                points3D.add(point3D);
-
                 //check that 3D point is in front of both cameras
                 //noinspection all
                 assertTrue(front1);
@@ -3789,10 +4263,147 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                 projectedPoint3 = new InhomogeneousPoint2D();
                 camera3.project(point3D, projectedPoint3);
                 projectedPoints3.add(projectedPoint3);
+            }
+
+            if (maxTriesReached) continue;
+
+            List<InhomogeneousPoint3D> points3D2 = new ArrayList<>();
+            Point2D projectedPoint2b, projectedPoint3b, projectedPoint4;
+            final List<Point2D> projectedPoints2b = new ArrayList<>();
+            final List<Point2D> projectedPoints3b = new ArrayList<>();
+            final List<Point2D> projectedPoints4 = new ArrayList<>();
+            for (int i = 0; i < numPoints2; i++) {
+                //generate points and ensure they lie in front of both cameras
+                int numTry = 0;
+                do {
+                    lambdaX = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaY = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaZ = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+
+                    point3D = new InhomogeneousPoint3D(
+                            centralCommonPoint.getInhomX() + lambdaX,
+                            centralCommonPoint.getInhomY() + lambdaY,
+                            centralCommonPoint.getInhomZ() + lambdaZ);
+
+                    front2 = camera2.isPointInFrontOfCamera(point3D);
+                    if (numTry > MAX_TRIES) {
+                        maxTriesReached = true;
+                        break;
+                    }
+                    numTry++;
+                } while(!front2);
+
+                if (maxTriesReached) break;
+
+                points3D2.add(point3D);
+
+                //check that 3D point is in front of both cameras
+                //noinspection all
+                assertTrue(front2);
+
+                //project 3D point into second pair
+                projectedPoint2b = new InhomogeneousPoint2D();
+                camera2.project(point3D, projectedPoint2b);
+                projectedPoints2b.add(projectedPoint2b);
+
+                projectedPoint3b = new InhomogeneousPoint2D();
+                camera3.project(point3D, projectedPoint3b);
+                projectedPoints3b.add(projectedPoint3b);
 
                 projectedPoint4 = new InhomogeneousPoint2D();
                 camera4.project(point3D, projectedPoint4);
                 projectedPoints4.add(projectedPoint4);
+            }
+
+            if (maxTriesReached) continue;
+
+            List<InhomogeneousPoint3D> points3D3 = new ArrayList<>();
+            Point2D projectedPoint3c, projectedPoint4b;
+            final List<Point2D> projectedPoints3c = new ArrayList<>();
+            final List<Point2D> projectedPoints4b = new ArrayList<>();
+            for (int i = 0; i < numPoints3; i++) {
+                //generate points and ensure they lie in front of both cameras
+                int numTry = 0;
+                do {
+                    lambdaX = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaY = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaZ = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+
+                    point3D = new InhomogeneousPoint3D(
+                            centralCommonPoint.getInhomX() + lambdaX,
+                            centralCommonPoint.getInhomY() + lambdaY,
+                            centralCommonPoint.getInhomZ() + lambdaZ);
+
+                    front2 = camera2.isPointInFrontOfCamera(point3D);
+                    if (numTry > MAX_TRIES) {
+                        maxTriesReached = true;
+                        break;
+                    }
+                    numTry++;
+                } while(!front2);
+
+                if (maxTriesReached) break;
+
+                points3D3.add(point3D);
+
+                //check that 3D point is in front of both cameras
+                //noinspection all
+                assertTrue(front2);
+
+                //project 3D point into second pair
+                projectedPoint3c = new InhomogeneousPoint2D();
+                camera3.project(point3D, projectedPoint3c);
+                projectedPoints3c.add(projectedPoint3c);
+
+                projectedPoint4b = new InhomogeneousPoint2D();
+                camera4.project(point3D, projectedPoint4b);
+                projectedPoints4b.add(projectedPoint4b);
+            }
+
+            if (maxTriesReached) continue;
+
+            Point2D projectedPoint4c;
+            final List<Point2D> projectedPoints4c = new ArrayList<>();
+            for (int i = 0; i < numPoints4; i++) {
+                //generate points and ensure they lie in front of both cameras
+                int numTry = 0;
+                do {
+                    lambdaX = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaY = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+                    lambdaZ = randomizer.nextDouble(
+                            MIN_LAMBDA_ESSENTIAL, MAX_LAMBDA_ESSENTIAL);
+
+                    point3D = new InhomogeneousPoint3D(
+                            centralCommonPoint.getInhomX() + lambdaX,
+                            centralCommonPoint.getInhomY() + lambdaY,
+                            centralCommonPoint.getInhomZ() + lambdaZ);
+
+                    front2 = camera2.isPointInFrontOfCamera(point3D);
+                    if (numTry > MAX_TRIES) {
+                        maxTriesReached = true;
+                        break;
+                    }
+                    numTry++;
+                } while(!front2);
+
+                if (maxTriesReached) break;
+
+                //check that 3D point is in front of both cameras
+                //noinspection all
+                assertTrue(front2);
+
+                //project 3D point into second pair
+                projectedPoint4c = new InhomogeneousPoint2D();
+                camera4.project(point3D, projectedPoint4c);
+                projectedPoints4c.add(projectedPoint4c);
             }
 
             if (maxTriesReached) continue;
@@ -3825,29 +4436,48 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                         }
 
                         @Override
-                        public void onRequestSamplesForCurrentView(
+                        public void onRequestSamples(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor,
-                                int viewId, List<Sample2D> samples) {
+                                int previousViewId, int currentViewId,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                List<Sample2D> currentViewNewlySpawnedSamples) {
 
-                            samples.clear();
+                            previousViewTrackedSamples.clear();
+                            currentViewTrackedSamples.clear();
+                            currentViewNewlySpawnedSamples.clear();
 
                             Sample2D sample;
                             if (mViewCount == 0) {
                                 //first view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints1.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
                                 }
-
                             } else if (mViewCount == 1) {
                                 //second view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = 0; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints1.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints2.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                //spawned samples
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewNewlySpawnedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -3871,11 +4501,40 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
                             } else if (mViewCount == 2){
                                 //third view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = start1; i < numPoints1; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints2b.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = start1; i < numPoints1; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints3.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints3b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                //spawned samples
+                                for (int i = 0; i < numPoints3; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints3c.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewNewlySpawnedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -3898,11 +4557,40 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
                             } else {
                                 //4th view
-                                for (int i = 0; i < numPoints; i++) {
+                                for (int i = start2; i < numPoints2; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints3b.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints3; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints3c.get(i));
+                                    sample.setViewId(previousViewId);
+                                    previousViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = start2; i < numPoints2; i++) {
                                     sample = new Sample2D();
                                     sample.setPoint(projectedPoints4.get(i));
-                                    sample.setViewId(viewId);
-                                    samples.add(sample);
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                for (int i = 0; i < numPoints3; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints4b.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewTrackedSamples.add(sample);
+                                }
+
+                                //spawned samples
+                                for (int i = 0; i < numPoints4; i++) {
+                                    sample = new Sample2D();
+                                    sample.setPoint(projectedPoints4c.get(i));
+                                    sample.setViewId(currentViewId);
+                                    currentViewNewlySpawnedSamples.add(sample);
                                 }
 
                                 //assume the following accelerator and gyroscope samples
@@ -3928,37 +4616,43 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
                         @Override
                         public void onSamplesAccepted(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) {
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
                             mViewCount++;
                         }
 
                         @Override
                         public void onSamplesRejected(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor, int viewId,
-                                List<Sample2D> samples) { }
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples) {
+                            mViewCount++;
+                        }
 
                         @Override
                         public void onRequestMatches(
                                 AbsoluteOrientationSlamSparseReconstructor reconstructor,
-                                List<Sample2D> samples1,
-                                List<Sample2D> samples2, int viewId1, int viewId2,
+                                List<Sample2D> allPreviousViewSamples,
+                                List<Sample2D> previousViewTrackedSamples,
+                                List<Sample2D> currentViewTrackedSamples,
+                                int previousViewId, int currentViewId,
                                 List<MatchedSamples> matches) {
                             matches.clear();
 
                             int numCameras = 0;
                             if (mEstimatedMetricCamera1 != null &&
-                                    (mEstimatedMetricCamera1.getViewId() == viewId1 ||
-                                            mEstimatedMetricCamera1.getViewId() == viewId2)) {
+                                    (mEstimatedMetricCamera1.getViewId() == previousViewId ||
+                                            mEstimatedMetricCamera1.getViewId() == currentViewId)) {
                                 numCameras++;
                             }
                             if (mEstimatedMetricCamera2 != null &&
-                                    (mEstimatedMetricCamera2.getViewId() == viewId1 ||
-                                            mEstimatedMetricCamera2.getViewId() == viewId2)) {
+                                    (mEstimatedMetricCamera2.getViewId() == previousViewId ||
+                                            mEstimatedMetricCamera2.getViewId() == currentViewId)) {
                                 numCameras++;
                             }
                             if (mEstimatedMetricCamera3 != null &&
-                                    (mEstimatedMetricCamera3.getViewId() == viewId1 ||
-                                            mEstimatedMetricCamera3.getViewId() == viewId2)) {
+                                    (mEstimatedMetricCamera3.getViewId() == previousViewId ||
+                                            mEstimatedMetricCamera3.getViewId() == currentViewId)) {
                                 numCameras++;
                             }
 
@@ -3969,35 +4663,54 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
                                 int pos = 0;
                                 if (mEstimatedMetricCamera1 != null &&
-                                        (mEstimatedMetricCamera1.getViewId() == viewId1 ||
-                                                mEstimatedMetricCamera1.getViewId() == viewId2)) {
+                                        (mEstimatedMetricCamera1.getViewId() == previousViewId ||
+                                                mEstimatedMetricCamera1.getViewId() == currentViewId)) {
                                     estimatedCameras[pos] = mEstimatedMetricCamera1;
                                     pos++;
                                 }
                                 if (mEstimatedMetricCamera2 != null &&
-                                        (mEstimatedMetricCamera2.getViewId() == viewId1 ||
-                                                mEstimatedMetricCamera2.getViewId() == viewId2)) {
+                                        (mEstimatedMetricCamera2.getViewId() == previousViewId ||
+                                                mEstimatedMetricCamera2.getViewId() == currentViewId)) {
                                     estimatedCameras[pos] = mEstimatedMetricCamera2;
                                 }
                                 if (mEstimatedMetricCamera3 != null &&
-                                        (mEstimatedMetricCamera3.getViewId() == viewId1 ||
-                                                mEstimatedMetricCamera3.getViewId() == viewId2)) {
+                                        (mEstimatedMetricCamera3.getViewId() == previousViewId ||
+                                                mEstimatedMetricCamera3.getViewId() == currentViewId)) {
                                     estimatedCameras[pos] = mEstimatedMetricCamera3;
                                 }
                             }
 
+                            List<Point2D> allPreviousPoints = new ArrayList<>();
+                            for (Sample2D sample : allPreviousViewSamples) {
+                                allPreviousPoints.add(sample.getPoint());
+                            }
+                            KDTree2D tree = new KDTree2D(allPreviousPoints);
+
+                            //search previous view tracked samples within tree
+                            int numTrackedSamples = previousViewTrackedSamples.size();
+                            Point2D point, nearestPoint;
+                            int nearestIndex;
                             MatchedSamples match;
-                            for (int i = 0; i < numPoints; i++) {
+                            for (int i = 0; i < numTrackedSamples; i++) {
+                                Sample2D previousSample = previousViewTrackedSamples.get(i);
+                                point = previousSample.getPoint();
+                                nearestIndex = tree.nearestIndex(point);
+                                nearestPoint = allPreviousPoints.get(nearestIndex);
+                                Sample2D nearestSample = allPreviousViewSamples.get(nearestIndex);
+
+                                if (point.distanceTo(nearestPoint) > NEAREST_THRESHOLD) {
+                                    continue;
+                                }
+
+                                Sample2D currentSample = currentViewTrackedSamples.get(i);
+
                                 match = new MatchedSamples();
                                 match.setSamples(new Sample2D[]{
-                                        samples1.get(i), samples2.get(i)
+                                        previousSample, currentSample
                                 });
-                                match.setViewIds(new int[]{viewId1, viewId2});
+                                match.setViewIds(new int[]{previousViewId, currentViewId});
 
-                                if (mMetricReconstructedPoints != null) {
-                                    match.setReconstructedPoint(
-                                            mMetricReconstructedPoints.get(i));
-                                }
+                                match.setReconstructedPoint(nearestSample.getReconstructedPoint());
 
                                 if (estimatedCameras != null) {
                                     match.setCameras(estimatedCameras);
@@ -4153,8 +4866,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertNotNull(reconstructor.getActiveEuclideanReconstructedPoints());
             assertSame(reconstructor.getActiveEuclideanReconstructedPoints(), mEuclideanReconstructedPoints);
             assertEquals(reconstructor.getCurrentScale(), mScale3, 0.0);
-            assertNotNull(reconstructor.getPreviousViewSamples());
-            assertNotNull(reconstructor.getCurrentViewSamples());
+            assertNotNull(reconstructor.getPreviousViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewTrackedSamples());
+            assertNotNull(reconstructor.getCurrentViewNewlySpawnedSamples());
 
             //check that estimated fundamental matrix is correct
             fundamentalMatrix1.normalize();
@@ -4208,13 +4922,15 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             assertNotSame(mMetricReconstructedPoints, mEuclideanReconstructedPoints);
 
-            if (mMetricReconstructedPoints.size() != numPoints) {
+            int numReconstructedPoints = numPoints2 - start2 + numPoints3;
+
+            if (mMetricReconstructedPoints.size() != numReconstructedPoints) {
                 continue;
             }
 
             List<Point3D> metricReconstructedPoints3D = new ArrayList<>();
             List<Point3D> euclideanReconstructedPoints3D = new ArrayList<>();
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numReconstructedPoints; i++) {
                 metricReconstructedPoints3D.add(
                         mMetricReconstructedPoints.get(i).getPoint());
                 euclideanReconstructedPoints3D.add(
@@ -4223,7 +4939,7 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             //check that all points are in front of both cameras
             boolean failed = false;
-            for (int i = 0; i < numPoints; i++) {
+            for (int i = 0; i < numReconstructedPoints; i++) {
                 Point3D p = metricReconstructedPoints3D.get(i);
                 Point3D pe = euclideanReconstructedPoints3D.get(i);
 
@@ -4387,13 +5103,59 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
 
             int numValidPoints = 0;
             double scaleX, scaleY, scaleZ;
-            for (int i = 0; i < numPoints; i++) {
-                Point3D point = points3D.get(i);
-                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i);
+            for (int i = start2; i < numPoints2; i++) {
+                Point3D point = points3D2.get(i);
+                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i - start2);
 
                 //check metric points
                 Point3D rescaledPoint = Point3D.create();
-                scaleAndOrientationTransformation.transform(metricReconstructedPoints3D.get(i),
+                scaleAndOrientationTransformation.transform(metricReconstructedPoints3D.get(i - start2),
+                        rescaledPoint);
+
+                assertTrue(euclideanPoint.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR));
+
+                scaleX = point.getInhomX() / rescaledPoint.getInhomX();
+                scaleY = point.getInhomY() / rescaledPoint.getInhomY();
+                scaleZ = point.getInhomZ() / rescaledPoint.getInhomZ();
+
+                //check that scale error is less than 5%
+                assertEquals(scaleX, baseline / mScale3, ABSOLUTE_ERROR);
+                assertEquals(scaleY, baseline / mScale3, ABSOLUTE_ERROR);
+                assertEquals(scaleZ, baseline / mScale3, ABSOLUTE_ERROR);
+                if (Math.abs(scaleX - 1.0) > RELATIVE_ERROR ||
+                        Math.abs(scaleY - 1.0) > RELATIVE_ERROR ||
+                        Math.abs(scaleZ - 1.0) > RELATIVE_ERROR) {
+                    continue;
+                }
+                rescaledPoint.setInhomogeneousCoordinates(
+                        rescaledPoint.getInhomX() * baseline / mScale3,
+                        rescaledPoint.getInhomY() * baseline / mScale3,
+                        rescaledPoint.getInhomZ() * baseline / mScale3);
+                if (point.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR)) {
+                    numValidPoints++;
+                }
+
+                //check euclidean points
+                scaleX = point.getInhomX() / euclideanPoint.getInhomX();
+                scaleY = point.getInhomY() / euclideanPoint.getInhomY();
+                scaleZ = point.getInhomZ() / euclideanPoint.getInhomZ();
+
+                //check that scale error is less than 5%
+                assertEquals(scaleX, baseline / mScale3, ABSOLUTE_ERROR);
+                assertEquals(scaleY, baseline / mScale3, ABSOLUTE_ERROR);
+                assertEquals(scaleZ, baseline / mScale3, ABSOLUTE_ERROR);
+                assertTrue(Math.abs(scaleX - 1.0) < RELATIVE_ERROR);
+                assertTrue(Math.abs(scaleY - 1.0) < RELATIVE_ERROR);
+                assertTrue(Math.abs(scaleZ - 1.0) < RELATIVE_ERROR);
+            }
+
+            for (int i = 0; i < numPoints3; i++) {
+                Point3D point = points3D3.get(i);
+                Point3D euclideanPoint = euclideanReconstructedPoints3D.get(i + numPoints2 - start2);
+
+                //check metric points
+                Point3D rescaledPoint = Point3D.create();
+                scaleAndOrientationTransformation.transform(metricReconstructedPoints3D.get(i + numPoints2 - start2),
                         rescaledPoint);
 
                 assertTrue(euclideanPoint.equals(rescaledPoint, LARGE_ABSOLUTE_ERROR));

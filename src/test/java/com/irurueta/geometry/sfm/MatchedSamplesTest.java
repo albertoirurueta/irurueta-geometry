@@ -104,6 +104,19 @@ public class MatchedSamplesTest {
         
         //check correctness
         assertSame(samples.getReconstructedPoint(), rp);
+
+        //set samples
+        Sample2D[] s = new Sample2D[1];
+        s[0] = new Sample2D();
+        samples.setSamples(s);
+
+        //set new value again
+        rp = new ReconstructedPoint3D();
+        samples.setReconstructedPoint(rp);
+
+        //check correctness
+        assertSame(samples.getReconstructedPoint(), rp);
+        assertSame(s[0].getReconstructedPoint(), rp);
     }
     
     @Test

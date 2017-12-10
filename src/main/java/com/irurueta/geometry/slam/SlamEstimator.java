@@ -46,7 +46,7 @@ public class SlamEstimator extends BaseSlamEstimator<SlamCalibrationData>
      * Length of position measurement, to correct any possible deviations of the
      * system after doing multiple predictions.
      */
-    protected static final int MEASUREMENT_LENGTH = 3;
+    private static final int MEASUREMENT_LENGTH = 3;
     
     /**
      * Contains device status containing the following values: position-x,

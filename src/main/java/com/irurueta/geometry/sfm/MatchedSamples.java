@@ -129,6 +129,11 @@ public class MatchedSamples implements Serializable {
      */
     public void setReconstructedPoint(ReconstructedPoint3D reconstructedPoint) {
         mReconstructedPoint = reconstructedPoint;
+        if (mSamples != null) {
+            for (int i = 0; i < mSamples.length; i++) {
+                mSamples[i].setReconstructedPoint(reconstructedPoint);
+            }
+        }
     }    
     
     /**
