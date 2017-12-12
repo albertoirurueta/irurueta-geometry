@@ -1858,13 +1858,17 @@ public class SlamSparseReconstructorTest {
                     center2.getInhomZ() + cameraSeparation2);
 
             double baseline = center1.distanceTo(center2);
+            double baseline2 = center2.distanceTo(center3);
 
             final double accelerationX, accelerationY, accelerationZ;
+            final double accelerationX2, accelerationY2, accelerationZ2;
 
             //s = 0.5*a*t^2 --> a = 2*s/t^2
             //assuming t = 1 second (50 samples * 0.02 s/sample = 1 second)
             accelerationX = accelerationY = accelerationZ
                     = 2 * cameraSeparation;
+            accelerationX2 = accelerationY2 = accelerationZ2
+                    = 2 * cameraSeparation2;
 
             PinholeCamera camera1 = new PinholeCamera(intrinsic, rotation1,
                     center1);
@@ -2146,8 +2150,8 @@ public class SlamSparseReconstructorTest {
                                 //and 3rd view (50 samples * 0.02 s/sample = 1 second)
                                 for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                                     reconstructor.updateAccelerometerSample(mTimestamp,
-                                            (float) accelerationX, (float) accelerationY,
-                                            (float) accelerationZ);
+                                            (float) accelerationX2, (float) accelerationY2,
+                                            (float) accelerationZ2);
                                     reconstructor.updateGyroscopeSample(mTimestamp,
                                             (float) angularSpeed3X, (float) angularSpeed3Y,
                                             (float) angularSpeed3Z);
@@ -2468,6 +2472,7 @@ public class SlamSparseReconstructorTest {
             Rotation3D euclideanRotation3 = estimatedEuclideanCamera3.getCameraRotation();
 
             double estimatedBaseline = euclideanCenter1.distanceTo(euclideanCenter2);
+            double estimatedBaseline2 = euclideanCenter2.distanceTo(euclideanCenter3);
 
             //check cameras are correct
             double maxBaseline = Math.max(estimatedBaseline, baseline);
@@ -2477,15 +2482,22 @@ public class SlamSparseReconstructorTest {
             }
             assertEquals(estimatedBaseline, baseline, absoluteScaleError);
 
+            double maxBaseline2 = Math.max(estimatedBaseline2, baseline2);
+            double absoluteScaleError2 = RELATIVE_ERROR * maxBaseline2;
+            if (Math.abs(estimatedBaseline2 - baseline2) > absoluteScaleError2) {
+                continue;
+            }
+            assertEquals(estimatedBaseline2, baseline2, absoluteScaleError2);
+
             assertTrue(center1.equals(euclideanCenter1, ABSOLUTE_ERROR));
             if (!center2.equals(euclideanCenter2, absoluteScaleError)) {
                 continue;
             }
             assertTrue(center2.equals(euclideanCenter2, absoluteScaleError));
-            if(!center3.equals(euclideanCenter3, absoluteScaleError)) {
+            if(!center3.equals(euclideanCenter3, absoluteScaleError2)) {
                 continue;
             }
-            assertTrue(center3.equals(euclideanCenter3, absoluteScaleError));
+            assertTrue(center3.equals(euclideanCenter3, absoluteScaleError2));
 
             assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
@@ -2840,13 +2852,17 @@ public class SlamSparseReconstructorTest {
                     center2.getInhomZ() + cameraSeparation2);
 
             double baseline = center1.distanceTo(center2);
+            double baseline2 = center2.distanceTo(center3);
 
             final double accelerationX, accelerationY, accelerationZ;
+            final double accelerationX2, accelerationY2, accelerationZ2;
 
             //s = 0.5*a*t^2 --> a = 2*s/t^2
             //assuming t = 1 second (50 samples * 0.02 s/sample = 1 second)
             accelerationX = accelerationY = accelerationZ
                     = 2 * cameraSeparation;
+            accelerationX2 = accelerationY2 = accelerationZ2
+                    = 2 * cameraSeparation2;
 
             PinholeCamera camera1 = new PinholeCamera(intrinsic, rotation1,
                     center1);
@@ -3204,11 +3220,11 @@ public class SlamSparseReconstructorTest {
                                     noiseAngularSpeedZ =
                                             angularSpeedRandomizer.nextFloat();
 
-                                    accelerationWithNoiseX = (float)accelerationX +
+                                    accelerationWithNoiseX = (float)accelerationX2 +
                                             noiseAccelerationX;
-                                    accelerationWithNoiseY = (float)accelerationY +
+                                    accelerationWithNoiseY = (float)accelerationY2 +
                                             noiseAccelerationY;
-                                    accelerationWithNoiseZ = (float)accelerationZ +
+                                    accelerationWithNoiseZ = (float)accelerationZ2 +
                                             noiseAccelerationZ;
                                     accelerationWithNoise[0] = accelerationWithNoiseX;
                                     accelerationWithNoise[1] = accelerationWithNoiseY;
@@ -3545,6 +3561,7 @@ public class SlamSparseReconstructorTest {
             Rotation3D euclideanRotation3 = estimatedEuclideanCamera3.getCameraRotation();
 
             double estimatedBaseline = euclideanCenter1.distanceTo(euclideanCenter2);
+            double estimatedBaseline2 = euclideanCenter2.distanceTo(euclideanCenter3);
 
             //check cameras are correct
             double maxBaseline = Math.max(estimatedBaseline, baseline);
@@ -3554,15 +3571,22 @@ public class SlamSparseReconstructorTest {
             }
             assertEquals(estimatedBaseline, baseline, absoluteScaleError);
 
+            double maxBaseline2 = Math.max(estimatedBaseline2, baseline2);
+            double absoluteScaleError2 = RELATIVE_ERROR * maxBaseline2;
+            if (Math.abs(estimatedBaseline2 - baseline2) > absoluteScaleError2) {
+                continue;
+            }
+            assertEquals(estimatedBaseline2, baseline2, absoluteScaleError2);
+
             assertTrue(center1.equals(euclideanCenter1, ABSOLUTE_ERROR));
             if (!center2.equals(euclideanCenter2, absoluteScaleError)) {
                 continue;
             }
             assertTrue(center2.equals(euclideanCenter2, absoluteScaleError));
-            if(!center3.equals(euclideanCenter3, absoluteScaleError)) {
+            if(!center3.equals(euclideanCenter3, absoluteScaleError2)) {
                 continue;
             }
-            assertTrue(center3.equals(euclideanCenter3, absoluteScaleError));
+            assertTrue(center3.equals(euclideanCenter3, absoluteScaleError2));
 
             assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);
@@ -3956,13 +3980,21 @@ public class SlamSparseReconstructorTest {
                     center3.getInhomZ() + cameraSeparation3);
 
             double baseline = center1.distanceTo(center2);
+            double baseline2 = center2.distanceTo(center3);
+            double baseline3 = center3.distanceTo(center4);
 
             final double accelerationX, accelerationY, accelerationZ;
+            final double accelerationX2, accelerationY2, accelerationZ2;
+            final double accelerationX3, accelerationY3, accelerationZ3;
 
             //s = 0.5*a*t^2 --> a = 2*s/t^2
             //assuming t = 1 second (50 samples * 0.02 s/sample = 1 second)
             accelerationX = accelerationY = accelerationZ
                     = 2 * cameraSeparation;
+            accelerationX2 = accelerationY2 = accelerationZ2
+                    = 2 * cameraSeparation2;
+            accelerationX3 = accelerationY3 = accelerationZ3
+                    = 2 * cameraSeparation3;
 
             PinholeCamera camera1 = new PinholeCamera(intrinsic, rotation1,
                     center1);
@@ -4339,8 +4371,8 @@ public class SlamSparseReconstructorTest {
                                 //and 3rd view (50 samples * 0.02 s/sample = 1 second)
                                 for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                                     reconstructor.updateAccelerometerSample(mTimestamp,
-                                            (float) accelerationX, (float) accelerationY,
-                                            (float) accelerationZ);
+                                            (float) accelerationX2, (float) accelerationY2,
+                                            (float) accelerationZ2);
                                     reconstructor.updateGyroscopeSample(mTimestamp,
                                             (float) angularSpeed3X, (float) angularSpeed3Y,
                                             (float) angularSpeed3Z);
@@ -4390,8 +4422,8 @@ public class SlamSparseReconstructorTest {
                                 //and 3rd view (50 samples * 0.02 s/sample = 1 second)
                                 for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                                     reconstructor.updateAccelerometerSample(mTimestamp,
-                                            (float) accelerationX, (float) accelerationY,
-                                            (float) accelerationZ);
+                                            (float) accelerationX3, (float) accelerationY3,
+                                            (float) accelerationZ3);
                                     reconstructor.updateGyroscopeSample(mTimestamp,
                                             (float) angularSpeed4X, (float) angularSpeed4Y,
                                             (float) angularSpeed4Z);
@@ -4774,6 +4806,8 @@ public class SlamSparseReconstructorTest {
             Rotation3D euclideanRotation4 = estimatedEuclideanCamera4.getCameraRotation();
 
             double estimatedBaseline = euclideanCenter1.distanceTo(euclideanCenter2);
+            double estimatedBaseline2 = euclideanCenter2.distanceTo(euclideanCenter3);
+            double estimatedBaseline3 = euclideanCenter3.distanceTo(euclideanCenter4);
 
             //check cameras are correct
             double maxBaseline = Math.max(estimatedBaseline, baseline);
@@ -4782,6 +4816,21 @@ public class SlamSparseReconstructorTest {
                 continue;
             }
             assertEquals(estimatedBaseline, baseline, absoluteScaleError);
+
+            double maxBaseline2 = Math.max(estimatedBaseline2, baseline2);
+            double absoluteScaleError2 = RELATIVE_ERROR * maxBaseline2;
+            if (Math.abs(estimatedBaseline2 - baseline2) > absoluteScaleError2) {
+                continue;
+            }
+            assertEquals(estimatedBaseline2, baseline2, absoluteScaleError2);
+
+            double maxBaseline3 = Math.max(estimatedBaseline3, baseline3);
+            double absoluteScaleError3 = RELATIVE_ERROR * maxBaseline3;
+            if (Math.abs(estimatedBaseline3 - baseline3) > absoluteScaleError3) {
+                continue;
+            }
+            assertEquals(estimatedBaseline3, baseline3, absoluteScaleError3);
+
 
             MetricTransformation3D scaleTransformation
                     = new MetricTransformation3D(baseline);
@@ -4805,14 +4854,14 @@ public class SlamSparseReconstructorTest {
                 continue;
             }
             assertTrue(center2.equals(euclideanCenter2, absoluteScaleError));
-            if(!center3.equals(euclideanCenter3, absoluteScaleError)) {
+            if(!center3.equals(euclideanCenter3, absoluteScaleError2)) {
                 continue;
             }
-            assertTrue(center3.equals(euclideanCenter3, absoluteScaleError));
-            if(!center4.equals(euclideanCenter4, 3*absoluteScaleError)) {
+            assertTrue(center3.equals(euclideanCenter3, absoluteScaleError2));
+            if(!center4.equals(euclideanCenter4, 3*absoluteScaleError3)) {
                 continue;
             }
-            assertTrue(center4.equals(euclideanCenter4, 3*absoluteScaleError));
+            assertTrue(center4.equals(euclideanCenter4, 3*absoluteScaleError3));
 
             assertEquals(euclideanIntrinsic1.getHorizontalFocalLength(),
                     intrinsic.getHorizontalFocalLength(), ABSOLUTE_ERROR);

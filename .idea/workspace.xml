@@ -2,24 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c6d6a1cb-41d7-401f-885d-de1ac92dc71e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/build-info.properties" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/build-info.properties" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSparseReconstructor.java" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSparseReconstructor.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSparseReconstructorListener.java" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSparseReconstructorListener.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/MatchedSamples.java" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/MatchedSamples.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/ReconstructedPoint3D.java" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/ReconstructedPoint3D.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/Sample2D.java" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/Sample2D.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/slam/SlamEstimator.java" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/slam/SlamEstimator.java" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest.java" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationSlamSparseReconstructorTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationSlamSparseReconstructorTest.java" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/ConstantVelocityModelSlamSparseReconstructorTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/ConstantVelocityModelSlamSparseReconstructorTest.java" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/KnownBaselineSparseReconstructorTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/KnownBaselineSparseReconstructorTest.java" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/MatchedSamplesTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/MatchedSamplesTest.java" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/Sample2DTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/Sample2DTest.java" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamSparseReconstructorTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamSparseReconstructorTest.java" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SparseReconstructorTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SparseReconstructorTest.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,162 +20,61 @@
     <option name="PATCH_PATH" value="" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SparseReconstructorTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SparseReconstructorTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="125">
-              <caret line="7327" column="20" lean-forward="false" selection-start-line="7327" selection-start-column="20" selection-end-line="7327" selection-end-column="20" />
-              <folding>
-                <element signature="method#testConstructor#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="method#testGeneralPointsEssentialTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#28286#28287#0" expanded="true" />
-                <element signature="e#28357#28358#0" expanded="true" />
-                <element signature="e#28474#28475#0" expanded="true" />
-                <element signature="e#28546#28547#0" expanded="true" />
-                <element signature="e#28663#28664#0" expanded="true" />
-                <element signature="e#28736#28737#0" expanded="true" />
-                <element signature="e#28851#28852#0" expanded="true" />
-                <element signature="e#28921#28922#0" expanded="true" />
-                <element signature="method#testGeneralPointsDIACTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#55715#55716#0" expanded="true" />
-                <element signature="e#55786#55787#0" expanded="true" />
-                <element signature="e#55903#55904#0" expanded="true" />
-                <element signature="e#55975#55976#0" expanded="true" />
-                <element signature="e#56092#56093#0" expanded="true" />
-                <element signature="e#56165#56166#0" expanded="true" />
-                <element signature="e#56280#56281#0" expanded="true" />
-                <element signature="e#56350#56351#0" expanded="true" />
-                <element signature="method#testGeneralPointsDAQAndEssentialZeroPrincipalPointTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#83529#83530#0" expanded="true" />
-                <element signature="e#83600#83601#0" expanded="true" />
-                <element signature="e#83717#83718#0" expanded="true" />
-                <element signature="e#83789#83790#0" expanded="true" />
-                <element signature="e#83906#83907#0" expanded="true" />
-                <element signature="e#83979#83980#0" expanded="true" />
-                <element signature="e#84094#84095#0" expanded="true" />
-                <element signature="e#84164#84165#0" expanded="true" />
-                <element signature="method#testGeneralPointsDAQAndEssentialTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#111438#111439#0" expanded="true" />
-                <element signature="e#111509#111510#0" expanded="true" />
-                <element signature="e#111626#111627#0" expanded="true" />
-                <element signature="e#111698#111699#0" expanded="true" />
-                <element signature="e#111815#111816#0" expanded="true" />
-                <element signature="e#111888#111889#0" expanded="true" />
-                <element signature="e#112003#112004#0" expanded="true" />
-                <element signature="e#112073#112074#0" expanded="true" />
-                <element signature="method#testGeneralPointsDAQTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#139237#139238#0" expanded="true" />
-                <element signature="e#139308#139309#0" expanded="true" />
-                <element signature="e#139425#139426#0" expanded="true" />
-                <element signature="e#139497#139498#0" expanded="true" />
-                <element signature="e#139614#139615#0" expanded="true" />
-                <element signature="e#139687#139688#0" expanded="true" />
-                <element signature="e#139802#139803#0" expanded="true" />
-                <element signature="e#139872#139873#0" expanded="true" />
-                <element signature="method#testPlanarPointsEssentialTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#165617#165618#0" expanded="true" />
-                <element signature="e#165688#165689#0" expanded="true" />
-                <element signature="e#165805#165806#0" expanded="true" />
-                <element signature="e#165877#165878#0" expanded="true" />
-                <element signature="e#165994#165995#0" expanded="true" />
-                <element signature="e#166067#166068#0" expanded="true" />
-                <element signature="e#166182#166183#0" expanded="true" />
-                <element signature="e#166252#166253#0" expanded="true" />
-                <element signature="method#testPlanarPointsDIACTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#194529#194530#0" expanded="true" />
-                <element signature="e#194600#194601#0" expanded="true" />
-                <element signature="e#194717#194718#0" expanded="true" />
-                <element signature="e#194789#194790#0" expanded="true" />
-                <element signature="e#194906#194907#0" expanded="true" />
-                <element signature="e#194979#194980#0" expanded="true" />
-                <element signature="e#195094#195095#0" expanded="true" />
-                <element signature="e#195164#195165#0" expanded="true" />
-                <element signature="method#testPlanarPointsDAQAndEssentialZeroPrincipalPointTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#220732#220733#0" expanded="true" />
-                <element signature="e#220803#220804#0" expanded="true" />
-                <element signature="e#220920#220921#0" expanded="true" />
-                <element signature="e#220992#220993#0" expanded="true" />
-                <element signature="e#221109#221110#0" expanded="true" />
-                <element signature="e#221182#221183#0" expanded="true" />
-                <element signature="e#221297#221298#0" expanded="true" />
-                <element signature="e#221367#221368#0" expanded="true" />
-                <element signature="method#testPlanarPointsDAQTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#247726#247727#0" expanded="true" />
-                <element signature="e#247797#247798#0" expanded="true" />
-                <element signature="e#247914#247915#0" expanded="true" />
-                <element signature="e#247986#247987#0" expanded="true" />
-                <element signature="e#248103#248104#0" expanded="true" />
-                <element signature="e#248176#248177#0" expanded="true" />
-                <element signature="e#248291#248292#0" expanded="true" />
-                <element signature="e#248361#248362#0" expanded="true" />
-                <element signature="method#testGeneralPointsEssentialEPnPAdditionalIntrinsicThreeViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#277744#277745#0" expanded="true" />
-                <element signature="e#277815#277816#0" expanded="true" />
-                <element signature="e#277932#277933#0" expanded="true" />
-                <element signature="e#278004#278005#0" expanded="true" />
-                <element signature="e#278121#278122#0" expanded="true" />
-                <element signature="e#278194#278195#0" expanded="true" />
-                <element signature="e#278309#278310#0" expanded="true" />
-                <element signature="e#278379#278380#0" expanded="true" />
-                <element signature="method#testGeneralPointsEssentialEPnPDAQThreeViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#315443#315444#0" expanded="true" />
-                <element signature="e#315514#315515#0" expanded="true" />
-                <element signature="e#315631#315632#0" expanded="true" />
-                <element signature="e#315703#315704#0" expanded="true" />
-                <element signature="e#315820#315821#0" expanded="true" />
-                <element signature="e#315893#315894#0" expanded="true" />
-                <element signature="e#316008#316009#0" expanded="true" />
-                <element signature="e#316078#316079#0" expanded="true" />
-                <element signature="method#testGeneralPointsEssentialEPnPDIACThreeViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#355149#355150#0" expanded="true" />
-                <element signature="e#355220#355221#0" expanded="true" />
-                <element signature="e#355337#355338#0" expanded="true" />
-                <element signature="e#355409#355410#0" expanded="true" />
-                <element signature="e#355526#355527#0" expanded="true" />
-                <element signature="e#355599#355600#0" expanded="true" />
-                <element signature="e#355714#355715#0" expanded="true" />
-                <element signature="e#355784#355785#0" expanded="true" />
-                <element signature="method#testGeneralPointsEssentialUPnPThreeViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#391643#391644#0" expanded="true" />
-                <element signature="e#391714#391715#0" expanded="true" />
-                <element signature="e#391831#391832#0" expanded="true" />
-                <element signature="e#391903#391904#0" expanded="true" />
-                <element signature="e#392020#392021#0" expanded="true" />
-                <element signature="e#392093#392094#0" expanded="true" />
-                <element signature="e#392208#392209#0" expanded="true" />
-                <element signature="e#392278#392279#0" expanded="true" />
-                <element signature="method#testGeneralPointsEssentialDLTThreeViews#0;class#SparseReconstructorTest#0" expanded="false" />
-                <element signature="e#429543#429544#0" expanded="true" />
-                <element signature="e#429614#429615#0" expanded="true" />
-                <element signature="e#429731#429732#0" expanded="true" />
-                <element signature="e#429803#429804#0" expanded="true" />
-                <element signature="e#429920#429921#0" expanded="true" />
-                <element signature="e#429993#429994#0" expanded="true" />
-                <element signature="e#430108#430109#0" expanded="true" />
-                <element signature="e#430178#430179#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AbsoluteOrientationSlamSparseReconstructorTest.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationSlamSparseReconstructorTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-8955">
-              <caret line="4628" column="41" lean-forward="false" selection-start-line="4628" selection-start-column="41" selection-end-line="4628" selection-end-column="41" />
-              <folding>
-                <element signature="method#testConstructor#0;class#AbsoluteOrientationSlamSparseReconstructorTest#0" expanded="false" />
-                <element signature="e#38134#38135#0" expanded="true" />
-                <element signature="e#38204#38205#0" expanded="true" />
-                <element signature="e#126970#126971#0" expanded="true" />
-                <element signature="e#127040#127041#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="SlamSparseReconstructor.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SlamSparseReconstructor.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="268">
+                  <caret line="61" column="49" lean-forward="false" selection-start-line="61" selection-start-column="49" selection-end-line="61" selection-end-column="49" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="BaseSlamSparseReconstructor.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamSparseReconstructor.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="135">
+                  <caret line="44" column="30" lean-forward="false" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="30" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SlamSparseReconstructorTest.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamSparseReconstructorTest.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-10072">
+                  <caret line="2865" column="0" lean-forward="true" selection-start-line="2863" selection-start-column="0" selection-end-line="2865" selection-end-column="0" />
+                  <folding>
+                    <element signature="method#testConstructor#0;class#SlamSparseReconstructorTest#0" expanded="false" />
+                    <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
+                    <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseTwoViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
+                    <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="SlamPairedViewsSparseReconstructor.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructor.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-59">
+                  <caret line="26" column="51" lean-forward="true" selection-start-line="26" selection-start-column="51" selection-end-line="26" selection-end-column="51" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -200,8 +86,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest</find>
-      <find>SlamPairedViewsSparseReconstructorTest</find>
       <find>testRefineSuggestedRotation</find>
       <find>testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseTwoViews</find>
       <find>testSetDualImageOfAbsoluteConicAndPlaneAtInfinity</find>
@@ -230,6 +114,8 @@
       <find>start</find>
       <find>mCurrentViewId</find>
       <find>start1</find>
+      <find>mSlamEstimator</find>
+      <find>baseline2</find>
     </findStrings>
     <replaceStrings>
       <replace>KnownBaselineSparseReconstructorConfiguration</replace>
@@ -259,7 +145,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/AbsoluteOrientationSlamSparseReconstructor.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/ConstantVelocityModelSlamPairedViewsSparseReconstructorListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorListener.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/PairedViewSparseReconstructorTest.java" />
@@ -306,10 +191,11 @@
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/slam/SlamEstimator.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SparseReconstructorTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/KnownBaselineSparseReconstructorTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamSparseReconstructorTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SlamSparseReconstructor.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/ConstantVelocityModelSlamSparseReconstructorTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationSlamSparseReconstructorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamSparseReconstructorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest.java" />
       </list>
     </option>
   </component>
@@ -516,7 +402,6 @@
       <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="Scratches" />
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -593,6 +478,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -622,7 +508,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.AbsoluteOrientationSlamSparseReconstructorTest">
+  <component name="RunManager" selected="JUnit.SlamSparseReconstructorTest">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -719,31 +605,6 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="KnownBaselineSparseReconstructorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.irurueta.geometry.sfm.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="irurueta-geometry" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="com.irurueta.geometry.sfm" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.sfm.KnownBaselineSparseReconstructorTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-    </configuration>
     <configuration name="SlamSparseReconstructorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -758,6 +619,31 @@
       <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.sfm.SlamSparseReconstructorTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration name="SlamSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseFourViews" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.irurueta.geometry.sfm.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="irurueta-geometry" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.irurueta.geometry.sfm" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.sfm.SlamSparseReconstructorTest" />
+      <option name="METHOD_NAME" value="testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseFourViews" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -948,18 +834,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="JUnit.SlamSparseReconstructorTest" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.KnownBaselineSparseReconstructorTest" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.AbsoluteOrientationSlamSparseReconstructorTest" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.SlamSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseFourViews" />
       <item index="3" class="java.lang.String" itemvalue="JUnit.ConstantVelocityModelSlamSparseReconstructorTest" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.AbsoluteOrientationSlamSparseReconstructorTest" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.AbsoluteOrientationSlamSparseReconstructorTest" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.SlamSparseReconstructorTest" />
         <item index="1" class="java.lang.String" itemvalue="JUnit.AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.ConstantVelocityModelSlamSparseReconstructorTest" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.SlamSparseReconstructorTest" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.KnownBaselineSparseReconstructorTest" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.AbsoluteOrientationSlamSparseReconstructorTest" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.ConstantVelocityModelSlamSparseReconstructorTest" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.SlamSparseReconstructorTest.testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseFourViews" />
       </list>
     </recent_temporary>
   </component>
@@ -993,44 +879,47 @@
       <workItem from="1512423080985" duration="5814000" />
       <workItem from="1512464112479" duration="755000" />
       <workItem from="1512510543473" duration="6821000" />
-      <workItem from="1512598787631" duration="59006000" />
+      <workItem from="1512598787631" duration="59050000" />
+      <workItem from="1512988132427" duration="574000" />
+      <workItem from="1513111800687" duration="32000" />
+      <workItem from="1513111871916" duration="6880000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest - 2017.12.10 at 17h 12m 52s.xml">
+    <history-entry file="AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest - 2017.12.12 at 23h 47m 53s.xml">
       <configuration name="AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest - 2017.12.10 at 17h 13m 10s.xml">
-      <configuration name="AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="AbsoluteOrientationSlamSparseReconstructorTest - 2017.12.10 at 17h 15m 10s.xml">
+    <history-entry file="AbsoluteOrientationSlamSparseReconstructorTest - 2017.12.12 at 23h 24m 01s.xml">
       <configuration name="AbsoluteOrientationSlamSparseReconstructorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ConstantVelocityModelSlamSparseReconstructorTest - 2017.12.10 at 17h 10m 57s.xml">
+    <history-entry file="AbsoluteOrientationSlamSparseReconstructorTest - 2017.12.12 at 23h 30m 12s.xml">
+      <configuration name="AbsoluteOrientationSlamSparseReconstructorTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="AbsoluteOrientationSlamSparseReconstructorTest - 2017.12.12 at 23h 34m 35s.xml">
+      <configuration name="AbsoluteOrientationSlamSparseReconstructorTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="AbsoluteOrientationSlamSparseReconstructorTest - 2017.12.12 at 23h 34m 51s.xml">
+      <configuration name="AbsoluteOrientationSlamSparseReconstructorTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ConstantVelocityModelSlamSparseReconstructorTest - 2017.12.12 at 23h 05m 22s.xml">
       <configuration name="ConstantVelocityModelSlamSparseReconstructorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ConstantVelocityModelSlamSparseReconstructorTest - 2017.12.10 at 17h 11m 28s.xml">
+    <history-entry file="ConstantVelocityModelSlamSparseReconstructorTest - 2017.12.12 at 23h 10m 14s.xml">
       <configuration name="ConstantVelocityModelSlamSparseReconstructorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="KnownBaselineSparseReconstructorTest - 2017.12.10 at 17h 05m 41s.xml">
-      <configuration name="KnownBaselineSparseReconstructorTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="KnownBaselineSparseReconstructorTest - 2017.12.10 at 17h 06m 13s.xml">
-      <configuration name="KnownBaselineSparseReconstructorTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="KnownBaselineSparseReconstructorTest - 2017.12.10 at 17h 07m 27s.xml">
-      <configuration name="KnownBaselineSparseReconstructorTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="SlamSparseReconstructorTest - 2017.12.10 at 17h 08m 54s.xml">
+    <history-entry file="SlamSparseReconstructorTest - 2017.12.12 at 23h 35m 02s.xml">
       <configuration name="SlamSparseReconstructorTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SparseReconstructorTest - 2017.12.10 at 17h 01m 24s.xml">
-      <configuration name="SparseReconstructorTest" configurationId="JUnit" />
+    <history-entry file="SlamSparseReconstructorTest - 2017.12.12 at 23h 35m 35s.xml">
+      <configuration name="SlamSparseReconstructorTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="SlamSparseReconstructorTest - 2017.12.12 at 23h 48m 01s.xml">
+      <configuration name="SlamSparseReconstructorTest" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="94852000" />
+    <option name="totallyTimeSpent" value="102382000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1431" height="803" extended-state="0" />
@@ -1044,20 +933,19 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299566" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32943013" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32992327" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27259886" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32992327" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26781857" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2786177" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32768363" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31355932" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1065,6 +953,7 @@
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32768363" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1123,7 +1012,7 @@
           <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="1006" />
+      <option name="time" value="1034" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1132,20 +1021,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/AbsoluteOrientationSlamPairedViewsSparseReconstructor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-403">
-          <caret line="25" column="13" lean-forward="false" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationSlamPairedViewsSparseReconstructorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="1516" column="41" lean-forward="true" selection-start-line="1516" selection-start-column="41" selection-end-line="1516" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationConstantVelocityModelSlamPairedViewsSparseReconstructorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
@@ -1178,13 +1053,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="275">
           <caret line="1119" column="24" lean-forward="false" selection-start-line="1119" selection-start-column="24" selection-end-line="1119" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="1345" column="13" lean-forward="true" selection-start-line="1345" selection-start-column="13" selection-end-line="1345" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1350,10 +1218,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1326">
           <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
-          <folding>
-            <element signature="e#3389#3390#0" expanded="true" />
-            <element signature="e#3431#3432#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1361,7 +1225,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1369,16 +1232,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
           <caret line="119" column="38" lean-forward="false" selection-start-line="119" selection-start-column="38" selection-end-line="119" selection-end-column="38" />
-          <folding>
-            <element signature="e#4199#4200#0" expanded="true" />
-            <element signature="e#4235#4236#0" expanded="true" />
-            <element signature="e#4608#4609#0" expanded="true" />
-            <element signature="e#4652#4653#0" expanded="true" />
-            <element signature="e#5085#5086#0" expanded="true" />
-            <element signature="e#5116#5117#0" expanded="true" />
-            <element signature="e#5573#5574#0" expanded="true" />
-            <element signature="e#5607#5608#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1386,7 +1239,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="404">
           <caret line="118" column="53" lean-forward="false" selection-start-line="118" selection-start-column="53" selection-end-line="118" selection-end-column="53" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1394,9 +1246,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="223">
           <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#5560#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1404,7 +1253,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1412,7 +1260,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-828">
           <caret line="59" column="0" lean-forward="true" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1420,7 +1267,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="228">
           <caret line="52" column="22" lean-forward="false" selection-start-line="52" selection-start-column="22" selection-end-line="52" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1428,23 +1274,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="145">
           <caret line="509" column="0" lean-forward="false" selection-start-line="509" selection-start-column="0" selection-end-line="509" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/slam/BaseSlamEstimator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="137" column="4" lean-forward="true" selection-start-line="137" selection-start-column="4" selection-end-line="137" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamSparseReconstructor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="129" column="0" lean-forward="false" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1452,15 +1281,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
           <caret line="48" column="11" lean-forward="false" selection-start-line="48" selection-start-column="11" selection-end-line="48" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SlamSparseReconstructor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="66" column="0" lean-forward="false" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1469,7 +1289,7 @@
         <state relative-caret-position="92">
           <caret line="445" column="31" lean-forward="true" selection-start-line="445" selection-start-column="31" selection-end-line="445" selection-end-column="31" />
           <folding>
-            <element signature="e#47202#47241#0" expanded="true" />
+            <element signature="e#47202#47241#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1482,250 +1302,252 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamSparseReconstructorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="4413" column="41" lean-forward="false" selection-start-line="4413" selection-start-column="41" selection-end-line="4413" selection-end-column="41" />
-          <folding>
-            <element signature="method#testConstructor#0;class#SlamSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
-            <element signature="e#35988#35989#0" expanded="true" />
-            <element signature="e#36059#36060#0" expanded="true" />
-            <element signature="e#36180#36181#0" expanded="true" />
-            <element signature="e#36252#36253#0" expanded="true" />
-            <element signature="e#36373#36374#0" expanded="true" />
-            <element signature="e#36446#36447#0" expanded="true" />
-            <element signature="e#36565#36566#0" expanded="true" />
-            <element signature="e#36635#36636#0" expanded="true" />
-            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseTwoViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
-            <element signature="e#74800#74801#0" expanded="true" />
-            <element signature="e#74871#74872#0" expanded="true" />
-            <element signature="e#74992#74993#0" expanded="true" />
-            <element signature="e#75064#75065#0" expanded="true" />
-            <element signature="e#75185#75186#0" expanded="true" />
-            <element signature="e#75258#75259#0" expanded="true" />
-            <element signature="e#75377#75378#0" expanded="true" />
-            <element signature="e#75447#75448#0" expanded="true" />
-            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
-            <element signature="e#120795#120796#0" expanded="true" />
-            <element signature="e#120866#120867#0" expanded="true" />
-            <element signature="e#120987#120988#0" expanded="true" />
-            <element signature="e#121059#121060#0" expanded="true" />
-            <element signature="e#121180#121181#0" expanded="true" />
-            <element signature="e#121253#121254#0" expanded="true" />
-            <element signature="e#121372#121373#0" expanded="true" />
-            <element signature="e#121442#121443#0" expanded="true" />
-            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseThreeViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
-            <element signature="e#179020#179021#0" expanded="true" />
-            <element signature="e#179091#179092#0" expanded="true" />
-            <element signature="e#179212#179213#0" expanded="true" />
-            <element signature="e#179284#179285#0" expanded="true" />
-            <element signature="e#179405#179406#0" expanded="true" />
-            <element signature="e#179478#179479#0" expanded="true" />
-            <element signature="e#179597#179598#0" expanded="true" />
-            <element signature="e#179667#179668#0" expanded="true" />
-            <element signature="e#242389#242390#0" expanded="true" />
-            <element signature="e#242460#242461#0" expanded="true" />
-            <element signature="e#242581#242582#0" expanded="true" />
-            <element signature="e#242653#242654#0" expanded="true" />
-            <element signature="e#242774#242775#0" expanded="true" />
-            <element signature="e#242847#242848#0" expanded="true" />
-            <element signature="e#242966#242967#0" expanded="true" />
-            <element signature="e#243036#243037#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/KnownBaselineSparseReconstructorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="231">
           <caret line="2778" column="37" lean-forward="false" selection-start-line="2778" selection-start-column="37" selection-end-line="2778" selection-end-column="37" />
-          <folding>
-            <element signature="method#testConstructor#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsEssentialTwoViews#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsDIACTwoViews#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsDAQAndEssentialZeroPrincipalPointTwoViews#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsDAQAndEssentialTwoViews#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsDAQTwoViews#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testPlanarPointsEssentialTwoViews#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testPlanarPointsDIACTwoViews#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testPlanarPointsDAQAndEssentialZeroPrincipalPointTwoViews#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testPlanarPointsDAQTwoViews#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsEssentialEPnPAdditionalIntrinsicThreeViews#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsEssentialEPnPDAQThreeViews#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsEssentialUPnPThreeViews#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-            <element signature="method#testGeneralPointsEssentialDLTThreeViews#0;class#KnownBaselineSparseReconstructorTest#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/ConstantVelocityModelSlamSparseReconstructorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="2646" column="0" lean-forward="true" selection-start-line="2646" selection-start-column="0" selection-end-line="2646" selection-end-column="0" />
-          <folding>
-            <element signature="method#testConstructor#0;class#ConstantVelocityModelSlamSparseReconstructorTest#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2394">
-          <caret line="2380" column="0" lean-forward="false" selection-start-line="2380" selection-start-column="0" selection-end-line="2380" selection-end-column="0" />
-          <folding>
-            <element signature="method#testConstructor#0;class#AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SparseReconstructorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="7327" column="20" lean-forward="false" selection-start-line="7327" selection-start-column="20" selection-end-line="7327" selection-end-column="20" />
+        <state relative-caret-position="253">
+          <caret line="8056" column="0" lean-forward="false" selection-start-line="8056" selection-start-column="0" selection-end-line="8056" selection-end-column="0" />
           <folding>
             <element signature="method#testConstructor#0;class#SparseReconstructorTest#0" expanded="false" />
             <element signature="method#testGeneralPointsEssentialTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#28286#28287#0" expanded="true" />
-            <element signature="e#28357#28358#0" expanded="true" />
-            <element signature="e#28474#28475#0" expanded="true" />
-            <element signature="e#28546#28547#0" expanded="true" />
-            <element signature="e#28663#28664#0" expanded="true" />
-            <element signature="e#28736#28737#0" expanded="true" />
-            <element signature="e#28851#28852#0" expanded="true" />
-            <element signature="e#28921#28922#0" expanded="true" />
+            <element signature="e#28286#28287#0" expanded="false" />
+            <element signature="e#28357#28358#0" expanded="false" />
+            <element signature="e#28474#28475#0" expanded="false" />
+            <element signature="e#28546#28547#0" expanded="false" />
+            <element signature="e#28663#28664#0" expanded="false" />
+            <element signature="e#28736#28737#0" expanded="false" />
+            <element signature="e#28851#28852#0" expanded="false" />
+            <element signature="e#28921#28922#0" expanded="false" />
             <element signature="method#testGeneralPointsDIACTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#55715#55716#0" expanded="true" />
-            <element signature="e#55786#55787#0" expanded="true" />
-            <element signature="e#55903#55904#0" expanded="true" />
-            <element signature="e#55975#55976#0" expanded="true" />
-            <element signature="e#56092#56093#0" expanded="true" />
-            <element signature="e#56165#56166#0" expanded="true" />
-            <element signature="e#56280#56281#0" expanded="true" />
-            <element signature="e#56350#56351#0" expanded="true" />
+            <element signature="e#55715#55716#0" expanded="false" />
+            <element signature="e#55786#55787#0" expanded="false" />
+            <element signature="e#55903#55904#0" expanded="false" />
+            <element signature="e#55975#55976#0" expanded="false" />
+            <element signature="e#56092#56093#0" expanded="false" />
+            <element signature="e#56165#56166#0" expanded="false" />
+            <element signature="e#56280#56281#0" expanded="false" />
+            <element signature="e#56350#56351#0" expanded="false" />
             <element signature="method#testGeneralPointsDAQAndEssentialZeroPrincipalPointTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#83529#83530#0" expanded="true" />
-            <element signature="e#83600#83601#0" expanded="true" />
-            <element signature="e#83717#83718#0" expanded="true" />
-            <element signature="e#83789#83790#0" expanded="true" />
-            <element signature="e#83906#83907#0" expanded="true" />
-            <element signature="e#83979#83980#0" expanded="true" />
-            <element signature="e#84094#84095#0" expanded="true" />
-            <element signature="e#84164#84165#0" expanded="true" />
+            <element signature="e#83529#83530#0" expanded="false" />
+            <element signature="e#83600#83601#0" expanded="false" />
+            <element signature="e#83717#83718#0" expanded="false" />
+            <element signature="e#83789#83790#0" expanded="false" />
+            <element signature="e#83906#83907#0" expanded="false" />
+            <element signature="e#83979#83980#0" expanded="false" />
+            <element signature="e#84094#84095#0" expanded="false" />
+            <element signature="e#84164#84165#0" expanded="false" />
             <element signature="method#testGeneralPointsDAQAndEssentialTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#111438#111439#0" expanded="true" />
-            <element signature="e#111509#111510#0" expanded="true" />
-            <element signature="e#111626#111627#0" expanded="true" />
-            <element signature="e#111698#111699#0" expanded="true" />
-            <element signature="e#111815#111816#0" expanded="true" />
-            <element signature="e#111888#111889#0" expanded="true" />
-            <element signature="e#112003#112004#0" expanded="true" />
-            <element signature="e#112073#112074#0" expanded="true" />
+            <element signature="e#111438#111439#0" expanded="false" />
+            <element signature="e#111509#111510#0" expanded="false" />
+            <element signature="e#111626#111627#0" expanded="false" />
+            <element signature="e#111698#111699#0" expanded="false" />
+            <element signature="e#111815#111816#0" expanded="false" />
+            <element signature="e#111888#111889#0" expanded="false" />
+            <element signature="e#112003#112004#0" expanded="false" />
+            <element signature="e#112073#112074#0" expanded="false" />
             <element signature="method#testGeneralPointsDAQTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#139237#139238#0" expanded="true" />
-            <element signature="e#139308#139309#0" expanded="true" />
-            <element signature="e#139425#139426#0" expanded="true" />
-            <element signature="e#139497#139498#0" expanded="true" />
-            <element signature="e#139614#139615#0" expanded="true" />
-            <element signature="e#139687#139688#0" expanded="true" />
-            <element signature="e#139802#139803#0" expanded="true" />
-            <element signature="e#139872#139873#0" expanded="true" />
+            <element signature="e#139237#139238#0" expanded="false" />
+            <element signature="e#139308#139309#0" expanded="false" />
+            <element signature="e#139425#139426#0" expanded="false" />
+            <element signature="e#139497#139498#0" expanded="false" />
+            <element signature="e#139614#139615#0" expanded="false" />
+            <element signature="e#139687#139688#0" expanded="false" />
+            <element signature="e#139802#139803#0" expanded="false" />
+            <element signature="e#139872#139873#0" expanded="false" />
             <element signature="method#testPlanarPointsEssentialTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#165617#165618#0" expanded="true" />
-            <element signature="e#165688#165689#0" expanded="true" />
-            <element signature="e#165805#165806#0" expanded="true" />
-            <element signature="e#165877#165878#0" expanded="true" />
-            <element signature="e#165994#165995#0" expanded="true" />
-            <element signature="e#166067#166068#0" expanded="true" />
-            <element signature="e#166182#166183#0" expanded="true" />
-            <element signature="e#166252#166253#0" expanded="true" />
+            <element signature="e#165617#165618#0" expanded="false" />
+            <element signature="e#165688#165689#0" expanded="false" />
+            <element signature="e#165805#165806#0" expanded="false" />
+            <element signature="e#165877#165878#0" expanded="false" />
+            <element signature="e#165994#165995#0" expanded="false" />
+            <element signature="e#166067#166068#0" expanded="false" />
+            <element signature="e#166182#166183#0" expanded="false" />
+            <element signature="e#166252#166253#0" expanded="false" />
             <element signature="method#testPlanarPointsDIACTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#194529#194530#0" expanded="true" />
-            <element signature="e#194600#194601#0" expanded="true" />
-            <element signature="e#194717#194718#0" expanded="true" />
-            <element signature="e#194789#194790#0" expanded="true" />
-            <element signature="e#194906#194907#0" expanded="true" />
-            <element signature="e#194979#194980#0" expanded="true" />
-            <element signature="e#195094#195095#0" expanded="true" />
-            <element signature="e#195164#195165#0" expanded="true" />
+            <element signature="e#194529#194530#0" expanded="false" />
+            <element signature="e#194600#194601#0" expanded="false" />
+            <element signature="e#194717#194718#0" expanded="false" />
+            <element signature="e#194789#194790#0" expanded="false" />
+            <element signature="e#194906#194907#0" expanded="false" />
+            <element signature="e#194979#194980#0" expanded="false" />
+            <element signature="e#195094#195095#0" expanded="false" />
+            <element signature="e#195164#195165#0" expanded="false" />
             <element signature="method#testPlanarPointsDAQAndEssentialZeroPrincipalPointTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#220732#220733#0" expanded="true" />
-            <element signature="e#220803#220804#0" expanded="true" />
-            <element signature="e#220920#220921#0" expanded="true" />
-            <element signature="e#220992#220993#0" expanded="true" />
-            <element signature="e#221109#221110#0" expanded="true" />
-            <element signature="e#221182#221183#0" expanded="true" />
-            <element signature="e#221297#221298#0" expanded="true" />
-            <element signature="e#221367#221368#0" expanded="true" />
+            <element signature="e#220732#220733#0" expanded="false" />
+            <element signature="e#220803#220804#0" expanded="false" />
+            <element signature="e#220920#220921#0" expanded="false" />
+            <element signature="e#220992#220993#0" expanded="false" />
+            <element signature="e#221109#221110#0" expanded="false" />
+            <element signature="e#221182#221183#0" expanded="false" />
+            <element signature="e#221297#221298#0" expanded="false" />
+            <element signature="e#221367#221368#0" expanded="false" />
             <element signature="method#testPlanarPointsDAQTwoViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#247726#247727#0" expanded="true" />
-            <element signature="e#247797#247798#0" expanded="true" />
-            <element signature="e#247914#247915#0" expanded="true" />
-            <element signature="e#247986#247987#0" expanded="true" />
-            <element signature="e#248103#248104#0" expanded="true" />
-            <element signature="e#248176#248177#0" expanded="true" />
-            <element signature="e#248291#248292#0" expanded="true" />
-            <element signature="e#248361#248362#0" expanded="true" />
+            <element signature="e#247726#247727#0" expanded="false" />
+            <element signature="e#247797#247798#0" expanded="false" />
+            <element signature="e#247914#247915#0" expanded="false" />
+            <element signature="e#247986#247987#0" expanded="false" />
+            <element signature="e#248103#248104#0" expanded="false" />
+            <element signature="e#248176#248177#0" expanded="false" />
+            <element signature="e#248291#248292#0" expanded="false" />
+            <element signature="e#248361#248362#0" expanded="false" />
             <element signature="method#testGeneralPointsEssentialEPnPAdditionalIntrinsicThreeViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#277744#277745#0" expanded="true" />
-            <element signature="e#277815#277816#0" expanded="true" />
-            <element signature="e#277932#277933#0" expanded="true" />
-            <element signature="e#278004#278005#0" expanded="true" />
-            <element signature="e#278121#278122#0" expanded="true" />
-            <element signature="e#278194#278195#0" expanded="true" />
-            <element signature="e#278309#278310#0" expanded="true" />
-            <element signature="e#278379#278380#0" expanded="true" />
+            <element signature="e#277744#277745#0" expanded="false" />
+            <element signature="e#277815#277816#0" expanded="false" />
+            <element signature="e#277932#277933#0" expanded="false" />
+            <element signature="e#278004#278005#0" expanded="false" />
+            <element signature="e#278121#278122#0" expanded="false" />
+            <element signature="e#278194#278195#0" expanded="false" />
+            <element signature="e#278309#278310#0" expanded="false" />
+            <element signature="e#278379#278380#0" expanded="false" />
             <element signature="method#testGeneralPointsEssentialEPnPDAQThreeViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#315443#315444#0" expanded="true" />
-            <element signature="e#315514#315515#0" expanded="true" />
-            <element signature="e#315631#315632#0" expanded="true" />
-            <element signature="e#315703#315704#0" expanded="true" />
-            <element signature="e#315820#315821#0" expanded="true" />
-            <element signature="e#315893#315894#0" expanded="true" />
-            <element signature="e#316008#316009#0" expanded="true" />
-            <element signature="e#316078#316079#0" expanded="true" />
+            <element signature="e#315443#315444#0" expanded="false" />
+            <element signature="e#315514#315515#0" expanded="false" />
+            <element signature="e#315631#315632#0" expanded="false" />
+            <element signature="e#315703#315704#0" expanded="false" />
+            <element signature="e#315820#315821#0" expanded="false" />
+            <element signature="e#315893#315894#0" expanded="false" />
+            <element signature="e#316008#316009#0" expanded="false" />
+            <element signature="e#316078#316079#0" expanded="false" />
             <element signature="method#testGeneralPointsEssentialEPnPDIACThreeViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#355149#355150#0" expanded="true" />
-            <element signature="e#355220#355221#0" expanded="true" />
-            <element signature="e#355337#355338#0" expanded="true" />
-            <element signature="e#355409#355410#0" expanded="true" />
-            <element signature="e#355526#355527#0" expanded="true" />
-            <element signature="e#355599#355600#0" expanded="true" />
-            <element signature="e#355714#355715#0" expanded="true" />
-            <element signature="e#355784#355785#0" expanded="true" />
+            <element signature="e#355149#355150#0" expanded="false" />
+            <element signature="e#355220#355221#0" expanded="false" />
+            <element signature="e#355337#355338#0" expanded="false" />
+            <element signature="e#355409#355410#0" expanded="false" />
+            <element signature="e#355526#355527#0" expanded="false" />
+            <element signature="e#355599#355600#0" expanded="false" />
+            <element signature="e#355714#355715#0" expanded="false" />
+            <element signature="e#355784#355785#0" expanded="false" />
             <element signature="method#testGeneralPointsEssentialUPnPThreeViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#391643#391644#0" expanded="true" />
-            <element signature="e#391714#391715#0" expanded="true" />
-            <element signature="e#391831#391832#0" expanded="true" />
-            <element signature="e#391903#391904#0" expanded="true" />
-            <element signature="e#392020#392021#0" expanded="true" />
-            <element signature="e#392093#392094#0" expanded="true" />
-            <element signature="e#392208#392209#0" expanded="true" />
-            <element signature="e#392278#392279#0" expanded="true" />
+            <element signature="e#391643#391644#0" expanded="false" />
+            <element signature="e#391714#391715#0" expanded="false" />
+            <element signature="e#391831#391832#0" expanded="false" />
+            <element signature="e#391903#391904#0" expanded="false" />
+            <element signature="e#392020#392021#0" expanded="false" />
+            <element signature="e#392093#392094#0" expanded="false" />
+            <element signature="e#392208#392209#0" expanded="false" />
+            <element signature="e#392278#392279#0" expanded="false" />
             <element signature="method#testGeneralPointsEssentialDLTThreeViews#0;class#SparseReconstructorTest#0" expanded="false" />
-            <element signature="e#429543#429544#0" expanded="true" />
-            <element signature="e#429614#429615#0" expanded="true" />
-            <element signature="e#429731#429732#0" expanded="true" />
-            <element signature="e#429803#429804#0" expanded="true" />
-            <element signature="e#429920#429921#0" expanded="true" />
-            <element signature="e#429993#429994#0" expanded="true" />
-            <element signature="e#430108#430109#0" expanded="true" />
-            <element signature="e#430178#430179#0" expanded="true" />
+            <element signature="e#429543#429544#0" expanded="false" />
+            <element signature="e#429614#429615#0" expanded="false" />
+            <element signature="e#429731#429732#0" expanded="false" />
+            <element signature="e#429803#429804#0" expanded="false" />
+            <element signature="e#429920#429921#0" expanded="false" />
+            <element signature="e#429993#429994#0" expanded="false" />
+            <element signature="e#430108#430109#0" expanded="false" />
+            <element signature="e#430178#430179#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-71">
+          <caret line="2189" column="37" lean-forward="false" selection-start-line="2189" selection-start-column="28" selection-end-line="2189" selection-end-column="37" />
+          <folding>
+            <element signature="method#testConstructor#0;class#SlamPairedViewsSparseReconstructorTest#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamSparseReconstructor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="44" column="30" lean-forward="false" selection-start-line="44" selection-start-column="16" selection-end-line="44" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/slam/BaseSlamEstimator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="141" column="22" lean-forward="false" selection-start-line="141" selection-start-column="22" selection-end-line="141" selection-end-column="22" />
+          <folding>
+            <element signature="e#21171#21172#0" expanded="false" />
+            <element signature="e#21229#21230#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SlamSparseReconstructor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="268">
+          <caret line="61" column="49" lean-forward="false" selection-start-line="61" selection-start-column="49" selection-end-line="61" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/BaseSlamPairedViewsSparseReconstructor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-6497">
+          <caret line="24" column="22" lean-forward="false" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/ConstantVelocityModelSlamSparseReconstructorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="3841" column="17" lean-forward="true" selection-start-line="3841" selection-start-column="17" selection-end-line="3841" selection-end-column="17" />
+          <folding>
+            <element signature="method#testConstructor#0;class#ConstantVelocityModelSlamSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews#0;class#ConstantVelocityModelSlamSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseTwoViews#0;class#ConstantVelocityModelSlamSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews#0;class#ConstantVelocityModelSlamSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseThreeViews#0;class#ConstantVelocityModelSlamSparseReconstructorTest#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationSlamSparseReconstructorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-8955">
-          <caret line="4628" column="41" lean-forward="false" selection-start-line="4628" selection-start-column="41" selection-end-line="4628" selection-end-column="41" />
+        <state relative-caret-position="122">
+          <caret line="2503" column="0" lean-forward="false" selection-start-line="2503" selection-start-column="0" selection-end-line="2503" selection-end-column="0" />
           <folding>
             <element signature="method#testConstructor#0;class#AbsoluteOrientationSlamSparseReconstructorTest#0" expanded="false" />
-            <element signature="e#38134#38135#0" expanded="true" />
-            <element signature="e#38204#38205#0" expanded="true" />
-            <element signature="e#126970#126971#0" expanded="true" />
-            <element signature="e#127040#127041#0" expanded="true" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews#0;class#AbsoluteOrientationSlamSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseTwoViews#0;class#AbsoluteOrientationSlamSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseThreeViews#0;class#AbsoluteOrientationSlamSparseReconstructorTest#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamSparseReconstructorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-10072">
+          <caret line="2865" column="0" lean-forward="true" selection-start-line="2863" selection-start-column="0" selection-end-line="2865" selection-end-column="0" />
+          <folding>
+            <element signature="method#testConstructor#0;class#SlamSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseTwoViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews#0;class#SlamSparseReconstructorTest#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="35">
+          <caret line="2755" column="26" lean-forward="true" selection-start-line="2755" selection-start-column="26" selection-end-line="2755" selection-end-column="26" />
+          <folding>
+            <element signature="method#testConstructor#0;class#AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseTwoViews#0;class#AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithNoiseTwoViews#0;class#AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest#0" expanded="false" />
+            <element signature="method#testGeneralPointsEssentialWithConstantAccelerationAndRotationWithoutNoiseThreeViews#0;class#AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-59">
+          <caret line="26" column="51" lean-forward="true" selection-start-line="26" selection-start-column="51" selection-end-line="26" selection-end-column="51" />
+          <folding />
         </state>
       </provider>
     </entry>

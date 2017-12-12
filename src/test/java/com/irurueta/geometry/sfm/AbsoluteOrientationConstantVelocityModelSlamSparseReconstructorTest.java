@@ -1840,11 +1840,14 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
             double baseline = center1.distanceTo(center2);
 
             final double accelerationX, accelerationY, accelerationZ;
+            final double accelerationX2, accelerationY2, accelerationZ2;
 
             //s = 0.5*a*t^2 --> a = 2*s/t^2
             //assuming t = 1 second (50 samples * 0.02 s/sample = 1 second)
             accelerationX = accelerationY = accelerationZ
                     = 2 * cameraSeparation;
+            accelerationX2 = accelerationY2 = accelerationZ2
+                    = 2 * cameraSeparation2;
 
             PinholeCamera camera1 = new PinholeCamera(intrinsic, rotation1,
                     center1);
@@ -2147,8 +2150,8 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
                                 Quaternion orientation = new Quaternion(rotation2);
                                 for (int s = 0; s < N_SENSOR_SAMPLES; s++) {
                                     reconstructor.updateAccelerometerSample(mTimestamp,
-                                            (float) accelerationX, (float) accelerationY,
-                                            (float) accelerationZ);
+                                            (float) accelerationX2, (float) accelerationY2,
+                                            (float) accelerationZ2);
                                     reconstructor.updateGyroscopeSample(mTimestamp,
                                             (float) angularSpeed3X, (float) angularSpeed3Y,
                                             (float) angularSpeed3Z);
@@ -2760,11 +2763,14 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
             double baseline = center1.distanceTo(center2);
 
             final double accelerationX, accelerationY, accelerationZ;
+            final double accelerationX2, accelerationY2, accelerationZ2;
 
             //s = 0.5*a*t^2 --> a = 2*s/t^2
             //assuming t = 1 second (50 samples * 0.02 s/sample = 1 second)
             accelerationX = accelerationY = accelerationZ
                     = 2 * cameraSeparation;
+            accelerationX2 = accelerationY2 = accelerationZ2
+                    = 2 * cameraSeparation2;
 
             PinholeCamera camera1 = new PinholeCamera(intrinsic, rotation1,
                     center1);
@@ -3145,11 +3151,11 @@ public class AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest
                                     noiseAngularSpeedZ =
                                             angularSpeedRandomizer.nextFloat();
 
-                                    accelerationWithNoiseX = (float)accelerationX +
+                                    accelerationWithNoiseX = (float)accelerationX2 +
                                             noiseAccelerationX;
-                                    accelerationWithNoiseY = (float)accelerationY +
+                                    accelerationWithNoiseY = (float)accelerationY2 +
                                             noiseAccelerationY;
-                                    accelerationWithNoiseZ = (float)accelerationZ +
+                                    accelerationWithNoiseZ = (float)accelerationZ2 +
                                             noiseAccelerationZ;
                                     accelerationWithNoise[0] = accelerationWithNoiseX;
                                     accelerationWithNoise[1] = accelerationWithNoiseY;
