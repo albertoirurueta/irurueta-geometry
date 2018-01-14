@@ -698,6 +698,7 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
     public void testEstimateWithoutRefinement() throws WrongSizeException, 
             DecomposerException, LockedException, NotReadyException, 
             RobustEstimatorException, AlgebraException {
+        int numValid = 0;
         for(int t = 0; t < TIMES; t++){
             //create an affine transformation
             Matrix A = null;
@@ -789,18 +790,34 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
             //using estimated transformation (transformation2) and checking
             //that output planes are equal to the original output planes without
             //error
+            boolean failed = false;
             Plane plane1, plane2;
             for(int i = 0; i < nPlanes; i++){
                 plane1 = outputPlanes.get(i);
                 plane2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
                 plane1.normalize();
                 plane2.normalize();
+                if (PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
+                        getResidual(plane1, plane2) > ABSOLUTE_ERROR) {
+                    failed = true;
+                    break;
+                }
                 assertEquals(
                         PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                         getResidual(plane1, plane2), 0.0, ABSOLUTE_ERROR);
                 assertTrue(plane1.equals(plane2, ABSOLUTE_ERROR));
             }
+
+            if (failed) {
+                continue;
+            }
+
+            numValid++;
+
+            break;
         }
+
+        assertTrue(numValid > 0);
     }
 
     @Test

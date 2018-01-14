@@ -2501,6 +2501,9 @@ public class AbsoluteOrientationSlamSparseReconstructorTest {
             assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
             assertSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
             assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
+            if (mEstimatedMetricCamera3 == null) {
+                continue;
+            }
             assertSame(reconstructor.getCurrentMetricEstimatedCamera(), mEstimatedMetricCamera3);
             assertNotNull(reconstructor.getPreviousMetricEstimatedCamera());
             assertSame(reconstructor.getPreviousMetricEstimatedCamera(), mEstimatedMetricCamera2);

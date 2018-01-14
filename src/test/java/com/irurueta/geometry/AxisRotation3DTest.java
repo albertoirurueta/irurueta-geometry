@@ -588,7 +588,7 @@ public class AxisRotation3DTest {
                 ABSOLUTE_ERROR));
 
         int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+        for (int t = 0; t < 10*TIMES; t++) {
             //Force InvalidRotationMatrixException (using a tiny threshold)
             try {
                 rotation.fromInhomogeneousMatrix(rotationMatrix, 0.0);
@@ -606,6 +606,8 @@ public class AxisRotation3DTest {
             } catch (InvalidRotationMatrixException e) { }
 
             numValid++;
+
+            break;
         }
 
         assertTrue(numValid > 0);

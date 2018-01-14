@@ -404,7 +404,7 @@ public abstract class BaseSparseReconstructor<C extends BaseSparseReconstructorC
      * @return true if current view is the first view, false otherwise.
      */
     public boolean isFirstView() {
-        return mViewCount == 0 || mPreviousViewTrackedSamples == null || mPreviousViewTrackedSamples.size() == 0;
+        return mViewCount == 0 && (mPreviousViewTrackedSamples == null || mPreviousViewTrackedSamples.size() == 0);
     }
 
     /**
