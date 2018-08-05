@@ -297,7 +297,7 @@ public class AccuracyPoint3DTest {
     }
 
     @Test
-    public void testFlattenTo2D() throws AlgebraException, GeometryException {
+    public void testFlattenTo2D() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
         double previous = 0.0;

@@ -26,7 +26,7 @@ import java.io.Serializable;
 /**
  * Base class representing the confidence of provided accuracy from a covariance matrix
  * expressed in the distance unit of such matrix.
- * This class contains utility methods to convert convariance matrices into geometric figures
+ * This class contains utility methods to convert covariance matrices into geometric figures
  * with the requested confidence.
  */
 @SuppressWarnings("WeakerAccess")
@@ -252,7 +252,7 @@ public abstract class AccuracyPoint implements Serializable {
     /**
      * Sets confidence of provided accuracy of estimated point or measure.
      * This is expressed as a value between 0 and 1, where 1 indicates a 100% confidence
-     * tthat the real point or measure is within provided accuracy.
+     * that the real point or measure is within provided accuracy.
      * @param confidence confidence of provided accuracy of estimated point or measure.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
