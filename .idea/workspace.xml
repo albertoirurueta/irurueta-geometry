@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c6d6a1cb-41d7-401f-885d-de1ac92dc71e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/AccuracyPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/AccuracyPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AccuracyPoint3DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AccuracyPoint3DTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/irurueta-geometry.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/irurueta-geometry.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_numerical_1_0_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_numerical_1_0_SNAPSHOT.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/build-info.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/irurueta/geometry/build-info.properties" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,8 +36,8 @@
       <file leaf-file-name="AccuracyPoint2DTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AccuracyPoint2DTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="172" column="17" lean-forward="true" selection-start-line="172" selection-start-column="17" selection-end-line="172" selection-end-column="17" />
+            <state relative-caret-position="2235">
+              <caret line="172" column="17" selection-start-line="172" selection-start-column="17" selection-end-line="172" selection-end-column="17" />
               <folding>
                 <element signature="method#testGetSetCovarianceMatrix#0;class#AccuracyPoint2DTest#0" />
                 <element signature="method#testGetSetStandardDeviationFactor#0;class#AccuracyPoint2DTest#0" />
@@ -44,13 +47,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AccuracyPoint3DTest.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AccuracyPoint3DTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AccuracyPoint3DTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="610">
-              <caret line="299" column="57" selection-start-line="299" selection-start-column="57" selection-end-line="299" selection-end-column="57" />
+            <state relative-caret-position="3735">
+              <caret line="275" column="29" selection-start-line="275" selection-start-column="29" selection-end-line="275" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="273" column="75" selection-start-line="273" selection-start-column="75" selection-end-line="273" selection-end-column="75" />
+              <folding>
+                <element signature="e#37#58#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -172,9 +187,9 @@
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/AccuracyPoint2D.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AccuracyPoint2DTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/AccuracyPoint3D.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/AccuracyPoint.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AccuracyPoint3DTest.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -229,7 +244,7 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="21" />
+    <option name="x" value="572" />
     <option name="y" value="23" />
     <option name="width" value="1255" />
     <option name="height" value="877" />
@@ -370,7 +385,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -400,27 +414,35 @@
               <item name="irurueta-geometry" type="b2602c69:ProjectViewProjectNode" />
               <item name="irurueta-geometry" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-geometry" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-geometry" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-geometry" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-geometry" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="geometry" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="irurueta-geometry" type="b2602c69:ProjectViewProjectNode" />
+              <item name="irurueta-geometry" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="irurueta-geometry" type="b2602c69:ProjectViewProjectNode" />
+              <item name="irurueta-geometry" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="irurueta-geometry" type="b2602c69:ProjectViewProjectNode" />
+              <item name="irurueta-geometry" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="AndroidView" />
     </panes>
   </component>
@@ -438,6 +460,11 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="Errors" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/com/irurueta/geometry" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -828,7 +855,9 @@
       <workItem from="1523218252040" duration="9000" />
       <workItem from="1523311691385" duration="719000" />
       <workItem from="1527580186917" duration="286000" />
-      <workItem from="1533418725215" duration="21190000" />
+      <workItem from="1533418725215" duration="21297000" />
+      <workItem from="1533507335461" duration="574000" />
+      <workItem from="1533673235310" duration="1227000" />
     </task>
     <servers />
   </component>
@@ -865,27 +894,26 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="171133000" />
+    <option name="totallyTimeSpent" value="173041000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-373" y="23" width="1255" height="877" extended-state="0" />
+    <frame x="572" y="23" width="1255" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="7" weight="0.32627118" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.3299566" />
-      <window_info anchor="right" id="Maven Projects" order="3" weight="0.32943013" />
+      <window_info anchor="right" id="Maven Projects" order="3" weight="0.32893652" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.41794872" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32992327" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Designer" order="4" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49150142" visible="true" weight="0.2811212" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49150142" weight="0.2893652" />
       <window_info anchor="right" id="Database" order="4" weight="0.3297336" />
       <window_info id="Structure" order="7" sideWeight="0.5084986" side_tool="true" weight="0.37940964" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -893,6 +921,7 @@
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.31282052" />
       <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" order="7" weight="0.32627118" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32768363" />
@@ -906,14 +935,14 @@
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Capture Analysis" order="7" />
-      <window_info anchor="bottom" id="Version Control" order="9" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.314578" />
       <window_info anchor="right" id="Theme Preview" order="8" />
       <window_info id="Nl-Palette" order="1" />
       <window_info id="Structure" order="7" weight="0.24964234" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.314578" />
+      <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="4" />
       <window_info anchor="right" id="Properties" order="5" />
@@ -1244,9 +1273,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret lean-forward="true" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1261,10 +1287,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret selection-end-line="14" selection-end-column="3" />
-          <folding>
-            <element signature="e#8563#8564#0" expanded="true" />
-            <element signature="e#8608#8609#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1293,22 +1315,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1245">
           <caret line="83" column="7" lean-forward="true" selection-start-line="83" selection-start-column="7" selection-end-line="83" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#703#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#831#864#0" expanded="true" />
-            <element signature="e#984#985#0" expanded="true" />
-            <element signature="e#1007#1008#0" expanded="true" />
-            <element signature="e#2733#2734#0" expanded="true" />
-            <element signature="e#2757#2758#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4579">
-          <caret line="20" column="16" lean-forward="true" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -1316,23 +1322,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
           <caret line="139" column="75" selection-start-line="139" selection-start-column="75" selection-end-line="139" selection-end-column="75" />
-          <folding>
-            <element signature="e#0#700#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#1152#1185#0" expanded="true" />
-            <element signature="e#4416#4417#0" expanded="true" />
-            <element signature="e#4456#4457#0" expanded="true" />
-            <element signature="e#8219#8220#0" expanded="true" />
-            <element signature="e#8266#8267#0" expanded="true" />
-            <element signature="e#9545#9546#0" expanded="true" />
-            <element signature="e#9579#9580#0" expanded="true" />
-            <element signature="e#10820#10821#0" expanded="true" />
-            <element signature="e#10887#10888#0" expanded="true" />
-            <element signature="e#11075#11076#0" expanded="true" />
-            <element signature="e#11142#11143#0" expanded="true" />
-            <element signature="e#11325#11326#0" expanded="true" />
-            <element signature="e#11392#11393#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1340,16 +1329,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-590">
           <caret line="29" column="7" lean-forward="true" selection-start-line="29" selection-start-column="7" selection-end-line="29" selection-end-column="7" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AccuracyPoint2DTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="172" column="17" lean-forward="true" selection-start-line="172" selection-start-column="17" selection-end-line="172" selection-end-column="17" />
+        <state relative-caret-position="2235">
+          <caret line="172" column="17" selection-start-line="172" selection-start-column="17" selection-end-line="172" selection-end-column="17" />
           <folding>
             <element signature="method#testGetSetCovarianceMatrix#0;class#AccuracyPoint2DTest#0" />
             <element signature="method#testGetSetStandardDeviationFactor#0;class#AccuracyPoint2DTest#0" />
@@ -1360,10 +1346,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AccuracyPoint3DTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="610">
-          <caret line="299" column="57" selection-start-line="299" selection-start-column="57" selection-end-line="299" selection-end-column="57" />
+        <state relative-caret-position="3735">
+          <caret line="275" column="29" selection-start-line="275" selection-start-column="29" selection-end-line="275" selection-end-column="29" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="273" column="75" selection-start-line="273" selection-start-column="75" selection-end-line="273" selection-end-column="75" />
+          <folding>
+            <element signature="e#37#58#0" expanded="true" />
           </folding>
         </state>
       </provider>
