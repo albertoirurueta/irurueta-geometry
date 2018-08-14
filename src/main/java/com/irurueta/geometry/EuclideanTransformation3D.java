@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.EuclideanTransformation3D
@@ -425,21 +425,26 @@ public class EuclideanTransformation3D extends Transformation3D
     @Override
     public void transform(Quadric inputQuadric, Quadric outputQuadric) 
             throws NonSymmetricMatrixException {
-        //P' * Q * P = 0
-        //P'*T' * Q * T * P = 0
-        
+        //point' * quadric * point = 0
+        //point' * T' * transformedQuadric * T * point = 0
+        //where:
+        // - transformedPoint = T * point
+
+        //Hence:
+        // transformedQuadric = T^-1' * quadric * T^-1
+
         inputQuadric.normalize();
         
         Matrix Q = inputQuadric.asMatrix();
-        Matrix T = asMatrix();
-        //normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(T);
-        T.multiplyByScalar(1.0 / norm);
+        Matrix invT = inverseAndReturnNew().asMatrix();
+        //normalize transformation matrix invT to increase accuracy
+        double norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
         
-        Matrix m = T.transposeAndReturnNew();
+        Matrix m = invT.transposeAndReturnNew();
         try {
             m.multiply(Q);
-            m.multiply(T);
+            m.multiply(invT);
         } catch (WrongSizeException ignore) { }
         
         //normalize resulting m matrix to increase accuracy so that it can be
@@ -463,29 +468,33 @@ public class EuclideanTransformation3D extends Transformation3D
     @Override
     public void transform(DualQuadric inputDualQuadric, 
             DualQuadric outputDualQuadric) throws NonSymmetricMatrixException {
-        //L' * Q¨* L = 0
-        //L'*(T^-1)' * Q ¨* (T^-1) * L = 0
-        
+        //plane' * dualQuadric * plane = 0
+        //plane' * T^-1 * T * dualQuadric * T' * T^-1'*plane
+
+        //Hence:
+        //transformed plane: T^-1'*plane
+        //transformed dual quadric: T * dualQuadric * T'
+
         inputDualQuadric.normalize();
         
         Matrix dualQ = inputDualQuadric.asMatrix();
-        Matrix invT = inverseAndReturnNew().asMatrix();
+        Matrix T = asMatrix();
         //normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(invT);
-        invT.multiplyByScalar(1.0 / norm);
-        
-        Matrix m = invT.transposeAndReturnNew();
+        double norm = Utils.normF(T);
+        T.multiplyByScalar(1.0 / norm);
+
+        Matrix transT = T.transposeAndReturnNew();
         try{
-            m.multiply(dualQ);
-            m.multiply(invT);
-        }catch(WrongSizeException ignore){}
+            T.multiply(dualQ);
+            T.multiply(transT);
+        }catch(WrongSizeException ignore) { }
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
-        norm = Utils.normF(m);
-        m.multiplyByScalar(1.0 / norm);
+        norm = Utils.normF(T);
+        T.multiplyByScalar(1.0 / norm);
         
-        outputDualQuadric.setParameters(m);
+        outputDualQuadric.setParameters(T);
     }
 
     /**
@@ -497,19 +506,27 @@ public class EuclideanTransformation3D extends Transformation3D
      */        
     @Override
     public void transform(Plane inputPlane, Plane outputPlane) {
-        //P' * L = 0 --> (T*P)' * (T^-1) * L = P'*T'*(T^-1)*L = 0
+        //plane' * point = 0 --> plane' * T^-1 * T * point
+        //(plane' * T^-1)*(T*point) = (T^-1'*plane)'*(T*point)
+        //where:
+        //- transformedPlane = T^-1'*plane
+        //- transformedpoint = T*point
         
         inputPlane.normalize();
         
         Matrix invT = inverseAndReturnNew().asMatrix();        
         Matrix plane = Matrix.newFromArray(inputPlane.asArray());
-        
-        Matrix m = invT;
+
+        //normalize transformation matrix T to increase accuracy
+        double norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
+
+        invT.transpose();
         try {
-            m.multiply(plane);        
+            invT.multiply(plane);
         } catch(WrongSizeException ignore) { }
         
-        outputPlane.setParameters(m.toArray());
+        outputPlane.setParameters(invT.getBuffer());
     }
     
     /**
@@ -691,13 +708,13 @@ public class EuclideanTransformation3D extends Transformation3D
             Point3D inputPoint2, Point3D inputPoint3, Point3D inputPoint4,
             Point3D outputPoint1, Point3D outputPoint2, Point3D outputPoint3,
             Point3D outputPoint4) throws CoincidentPointsException {
-        List<Point3D> inputPoints = new ArrayList<Point3D>();
+        List<Point3D> inputPoints = new ArrayList<>();
         inputPoints.add(inputPoint1);
         inputPoints.add(inputPoint2);
         inputPoints.add(inputPoint3);
         inputPoints.add(inputPoint4);
         
-        List<Point3D> outputPoints = new ArrayList<Point3D>();
+        List<Point3D> outputPoints = new ArrayList<>();
         outputPoints.add(outputPoint1);
         outputPoints.add(outputPoint2);
         outputPoints.add(outputPoint3);
@@ -709,9 +726,7 @@ public class EuclideanTransformation3D extends Transformation3D
         
         try {
             estimator.estimate(this);
-        } catch (LockedException ignore) {
-            //never thrown
-        } catch (NotReadyException ignore) {
+        } catch (LockedException | NotReadyException ignore) {
             //never thrown
         }        
     }

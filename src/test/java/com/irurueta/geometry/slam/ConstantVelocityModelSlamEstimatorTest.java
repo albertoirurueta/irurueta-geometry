@@ -55,7 +55,7 @@ public class ConstantVelocityModelSlamEstimatorTest implements
     public static final double ANGULAR_SPEED_NOISE_STANDARD_DEVIATION = 1e-4;
     
     public static final double REQUIRED_PREDICTION_SUCCESS_RATE = 0.5;    
-    public static final double REQUIRED_PREDICTION_WITH_CALIBRATION_SUCCESS_RATE = 0.3;
+    public static final double REQUIRED_PREDICTION_WITH_CALIBRATION_SUCCESS_RATE = 0.2;
     
     public static final float MIN_CALIBRATION_OFFSET = -1e-4f;
     public static final float MAX_CALIBRATION_OFFSET = 1e-4f;

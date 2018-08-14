@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.AffineTransformation3D
@@ -729,14 +729,18 @@ public class AffineTransformation3D extends Transformation3D
         }
         
         //set rotation        
-        m.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, A);
+        m.setSubmatrix(0, 0, 2, 2,
+                A);
         
         //set translation
-        m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
-                HOM_COORDS - 1, translation);     
+        m.setSubmatrix(0, 3, 2, 3,
+                translation);
         
         //set last element
-        m.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);
+        m.setElementAt(3 , 0, 0.0);
+        m.setElementAt(3 , 1, 0.0);
+        m.setElementAt(3 , 2, 0.0);
+        m.setElementAt(3, 3, 1.0);
     }       
 
     /**
@@ -773,25 +777,32 @@ public class AffineTransformation3D extends Transformation3D
      * stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      * the resulting output conic matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed becauseof
+     * numerical instabilities.
      */        
     @Override
     public void transform(Quadric inputQuadric, Quadric outputQuadric) 
-            throws NonSymmetricMatrixException {
-        //p' * C * p = 0
-        //p'*T' * C * T * p = 0
-        
+            throws NonSymmetricMatrixException, AlgebraException {
+        //point' * quadric * point = 0
+        //point' * T' * transformedQuadric * T * point = 0
+        //where:
+        // - transformedPoint = T * point
+
+        //Hence:
+        // transformedQuadric = T^-1' * quadric * T^-1
+
         inputQuadric.normalize();
         
-        Matrix C = inputQuadric.asMatrix();
-        Matrix T = asMatrix();
-        //normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(T);
-        T.multiplyByScalar(1.0 / norm);
+        Matrix Q = inputQuadric.asMatrix();
+        Matrix invT = inverseAndReturnNew().asMatrix();
+        //normalize transformation matrix invT to increase accuracy
+        double norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
         
-        Matrix m = T.transposeAndReturnNew();
+        Matrix m = invT.transposeAndReturnNew();
         try {
-            m.multiply(C);
-            m.multiply(T);
+            m.multiply(Q);
+            m.multiply(invT);
         } catch (WrongSizeException ignore) { }
         
         //normalize resulting m matrix to increase accuracy so that it can be
@@ -810,34 +821,37 @@ public class AffineTransformation3D extends Transformation3D
      * will be stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      * the resulting output dual conic matrix is not considered to be symmetric.
-     * @throws AlgebraException raised if transformcannot be computed becauseof 
-     * numerical instabilities.
-     */        
+     */
     @Override
     public void transform(DualQuadric inputDualQuadric, 
-            DualQuadric outputDualQuadric) throws NonSymmetricMatrixException, 
-            AlgebraException {
-        //l' * C¨* l = 0
-        //l'*(T^-1)' * C ¨* (T^-1) * p = 0
+            DualQuadric outputDualQuadric) throws NonSymmetricMatrixException {
+        //plane' * dualQuadric * plane = 0
+        //plane' * T^-1 * T * dualQuadric * T' * T^-1'*plane
+
+        //Hence:
+        //transformed plane: T^-1'*plane
+        //transformed dual quadric: T * dualQuadric * T'
         
         inputDualQuadric.normalize();
         
-        Matrix dualC = inputDualQuadric.asMatrix();
-        Matrix invT = inverseAndReturnNew().asMatrix();
+        Matrix dualQ = inputDualQuadric.asMatrix();
+        Matrix T = asMatrix();
         //normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(invT);
-        invT.multiplyByScalar(1.0 / norm);
-        
-        Matrix m = invT.transposeAndReturnNew();
-        m.multiply(dualC);
-        m.multiply(invT);
+        double norm = Utils.normF(T);
+        T.multiplyByScalar(1.0 / norm);
+
+        Matrix transT = T.transposeAndReturnNew();
+        try {
+            T.multiply(dualQ);
+            T.multiply(transT);
+        } catch (WrongSizeException ignore) { }
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
-        norm = Utils.normF(m);
-        m.multiplyByScalar(1.0 / norm);
+        norm = Utils.normF(T);
+        T.multiplyByScalar(1.0 / norm);
         
-        outputDualQuadric.setParameters(m);
+        outputDualQuadric.setParameters(T);
     }
 
     /**
@@ -852,17 +866,25 @@ public class AffineTransformation3D extends Transformation3D
     @Override
     public void transform(Plane inputPlane, Plane outputPlane) 
             throws AlgebraException {
-        //p' * l = 0 --> (T*p)' * (T^-1) * l = p'*T'*(T^-1)*l = 0
+        //plane' * point = 0 --> plane' * T^-1 * T * point
+        //(plane' * T^-1)*(T*point) = (T^-1'*plane)'*(T*point)
+        //where:
+        //- transformedPlane = T^-1'*plane
+        //- transformedpoint = T*point
         
         inputPlane.normalize();
         
         Matrix invT = inverseAndReturnNew().asMatrix();        
         Matrix l = Matrix.newFromArray(inputPlane.asArray());
+
+        //normalize transformation matrix T to increase accuracy
+        double norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
+
+        invT.transpose();
+        invT.multiply(l);
         
-        Matrix m = invT;
-        m.multiply(l);
-        
-        outputPlane.setParameters(m.toArray());
+        outputPlane.setParameters(invT.toArray());
     }
     
     /**
@@ -1041,199 +1063,191 @@ public class AffineTransformation3D extends Transformation3D
         Matrix m = null;
         try {
             m = new Matrix(12, 13); //build matrix initialized to zero
-        } catch (WrongSizeException ignore) { }
+
+            //1st pair of points
+            double iX = inputPoint1.getHomX();
+            double iY = inputPoint1.getHomY();
+            double iZ = inputPoint1.getHomZ();
+            double iW = inputPoint1.getHomW();
         
-        //1st pair of points
-        double iX = inputPoint1.getHomX();
-        double iY = inputPoint1.getHomY();
-        double iZ = inputPoint1.getHomZ();
-        double iW = inputPoint1.getHomW();
+            double oX = outputPoint1.getHomX();
+            double oY = outputPoint1.getHomY();
+            double oZ = outputPoint1.getHomZ();
+            double oW = outputPoint1.getHomW();
         
-        double oX = outputPoint1.getHomX();
-        double oY = outputPoint1.getHomY();
-        double oZ = outputPoint1.getHomZ();
-        double oW = outputPoint1.getHomW();
+            double oWiX = oW * iX;
+            double oWiY = oW * iY;
+            double oWiZ = oW * iZ;
+            double oWiW = oW * iW;
         
-        double oWiX = oW * iX;
-        double oWiY = oW * iY;
-        double oWiZ = oW * iZ;
-        double oWiW = oW * iW;
+            double oXiW = oX * iW;
+            double oYiW = oY * iW;
+            double oZiW = oZ * iW;
+
+            double tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
+            double norm = Math.sqrt(tmp + oXiW * oXiW);
         
-        double oXiW = oX * iW;
-        double oYiW = oY * iW;
-        double oZiW = oZ * iW;
-                
-        double norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ +
-                oWiW * oWiW + oXiW * oXiW);
+            m.setElementAt(0, 0, oWiX / norm);
+            m.setElementAt(0, 1, oWiY / norm);
+            m.setElementAt(0, 2, oWiZ / norm);
+            m.setElementAt(0, 9, oWiW / norm);
+            m.setElementAt(0, 12, -oXiW / norm);
         
-        m.setElementAt(0, 0, oWiX / norm);
-        m.setElementAt(0, 1, oWiY / norm);
-        m.setElementAt(0, 2, oWiZ / norm);
-        m.setElementAt(0, 9, oWiW / norm);        
-        m.setElementAt(0, 12, -oXiW / norm);
+            norm = Math.sqrt(tmp + oYiW * oYiW);
         
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ +
-                oWiW * oWiW + oYiW * oYiW);
+            m.setElementAt(1, 3, oWiX / norm);
+            m.setElementAt(1, 4, oWiY / norm);
+            m.setElementAt(1, 5, oWiZ / norm);
+            m.setElementAt(1, 10, oWiW / norm);
+            m.setElementAt(1, 12, -oYiW / norm);
         
-        m.setElementAt(1, 3, oWiX / norm);
-        m.setElementAt(1, 4, oWiY / norm);
-        m.setElementAt(1, 5, oWiZ / norm);
-        m.setElementAt(1, 10, oWiW / norm);        
-        m.setElementAt(1, 12, -oYiW / norm);
+            norm = Math.sqrt(tmp + oZiW * oZiW);
         
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ +
-                oWiW * oWiW + oZiW * oZiW);
-        
-        m.setElementAt(2, 6, oWiX / norm);
-        m.setElementAt(2, 7, oWiY / norm);
-        m.setElementAt(2, 8, oWiZ / norm);
-        m.setElementAt(2, 11, oWiW / norm);        
-        m.setElementAt(2, 12, -oZiW / norm);
+            m.setElementAt(2, 6, oWiX / norm);
+            m.setElementAt(2, 7, oWiY / norm);
+            m.setElementAt(2, 8, oWiZ / norm);
+            m.setElementAt(2, 11, oWiW / norm);
+            m.setElementAt(2, 12, -oZiW / norm);
         
         
-        //2nd pair of points
-        iX = inputPoint2.getHomX();
-        iY = inputPoint2.getHomY();
-        iZ = inputPoint2.getHomZ();
-        iW = inputPoint2.getHomW();
+            //2nd pair of points
+            iX = inputPoint2.getHomX();
+            iY = inputPoint2.getHomY();
+            iZ = inputPoint2.getHomZ();
+            iW = inputPoint2.getHomW();
         
-        oX = outputPoint2.getHomX();
-        oY = outputPoint2.getHomY();
-        oZ = outputPoint2.getHomZ();
-        oW = outputPoint2.getHomW();
+            oX = outputPoint2.getHomX();
+            oY = outputPoint2.getHomY();
+            oZ = outputPoint2.getHomZ();
+            oW = outputPoint2.getHomW();
         
-        oWiX = oW * iX;
-        oWiY = oW * iY;
-        oWiZ = oW * iZ;
-        oWiW = oW * iW;
+            oWiX = oW * iX;
+            oWiY = oW * iY;
+            oWiZ = oW * iZ;
+            oWiW = oW * iW;
         
-        oXiW = oX * iW;
-        oYiW = oY * iW;
-        oZiW = oZ * iW;
-                
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ +
-                oWiW * oWiW + oXiW * oXiW);
+            oXiW = oX * iW;
+            oYiW = oY * iW;
+            oZiW = oZ * iW;
+
+            tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
+            norm = Math.sqrt(tmp + oXiW * oXiW);
         
-        m.setElementAt(3, 0, oWiX / norm);
-        m.setElementAt(3, 1, oWiY / norm);
-        m.setElementAt(3, 2, oWiZ / norm);
-        m.setElementAt(3, 9, oWiW / norm);        
-        m.setElementAt(3, 12, -oXiW / norm);
+            m.setElementAt(3, 0, oWiX / norm);
+            m.setElementAt(3, 1, oWiY / norm);
+            m.setElementAt(3, 2, oWiZ / norm);
+            m.setElementAt(3, 9, oWiW / norm);
+            m.setElementAt(3, 12, -oXiW / norm);
         
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ +
-                oWiW * oWiW + oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiW * oYiW);
         
-        m.setElementAt(4, 3, oWiX / norm);
-        m.setElementAt(4, 4, oWiY / norm);
-        m.setElementAt(4, 5, oWiZ / norm);
-        m.setElementAt(4, 10, oWiW / norm);        
-        m.setElementAt(4, 12, -oYiW / norm);
+            m.setElementAt(4, 3, oWiX / norm);
+            m.setElementAt(4, 4, oWiY / norm);
+            m.setElementAt(4, 5, oWiZ / norm);
+            m.setElementAt(4, 10, oWiW / norm);
+            m.setElementAt(4, 12, -oYiW / norm);
         
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ +
-                oWiW * oWiW + oZiW * oZiW);
+            norm = Math.sqrt(tmp + oZiW * oZiW);
         
-        m.setElementAt(5, 6, oWiX / norm);
-        m.setElementAt(5, 7, oWiY / norm);
-        m.setElementAt(5, 8, oWiZ / norm);
-        m.setElementAt(5, 11, oWiW / norm);        
-        m.setElementAt(5, 12, -oZiW / norm);
+            m.setElementAt(5, 6, oWiX / norm);
+            m.setElementAt(5, 7, oWiY / norm);
+            m.setElementAt(5, 8, oWiZ / norm);
+            m.setElementAt(5, 11, oWiW / norm);
+            m.setElementAt(5, 12, -oZiW / norm);
         
         
-        //3rd pair of points
-        iX = inputPoint3.getHomX();
-        iY = inputPoint3.getHomY();
-        iZ = inputPoint3.getHomZ();
-        iW = inputPoint3.getHomW();
+            //3rd pair of points
+            iX = inputPoint3.getHomX();
+            iY = inputPoint3.getHomY();
+            iZ = inputPoint3.getHomZ();
+            iW = inputPoint3.getHomW();
         
-        oX = outputPoint3.getHomX();
-        oY = outputPoint3.getHomY();
-        oZ = outputPoint3.getHomZ();
-        oW = outputPoint3.getHomW();
+            oX = outputPoint3.getHomX();
+            oY = outputPoint3.getHomY();
+            oZ = outputPoint3.getHomZ();
+            oW = outputPoint3.getHomW();
         
-        oWiX = oW * iX;
-        oWiY = oW * iY;
-        oWiZ = oW * iZ;
-        oWiW = oW * iW;
+            oWiX = oW * iX;
+            oWiY = oW * iY;
+            oWiZ = oW * iZ;
+            oWiW = oW * iW;
         
-        oXiW = oX * iW;
-        oYiW = oY * iW;
-        oZiW = oZ * iW;
-                
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ +
-                oWiW * oWiW + oXiW * oXiW);
+            oXiW = oX * iW;
+            oYiW = oY * iW;
+            oZiW = oZ * iW;
+
+            tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
+            norm = Math.sqrt(tmp + oXiW * oXiW);
         
-        m.setElementAt(6, 0, oWiX / norm);
-        m.setElementAt(6, 1, oWiY / norm);
-        m.setElementAt(6, 2, oWiZ / norm);
-        m.setElementAt(6, 9, oWiW / norm);        
-        m.setElementAt(6, 12, -oXiW / norm);
+            m.setElementAt(6, 0, oWiX / norm);
+            m.setElementAt(6, 1, oWiY / norm);
+            m.setElementAt(6, 2, oWiZ / norm);
+            m.setElementAt(6, 9, oWiW / norm);
+            m.setElementAt(6, 12, -oXiW / norm);
         
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ +
-                oWiW * oWiW + oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiW * oYiW);
         
-        m.setElementAt(7, 3, oWiX / norm);
-        m.setElementAt(7, 4, oWiY / norm);
-        m.setElementAt(7, 5, oWiZ / norm);
-        m.setElementAt(7, 10, oWiW / norm);        
-        m.setElementAt(7, 12, -oYiW / norm);
+            m.setElementAt(7, 3, oWiX / norm);
+            m.setElementAt(7, 4, oWiY / norm);
+            m.setElementAt(7, 5, oWiZ / norm);
+            m.setElementAt(7, 10, oWiW / norm);
+            m.setElementAt(7, 12, -oYiW / norm);
         
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ +
-                oWiW * oWiW + oZiW * oZiW);
+            norm = Math.sqrt(tmp + oZiW * oZiW);
         
-        m.setElementAt(8, 6, oWiX / norm);
-        m.setElementAt(8, 7, oWiY / norm);
-        m.setElementAt(8, 8, oWiZ / norm);
-        m.setElementAt(8, 11, oWiW / norm);        
-        m.setElementAt(8, 12, -oZiW / norm);
+            m.setElementAt(8, 6, oWiX / norm);
+            m.setElementAt(8, 7, oWiY / norm);
+            m.setElementAt(8, 8, oWiZ / norm);
+            m.setElementAt(8, 11, oWiW / norm);
+            m.setElementAt(8, 12, -oZiW / norm);
         
 
-        //4th pair of points
-        iX = inputPoint4.getHomX();
-        iY = inputPoint4.getHomY();
-        iZ = inputPoint4.getHomZ();
-        iW = inputPoint4.getHomW();
+            //4th pair of points
+            iX = inputPoint4.getHomX();
+            iY = inputPoint4.getHomY();
+            iZ = inputPoint4.getHomZ();
+            iW = inputPoint4.getHomW();
         
-        oX = outputPoint4.getHomX();
-        oY = outputPoint4.getHomY();
-        oZ = outputPoint4.getHomZ();
-        oW = outputPoint4.getHomW();
+            oX = outputPoint4.getHomX();
+            oY = outputPoint4.getHomY();
+            oZ = outputPoint4.getHomZ();
+            oW = outputPoint4.getHomW();
         
-        oWiX = oW * iX;
-        oWiY = oW * iY;
-        oWiZ = oW * iZ;
-        oWiW = oW * iW;
+            oWiX = oW * iX;
+            oWiY = oW * iY;
+            oWiZ = oW * iZ;
+            oWiW = oW * iW;
         
-        oXiW = oX * iW;
-        oYiW = oY * iW;
-        oZiW = oZ * iW;
-                
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ +
-                oWiW * oWiW + oXiW * oXiW);
+            oXiW = oX * iW;
+            oYiW = oY * iW;
+            oZiW = oZ * iW;
+
+            tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
+            norm = Math.sqrt(tmp + oXiW * oXiW);
         
-        m.setElementAt(9, 0, oWiX / norm);
-        m.setElementAt(9, 1, oWiY / norm);
-        m.setElementAt(9, 2, oWiZ / norm);
-        m.setElementAt(9, 9, oWiW / norm);        
-        m.setElementAt(9, 12, -oXiW / norm);
+            m.setElementAt(9, 0, oWiX / norm);
+            m.setElementAt(9, 1, oWiY / norm);
+            m.setElementAt(9, 2, oWiZ / norm);
+            m.setElementAt(9, 9, oWiW / norm);
+            m.setElementAt(9, 12, -oXiW / norm);
         
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ +
-                oWiW * oWiW + oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiW * oYiW);
         
-        m.setElementAt(10, 3, oWiX / norm);
-        m.setElementAt(10, 4, oWiY / norm);
-        m.setElementAt(10, 5, oWiZ / norm);
-        m.setElementAt(10, 10, oWiW / norm);        
-        m.setElementAt(10, 12, -oYiW / norm);
+            m.setElementAt(10, 3, oWiX / norm);
+            m.setElementAt(10, 4, oWiY / norm);
+            m.setElementAt(10, 5, oWiZ / norm);
+            m.setElementAt(10, 10, oWiW / norm);
+            m.setElementAt(10, 12, -oYiW / norm);
         
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ +
-                oWiW * oWiW + oZiW * oZiW);
+            norm = Math.sqrt(tmp + oZiW * oZiW);
         
-        m.setElementAt(11, 6, oWiX / norm);
-        m.setElementAt(11, 7, oWiY / norm);
-        m.setElementAt(11, 8, oWiZ / norm);
-        m.setElementAt(11, 11, oWiW / norm);        
-        m.setElementAt(11, 12, -oZiW / norm);
-                                
+            m.setElementAt(11, 6, oWiX / norm);
+            m.setElementAt(11, 7, oWiY / norm);
+            m.setElementAt(11, 8, oWiZ / norm);
+            m.setElementAt(11, 11, oWiW / norm);
+            m.setElementAt(11, 12, -oZiW / norm);
+        } catch (WrongSizeException ignore) { }
+
         //use SVD to decompose matrix m
         Matrix V;
         try {
@@ -1307,199 +1321,265 @@ public class AffineTransformation3D extends Transformation3D
         Matrix m = null;
         try {
             m = new Matrix(12, 13); //build matrix initialized to zero
-        } catch (WrongSizeException ignore) { }
-        
-        //1st pair of planes
-        double iA = inputPlane1.getA();
-        double iB = inputPlane1.getB();
-        double iC = inputPlane1.getC();
-        double iD = inputPlane1.getD();
-        
-        double oA = outputPlane1.getA();
-        double oB = outputPlane1.getB();
-        double oC = outputPlane1.getC();
-        double oD = outputPlane1.getD();
-        
-        double oDiA = oD * iA;
-        double oDiB = oD * iB;
-        double oDiC = oD * iC;
-        double oDiD = oD * iD;
-        
-        double oAiD = oA * iD;
-        double oBiD = oB * iD;
-        double oCiD = oC * iD;
-                
-        double norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC +
-                oDiD * oDiD + oAiD * oAiD);
-        
-        m.setElementAt(0, 0, oDiA / norm);
-        m.setElementAt(0, 1, oDiB / norm);
-        m.setElementAt(0, 2, oDiC / norm);
-        m.setElementAt(0, 9, oDiD / norm);        
-        m.setElementAt(0, 12, -oAiD / norm);
-        
-        norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC +
-                oDiD * oDiD + oBiD * oBiD);
-        
-        m.setElementAt(1, 3, oDiA / norm);
-        m.setElementAt(1, 4, oDiB / norm);
-        m.setElementAt(1, 5, oDiC / norm);
-        m.setElementAt(1, 10, oDiD / norm);        
-        m.setElementAt(1, 12, -oBiD / norm);
-        
-        norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC +
-                oDiD * oDiD + oCiD * oCiD);
-        
-        m.setElementAt(2, 6, oDiA / norm);
-        m.setElementAt(2, 7, oDiB / norm);
-        m.setElementAt(2, 8, oDiC / norm);
-        m.setElementAt(2, 11, oDiD / norm);        
-        m.setElementAt(2, 12, -oCiD / norm);
-        
-        
-        //2nd pair of planes
-        iA = inputPlane2.getA();
-        iB = inputPlane2.getB();
-        iC = inputPlane2.getC();
-        iD = inputPlane2.getD();
-        
-        oA = outputPlane2.getA();
-        oB = outputPlane2.getB();
-        oC = outputPlane2.getC();
-        oD = outputPlane2.getD();
-        
-        oDiA = oD * iA;
-        oDiB = oD * iB;
-        oDiC = oD * iC;
-        oDiD = oD * iD;
-        
-        oAiD = oA * iD;
-        oBiD = oB * iD;
-        oCiD = oC * iD;
-                
-        norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC +
-                oDiD * oDiD + oAiD * oAiD);
-        
-        m.setElementAt(3, 0, oDiA / norm);
-        m.setElementAt(3, 1, oDiB / norm);
-        m.setElementAt(3, 2, oDiC / norm);
-        m.setElementAt(3, 9, oDiD / norm);        
-        m.setElementAt(3, 12, -oAiD / norm);
-        
-        norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC +
-                oDiD * oDiD + oBiD * oBiD);
-        
-        m.setElementAt(4, 3, oDiA / norm);
-        m.setElementAt(4, 4, oDiB / norm);
-        m.setElementAt(4, 5, oDiC / norm);
-        m.setElementAt(4, 10, oDiD / norm);        
-        m.setElementAt(4, 12, -oBiD / norm);
-        
-        norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC +
-                oDiD * oDiD + oCiD * oCiD);
-        
-        m.setElementAt(5, 6, oDiA / norm);
-        m.setElementAt(5, 7, oDiB / norm);
-        m.setElementAt(5, 8, oDiC / norm);
-        m.setElementAt(5, 11, oDiD / norm);        
-        m.setElementAt(5, 12, -oCiD / norm);
-        
-        
-        //3rd pair of planes
-        iA = inputPlane3.getA();
-        iB = inputPlane3.getB();
-        iC = inputPlane3.getC();
-        iD = inputPlane3.getD();
-        
-        oA = outputPlane3.getA();
-        oB = outputPlane3.getB();
-        oC = outputPlane3.getC();
-        oD = outputPlane3.getD();
-        
-        oDiA = oD * iA;
-        oDiB = oD * iB;
-        oDiC = oD * iC;
-        oDiD = oD * iD;
-        
-        oAiD = oA * iD;
-        oBiD = oB * iD;
-        oCiD = oC * iD;
-                
-        norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC +
-                oDiD * oDiD + oAiD * oAiD);
-        
-        m.setElementAt(6, 0, oDiA / norm);
-        m.setElementAt(6, 1, oDiB / norm);
-        m.setElementAt(6, 2, oDiC / norm);
-        m.setElementAt(6, 9, oDiD / norm);        
-        m.setElementAt(6, 12, -oAiD / norm);
-        
-        norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC +
-                oDiD * oDiD + oBiD * oBiD);
-        
-        m.setElementAt(7, 3, oDiA / norm);
-        m.setElementAt(7, 4, oDiB / norm);
-        m.setElementAt(7, 5, oDiC / norm);
-        m.setElementAt(7, 10, oDiD / norm);        
-        m.setElementAt(7, 12, -oBiD / norm);
-        
-        norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC +
-                oDiD * oDiD + oCiD * oCiD);
-        
-        m.setElementAt(8, 6, oDiA / norm);
-        m.setElementAt(8, 7, oDiB / norm);
-        m.setElementAt(8, 8, oDiC / norm);
-        m.setElementAt(8, 11, oDiD / norm);        
-        m.setElementAt(8, 12, -oCiD / norm);
-        
 
-        //4th pair of planes
-        iA = inputPlane4.getA();
-        iB = inputPlane4.getB();
-        iC = inputPlane4.getC();
-        iD = inputPlane4.getD();
+            //1st pair of planes
+            double iA = inputPlane1.getA();
+            double iB = inputPlane1.getB();
+            double iC = inputPlane1.getC();
+            double iD = inputPlane1.getD();
         
-        oA = outputPlane4.getA();
-        oB = outputPlane4.getB();
-        oC = outputPlane4.getC();
-        oD = outputPlane4.getD();
+            double oA = outputPlane1.getA();
+            double oB = outputPlane1.getB();
+            double oC = outputPlane1.getC();
+            double oD = outputPlane1.getD();
         
-        oDiA = oD * iA;
-        oDiB = oD * iB;
-        oDiC = oD * iC;
-        oDiD = oD * iD;
+            double oDiA = oD * iA;
+            double oDiB = oD * iB;
+            double oDiC = oD * iC;
+
+            double oAiA = oA * iA;
+            double oAiB = oA * iB;
+            double oAiC = oA * iC;
+            double oAiD = oA * iD;
+
+            double oBiA = oB * iA;
+            double oBiB = oB * iB;
+            double oBiC = oB * iC;
+            double oBiD = oB * iD;
+
+            double oCiA = oC * iA;
+            double oCiB = oC * iB;
+            double oCiC = oC * iC;
+            double oCiD = oC * iD;
+
+
+            double tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC;
+            double norm = Math.sqrt(tmp +
+                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
+
+            m.setElementAt(0, 0, oDiA / norm);
+            m.setElementAt(0, 1, oDiB / norm);
+            m.setElementAt(0, 2, oDiC / norm);
+            m.setElementAt(0, 9, -oAiA / norm);
+            m.setElementAt(0, 10, -oAiB / norm);
+            m.setElementAt(0, 11, -oAiC / norm);
+            m.setElementAt(0, 12, -oAiD / norm);
+
+            norm = Math.sqrt(tmp +
+                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
+
+            m.setElementAt(1, 3, oDiA / norm);
+            m.setElementAt(1, 4, oDiB / norm);
+            m.setElementAt(1, 5, oDiC / norm);
+            m.setElementAt(1, 9, -oBiA / norm);
+            m.setElementAt(1, 10, -oBiB / norm);
+            m.setElementAt(1, 11, -oBiC / norm);
+            m.setElementAt(1, 12, -oBiD / norm);
+
+            norm = Math.sqrt(tmp +
+                    oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
+
+            m.setElementAt(2, 6, oDiA / norm);
+            m.setElementAt(2, 7, oDiB / norm);
+            m.setElementAt(2, 8, oDiC / norm);
+            m.setElementAt(2, 9, -oCiA / norm);
+            m.setElementAt(2, 10, -oCiB / norm);
+            m.setElementAt(2, 11, -oCiC / norm);
+            m.setElementAt(2, 12, -oCiD / norm);
         
-        oAiD = oA * iD;
-        oBiD = oB * iD;
-        oCiD = oC * iD;
-                
-        norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC +
-                oDiD * oDiD + oAiD * oAiD);
+            //2nd pair of planes
+            iA = inputPlane2.getA();
+            iB = inputPlane2.getB();
+            iC = inputPlane2.getC();
+            iD = inputPlane2.getD();
         
-        m.setElementAt(9, 0, oDiA / norm);
-        m.setElementAt(9, 1, oDiB / norm);
-        m.setElementAt(9, 2, oDiC / norm);
-        m.setElementAt(9, 9, oDiD / norm);        
-        m.setElementAt(9, 12, -oAiD / norm);
+            oA = outputPlane2.getA();
+            oB = outputPlane2.getB();
+            oC = outputPlane2.getC();
+            oD = outputPlane2.getD();
         
-        norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC +
-                oDiD * oDiD + oBiD * oBiD);
+            oDiA = oD * iA;
+            oDiB = oD * iB;
+            oDiC = oD * iC;
+
+            oAiA = oA * iA;
+            oAiB = oA * iB;
+            oAiC = oA * iC;
+            oAiD = oA * iD;
+
+            oBiA = oB * iA;
+            oBiB = oB * iB;
+            oBiC = oB * iC;
+            oBiD = oB * iD;
+
+            oCiA = oC * iA;
+            oCiB = oC * iB;
+            oCiC = oC * iC;
+            oCiD = oC * iD;
+
+            tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC;
+            norm = Math.sqrt(tmp +
+                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
+
+            m.setElementAt(3, 0, oDiA / norm);
+            m.setElementAt(3, 1, oDiB / norm);
+            m.setElementAt(3, 2, oDiC / norm);
+            m.setElementAt(3, 9, -oAiA / norm);
+            m.setElementAt(3, 10, -oAiB / norm);
+            m.setElementAt(3, 11, -oAiC / norm);
+            m.setElementAt(3, 12, -oAiD / norm);
+
+            norm = Math.sqrt(tmp +
+                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
+
+            m.setElementAt(4, 3, oDiA / norm);
+            m.setElementAt(4, 4, oDiB / norm);
+            m.setElementAt(4, 5, oDiC / norm);
+            m.setElementAt(4, 9, -oBiA / norm);
+            m.setElementAt(4, 10, -oBiB / norm);
+            m.setElementAt(4, 11, -oBiC / norm);
+            m.setElementAt(4, 12, -oBiD / norm);
+
+            norm = Math.sqrt(tmp +
+                    oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
+
+            m.setElementAt(5, 6, oDiA / norm);
+            m.setElementAt(5, 7, oDiB / norm);
+            m.setElementAt(5, 8, oDiC / norm);
+            m.setElementAt(5, 9, -oCiA / norm);
+            m.setElementAt(5, 10, -oCiB / norm);
+            m.setElementAt(5, 11, -oCiC / norm);
+            m.setElementAt(5, 12, -oCiD / norm);
         
-        m.setElementAt(10, 3, oDiA / norm);
-        m.setElementAt(10, 4, oDiB / norm);
-        m.setElementAt(10, 5, oDiC / norm);
-        m.setElementAt(10, 10, oDiD / norm);        
-        m.setElementAt(10, 12, -oBiD / norm);
+            //3rd pair of planes
+            iA = inputPlane3.getA();
+            iB = inputPlane3.getB();
+            iC = inputPlane3.getC();
+            iD = inputPlane3.getD();
         
-        norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC +
-                oDiD * oDiD + oCiD * oCiD);
+            oA = outputPlane3.getA();
+            oB = outputPlane3.getB();
+            oC = outputPlane3.getC();
+            oD = outputPlane3.getD();
         
-        m.setElementAt(11, 6, oDiA / norm);
-        m.setElementAt(11, 7, oDiB / norm);
-        m.setElementAt(11, 8, oDiC / norm);
-        m.setElementAt(11, 11, oDiD / norm);        
-        m.setElementAt(11, 12, -oCiD / norm);
-                                
+            oDiA = oD * iA;
+            oDiB = oD * iB;
+            oDiC = oD * iC;
+
+            oAiA = oA * iA;
+            oAiB = oA * iB;
+            oAiC = oA * iC;
+            oAiD = oA * iD;
+
+            oBiA = oB * iA;
+            oBiB = oB * iB;
+            oBiC = oB * iC;
+            oBiD = oB * iD;
+
+            oCiA = oC * iA;
+            oCiB = oC * iB;
+            oCiC = oC * iC;
+            oCiD = oC * iD;
+
+            tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC;
+            norm = Math.sqrt(tmp +
+                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
+
+            m.setElementAt(6, 0, oDiA / norm);
+            m.setElementAt(6, 1, oDiB / norm);
+            m.setElementAt(6, 2, oDiC / norm);
+            m.setElementAt(6, 9, -oAiA / norm);
+            m.setElementAt(6, 10, -oAiB / norm);
+            m.setElementAt(6, 11, -oAiC / norm);
+            m.setElementAt(6, 12, -oAiD / norm);
+
+            norm = Math.sqrt(tmp +
+                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
+
+            m.setElementAt(7, 3, oDiA / norm);
+            m.setElementAt(7, 4, oDiB / norm);
+            m.setElementAt(7, 5, oDiC / norm);
+            m.setElementAt(7, 9, -oBiA / norm);
+            m.setElementAt(7, 10, -oBiB / norm);
+            m.setElementAt(7, 11, -oBiC / norm);
+            m.setElementAt(7, 12, -oBiD / norm);
+
+            norm = Math.sqrt(tmp +
+                    oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
+
+            m.setElementAt(8, 6, oDiA / norm);
+            m.setElementAt(8, 7, oDiB / norm);
+            m.setElementAt(8, 8, oDiC / norm);
+            m.setElementAt(8, 9, -oCiA / norm);
+            m.setElementAt(8, 10, -oCiB / norm);
+            m.setElementAt(8, 11, -oCiC / norm);
+            m.setElementAt(8, 12, -oCiD / norm);
+
+            //4th pair of planes
+            iA = inputPlane4.getA();
+            iB = inputPlane4.getB();
+            iC = inputPlane4.getC();
+            iD = inputPlane4.getD();
+        
+            oA = outputPlane4.getA();
+            oB = outputPlane4.getB();
+            oC = outputPlane4.getC();
+            oD = outputPlane4.getD();
+        
+            oDiA = oD * iA;
+            oDiB = oD * iB;
+            oDiC = oD * iC;
+
+            oAiA = oA * iA;
+            oAiB = oA * iB;
+            oAiC = oA * iC;
+            oAiD = oA * iD;
+
+            oBiA = oB * iA;
+            oBiB = oB * iB;
+            oBiC = oB * iC;
+            oBiD = oB * iD;
+
+            oCiA = oC * iA;
+            oCiB = oC * iB;
+            oCiC = oC * iC;
+            oCiD = oC * iD;
+
+            tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC;
+            norm = Math.sqrt(tmp +
+                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
+
+            m.setElementAt(9, 0, oDiA / norm);
+            m.setElementAt(9, 1, oDiB / norm);
+            m.setElementAt(9, 2, oDiC / norm);
+            m.setElementAt(9, 9, -oAiA / norm);
+            m.setElementAt(9, 10, -oAiB / norm);
+            m.setElementAt(9, 11, -oAiC / norm);
+            m.setElementAt(9, 12, -oAiD / norm);
+
+            norm = Math.sqrt(tmp +
+                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
+
+            m.setElementAt(10, 3, oDiA / norm);
+            m.setElementAt(10, 4, oDiB / norm);
+            m.setElementAt(10, 5, oDiC / norm);
+            m.setElementAt(10, 9, -oBiA / norm);
+            m.setElementAt(10, 10, -oBiB / norm);
+            m.setElementAt(10, 11, -oBiC / norm);
+            m.setElementAt(10, 12, -oBiD / norm);
+
+            norm = Math.sqrt(tmp +
+                    oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
+
+            m.setElementAt(11, 6, oDiA / norm);
+            m.setElementAt(11, 7, oDiB / norm);
+            m.setElementAt(11, 8, oDiC / norm);
+            m.setElementAt(11, 9, -oCiA / norm);
+            m.setElementAt(11, 10, -oCiB / norm);
+            m.setElementAt(11, 11, -oCiC / norm);
+            m.setElementAt(11, 12, -oCiD / norm);
+        } catch (WrongSizeException ignore) { }
+
         //use SVD to decompose matrix m
         Matrix V;
         try {
@@ -1513,29 +1593,32 @@ public class AffineTransformation3D extends Transformation3D
             
             //last column of V will contain parameters of transformation
             double value = V.getElementAt(12, 12);
-            AffineTransformation3D transformation = new AffineTransformation3D();
-            transformation.A.setElementAt(0, 0, V.getElementAt(0, 12) / value);
-            transformation.A.setElementAt(0, 1, V.getElementAt(1, 12) / value);
-            transformation.A.setElementAt(0, 2, V.getElementAt(2, 12) / value);
-            transformation.A.setElementAt(1, 0, V.getElementAt(3, 12) / value);
-            transformation.A.setElementAt(1, 1, V.getElementAt(4, 12) / value);
-            transformation.A.setElementAt(1, 2, V.getElementAt(5, 12) / value);
-            transformation.A.setElementAt(2, 0, V.getElementAt(6, 12) / value);
-            transformation.A.setElementAt(2, 1, V.getElementAt(7, 12) / value);
-            transformation.A.setElementAt(2, 2, V.getElementAt(8, 12) / value);
-            
-            transformation.translation[0] = V.getElementAt(9, 12) / value;
-            transformation.translation[1] = V.getElementAt(10, 12) / value;
-            transformation.translation[2] = V.getElementAt(11, 12) / value;
-                        
-            //planes compute inverse transformation, so we need to inverse it
-            //to get the right solution
-            transformation.inverse(); //(we do it on another instance in case 
-            //that transformation inversion fails, so that original A and
-            //translation get preserved
-            
-            this.A = transformation.A;
-            this.translation = transformation.translation;                        
+
+            Matrix invTransA = new Matrix(3, 3);
+            //copy former 9 elements of 12th column of V into A in row order
+            invTransA.setSubmatrix(0, 0, 2, 2,
+                    V.getSubmatrixAsArray(0, 12, 8, 12),
+                    false);
+            //normalize by scale value
+            invTransA.multiplyByScalar(1.0 / value);
+
+            //initially A contains the inverse of its transpose, so to obtain A we need
+            //to transpose it and invert it
+            invTransA.transpose();
+            Matrix A = Utils.inverse(invTransA);
+
+            Matrix invt = new Matrix(1, 3);
+            invt.setSubmatrix(0, 0, 0, 2,
+                    V.getSubmatrixAsArray(9, 12, 11, 12),
+                    false);
+            //normalize by scale value (we need to change sign as well)
+            invt.multiplyByScalar(-1.0 / value);
+            invt.transpose();
+
+            Matrix t = A.multiplyAndReturnNew(invt);
+
+            this.A = A;
+            this.translation = t.getBuffer();
         } catch (AlgebraException e) {
             throw new CoincidentPlanesException(e);
         }             

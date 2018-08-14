@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.ProjectiveTransformation3D
@@ -1095,27 +1095,39 @@ public class ProjectiveTransformation3D extends Transformation3D
      * stored.
      * @throws NonSymmetricMatrixException Raised if due to numerical precision
      * the resulting output quadric matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed becauseof
+     * numerical instabilities.
      */            
     @Override
     public void transform(Quadric inputQuadric, Quadric outputQuadric)
-            throws NonSymmetricMatrixException {
-        //p' * Q * p = 0
-        //p'*T' * Q * T * p = 0
+            throws NonSymmetricMatrixException, AlgebraException {
+        //point' * quadric * point = 0
+        //point' * T' * transformedQuadric * T * point = 0
+        //where:
+        // - transformedPoint = T * point
+
+        //Hence:
+        // transformedQuadric = T^-1' * quadric * T^-1
         
         inputQuadric.normalize();
         
         Matrix Q = inputQuadric.asMatrix();
         normalize();
-        
-        Matrix m = T.transposeAndReturnNew();
+
+        Matrix invT = inverseAndReturnNew().asMatrix();
+        //normalize transformation matrix invT to increase accuracy
+        double norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
+
+        Matrix m = invT.transposeAndReturnNew();
         try{
             m.multiply(Q);
-            m.multiply(T);
+            m.multiply(invT);
         }catch(WrongSizeException ignore){}
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
-        double norm = Utils.normF(m);
+        norm = Utils.normF(m);
         m.multiplyByScalar(1.0 / norm);
         
         outputQuadric.setParameters(m);        
@@ -1137,25 +1149,25 @@ public class ProjectiveTransformation3D extends Transformation3D
     public void transform(DualQuadric inputDualQuadric, 
         DualQuadric outputDualQuadric) throws NonSymmetricMatrixException, 
         AlgebraException {
-        //l' * Q¨* l = 0
-        //l'*(T^-1)' * Q ¨* (T^-1) * p = 0
-        
+        //plane' * dualQuadric * plane = 0
+        //plane' * T^-1 * T * dualQuadric * T' * T^-1'*plane
+
+        //Hence:
+        //transformed plane: T^-1'*plane
+        //transformed dual quadric: T * dualQuadric * T'
+
         inputDualQuadric.normalize();
         normalize();
         
         Matrix dualQ = inputDualQuadric.asMatrix();
-        Matrix invT = inverseAndReturnNew().asMatrix();
-        //normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(invT);
-        invT.multiplyByScalar(1.0 / norm);
-        
-        Matrix m = invT.transposeAndReturnNew();
-        m.multiply(dualQ);
-        m.multiply(invT);
-        
+        Matrix transT = T.transposeAndReturnNew();
+
+        Matrix m = T.multiplyAndReturnNew(dualQ);
+        m.multiply(transT);
+
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
-        norm = Utils.normF(m);
+        double norm = Utils.normF(m);
         m.multiplyByScalar(1.0 / norm);
         
         outputDualQuadric.setParameters(m);
@@ -1173,18 +1185,23 @@ public class ProjectiveTransformation3D extends Transformation3D
     @Override
     public void transform(Plane inputPlane, Plane outputPlane) 
             throws AlgebraException {
-        //p' * l = 0 --> (T*p)' * (T^-1) * l = p'*T'*(T^-1)*l = 0
+        //plane' * point = 0 --> plane' * T^-1 * T * point
+        //(plane' * T^-1)*(T*point) = (T^-1'*plane)'*(T*point)
+        //where:
+        //- transformedPlane = T^-1'*plane
+        //- transformedpoint = T*point
+
         
         inputPlane.normalize();
         normalize();
         
         Matrix invT = inverseAndReturnNew().asMatrix();        
         Matrix l = Matrix.newFromArray(inputPlane.asArray());
+
+        invT.transpose();
+        invT.multiply(l);
         
-        Matrix m = invT;
-        m.multiply(l);        
-        
-        outputPlane.setParameters(m.toArray());
+        outputPlane.setParameters(invT.toArray());
     }
     
     /**
@@ -1241,8 +1258,7 @@ public class ProjectiveTransformation3D extends Transformation3D
     protected void inverse(ProjectiveTransformation3D result) 
             throws AlgebraException {
 
-        Matrix invT = Utils.inverse(T);
-        result.T = invT;
+        result.T = Utils.inverse(T);
     }        
     
     /**
@@ -1374,8 +1390,8 @@ public class ProjectiveTransformation3D extends Transformation3D
             double oZiZ = oZ * iZ;
             double oZiW = oZ * iW;
 
-            double norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ +
-                    oWiW * oWiW + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ + 
+            double tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
+            double norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ +
                     oXiW * oXiW);
 
             m.setElementAt(0, 0, oWiX / norm);
@@ -1388,8 +1404,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(0, 14, -oXiZ / norm);
             m.setElementAt(0, 15, -oXiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ + 
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ +
                     oYiW * oYiW);
 
             m.setElementAt(1, 4, oWiX / norm);
@@ -1402,8 +1417,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(1, 14, -oYiZ / norm);
             m.setElementAt(1, 15, -oYiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ + 
+            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ +
                     oZiW * oZiW);
 
             m.setElementAt(2, 8, oWiX / norm);
@@ -1448,8 +1462,8 @@ public class ProjectiveTransformation3D extends Transformation3D
             oZiZ = oZ * iZ;
             oZiW = oZ * iW;
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ + 
+            tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
+            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ +
                     oXiW * oXiW);
 
             m.setElementAt(3, 0, oWiX / norm);
@@ -1462,8 +1476,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(3, 14, -oXiZ / norm);
             m.setElementAt(3, 15, -oXiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ + 
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ +
                     oYiW * oYiW);
 
             m.setElementAt(4, 4, oWiX / norm);
@@ -1476,8 +1489,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(4, 14, -oYiZ / norm);
             m.setElementAt(4, 15, -oYiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ + 
+            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ +
                     oZiW * oZiW);
 
             m.setElementAt(5, 8, oWiX / norm);
@@ -1522,8 +1534,8 @@ public class ProjectiveTransformation3D extends Transformation3D
             oZiZ = oZ * iZ;
             oZiW = oZ * iW;
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ + 
+            tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
+            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ +
                     oXiW * oXiW);
 
             m.setElementAt(6, 0, oWiX / norm);
@@ -1536,8 +1548,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(6, 14, -oXiZ / norm);
             m.setElementAt(6, 15, -oXiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ + 
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ +
                     oYiW * oYiW);
 
             m.setElementAt(7, 4, oWiX / norm);
@@ -1550,8 +1561,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(7, 14, -oYiZ / norm);
             m.setElementAt(7, 15, -oYiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ + 
+            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ +
                     oZiW * oZiW);
 
             m.setElementAt(8, 8, oWiX / norm);
@@ -1596,8 +1606,8 @@ public class ProjectiveTransformation3D extends Transformation3D
             oZiZ = oZ * iZ;
             oZiW = oZ * iW;
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ + 
+            tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
+            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ +
                     oXiW * oXiW);
 
             m.setElementAt(9, 0, oWiX / norm);
@@ -1610,8 +1620,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(9, 14, -oXiZ / norm);
             m.setElementAt(9, 15, -oXiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ + 
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ +
                     oYiW * oYiW);
 
             m.setElementAt(10, 4, oWiX / norm);
@@ -1624,8 +1633,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(10, 14, -oYiZ / norm);
             m.setElementAt(10, 15, -oYiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ + 
+            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ +
                     oZiW * oZiW);
 
             m.setElementAt(11, 8, oWiX / norm);
@@ -1670,8 +1678,8 @@ public class ProjectiveTransformation3D extends Transformation3D
             oZiZ = oZ * iZ;
             oZiW = oZ * iW;
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ + 
+            tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
+            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ +
                     oXiW * oXiW);
 
             m.setElementAt(12, 0, oWiX / norm);
@@ -1684,8 +1692,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(12, 14, -oXiZ / norm);
             m.setElementAt(12, 15, -oXiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ + 
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ +
                     oYiW * oYiW);
 
             m.setElementAt(13, 4, oWiX / norm);
@@ -1698,8 +1705,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(13, 14, -oYiZ / norm);
             m.setElementAt(13, 15, -oYiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + 
-                    oWiW * oWiW + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ + 
+            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ +
                     oZiW * oZiW);
 
             m.setElementAt(14, 8, oWiX / norm);
@@ -1814,8 +1820,8 @@ public class ProjectiveTransformation3D extends Transformation3D
             double oCiC = oC * iC;
             double oCiD = oC * iD;
 
-            double norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC +
-                    oDiD * oDiD + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + 
+            double tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + oDiD * oDiD;
+            double norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC +
                     oAiD * oAiD);
 
             m.setElementAt(0, 0, oDiA / norm);
@@ -1828,8 +1834,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(0, 14, -oAiC / norm);
             m.setElementAt(0, 15, -oAiD / norm);
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + 
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC +
                     oBiD * oBiD);
 
             m.setElementAt(1, 4, oDiA / norm);
@@ -1842,8 +1847,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(1, 14, -oBiC / norm);
             m.setElementAt(1, 15, -oBiD / norm);
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + 
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
                     oCiD * oCiD);
 
             m.setElementAt(2, 8, oDiA / norm);
@@ -1888,8 +1892,8 @@ public class ProjectiveTransformation3D extends Transformation3D
             oCiC = oC * iC;
             oCiD = oC * iD;
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + 
+            tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + oDiD * oDiD;
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC +
                     oAiD * oAiD);
 
             m.setElementAt(3, 0, oDiA / norm);
@@ -1902,8 +1906,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(3, 14, -oAiC / norm);
             m.setElementAt(3, 15, -oAiD / norm);
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + 
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC +
                     oBiD * oBiD);
 
             m.setElementAt(4, 4, oDiA / norm);
@@ -1916,8 +1919,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(4, 14, -oBiC / norm);
             m.setElementAt(4, 15, -oBiD / norm);
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + 
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
                     oCiD * oCiD);
 
             m.setElementAt(5, 8, oDiA / norm);
@@ -1962,8 +1964,8 @@ public class ProjectiveTransformation3D extends Transformation3D
             oCiC = oC * iC;
             oCiD = oC * iD;
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + 
+            tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + oDiD * oDiD;
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC +
                     oAiD * oAiD);
 
             m.setElementAt(6, 0, oDiA / norm);
@@ -1976,8 +1978,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(6, 14, -oAiC / norm);
             m.setElementAt(6, 15, -oAiD / norm);
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + 
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC +
                     oBiD * oBiD);
 
             m.setElementAt(7, 4, oDiA / norm);
@@ -1990,8 +1991,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(7, 14, -oBiC / norm);
             m.setElementAt(7, 15, -oBiD / norm);
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + 
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
                     oCiD * oCiD);
 
             m.setElementAt(8, 8, oDiA / norm);
@@ -2036,8 +2036,8 @@ public class ProjectiveTransformation3D extends Transformation3D
             oCiC = oC * iC;
             oCiD = oC * iD;
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + 
+            tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + oDiD * oDiD;
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC +
                     oAiD * oAiD);
 
             m.setElementAt(9, 0, oDiA / norm);
@@ -2050,8 +2050,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(9, 14, -oAiC / norm);
             m.setElementAt(9, 15, -oAiD / norm);
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + 
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC +
                     oBiD * oBiD);
 
             m.setElementAt(10, 4, oDiA / norm);
@@ -2064,8 +2063,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(10, 14, -oBiC / norm);
             m.setElementAt(10, 15, -oBiD / norm);
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + 
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
                     oCiD * oCiD);
 
             m.setElementAt(11, 8, oDiA / norm);
@@ -2110,8 +2108,8 @@ public class ProjectiveTransformation3D extends Transformation3D
             oCiC = oC * iC;
             oCiD = oC * iD;
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + 
+            tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + oDiD * oDiD;
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC +
                     oAiD * oAiD);
 
             m.setElementAt(12, 0, oDiA / norm);
@@ -2124,8 +2122,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(12, 14, -oAiC / norm);
             m.setElementAt(12, 15, -oAiD / norm);
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + 
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC +
                     oBiD * oBiD);
 
             m.setElementAt(13, 4, oDiA / norm);
@@ -2138,8 +2135,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(13, 14, -oBiC / norm);
             m.setElementAt(13, 15, -oBiD / norm);
 
-            norm = Math.sqrt(oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + 
-                    oDiD * oDiD + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + 
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
                     oCiD * oCiD);
 
             m.setElementAt(14, 8, oDiA / norm);
@@ -2165,10 +2161,11 @@ public class ProjectiveTransformation3D extends Transformation3D
             V = decomposer.getV(); //V is 16x16
             
             //last column of V will contain parameters of transformation
-            Matrix invT = new Matrix(HOM_COORDS, HOM_COORDS);
-            invT.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1, 
+            Matrix transInvT = new Matrix(HOM_COORDS, HOM_COORDS);
+            transInvT.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1,
                     V.getSubmatrix(0, 15, 15, 15).toArray(), false);
-            T = Utils.inverse(invT);
+            transInvT.transpose(); //this is now invT
+            T = Utils.inverse(transInvT);
             normalized = false; //invT is normalized, but not T
             
         } catch (AlgebraException e) {

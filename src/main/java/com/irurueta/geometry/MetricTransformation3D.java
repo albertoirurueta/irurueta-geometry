@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.MetricTransformation3D
@@ -209,7 +209,7 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      */
     @Override
     public void inverse() {
-        inverse((MetricTransformation3D)this);
+        inverse(this);
     }
     
     /**
@@ -220,7 +220,7 @@ public class MetricTransformation3D extends EuclideanTransformation3D
     @Override
     public Transformation3D inverseAndReturnNew() {
         MetricTransformation3D result = new MetricTransformation3D();
-        inverse((MetricTransformation3D)result);
+        inverse(result);
         return result;
     }    
     
@@ -234,7 +234,7 @@ public class MetricTransformation3D extends EuclideanTransformation3D
         //Then inverse transformation is: (1/s)*R* x' = (1/s) * R' * s * R * x +
         //(1/s) * R'*t = x + (1/s) * R'*t
         //--> x = (1/s) * R'*x' - (1/s) * R'*t
-        super.inverse((EuclideanTransformation3D)result);
+        super.inverse(result);
         double[] translation = result.getTranslation();
         double invScale = 1.0 / scale;
         ArrayUtils.multiplyByScalar(translation, invScale, translation);
@@ -404,13 +404,13 @@ public class MetricTransformation3D extends EuclideanTransformation3D
             Point3D inputPoint2, Point3D inputPoint3, Point3D inputPoint4,
             Point3D outputPoint1, Point3D outputPoint2, Point3D outputPoint3,
             Point3D outputPoint4) throws CoincidentPointsException {
-        List<Point3D> inputPoints = new ArrayList<Point3D>();
+        List<Point3D> inputPoints = new ArrayList<>();
         inputPoints.add(inputPoint1);
         inputPoints.add(inputPoint2);
         inputPoints.add(inputPoint3);
         inputPoints.add(inputPoint4);
         
-        List<Point3D> outputPoints = new ArrayList<Point3D>();
+        List<Point3D> outputPoints = new ArrayList<>();
         outputPoints.add(outputPoint1);
         outputPoints.add(outputPoint2);
         outputPoints.add(outputPoint3);
@@ -422,9 +422,7 @@ public class MetricTransformation3D extends EuclideanTransformation3D
         
         try {
             estimator.estimate(this);
-        } catch (LockedException ignore) {
-            //never thrown
-        } catch (NotReadyException ignore) {
+        } catch (LockedException | NotReadyException ignore) {
             //never thrown
         }        
     }    

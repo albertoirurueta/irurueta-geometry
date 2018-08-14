@@ -7868,7 +7868,6 @@ public class KnownBaselineSparseReconstructorTest {
             assertTrue(reconstructor.isAdditionalView());
             assertTrue(reconstructor.getViewCount() > 0);
             assertNotNull(reconstructor.getCurrentEstimatedFundamentalMatrix());
-            assertNotSame(reconstructor.getCurrentEstimatedFundamentalMatrix(), mEstimatedFundamentalMatrix);
             assertNotNull(reconstructor.getCurrentMetricEstimatedCamera());
             if (mEstimatedMetricCamera3 == null) {
                 continue;

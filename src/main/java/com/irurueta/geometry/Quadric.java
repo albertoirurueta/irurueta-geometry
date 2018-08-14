@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.Quadric
@@ -14,6 +14,7 @@ import java.io.Serializable;
 /**
  * This class contains the implementation of a quadric
  */
+@SuppressWarnings("WeakerAccess")
 public class Quadric extends BaseQuadric implements Serializable{
     
     /**
@@ -561,6 +562,11 @@ public class Quadric extends BaseQuadric implements Serializable{
     
     /**
      * Intersects this quadric with provided plane.
+     * Notice that result of intersection is expressed on original quadric
+     * coordinates.
+     * If resulting conic needs to be expressed in terms of plane coordinates,
+     * then the plane and the conic must be rotated so that the plane becomes
+     * an xy plane.
      * @param plane plane to intersect this quadric with.
      * @param result instance where resulting intersection will be stored.
      */
@@ -637,27 +643,39 @@ public class Quadric extends BaseQuadric implements Serializable{
         //(2*aP*cQ*dP/cP^2 -2*fQ*dP/cP + 2*gQ -2*iQ*aP/cP)*x*w + 
         //(2*bP*cQ*dP/cP^2 -2*eQ*dP/cP + 2*hQ -2*iQ*bP/cP)*y*w + 
         //(cQ*dP^2/cP^2 -2*iQ*dP/cP + jQ)*w^2 = 0
+
+
+        //(aQ - 2*aP*fQ/cP + cQ*aP^2/cP^2)*x^2 +
+        //2*(dQ - bP*fQ/cP - eQ*aP/cP + aP*bP*cQ/cP^2)*x*y +
+        //2*(gQ - dP*fQ/cP - aP*iQ/cP + cQ*aP*dP/cP^2)*x*w +
+        //(bQ - 2*bP*eQ/cP + cQ*bP^2/cP^2)*y^2 +
+        //2*(hQ - bP*iQ/cP - eQ*dP/cP + cQ*bP*dP/cP^2)*y*w +
+        //(jQ - 2*dP*iQ/cP + cQ*dP^2/cP^2)*w^2 = 0
+
         
         //Comparing with conic equation:
-        //aC*x^2 + 2*bC*x*y + cC*y^2 + 2*dC*x*w + 2*eC*y*w + fC*w^2 = 0
+        //aC*x^2 + 2*bC*x*y + 2*dC*x*w + cC*y^2 + 2*eC*y*w + fC*w^2 = 0
         
         //then conic parameters become:
-        //aC = aQ + aP^2*cQ/cP^2 -2*fQ*aP/cP
-        //bC = 2*aP*bP*cQ/cP^2 + 2*dQ -2*eQ*aP/cP -2*fQ*bP/cP
-        //cC = bQ + bP^2*cQ/cP^2 -2*eQ*bP/cP
-        //dC = 2*aP*cQ*dP/cP^2 -2*fQ*dP/cP + 2*gQ -2*iQ*aP/cP
-        //eC = 2*bP*cQ*dP/cP^2 -2*eQ*dP/cP + 2*hQ -2*iQ*bP/cP
-        //fC = cQ*dP^2/cP^2 -2*iQ*dP/cP + jQ
-        
-        double aC = aQ + Math.pow(aP,2.0)*cQ/Math.pow(cP,2.0) - 2.0*fQ*aP/cP;
-        double bC = 2.0*aP*bP*cQ/Math.pow(cP,2.0) + 2.0*dQ - 2.0*eQ*aP/cP 
-                - 2.0*fQ*bP/cP;
-        double cC = bQ + Math.pow(bP,2.0)*cQ/Math.pow(cP,2.0) - 2.0*eQ*bP/cP;
-        double dC = 2.0*aP*cQ*dP/Math.pow(cP,2.0) - 2.0*fQ*dP/cP + 2.0*gQ - 
-                2.0*iQ*aP/cP;
-        double eC = 2.0*bP*cQ*dP/Math.pow(cP,2.0) - 2.0*eQ*dP/cP + 2.0*hQ -
-                2.0*iQ*bP/cP;
-        double fC = cQ*Math.pow(dP,2.0)/Math.pow(cP,2.0) - 2.0*iQ*dP/cP + jQ;
+        //aC = aQ - 2*aP*fQ/cP + cQ*aP^2/cP^2
+        //bC = dQ - bP*fQ/cP - eQ*aP/cP + aP*bP*cQ/cP^2
+        //cC = bQ - 2*bP*eQ/cP + cQ*bP^2/cP^2
+        //dC = gQ - dP*fQ/cP - aP*iQ/cP + cQ*aP*dP/cP^2
+        //eC = hQ - bP*iQ/cP - eQ*dP/cP + cQ*bP*dP/cP^2
+        //fC = jQ - 2*dP*iQ/cP + cQ*dP^2/cP^2
+
+        double aP2 = aP * aP;
+        double bP2 = bP * bP;
+        double cP2 = cP * cP;
+        double dP2 = dP * dP;
+
+        double aC = aQ - 2.0*aP*fQ/cP + cQ*aP2/cP2;
+        double bC = dQ - bP*fQ/cP - eQ*aP/cP
+                 + aP*bP*cQ/cP2;
+        double cC = bQ - 2.0*bP*eQ/cP + cQ*bP2/cP2;
+        double dC = gQ - dP*fQ/cP - aP*iQ/cP + cQ*aP*dP/cP2;
+        double eC = hQ - bP*iQ/cP - eQ*dP/cP + cQ*bP*dP/cP2;
+        double fC = jQ - 2.0*dP*iQ/cP + cQ*dP2/cP2;
         
         result.setParameters(aC, bC, cC, dC, eC, fC);
     }

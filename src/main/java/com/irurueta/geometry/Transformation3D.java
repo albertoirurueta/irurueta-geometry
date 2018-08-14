@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.Transformation3D
@@ -59,7 +59,7 @@ public abstract class Transformation3D {
      */
     public List<Point3D> transformPointsAndReturnNew(
             List<Point3D> inputPoints) {
-        List<Point3D> outputPoints = new ArrayList<Point3D>(inputPoints.size());
+        List<Point3D> outputPoints = new ArrayList<>(inputPoints.size());
         transformPoints(inputPoints, outputPoints);
         return outputPoints;
     }
@@ -99,9 +99,11 @@ public abstract class Transformation3D {
      * @return a new transformed quadric.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      * the resulting output quadric matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed becauseof
+     * numerical instabilities.
      */
     public Quadric transformAndReturnNew(Quadric inputQuadric) 
-            throws NonSymmetricMatrixException {
+            throws NonSymmetricMatrixException, AlgebraException {
         Quadric outputQuadric = new Quadric();
         transform(inputQuadric, outputQuadric);
         return outputQuadric;
@@ -112,8 +114,11 @@ public abstract class Transformation3D {
      * @param quadric quadric to be transformed
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      * the resulting quadric matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed becauseof
+     * numerical instabilities.
      */
-    public void transform(Quadric quadric) throws NonSymmetricMatrixException {
+    public void transform(Quadric quadric) throws NonSymmetricMatrixException,
+            AlgebraException {
         transform(quadric, quadric);
     }
     
@@ -125,9 +130,11 @@ public abstract class Transformation3D {
      * stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      * the resulting output quadric matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed becauseof
+     * numerical instabilities.
      */
     public abstract void transform(Quadric inputQuadric, Quadric outputQuadric)
-            throws NonSymmetricMatrixException;
+            throws NonSymmetricMatrixException, AlgebraException;
     
     /**
      * Transforms a dual quadric using this transformation and returns a new 
@@ -223,7 +230,7 @@ public abstract class Transformation3D {
      */
     public List<Plane> transformPlanesAndReturnNew(List<Plane> inputPlanes) 
             throws AlgebraException {
-        List<Plane> outputPlanes = new ArrayList<Plane>(inputPlanes.size());
+        List<Plane> outputPlanes = new ArrayList<>(inputPlanes.size());
         transformPlanes(inputPlanes, outputPlanes);
         return outputPlanes;
     }
@@ -322,7 +329,7 @@ public abstract class Transformation3D {
      */
     public List<Line3D> transformLines(List<Line3D> inputLines) 
             throws CoincidentPlanesException, AlgebraException {
-        List<Line3D> outputLines = new ArrayList<Line3D>(inputLines.size());
+        List<Line3D> outputLines = new ArrayList<>(inputLines.size());
         transformLines(inputLines, outputLines);
         return outputLines;
     }

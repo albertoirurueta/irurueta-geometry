@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains unit tests for
  * com.irurueta.geometry.ProjectiveTransformation3D
@@ -33,25 +33,25 @@ import org.junit.Test;
 
 public class ProjectiveTransformation3DTest {
     
-    public static final int PINHOLE_CAMERA_ROWS = 3;
-    public static final int PINHOLE_CAMERA_COLS = 4;
+    private static final int PINHOLE_CAMERA_ROWS = 3;
+    private static final int PINHOLE_CAMERA_COLS = 4;
     
-    public static final double MIN_ANGLE_DEGREES = -90.0;
-    public static final double MAX_ANGLE_DEGREES = 90.0;
+    private static final double MIN_ANGLE_DEGREES = -90.0;
+    private static final double MAX_ANGLE_DEGREES = 90.0;
     
-    public static final double MIN_RANDOM_VALUE = -10.0;
-    public static final double MAX_RANDOM_VALUE = 10.0;
+    private static final double MIN_RANDOM_VALUE = -10.0;
+    private static final double MAX_RANDOM_VALUE = 10.0;
     
-    public static final double MIN_SCALE = 0.2;
-    public static final double MAX_SCALE = 5.0;
+    private static final double MIN_SCALE = 0.2;
+    private static final double MAX_SCALE = 5.0;
     
-    public static final int MIN_POINTS = 3;
-    public static final int MAX_POINTS = 50;
+    private static final int MIN_POINTS = 3;
+    private static final int MAX_POINTS = 50;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;  
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-3;
+    private static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
     
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
     
     
     public ProjectiveTransformation3DTest() { }
@@ -149,7 +149,7 @@ public class ProjectiveTransformation3DTest {
         try {
             transformation = new ProjectiveTransformation3D((Matrix)null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         Matrix badT = new Matrix(ProjectiveTransformation3D.HOM_COORDS + 1,
@@ -157,7 +157,7 @@ public class ProjectiveTransformation3DTest {
         try {
             transformation = new ProjectiveTransformation3D(badT);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);
         
         
@@ -263,7 +263,7 @@ public class ProjectiveTransformation3DTest {
         try {
             transformation = new ProjectiveTransformation3D((Rotation3D)null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         assertNull(transformation);
         
         
@@ -317,7 +317,7 @@ public class ProjectiveTransformation3DTest {
             transformation = new ProjectiveTransformation3D(scale, 
                     (Rotation3D)null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         assertNull(transformation);
         
         
@@ -380,15 +380,13 @@ public class ProjectiveTransformation3DTest {
         //Force NullPointerException
         transformation = null;
         try {
-            transformation = new ProjectiveTransformation3D(
-                    (AffineParameters3D)null, rotation);
+            transformation = new ProjectiveTransformation3D(null, rotation);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
-            transformation = new ProjectiveTransformation3D(params, 
-                    (Rotation3D)null);
+            transformation = new ProjectiveTransformation3D(params, null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         assertNull(transformation);
         
         
@@ -448,14 +446,14 @@ public class ProjectiveTransformation3DTest {
         try {
             transformation = new ProjectiveTransformation3D((double[])null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         double[] badTranslation = new double[
                 ProjectiveTransformation3D.NUM_TRANSLATION_COORDS + 1];
         try {
             transformation = new ProjectiveTransformation3D(badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);
         
         
@@ -498,11 +496,11 @@ public class ProjectiveTransformation3DTest {
             transformation = new ProjectiveTransformation3D((Matrix)null, 
                     translation);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
-            transformation = new ProjectiveTransformation3D(A, (double[])null);
+            transformation = new ProjectiveTransformation3D(A, null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         Matrix badA = new Matrix(ProjectiveTransformation3D.INHOM_COORDS + 1,
@@ -510,11 +508,11 @@ public class ProjectiveTransformation3DTest {
         try {
             transformation = new ProjectiveTransformation3D(badA, translation);
             fail("IllegalArgumetnException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             transformation = new ProjectiveTransformation3D(A, badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);
         
         
@@ -571,14 +569,14 @@ public class ProjectiveTransformation3DTest {
             transformation = new ProjectiveTransformation3D(scale, 
                     (double[])null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         try {
             transformation = new ProjectiveTransformation3D(scale, 
                     badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);
         
         
@@ -637,19 +635,18 @@ public class ProjectiveTransformation3DTest {
             transformation = new ProjectiveTransformation3D((Rotation3D)null,
                     translation);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
-            transformation = new ProjectiveTransformation3D(rotation, 
-                    (double[])null);
+            transformation = new ProjectiveTransformation3D(rotation, null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         try {
             transformation = new ProjectiveTransformation3D(rotation, 
                     badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);
         
         
@@ -707,21 +704,21 @@ public class ProjectiveTransformation3DTest {
         transformation = null;
         try {
             transformation = new ProjectiveTransformation3D(scale, 
-                    (Rotation3D)null, translation);
+                    null, translation);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation3D(scale, rotation, 
-                    (double[])null);
+                    null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Foce IllegalArgumentException
         try {
             transformation = new ProjectiveTransformation3D(scale, rotation, 
                     badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);
 
         
@@ -792,33 +789,33 @@ public class ProjectiveTransformation3DTest {
         transformation = null;
         try {
             transformation = new ProjectiveTransformation3D(scale, 
-                    (Rotation3D)null, translation, projectiveParameters);
+                    null, translation, projectiveParameters);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation3D(scale, rotation, 
-                    (double[])null, projectiveParameters);
+                    null, projectiveParameters);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation3D(scale, rotation, 
                     translation, null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Foce IllegalArgumentException
         try {
             transformation = new ProjectiveTransformation3D(scale, rotation, 
                     badTranslation, projectiveParameters);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         double[] badProjectiveParameters = new double[
                 ProjectiveTransformation3D.HOM_COORDS + 1];
         try {
             transformation = new ProjectiveTransformation3D(scale, rotation, 
                     translation, badProjectiveParameters);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);
         
         
@@ -878,24 +875,24 @@ public class ProjectiveTransformation3DTest {
             transformation = new ProjectiveTransformation3D(null, rotation, 
                     translation);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation3D(params, null, 
                     translation);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation3D(params, rotation, 
                     null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         try {
             transformation = new ProjectiveTransformation3D(params, rotation, 
                     badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);
         
         
@@ -959,34 +956,34 @@ public class ProjectiveTransformation3DTest {
             transformation = new ProjectiveTransformation3D(null, rotation, 
                     translation, projectiveParameters);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation3D(params, null, 
                     translation, projectiveParameters);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation3D(params, rotation, 
                     null, projectiveParameters);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation3D(params, rotation, 
                     translation, null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalARgumentException
         try {
             transformation = new ProjectiveTransformation3D(params, rotation, 
                     badTranslation, projectiveParameters);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             transformation = new ProjectiveTransformation3D(params, rotation, 
                     translation, badProjectiveParameters);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);        
     }
     
@@ -1018,7 +1015,7 @@ public class ProjectiveTransformation3DTest {
         try {
             transformation.setT(null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         Matrix badT = new Matrix(ProjectiveTransformation3D.HOM_COORDS + 1,
@@ -1026,7 +1023,7 @@ public class ProjectiveTransformation3DTest {
         try {
             transformation.setT(badT);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -1076,7 +1073,7 @@ public class ProjectiveTransformation3DTest {
         try {
             ProjectiveTransformation3D.isDegenerate(T);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -1104,7 +1101,7 @@ public class ProjectiveTransformation3DTest {
         try {
             transformation.setA(null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         Matrix badA = new Matrix(ProjectiveTransformation2D.INHOM_COORDS + 1,
@@ -1113,7 +1110,7 @@ public class ProjectiveTransformation3DTest {
         try {
             transformation.setA(badA);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -1187,7 +1184,7 @@ public class ProjectiveTransformation3DTest {
         try {
             transformation.setRotation(null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
     }
     
     @Test
@@ -1404,7 +1401,7 @@ public class ProjectiveTransformation3DTest {
         try {
             transformation.setTranslation(badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -1476,7 +1473,7 @@ public class ProjectiveTransformation3DTest {
         try {
             transformation.addTranslation(badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -1664,7 +1661,7 @@ public class ProjectiveTransformation3DTest {
                 translationX1 + translationX2, ABSOLUTE_ERROR);
     }
     
-   @Test
+    @Test
     public void testAddTranslationY() {
         ProjectiveTransformation3D transformation = 
                 new ProjectiveTransformation3D();
@@ -1751,7 +1748,7 @@ public class ProjectiveTransformation3DTest {
                 ABSOLUTE_ERROR);
     }    
        
-  @Test
+    @Test
     public void testAsMatrix() throws WrongSizeException {
         Matrix T = Matrix.createWithUniformRandomValues(
                 ProjectiveTransformation3D.HOM_COORDS, 
@@ -1778,7 +1775,7 @@ public class ProjectiveTransformation3DTest {
         try {
             transformation.asMatrix(badT);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
   
     @Test
@@ -1830,8 +1827,8 @@ public class ProjectiveTransformation3DTest {
         ProjectiveTransformation3D transformation = 
                 new ProjectiveTransformation3D(T);
         
-        ArrayList<Point3D> inputPoints = new ArrayList<Point3D>(size);
-        ArrayList<Point3D> expectedPoints = new ArrayList<Point3D>(size);
+        ArrayList<Point3D> inputPoints = new ArrayList<>(size);
+        ArrayList<Point3D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -1848,7 +1845,7 @@ public class ProjectiveTransformation3DTest {
         }                
         
         List<Point3D> outPoints1 = transformation.transformPointsAndReturnNew(inputPoints);
-        List<Point3D> outPoints2 = new ArrayList<Point3D>();
+        List<Point3D> outPoints2 = new ArrayList<>();
         transformation.transformPoints(inputPoints, outPoints2);
                 
         //check correctness
@@ -1878,8 +1875,8 @@ public class ProjectiveTransformation3DTest {
         ProjectiveTransformation3D transformation = 
                 new ProjectiveTransformation3D(T);        
         
-        ArrayList<Point3D> inputPoints = new ArrayList<Point3D>(size);
-        ArrayList<Point3D> expectedPoints = new ArrayList<Point3D>(size);
+        ArrayList<Point3D> inputPoints = new ArrayList<>(size);
+        ArrayList<Point3D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -1909,8 +1906,8 @@ public class ProjectiveTransformation3DTest {
     }
    
     @Test
-    public void testTransformQuadric() throws WrongSizeException, 
-            NonSymmetricMatrixException {
+    public void testTransformQuadric() throws NonSymmetricMatrixException,
+            AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -2021,9 +2018,8 @@ public class ProjectiveTransformation3DTest {
     }   
     
     @Test
-    public void tesTransformDualQuadric() throws WrongSizeException, 
-        NonSymmetricMatrixException, RankDeficientMatrixException, 
-        DecomposerException, AlgebraException {
+    public void tesTransformDualQuadric() throws NonSymmetricMatrixException,
+            AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -2142,9 +2138,7 @@ public class ProjectiveTransformation3DTest {
     }      
     
     @Test
-    public void testTransformPlane() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            AlgebraException {
+    public void testTransformPlane() throws AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] params = new double[Plane.PLANE_NUMBER_PARAMS];
@@ -2200,9 +2194,7 @@ public class ProjectiveTransformation3DTest {
     }    
  
     @Test
-    public void testTransformPlanes() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            AlgebraException {
+    public void testTransformPlanes() throws AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -2221,8 +2213,8 @@ public class ProjectiveTransformation3DTest {
         ProjectiveTransformation3D transformation = 
                 new ProjectiveTransformation3D(T);
         
-        ArrayList<Plane> inputPlanes = new ArrayList<Plane>(size);
-        ArrayList<Plane> expectedPlanes = new ArrayList<Plane>(size);
+        ArrayList<Plane> inputPlanes = new ArrayList<>(size);
+        ArrayList<Plane> expectedPlanes = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] params = new double[Plane.PLANE_NUMBER_PARAMS];
             randomizer.fill(params, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -2238,7 +2230,7 @@ public class ProjectiveTransformation3DTest {
 
         
         List<Plane> outPlanes1 = transformation.transformPlanesAndReturnNew(inputPlanes);
-        List<Plane> outPlanes2 = new ArrayList<Plane>();
+        List<Plane> outPlanes2 = new ArrayList<>();
         transformation.transformPlanes(inputPlanes, outPlanes2);
                 
         //check correctness
@@ -2276,9 +2268,7 @@ public class ProjectiveTransformation3DTest {
     }  
       
     @Test
-    public void testTransformAndOverwritePlanes() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            AlgebraException {
+    public void testTransformAndOverwritePlanes() throws AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -2297,8 +2287,8 @@ public class ProjectiveTransformation3DTest {
         ProjectiveTransformation3D transformation = 
                 new ProjectiveTransformation3D(T);
         
-        ArrayList<Plane> inputPlanes = new ArrayList<Plane>(size);
-        ArrayList<Plane> expectedPlanes = new ArrayList<Plane>(size);
+        ArrayList<Plane> inputPlanes = new ArrayList<>(size);
+        ArrayList<Plane> expectedPlanes = new ArrayList<>(size);
         for(int i = 0; i < size; i++) {
             double[] params = new double[Plane.PLANE_NUMBER_PARAMS];
             randomizer.fill(params, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -2333,10 +2323,8 @@ public class ProjectiveTransformation3DTest {
     }
     
     @Test
-    public void testTransformLine() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            CoincidentPointsException, CoincidentPlanesException, 
-            AlgebraException {
+    public void testTransformLine() throws CoincidentPointsException,
+            CoincidentPlanesException, AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] coords = new double[
@@ -2439,10 +2427,8 @@ public class ProjectiveTransformation3DTest {
     }   
     
     @Test
-    public void testTransformLines() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            CoincidentPlanesException, CoincidentPointsException, 
-            AlgebraException {
+    public void testTransformLines() throws CoincidentPlanesException,
+            CoincidentPointsException, AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -2461,8 +2447,8 @@ public class ProjectiveTransformation3DTest {
         ProjectiveTransformation3D transformation = 
                 new ProjectiveTransformation3D(T);  
         
-        ArrayList<Line3D> inputLines = new ArrayList<Line3D>(size);
-        ArrayList<Line3D> expectedLines = new ArrayList<Line3D>(size);
+        ArrayList<Line3D> inputLines = new ArrayList<>(size);
+        ArrayList<Line3D> expectedLines = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                 Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -2485,7 +2471,7 @@ public class ProjectiveTransformation3DTest {
 
         
         List<Line3D> outLines1 = transformation.transformLines(inputLines);
-        List<Line3D> outLines2 = new ArrayList<Line3D>();
+        List<Line3D> outLines2 = new ArrayList<>();
         transformation.transformLines(inputLines, outLines2);
                 
         //check correctness
@@ -2542,10 +2528,8 @@ public class ProjectiveTransformation3DTest {
     }  
     
     @Test
-    public void testTransformAndOverwriteLines() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            CoincidentPointsException, CoincidentPlanesException, 
-            AlgebraException {
+    public void testTransformAndOverwriteLines() throws CoincidentPointsException,
+            CoincidentPlanesException, AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -2564,8 +2548,8 @@ public class ProjectiveTransformation3DTest {
         ProjectiveTransformation3D transformation = 
                 new ProjectiveTransformation3D(T);  
         
-        ArrayList<Line3D> inputLines = new ArrayList<Line3D>(size);
-        ArrayList<Line3D> expectedLines = new ArrayList<Line3D>(size);
+        ArrayList<Line3D> inputLines = new ArrayList<>(size);
+        ArrayList<Line3D> expectedLines = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                 Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -2634,8 +2618,8 @@ public class ProjectiveTransformation3DTest {
         ProjectiveTransformation3D transformation = 
                 new ProjectiveTransformation3D(T);
         
-        ArrayList<Point3D> inputPoints = new ArrayList<Point3D>(size);
-        ArrayList<Point3D> expectedPoints = new ArrayList<Point3D>(size);
+        ArrayList<Point3D> inputPoints = new ArrayList<>(size);
+        ArrayList<Point3D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -2689,8 +2673,7 @@ public class ProjectiveTransformation3DTest {
     }
     
     @Test
-    public void testTransformTriangle() throws NotEnoughVerticesException, 
-        AlgebraException {
+    public void testTransformTriangle() throws AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = Triangle2D.NUM_VERTICES;
@@ -2703,8 +2686,8 @@ public class ProjectiveTransformation3DTest {
         ProjectiveTransformation3D transformation = 
                 new ProjectiveTransformation3D(T);
         
-        ArrayList<Point3D> inputPoints = new ArrayList<Point3D>(size);
-        ArrayList<Point3D> expectedPoints = new ArrayList<Point3D>(size);
+        ArrayList<Point3D> inputPoints = new ArrayList<>(size);
+        ArrayList<Point3D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -2804,7 +2787,7 @@ public class ProjectiveTransformation3DTest {
     }
     
     @Test
-    public void testInverse() throws WrongSizeException, AlgebraException {
+    public void testInverse() throws AlgebraException {
        
         //generate invertible matrix
         Matrix T;
@@ -2866,7 +2849,7 @@ public class ProjectiveTransformation3DTest {
     }   
    
     @Test
-    public void testCombine() throws WrongSizeException, AlgebraException {
+    public void testCombine() throws AlgebraException {
         Matrix T1 = Matrix.createWithUniformRandomValues(
                 ProjectiveTransformation3D.HOM_COORDS, 
                 ProjectiveTransformation3D.HOM_COORDS, 
@@ -2914,11 +2897,11 @@ public class ProjectiveTransformation3DTest {
     
     @Test
     public void testSetTransformationFromPoints() throws WrongSizeException, 
-        DecomposerException, CoincidentPointsException {
+            DecomposerException, CoincidentPointsException {
         
         for (int t = 0; t < TIMES; t++) {
         
-            Matrix T = null;
+            Matrix T;
             do {
                 //ensure transformation matrix is invertible
                 T = Matrix.createWithUniformRandomValues(
@@ -3383,17 +3366,17 @@ public class ProjectiveTransformation3DTest {
                         outputPoint1, outputPoint1, outputPoint3, outputPoint4,
                         outputPoint5);
                 fail("CoincidentPointsException expected but not thrown");
-            }catch(CoincidentPointsException e){}
+            }catch(CoincidentPointsException ignore) { }
         }
     }    
     
     @Test
     public void testConstructorFromPoints() throws WrongSizeException, 
-        DecomposerException, CoincidentPointsException {
+            DecomposerException, CoincidentPointsException {
         
         for (int t = 0; t < TIMES; t++) {
         
-            Matrix T = null;
+            Matrix T;
             do {
                 //ensure transformation matrix is invertible
                 T = Matrix.createWithUniformRandomValues(
@@ -3856,18 +3839,18 @@ public class ProjectiveTransformation3DTest {
                         outputPoint1, outputPoint1, outputPoint3, outputPoint4,
                         outputPoint5);
                 fail("CoincidentPointsException expected but not thrown");
-            } catch (CoincidentPointsException e){}
+            } catch (CoincidentPointsException ignore) { }
             assertNull(transformation2);
         }
     }
     
     @Test
-    public void testSetTransformationFromPlanes() throws WrongSizeException, 
-        DecomposerException, CoincidentPlanesException, AlgebraException {
+    public void testSetTransformationFromPlanes() throws CoincidentPlanesException,
+            AlgebraException {
         
         for (int t = 0; t < TIMES; t++) {
         
-            Matrix T = null;
+            Matrix T;
             do {
                 //ensure transformation matrix is invertible
                 T = Matrix.createWithUniformRandomValues(
@@ -4371,17 +4354,17 @@ public class ProjectiveTransformation3DTest {
                         outputPlane1, outputPlane1, outputPlane3, outputPlane4,
                         outputPlane5);
                 fail("CoincidentPlanesException expected but not thrown");
-            } catch(CoincidentPlanesException e) { }
+            } catch(CoincidentPlanesException ignore) { }
         }
     }        
     
     @Test
-    public void testConstructorFromPlanes() throws WrongSizeException, 
-        DecomposerException, CoincidentPlanesException, AlgebraException {
+    public void testConstructorFromPlanes() throws CoincidentPlanesException,
+            AlgebraException {
         
         for (int t = 0; t < TIMES; t++) {
         
-            Matrix T = null;
+            Matrix T;
             do {
                 //ensure transformation matrix is invertible
                 T = Matrix.createWithUniformRandomValues(
@@ -4883,19 +4866,18 @@ public class ProjectiveTransformation3DTest {
                         outputPlane1, outputPlane1, outputPlane3, outputPlane4,
                         outputPlane5);
                 fail("CoincidentPlanesException expected but not thrown");
-            } catch (CoincidentPlanesException e) { }
+            } catch (CoincidentPlanesException ignore) { }
             assertNull(transformation2);
         }
     }
     
     @Test
-    public void testSetTransformationFromLines() throws WrongSizeException, 
-        DecomposerException, CoincidentLinesException, AlgebraException, 
-        CoincidentPlanesException{
+    public void testSetTransformationFromLines() throws CoincidentLinesException,
+            AlgebraException, CoincidentPlanesException{
         
         for (int t = 0; t < 1; t++) {
         
-            Matrix T = null;
+            Matrix T;
             do {
                 //ensure transformation matrix is invertible
                 T = Matrix.createWithUniformRandomValues(
@@ -5418,18 +5400,17 @@ public class ProjectiveTransformation3DTest {
                         inputLine1, inputLine3, outputLine1, outputLine1, 
                         outputLine3);
                 fail("CoincidentLinesException expected but not thrown");
-            }catch(CoincidentLinesException e){}
+            }catch(CoincidentLinesException ignore) { }
         }
     }            
     
     @Test
-    public void testConstructorFromLines() throws WrongSizeException, 
-        DecomposerException, CoincidentLinesException, AlgebraException, 
-        CoincidentPlanesException {
+    public void testConstructorFromLines() throws CoincidentLinesException,
+            AlgebraException, CoincidentPlanesException {
         
         for (int t = 0; t < 1; t++) {
         
-            Matrix T = null;
+            Matrix T;
             do {
                 //ensure transformation matrix is invertible
                 T = Matrix.createWithUniformRandomValues(
@@ -5950,7 +5931,7 @@ public class ProjectiveTransformation3DTest {
                         inputLine1, inputLine3, outputLine1, outputLine1, 
                         outputLine3);
                 fail("CoincidentLinesException expected but not thrown");
-            } catch (CoincidentLinesException e) { }
+            } catch (CoincidentLinesException ignore) { }
             assertNull(transformation2);
         }
     }   
@@ -5983,66 +5964,63 @@ public class ProjectiveTransformation3DTest {
             ProjectiveTransformation3D transformation) 
             throws WrongSizeException, RankDeficientMatrixException, 
             DecomposerException {
-        
+
         inputPlane.normalize();
-        transformation.normalize();
-        
-        Matrix T = transformation.asMatrix();                
+        Matrix T = transformation.asMatrix();
         double norm = Utils.normF(T);
         T.multiplyByScalar(1.0 / norm);
-        
+
         Matrix invT = Utils.inverse(T);
         norm = Utils.normF(invT);
         invT.multiplyByScalar(1.0 / norm);
-        
+        Matrix transInvT = invT.transposeAndReturnNew();
         Matrix P = Matrix.newFromArray(inputPlane.asArray(), true);
-        
-        outputPlane.setParameters(invT.multiplyAndReturnNew(P).toArray());
+
+
+        outputPlane.setParameters(transInvT.multiplyAndReturnNew(P).toArray());
     }
     
     private static void transformQuadric(Quadric inputQuadric, 
             Quadric outputQuadric, ProjectiveTransformation3D transformation) 
-            throws WrongSizeException, NonSymmetricMatrixException {
-        
-        transformation.normalize();
+            throws AlgebraException, NonSymmetricMatrixException {
+
         Matrix T = transformation.asMatrix();
-        Matrix transT = T.transposeAndReturnNew();
-        
+        Matrix invT = Utils.inverse(T);
+        double norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
+        Matrix transInvT = invT.transposeAndReturnNew();
+
         inputQuadric.normalize();
         Matrix Q = inputQuadric.asMatrix();
-        
-        Matrix transQ = transT.multiplyAndReturnNew(Q.multiplyAndReturnNew(T));
+
+        Matrix transQ = transInvT.multiplyAndReturnNew(Q.multiplyAndReturnNew(invT));
         //normalize to increase accuracy to ensure that matrix remains symmetric
-        double norm = Utils.normF(transQ);
+        norm = Utils.normF(transQ);
         transQ.multiplyByScalar(1.0 / norm);
-        
+
         outputQuadric.setParameters(transQ);
     }
     
     private static void transformDualQuadric(DualQuadric inputDualQuadric, 
             DualQuadric outputDualQuadric, 
             ProjectiveTransformation3D transformation) 
-            throws WrongSizeException, RankDeficientMatrixException, 
-            DecomposerException, NonSymmetricMatrixException {
-        
+            throws WrongSizeException, NonSymmetricMatrixException {
+
         Matrix T = transformation.asMatrix();
         double norm = Utils.normF(T);
         T.multiplyByScalar(1.0 / norm);
-        
-        Matrix invT = Utils.inverse(T);
-        norm = Utils.normF(invT);
-        invT.multiplyByScalar(1.0 / norm);
-        Matrix transInvT = invT.transposeAndReturnNew();
-        
+
+        Matrix transT = T.transposeAndReturnNew();
+
         inputDualQuadric.normalize();
         Matrix dualQ = inputDualQuadric.asMatrix();
-        
-        Matrix transDualQ = transInvT.multiplyAndReturnNew(
-                dualQ.multiplyAndReturnNew(invT));
+
+        Matrix transDualQ = T.multiplyAndReturnNew(
+                dualQ.multiplyAndReturnNew(transT));
         //normalize to increase accuracy to ensure that matrix remains symmetric
         norm = Utils.normF(transDualQ);
         transDualQ.multiplyByScalar(1.0 / norm);
-        
+
         outputDualQuadric.setParameters(transDualQ);
     }
     

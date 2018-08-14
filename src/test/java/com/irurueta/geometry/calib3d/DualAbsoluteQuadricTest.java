@@ -72,7 +72,7 @@ public class DualAbsoluteQuadricTest {
         int succeeded = 0;
         
         try {
-            for (int t = 0; t < 10*TIMES; t++) {
+            for (int t = 0; t < 50*TIMES; t++) {
                 //test empty constructor
                 DualAbsoluteQuadric daq = new DualAbsoluteQuadric();
         

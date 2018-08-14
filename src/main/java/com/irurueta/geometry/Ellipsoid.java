@@ -8,6 +8,8 @@
  */
 package com.irurueta.geometry;
 
+import com.irurueta.algebra.AlgebraException;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -215,7 +217,7 @@ public class Ellipsoid implements Serializable {
         
         try {
             t.transform(q);
-        } catch (NonSymmetricMatrixException ex) {
+        } catch (NonSymmetricMatrixException | AlgebraException ex) {
             throw new GeometryException(ex);
         }
         

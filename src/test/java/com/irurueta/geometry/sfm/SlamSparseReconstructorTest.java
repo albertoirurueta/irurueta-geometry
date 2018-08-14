@@ -4843,6 +4843,18 @@ public class SlamSparseReconstructorTest {
             Point3D rescaledCenter4 = scaleTransformation.transformAndReturnNew(
                     metricCenter4);
 
+            if (!center1.equals(rescaledCenter1, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            if (!center2.equals(rescaledCenter2, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            if (!center3.equals(rescaledCenter3, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            if (!center4.equals(rescaledCenter4, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
 
             assertTrue(center1.equals(rescaledCenter1, LARGE_ABSOLUTE_ERROR));
             assertTrue(center2.equals(rescaledCenter2, LARGE_ABSOLUTE_ERROR));

@@ -112,4 +112,28 @@ public class AccuracyPoint3D extends AccuracyPoint {
                 0, 0, 1, 1);
         return new AccuracyPoint2D(subCovarianceMatrix, mConfidence);
     }
+
+    /**
+     * Projects current accuracy using provided camera to obtain projected ellipse of accuracy.
+     * @param camera camera to project 3D ellipsoid of accuracy into an ellipse.
+     * @return projected ellipse.
+     * @throws NullPointerException if covariance matrix is not defined.
+     * @throws GeometryException if projection fails.
+     */
+    public Ellipse project(PinholeCamera camera) throws NullPointerException, GeometryException {
+        Ellipsoid ellipsoid = toEllipsoid();
+        Quadric quadric = ellipsoid.toQuadric();
+        Conic conic = camera.project(quadric);
+        return new Ellipse(conic);
+    }
+
+    /**
+     * Projects current accuracy using default camera to obtain projected ellipse of accuracy.
+     * @return projected ellipse.
+     * @throws NullPointerException if covariance matrix is not defined.
+     * @throws GeometryException if projection fails.
+     */
+    public Ellipse project() throws NullPointerException, GeometryException {
+        return project(new PinholeCamera());
+    }
 }

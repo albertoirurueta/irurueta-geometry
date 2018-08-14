@@ -333,4 +333,53 @@ public class AccuracyPoint3DTest {
         LOGGER.log(Level.INFO, "Avg accuracy 3D: {0} m",
                 accuracy.getAverageAccuracy());
     }
+
+    @Test
+    public void testProject() throws AlgebraException, GeometryException {
+        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        double[] semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
+        double previous = 0.0;
+        for (int i = Ellipsoid.DIMENSIONS - 1; i >= 0; i--) {
+            semiAxesLengths[i] = previous + randomizer.nextDouble();
+            previous = semiAxesLengths[i];
+        }
+        double roll = Utils.convertToRadians(randomizer.nextDouble(
+                MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        double pitch = Utils.convertToRadians(randomizer.nextDouble(
+                MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        double yaw = Utils.convertToRadians(randomizer.nextDouble(
+                MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        Rotation3D rotation = new MatrixRotation3D(new Quaternion(roll, pitch, yaw));
+
+        Matrix rotationMatrix = rotation.asInhomogeneousMatrix();
+        Matrix covarianceMatrix = rotationMatrix.multiplyAndReturnNew(
+                Matrix.diagonal(semiAxesLengths).multiplyAndReturnNew(rotationMatrix));
+
+        AccuracyPoint3D accuracy = new AccuracyPoint3D(covarianceMatrix);
+
+        PinholeCamera camera = new PinholeCamera();
+        camera.setCameraCenter(new InhomogeneousPoint3D(0,0,-10.0));
+        Ellipse ellipse1 = accuracy.project(camera);
+        Ellipse ellipse2 = accuracy.project();
+
+        Ellipsoid ellipsoid = accuracy.toEllipsoid();
+        Quadric quadric = ellipsoid.toQuadric();
+        Conic conic = camera.project(quadric);
+        Ellipse ellipse3 = new Ellipse(conic);
+
+        assertEquals(ellipse1.getRotationAngle(), ellipse3.getRotationAngle(),
+                ABSOLUTE_ERROR);
+        assertEquals(ellipse2.getRotationAngle(), ellipse3.getRotationAngle(),
+                ABSOLUTE_ERROR);
+
+        assertEquals(ellipse1.getSemiMajorAxis(), ellipse3.getSemiMajorAxis(),
+                ABSOLUTE_ERROR);
+        assertEquals(ellipse2.getSemiMajorAxis(), ellipse3.getSemiMajorAxis(),
+                ABSOLUTE_ERROR);
+
+        assertEquals(ellipse1.getSemiMinorAxis(), ellipse3.getSemiMinorAxis(),
+                ABSOLUTE_ERROR);
+        assertEquals(ellipse2.getSemiMinorAxis(), ellipse3.getSemiMinorAxis(),
+                ABSOLUTE_ERROR);
+    }
 }

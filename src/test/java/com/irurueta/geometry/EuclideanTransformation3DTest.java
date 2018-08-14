@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains unit tests for
  * com.irurueta.geometry.EuclideanTransformation3D
@@ -29,27 +29,27 @@ import org.junit.Test;
 
 public class EuclideanTransformation3DTest {
     
-    public static final int PINHOLE_CAMERA_ROWS = 3;
-    public static final int PINHOLE_CAMERA_COLS = 4;
+    private static final int PINHOLE_CAMERA_ROWS = 3;
+    private static final int PINHOLE_CAMERA_COLS = 4;
     
-    public static final double MIN_ANGLE_DEGREES = -180.0;
-    public static final double MAX_ANGLE_DEGREES = 180.0;
+    private static final double MIN_ANGLE_DEGREES = -180.0;
+    private static final double MAX_ANGLE_DEGREES = 180.0;
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final int MIN_POINTS = 3;
-    public static final int MAX_POINTS = 50;
+    private static final int MIN_POINTS = 3;
+    private static final int MAX_POINTS = 50;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double ABSOLUTE_ERROR = 1e-8;
     
-    public static final double MIN_ANGLE_DEGREES2 = -90.0;
-    public static final double MAX_ANGLE_DEGREES2 = 90.0;
+    private static final double MIN_ANGLE_DEGREES2 = -90.0;
+    private static final double MAX_ANGLE_DEGREES2 = 90.0;
     
-    public static final double MIN_TRANSLATION2 = -100.0;
-    public static final double MAX_TRANSLATION2 = 100.0;
+    private static final double MIN_TRANSLATION2 = -100.0;
+    private static final double MAX_TRANSLATION2 = 100.0;
 
-    public static final int TIMES = 50;        
+    private static final int TIMES = 50;
     
     public EuclideanTransformation3DTest() { }
     
@@ -129,7 +129,7 @@ public class EuclideanTransformation3DTest {
         try {
             transformation = new EuclideanTransformation3D((Rotation3D)null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         assertNull(transformation);
         
         
@@ -163,7 +163,7 @@ public class EuclideanTransformation3DTest {
         try {
             transformation = new EuclideanTransformation3D((double[])null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         double[] badTranslation = new double[
@@ -171,7 +171,7 @@ public class EuclideanTransformation3DTest {
         try {
             transformation = new EuclideanTransformation3D(badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);
         
         
@@ -201,11 +201,11 @@ public class EuclideanTransformation3DTest {
         try {
             transformation = new EuclideanTransformation3D(null, translation);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new EuclideanTransformation3D(rotation, null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         assertNull(transformation);
         
         //Force IllegalArgumentException
@@ -214,7 +214,7 @@ public class EuclideanTransformation3DTest {
             transformation = new EuclideanTransformation3D(rotation, 
                     badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);
         
         
@@ -296,8 +296,6 @@ public class EuclideanTransformation3DTest {
         
         double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        //normalize rotation axis
-        double norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, theta, rotAxis);
         
         Rotation3D rotation = Rotation3D.create(rotAxis, theta);
@@ -329,7 +327,7 @@ public class EuclideanTransformation3DTest {
         try {
             transformation.setRotation(null);
             fail("NullPointerException expected but not thrown");
-        } catch(NullPointerException e){}
+        } catch(NullPointerException ignore) { }
     }
     
     @Test
@@ -431,7 +429,7 @@ public class EuclideanTransformation3DTest {
         try {
             transformation.setTranslation(badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -503,7 +501,7 @@ public class EuclideanTransformation3DTest {
         try {
             transformation.addTranslation(badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -863,7 +861,7 @@ public class EuclideanTransformation3DTest {
         try{
             transformation.asMatrix(T);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        }catch(IllegalArgumentException ignore) { }
     }
         
     @Test
@@ -931,8 +929,8 @@ public class EuclideanTransformation3DTest {
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         
         
-        ArrayList<Point3D> inputPoints = new ArrayList<Point3D>(size);
-        ArrayList<Point3D> expectedPoints = new ArrayList<Point3D>(size);
+        ArrayList<Point3D> inputPoints = new ArrayList<>(size);
+        ArrayList<Point3D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -952,7 +950,7 @@ public class EuclideanTransformation3DTest {
                 new EuclideanTransformation3D(rotation, translation);
         
         List<Point3D> outPoints1 = transformation.transformPointsAndReturnNew(inputPoints);
-        List<Point3D> outPoints2 = new ArrayList<Point3D>();
+        List<Point3D> outPoints2 = new ArrayList<>();
         transformation.transformPoints(inputPoints, outPoints2);
                 
         //check correctness
@@ -989,8 +987,8 @@ public class EuclideanTransformation3DTest {
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         
         
-        ArrayList<Point3D> inputPoints = new ArrayList<Point3D>(size);
-        ArrayList<Point3D> expectedPoints = new ArrayList<Point3D>(size);
+        ArrayList<Point3D> inputPoints = new ArrayList<>(size);
+        ArrayList<Point3D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -1023,8 +1021,8 @@ public class EuclideanTransformation3DTest {
     }
         
     @Test
-    public void testTransformQuadric() throws WrongSizeException, 
-            NonSymmetricMatrixException {
+    public void testTransformQuadric() throws NonSymmetricMatrixException,
+            AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -1144,9 +1142,8 @@ public class EuclideanTransformation3DTest {
     }    
        
     @Test
-    public void testTransformDualQuadric() throws WrongSizeException, 
-        NonSymmetricMatrixException, RankDeficientMatrixException, 
-        DecomposerException, AlgebraException {
+    public void testTransformDualQuadric() throws NonSymmetricMatrixException,
+            AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -1268,9 +1265,7 @@ public class EuclideanTransformation3DTest {
     }  
         
     @Test
-    public void testTransformPlane() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            AlgebraException {
+    public void testTransformPlane() throws AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] params = new double[Plane.PLANE_NUMBER_PARAMS];
@@ -1329,9 +1324,7 @@ public class EuclideanTransformation3DTest {
     }    
     
     @Test
-    public void testTransformPlanes() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            AlgebraException {
+    public void testTransformPlanes() throws AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -1353,8 +1346,8 @@ public class EuclideanTransformation3DTest {
         EuclideanTransformation3D transformation = 
                 new EuclideanTransformation3D(rotation, translation);
         
-        ArrayList<Plane> inputPlanes = new ArrayList<Plane>(size);
-        ArrayList<Plane> expectedPlanes = new ArrayList<Plane>(size);
+        ArrayList<Plane> inputPlanes = new ArrayList<>(size);
+        ArrayList<Plane> expectedPlanes = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] params = new double[Plane.PLANE_NUMBER_PARAMS];
             randomizer.fill(params, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1370,7 +1363,7 @@ public class EuclideanTransformation3DTest {
 
         
         List<Plane> outPlanes1 = transformation.transformPlanesAndReturnNew(inputPlanes);
-        List<Plane> outPlanes2 = new ArrayList<Plane>();
+        List<Plane> outPlanes2 = new ArrayList<>();
         transformation.transformPlanes(inputPlanes, outPlanes2);
                 
         //check correctness
@@ -1408,9 +1401,7 @@ public class EuclideanTransformation3DTest {
     }  
         
     @Test
-    public void testTransformAndOverwritePlanes() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            AlgebraException {
+    public void testTransformAndOverwritePlanes() throws AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -1432,8 +1423,8 @@ public class EuclideanTransformation3DTest {
         EuclideanTransformation3D transformation = 
                 new EuclideanTransformation3D(rotation, translation);
         
-        ArrayList<Plane> inputPlanes = new ArrayList<Plane>(size);
-        ArrayList<Plane> expectedPlanes = new ArrayList<Plane>(size);
+        ArrayList<Plane> inputPlanes = new ArrayList<>(size);
+        ArrayList<Plane> expectedPlanes = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] params = new double[Plane.PLANE_NUMBER_PARAMS];
             randomizer.fill(params, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1468,10 +1459,8 @@ public class EuclideanTransformation3DTest {
     }
             
     @Test
-    public void testTransformLine() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            CoincidentPointsException, CoincidentPlanesException, 
-            AlgebraException {
+    public void testTransformLine() throws CoincidentPointsException,
+            CoincidentPlanesException, AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] coords = new double[
@@ -1577,10 +1566,8 @@ public class EuclideanTransformation3DTest {
     }    
         
     @Test
-    public void testTransformLines() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            CoincidentPlanesException, CoincidentPointsException, 
-            AlgebraException {
+    public void testTransformLines() throws CoincidentPlanesException,
+            CoincidentPointsException, AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -1602,8 +1589,8 @@ public class EuclideanTransformation3DTest {
         EuclideanTransformation3D transformation = 
                 new EuclideanTransformation3D(rotation, translation);
         
-        ArrayList<Line3D> inputLines = new ArrayList<Line3D>(size);
-        ArrayList<Line3D> expectedLines = new ArrayList<Line3D>(size);
+        ArrayList<Line3D> inputLines = new ArrayList<>(size);
+        ArrayList<Line3D> expectedLines = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                 Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -1626,7 +1613,7 @@ public class EuclideanTransformation3DTest {
 
         
         List<Line3D> outLines1 = transformation.transformLines(inputLines);
-        List<Line3D> outLines2 = new ArrayList<Line3D>();
+        List<Line3D> outLines2 = new ArrayList<>();
         transformation.transformLines(inputLines, outLines2);
                 
         //check correctness
@@ -1683,10 +1670,8 @@ public class EuclideanTransformation3DTest {
     }  
         
     @Test
-    public void testTransformAndOverwriteLines() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            CoincidentPointsException, CoincidentPlanesException, 
-            AlgebraException {
+    public void testTransformAndOverwriteLines() throws CoincidentPointsException,
+            CoincidentPlanesException, AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -1708,8 +1693,8 @@ public class EuclideanTransformation3DTest {
         EuclideanTransformation3D transformation = 
                 new EuclideanTransformation3D(rotation, translation);
         
-        ArrayList<Line3D> inputLines = new ArrayList<Line3D>(size);
-        ArrayList<Line3D> expectedLines = new ArrayList<Line3D>(size);
+        ArrayList<Line3D> inputLines = new ArrayList<>(size);
+        ArrayList<Line3D> expectedLines = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                 Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -1786,8 +1771,8 @@ public class EuclideanTransformation3DTest {
         EuclideanTransformation3D transformation = 
                 new EuclideanTransformation3D(rotation, translation);
         
-        ArrayList<Point3D> inputPoints = new ArrayList<Point3D>(size);
-        ArrayList<Point3D> expectedPoints = new ArrayList<Point3D>(size);
+        ArrayList<Point3D> inputPoints = new ArrayList<>(size);
+        ArrayList<Point3D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -1842,7 +1827,7 @@ public class EuclideanTransformation3DTest {
     
 
     @Test
-    public void testTransformTriangle() throws NotEnoughVerticesException {
+    public void testTransformTriangle() {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = Triangle2D.NUM_VERTICES;
@@ -1864,8 +1849,8 @@ public class EuclideanTransformation3DTest {
         EuclideanTransformation3D transformation = 
                 new EuclideanTransformation3D(rotation, translation);
         
-        ArrayList<Point3D> inputPoints = new ArrayList<Point3D>(size);
-        ArrayList<Point3D> expectedPoints = new ArrayList<Point3D>(size);
+        ArrayList<Point3D> inputPoints = new ArrayList<>(size);
+        ArrayList<Point3D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -2311,30 +2296,36 @@ public class EuclideanTransformation3DTest {
     private static void transformPlane(Plane inputPlane, Plane outputPlane,
             EuclideanTransformation3D transformation) throws WrongSizeException,
             RankDeficientMatrixException, DecomposerException {
+
         inputPlane.normalize();
         Matrix T = transformation.asMatrix();
         double norm = Utils.normF(T);
         T.multiplyByScalar(1.0 / norm);
         
         Matrix invT = Utils.inverse(T);
+        norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
+        Matrix transInvT = invT.transposeAndReturnNew();
         Matrix P = Matrix.newFromArray(inputPlane.asArray(), true);
+
         
-        outputPlane.setParameters(invT.multiplyAndReturnNew(P).toArray());
+        outputPlane.setParameters(transInvT.multiplyAndReturnNew(P).toArray());
     }
     
     private static void transformQuadric(Quadric inputQuadric, 
             Quadric outputQuadric, EuclideanTransformation3D transformation) 
-            throws WrongSizeException, NonSymmetricMatrixException {
+            throws AlgebraException, NonSymmetricMatrixException {
         
         Matrix T = transformation.asMatrix();
-        double norm = Utils.normF(T);
-        T.multiplyByScalar(1.0 / norm);
-        Matrix transT = T.transposeAndReturnNew();
+        Matrix invT = Utils.inverse(T);
+        double norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
+        Matrix transInvT = invT.transposeAndReturnNew();
         
         inputQuadric.normalize();
         Matrix Q = inputQuadric.asMatrix();
         
-        Matrix transQ = transT.multiplyAndReturnNew(Q.multiplyAndReturnNew(T));
+        Matrix transQ = transInvT.multiplyAndReturnNew(Q.multiplyAndReturnNew(invT));
         //normalize to increase accuracy to ensure that matrix remains symmetric
         norm = Utils.normF(transQ);
         transQ.multiplyByScalar(1.0 / norm);
@@ -2344,24 +2335,20 @@ public class EuclideanTransformation3DTest {
     
     private static void transformDualQuadric(DualQuadric inputDualQuadric, 
             DualQuadric outputDualQuadric, 
-            EuclideanTransformation3D transformation) throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
+            EuclideanTransformation3D transformation) throws WrongSizeException,
             NonSymmetricMatrixException {
         
         Matrix T = transformation.asMatrix();
         double norm = Utils.normF(T);
         T.multiplyByScalar(1.0 / norm);
-        
-        Matrix invT = Utils.inverse(T);
-        norm = Utils.normF(invT);
-        invT.multiplyByScalar(1.0 / norm);
-        Matrix transInvT = invT.transposeAndReturnNew();
-        
+
+        Matrix transT = T.transposeAndReturnNew();
+
         inputDualQuadric.normalize();
         Matrix dualQ = inputDualQuadric.asMatrix();
         
-        Matrix transDualQ = transInvT.multiplyAndReturnNew(
-                dualQ.multiplyAndReturnNew(invT));
+        Matrix transDualQ = T.multiplyAndReturnNew(
+                dualQ.multiplyAndReturnNew(transT));
         //normalize to increase accuracy to ensure that matrix remains symmetric
         norm = Utils.normF(transDualQ);
         transDualQ.multiplyByScalar(1.0 / norm);
