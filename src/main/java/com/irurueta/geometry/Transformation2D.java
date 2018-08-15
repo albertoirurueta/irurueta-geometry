@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.Transformation2D
@@ -59,7 +59,7 @@ public abstract class Transformation2D {
      */
     public List<Point2D> transformPointsAndReturnNew(
             List<Point2D> inputPoints) {
-        List<Point2D> outputPoints = new ArrayList<Point2D>(inputPoints.size());
+        List<Point2D> outputPoints = new ArrayList<>(inputPoints.size());
         transformPoints(inputPoints, outputPoints);
         return outputPoints;
     }
@@ -99,9 +99,11 @@ public abstract class Transformation2D {
      * @return transformed conic.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      * the resulting output conic matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed because of
+     * numerical instabilities.
      */
     public Conic transformAndReturnNew(Conic inputConic) 
-            throws NonSymmetricMatrixException {
+            throws NonSymmetricMatrixException, AlgebraException {
         Conic outputConic = new Conic();
         transform(inputConic, outputConic);
         return outputConic;
@@ -112,8 +114,11 @@ public abstract class Transformation2D {
      * @param conic conic to be transformed.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      * the resulting conic matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed because of
+     * numerical instabilities.
      */
-    public void transform(Conic conic) throws NonSymmetricMatrixException {
+    public void transform(Conic conic) throws NonSymmetricMatrixException,
+            AlgebraException {
         transform(conic, conic);
     }
     
@@ -125,9 +130,11 @@ public abstract class Transformation2D {
      * stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      * the resulting output conic matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed because of
+     * numerical instabilities.
      */
     public abstract void transform(Conic inputConic, Conic outputConic) 
-            throws NonSymmetricMatrixException;
+            throws NonSymmetricMatrixException, AlgebraException;
     
     /**
      * Transforms a dual conic using this transformation and returns a new one.
@@ -218,7 +225,7 @@ public abstract class Transformation2D {
      */
     public List<Line2D> transformLinesAndReturnNew(List<Line2D> inputLines) 
             throws AlgebraException {
-        List<Line2D> outputLines = new ArrayList<Line2D>(inputLines.size());
+        List<Line2D> outputLines = new ArrayList<>(inputLines.size());
         transformLines(inputLines, outputLines);
         return outputLines;
     }

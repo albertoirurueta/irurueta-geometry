@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.Plane
@@ -16,7 +16,7 @@ import java.io.Serializable;
  * Planes can be expressed using the following expression:
  * A * x + B * y + C * z + D = 0
  */
-public class Plane implements Serializable{
+public class Plane implements Serializable {
     
     /**
      * Parameter A of a plane

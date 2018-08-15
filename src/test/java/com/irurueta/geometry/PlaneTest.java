@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains unit tests for
  * com.irurueta.geometry.Plane
@@ -16,41 +16,36 @@ import static org.junit.Assert.*;
 
 public class PlaneTest {
     
-    public static final int HOM_COORDS = 4;
-    public static final int INHOM_COORDS = 3;
+    private static final int HOM_COORDS = 4;
+    private static final int INHOM_COORDS = 3;
     
-    public static final double PRECISION_ERROR = 1e-6;
-    public static final double MIN_RANDOM_VALUE = 1.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
-    public static final double MIN_RANDOM_DISTANCE = -100.0;
-    public static final double MAX_RANDOM_DISTANCE = 100.0;
+    private static final double PRECISION_ERROR = 1e-6;
+    private static final double MIN_RANDOM_VALUE = 1.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_DISTANCE = -100.0;
+    private static final double MAX_RANDOM_DISTANCE = 100.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double ABSOLUTE_ERROR = 1e-8;
     
-    public PlaneTest() {
-    }
+    public PlaneTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
     public void testConstructor() throws WrongSizeException, NotReadyException, 
         LockedException, DecomposerException, 
         com.irurueta.algebra.NotAvailableException, ColinearPointsException, 
-        IllegalArgumentException, ParallelVectorsException{
+        IllegalArgumentException, ParallelVectorsException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -84,10 +79,10 @@ public class PlaneTest {
         
         //Force IllegalArgumentException
         plane = null;
-        try{
+        try {
             plane = new Plane(new double[HOM_COORDS + 1]);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(plane);
         
         //find 1st point
@@ -117,9 +112,9 @@ public class PlaneTest {
         //Force ColinearPointsException
         assertTrue(Plane.areColinearPoints(point1, point2, point3));
         plane = null;
-        try{
+        try {
             plane = new Plane(point1, point2, point3);
-        }catch(ColinearPointsException e){}
+        } catch (ColinearPointsException ignore) { }
         assertNull(plane);
         
         //try with 3 non-colinear points
@@ -247,34 +242,34 @@ public class PlaneTest {
         
         //Force ParallelVectorsException
         plane1 = null;
-        try{
+        try {
             plane1 = new Plane(point, direction1, direction1);
             fail("ParallelsVectorsException expected but not thrown");
-        }catch(ParallelVectorsException e){}
+        } catch (ParallelVectorsException ignore) { }
         assertNull(plane1);
         
         //Force IllegalArgumentExeption
         double[] wrongArray = new double[HOM_COORDS];
         plane2 = null;
-        try{
+        try {
             plane1 = new Plane(point, wrongArray, direction2);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             plane1 = new Plane(point, direction1, wrongArray);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             plane2 = new Plane(point, wrongArray);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(plane1);
         assertNull(plane2);
         
     }
     
     @Test
-    public void testGettersAndSetters(){
+    public void testGettersAndSetters() {
         double[] array = new double[HOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -318,7 +313,7 @@ public class PlaneTest {
     @Test
     public void testSetParametersFromThreePoints() throws WrongSizeException, 
         NotReadyException, LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException, ColinearPointsException{
+        com.irurueta.algebra.NotAvailableException, ColinearPointsException {
         
         Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -326,7 +321,7 @@ public class PlaneTest {
         SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
         
-        while(decomposer.getRank() < 2){
+        while (decomposer.getRank() < 2) {
             m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
@@ -414,16 +409,16 @@ public class PlaneTest {
         //Force ColinearPointsException
         plane = null;
         assertTrue(Plane.areColinearPoints(point1, point2, point3));
-        try{
+        try {
             plane = new Plane(point1, point2, point3);
-        }catch(ColinearPointsException e){}
+        } catch (ColinearPointsException ignore) { }
         assertNull(plane);
     }
     
     @Test
     public void testSetParametersFrom1PointAnd2Vectors() 
             throws WrongSizeException, IllegalArgumentException, 
-            ParallelVectorsException{
+            ParallelVectorsException {
         //create plane passing through a point and laying on provided direction 
         //vectors
         double[] array = new double[HOM_COORDS];
@@ -475,29 +470,29 @@ public class PlaneTest {
         
         
         //Force ParallelVectorsException
-        try{
+        try {
             plane.setParametersFrom1PointAnd2Vectors(point, direction1, 
                     direction1);
             fail("ParallelsVectorsException expected but not thrown");
-        }catch(ParallelVectorsException e){}
+        } catch (ParallelVectorsException ignore) { }
         
         //Force IllegalArgumentExeption
         double[] wrongArray = new double[HOM_COORDS];
-        try{
+        try {
             plane.setParametersFrom1PointAnd2Vectors(point, wrongArray, 
                     direction2);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             plane.setParametersFrom1PointAnd2Vectors(point, direction1, 
                     wrongArray);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testSetParametersFrom1PointAndDirectorVector() 
-            throws WrongSizeException{
+            throws WrongSizeException {
         //create plane passing through a point and laying on provided direction 
         //vectors
         double[] array = new double[HOM_COORDS];
@@ -550,16 +545,16 @@ public class PlaneTest {
                 
         //Force IllegalArgumentExeption
         double[] wrongArray = new double[HOM_COORDS];
-        try{
+        try {
             plane.setParametersFromPointAndDirectorVector(point, wrongArray);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testIsLocus() throws WrongSizeException, NotReadyException, 
         LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException{
+        com.irurueta.algebra.NotAvailableException {
         
         //randomly choose 3 points to find their corresponding plane
         Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
@@ -568,7 +563,7 @@ public class PlaneTest {
         SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
         
-        while(decomposer.getRank() < 3){
+        while(decomposer.getRank() < 3) {
             m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
@@ -626,7 +621,7 @@ public class PlaneTest {
     @Test
     public void testSignedDistance() throws WrongSizeException, 
         NotReadyException, LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException{
+        com.irurueta.algebra.NotAvailableException {
         
         //randomly choose 3 points to find their corresponding plane
         Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
@@ -635,7 +630,7 @@ public class PlaneTest {
         SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
         
-        while(decomposer.getRank() < 2){
+        while(decomposer.getRank() < 2) {
             m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
@@ -695,7 +690,7 @@ public class PlaneTest {
     }
     
     @Test
-    public void testAsArray(){
+    public void testAsArray() {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -726,14 +721,14 @@ public class PlaneTest {
         assertEquals(array[3], d, 0.0);
 
         //Force IllegalArgumentException
-        try{
+        try {
             plane.asArray(new double[HOM_COORDS + 1]);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testNormalize(){
+    public void testNormalize() {
         
         double[] array = new double[HOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -772,7 +767,7 @@ public class PlaneTest {
     }
     
     @Test
-    public void testDirectorVector(){
+    public void testDirectorVector() {
         double[] array = new double[HOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -801,7 +796,7 @@ public class PlaneTest {
     @Test
     public void testIntersection() throws WrongSizeException, NotReadyException, 
         com.irurueta.algebra.NotAvailableException, LockedException, 
-        DecomposerException, NoIntersectionException, ColinearPointsException{
+        DecomposerException, NoIntersectionException, ColinearPointsException {
         
         //Create random homogeneous coordinates for a point
         Matrix m = Matrix.createWithUniformRandomValues(1, HOM_COORDS, 
@@ -844,14 +839,14 @@ public class PlaneTest {
         
         //Force NoIntersectionException by using two coincident or parallel 
         //planes
-        try{
+        try {
             plane1.getIntersection(plane1, plane2);
             fail("NoIntersectionException expected but not thrown");
-        }catch(NoIntersectionException e){}
-        try{
+        } catch (NoIntersectionException ignore) { }
+        try {
             plane1.intersection(plane1, plane2, intersection);
             fail("NoIntersectionException expected but not thrown");
-        }catch(NoIntersectionException e){}
+        } catch (NoIntersectionException ignore) { }
         
         
         //we could also find 7 random points to find 3 planes having one point 
@@ -935,7 +930,7 @@ public class PlaneTest {
     @Test
     public void testClosestPoint() throws WrongSizeException, NotReadyException,
         LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException, ColinearPointsException{
+        com.irurueta.algebra.NotAvailableException, ColinearPointsException {
         
         //randomly choose 3 points to find their corresponding plane.
         //Each point is represented as one row of matrix below
@@ -946,16 +941,14 @@ public class PlaneTest {
         decomposer.decompose();
         
         //ensure points are not colinear
-        while(decomposer.getRank() < 3){
+        while(decomposer.getRank() < 3) {
             m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
             decomposer.decompose();
         }
         
-        Matrix V = decomposer.getV();
-        
-        Point3D point1 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0, 0, 0, 
+        Point3D point1 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0, 0, 0,
                 HOM_COORDS - 1));
         Point3D point2 = new HomogeneousPoint3D(m.getSubmatrixAsArray(1, 0, 1, 
                 HOM_COORDS - 1));
@@ -1045,18 +1038,18 @@ public class PlaneTest {
         assertTrue(closestPointD.equals(point1, ABSOLUTE_ERROR));        
         
         //Force IllegalArgumentException
-        try{
+        try {
             plane.getClosestPoint(point4, -PRECISION_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             plane.closestPoint(point4, closestPointD, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testDotProduct(){
+    public void testDotProduct() {
         double[] array = new double[HOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1084,7 +1077,7 @@ public class PlaneTest {
     }
     
     @Test
-    public void testEquals(){
+    public void testEquals() {
         double[] array = new double[HOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1093,6 +1086,7 @@ public class PlaneTest {
         Plane plane2 = new Plane(array);
         assertTrue(plane1.equals(plane2, ABSOLUTE_ERROR));
         assertTrue(plane1.equals(plane2));
+        //noinspection all
         assertTrue(plane1.equals((Object)plane2));
         
         array[0] = plane1.getA() + randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -1116,14 +1110,15 @@ public class PlaneTest {
         assertFalse(plane1.equals(plane2, 0.0));
         
         //Force IllegalArgumentException
-        try{
+        try {
+            //noinspection all
             plane1.equals(plane1, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testCreateCanonicalPlaneAtInfinity(){
+    public void testCreateCanonicalPlaneAtInfinity() {
         Plane plane = Plane.createCanonicalPlaneAtInfinity();
         
         assertEquals(plane.getA(), 0.0, 0.0);
@@ -1143,7 +1138,7 @@ public class PlaneTest {
     }
     
     @Test
-    public void testSetAsCanonicalPlaneAtInfinity(){
+    public void testSetAsCanonicalPlaneAtInfinity() {
         //create a point at infinity
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point3D point = new HomogeneousPoint3D(

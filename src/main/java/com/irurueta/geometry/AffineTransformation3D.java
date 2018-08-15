@@ -777,7 +777,7 @@ public class AffineTransformation3D extends Transformation3D
      * stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      * the resulting output conic matrix is not considered to be symmetric.
-     * @throws AlgebraException raised if transform cannot be computed becauseof
+     * @throws AlgebraException raised if transform cannot be computed because of
      * numerical instabilities.
      */        
     @Override
@@ -860,8 +860,8 @@ public class AffineTransformation3D extends Transformation3D
      * @param inputPlane plane to be transformed.
      * @param outputPlane instance where data of transformed plane will be 
      * stored.
-     * @throws AlgebraException raised if transformAndReturnNew cannot be computed because
- of numerical instabilities.
+     * @throws AlgebraException raised if transformAndReturnNew cannot be
+     * computed because of numerical instabilities.
      */        
     @Override
     public void transform(Plane inputPlane, Plane outputPlane) 
@@ -870,19 +870,19 @@ public class AffineTransformation3D extends Transformation3D
         //(plane' * T^-1)*(T*point) = (T^-1'*plane)'*(T*point)
         //where:
         //- transformedPlane = T^-1'*plane
-        //- transformedpoint = T*point
+        //- transformedPoint = T*point
         
         inputPlane.normalize();
         
         Matrix invT = inverseAndReturnNew().asMatrix();        
-        Matrix l = Matrix.newFromArray(inputPlane.asArray());
+        Matrix p = Matrix.newFromArray(inputPlane.asArray());
 
         //normalize transformation matrix T to increase accuracy
         double norm = Utils.normF(invT);
         invT.multiplyByScalar(1.0 / norm);
 
         invT.transpose();
-        invT.multiply(l);
+        invT.multiply(p);
         
         outputPlane.setParameters(invT.toArray());
     }
@@ -1594,8 +1594,9 @@ public class AffineTransformation3D extends Transformation3D
             //last column of V will contain parameters of transformation
             double value = V.getElementAt(12, 12);
 
-            Matrix invTransA = new Matrix(3, 3);
-            //copy former 9 elements of 12th column of V into A in row order
+            Matrix invTransA = new Matrix(AffineParameters3D.INHOM_COORDS,
+                    AffineParameters3D.INHOM_COORDS);
+            //copy former 9 elements of 13th column of V into A in row order
             invTransA.setSubmatrix(0, 0, 2, 2,
                     V.getSubmatrixAsArray(0, 12, 8, 12),
                     false);

@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.BaseConic
@@ -19,7 +19,7 @@ import java.io.Serializable;
  * Appropriate subclasses should be used for each conic type: pure conics and
  * dual conics.
  */
-public abstract class BaseConic implements Serializable{
+public abstract class BaseConic implements Serializable {
     /**
      * Number of rows of one matrix that contains conic parameters.
      */
@@ -101,7 +101,7 @@ public abstract class BaseConic implements Serializable{
     /**
      * Constructor of this class.
      */
-    public BaseConic(){
+    public BaseConic() {
         mA = mB = mC = mD = mE = mF = 0.0;
         mNormalized = false;
     }
@@ -117,7 +117,7 @@ public abstract class BaseConic implements Serializable{
      * @param f Parameter F of the base conic.
      */
     public BaseConic(double a, double b, double c, double d, double e, 
-            double f){
+            double f) {
         setParameters(a, b, c, d, e, f);
     }
     
@@ -134,7 +134,7 @@ public abstract class BaseConic implements Serializable{
      * not 3x3.
      */
     public BaseConic(Matrix m, double symmetricThreshold)
-            throws NonSymmetricMatrixException, IllegalArgumentException{
+            throws NonSymmetricMatrixException, IllegalArgumentException {
         setParameters(m, symmetricThreshold);
     }
     
@@ -148,7 +148,7 @@ public abstract class BaseConic implements Serializable{
      * @see #BaseConic(Matrix, double)
      */
     public BaseConic(Matrix m) throws NonSymmetricMatrixException, 
-            IllegalArgumentException{
+            IllegalArgumentException {
         setParameters(m);
     }
     
@@ -156,7 +156,7 @@ public abstract class BaseConic implements Serializable{
      * Returns parameter A of the given base conic.
      * @return Parameter A of a matrix describing a base conic.
      */
-    public double getA(){
+    public double getA() {
         return mA;
     }
     
@@ -164,7 +164,7 @@ public abstract class BaseConic implements Serializable{
      * Returns parameter B of the given base conic.
      * @return Parameter B of a matrix describing a base conic.
      */
-    public double getB(){
+    public double getB() {
         return mB;
     }
 
@@ -211,7 +211,7 @@ public abstract class BaseConic implements Serializable{
      * @param f Parameter F of the base conic.
      */
     public final void setParameters(double a, double b, double c, double d,
-            double e, double f){
+            double e, double f) {
         mA = a;
         mB = b;
         mC = c;
@@ -235,14 +235,14 @@ public abstract class BaseConic implements Serializable{
      * symmetric.
      */
     public final void setParameters(Matrix m, double symmetricThreshold) 
-            throws IllegalArgumentException, NonSymmetricMatrixException{
-        if(m.getRows() != BASECONIC_MATRIX_ROW_SIZE ||
-                m.getColumns() != BASECONIC_MATRIX_COLUMN_SIZE){
+            throws IllegalArgumentException, NonSymmetricMatrixException {
+        if (m.getRows() != BASECONIC_MATRIX_ROW_SIZE ||
+                m.getColumns() != BASECONIC_MATRIX_COLUMN_SIZE) {
             throw new IllegalArgumentException();
-        }else{
-            if(!Utils.isSymmetric(m, symmetricThreshold)){
+        } else {
+            if (!Utils.isSymmetric(m, symmetricThreshold)) {
                 throw new NonSymmetricMatrixException();
-            }else{
+            } else {
                 mA = m.getElementAt(0, 0);
                 mB = m.getElementAt(0, 1);
                 mC = m.getElementAt(1, 1);
@@ -264,7 +264,7 @@ public abstract class BaseConic implements Serializable{
      * symmetric.
      */    
     public final void setParameters(Matrix m) throws IllegalArgumentException,
-            NonSymmetricMatrixException{
+            NonSymmetricMatrixException {
         setParameters(m, DEFAULT_SYMMETRIC_THRESHOLD);
     }
     
@@ -272,7 +272,7 @@ public abstract class BaseConic implements Serializable{
      * This method sets the A parameter of a base conic.
      * @param a Parameter A of the given base conic.
      */
-    public void setA(double a){
+    public void setA(double a) {
         mA = a;
         mNormalized = false;
     }
@@ -281,7 +281,7 @@ public abstract class BaseConic implements Serializable{
      * This method sets the B parameter of a base conic.
      * @param b Parameter B of the given base conic.
      */
-    public void setB(double b){
+    public void setB(double b) {
         mB = b;
         mNormalized = false;
     }
@@ -290,7 +290,7 @@ public abstract class BaseConic implements Serializable{
      * This method sets the C parameter of a base conic.
      * @param c Parameter C of the given base conic.
      */
-    public void setC(double c){
+    public void setC(double c) {
         mC = c;
         mNormalized = false;
     }
@@ -299,7 +299,7 @@ public abstract class BaseConic implements Serializable{
      * This method sets the D parameter of a base conic.
      * @param d Parameter D of the given base conic.
      */
-    public void setD(double d){
+    public void setD(double d) {
         mD = d;
         mNormalized = false;
     }
@@ -308,7 +308,7 @@ public abstract class BaseConic implements Serializable{
      * This method sets the E parameter of a base conic.
      * @param e Parameter E of the given base conic.
      */
-    public void setE(double e){
+    public void setE(double e) {
         mE = e;
         mNormalized = false;
     }
@@ -317,7 +317,7 @@ public abstract class BaseConic implements Serializable{
      * This method sets the F parameter of a base conic.
      * @param f Parameter F of the given base conic.
      */
-    public void setF(double f){
+    public void setF(double f) {
         mF = f;
         mNormalized = false;
     }
@@ -326,12 +326,12 @@ public abstract class BaseConic implements Serializable{
      * Returns the matrix that describes this base conic.
      * @return 3x3 matrix describing this base conic.
      */
-    public Matrix asMatrix(){
+    public Matrix asMatrix() {
         Matrix out = null;
-        try{
+        try {
             out = new Matrix(BASECONIC_MATRIX_ROW_SIZE, 
                     BASECONIC_MATRIX_COLUMN_SIZE);
-        }catch(WrongSizeException ignore){}
+        } catch (WrongSizeException ignore) { }
         asMatrix(out);        
         return out;
     }
@@ -341,11 +341,12 @@ public abstract class BaseConic implements Serializable{
      * @param m Provided matrix where values will be stored
      * @throws IllegalArgumentException Raised if provided matrix is not 3x3
      */
-    public void asMatrix(Matrix m) throws IllegalArgumentException{
+    public void asMatrix(Matrix m) throws IllegalArgumentException {
         
         if(m.getRows() != BASECONIC_MATRIX_ROW_SIZE ||
-                m.getColumns() != BASECONIC_MATRIX_ROW_SIZE)
+                m.getColumns() != BASECONIC_MATRIX_ROW_SIZE) {
             throw new IllegalArgumentException();
+        }
         
         m.setElementAt(0, 0, mA);
         m.setElementAt(0, 1, mB);
@@ -361,12 +362,12 @@ public abstract class BaseConic implements Serializable{
     /**
      * Normalizes the Conic params using its norm
      */
-    public void normalize(){
-        if(!mNormalized){
+    public void normalize() {
+        if (!mNormalized) {
             Matrix m = asMatrix();
             double norm = Utils.normF(m);
         
-            if(norm > PRECISION && !Double.isNaN(norm)){
+            if (norm > PRECISION && !Double.isNaN(norm)) {
                 mA /= norm;
                 mB /= norm;
                 mC /= norm;
@@ -383,7 +384,7 @@ public abstract class BaseConic implements Serializable{
      * normalized
      * @return True if normalized, false otherwise
      */
-    public boolean isNormalized(){
+    public boolean isNormalized() {
         return mNormalized;
     }
 }

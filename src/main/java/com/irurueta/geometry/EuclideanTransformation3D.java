@@ -65,7 +65,7 @@ public class EuclideanTransformation3D extends Transformation3D
      */
     public EuclideanTransformation3D(Rotation3D rotation)
             throws NullPointerException {
-        if(rotation == null) {
+        if (rotation == null) {
             throw new NullPointerException();
         }
         
@@ -83,7 +83,7 @@ public class EuclideanTransformation3D extends Transformation3D
      */
     public EuclideanTransformation3D(double[] translation)
             throws NullPointerException, IllegalArgumentException {
-        if(translation.length != NUM_TRANSLATION_COORDS) {
+        if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -103,10 +103,10 @@ public class EuclideanTransformation3D extends Transformation3D
     public EuclideanTransformation3D(Rotation3D rotation, double[] translation)
             throws NullPointerException, IllegalArgumentException {
         
-        if(rotation == null) {
+        if (rotation == null) {
             throw new NullPointerException();
         }
-        if(translation.length != NUM_TRANSLATION_COORDS) {
+        if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -156,7 +156,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @throws NullPointerException Raised if provided rotation is null.
      */
     public void setRotation(Rotation3D rotation) throws NullPointerException {
-        if(rotation == null) {
+        if (rotation == null) {
             throw new NullPointerException();
         }
         this.rotation = rotation;
@@ -189,7 +189,7 @@ public class EuclideanTransformation3D extends Transformation3D
      */
     public void setTranslation(double[] translation)
             throws IllegalArgumentException {
-        if(translation.length != NUM_TRANSLATION_COORDS) {
+        if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -379,7 +379,7 @@ public class EuclideanTransformation3D extends Transformation3D
      */
     @Override
     public void asMatrix(Matrix m) throws IllegalArgumentException {
-        if(m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
+        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -484,10 +484,10 @@ public class EuclideanTransformation3D extends Transformation3D
         T.multiplyByScalar(1.0 / norm);
 
         Matrix transT = T.transposeAndReturnNew();
-        try{
+        try {
             T.multiply(dualQ);
             T.multiply(transT);
-        }catch(WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) { }
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
@@ -524,7 +524,7 @@ public class EuclideanTransformation3D extends Transformation3D
         invT.transpose();
         try {
             invT.multiply(plane);
-        } catch(WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) { }
         
         outputPlane.setParameters(invT.getBuffer());
     }
@@ -596,7 +596,7 @@ public class EuclideanTransformation3D extends Transformation3D
         Matrix invRot = result.rotation.asInhomogeneousMatrix();
         try {
             invRot.multiply(t);
-        } catch(WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) { }
         
         result.translation = invRot.toArray();
     }

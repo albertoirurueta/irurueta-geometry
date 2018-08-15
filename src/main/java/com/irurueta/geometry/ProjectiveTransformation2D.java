@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.ProjectiveTransformation2D
@@ -90,6 +90,7 @@ public class ProjectiveTransformation2D extends Transformation2D
     public ProjectiveTransformation2D(Matrix T)
             throws NullPointerException, IllegalArgumentException {
         setT(T);
+        normalize();
     }
     
     /**
@@ -813,8 +814,9 @@ public class ProjectiveTransformation2D extends Transformation2D
      */
     public void setTranslation(double[] translation)
             throws IllegalArgumentException {
-        if(translation.length != NUM_TRANSLATION_COORDS)
+        if(translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
+        }
         
         double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
         double[] translation2 = ArrayUtils.multiplyByScalarAndReturnNew(
@@ -1017,27 +1019,39 @@ public class ProjectiveTransformation2D extends Transformation2D
      * stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      * the resulting output conic matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed becauseof
+     * numerical instabilities.
      */            
     @Override
     public void transform(Conic inputConic, Conic outputConic)
-            throws NonSymmetricMatrixException {
-        //p' * C * p = 0
-        //p'*T' * C * T * p = 0
-        
+            throws NonSymmetricMatrixException, AlgebraException {
+        //point' * conic * point = 0
+        //point' * T' * transformedConic * T * point = 0
+        //where:
+        // - transformedPoint = T * point
+
+        //Hence:
+        // transformedConic = T^-' * conic * T^-1
+
         inputConic.normalize();
         
         Matrix C = inputConic.asMatrix();
         normalize();
+
+        Matrix invT = inverseAndReturnNew().asMatrix();
+        //normalize transformation matrix invT to increase accuracy
+        double norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
         
-        Matrix m = T.transposeAndReturnNew();
+        Matrix m = invT.transposeAndReturnNew();
         try {
             m.multiply(C);
-            m.multiply(T);
+            m.multiply(invT);
         } catch (WrongSizeException ignore) { }
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
-        double norm = Utils.normF(m);
+        norm = Utils.normF(m);
         m.multiplyByScalar(1.0 / norm);
         
         outputConic.setParameters(m);        
@@ -1057,27 +1071,25 @@ public class ProjectiveTransformation2D extends Transformation2D
     @Override
     public void transform(DualConic inputDualConic, DualConic outputDualConic) 
             throws NonSymmetricMatrixException, AlgebraException {
-        //l' * C¨* l = 0
-        //l'*(T^-1)' * C ¨* (T^-1) * p = 0
-        
+        //line' * dualConic * line = 0
+        //line' * T^-1 * T * dualConic * T' * T^-1' * line
+
+        //Hence:
+        //transformed line : T^-1'*line
+        //transformed dual conic: T * dualConic * T'
+
         inputDualConic.normalize();
         normalize();
         
         Matrix dualC = inputDualConic.asMatrix();
-        Matrix invT = inverseAndReturnNew().asMatrix();
-        //normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(invT);
-        invT.multiplyByScalar(1.0 / norm);
-        
-        Matrix m = invT.transposeAndReturnNew();
-        try{
-            m.multiply(dualC);
-            m.multiply(invT);
-        }catch(WrongSizeException ignore){}
-        
+        Matrix transT = T.transposeAndReturnNew();
+
+        Matrix m = T.multiplyAndReturnNew(dualC);
+        m.multiply(transT);
+
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
-        norm = Utils.normF(m);
+        double norm = Utils.normF(m);
         m.multiplyByScalar(1.0 / norm);
         
         outputDualConic.setParameters(m);
@@ -1094,23 +1106,23 @@ public class ProjectiveTransformation2D extends Transformation2D
     @Override
     public void transform(Line2D inputLine, Line2D outputLine) 
             throws AlgebraException {
-        //p' * l = 0 --> (T*p)' * (T^-1) * l = p'*T'*(T^-1)*l = 0
+        //line' * point = 0 --> line' * T^-1 * T * point
+        //(line' * T^-1)*(T*point) = (T^-1'*line)'*(T*point)
+        //where:
+        //- transformedLine = T^-1'*line
+        //- transformedPoint = T*point
+
         
         inputLine.normalize();
         normalize();
         
         Matrix invT = inverseAndReturnNew().asMatrix();
-        //normalize inverse transform matrix to increase accuracy
-        double norm = Utils.normF(invT);
-        
         Matrix l = Matrix.newFromArray(inputLine.asArray());
-        
-        Matrix m = invT;
-        try{
-            m.multiply(l);        
-        }catch(WrongSizeException ignore){}
-        
-        outputLine.setParameters(m.toArray());
+
+        invT.transpose();
+        invT.multiply(l);
+
+        outputLine.setParameters(invT.toArray());
     }
     
     /**
@@ -1145,8 +1157,7 @@ public class ProjectiveTransformation2D extends Transformation2D
     protected void inverse(ProjectiveTransformation2D result) 
             throws AlgebraException {
 
-        Matrix invT = Utils.inverse(T);
-        result.T = invT;
+        result.T = Utils.inverse(T);
     }    
     
     /**
@@ -1262,24 +1273,23 @@ public class ProjectiveTransformation2D extends Transformation2D
             double oYiY = oY * iY;
             double oYiW = oY * iW;
 
-            double norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
+            double tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;
+            double norm = Math.sqrt(tmp +
                     oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
 
             m.setElementAt(0, 0, oWiX / norm);
             m.setElementAt(0, 1, oWiY / norm);
             m.setElementAt(0, 2, oWiW / norm);
-
             m.setElementAt(0, 6, -oXiX / norm);
             m.setElementAt(0, 7, -oXiY / norm);
             m.setElementAt(0, 8, -oXiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
+            norm = Math.sqrt(tmp +
                     oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
 
             m.setElementAt(1, 3, oWiX / norm);
             m.setElementAt(1, 4, oWiY / norm);
             m.setElementAt(1, 5, oWiW / norm);
-
             m.setElementAt(1, 6, -oYiX / norm);
             m.setElementAt(1, 7, -oYiY / norm);
             m.setElementAt(1, 8, -oYiW / norm);
@@ -1305,24 +1315,23 @@ public class ProjectiveTransformation2D extends Transformation2D
             oYiY = oY * iY;
             oYiW = oY * iW;
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
+            tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;
+            norm = Math.sqrt(tmp +
                     oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
 
             m.setElementAt(2, 0, oWiX / norm);
             m.setElementAt(2, 1, oWiY / norm);
             m.setElementAt(2, 2, oWiW / norm);
-
             m.setElementAt(2, 6, -oXiX / norm);
             m.setElementAt(2, 7, -oXiY / norm);
             m.setElementAt(2, 8, -oXiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
+            norm = Math.sqrt(tmp +
                     oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
 
             m.setElementAt(3, 3, oWiX / norm);
             m.setElementAt(3, 4, oWiY / norm);
             m.setElementAt(3, 5, oWiW / norm);
-
             m.setElementAt(3, 6, -oYiX / norm);
             m.setElementAt(3, 7, -oYiY / norm);
             m.setElementAt(3, 8, -oYiW / norm);
@@ -1348,24 +1357,23 @@ public class ProjectiveTransformation2D extends Transformation2D
             oYiY = oY * iY;
             oYiW = oY * iW;
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
+            tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;
+            norm = Math.sqrt(tmp +
                     oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
 
             m.setElementAt(4, 0, oWiX / norm);
             m.setElementAt(4, 1, oWiY / norm);
             m.setElementAt(4, 2, oWiW / norm);
-
             m.setElementAt(4, 6, -oXiX / norm);
             m.setElementAt(4, 7, -oXiY / norm);
             m.setElementAt(4, 8, -oXiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
+            norm = Math.sqrt(tmp +
                     oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
 
             m.setElementAt(5, 3, oWiX / norm);
             m.setElementAt(5, 4, oWiY / norm);
             m.setElementAt(5, 5, oWiW / norm);
-
             m.setElementAt(5, 6, -oYiX / norm);
             m.setElementAt(5, 7, -oYiY / norm);
             m.setElementAt(5, 8, -oYiW / norm);
@@ -1391,24 +1399,23 @@ public class ProjectiveTransformation2D extends Transformation2D
             oYiY = oY * iY;
             oYiW = oY * iW;
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
+            tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;
+            norm = Math.sqrt(tmp +
                     oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
 
             m.setElementAt(6, 0, oWiX / norm);
             m.setElementAt(6, 1, oWiY / norm);
             m.setElementAt(6, 2, oWiW / norm);
-
             m.setElementAt(6, 6, -oXiX / norm);
             m.setElementAt(6, 7, -oXiY / norm);
             m.setElementAt(6, 8, -oXiW / norm);
 
-            norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
+            norm = Math.sqrt(tmp +
                     oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
 
             m.setElementAt(7, 3, oWiX / norm);
             m.setElementAt(7, 4, oWiY / norm);
             m.setElementAt(7, 5, oWiW / norm);
-
             m.setElementAt(7, 6, -oYiX / norm);
             m.setElementAt(7, 7, -oYiY / norm);
             m.setElementAt(7, 8, -oYiW / norm);
@@ -1477,7 +1484,7 @@ public class ProjectiveTransformation2D extends Transformation2D
         try {
             m = new Matrix(8, 9); //build matrix initialized to zero
                 
-            //1st pair of points
+            //1st pair of lines
             double iA = inputLine1.getA();
             double iB = inputLine1.getB();
             double iC = inputLine1.getC();
@@ -1498,29 +1505,28 @@ public class ProjectiveTransformation2D extends Transformation2D
             double oBiB = oB * iB;
             double oBiC = oB * iC;
 
-            double norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
+            double tmp = oCiA * oCiA + oCiB * oCiB + oCiC * oCiC;
+            double norm = Math.sqrt(tmp +
                     oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
 
             m.setElementAt(0, 0, oCiA / norm);
             m.setElementAt(0, 1, oCiB / norm);
             m.setElementAt(0, 2, oCiC / norm);
-
             m.setElementAt(0, 6, -oAiA / norm);
             m.setElementAt(0, 7, -oAiB / norm);
             m.setElementAt(0, 8, -oAiC / norm);
 
-            norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
+            norm = Math.sqrt(tmp +
                     oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
 
             m.setElementAt(1, 3, oCiA / norm);
             m.setElementAt(1, 4, oCiB / norm);
             m.setElementAt(1, 5, oCiC / norm);
-
             m.setElementAt(1, 6, -oBiA / norm);
             m.setElementAt(1, 7, -oBiB / norm);
             m.setElementAt(1, 8, -oBiC / norm);
 
-            //2nd pair of points
+            //2nd pair of lines
             iA = inputLine2.getA();
             iB = inputLine2.getB();
             iC = inputLine2.getC();
@@ -1541,24 +1547,23 @@ public class ProjectiveTransformation2D extends Transformation2D
             oBiB = oB * iB;
             oBiC = oB * iC;
 
-            norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
+            tmp = oCiA * oCiA + oCiB * oCiB + oCiC * oCiC;
+            norm = Math.sqrt(tmp +
                     oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
 
             m.setElementAt(2, 0, oCiA / norm);
             m.setElementAt(2, 1, oCiB / norm);
             m.setElementAt(2, 2, oCiC / norm);
-
             m.setElementAt(2, 6, -oAiA / norm);
             m.setElementAt(2, 7, -oAiB / norm);
             m.setElementAt(2, 8, -oAiC / norm);
 
-            norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
+            norm = Math.sqrt(tmp +
                     oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
 
             m.setElementAt(3, 3, oCiA / norm);
             m.setElementAt(3, 4, oCiB / norm);
             m.setElementAt(3, 5, oCiC / norm);
-
             m.setElementAt(3, 6, -oBiA / norm);
             m.setElementAt(3, 7, -oBiB / norm);
             m.setElementAt(3, 8, -oBiC / norm);
@@ -1584,24 +1589,23 @@ public class ProjectiveTransformation2D extends Transformation2D
             oBiB = oB * iB;
             oBiC = oB * iC;
 
-            norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
+            tmp = oCiA * oCiA + oCiB * oCiB + oCiC * oCiC;
+            norm = Math.sqrt(tmp +
                     oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
 
             m.setElementAt(4, 0, oCiA / norm);
             m.setElementAt(4, 1, oCiB / norm);
             m.setElementAt(4, 2, oCiC / norm);
-
             m.setElementAt(4, 6, -oAiA / norm);
             m.setElementAt(4, 7, -oAiB / norm);
             m.setElementAt(4, 8, -oAiC / norm);
 
-            norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
+            norm = Math.sqrt(tmp +
                     oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
 
             m.setElementAt(5, 3, oCiA / norm);
             m.setElementAt(5, 4, oCiB / norm);
             m.setElementAt(5, 5, oCiC / norm);
-
             m.setElementAt(5, 6, -oBiA / norm);
             m.setElementAt(5, 7, -oBiB / norm);
             m.setElementAt(5, 8, -oBiC / norm);
@@ -1627,24 +1631,23 @@ public class ProjectiveTransformation2D extends Transformation2D
             oBiB = oB * iB;
             oBiC = oB * iC;
 
-            norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
+            tmp = oCiA * oCiA + oCiB * oCiB + oCiC * oCiC;
+            norm = Math.sqrt(tmp +
                     oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
 
             m.setElementAt(6, 0, oCiA / norm);
             m.setElementAt(6, 1, oCiB / norm);
             m.setElementAt(6, 2, oCiC / norm);
-
             m.setElementAt(6, 6, -oAiA / norm);
             m.setElementAt(6, 7, -oAiB / norm);
             m.setElementAt(6, 8, -oAiC / norm);
 
-            norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
+            norm = Math.sqrt(tmp +
                     oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
 
             m.setElementAt(7, 3, oCiA / norm);
             m.setElementAt(7, 4, oCiB / norm);
             m.setElementAt(7, 5, oCiC / norm);
-
             m.setElementAt(7, 6, -oBiA / norm);
             m.setElementAt(7, 7, -oBiB / norm);
             m.setElementAt(7, 8, -oBiC / norm);
@@ -1662,10 +1665,12 @@ public class ProjectiveTransformation2D extends Transformation2D
             V = decomposer.getV(); //V is 9x9
             
             //last column of V will contain parameters of transformation
-            Matrix invT = new Matrix(HOM_COORDS, HOM_COORDS);
-            invT.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1, 
-                    V.getSubmatrix(0, 8, 8, 8).toArray(), false);
-            T = Utils.inverse(invT);
+            Matrix transInvT = new Matrix(HOM_COORDS, HOM_COORDS);
+            transInvT.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1,
+                    V.getSubmatrix(0, 8, 8, 8).toArray(),
+                    false);
+            transInvT.transpose(); //this is now invT
+            T = Utils.inverse(transInvT);
             normalized = false; //invT is normalized, but not T
             
         } catch(AlgebraException e) {

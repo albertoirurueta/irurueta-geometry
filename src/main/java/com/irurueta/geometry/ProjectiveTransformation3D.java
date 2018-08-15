@@ -798,7 +798,9 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public final void setProjectiveParameters(double[] params) 
             throws IllegalArgumentException {
-        if(params.length != HOM_COORDS) throw new IllegalArgumentException();
+        if(params.length != HOM_COORDS) {
+            throw new IllegalArgumentException();
+        }
         
         T.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1, HOM_COORDS - 1, 
                 params);
@@ -1120,10 +1122,10 @@ public class ProjectiveTransformation3D extends Transformation3D
         invT.multiplyByScalar(1.0 / norm);
 
         Matrix m = invT.transposeAndReturnNew();
-        try{
+        try {
             m.multiply(Q);
             m.multiply(invT);
-        }catch(WrongSizeException ignore){}
+        } catch (WrongSizeException ignore) { }
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
@@ -1189,7 +1191,7 @@ public class ProjectiveTransformation3D extends Transformation3D
         //(plane' * T^-1)*(T*point) = (T^-1'*plane)'*(T*point)
         //where:
         //- transformedPlane = T^-1'*plane
-        //- transformedpoint = T*point
+        //- transformedPoint = T*point
 
         
         inputPlane.normalize();
@@ -2163,7 +2165,8 @@ public class ProjectiveTransformation3D extends Transformation3D
             //last column of V will contain parameters of transformation
             Matrix transInvT = new Matrix(HOM_COORDS, HOM_COORDS);
             transInvT.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1,
-                    V.getSubmatrix(0, 15, 15, 15).toArray(), false);
+                    V.getSubmatrix(0, 15, 15, 15).toArray(),
+                    false);
             transInvT.transpose(); //this is now invT
             T = Utils.inverse(transInvT);
             normalized = false; //invT is normalized, but not T

@@ -8,13 +8,8 @@
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.DecomposerException;
-import com.irurueta.algebra.Matrix;
-import com.irurueta.algebra.RankDeficientMatrixException;
+import com.irurueta.algebra.*;
 import com.irurueta.algebra.Utils;
-import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +27,8 @@ public class AffineTransformation3DTest {
      
     private static final int PINHOLE_CAMERA_ROWS = 3;
     private static final int PINHOLE_CAMERA_COLS = 4;
+
+    private static final int HOM_COORDS = 4;
     
     private static final double MIN_ANGLE_DEGREES = -180.0;
     private static final double MAX_ANGLE_DEGREES = 180.0;
@@ -752,63 +749,75 @@ public class AffineTransformation3DTest {
     
     @Test
     public void testAddRotation() throws RotationException, AlgebraException {
-        AffineTransformation3D transformation = new AffineTransformation3D();
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double theta1 = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        double theta2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        
-        double[] rotAxis1 = new double[Rotation3D.INHOM_COORDS];
-        randomizer.fill(rotAxis1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double norm = Utils.normF(rotAxis1);
-        ArrayUtils.multiplyByScalar(rotAxis1, 1.0 / norm, rotAxis1);
-        
-        double[] rotAxis2 = new double[Rotation3D.INHOM_COORDS];
-        randomizer.fill(rotAxis2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        norm = Utils.normF(rotAxis2);
-        ArrayUtils.multiplyByScalar(rotAxis2, 1.0 / norm, rotAxis2);
-        
-        Rotation3D rotation1 = Rotation3D.create(rotAxis1, theta1);
-        Rotation3D rotation2 = Rotation3D.create(rotAxis2, theta2);
-        
-        Rotation3D combinedRotation = rotation1.combineAndReturnNew(rotation2);
-        
-        //set rotation1
-        transformation.setRotation(rotation1);
-        
-        //check correctness
-        assertEquals(Math.abs(transformation.getRotation().getRotationAngle()), 
-                Math.abs(theta1), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[0]), 
-                Math.abs(rotAxis1[0]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[1]), 
-                Math.abs(rotAxis1[1]), ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[2]), 
-                Math.abs(rotAxis1[2]), ABSOLUTE_ERROR);
+        int numValid = 0;
+        for (int t = 0; t < TIMES; t++) {
+            AffineTransformation3D transformation = new AffineTransformation3D();
 
-        //add second rotation
-        transformation.addRotation(rotation2);
-        
-        //check correctness
-        assertEquals(Math.abs(transformation.getRotation().getRotationAngle()),
-                Math.abs(combinedRotation.getRotationAngle()), ABSOLUTE_ERROR);
-        assertEquals(
-                Math.abs(transformation.getRotation().getRotationAxis()[0]),
-                Math.abs(combinedRotation.getRotationAxis()[0]), 
-                ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[1]),
-                Math.abs(combinedRotation.getRotationAxis()[1]), 
-                ABSOLUTE_ERROR);
-        assertEquals(Math.abs(
-                transformation.getRotation().getRotationAxis()[2]),
-                Math.abs(combinedRotation.getRotationAxis()[2]), 
-                ABSOLUTE_ERROR);
+            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            double theta1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double theta2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+
+            double[] rotAxis1 = new double[Rotation3D.INHOM_COORDS];
+            randomizer.fill(rotAxis1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            double norm = Utils.normF(rotAxis1);
+            ArrayUtils.multiplyByScalar(rotAxis1, 1.0 / norm, rotAxis1);
+
+            double[] rotAxis2 = new double[Rotation3D.INHOM_COORDS];
+            randomizer.fill(rotAxis2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            norm = Utils.normF(rotAxis2);
+            ArrayUtils.multiplyByScalar(rotAxis2, 1.0 / norm, rotAxis2);
+
+            Rotation3D rotation1 = Rotation3D.create(rotAxis1, theta1);
+            Rotation3D rotation2 = Rotation3D.create(rotAxis2, theta2);
+
+            Rotation3D combinedRotation = rotation1.combineAndReturnNew(rotation2);
+
+            //set rotation1
+            transformation.setRotation(rotation1);
+
+            //check correctness
+            if (Math.abs(Math.abs(transformation.getRotation().getRotationAngle()) -
+                    Math.abs(theta1)) > ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(Math.abs(transformation.getRotation().getRotationAngle()),
+                    Math.abs(theta1), ABSOLUTE_ERROR);
+            assertEquals(Math.abs(
+                    transformation.getRotation().getRotationAxis()[0]),
+                    Math.abs(rotAxis1[0]), ABSOLUTE_ERROR);
+            assertEquals(Math.abs(
+                    transformation.getRotation().getRotationAxis()[1]),
+                    Math.abs(rotAxis1[1]), ABSOLUTE_ERROR);
+            assertEquals(Math.abs(
+                    transformation.getRotation().getRotationAxis()[2]),
+                    Math.abs(rotAxis1[2]), ABSOLUTE_ERROR);
+
+            //add second rotation
+            transformation.addRotation(rotation2);
+
+            //check correctness
+            assertEquals(Math.abs(transformation.getRotation().getRotationAngle()),
+                    Math.abs(combinedRotation.getRotationAngle()), ABSOLUTE_ERROR);
+            assertEquals(
+                    Math.abs(transformation.getRotation().getRotationAxis()[0]),
+                    Math.abs(combinedRotation.getRotationAxis()[0]),
+                    ABSOLUTE_ERROR);
+            assertEquals(Math.abs(
+                    transformation.getRotation().getRotationAxis()[1]),
+                    Math.abs(combinedRotation.getRotationAxis()[1]),
+                    ABSOLUTE_ERROR);
+            assertEquals(Math.abs(
+                    transformation.getRotation().getRotationAxis()[2]),
+                    Math.abs(combinedRotation.getRotationAxis()[2]),
+                    ABSOLUTE_ERROR);
+
+            numValid++;
+            break;
+        }
+
+        assertTrue(numValid > 0);
     }
        
     @Test
@@ -1042,8 +1051,7 @@ public class AffineTransformation3DTest {
         //check correctness
         assertEquals(transformation.getTranslationY(), translationY, 0.0);
     }
-    
-    
+
     @Test
     public void testGetSetTranslationZ() {
         AffineTransformation3D transformation = new AffineTransformation3D();
@@ -1346,7 +1354,7 @@ public class AffineTransformation3DTest {
                 ABSOLUTE_ERROR);
     }    
     
-   @Test
+    @Test
     public void testAsMatrix() throws WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
@@ -1752,7 +1760,143 @@ public class AffineTransformation3DTest {
                 ABSOLUTE_ERROR);        
         assertEquals(expectedQuadric.getJ(), quadric.getJ(), 
                 ABSOLUTE_ERROR);
-    }   
+    }
+
+    @Test
+    public void testTransformQuadricAndPoints() throws AlgebraException,
+            GeometryException {
+
+        //create Quadric from 9 points
+        Quadric quadric = null;
+        Point3D point1, point2, point3, point4, point5, point6, point7, point8, point9;
+        do {
+            Matrix m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
+                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+            point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
+                    m.getElementAt(0, 1), m.getElementAt(0, 2), 1.0);
+            point2 = new HomogeneousPoint3D(m.getElementAt(1, 0),
+                    m.getElementAt(1, 1), m.getElementAt(1, 2), 1.0);
+            point3 = new HomogeneousPoint3D(m.getElementAt(2, 0),
+                    m.getElementAt(2, 1), m.getElementAt(2, 2), 1.0);
+            point4 = new HomogeneousPoint3D(m.getElementAt(3, 0),
+                    m.getElementAt(3, 1), m.getElementAt(3, 2), 1.0);
+            point5 = new HomogeneousPoint3D(m.getElementAt(4, 0),
+                    m.getElementAt(4, 1), m.getElementAt(4, 2), 1.0);
+            point6 = new HomogeneousPoint3D(m.getElementAt(5, 0),
+                    m.getElementAt(5, 1), m.getElementAt(5, 2), 1.0);
+            point7 = new HomogeneousPoint3D(m.getElementAt(6, 0),
+                    m.getElementAt(6, 1), m.getElementAt(6, 2), 1.0);
+            point8 = new HomogeneousPoint3D(m.getElementAt(7, 0),
+                    m.getElementAt(7, 1), m.getElementAt(7, 2), 1.0);
+            point9 = new HomogeneousPoint3D(m.getElementAt(8, 0),
+                    m.getElementAt(8, 1), m.getElementAt(8, 2), 1.0);
+
+            try {
+                quadric = new Quadric(point1, point2, point3, point4, point5, point6,
+                        point7, point8, point9);
+            } catch (GeometryException ignore) { }
+
+        } while (quadric == null);
+
+        //check that points belong to quadric
+        assertTrue(quadric.isLocus(point1, ABSOLUTE_ERROR));
+        assertTrue(quadric.isLocus(point2, ABSOLUTE_ERROR));
+        assertTrue(quadric.isLocus(point3, ABSOLUTE_ERROR));
+        assertTrue(quadric.isLocus(point4, ABSOLUTE_ERROR));
+        assertTrue(quadric.isLocus(point5, ABSOLUTE_ERROR));
+        assertTrue(quadric.isLocus(point6, ABSOLUTE_ERROR));
+        assertTrue(quadric.isLocus(point7, ABSOLUTE_ERROR));
+        assertTrue(quadric.isLocus(point8, ABSOLUTE_ERROR));
+        assertTrue(quadric.isLocus(point9, ABSOLUTE_ERROR));
+
+        //create transformation
+        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        //normalize axis
+        double norm = Utils.normF(rotAxis);
+        ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
+
+        Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+
+        double[] translation = new double[
+                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double scaleX = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double scaleY = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double scaleZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double skewnessXY = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double skewnessXZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double skewnessYZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+
+        AffineParameters3D affineParams = new AffineParameters3D(scaleX, scaleY,
+                scaleZ, skewnessXY, skewnessXZ, skewnessYZ);
+
+        AffineTransformation3D transformation =
+                new AffineTransformation3D(affineParams, rotation, translation);
+
+        //compute expected value
+        Quadric expectedQuadric = new Quadric();
+        transformQuadric(quadric, expectedQuadric, transformation);
+        expectedQuadric.normalize();
+
+        //transform quadric and points
+        Quadric outQuadric = transformation.transformAndReturnNew(quadric);
+        Point3D outPoint1 = transformation.transformAndReturnNew(point1);
+        Point3D outPoint2 = transformation.transformAndReturnNew(point2);
+        Point3D outPoint3 = transformation.transformAndReturnNew(point3);
+        Point3D outPoint4 = transformation.transformAndReturnNew(point4);
+        Point3D outPoint5 = transformation.transformAndReturnNew(point5);
+        Point3D outPoint6 = transformation.transformAndReturnNew(point6);
+        Point3D outPoint7 = transformation.transformAndReturnNew(point7);
+        Point3D outPoint8 = transformation.transformAndReturnNew(point8);
+        Point3D outPoint9 = transformation.transformAndReturnNew(point9);
+
+        //check that transformed points still belong to transformed quadric
+        assertTrue(outQuadric.isLocus(outPoint1, ABSOLUTE_ERROR));
+        assertTrue(outQuadric.isLocus(outPoint2, ABSOLUTE_ERROR));
+        assertTrue(outQuadric.isLocus(outPoint3, ABSOLUTE_ERROR));
+        assertTrue(outQuadric.isLocus(outPoint4, ABSOLUTE_ERROR));
+        assertTrue(outQuadric.isLocus(outPoint5, ABSOLUTE_ERROR));
+        assertTrue(outQuadric.isLocus(outPoint6, ABSOLUTE_ERROR));
+        assertTrue(outQuadric.isLocus(outPoint7, ABSOLUTE_ERROR));
+        assertTrue(outQuadric.isLocus(outPoint8, ABSOLUTE_ERROR));
+        assertTrue(outQuadric.isLocus(outPoint9, ABSOLUTE_ERROR));
+
+        //check quadric correctness
+        outQuadric.normalize();
+
+        assertEquals(expectedQuadric.getA(), outQuadric.getA(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getB(), outQuadric.getB(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getC(), outQuadric.getC(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getD(), outQuadric.getD(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getE(), outQuadric.getE(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getF(), outQuadric.getF(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getG(), outQuadric.getG(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getH(), outQuadric.getH(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getI(), outQuadric.getI(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedQuadric.getJ(), outQuadric.getJ(),
+                ABSOLUTE_ERROR);
+    }
     
     @Test
     public void testTransformDualQuadric() throws NonSymmetricMatrixException,
@@ -1891,7 +2035,153 @@ public class AffineTransformation3DTest {
                 ABSOLUTE_ERROR);
         assertEquals(expectedDualQuadric.getJ(), dualQuadric.getJ(), 
                 ABSOLUTE_ERROR);          
-    }      
+    }
+
+    @Test
+    public void testTransformDualQuadricAndPlanes() throws AlgebraException,
+            GeometryException {
+
+        //create dual quadric from 9 planes
+        DualQuadric dualQuadric = null;
+        Plane plane1, plane2, plane3, plane4, plane5, plane6, plane7, plane8, plane9;
+        do {
+            Matrix m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
+                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+            plane1 = new Plane(m.getElementAt(0, 0), m.getElementAt(0, 1),
+                    m.getElementAt(0, 2), m.getElementAt(0, 3));
+            plane2 = new Plane(m.getElementAt(1, 0), m.getElementAt(1, 1),
+                    m.getElementAt(1, 2), m.getElementAt(1, 3));
+            plane3 = new Plane(m.getElementAt(2, 0), m.getElementAt(2, 1),
+                    m.getElementAt(2, 2), m.getElementAt(2, 3));
+            plane4 = new Plane(m.getElementAt(3, 0), m.getElementAt(3, 1),
+                    m.getElementAt(3, 2), m.getElementAt(3, 3));
+            plane5 = new Plane(m.getElementAt(4, 0), m.getElementAt(4, 1),
+                    m.getElementAt(4, 2), m.getElementAt(4, 3));
+            plane6 = new Plane(m.getElementAt(5, 0), m.getElementAt(5, 1),
+                    m.getElementAt(5, 2), m.getElementAt(5, 3));
+            plane7 = new Plane(m.getElementAt(6, 0), m.getElementAt(6, 1),
+                    m.getElementAt(6, 2), m.getElementAt(6, 3));
+            plane8 = new Plane(m.getElementAt(7, 0), m.getElementAt(7, 1),
+                    m.getElementAt(7, 2), m.getElementAt(7, 3));
+            plane9 = new Plane(m.getElementAt(8, 0), m.getElementAt(8, 1),
+                    m.getElementAt(8, 2), m.getElementAt(8, 3));
+
+            plane1.normalize();
+            plane2.normalize();
+            plane3.normalize();
+            plane4.normalize();
+            plane5.normalize();
+            plane6.normalize();
+            plane7.normalize();
+            plane8.normalize();
+            plane9.normalize();
+
+            try {
+                dualQuadric = new DualQuadric(plane1, plane2, plane3, plane4, plane5,
+                        plane6, plane7, plane8, plane9);
+            } catch (GeometryException ignore) { }
+
+        } while (dualQuadric == null);
+
+        //check that planes belong to dual quadric
+        assertTrue(dualQuadric.isLocus(plane1, ABSOLUTE_ERROR));
+        assertTrue(dualQuadric.isLocus(plane2, ABSOLUTE_ERROR));
+        assertTrue(dualQuadric.isLocus(plane3, ABSOLUTE_ERROR));
+        assertTrue(dualQuadric.isLocus(plane4, ABSOLUTE_ERROR));
+        assertTrue(dualQuadric.isLocus(plane5, ABSOLUTE_ERROR));
+        assertTrue(dualQuadric.isLocus(plane6, ABSOLUTE_ERROR));
+        assertTrue(dualQuadric.isLocus(plane7, ABSOLUTE_ERROR));
+        assertTrue(dualQuadric.isLocus(plane8, ABSOLUTE_ERROR));
+        assertTrue(dualQuadric.isLocus(plane9, ABSOLUTE_ERROR));
+
+        //create transformation
+        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        //normalize axis
+        double norm = Utils.normF(rotAxis);
+        ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
+
+        Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+
+        double[] translation = new double[
+                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double scaleX = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double scaleY = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double scaleZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double skewnessXY = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double skewnessXZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double skewnessYZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+
+        AffineParameters3D affineParams = new AffineParameters3D(scaleX, scaleY,
+                scaleZ, skewnessXY, skewnessXZ, skewnessYZ);
+
+        AffineTransformation3D transformation =
+                new AffineTransformation3D(affineParams, rotation, translation);
+
+        //compute expected value
+        DualQuadric expectedDualQuadric = new DualQuadric();
+        transformDualQuadric(dualQuadric, expectedDualQuadric, transformation);
+        expectedDualQuadric.normalize();
+
+        //transform dual quadric and planes
+        DualQuadric outDualQuadric = transformation.transformAndReturnNew(dualQuadric);
+        Plane outPlane1 = transformation.transformAndReturnNew(plane1);
+        Plane outPlane2 = transformation.transformAndReturnNew(plane2);
+        Plane outPlane3 = transformation.transformAndReturnNew(plane3);
+        Plane outPlane4 = transformation.transformAndReturnNew(plane4);
+        Plane outPlane5 = transformation.transformAndReturnNew(plane5);
+        Plane outPlane6 = transformation.transformAndReturnNew(plane6);
+        Plane outPlane7 = transformation.transformAndReturnNew(plane7);
+        Plane outPlane8 = transformation.transformAndReturnNew(plane8);
+        Plane outPlane9 = transformation.transformAndReturnNew(plane9);
+
+        //check that transformed planes still belong to transformed dual quadric
+        assertTrue(outDualQuadric.isLocus(outPlane1, ABSOLUTE_ERROR));
+        assertTrue(outDualQuadric.isLocus(outPlane2, ABSOLUTE_ERROR));
+        assertTrue(outDualQuadric.isLocus(outPlane3, ABSOLUTE_ERROR));
+        assertTrue(outDualQuadric.isLocus(outPlane4, ABSOLUTE_ERROR));
+        assertTrue(outDualQuadric.isLocus(outPlane5, ABSOLUTE_ERROR));
+        assertTrue(outDualQuadric.isLocus(outPlane6, ABSOLUTE_ERROR));
+        assertTrue(outDualQuadric.isLocus(outPlane7, ABSOLUTE_ERROR));
+        assertTrue(outDualQuadric.isLocus(outPlane8, ABSOLUTE_ERROR));
+        assertTrue(outDualQuadric.isLocus(outPlane9, ABSOLUTE_ERROR));
+
+        //check dual quadric correctness
+        outDualQuadric.normalize();
+
+        assertEquals(expectedDualQuadric.getA(), outDualQuadric.getA(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getB(), outDualQuadric.getB(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getC(), outDualQuadric.getC(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getD(), outDualQuadric.getD(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getE(), outDualQuadric.getE(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getF(), outDualQuadric.getF(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getG(), outDualQuadric.getG(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getH(), outDualQuadric.getH(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getI(), outDualQuadric.getI(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedDualQuadric.getJ(), outDualQuadric.getJ(),
+                ABSOLUTE_ERROR);
+    }
     
     @Test
     public void testTransformPlane() throws AlgebraException {
@@ -1966,7 +2256,108 @@ public class AffineTransformation3DTest {
         assertEquals(expectedPlane.getC(), plane.getC(), ABSOLUTE_ERROR);
         assertEquals(expectedPlane.getD(), plane.getD(), ABSOLUTE_ERROR);
     }    
-    
+
+    @Test
+    public void testTransformPlaneAndPoints() throws AlgebraException,
+            GeometryException {
+
+        //create plane from 3 points
+        Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        decomposer.decompose();
+
+        //ensure we create a matrix with 3 non linear dependent rows
+        while (decomposer.getRank() < 3) {
+            m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
+                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            decomposer.setInputMatrix(m);
+            decomposer.decompose();
+        }
+
+        Point3D point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
+                m.getElementAt(0, 1),
+                m.getElementAt(0, 2),
+                m.getElementAt(0, 3));
+        Point3D point2 = new HomogeneousPoint3D(m.getElementAt(1, 0),
+                m.getElementAt(1, 1),
+                m.getElementAt(1, 2),
+                m.getElementAt(1, 3));
+        Point3D point3 = new HomogeneousPoint3D(m.getElementAt(2, 0),
+                m.getElementAt(2, 1),
+                m.getElementAt(2, 2),
+                m.getElementAt(2, 3));
+
+        point1.normalize();
+        point2.normalize();
+        point3.normalize();
+
+        Plane plane = new Plane(point1, point2, point3);
+
+        //check that points belong to the plane
+        assertTrue(plane.isLocus(point1));
+        assertTrue(plane.isLocus(point2));
+        assertTrue(plane.isLocus(point3));
+
+        //create transformation
+        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+        double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        //normalize axis
+        double norm = Utils.normF(rotAxis);
+        ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
+
+        Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+
+        double[] translation = new double[
+                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        double scaleX = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double scaleY = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double scaleZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double skewnessXY = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double skewnessXZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+        double skewnessYZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
+
+        AffineParameters3D affineParams = new AffineParameters3D(scaleX, scaleY,
+                scaleZ, skewnessXY, skewnessXZ, skewnessYZ);
+
+        AffineTransformation3D transformation =
+                new AffineTransformation3D(affineParams, rotation, translation);
+
+        Plane expectedPlane = new Plane();
+        transformPlane(plane, expectedPlane, transformation);
+        expectedPlane.normalize();
+
+        //transform plane and points
+        Plane outPlane = transformation.transformAndReturnNew(plane);
+        Point3D outPoint1 = transformation.transformAndReturnNew(point1);
+        Point3D outPoint2 = transformation.transformAndReturnNew(point1);
+        Point3D outPoint3 = transformation.transformAndReturnNew(point1);
+
+        //check that transformed points still belong to transformed plane
+        assertTrue(outPlane.isLocus(outPoint1));
+        assertTrue(outPlane.isLocus(outPoint2));
+        assertTrue(outPlane.isLocus(outPoint3));
+
+        //check plane correctess
+        outPlane.normalize();
+
+        assertEquals(expectedPlane.getA(), outPlane.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedPlane.getB(), outPlane.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedPlane.getC(), outPlane.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedPlane.getD(), outPlane.getD(), ABSOLUTE_ERROR);
+    }
+
     @Test
     public void testTransformPlanes() throws AlgebraException {
         

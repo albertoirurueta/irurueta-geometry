@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains Unit Tests for
  * com.irurueta.geometry.Conic
@@ -16,41 +16,40 @@ import static org.junit.Assert.*;
 
 public class ConicTest {
     
-    public static final double MIN_RANDOM_VALUE = -10.0;
-    public static final double MAX_RANDOM_VALUE = 10.0;
-    public static final double PRECISION_ERROR = 1e-8;
-    public static final double LOCUS_THRESHOLD = 1e-8;
-    public static final double PERPENDICULAR_THRESHOLD = 1e-5;
+    private static final double MIN_RANDOM_VALUE = -10.0;
+    private static final double MAX_RANDOM_VALUE = 10.0;
+    private static final double PRECISION_ERROR = 1e-8;
+    private static final double LOCUS_THRESHOLD = 1e-8;
+    private static final double PERPENDICULAR_THRESHOLD = 1e-5;
     
-    public static final int CONIC_ROWS = 3;
-    public static final int CONIC_COLS = 3;
-    public static final int HOM_COORDS = 3;
-    public static final int INHOM_COORDS = 2;
+    private static final int CONIC_ROWS = 3;
+    private static final int CONIC_COLS = 3;
+    private static final int HOM_COORDS = 3;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
-    public static final double MIN_RANDOM_DEGREES = -180.0;
-    public static final double MAX_RANDOM_DEGREES = 180.0;
+    private static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double MIN_RANDOM_DEGREES = -180.0;
+    private static final double MAX_RANDOM_DEGREES = 180.0;
     
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
     
-    public ConicTest() {}
+    public ConicTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {}
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
     
     @Test
     public void testConstructor() throws WrongSizeException, 
         IllegalArgumentException, NonSymmetricMatrixException, 
-        DecomposerException, CoincidentPointsException{
+        DecomposerException, CoincidentPointsException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -113,10 +112,10 @@ public class ConicTest {
         //Constructor using matrix with wrong size exception
         m = new Matrix(CONIC_ROWS, CONIC_COLS + 1);
         conic = null;
-        try{
+        try {
             conic = new Conic(m);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ex){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(conic);
         
         //Constructor using non-symmetric matrix
@@ -132,10 +131,10 @@ public class ConicTest {
         m.setElementAt(2, 2, f);
         
         conic = null;
-        try{
+        try {
             conic = new Conic(m);
             fail("NonSymmetricMatrixException expected but not thrown");
-        }catch(NonSymmetricMatrixException ex){}
+        } catch (NonSymmetricMatrixException ignore) { }
         assertNull(conic);
         
         
@@ -165,7 +164,7 @@ public class ConicTest {
         double x = point1.getHomX();
         double y = point1.getHomY();
         double w = point1.getHomW();
-	conicMatrix.setElementAt(0, 0, x * x);
+	    conicMatrix.setElementAt(0, 0, x * x);
         conicMatrix.setElementAt(0, 1, x * y);
         conicMatrix.setElementAt(0, 2, y * y);
         conicMatrix.setElementAt(0, 3, x * w);
@@ -208,7 +207,7 @@ public class ConicTest {
         conicMatrix.setElementAt(4, 4, y * w);
         conicMatrix.setElementAt(4, 5, w * w);
         
-        while(com.irurueta.algebra.Utils.rank(conicMatrix) < 5){
+        while (com.irurueta.algebra.Utils.rank(conicMatrix) < 5) {
             m = Matrix.createWithUniformRandomValues(5, HOM_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             
@@ -285,16 +284,16 @@ public class ConicTest {
         
         //Force CoincidentPointsException
         conic = null;
-        try{
+        try {
             conic = new Conic(point1, point2, point3, point4, point4);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException ex){}
+        } catch (CoincidentPointsException ignore) { }
         assertNull(conic);
     }
     
     @Test
     public void testGettersAndSetters() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -358,10 +357,10 @@ public class ConicTest {
         
         //Force IllegalArgumentException
         m = new Matrix(CONIC_ROWS + 1, CONIC_COLS + 1);
-        try{
+        try {
             conic.setParameters(m);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ex){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Force NonSymmetricMatrixException
         m = new Matrix(CONIC_ROWS, CONIC_COLS);
@@ -380,16 +379,16 @@ public class ConicTest {
         m.setElementAt(2, 0, d + 1.0);
         m.setElementAt(2, 1, e + 1.0);
         m.setElementAt(2, 2, f);
-        try{
+        try {
             conic.setParameters(m);
             fail("NonSymmetricMatrixException expected but not thrown");
-        }catch(NonSymmetricMatrixException ex){}
+        } catch (NonSymmetricMatrixException ignore) { }
         conic.setParameters(m, 1.0);        
     }
     
     @Test
     public void testAsMatrix() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Conic conic = new Conic();
@@ -418,10 +417,9 @@ public class ConicTest {
     
     @Test
     public void testIsLocus() throws WrongSizeException, DecomposerException, 
-        RankDeficientMatrixException, IllegalArgumentException, 
-        NonSymmetricMatrixException, CoincidentPointsException, 
-        NotReadyException, LockedException, 
-        com.irurueta.algebra.NotAvailableException{
+            IllegalArgumentException, NonSymmetricMatrixException,
+            CoincidentPointsException, NotReadyException, LockedException,
+            com.irurueta.algebra.NotAvailableException {
         
         Matrix m = Matrix.createWithUniformRandomValues(5, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -454,7 +452,7 @@ public class ConicTest {
         double x = point1.getHomX();
         double y = point1.getHomY();
         double w = point1.getHomW();
-	conicMatrix.setElementAt(0, 0, x * x);
+	    conicMatrix.setElementAt(0, 0, x * x);
         conicMatrix.setElementAt(0, 1, 2.0 * x * y);
         conicMatrix.setElementAt(0, 2, y * y);
         conicMatrix.setElementAt(0, 3, 2.0 * x * w);
@@ -497,7 +495,7 @@ public class ConicTest {
         conicMatrix.setElementAt(4, 4, 2.0 * y * w);
         conicMatrix.setElementAt(4, 5, w * w);
         
-        while(com.irurueta.algebra.Utils.rank(conicMatrix) < 5){
+        while (com.irurueta.algebra.Utils.rank(conicMatrix) < 5) {
             m = Matrix.createWithUniformRandomValues(5, HOM_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             
@@ -643,18 +641,12 @@ public class ConicTest {
         assertTrue(conic2.isLocus(point2, LOCUS_THRESHOLD));
         assertTrue(conic2.isLocus(point3, LOCUS_THRESHOLD));
         assertTrue(conic2.isLocus(point4, LOCUS_THRESHOLD));
-        assertTrue(conic2.isLocus(point5, LOCUS_THRESHOLD));        
-        
-        //check that conic matrices are equal for conic1 and conic2
-        /*Matrix conicMatrix1 = conic.asMatrix();
-        Matrix conicMatrix2 = conic2.asMatrix();
-        
-        assertTrue(conicMatrix1.equals(conicMatrix2, LARGE_PRECISION_ERROR));*/
+        assertTrue(conic2.isLocus(point5, LOCUS_THRESHOLD));
     }
     
     @Test
     public void testAngleBetweenPoints() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         //initial 2D points
         Matrix point1Matrix = Matrix.createWithUniformRandomValues(HOM_COORDS, 
@@ -707,7 +699,7 @@ public class ConicTest {
     @Test
     public void testArePerpendicularPoints() throws WrongSizeException, 
         DecomposerException, RankDeficientMatrixException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
+        IllegalArgumentException, NonSymmetricMatrixException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             Matrix matrixPoint1 = Matrix.createWithUniformRandomValues(
@@ -728,7 +720,7 @@ public class ConicTest {
 
             Matrix transform = Matrix.createWithUniformRandomValues(HOM_COORDS, 
                     HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            while(com.irurueta.algebra.Utils.rank(transform) < 3){
+            while (com.irurueta.algebra.Utils.rank(transform) < 3) {
                 transform = Matrix.createWithUniformRandomValues(HOM_COORDS, 
                         HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             }
@@ -774,7 +766,7 @@ public class ConicTest {
                     multiplyAndReturnNew(matrixPoint2).getElementAt(0, 0);
 
             //ensure points are not perpendicular
-            while(Math.abs(dotProduct) < PERPENDICULAR_THRESHOLD){
+            while (Math.abs(dotProduct) < PERPENDICULAR_THRESHOLD) {
                 matrixPoint1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, 
                         MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 norm = com.irurueta.algebra.Utils.normF(matrixPoint1);
@@ -797,7 +789,7 @@ public class ConicTest {
             transformPoint2 = new HomogeneousPoint2D(
                     transformPointMatrix2.toArray());
 
-            if(conic.arePerpendicularPoints(transformPoint1, transformPoint2, 20.0 * PERPENDICULAR_THRESHOLD)) {
+            if (conic.arePerpendicularPoints(transformPoint1, transformPoint2, 20.0 * PERPENDICULAR_THRESHOLD)) {
                 continue;
             }
             assertFalse(conic.arePerpendicularPoints(transformPoint1, 
@@ -811,11 +803,11 @@ public class ConicTest {
     public void testGetDualConic() throws WrongSizeException, 
         DecomposerException, RankDeficientMatrixException, 
         IllegalArgumentException, NonSymmetricMatrixException, 
-        DualConicNotAvailableException{
+        DualConicNotAvailableException {
         
         Matrix transformMatrix = Matrix.createWithUniformRandomValues(
                 HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        while(com.irurueta.algebra.Utils.rank(transformMatrix) != 3){
+        while (com.irurueta.algebra.Utils.rank(transformMatrix) != 3) {
             transformMatrix = Matrix.createWithUniformRandomValues(
                 HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
@@ -850,7 +842,7 @@ public class ConicTest {
     }
     
     @Test
-    public void testGetConicType(){
+    public void testGetConicType() {
         // passing a circle conic
         double a = 3.0, b = 0.0, c = 3.0, d = 3.0, e = 2.0, f = 1.0;
         Conic conic = new Conic();
@@ -901,7 +893,7 @@ public class ConicTest {
     
     @Test
     public void testNormalize() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         Matrix t = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -986,8 +978,8 @@ public class ConicTest {
     }
     
     @Test
-    public void testGetTangentLineAt() throws NotLocusException{
-        for(int t = 0; t < TIMES; t++){
+    public void testGetTangentLineAt() throws NotLocusException {
+        for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             Point2D center = new HomogeneousPoint2D(randomizer.nextDouble(
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -997,11 +989,11 @@ public class ConicTest {
             double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES, 
                     MAX_RANDOM_DEGREES) * Math.PI / 180.0;
             double theta2; //angle corresponding to line slope
-            if(theta > Math.PI / 2.0){
+            if (theta > Math.PI / 2.0) {
                 theta2 = theta - Math.PI;
-            }else if(theta < -Math.PI / 2.0){
+            } else if (theta < -Math.PI / 2.0) {
                 theta2 = theta + Math.PI;
-            }else{
+            } else {
                 theta2 = theta;
             }
             
@@ -1030,9 +1022,9 @@ public class ConicTest {
             double lineAngle1 = line.getAngle();
             double lineAngle2 = line2.getAngle();
             double theta3 = theta2 - Math.PI / 2.0;
-            if(theta3 < -Math.PI / 2.0){
+            if (theta3 < -Math.PI / 2.0) {
                 theta3 += Math.PI;
-            }else if(theta3 > Math.PI / 2.0){
+            } else if (theta3 > Math.PI / 2.0) {
                 theta3 -= Math.PI;
             }
             assertEquals(lineAngle1 * 180.0 / Math.PI,
@@ -1043,7 +1035,7 @@ public class ConicTest {
     }
     
     @Test
-    public void testCreateCanonicalAbsoluteConic() throws WrongSizeException{
+    public void testCreateCanonicalAbsoluteConic() throws WrongSizeException {
         Conic ac = Conic.createCanonicalAbsoluteConic();
         
         assertEquals(ac.getA(), 1.0, 0.0);

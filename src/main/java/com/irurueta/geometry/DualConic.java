@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.DualConic
@@ -14,7 +14,7 @@ import java.io.Serializable;
 /**
  * This class contains implementation of a dual conic
  */
-public class DualConic extends BaseConic implements Serializable{
+public class DualConic extends BaseConic implements Serializable {
     
     /**
      * Constructor
@@ -48,7 +48,7 @@ public class DualConic extends BaseConic implements Serializable{
      * symmetric
      */
     public DualConic(Matrix m) throws IllegalArgumentException, 
-            NonSymmetricMatrixException{
+            NonSymmetricMatrixException {
         super(m);
     }
     
@@ -80,11 +80,13 @@ public class DualConic extends BaseConic implements Serializable{
      * @throws IllegalArgumentException Raised if provided threshold is negative
      */
     public boolean isLocus(Line2D line, double threshold) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+        if(threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
                 
-        try{
+        try {
             normalize();
             Matrix dualC = asMatrix();
             Matrix homLine = 
@@ -98,7 +100,7 @@ public class DualConic extends BaseConic implements Serializable{
             locusMatrix.multiply(homLine);
                 
             return Math.abs(locusMatrix.getElementAt(0, 0)) < threshold;
-        }catch(WrongSizeException ignore){
+        } catch (WrongSizeException ignore) {
             return false;
         }
     }
@@ -112,7 +114,7 @@ public class DualConic extends BaseConic implements Serializable{
      * otherwise
      * @see #isLocus(Line2D, double)
      */    
-    public boolean isLocus(Line2D line){
+    public boolean isLocus(Line2D line) {
         return isLocus(line, DEFAULT_LOCUS_THRESHOLD);
     }
     
@@ -122,8 +124,8 @@ public class DualConic extends BaseConic implements Serializable{
      * @param lineB Second line to be tested
      * @return Angle between the two provided lines in radians.
      */
-    public double angleBetweenLines(Line2D lineA, Line2D lineB){
-        try{
+    public double angleBetweenLines(Line2D lineA, Line2D lineB) {
+        try {
             //retrieve conic as matrix
             normalize();
             Matrix dualC = asMatrix();
@@ -160,7 +162,7 @@ public class DualConic extends BaseConic implements Serializable{
 
             double cosTheta = angleNumerator / Math.sqrt(normA * normB);
             return Math.acos(cosTheta);
-        }catch(WrongSizeException ignore){
+        } catch (WrongSizeException ignore) {
             return 0.0; //This will never happen
         }
     }
@@ -178,8 +180,8 @@ public class DualConic extends BaseConic implements Serializable{
      * @throws IllegalArgumentException Raised if provided threshold is negative
      */
     public boolean arePerpendicularLines(Line2D lineA, Line2D lineB, 
-            double threshold) throws IllegalArgumentException{
-        try{
+            double threshold) throws IllegalArgumentException {
+        try {
             //retrieve conic as matrix
             Matrix transHomLineA = new Matrix(1, Line2D.LINE_NUMBER_PARAMS);
             lineA.normalize();
@@ -204,7 +206,7 @@ public class DualConic extends BaseConic implements Serializable{
             double perpend = transHomLineA.getElementAt(0, 0);
         
             return Math.abs(perpend) < threshold;
-        }catch(WrongSizeException ignore){
+        } catch (WrongSizeException ignore) {
             return false; //This will never happen
         }  
     }
@@ -216,7 +218,7 @@ public class DualConic extends BaseConic implements Serializable{
      * @param lineB Second line to be checked
      * @return True if provided lines are perpendicular, false otherwise
      */    
-    public boolean arePerpendicularLines(Line2D lineA, Line2D lineB){
+    public boolean arePerpendicularLines(Line2D lineA, Line2D lineB) {
         return arePerpendicularLines(lineA, lineB, 
                 DEFAULT_PERPENDICULAR_THRESHOLD);
     }
@@ -227,7 +229,7 @@ public class DualConic extends BaseConic implements Serializable{
      * @throws ConicNotAvailableException Raised if the rank of the dual conic 
      * matrix is not complete due to wrong parameters or numerical instability.
      */
-    public Conic getConic() throws ConicNotAvailableException{
+    public Conic getConic() throws ConicNotAvailableException {
         Conic c = new Conic();
         conic(c);
         return c;
@@ -240,10 +242,10 @@ public class DualConic extends BaseConic implements Serializable{
      * @throws ConicNotAvailableException Raised if the rank of the dual conic
      * matrix is not complete due to wrong parameters or numerical instability.
      */
-    public void conic(Conic conic) throws ConicNotAvailableException{
+    public void conic(Conic conic) throws ConicNotAvailableException {
         
         Matrix dualConicMatrix = asMatrix();
-        try{
+        try {
             Matrix invMatrix = com.irurueta.algebra.Utils.inverse(
                     dualConicMatrix);
             
@@ -259,7 +261,7 @@ public class DualConic extends BaseConic implements Serializable{
                     invMatrix.getElementAt(2, 1));
             double f = invMatrix.getElementAt(2, 2);
             conic.setParameters(a, b, c, d, e, f);       
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             throw new ConicNotAvailableException(e);
         }
     }
@@ -276,9 +278,9 @@ public class DualConic extends BaseConic implements Serializable{
      * produce a degenerated configuration
      */
     public final void setParametersFromLines(Line2D line1, Line2D line2, Line2D line3,
-            Line2D line4, Line2D line5) throws CoincidentLinesException{
+            Line2D line4, Line2D line5) throws CoincidentLinesException {
         
-        try{
+        try {
             line1.normalize();
             line2.normalize();
             line3.normalize();
@@ -343,17 +345,20 @@ public class DualConic extends BaseConic implements Serializable{
             double[] row = new double[6];
             double rowNorm;
             
-            for(int j = 0; j < 5; j++){
+            for(int j = 0; j < 5; j++) {
                 m.getSubmatrixAsArray(j, 0, j, 5, row);
                 rowNorm = com.irurueta.algebra.Utils.normF(row);
-                for(int i = 0; i < 6; i++) 
+                for(int i = 0; i < 6; i++) {
                     m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);
+                }
             }            
             
             SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
             
-            if(decomposer.getRank() < 5) throw new CoincidentLinesException();
+            if(decomposer.getRank() < 5) {
+                throw new CoincidentLinesException();
+            }
             
             //the right null-space of m contains the parameters a, b, c, d, e ,f
             //of the conic
@@ -368,7 +373,7 @@ public class DualConic extends BaseConic implements Serializable{
             double f = V.getElementAt(5, 5);
                             
             setParameters(a, b, c, d, e, f);
-        }catch(AlgebraException ex){
+        }catch(AlgebraException ex) {
             throw new CoincidentLinesException(ex);
         }
     }
@@ -386,7 +391,7 @@ public class DualConic extends BaseConic implements Serializable{
      * is correctly calibrated), their canonical value is equal to the identity
      * @return a canonical instance of the dual absolute conic
      */
-    public static DualConic createCanonicalDualAbsoluteConic(){
+    public static DualConic createCanonicalDualAbsoluteConic() {
         return new DualConic(1.0, 0.0, 1.0, 0.0, 0.0, 1.0);
     }    
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.Conic
@@ -19,12 +19,12 @@ import java.io.Serializable;
 /**
  * This class contains the implementation of a conic
  */
-public class Conic extends BaseConic implements Serializable{
+public class Conic extends BaseConic implements Serializable {
         
     /**
      * Constructor
      */
-    public Conic(){
+    public Conic() {
         super();
     }
     
@@ -38,7 +38,7 @@ public class Conic extends BaseConic implements Serializable{
      * @param e Parameter E of the conic.
      * @param f Parameter F of the conic.
      */
-    public Conic(double a, double b, double c, double d, double e, double f){
+    public Conic(double a, double b, double c, double d, double e, double f) {
         super(a, b, c, d, e, f);
     }
     
@@ -52,7 +52,7 @@ public class Conic extends BaseConic implements Serializable{
      * symmetric
      */
     public Conic(Matrix m) throws IllegalArgumentException, 
-            NonSymmetricMatrixException{
+            NonSymmetricMatrixException {
         super(m);
     }
     
@@ -67,7 +67,7 @@ public class Conic extends BaseConic implements Serializable{
      * produce a degenerated configuration
      */
     public Conic(Point2D point1, Point2D point2, Point2D point3, Point2D point4,
-            Point2D point5) throws CoincidentPointsException{
+            Point2D point5) throws CoincidentPointsException {
         setParametersFromPoints(point1, point2, point3, point4, point5);
     }
     
@@ -82,11 +82,13 @@ public class Conic extends BaseConic implements Serializable{
      * @throws IllegalArgumentException Raised if threshold is negative
      */
     public boolean isLocus(Point2D point, double threshold) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+        if(threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
                 
-        try{
+        try {
             normalize();
             Matrix C = asMatrix();
             Matrix homPoint = 
@@ -101,7 +103,7 @@ public class Conic extends BaseConic implements Serializable{
             locusMatrix.multiply(homPoint);                
         
             return Math.abs(locusMatrix.getElementAt(0, 0)) < threshold;
-        }catch(WrongSizeException ignore){
+        } catch (WrongSizeException ignore) {
             return false;
         }
     }
@@ -112,7 +114,7 @@ public class Conic extends BaseConic implements Serializable{
      * @return True if the point lies within this conic, false otherwise
      * @see #isLocus(Point2D, double)
      */    
-    public boolean isLocus(Point2D point){
+    public boolean isLocus(Point2D point) {
         return isLocus(point, DEFAULT_LOCUS_THRESHOLD);                
     }
     
@@ -123,8 +125,8 @@ public class Conic extends BaseConic implements Serializable{
      * @param pointB Second point
      * @return Angle between provided points given in radians.
      */
-    public double angleBetweenPoints(Point2D pointA, Point2D pointB){        
-        try{
+    public double angleBetweenPoints(Point2D pointA, Point2D pointB) {
+        try {
             //retrieve conic as matrix
             normalize();
             Matrix C = asMatrix();
@@ -164,7 +166,7 @@ public class Conic extends BaseConic implements Serializable{
 
             double cosTheta = angleNumerator / Math.sqrt(normA * normB);
             return Math.acos(cosTheta);
-        }catch(WrongSizeException ignore){
+        } catch (WrongSizeException ignore) {
             return 0.0; //This will never happen
         }
     }
@@ -184,9 +186,9 @@ public class Conic extends BaseConic implements Serializable{
      * @throws IllegalArgumentException Raised if threshold is negative
      */
     public boolean arePerpendicularPoints(Point2D pointA, Point2D pointB,
-            double threshold) throws IllegalArgumentException{
+            double threshold) throws IllegalArgumentException {
         
-        try{
+        try {
             //retrieve conic as matrix
             Matrix transHomPointA = 
                 new Matrix(1, Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
@@ -212,7 +214,7 @@ public class Conic extends BaseConic implements Serializable{
             double perpend = transHomPointA.getElementAt(0, 0);
         
             return Math.abs(perpend) < threshold;
-        }catch(WrongSizeException ignore){
+        } catch (WrongSizeException ignore) {
             return false; //This will never happen
         }
     }
@@ -225,7 +227,7 @@ public class Conic extends BaseConic implements Serializable{
      * @return True if points are perpendicular, false otherwise.
      * @see #arePerpendicularPoints(Point2D, Point2D, double)
      */    
-    public boolean arePerpendicularPoints(Point2D pointA, Point2D pointB){
+    public boolean arePerpendicularPoints(Point2D pointA, Point2D pointB) {
         return arePerpendicularPoints(pointA, pointB, 
                 DEFAULT_PERPENDICULAR_THRESHOLD);
     }
@@ -241,10 +243,10 @@ public class Conic extends BaseConic implements Serializable{
      * computed)
      */
     public void dualConic(DualConic dualConic) 
-            throws DualConicNotAvailableException{
+            throws DualConicNotAvailableException {
         
         Matrix conicMatrix = asMatrix();
-        try{
+        try {
             Matrix invMatrix = com.irurueta.algebra.Utils.inverse(conicMatrix);
             
             //ensure that resulting matrix after inversion is symmetric
@@ -259,7 +261,7 @@ public class Conic extends BaseConic implements Serializable{
                     invMatrix.getElementAt(2, 1));
             double f = invMatrix.getElementAt(2, 2);
             dualConic.setParameters(a, b, c, d, e, f);
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             throw new DualConicNotAvailableException(e);
         }
     }
@@ -272,7 +274,7 @@ public class Conic extends BaseConic implements Serializable{
      * exist because this conic instance is degenerate (its inverse cannot be 
      * computed)
      */
-    public DualConic getDualConic() throws DualConicNotAvailableException{
+    public DualConic getDualConic() throws DualConicNotAvailableException {
         DualConic dualConic = new DualConic();
         dualConic(dualConic);
         return dualConic;
@@ -285,7 +287,7 @@ public class Conic extends BaseConic implements Serializable{
      * PARABOLA_CONIC_TYPE, HYPERBOLA_CONIC_TYPE and 
      * RECTANGULAR_HYPERBOLA_CONIC_TYPE
      */
-    public ConicType getConicType(){
+    public ConicType getConicType() {
         //computes and evaluates the following expression: b^2 - 4ac
         double expression = (mB * mB) - (mA * mC);
         
@@ -389,7 +391,9 @@ public class Conic extends BaseConic implements Serializable{
             SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
             
-            if (decomposer.getRank() < 5) throw new CoincidentPointsException();
+            if (decomposer.getRank() < 5) {
+                throw new CoincidentPointsException();
+            }
             
             //the right null-space of m contains the parameters a, b, c, d, e ,f
             //of the conic
@@ -416,7 +420,7 @@ public class Conic extends BaseConic implements Serializable{
      * @throws NotLocusException if provided point is not locus of this conic up
      * to DEFAULT_LOCUS_THRESHOLD
      */
-    public Line2D getTangentLineAt(Point2D point) throws NotLocusException{
+    public Line2D getTangentLineAt(Point2D point) throws NotLocusException {
         return getTangentLineAt(point, DEFAULT_LOCUS_THRESHOLD);
     }
     
@@ -431,7 +435,7 @@ public class Conic extends BaseConic implements Serializable{
      * @throws IllegalArgumentException if provided threshold is negative
      */
     public Line2D getTangentLineAt(Point2D point, double threshold) 
-            throws NotLocusException, IllegalArgumentException{
+            throws NotLocusException, IllegalArgumentException {
         
         Line2D line = new Line2D();
         tangentLineAt(point, line, threshold);
@@ -449,16 +453,18 @@ public class Conic extends BaseConic implements Serializable{
      * @throws IllegalArgumentException if provided threshold is negative
      */
     public void tangentLineAt(Point2D point, Line2D line, double threshold)
-            throws NotLocusException, IllegalArgumentException{
+            throws NotLocusException, IllegalArgumentException {
         
-        if(!isLocus(point, threshold)) throw new NotLocusException();
+        if(!isLocus(point, threshold)) {
+            throw new NotLocusException();
+        }
         
         point.normalize();
         normalize();
         
         Matrix C = asMatrix();
         
-        try{
+        try {
             Matrix p = new Matrix(
                     Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             p.setElementAt(0, 0, point.getHomX());
@@ -466,7 +472,7 @@ public class Conic extends BaseConic implements Serializable{
             p.setElementAt(2, 0, point.getHomW());
         
             C.multiply(p);
-        }catch(WrongSizeException ignore){}
+        } catch (WrongSizeException ignore) { }
         
         line.setParameters(C.getElementAt(0, 0), C.getElementAt(1, 0), 
                 C.getElementAt(2, 0));        
@@ -481,7 +487,7 @@ public class Conic extends BaseConic implements Serializable{
      * is correctly calibrated), their canonical value is equal to the identity
      * @return a canonical instance of the absolute conic
      */
-    public static Conic createCanonicalAbsoluteConic(){
+    public static Conic createCanonicalAbsoluteConic() {
         return new Conic(1.0, 0.0, 1.0, 0.0, 0.0, 1.0);
     }
     

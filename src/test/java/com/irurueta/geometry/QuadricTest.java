@@ -1601,9 +1601,6 @@ public class QuadricTest {
             assertEquals(conic1.getConicType(), ConicType.ELLIPSE_CONIC_TYPE);
             assertEquals(conic2.getConicType(), ConicType.ELLIPSE_CONIC_TYPE);
 
-            Ellipse el = new Ellipse(conic1);
-
-
             //Rotate plane and quadric to make it an xy plane
             double[] directorVector2 = new double[]{0.0, 0.0, 1.0};
             double angle = ArrayUtils.angle(directorVector,
@@ -1676,6 +1673,54 @@ public class QuadricTest {
             assertEquals(ellipseCenter.getInhomX(), 0.0,
                     ABSOLUTE_ERROR);
             assertEquals(ellipseCenter.getInhomY(), 0.0,
+                    ABSOLUTE_ERROR);
+            assertEquals(radius, semiMajorAxis, ABSOLUTE_ERROR);
+            assertEquals(radius, semiMinorAxis, ABSOLUTE_ERROR);
+
+            assertTrue(conic3.getConicType() == ConicType.CIRCLE_CONIC_TYPE ||
+                    conic3.getConicType() == ConicType.ELLIPSE_CONIC_TYPE);
+
+            //transform plane and quadric to their original position (but now they are
+            //rotated so that plane points towards z axis)
+            transformation = new EuclideanTransformation3D(new double[]{
+                            center.getInhomX(),
+                            center.getInhomY(),
+                            center.getInhomZ()});
+
+            transformedQuadric = transformation.transformAndReturnNew(
+                    transformedQuadric);
+            transformedPlane = transformation.transformAndReturnNew(
+                    transformedPlane);
+            transformedCenter = transformation.transformAndReturnNew(
+                    transformedCenter);
+
+            //center is at the original position
+            assertTrue(transformedCenter.equals(center, ABSOLUTE_ERROR));
+
+            //plane is at the original position and rotated
+            transformedPlane.normalize();
+            assertTrue(transformedPlane.isLocus(center, ABSOLUTE_ERROR));
+
+            transformedDirectorVector = transformedPlane.getDirectorVector();
+            assertArrayEquals(
+                    ArrayUtils.normalizeAndReturnNew(transformedDirectorVector),
+                    directorVector2, ABSOLUTE_ERROR);
+
+            //because of numerical accuracy, transformed quadric is an ellipsoid rather
+            //than an ellipse, but having almost equal semi-axes.
+
+            conic3 = transformedQuadric.intersectWith(transformedPlane);
+
+            ellipse = new Ellipse(conic3);
+
+            ellipseCenter = ellipse.getCenter();
+            semiMajorAxis = ellipse.getSemiMajorAxis();
+            semiMinorAxis = ellipse.getSemiMinorAxis();
+
+            //check that conic is centered at origin and keeps radius
+            assertEquals(ellipseCenter.getInhomX(), center.getInhomX(),
+                    ABSOLUTE_ERROR);
+            assertEquals(ellipseCenter.getInhomY(), center.getInhomY(),
                     ABSOLUTE_ERROR);
             assertEquals(radius, semiMajorAxis, ABSOLUTE_ERROR);
             assertEquals(radius, semiMinorAxis, ABSOLUTE_ERROR);

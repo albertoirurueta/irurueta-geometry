@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains Unit Tests for
  * com.irurueta.geometry.DualConic
@@ -16,42 +16,36 @@ import static org.junit.Assert.*;
 
 public class DualConicTest {
     
-    public static final double MIN_RANDOM_VALUE = -10.0;
-    public static final double MAX_RANDOM_VALUE = 10.0;
-    public static final double PRECISION_ERROR = 1e-8;
-    public static final double LOCUS_THRESHOLD = 1e-8;
-    public static final double PERPENDICULAR_THRESHOLD = 1e-6;
+    private static final double MIN_RANDOM_VALUE = -10.0;
+    private static final double MAX_RANDOM_VALUE = 10.0;
+    private static final double PRECISION_ERROR = 1e-8;
+    private static final double LOCUS_THRESHOLD = 1e-8;
+    private static final double PERPENDICULAR_THRESHOLD = 1e-6;
     
-    public static final int DUAL_CONIC_ROWS = 3;
-    public static final int DUAL_CONIC_COLS = 3;
-    public static final int HOM_COORDS = 3;
-    public static final int INHOM_COORDS = 2;
+    private static final int DUAL_CONIC_ROWS = 3;
+    private static final int DUAL_CONIC_COLS = 3;
+    private static final int HOM_COORDS = 3;
     
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
     
-    public DualConicTest() {
-    }
+    public DualConicTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
     public void testConstructor() throws WrongSizeException, 
         IllegalArgumentException, NonSymmetricMatrixException, 
-        DecomposerException, CoincidentLinesException{
+        DecomposerException, CoincidentLinesException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -109,10 +103,10 @@ public class DualConicTest {
         //Constructor using matrix with wrong size
         m = new Matrix(DUAL_CONIC_ROWS + 1, DUAL_CONIC_COLS);
         dualConic = null;
-        try{
+        try {
             dualConic = new DualConic(m);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ex){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(dualConic);
         
         //Constructor using non-symmetric matrix
@@ -127,10 +121,10 @@ public class DualConicTest {
         m.setElementAt(2, 1, e);
         m.setElementAt(2, 2, f);
         dualConic = null;
-        try{
+        try {
             dualConic = new DualConic(m);
             fail("NonSymmetricMatrixException expected but not thrown");
-        }catch(NonSymmetricMatrixException ex){}
+        } catch (NonSymmetricMatrixException ignore) { }
         assertNull(dualConic);
         
         
@@ -209,7 +203,7 @@ public class DualConicTest {
         m2.setElementAt(4, 4, 2.0 * l2 * l3);
         m2.setElementAt(4, 5, l3 * l3);
         
-        while(com.irurueta.algebra.Utils.rank(m2) < 5){
+        while (com.irurueta.algebra.Utils.rank(m2) < 5) {
             m = Matrix.createWithUniformRandomValues(5, HOM_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
@@ -291,16 +285,16 @@ public class DualConicTest {
         
         //Force CoincidentLinesException
         dualConic = null;
-        try{
+        try {
             dualConic = new DualConic(line1, line2, line3, line4, line4);
             fail("CoincidentLinesException expected but not thrown");
-        }catch(CoincidentLinesException ex){}
+        } catch (CoincidentLinesException ignore) { }
         assertNull(dualConic);
     }
     
     @Test
     public void testGettersAndSetters() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -352,7 +346,7 @@ public class DualConicTest {
     
     @Test
     public void testAsMatrix() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -383,7 +377,7 @@ public class DualConicTest {
     public void testIsLocus() throws WrongSizeException, DecomposerException, 
         RankDeficientMatrixException, IllegalArgumentException, 
         NonSymmetricMatrixException, NotReadyException, LockedException, 
-        com.irurueta.algebra.NotAvailableException{
+        com.irurueta.algebra.NotAvailableException {
         
         Matrix m = Matrix.createWithUniformRandomValues(5, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -459,7 +453,7 @@ public class DualConicTest {
         systemOfEquationsMatrix.setElementAt(4, 4, 2.0 * l2 * l3);
         systemOfEquationsMatrix.setElementAt(4, 5, l3 * l3);
             
-        while(com.irurueta.algebra.Utils.rank(systemOfEquationsMatrix) < 5){
+        while (com.irurueta.algebra.Utils.rank(systemOfEquationsMatrix) < 5) {
             m = Matrix.createWithUniformRandomValues(5, HOM_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
@@ -614,9 +608,7 @@ public class DualConicTest {
     
     @Test
     public void testAngleBetweenLines() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         //initial lines
         Matrix lineMatrix1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, 
@@ -667,7 +659,7 @@ public class DualConicTest {
     @Test
     public void testArePerpendicularLines() throws WrongSizeException, 
         DecomposerException, RankDeficientMatrixException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
@@ -689,7 +681,7 @@ public class DualConicTest {
 
             Matrix transform = Matrix.createWithUniformRandomValues(HOM_COORDS, 
                     HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            while(com.irurueta.algebra.Utils.rank(transform) < 3){
+            while (com.irurueta.algebra.Utils.rank(transform) < 3) {
                 transform = Matrix.createWithUniformRandomValues(HOM_COORDS, 
                         HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             }
@@ -733,7 +725,7 @@ public class DualConicTest {
                     matrixLine2).getElementAt(0, 0);
 
             //ensure lines are not perpendicular
-            while(Math.abs(dotProduct) < PERPENDICULAR_THRESHOLD){
+            while (Math.abs(dotProduct) < PERPENDICULAR_THRESHOLD) {
                 matrixLine1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, 
                         MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 norm = com.irurueta.algebra.Utils.normF(matrixLine1);
@@ -769,11 +761,11 @@ public class DualConicTest {
     @Test
     public void testGetConic() throws WrongSizeException, DecomposerException, 
         RankDeficientMatrixException, IllegalArgumentException, 
-        NonSymmetricMatrixException, ConicNotAvailableException{
+        NonSymmetricMatrixException, ConicNotAvailableException {
         
         Matrix transformMatrix = Matrix.createWithUniformRandomValues(
                 HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        while(com.irurueta.algebra.Utils.rank(transformMatrix) != 3){
+        while (com.irurueta.algebra.Utils.rank(transformMatrix) != 3) {
             transformMatrix = Matrix.createWithUniformRandomValues(HOM_COORDS, 
                     HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
@@ -809,7 +801,7 @@ public class DualConicTest {
     
     @Test
     public void testNormalize() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         Matrix t = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -846,7 +838,7 @@ public class DualConicTest {
     }
     
     @Test
-    public void testCreateCanonicalDualAbsoluteConic() throws WrongSizeException{
+    public void testCreateCanonicalDualAbsoluteConic() throws WrongSizeException {
         DualConic dac = DualConic.createCanonicalDualAbsoluteConic();
         
         assertEquals(dac.getA(), 1.0, 0.0);

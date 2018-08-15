@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.MetricTransformation2D
@@ -199,7 +199,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      */
     @Override
     public void inverse() {
-        inverse((MetricTransformation2D)this);
+        inverse(this);
     }
     
     /**
@@ -210,7 +210,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
     @Override
     public Transformation2D inverseAndReturnNew() {
         MetricTransformation2D result = new MetricTransformation2D();
-        inverse((MetricTransformation2D)result);
+        inverse(result);
         return result;
     }    
     
@@ -224,7 +224,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
         //Then inverse transformation is: (1/s)*R* x' = (1/s) * R' * s * R * x +
         //(1/s) * R'*t = x + (1/s) * R'*t
         //--> x = (1/s) * R'*x' - (1/s) * R'*t
-        super.inverse((EuclideanTransformation2D)result);
+        super.inverse(result);
         double[] translation = result.getTranslation();
         double invScale = 1.0 / scale;
         ArrayUtils.multiplyByScalar(translation, invScale, translation);
@@ -387,12 +387,12 @@ public class MetricTransformation2D extends EuclideanTransformation2D
             Point2D inputPoint2, Point2D inputPoint3, Point2D outputPoint1,
             Point2D outputPoint2, Point2D outputPoint3)
             throws CoincidentPointsException {
-        List<Point2D> inputPoints = new ArrayList<Point2D>();
+        List<Point2D> inputPoints = new ArrayList<>();
         inputPoints.add(inputPoint1);
         inputPoints.add(inputPoint2);
         inputPoints.add(inputPoint3);
         
-        List<Point2D> outputPoints = new ArrayList<Point2D>();
+        List<Point2D> outputPoints = new ArrayList<>();
         outputPoints.add(outputPoint1);
         outputPoints.add(outputPoint2);
         outputPoints.add(outputPoint3);
@@ -402,9 +402,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
         
         try {
             estimator.estimate(this);
-        } catch (LockedException ignore) {
-            //never thrown
-        } catch (NotReadyException ignore) {
+        } catch (LockedException | NotReadyException ignore) {
             //never thrown
         }
     }

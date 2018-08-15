@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.EuclideanTransformation2D
@@ -383,21 +383,26 @@ public class EuclideanTransformation2D extends Transformation2D
     @Override
     public void transform(Conic inputConic, Conic outputConic) 
             throws NonSymmetricMatrixException {
-        //p' * C * p = 0
-        //p'*T' * C * T * p = 0
-        
+        //point' * conic * point = 0
+        //point' * T' * transformedConic * T * point = 0
+        //where:
+        // - transformedPoint = T * point
+
+        //Hence:
+        // transformedConic = T^-1' * conic * T^-1
+
         inputConic.normalize();
         
         Matrix C = inputConic.asMatrix();
-        Matrix T = asMatrix();
+        Matrix invT = inverseAndReturnNew().asMatrix();
         //normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(T);
-        T.multiplyByScalar(1.0 / norm);
+        double norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
         
-        Matrix m = T.transposeAndReturnNew();
+        Matrix m = invT.transposeAndReturnNew();
         try {
             m.multiply(C);
-            m.multiply(T);
+            m.multiply(invT);
         } catch (WrongSizeException ignore) { }
         
         //normalize resulting m matrix to increase accuracy so that it can be
@@ -420,29 +425,33 @@ public class EuclideanTransformation2D extends Transformation2D
     @Override
     public void transform(DualConic inputDualConic, DualConic outputDualConic)
             throws NonSymmetricMatrixException {
-        //l' * C¨* l = 0
-        //l'*(T^-1)' * C ¨* (T^-1) * p = 0
-        
+        //line' * dualConic * line = 0
+        //line' * T^-1 * T * dualConic * T' * T^-1'* line
+
+        //Hence:
+        //transformed plane: T^-1'* line
+        //transformed dual quadric: T * dualQuadric * T'
+
         inputDualConic.normalize();
         
         Matrix dualC = inputDualConic.asMatrix();
-        Matrix invT = inverseAndReturnNew().asMatrix();
+        Matrix T = asMatrix();
         //normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(invT);
-        invT.multiplyByScalar(1.0 / norm);
+        double norm = Utils.normF(T);
+        T.multiplyByScalar(1.0 / norm);
         
-        Matrix m = invT.transposeAndReturnNew();
+        Matrix transT = T.transposeAndReturnNew();
         try {
-            m.multiply(dualC);
-            m.multiply(invT);
+            T.multiply(dualC);
+            T.multiply(transT);
         } catch (WrongSizeException ignore) { }
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
-        norm = Utils.normF(m);
-        m.multiplyByScalar(1.0 / norm);
+        norm = Utils.normF(T);
+        T.multiplyByScalar(1.0 / norm);
         
-        outputDualConic.setParameters(m);
+        outputDualConic.setParameters(T);
     }
 
     /**
@@ -452,20 +461,28 @@ public class EuclideanTransformation2D extends Transformation2D
      * @param outputLine instance where data of transformed line will be stored.
      */    
     @Override
-    public void transform(Line2D inputLine, Line2D outputLine) {        
-        //p' * l = 0 --> (T*p)' * (T^-1) * l = p'*T'*(T^-1)*l = 0
-        
+    public void transform(Line2D inputLine, Line2D outputLine) {
+        //line' * point = 0 --> line' * T^-1 * T * point
+        //(line' * T^-1)*(T*point) = (T^-1'*line)'*(T*point)
+        //where:
+        //- transformedLine = T^-1'*line
+        //- transformedPoint = T*point
+
         inputLine.normalize();
         
         Matrix invT = inverseAndReturnNew().asMatrix();        
         Matrix l = Matrix.newFromArray(inputLine.asArray());
-        
-        Matrix m = invT;
-        try{
-            m.multiply(l);        
-        }catch(WrongSizeException ignore){}
-        
-        outputLine.setParameters(m.toArray());
+
+        //normalize transformation matrix T to increase accuracy
+        double norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
+
+        invT.transpose();
+        try {
+            invT.multiply(l);
+        } catch (WrongSizeException ignore) { /*never happens*/ }
+
+        outputLine.setParameters(invT.toArray());
     }
     
     /**
@@ -620,12 +637,12 @@ public class EuclideanTransformation2D extends Transformation2D
             Point2D inputPoint2, Point2D inputPoint3, Point2D outputPoint1,
             Point2D outputPoint2, Point2D outputPoint3) 
             throws CoincidentPointsException {
-        List<Point2D> inputPoints = new ArrayList<Point2D>();
+        List<Point2D> inputPoints = new ArrayList<>();
         inputPoints.add(inputPoint1);
         inputPoints.add(inputPoint2);
         inputPoints.add(inputPoint3);
         
-        List<Point2D> outputPoints = new ArrayList<Point2D>();
+        List<Point2D> outputPoints = new ArrayList<>();
         outputPoints.add(outputPoint1);
         outputPoints.add(outputPoint2);
         outputPoints.add(outputPoint3);
@@ -636,9 +653,7 @@ public class EuclideanTransformation2D extends Transformation2D
         
         try {
             estimator.estimate(this);
-        } catch (LockedException ignore) {
-            //never thrown
-        } catch (NotReadyException ignore) {
+        } catch (LockedException | NotReadyException ignore) {
             //never thrown
         }
     }

@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains Unit Tests for
  * com.irurueta.geometry.DualQuadric
@@ -15,42 +15,37 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 public class DualQuadricTest {
-    public static final double MIN_RANDOM_VALUE = -10.0;
-    public static final double MAX_RANDOM_VALUE = 10.0;
-    public static final double PRECISION_ERROR = 1e-8;
-    public static final double LOCUS_THRESHOLD = 1e-8;
-    public static final double PERPENDICULAR_THRESHOLD = 1e-6;
+
+    private static final double MIN_RANDOM_VALUE = -10.0;
+    private static final double MAX_RANDOM_VALUE = 10.0;
+    private static final double PRECISION_ERROR = 1e-8;
+    private static final double LOCUS_THRESHOLD = 1e-8;
+    private static final double PERPENDICULAR_THRESHOLD = 1e-6;
     
-    public static final int DUAL_QUADRIC_ROWS = 4;
-    public static final int DUAL_QUADRIC_COLS = 4;
-    public static final int HOM_COORDS = 4;
-    public static final int INHOM_COORDS = 3;
+    private static final int DUAL_QUADRIC_ROWS = 4;
+    private static final int DUAL_QUADRIC_COLS = 4;
+    private static final int HOM_COORDS = 4;
         
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
     
-    public DualQuadricTest() {
-    }
+    public DualQuadricTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
     public void testconstructor() throws WrongSizeException, 
         IllegalArgumentException, NonSymmetricMatrixException, 
-        DecomposerException, CoincidentPlanesException{
+        DecomposerException, CoincidentPlanesException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -136,10 +131,10 @@ public class DualQuadricTest {
         //Constructor using matrix with wrong size exception
         m = new Matrix(DUAL_QUADRIC_ROWS, DUAL_QUADRIC_COLS + 1);
         dualQuadric = null;
-        try{
+        try {
             dualQuadric = new DualQuadric(m);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ex){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(dualQuadric);
         
         //Constructor using non-symmetric matrix
@@ -162,10 +157,10 @@ public class DualQuadricTest {
         m.setElementAt(2, 3, i + 1.0); 
         
         dualQuadric = null;
-        try{
+        try {
             dualQuadric = new DualQuadric(m);
             fail("NonSymmetricMatrixException expected but not thrown");
-        }catch(NonSymmetricMatrixException ex){}
+        } catch (NonSymmetricMatrixException ignore) { }
         assertNull(dualQuadric);
         
         //Constructor from 9 planes
@@ -509,17 +504,17 @@ public class DualQuadricTest {
         
         //Force CoincidentPlanesException
         dualQuadric = null;
-        try{
+        try {
             dualQuadric = new DualQuadric(plane1, plane2, plane3, plane4, 
                     plane5, plane6, plane7, plane8, plane8);
             fail("CoincidentPlanesException expected but not thrown");
-        }catch(CoincidentPlanesException ex){}
+        } catch (CoincidentPlanesException ignore) { }
         assertNull(dualQuadric);
     }
     
     @Test
     public void testGettersAndSetters() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -621,7 +616,7 @@ public class DualQuadricTest {
     
     @Test
     public void testAsMatrix() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -661,10 +656,10 @@ public class DualQuadricTest {
     
     @Test
     public void testIsLocus() throws WrongSizeException, DecomposerException, 
-        CoincidentPlanesException, NotReadyException, LockedException, 
+        NotReadyException, LockedException,
         com.irurueta.algebra.NotAvailableException, 
         RankDeficientMatrixException, IllegalArgumentException, 
-        NonSymmetricMatrixException{
+        NonSymmetricMatrixException {
         
         Matrix m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -828,7 +823,7 @@ public class DualQuadricTest {
         m2.setElementAt(8, 8, 2.0 * pC * pD);
         m2.setElementAt(8, 9, pD * pD);
         
-        while(com.irurueta.algebra.Utils.rank(m2) < 9){
+        while (com.irurueta.algebra.Utils.rank(m2) < 9) {
             m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         
@@ -1096,9 +1091,7 @@ public class DualQuadricTest {
     
     @Test
     public void testAngleBetweenPlanes() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
-        
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         //initial planes
         Matrix planeMatrix1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 
@@ -1153,7 +1146,7 @@ public class DualQuadricTest {
     @Test
     public void testArePerpendicularPlanes() throws WrongSizeException, 
         DecomposerException, RankDeficientMatrixException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
@@ -1175,7 +1168,7 @@ public class DualQuadricTest {
 
             Matrix transform = Matrix.createWithUniformRandomValues(HOM_COORDS, 
                     HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            while(com.irurueta.algebra.Utils.rank(transform) < 3){
+            while (com.irurueta.algebra.Utils.rank(transform) < 3) {
                 transform = Matrix.createWithUniformRandomValues(HOM_COORDS, 
                         HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             }
@@ -1219,7 +1212,7 @@ public class DualQuadricTest {
                     matrixPlane2).getElementAt(0, 0);
 
             //ensure lines are not perpendicular
-            while(Math.abs(dotProduct) < PERPENDICULAR_THRESHOLD){
+            while (Math.abs(dotProduct) < PERPENDICULAR_THRESHOLD) {
                 matrixPlane1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, 
                         MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 norm = com.irurueta.algebra.Utils.normF(matrixPlane1);
@@ -1240,7 +1233,7 @@ public class DualQuadricTest {
             transformPlane1 = new Plane(transformPlaneMatrix1.toArray());
             transformPlane2 = new Plane(transformPlaneMatrix2.toArray());
 
-            if(dualQuadric.arePerpendicularPlanes(transformPlane1, transformPlane2, PERPENDICULAR_THRESHOLD)) {
+            if (dualQuadric.arePerpendicularPlanes(transformPlane1, transformPlane2, PERPENDICULAR_THRESHOLD)) {
                 continue;
             }
             assertFalse(dualQuadric.arePerpendicularPlanes(transformPlane1,
@@ -1254,11 +1247,11 @@ public class DualQuadricTest {
     @Test
     public void testGetQuadric() throws WrongSizeException, DecomposerException, 
         RankDeficientMatrixException, IllegalArgumentException, 
-        NonSymmetricMatrixException, QuadricNotAvailableException{
+        NonSymmetricMatrixException, QuadricNotAvailableException {
         
         Matrix transformMatrix = Matrix.createWithUniformRandomValues(
                 HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        while(com.irurueta.algebra.Utils.rank(transformMatrix) != 4){
+        while (com.irurueta.algebra.Utils.rank(transformMatrix) != 4) {
             transformMatrix = Matrix.createWithUniformRandomValues(HOM_COORDS, 
                     HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
@@ -1294,7 +1287,7 @@ public class DualQuadricTest {
     
     @Test
     public void testNormalize() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException{
+        IllegalArgumentException, NonSymmetricMatrixException {
         
         Matrix t = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS,
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1402,7 +1395,7 @@ public class DualQuadricTest {
     }   
     
     @Test
-    public void testCreateCanonicalDualAbsoluteQuadric() throws WrongSizeException{
+    public void testCreateCanonicalDualAbsoluteQuadric() throws WrongSizeException {
         DualQuadric daq = DualQuadric.createCanonicalDualAbsoluteQuadric();
         
         assertEquals(daq.getA(), 1.0, 0.0);

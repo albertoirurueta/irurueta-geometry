@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains unit tests for
  * com.irurueta.geometry.ProjectiveTransformation2D
@@ -8,17 +8,9 @@
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.DecomposerException;
-import com.irurueta.algebra.LUDecomposer;
-import com.irurueta.algebra.LockedException;
-import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.*;
 import com.irurueta.algebra.NotAvailableException;
-import com.irurueta.algebra.NotReadyException;
-import com.irurueta.algebra.RankDeficientMatrixException;
 import com.irurueta.algebra.Utils;
-import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,23 +24,25 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ProjectiveTransformation2DTest {
+
+    private static final int HOM_COORDS = 3;
     
-    public static final double MIN_ANGLE_DEGREES = -180.0;
-    public static final double MAX_ANGLE_DEGREES = 180.0;
+    private static final double MIN_ANGLE_DEGREES = -180.0;
+    private static final double MAX_ANGLE_DEGREES = 180.0;
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_SCALE = 0.2;
-    public static final double MAX_SCALE = 5.0;
+    private static final double MIN_SCALE = 0.2;
+    private static final double MAX_SCALE = 5.0;
     
-    public static final int MIN_POINTS = 3;
-    public static final int MAX_POINTS = 50;
+    private static final int MIN_POINTS = 3;
+    private static final int MAX_POINTS = 50;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
-    public static final double LARGE_ABSOLUTE_ERROR = 5e-6;
+    private static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double LARGE_ABSOLUTE_ERROR = 5e-6;
     
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
     
     
     public ProjectiveTransformation2DTest() { }
@@ -66,7 +60,7 @@ public class ProjectiveTransformation2DTest {
     public void tearDown() { }
           
     @Test
-    public void testConstructor() throws WrongSizeException, AlgebraException {
+    public void testConstructor() throws AlgebraException {
         //Test empty constructor
         ProjectiveTransformation2D transformation = 
                 new ProjectiveTransformation2D();
@@ -130,7 +124,7 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation = new ProjectiveTransformation2D((Matrix)null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         Matrix badT = new Matrix(ProjectiveTransformation2D.HOM_COORDS + 1,
@@ -138,7 +132,7 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation = new ProjectiveTransformation2D(badT);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);
         
         //Test constructor with scale
@@ -207,7 +201,7 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation = new ProjectiveTransformation2D((Rotation2D)null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         assertNull(transformation);
         
         
@@ -244,7 +238,7 @@ public class ProjectiveTransformation2DTest {
             transformation = new ProjectiveTransformation2D(scale, 
                     (Rotation2D)null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         assertNull(transformation);        
         
         
@@ -285,14 +279,14 @@ public class ProjectiveTransformation2DTest {
         transformation = null;
         try {
             transformation = new ProjectiveTransformation2D(
-                    (AffineParameters2D)null, rotation);
+                    null, rotation);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation2D(params, 
-                    (Rotation2D)null);
+                    null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         assertNull(transformation);     
         
 
@@ -335,14 +329,14 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation = new ProjectiveTransformation2D((double[])null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         double[] badTranslation = new double[
                 ProjectiveTransformation2D.NUM_TRANSLATION_COORDS + 1];
         try {
             transformation = new ProjectiveTransformation2D(badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);        
         
 
@@ -381,11 +375,11 @@ public class ProjectiveTransformation2DTest {
             transformation = new ProjectiveTransformation2D((Matrix)null, 
                     translation);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
-            transformation = new ProjectiveTransformation2D(A, (double[])null);
+            transformation = new ProjectiveTransformation2D(A, null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         Matrix badA = new Matrix(ProjectiveTransformation2D.INHOM_COORDS + 1,
@@ -393,11 +387,11 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation = new ProjectiveTransformation2D(badA, translation);
             fail("IllegalArgumetnException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             transformation = new ProjectiveTransformation2D(A, badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);      
         
         
@@ -437,14 +431,14 @@ public class ProjectiveTransformation2DTest {
             transformation = new ProjectiveTransformation2D(scale, 
                     (double[])null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         try {
             transformation = new ProjectiveTransformation2D(scale, 
                     badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);        
         
         
@@ -484,19 +478,19 @@ public class ProjectiveTransformation2DTest {
             transformation = new ProjectiveTransformation2D((Rotation2D)null,
                     translation);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation2D(rotation, 
-                    (double[])null);
+                    null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         try {
             transformation = new ProjectiveTransformation2D(rotation, 
                     badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);        
         
         
@@ -535,21 +529,21 @@ public class ProjectiveTransformation2DTest {
         transformation = null;
         try {
             transformation = new ProjectiveTransformation2D(scale, 
-                    (Rotation2D)null, translation);
+                    null, translation);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation2D(scale, rotation, 
-                    (double[])null);
+                    null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Foce IllegalArgumentException
         try {
             transformation = new ProjectiveTransformation2D(scale, rotation, 
                     badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);        
         
         
@@ -601,33 +595,33 @@ public class ProjectiveTransformation2DTest {
         transformation = null;
         try {
             transformation = new ProjectiveTransformation2D(scale, 
-                    (Rotation2D)null, translation, projectiveParameters);
+                    null, translation, projectiveParameters);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation2D(scale, rotation, 
-                    (double[])null, projectiveParameters);
+                    null, projectiveParameters);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation2D(scale, rotation,
                     translation, null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Foce IllegalArgumentException
         try {
             transformation = new ProjectiveTransformation2D(scale, rotation, 
                     badTranslation, projectiveParameters);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         double[] badProjectiveParameters = new double[
                 ProjectiveTransformation2D.HOM_COORDS + 1];
         try {
             transformation = new ProjectiveTransformation2D(scale, rotation,
                     translation, badProjectiveParameters);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);        
         
         
@@ -668,24 +662,24 @@ public class ProjectiveTransformation2DTest {
             transformation = new ProjectiveTransformation2D(null, rotation, 
                     translation);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation2D(params, null, 
                     translation);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation2D(params, rotation, 
                     null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalARgumentException
         try {
             transformation = new ProjectiveTransformation2D(params, rotation, 
                     badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);        
         
         
@@ -730,34 +724,34 @@ public class ProjectiveTransformation2DTest {
             transformation = new ProjectiveTransformation2D(null, rotation, 
                     translation, projectiveParameters);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation2D(params, null, 
                     translation, projectiveParameters);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation2D(params, rotation, 
                     null, projectiveParameters);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         try {
             transformation = new ProjectiveTransformation2D(params, rotation,
                     translation, null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalARgumentException
         try {
             transformation = new ProjectiveTransformation2D(params, rotation, 
                     badTranslation, projectiveParameters);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             transformation = new ProjectiveTransformation2D(params, rotation,
                     translation, badProjectiveParameters);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(transformation);                
     }
     
@@ -789,7 +783,7 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation.setT(null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         Matrix badT = new Matrix(ProjectiveTransformation2D.HOM_COORDS + 1,
@@ -797,7 +791,7 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation.setT(badT);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -846,7 +840,7 @@ public class ProjectiveTransformation2DTest {
         try {
             ProjectiveTransformation2D.isDegenerate(T);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -874,7 +868,7 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation.setA(null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
         
         //Force IllegalArgumentException
         Matrix badA = new Matrix(ProjectiveTransformation2D.INHOM_COORDS + 1,
@@ -883,7 +877,7 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation.setA(badA);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -935,7 +929,7 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation.setRotation(null);
             fail("NullPointerException expected but not thrown");
-        } catch (NullPointerException e) { }
+        } catch (NullPointerException ignore) { }
     }
     
     @Test
@@ -1092,7 +1086,7 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation.setTranslation(badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
    @Test
@@ -1155,7 +1149,7 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation.addTranslation(badTranslation);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
    
     @Test
@@ -1387,7 +1381,7 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation.asMatrix(badT);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
    
     @Test
@@ -1427,8 +1421,7 @@ public class ProjectiveTransformation2DTest {
         //check correctness
         assertTrue(point.equals(expectedPoint, ABSOLUTE_ERROR));        
     }
-    
-        
+
     @Test
     public void testTransformPoints() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1443,8 +1436,8 @@ public class ProjectiveTransformation2DTest {
                 new ProjectiveTransformation2D(T);
         
         
-        ArrayList<Point2D> inputPoints = new ArrayList<Point2D>(size);
-        ArrayList<Point2D> expectedPoints = new ArrayList<Point2D>(size);
+        ArrayList<Point2D> inputPoints = new ArrayList<>(size);
+        ArrayList<Point2D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                     Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -1462,7 +1455,7 @@ public class ProjectiveTransformation2DTest {
 
         
         List<Point2D> outPoints1 = transformation.transformPointsAndReturnNew(inputPoints);
-        List<Point2D> outPoints2 = new ArrayList<Point2D>();
+        List<Point2D> outPoints2 = new ArrayList<>();
         transformation.transformPoints(inputPoints, outPoints2);
                 
         //check correctness
@@ -1493,8 +1486,8 @@ public class ProjectiveTransformation2DTest {
                 new ProjectiveTransformation2D(T);
         
         
-        ArrayList<Point2D> inputPoints = new ArrayList<Point2D>(size);
-        ArrayList<Point2D> expectedPoints = new ArrayList<Point2D>(size);
+        ArrayList<Point2D> inputPoints = new ArrayList<>(size);
+        ArrayList<Point2D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                     Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -1524,7 +1517,7 @@ public class ProjectiveTransformation2DTest {
     }      
     
     @Test
-    public void testTransformConic() throws WrongSizeException, 
+    public void testTransformConic() throws AlgebraException,
             NonSymmetricMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1588,11 +1581,90 @@ public class ProjectiveTransformation2DTest {
         assertEquals(expectedConic.getE(), conic.getE(), ABSOLUTE_ERROR);
         assertEquals(expectedConic.getF(), conic.getF(), ABSOLUTE_ERROR);        
     }
-    
+
     @Test
-    public void tesTransformDualConic() throws WrongSizeException, 
-        NonSymmetricMatrixException, RankDeficientMatrixException, 
-        DecomposerException, AlgebraException {
+    public void testTransformConicAndPoints() throws AlgebraException,
+            GeometryException {
+        //create Conic from 5 points
+        Conic conic = null;
+        Point2D point1, point2, point3, point4, point5;
+        do {
+            Matrix m = Matrix.createWithUniformRandomValues(5, HOM_COORDS,
+                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+            point1 = new HomogeneousPoint2D(m.getElementAt(0, 0),
+                    m.getElementAt(0, 1), 1.0);
+            point2 = new HomogeneousPoint2D(m.getElementAt(1, 0),
+                    m.getElementAt(1, 1), 1.0);
+            point3 = new HomogeneousPoint2D(m.getElementAt(2, 0),
+                    m.getElementAt(2, 1), 1.0);
+            point4 = new HomogeneousPoint2D(m.getElementAt(3, 0),
+                    m.getElementAt(3, 1), 1.0);
+            point5 = new HomogeneousPoint2D(m.getElementAt(4, 0),
+                    m.getElementAt(4, 1), 1.0);
+
+
+            try {
+                conic = new Conic(point1, point2, point3, point4, point5);
+            } catch (GeometryException ignore) { }
+        } while (conic == null);
+
+        //check that points belong to conic
+        assertTrue(conic.isLocus(point1, ABSOLUTE_ERROR));
+        assertTrue(conic.isLocus(point2, ABSOLUTE_ERROR));
+        assertTrue(conic.isLocus(point3, ABSOLUTE_ERROR));
+        assertTrue(conic.isLocus(point4, ABSOLUTE_ERROR));
+        assertTrue(conic.isLocus(point5, ABSOLUTE_ERROR));
+
+        //create transformation
+        Matrix T;
+        LUDecomposer luDecomposer = new LUDecomposer();
+        do {
+            T = Matrix.createWithUniformRandomValues(
+                    ProjectiveTransformation2D.HOM_COORDS,
+                    ProjectiveTransformation2D.HOM_COORDS, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
+            luDecomposer.setInputMatrix(T);
+            luDecomposer.decompose();
+        } while (luDecomposer.isSingular());
+
+        ProjectiveTransformation2D transformation =
+                new ProjectiveTransformation2D(T);
+
+        //compute expected value
+        Conic expectedConic = new Conic();
+        transformConic(conic, expectedConic, transformation);
+        expectedConic.normalize();
+
+        //transform conic and points
+        Conic outConic = transformation.transformAndReturnNew(conic);
+        Point2D outPoint1 = transformation.transformAndReturnNew(point1);
+        Point2D outPoint2 = transformation.transformAndReturnNew(point2);
+        Point2D outPoint3 = transformation.transformAndReturnNew(point3);
+        Point2D outPoint4 = transformation.transformAndReturnNew(point4);
+        Point2D outPoint5 = transformation.transformAndReturnNew(point5);
+
+        //check that transformed points still belong to transformed conic
+        assertTrue(outConic.isLocus(outPoint1, ABSOLUTE_ERROR));
+        assertTrue(outConic.isLocus(outPoint2, ABSOLUTE_ERROR));
+        assertTrue(outConic.isLocus(outPoint3, ABSOLUTE_ERROR));
+        assertTrue(outConic.isLocus(outPoint4, ABSOLUTE_ERROR));
+        assertTrue(outConic.isLocus(outPoint5, ABSOLUTE_ERROR));
+
+        //check conic correctness
+        outConic.normalize();
+
+        assertEquals(expectedConic.getA(), outConic.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedConic.getB(), outConic.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedConic.getC(), outConic.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedConic.getD(), outConic.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedConic.getE(), outConic.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedConic.getF(), outConic.getF(), ABSOLUTE_ERROR);
+    }
+
+    @Test
+    public void tesTransformDualConic() throws NonSymmetricMatrixException,
+            AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -1678,12 +1750,99 @@ public class ProjectiveTransformation2DTest {
                 ABSOLUTE_ERROR);
         assertEquals(expectedDualConic.getF(), dualConic.getF(), 
                 ABSOLUTE_ERROR);        
-    }    
+    }
+
+    @Test
+    public void testTransformDualConicAndLines() throws AlgebraException,
+            GeometryException {
+        //create dual conic from 5 lines
+        DualConic dualConic = null;
+        Line2D line1, line2, line3, line4, line5;
+        do {
+            Matrix m = Matrix.createWithUniformRandomValues(5, HOM_COORDS,
+                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            line1 = new Line2D(m.getElementAt(0, 0),
+                    m.getElementAt(0, 1),
+                    m.getElementAt(0, 2));
+            line2 = new Line2D(m.getElementAt(1, 0),
+                    m.getElementAt(1, 1),
+                    m.getElementAt(1, 2));
+            line3 = new Line2D(m.getElementAt(2, 0),
+                    m.getElementAt(2, 1),
+                    m.getElementAt(2, 2));
+            line4 = new Line2D(m.getElementAt(3, 0),
+                    m.getElementAt(3, 1),
+                    m.getElementAt(3, 2));
+            line5 = new Line2D(m.getElementAt(4, 0),
+                    m.getElementAt(4, 1),
+                    m.getElementAt(4, 2));
+
+            line1.normalize();
+            line2.normalize();
+            line3.normalize();
+            line4.normalize();
+            line5.normalize();
+
+            try {
+                dualConic = new DualConic(line1, line2, line3, line4, line5);
+            } catch (GeometryException ignore) { }
+        } while (dualConic == null);
+
+        //check that lines belong to dual conic
+        assertTrue(dualConic.isLocus(line1, ABSOLUTE_ERROR));
+        assertTrue(dualConic.isLocus(line2, ABSOLUTE_ERROR));
+        assertTrue(dualConic.isLocus(line3, ABSOLUTE_ERROR));
+        assertTrue(dualConic.isLocus(line4, ABSOLUTE_ERROR));
+        assertTrue(dualConic.isLocus(line5, ABSOLUTE_ERROR));
+
+        //create transformation
+        Matrix T;
+        LUDecomposer luDecomposer = new LUDecomposer();
+        do {
+            T = Matrix.createWithUniformRandomValues(
+                    ProjectiveTransformation2D.HOM_COORDS,
+                    ProjectiveTransformation2D.HOM_COORDS, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
+            luDecomposer.setInputMatrix(T);
+            luDecomposer.decompose();
+        } while (luDecomposer.isSingular());
+
+        ProjectiveTransformation2D transformation =
+                new ProjectiveTransformation2D(T);
+
+        //compute expected value
+        DualConic expectedDualConic = new DualConic();
+        transformDualConic(dualConic, expectedDualConic, transformation);
+        expectedDualConic.normalize();
+
+        //transform dual conic and lines
+        DualConic outDualConic = transformation.transformAndReturnNew(dualConic);
+        Line2D outLine1 = transformation.transformAndReturnNew(line1);
+        Line2D outLine2 = transformation.transformAndReturnNew(line2);
+        Line2D outLine3 = transformation.transformAndReturnNew(line3);
+        Line2D outLine4 = transformation.transformAndReturnNew(line4);
+        Line2D outLine5 = transformation.transformAndReturnNew(line5);
+
+        //check that transformed lines still belong to transformed dual conic
+        assertTrue(outDualConic.isLocus(outLine1, ABSOLUTE_ERROR));
+        assertTrue(outDualConic.isLocus(outLine2, ABSOLUTE_ERROR));
+        assertTrue(outDualConic.isLocus(outLine3, ABSOLUTE_ERROR));
+        assertTrue(outDualConic.isLocus(outLine4, ABSOLUTE_ERROR));
+        assertTrue(outDualConic.isLocus(outLine5, ABSOLUTE_ERROR));
+
+        //check dual conic correctness
+        outDualConic.normalize();
+
+        assertEquals(expectedDualConic.getA(), outDualConic.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getB(), outDualConic.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getC(), outDualConic.getC(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getD(), outDualConic.getD(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getE(), outDualConic.getE(), ABSOLUTE_ERROR);
+        assertEquals(expectedDualConic.getF(), outDualConic.getF(), ABSOLUTE_ERROR);
+    }
     
     @Test
-    public void testTransformLine() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            AlgebraException {
+    public void testTransformLine() throws AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] params = new double[
@@ -1735,11 +1894,77 @@ public class ProjectiveTransformation2DTest {
         assertEquals(expectedLine.getB(), line.getB(), ABSOLUTE_ERROR);
         assertEquals(expectedLine.getC(), line.getC(), ABSOLUTE_ERROR);        
     }    
-    
+
     @Test
-    public void testTransformLines() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            AlgebraException {
+    public void testTransformLineAndPoints() throws AlgebraException {
+        //create line from 2 points
+        Matrix m = Matrix.createWithUniformRandomValues(2, HOM_COORDS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        decomposer.decompose();
+
+        //ensure we create a matrix with 2 non linear dependent rows
+        while (decomposer.getRank() < 2) {
+            m = Matrix.createWithUniformRandomValues(2, HOM_COORDS,
+                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            decomposer.setInputMatrix(m);
+            decomposer.decompose();
+        }
+
+        Point2D point1 = new HomogeneousPoint2D(m.getElementAt(0, 0),
+                m.getElementAt(0, 1),
+                m.getElementAt(0, 2));
+        Point2D point2 = new HomogeneousPoint2D(m.getElementAt(1, 0),
+                m.getElementAt(1, 1),
+                m.getElementAt(1, 2));
+
+        point1.normalize();
+        point2.normalize();
+
+        Line2D line = new Line2D(point1, point2);
+
+        //check that points belong to the line
+        assertTrue(line.isLocus(point1));
+        assertTrue(line.isLocus(point2));
+
+        //create transformation
+        Matrix T;
+        LUDecomposer luDecomposer = new LUDecomposer();
+        do {
+            T = Matrix.createWithUniformRandomValues(
+                    ProjectiveTransformation2D.HOM_COORDS,
+                    ProjectiveTransformation2D.HOM_COORDS, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
+            luDecomposer.setInputMatrix(T);
+            luDecomposer.decompose();
+        } while (luDecomposer.isSingular());
+
+        ProjectiveTransformation2D transformation =
+                new ProjectiveTransformation2D(T);
+
+        Line2D expectedLine = new Line2D();
+        transformLine(line, expectedLine, transformation);
+        expectedLine.normalize();
+
+        //transform line and points
+        Line2D outLine = transformation.transformAndReturnNew(line);
+        Point2D outPoint1 = transformation.transformAndReturnNew(point1);
+        Point2D outPoint2 = transformation.transformAndReturnNew(point2);
+
+        //check that transformed points still belong to transformed line
+        assertTrue(outLine.isLocus(outPoint1));
+        assertTrue(outLine.isLocus(outPoint2));
+
+        //check line correctness
+        outLine.normalize();
+
+        assertEquals(expectedLine.getA(), outLine.getA(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getB(), outLine.getB(), ABSOLUTE_ERROR);
+        assertEquals(expectedLine.getC(), outLine.getC(), ABSOLUTE_ERROR);
+    }
+
+    @Test
+    public void testTransformLines() throws AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -1758,8 +1983,8 @@ public class ProjectiveTransformation2DTest {
         ProjectiveTransformation2D transformation = 
                 new ProjectiveTransformation2D(T);
         
-        ArrayList<Line2D> inputLines = new ArrayList<Line2D>(size);
-        ArrayList<Line2D> expectedLines = new ArrayList<Line2D>(size);
+        ArrayList<Line2D> inputLines = new ArrayList<>(size);
+        ArrayList<Line2D> expectedLines = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] params = new double[Line2D.LINE_NUMBER_PARAMS];
             randomizer.fill(params, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1775,7 +2000,7 @@ public class ProjectiveTransformation2DTest {
 
         
         List<Line2D> outLines1 = transformation.transformLinesAndReturnNew(inputLines);
-        List<Line2D> outLines2 = new ArrayList<Line2D>();
+        List<Line2D> outLines2 = new ArrayList<>();
         transformation.transformLines(inputLines, outLines2);
                 
         //check correctness
@@ -1803,9 +2028,7 @@ public class ProjectiveTransformation2DTest {
     }
     
     @Test
-    public void testTransformAndOverwriteLines() throws WrongSizeException, 
-            RankDeficientMatrixException, DecomposerException, 
-            AlgebraException {
+    public void testTransformAndOverwriteLines() throws AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -1824,8 +2047,8 @@ public class ProjectiveTransformation2DTest {
         ProjectiveTransformation2D transformation = 
                 new ProjectiveTransformation2D(T);
         
-        ArrayList<Line2D> inputLines = new ArrayList<Line2D>(size);
-        ArrayList<Line2D> expectedLines = new ArrayList<Line2D>(size);
+        ArrayList<Line2D> inputLines = new ArrayList<>(size);
+        ArrayList<Line2D> expectedLines = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] params = new double[Line2D.LINE_NUMBER_PARAMS];
             randomizer.fill(params, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1873,8 +2096,8 @@ public class ProjectiveTransformation2DTest {
         ProjectiveTransformation2D transformation = 
                 new ProjectiveTransformation2D(T);
         
-        ArrayList<Point2D> inputPoints = new ArrayList<Point2D>(size);
-        ArrayList<Point2D> expectedPoints = new ArrayList<Point2D>(size);
+        ArrayList<Point2D> inputPoints = new ArrayList<>(size);
+        ArrayList<Point2D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                     Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -1915,8 +2138,7 @@ public class ProjectiveTransformation2DTest {
     }
     
     @Test
-    public void testTransformTriangle() throws NotEnoughVerticesException, 
-        AlgebraException {
+    public void testTransformTriangle() throws AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = Triangle2D.NUM_VERTICES;
@@ -1929,8 +2151,8 @@ public class ProjectiveTransformation2DTest {
         ProjectiveTransformation2D transformation = 
                 new ProjectiveTransformation2D(T);
         
-        ArrayList<Point2D> inputPoints = new ArrayList<Point2D>(size);
-        ArrayList<Point2D> expectedPoints = new ArrayList<Point2D>(size);
+        ArrayList<Point2D> inputPoints = new ArrayList<>(size);
+        ArrayList<Point2D> expectedPoints = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double[] coords = new double[
                     Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
@@ -1982,7 +2204,7 @@ public class ProjectiveTransformation2DTest {
     }
     
     @Test
-    public void testInverse() throws WrongSizeException, AlgebraException {
+    public void testInverse() throws AlgebraException {
         
         //generate invertible matrix
         Matrix T;
@@ -2053,19 +2275,19 @@ public class ProjectiveTransformation2DTest {
         try {
             transformation.inverse();
             fail("AlgebraException expected but not thrown");
-        } catch (AlgebraException e) { }
+        } catch (AlgebraException ignore) { }
         try {
             transformation.inverseAndReturnNew();
             fail("AlgebraException expected but not thrown");
-        } catch (AlgebraException e) { }
+        } catch (AlgebraException ignore) { }
         try {
             transformation.inverse(invTransformation2);
             fail("AlgebraException expected but not thrown");
-        } catch (AlgebraException e) { }
+        } catch (AlgebraException ignore) { }
     }  
     
     @Test
-    public void testCombine() throws WrongSizeException, AlgebraException {
+    public void testCombine() throws AlgebraException {
         Matrix T1 = Matrix.createWithUniformRandomValues(
                 ProjectiveTransformation2D.HOM_COORDS, 
                 ProjectiveTransformation2D.HOM_COORDS, 
@@ -2118,7 +2340,7 @@ public class ProjectiveTransformation2DTest {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
         
-            Matrix T = null;
+            Matrix T;
             do {
                 //ensure transformation matrix is invertible
                 T = Matrix.createWithUniformRandomValues(
@@ -2384,7 +2606,7 @@ public class ProjectiveTransformation2DTest {
                         inputPoint1, inputPoint3, inputPoint4, outputPoint1, 
                         outputPoint1, outputPoint3, outputPoint4);
                 fail("CoincidentPointsException expected but not thrown");
-            } catch (CoincidentPointsException e) { }
+            } catch (CoincidentPointsException ignore) { }
             
             numValid++;
         }
@@ -2398,7 +2620,7 @@ public class ProjectiveTransformation2DTest {
         
         for (int t = 0; t < TIMES; t++) {
         
-            Matrix T = null;
+            Matrix T;
             do {
                 //ensure transformation matrix is invertible
                 T = Matrix.createWithUniformRandomValues(
@@ -2650,18 +2872,18 @@ public class ProjectiveTransformation2DTest {
                         inputPoint1, inputPoint3, inputPoint4, outputPoint1, 
                         outputPoint1, outputPoint3, outputPoint4);
                 fail("CoincidentPointsException expected but not thrown");
-            } catch (CoincidentPointsException e) { }
+            } catch (CoincidentPointsException ignore) { }
             assertNull(transformation2);
         }
     }  
     
     @Test
-    public void testSetTransformationFromLines() throws WrongSizeException, 
-        DecomposerException, CoincidentLinesException, AlgebraException {
+    public void testSetTransformationFromLines() throws CoincidentLinesException,
+            AlgebraException {
         
         for (int t = 0; t < TIMES; t++) {
         
-            Matrix T = null;
+            Matrix T;
             do {
                 //ensure transformation matrix is invertible
                 T = Matrix.createWithUniformRandomValues(
@@ -2946,18 +3168,18 @@ public class ProjectiveTransformation2DTest {
                         inputLine1, inputLine3, inputLine4, outputLine1, 
                         outputLine1, outputLine3, outputLine4);
                 fail("CoincidentLinesException expected but not thrown");
-            } catch (CoincidentLinesException e) { }
+            } catch (CoincidentLinesException ignore) { }
         }
     }    
     
     @Test
-    public void testConstructorFromLines() throws WrongSizeException, 
-        DecomposerException, CoincidentLinesException, AlgebraException {
+    public void testConstructorFromLines() throws CoincidentLinesException,
+            AlgebraException {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
         
-            Matrix T = null;
+            Matrix T;
             do {
                 //ensure transformation matrix is invertible
                 T = Matrix.createWithUniformRandomValues(
@@ -3276,7 +3498,7 @@ public class ProjectiveTransformation2DTest {
                         inputLine1, inputLine3, inputLine4, outputLine1, 
                         outputLine1, outputLine3, outputLine4);
                 fail("CoincidentLinesException expected but not thrown");
-            } catch (CoincidentLinesException e) { }
+            } catch (CoincidentLinesException ignore) { }
             assertNull(transformation2);
 
             numValid++;
@@ -3323,26 +3545,29 @@ public class ProjectiveTransformation2DTest {
         Matrix invT = Utils.inverse(T);        
         norm = Utils.normF(invT);
         invT.multiplyByScalar(1.0 / norm);
-        
+        Matrix transInvT = invT.transposeAndReturnNew();
         Matrix l = Matrix.newFromArray(inputLine.asArray(), true);
         
-        outputLine.setParameters(invT.multiplyAndReturnNew(l).toArray());
+        outputLine.setParameters(transInvT.multiplyAndReturnNew(l).toArray());
     }
     
     private static void transformConic(Conic inputConic, Conic outputConic,
             ProjectiveTransformation2D transformation) 
-            throws WrongSizeException, NonSymmetricMatrixException {
+            throws AlgebraException, NonSymmetricMatrixException {
         
         transformation.normalize();
         Matrix T = transformation.asMatrix();
-        Matrix transT = T.transposeAndReturnNew();
+        Matrix invT = Utils.inverse(T);
+        double norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
+        Matrix transInvT = invT.transposeAndReturnNew();
         
         inputConic.normalize();
         Matrix C = inputConic.asMatrix();
         
-        Matrix transC = transT.multiplyAndReturnNew(C.multiplyAndReturnNew(T));
+        Matrix transC = transInvT.multiplyAndReturnNew(C.multiplyAndReturnNew(invT));
         //normalize to increase accuracy to ensure that matrix remains symmetric
-        double norm = Utils.normF(transC);
+        norm = Utils.normF(transC);
         transC.multiplyByScalar(1.0 / norm);
         
         outputConic.setParameters(transC);
@@ -3351,22 +3576,20 @@ public class ProjectiveTransformation2DTest {
     private static void transformDualConic(DualConic inputDualConic, 
             DualConic outputDualConic, 
             ProjectiveTransformation2D transformation) 
-            throws WrongSizeException, NonSymmetricMatrixException,
-            RankDeficientMatrixException, DecomposerException {
+            throws WrongSizeException, NonSymmetricMatrixException {
         
         transformation.normalize();
         Matrix T = transformation.asMatrix();
-        
-        Matrix invT = Utils.inverse(T);        
-        double norm = Utils.normF(invT);
-        invT.multiplyByScalar(1.0 / norm);
-        Matrix transInvT = invT.transposeAndReturnNew();
-        
+        double norm = Utils.normF(T);
+        T.multiplyByScalar(1.0 / norm);
+
+        Matrix transT = T.transposeAndReturnNew();
+
         inputDualConic.normalize();
         Matrix dualC = inputDualConic.asMatrix();
         
-        Matrix transDualC = transInvT.multiplyAndReturnNew(
-                dualC.multiplyAndReturnNew(invT));
+        Matrix transDualC = T.multiplyAndReturnNew(
+                dualC.multiplyAndReturnNew(transT));
         //normalize to increase accuracy to ensure that matrix remains symmetric
         norm = Utils.normF(transDualC);
         transDualC.multiplyByScalar(1.0 / norm);        

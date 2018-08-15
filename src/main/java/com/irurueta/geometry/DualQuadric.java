@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.DualQuadric
@@ -14,7 +14,7 @@ import java.io.Serializable;
 /**
  *  This class contains implementation of a dual quadric
  */
-public class DualQuadric extends BaseQuadric implements Serializable{
+public class DualQuadric extends BaseQuadric implements Serializable {
     
     /**
      * Constructor
@@ -38,7 +38,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
      * @param j Parameter J of the quadric
      */
     public DualQuadric(double a, double b, double c, double d, double e, 
-            double f, double g, double h, double i, double j){
+            double f, double g, double h, double i, double j) {
         super(a, b, c, d, e, f, g, h, i , j);
     }
     
@@ -52,7 +52,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
      * symmetric
      */
     public DualQuadric(Matrix m) throws IllegalArgumentException,
-            NonSymmetricMatrixException{
+            NonSymmetricMatrixException {
         super(m);
     }
     
@@ -75,7 +75,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
      */
     public DualQuadric(Plane plane1, Plane plane2, Plane plane3, Plane plane4,
             Plane plane5, Plane plane6, Plane plane7, Plane plane8, 
-            Plane plane9) throws CoincidentPlanesException{
+            Plane plane9) throws CoincidentPlanesException {
         setParametersFromPlanes(plane1, plane2, plane3, plane4, plane5, plane6,
                 plane7, plane8, plane9);
     }
@@ -94,11 +94,11 @@ public class DualQuadric extends BaseQuadric implements Serializable{
      * @throws IllegalArgumentException Raised if provided threshold is negative
      */
     public boolean isLocus(Plane plane, double threshold) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
 
         if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
         
-        try{
+        try {
             normalize();
             Matrix dualQ = asMatrix();
             Matrix homPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
@@ -112,7 +112,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
             locusMatrix.multiply(homPlane);
             
             return Math.abs(locusMatrix.getElementAt(0, 0)) < threshold;
-        }catch(WrongSizeException ignore){
+        } catch(WrongSizeException ignore) {
             return false;
         }
     }
@@ -127,7 +127,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
      * otherwise.
      * @see #isLocus(Plane, double)
      */
-    public boolean isLocus(Plane plane){
+    public boolean isLocus(Plane plane) {
         return isLocus(plane, DEFAULT_LOCUS_THRESHOLD);
     }
     
@@ -140,8 +140,8 @@ public class DualQuadric extends BaseQuadric implements Serializable{
      * euclidean geometry, but it might not be the case for the geometry defined
      * by this dual quadric
      */
-    public double angleBetweenPlanes(Plane planeA, Plane planeB){
-        try{
+    public double angleBetweenPlanes(Plane planeA, Plane planeB) {
+        try {
             //retrieve quadric as matrix
             normalize();
             Matrix dualQ = asMatrix();
@@ -179,7 +179,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
             
             double cosTheta = angleNumerator / Math.sqrt(normA * normB);
             return Math.acos(cosTheta);
-        }catch(WrongSizeException ignore){
+        } catch (WrongSizeException ignore) {
             return 0.0; //This will never happen
         }
     }
@@ -198,8 +198,8 @@ public class DualQuadric extends BaseQuadric implements Serializable{
      * negative.
      */
     public boolean arePerpendicularPlanes(Plane planeA, Plane planeB, 
-            double threshold) throws IllegalArgumentException{
-        try{
+            double threshold) throws IllegalArgumentException {
+        try {
             //retrueve quadric as matrix
             Matrix transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);
             planeA.normalize();
@@ -226,7 +226,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
             double perpend = transHomPlaneA.getElementAt(0, 0);
             
             return Math.abs(perpend) < threshold;
-        }catch(WrongSizeException ignore){
+        } catch (WrongSizeException ignore) {
             return false; //This will never happen
         }
     }
@@ -238,7 +238,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
      * @param planeB Second plane to be checked
      * @return True if provided planes are perpendicular, false otherwise.
      */    
-    public boolean arePerpendicularPlanes(Plane planeA, Plane planeB){
+    public boolean arePerpendicularPlanes(Plane planeA, Plane planeB) {
         return arePerpendicularPlanes(planeA, planeB, 
                 DEFAULT_PERPENDICULAR_THRESHOLD);
     }
@@ -250,7 +250,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
      * quadric matrix is not complete due to wrong parameters or numerical 
      * instability
      */
-    public Quadric getQuadric() throws QuadricNotAvailableException{
+    public Quadric getQuadric() throws QuadricNotAvailableException {
         Quadric q = new Quadric();
         quadric(q);
         return q;
@@ -264,10 +264,10 @@ public class DualQuadric extends BaseQuadric implements Serializable{
      * quadric matrix is not complete due to wrong parameters or numerical
      * instability
      */
-    public void quadric(Quadric quadric) throws QuadricNotAvailableException{
+    public void quadric(Quadric quadric) throws QuadricNotAvailableException {
         
         Matrix dualQuadricMatrix = asMatrix();
-        try{
+        try {
             Matrix invMatrix = com.irurueta.algebra.Utils.inverse(
                     dualQuadricMatrix);
             
@@ -288,7 +288,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
                     invMatrix.getElementAt(2, 3));
             double j = invMatrix.getElementAt(3, 3);
             quadric.setParameters(a, b, c, d, e, f, g, h, i, j);
-        }catch(AlgebraException e){
+        } catch(AlgebraException e) {
             throw new QuadricNotAvailableException(e);
         }
     }
@@ -311,7 +311,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
     public final void setParametersFromPlanes(Plane plane1, Plane plane2,
             Plane plane3, Plane plane4, Plane plane5, Plane plane6, 
             Plane plane7, Plane plane8, Plane plane9) 
-            throws CoincidentPlanesException{
+            throws CoincidentPlanesException {
         
         //normalize planes to increase accuracy
         plane1.normalize();
@@ -324,7 +324,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
         plane8.normalize();
         plane9.normalize();
         
-        try{
+        try {
             //each plane belonging to a dual quadric follows equation:
             //p' * Q * p = 0 ==>
             //pA^2 + pB^2 + pC^2 + 2*pA*pB + 2*pA*pC + 2*pB*pC + 2*pA*pD + 
@@ -462,7 +462,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
             double[] row = new double[10];
             double rowNorm;
                         
-            for(int j = 0; j < 9; j++){
+            for (int j = 0; j < 9; j++) {
                 m.getSubmatrixAsArray(j, 0, j, 9, row);
                 rowNorm = com.irurueta.algebra.Utils.normF(row);
                 for(int i = 0; i < 10; i++) 
@@ -492,7 +492,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
             double j = V.getElementAt(9, 9);            
             
             setParameters(a, b, c, d, e, f, g, h, i, j);            
-        }catch(AlgebraException ex){
+        } catch (AlgebraException ex) {
             throw new CoincidentPlanesException(ex);
         }        
     }
@@ -506,7 +506,7 @@ public class DualQuadric extends BaseQuadric implements Serializable{
      * conic (i.e. the identity) in its top left submatrix
      * @return a canonical instance of the dual absolute quadric
      */
-    public static DualQuadric createCanonicalDualAbsoluteQuadric(){
+    public static DualQuadric createCanonicalDualAbsoluteQuadric() {
         return new DualQuadric(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
                 0.0);
     }        

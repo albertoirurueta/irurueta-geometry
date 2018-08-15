@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains implementation of
  * com.irurueta.geometry.AffineTransformation2D
@@ -705,25 +705,32 @@ public class AffineTransformation2D extends Transformation2D
      * stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      * the resulting output conic matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed because of
+     * numerical instabilities.
      */        
     @Override
     public void transform(Conic inputConic, Conic outputConic) 
-            throws NonSymmetricMatrixException {
-        //p' * C * p = 0
-        //p'*T' * C * T * p = 0
+            throws NonSymmetricMatrixException, AlgebraException {
+        //point' * conic * point = 0
+        //point' * T' * transformedConic * T * point = 0
+        //where:
+        // - transformedPoint = T * point
+
+        //Hence:
+        // transformedConic = T^-1' * conic * T^-1
         
         inputConic.normalize();
         
         Matrix C = inputConic.asMatrix();
-        Matrix T = asMatrix();
-        //normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(T);
-        T.multiplyByScalar(1.0 / norm);
-        
-        Matrix m = T.transposeAndReturnNew();
+        Matrix invT = inverseAndReturnNew().asMatrix();
+        //normalize transformation matrix invT to increase accuracy
+        double norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
+
+        Matrix m = invT.transposeAndReturnNew();
         try {
             m.multiply(C);
-            m.multiply(T);
+            m.multiply(invT);
         } catch (WrongSizeException ignore) { }
         
         //normalize resulting m matrix to increase accuracy so that it can be
@@ -748,29 +755,33 @@ public class AffineTransformation2D extends Transformation2D
     @Override
     public void transform(DualConic inputDualConic, DualConic outputDualConic) 
             throws NonSymmetricMatrixException, AlgebraException {
-        //l' * C¨* l = 0
-        //l'*(T^-1)' * C ¨* (T^-1) * p = 0
+        //line' * dualConic * line = 0
+        //line' * T^-1 * T * dualConic * T' * T^-1'* line
+
+        //Hence:
+        //transformed plane: T^-1'* line
+        //transformed dual quadric: T * dualQuadric * T'
         
         inputDualConic.normalize();
         
         Matrix dualC = inputDualConic.asMatrix();
-        Matrix invT = inverseAndReturnNew().asMatrix();
+        Matrix T = asMatrix();
         //normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(invT);
-        invT.multiplyByScalar(1.0 / norm);
-        
-        Matrix m = invT.transposeAndReturnNew();
+        double norm = Utils.normF(T);
+        T.multiplyByScalar(1.0 / norm);
+
+        Matrix transT = T.transposeAndReturnNew();
         try{
-            m.multiply(dualC);
-            m.multiply(invT);
+            T.multiply(dualC);
+            T.multiply(transT);
         }catch(WrongSizeException ignore){}
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
-        norm = Utils.normF(m);
-        m.multiplyByScalar(1.0 / norm);
+        norm = Utils.normF(T);
+        T.multiplyByScalar(1.0 / norm);
         
-        outputDualConic.setParameters(m);
+        outputDualConic.setParameters(T);
     }
 
     /**
@@ -784,22 +795,25 @@ public class AffineTransformation2D extends Transformation2D
     @Override
     public void transform(Line2D inputLine, Line2D outputLine) 
             throws AlgebraException {
-        //p' * l = 0 --> (T*p)' * (T^-1) * l = p'*T'*(T^-1)*l = 0
-        
+        //line' * point = 0 --> line' * T^-1 * T * point
+        //(line' * T^-1)*(T*point) = (T^-1'*line)'*(T*point)
+        //where:
+        //- transformedLine = T^-1'*line
+        //- transformedPoint = T*point
+
         inputLine.normalize();
         
         Matrix invT = inverseAndReturnNew().asMatrix();
-        //normalize inverse transform matrix to increase accuracy
-        double norm = Utils.normF(invT);
-        
         Matrix l = Matrix.newFromArray(inputLine.asArray());
-        
-        Matrix m = invT;
-        try {
-            m.multiply(l);        
-        } catch (WrongSizeException ignore) { }
-        
-        outputLine.setParameters(m.toArray());
+
+        //normalize transformation matrix T to increase accuracy
+        double norm = Utils.normF(invT);
+        invT.multiplyByScalar(1.0 / norm);
+
+        invT.transpose();
+        invT.multiply(l);
+
+        outputLine.setParameters(invT.toArray());
     }
     
     /**
@@ -952,103 +966,100 @@ public class AffineTransformation2D extends Transformation2D
         Matrix m = null;
         try {
             m = new Matrix(6, 7); //build matrix initialized to zero
-        } catch (WrongSizeException ignore) { }
         
-        //1st pair of points
-        double iX = inputPoint1.getHomX();
-        double iY = inputPoint1.getHomY();
-        double iW = inputPoint1.getHomW();
+            //1st pair of points
+            double iX = inputPoint1.getHomX();
+            double iY = inputPoint1.getHomY();
+            double iW = inputPoint1.getHomW();
         
-        double oX = outputPoint1.getHomX();
-        double oY = outputPoint1.getHomY();
-        double oW = outputPoint1.getHomW();
+            double oX = outputPoint1.getHomX();
+            double oY = outputPoint1.getHomY();
+            double oW = outputPoint1.getHomW();
         
-        double oWiX = oW * iX;
-        double oWiY = oW * iY;
-        double oWiW = oW * iW;
+            double oWiX = oW * iX;
+            double oWiY = oW * iY;
+            double oWiW = oW * iW;
         
-        double oXiW = oX * iW;
-        double oYiW = oY * iW;
-                
-        double norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
-                oXiW * oXiW);
+            double oXiW = oX * iW;
+            double oYiW = oY * iW;
+
+            double tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;
+            double norm = Math.sqrt(tmp + oXiW * oXiW);
         
-        m.setElementAt(0, 0, oWiX / norm);
-        m.setElementAt(0, 1, oWiY / norm);        
-        m.setElementAt(0, 4, oWiW / norm);        
-        m.setElementAt(0, 6, -oXiW / norm);
+            m.setElementAt(0, 0, oWiX / norm);
+            m.setElementAt(0, 1, oWiY / norm);
+            m.setElementAt(0, 4, oWiW / norm);
+            m.setElementAt(0, 6, -oXiW / norm);
         
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
-                oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiW * oYiW);
         
-        m.setElementAt(1, 2, oWiX / norm);
-        m.setElementAt(1, 3, oWiY / norm);        
-        m.setElementAt(1, 5, oWiW / norm);        
-        m.setElementAt(1, 6, -oYiW / norm);
+            m.setElementAt(1, 2, oWiX / norm);
+            m.setElementAt(1, 3, oWiY / norm);
+            m.setElementAt(1, 5, oWiW / norm);
+            m.setElementAt(1, 6, -oYiW / norm);
         
-        //2nd pair of points
-        iX = inputPoint2.getHomX();
-        iY = inputPoint2.getHomY();
-        iW = inputPoint2.getHomW();
+            //2nd pair of points
+            iX = inputPoint2.getHomX();
+            iY = inputPoint2.getHomY();
+            iW = inputPoint2.getHomW();
         
-        oX = outputPoint2.getHomX();
-        oY = outputPoint2.getHomY();
-        oW = outputPoint2.getHomW();
+            oX = outputPoint2.getHomX();
+            oY = outputPoint2.getHomY();
+            oW = outputPoint2.getHomW();
         
-        oWiX = oW * iX;
-        oWiY = oW * iY;
-        oWiW = oW * iW;
+            oWiX = oW * iX;
+            oWiY = oW * iY;
+            oWiW = oW * iW;
         
-        oXiW = oX * iW;
-        oYiW = oY * iW;
-                
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
-                oXiW * oXiW);
+            oXiW = oX * iW;
+            oYiW = oY * iW;
+
+            tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;
+            norm = Math.sqrt(tmp + oXiW * oXiW);
         
-        m.setElementAt(2, 0, oWiX / norm);
-        m.setElementAt(2, 1, oWiY / norm);        
-        m.setElementAt(2, 4, oWiW / norm);        
-        m.setElementAt(2, 6, -oXiW / norm);
+            m.setElementAt(2, 0, oWiX / norm);
+            m.setElementAt(2, 1, oWiY / norm);
+            m.setElementAt(2, 4, oWiW / norm);
+            m.setElementAt(2, 6, -oXiW / norm);
         
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
-                oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiW * oYiW);
         
-        m.setElementAt(3, 2, oWiX / norm);
-        m.setElementAt(3, 3, oWiY / norm);        
-        m.setElementAt(3, 5, oWiW / norm);        
-        m.setElementAt(3, 6, -oYiW / norm);
+            m.setElementAt(3, 2, oWiX / norm);
+            m.setElementAt(3, 3, oWiY / norm);
+            m.setElementAt(3, 5, oWiW / norm);
+            m.setElementAt(3, 6, -oYiW / norm);
                
-        //3rd pair of points
-        iX = inputPoint3.getHomX();
-        iY = inputPoint3.getHomY();
-        iW = inputPoint3.getHomW();
+            //3rd pair of points
+            iX = inputPoint3.getHomX();
+            iY = inputPoint3.getHomY();
+            iW = inputPoint3.getHomW();
         
-        oX = outputPoint3.getHomX();
-        oY = outputPoint3.getHomY();
-        oW = outputPoint3.getHomW();
+            oX = outputPoint3.getHomX();
+            oY = outputPoint3.getHomY();
+            oW = outputPoint3.getHomW();
         
-        oWiX = oW * iX;
-        oWiY = oW * iY;
-        oWiW = oW * iW;
+            oWiX = oW * iX;
+            oWiY = oW * iY;
+            oWiW = oW * iW;
         
-        oXiW = oX * iW;
-        oYiW = oY * iW;
-                
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
-                oXiW * oXiW);
+            oXiW = oX * iW;
+            oYiW = oY * iW;
+
+            tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;
+            norm = Math.sqrt(tmp + oXiW * oXiW);
         
-        m.setElementAt(4, 0, oWiX / norm);
-        m.setElementAt(4, 1, oWiY / norm);        
-        m.setElementAt(4, 4, oWiW / norm);        
-        m.setElementAt(4, 6, -oXiW / norm);
+            m.setElementAt(4, 0, oWiX / norm);
+            m.setElementAt(4, 1, oWiY / norm);
+            m.setElementAt(4, 4, oWiW / norm);
+            m.setElementAt(4, 6, -oXiW / norm);
         
-        norm = Math.sqrt(oWiX * oWiX + oWiY * oWiY + oWiW * oWiW +
-                oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiW * oYiW);
         
-        m.setElementAt(5, 2, oWiX / norm);
-        m.setElementAt(5, 3, oWiY / norm);        
-        m.setElementAt(5, 5, oWiW / norm);        
-        m.setElementAt(5, 6, -oYiW / norm);
+            m.setElementAt(5, 2, oWiX / norm);
+            m.setElementAt(5, 3, oWiY / norm);
+            m.setElementAt(5, 5, oWiW / norm);
+            m.setElementAt(5, 6, -oYiW / norm);
+        } catch (WrongSizeException ignore) { }
                         
         //use SVD to decompose matrix m
         Matrix V;
@@ -1112,103 +1123,126 @@ public class AffineTransformation2D extends Transformation2D
         Matrix m = null;
         try {
             m = new Matrix(6, 7); //build matrix initialized to zero
+        
+            //1st pair of lines
+            double iA = inputLine1.getA();
+            double iB = inputLine1.getB();
+            double iC = inputLine1.getC();
+        
+            double oA = outputLine1.getA();
+            double oB = outputLine1.getB();
+            double oC = outputLine1.getC();
+        
+            double oCiA = oC * iA;
+            double oCiB = oC * iB;
+
+            double oAiA = oA * iA;
+            double oAiB = oA * iB;
+            double oAiC = oA * iC;
+
+            double oBiA = oB * iA;
+            double oBiB = oB * iB;
+            double oBiC = oB * iC;
+
+            double tmp = oCiA * oCiA + oCiB * oCiB;
+            double norm = Math.sqrt(tmp +
+                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
+
+            m.setElementAt(0, 0, oCiA / norm);
+            m.setElementAt(0, 1, oCiB / norm);
+            m.setElementAt(0, 4, -oAiA / norm);
+            m.setElementAt(0, 5, -oAiB / norm);
+            m.setElementAt(0, 6, -oAiC / norm);
+
+            norm = Math.sqrt(tmp +
+                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
+
+            m.setElementAt(1, 2, oCiA / norm);
+            m.setElementAt(1, 3, oCiB / norm);
+            m.setElementAt(1, 4, -oBiA / norm);
+            m.setElementAt(1, 5, -oBiB / norm);
+            m.setElementAt(1, 6, -oBiC / norm);
+
+
+            //2nd pair of lines
+            iA = inputLine2.getA();
+            iB = inputLine2.getB();
+            iC = inputLine2.getC();
+        
+            oA = outputLine2.getA();
+            oB = outputLine2.getB();
+            oC = outputLine2.getC();
+
+            oCiA = oC * iA;
+            oCiB = oC * iB;
+
+            oAiA = oA * iA;
+            oAiB = oA * iB;
+            oAiC = oA * iC;
+
+            oBiA = oB * iA;
+            oBiB = oB * iB;
+            oBiC = oB * iC;
+
+            tmp = oCiA * oCiA + oCiB * oCiB;
+            norm = Math.sqrt(tmp +
+                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
+
+            m.setElementAt(2, 0, oCiA / norm);
+            m.setElementAt(2, 1, oCiB / norm);
+            m.setElementAt(2, 4, -oAiA / norm);
+            m.setElementAt(2, 5, -oAiB / norm);
+            m.setElementAt(2, 6, -oAiC / norm);
+
+            norm = Math.sqrt(tmp +
+                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
+
+            m.setElementAt(3, 2, oCiA / norm);
+            m.setElementAt(3, 3, oCiB / norm);
+            m.setElementAt(3, 4, -oBiA / norm);
+            m.setElementAt(3, 5, -oBiB / norm);
+            m.setElementAt(3, 6, -oBiC / norm);
+
+
+            //3rd pair of lines
+            iA = inputLine3.getA();
+            iB = inputLine3.getB();
+            iC = inputLine3.getC();
+        
+            oA = outputLine3.getA();
+            oB = outputLine3.getB();
+            oC = outputLine3.getC();
+
+            oCiA = oC * iA;
+            oCiB = oC * iB;
+
+            oAiA = oA * iA;
+            oAiB = oA * iB;
+            oAiC = oA * iC;
+
+            oBiA = oB * iA;
+            oBiB = oB * iB;
+            oBiC = oB * iC;
+
+            tmp = oCiA * oCiA + oCiB * oCiB;
+            norm = Math.sqrt(tmp +
+                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
+
+            m.setElementAt(4, 0, oCiA / norm);
+            m.setElementAt(4, 1, oCiB / norm);
+            m.setElementAt(4, 4, -oAiA / norm);
+            m.setElementAt(4, 5, -oAiB / norm);
+            m.setElementAt(4, 6, -oAiC / norm);
+
+            norm = Math.sqrt(tmp +
+                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
+
+            m.setElementAt(5, 2, oCiA / norm);
+            m.setElementAt(5, 3, oCiB / norm);
+            m.setElementAt(5, 4, -oBiA / norm);
+            m.setElementAt(5, 5, -oBiB / norm);
+            m.setElementAt(5, 6, -oBiC / norm);
         } catch (WrongSizeException ignore) { }
-        
-        //1st pair of lines
-        double iA = inputLine1.getA();
-        double iB = inputLine1.getB();
-        double iC = inputLine1.getC();
-        
-        double oA = outputLine1.getA();
-        double oB = outputLine1.getB();
-        double oC = outputLine1.getC();
-        
-        double oCiA = oC * iA;
-        double oCiB = oC * iB;
-        double oCiC = oC * iC;
-        
-        double oAiC = oA * iC;
-        double oBiC = oB * iC;
-                
-        double norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
-                oAiC * oAiC);
-        
-        m.setElementAt(0, 0, oCiA / norm);
-        m.setElementAt(0, 1, oCiB / norm);        
-        m.setElementAt(0, 4, oCiC / norm);        
-        m.setElementAt(0, 6, -oAiC / norm);
-        
-        norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
-                oBiC * oBiC);
-        
-        m.setElementAt(1, 2, oCiA / norm);
-        m.setElementAt(1, 3, oCiB / norm);        
-        m.setElementAt(1, 5, oCiC / norm);        
-        m.setElementAt(1, 6, -oBiC / norm);
-        
-        //2nd pair of lines
-        iA = inputLine2.getA();
-        iB = inputLine2.getB();
-        iC = inputLine2.getC();
-        
-        oA = outputLine2.getA();
-        oB = outputLine2.getB();
-        oC = outputLine2.getC();
-        
-        oCiA = oC * iA;
-        oCiB = oC * iB;
-        oCiC = oC * iC;
-        
-        oAiC = oA * iC;
-        oBiC = oB * iC;
-                
-        norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
-                oAiC * oAiC);
-        
-        m.setElementAt(2, 0, oCiA / norm);
-        m.setElementAt(2, 1, oCiB / norm);        
-        m.setElementAt(2, 4, oCiC / norm);        
-        m.setElementAt(2, 6, -oAiC / norm);
-        
-        norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
-                oBiC * oBiC);
-        
-        m.setElementAt(3, 2, oCiA / norm);
-        m.setElementAt(3, 3, oCiB / norm);        
-        m.setElementAt(3, 5, oCiC / norm);        
-        m.setElementAt(3, 6, -oBiC / norm);
-               
-        //3rd pair of lines
-        iA = inputLine3.getA();
-        iB = inputLine3.getB();
-        iC = inputLine3.getC();
-        
-        oA = outputLine3.getA();
-        oB = outputLine3.getB();
-        oC = outputLine3.getC();
-        
-        oCiA = oC * iA;
-        oCiB = oC * iB;
-        oCiC = oC * iC;
-        
-        oAiC = oA * iC;
-        oBiC = oB * iC;
-                
-        norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
-                oAiC * oAiC);
-        
-        m.setElementAt(4, 0, oCiA / norm);
-        m.setElementAt(4, 1, oCiB / norm);        
-        m.setElementAt(4, 4, oCiC / norm);        
-        m.setElementAt(4, 6, -oAiC / norm);
-        
-        norm = Math.sqrt(oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
-                oBiC * oBiC);
-        
-        m.setElementAt(5, 2, oCiA / norm);
-        m.setElementAt(5, 3, oCiB / norm);        
-        m.setElementAt(5, 5, oCiC / norm);        
-        m.setElementAt(5, 6, -oBiC / norm);
                         
         //use SVD to decompose matrix m
         Matrix V;
@@ -1222,24 +1256,34 @@ public class AffineTransformation2D extends Transformation2D
             V = decomposer.getV(); //V is 7x7
             
             //last column of V will contain parameters of transformation
-            double value = V.getElementAt(6, 6);                       
-            AffineTransformation2D transformation = new AffineTransformation2D();
-            transformation.A.setElementAt(0, 0, V.getElementAt(0, 6) / value);
-            transformation.A.setElementAt(0, 1, V.getElementAt(1, 6) / value);
-            transformation.A.setElementAt(1, 0, V.getElementAt(2, 6) / value);
-            transformation.A.setElementAt(1, 1, V.getElementAt(3, 6) / value);            
-            
-            transformation.translation[0] = V.getElementAt(4, 6) / value;
-            transformation.translation[1] = V.getElementAt(5, 6) / value;
-                        
-            //lines compute inverse transformation, so we need to inverse it
-            //to get the right solution
-            transformation.inverse(); //(we do it on another instance in case 
-            //that transformation inversion fails, so that original A and
-            //translation get preserved
-            
-            this.A = transformation.A;
-            this.translation = transformation.translation;            
+            double value = V.getElementAt(6, 6);
+
+            Matrix invTransA = new Matrix(AffineParameters2D.INHOM_COORDS,
+                    AffineParameters2D.INHOM_COORDS);
+            //copy former 4 elements of 7th column of V into A in row order
+            invTransA.setSubmatrix(0, 0, 1, 1,
+                    V.getSubmatrixAsArray(0, 6, 3, 6),
+                    false);
+            //normalize by scale value
+            invTransA.multiplyByScalar(1.0 / value);
+
+            //initially A contains the inverse of its transpose, so to obtain A we need
+            //to transpose it and invert it
+            invTransA.transpose();
+            Matrix A = Utils.inverse(invTransA);
+
+            Matrix invt = new Matrix(1, 2);
+            invt.setSubmatrix(0, 0, 0, 1,
+                    V.getSubmatrixAsArray(4, 6, 5, 6),
+                    false);
+            //normalize by scale value (we need to change sign as well)
+            invt.multiplyByScalar(-1.0 / value);
+            invt.transpose();
+
+            Matrix t = A.multiplyAndReturnNew(invt);
+
+            this.A = A;
+            this.translation = t.getBuffer();
         } catch (AlgebraException e) {
             throw new CoincidentLinesException(e);
         }        
