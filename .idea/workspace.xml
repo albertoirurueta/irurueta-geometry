@@ -3,29 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c6d6a1cb-41d7-401f-885d-de1ac92dc71e" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/AccuracyPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/Accuracy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/AccuracyPoint2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/Accuracy2D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/AccuracyPoint3D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/Accuracy3D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/PinholeCamera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/PinholeCamera.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/irurueta/geometry/build-info.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/irurueta/geometry/build-info.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AccuracyPoint2DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Accuracy2DTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AccuracyPoint3DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Accuracy3DTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AffineTransformation3DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AffineTransformation3DTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/EuclideanTransformation3DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/EuclideanTransformation3DTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/MetricTransformation3DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/MetricTransformation3DTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/PinholeCameraTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/PinholeCameraTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/ProjectiveTransformation3DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/ProjectiveTransformation3DTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/QuadricTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/QuadricTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/calib3d/estimators/LMSEImageOfAbsoluteConicEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/calib3d/estimators/LMSEImageOfAbsoluteConicEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/calib3d/estimators/PROSACRadialDistortionRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/calib3d/estimators/PROSACRadialDistortionRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MetricTransformation3DEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MetricTransformation3DEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationSlamPairedViewsSparseReconstructorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationSlamPairedViewsSparseReconstructorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationSlamSparseReconstructorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/AbsoluteOrientationSlamSparseReconstructorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Accuracy3DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Accuracy3DTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -57,35 +36,38 @@
       <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+            <state relative-caret-position="135">
+              <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MetricTransformation3DTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/MetricTransformation3DTest.java">
+      <file leaf-file-name="Accuracy2DTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Accuracy2DTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="25110">
-              <caret line="1693" selection-start-line="1693" selection-end-line="1693" />
+            <state relative-caret-position="17">
+              <caret line="120" column="34" lean-forward="true" selection-start-line="120" selection-start-column="34" selection-end-line="120" selection-end-column="34" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LMSEImageOfAbsoluteConicEstimatorTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/calib3d/estimators/LMSEImageOfAbsoluteConicEstimatorTest.java">
+      <file leaf-file-name="Accuracy3DTest.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Accuracy3DTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="41955">
-              <caret line="2835" column="32" selection-start-line="2835" selection-start-column="32" selection-end-line="2835" selection-end-column="32" />
+            <state relative-caret-position="560">
+              <caret line="330" column="54" selection-start-line="330" selection-start-column="54" selection-end-line="330" selection-end-column="54" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SlamPairedViewsSparseReconstructorTest.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java">
+      <file leaf-file-name="AffineParameters2DTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AffineParameters2DTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="94">
-              <caret line="4383" column="71" selection-start-line="4383" selection-start-column="71" selection-end-line="4383" selection-end-column="71" />
+            <state relative-caret-position="75">
+              <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -165,7 +147,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/calib3d/DualAbsoluteQuadricTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/Quadric.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/Transformation3D.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/Ellipsoid.java" />
@@ -216,6 +197,7 @@
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/MetricTransformation3DTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/calib3d/estimators/LMSEImageOfAbsoluteConicEstimatorTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Accuracy3DTest.java" />
       </list>
     </option>
   </component>
@@ -253,18 +235,12 @@
           <item name="com.irurueta:irurueta-geometry" type="9519ce18:MavenProjectsStructure$ProjectNode" />
           <item name="Dependencies" type="f4be9f2a:MavenProjectsStructure$DependenciesNode" />
         </path>
-        <path>
-          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="com.irurueta:irurueta-geometry" type="9519ce18:MavenProjectsStructure$ProjectNode" />
-          <item name="Dependencies" type="f4be9f2a:MavenProjectsStructure$DependenciesNode" />
-          <item name="com.irurueta:irurueta-numerical:1.0-SNAPSHOT" type="c0821a7e:MavenProjectsStructure$DependencyNode" />
-        </path>
       </expand>
       <select />
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="69" />
+    <option name="x" value="-360" />
     <option name="y" value="23" />
     <option name="width" value="1377" />
     <option name="height" value="877" />
@@ -276,6 +252,7 @@
     <panes>
       <pane id="AndroidView" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -305,14 +282,6 @@
               <item name="irurueta-geometry" type="b2602c69:ProjectViewProjectNode" />
               <item name="irurueta-geometry" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="geometry" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="irurueta-geometry" type="b2602c69:ProjectViewProjectNode" />
-              <item name="irurueta-geometry" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -334,7 +303,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -369,27 +337,50 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.SlamPairedViewsSparseReconstructorTest">
+  <component name="RunManager" selected="JUnit.Accuracy3DTest">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     </configuration>
-    <configuration name="AbsoluteOrientationSlamSparseReconstructorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Accuracy3DTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="irurueta-geometry" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.irurueta.geometry.sfm.*" />
+          <option name="PATTERN" value="com.irurueta.geometry.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="com.irurueta.geometry.sfm" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.sfm.AbsoluteOrientationSlamSparseReconstructorTest" />
+      <option name="PACKAGE_NAME" value="com.irurueta.geometry" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.Accuracy3DTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+    </configuration>
+    <configuration name="Accuracy3DTest.testFlattenTo2D" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="irurueta-geometry" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.irurueta.geometry.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.irurueta.geometry" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.Accuracy3DTest" />
+      <option name="METHOD_NAME" value="testFlattenTo2D" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -434,29 +425,6 @@
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="com.irurueta.geometry" />
       <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.MetricTransformation3DTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <patterns />
-    </configuration>
-    <configuration name="QuadricTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="irurueta-geometry" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.irurueta.geometry.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="com.irurueta.geometry" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.QuadricTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
@@ -660,19 +628,19 @@
       <predefined_log_file id="idea.log" enabled="true" />
     </configuration>
     <list>
-      <item itemvalue="JUnit.AbsoluteOrientationSlamSparseReconstructorTest" />
-      <item itemvalue="JUnit.QuadricTest" />
       <item itemvalue="JUnit.MetricTransformation3DTest" />
       <item itemvalue="JUnit.LMSEImageOfAbsoluteConicEstimatorTest" />
       <item itemvalue="JUnit.SlamPairedViewsSparseReconstructorTest" />
+      <item itemvalue="JUnit.Accuracy3DTest.testFlattenTo2D" />
+      <item itemvalue="JUnit.Accuracy3DTest" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.Accuracy3DTest" />
+        <item itemvalue="JUnit.Accuracy3DTest.testFlattenTo2D" />
         <item itemvalue="JUnit.SlamPairedViewsSparseReconstructorTest" />
         <item itemvalue="JUnit.LMSEImageOfAbsoluteConicEstimatorTest" />
         <item itemvalue="JUnit.MetricTransformation3DTest" />
-        <item itemvalue="JUnit.QuadricTest" />
-        <item itemvalue="JUnit.AbsoluteOrientationSlamSparseReconstructorTest" />
       </list>
     </recent_temporary>
   </component>
@@ -763,7 +731,9 @@
       <workItem from="1534492242022" duration="372000" />
       <workItem from="1534530740340" duration="4584000" />
       <workItem from="1534603314282" duration="10705000" />
-      <workItem from="1534796677281" duration="598000" />
+      <workItem from="1534796677281" duration="957000" />
+      <workItem from="1534798511718" duration="114000" />
+      <workItem from="1534800397116" duration="1139000" />
     </task>
     <servers />
   </component>
@@ -800,10 +770,10 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="283302000" />
+    <option name="totallyTimeSpent" value="284914000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1400" y="193" width="1377" height="877" extended-state="0" />
+    <frame x="-360" y="23" width="1377" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
@@ -812,30 +782,30 @@
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.3299566" />
-      <window_info anchor="right" id="Maven Projects" order="4" weight="0.32893652" />
+      <window_info anchor="right" id="Maven Projects" order="4" weight="0.32883894" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32948717" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.28589743" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32948717" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Designer" order="4" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4847397" visible="true" weight="0.24269663" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4847397" visible="true" weight="0.25018728" />
       <window_info anchor="right" id="Database" order="8" weight="0.32893652" />
       <window_info id="Structure" order="7" sideWeight="0.51526034" side_tool="true" weight="0.23962805" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="5" />
       <window_info anchor="right" id="Theme Preview" order="7" />
-      <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.31282052" />
+      <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.32564104" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32692307" />
       <window_info id="Nl-Palette" order="1" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="right" id="Properties" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32692307" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -872,13 +842,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/ConicTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="722">
-          <caret line="1037" column="77" selection-start-line="1037" selection-start-column="77" selection-end-line="1037" selection-end-column="77" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/DualConicTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="445">
@@ -1068,13 +1031,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Accuracy2DTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="56" column="19" lean-forward="true" selection-start-line="56" selection-start-column="19" selection-end-line="56" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/irurueta/geometry/Ellipse.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -1097,13 +1053,6 @@
             <element signature="e#3759#3760#0" expanded="true" />
             <element signature="e#3811#3812#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Accuracy3DTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="20" column="60" selection-start-line="20" selection-start-column="60" selection-end-line="20" selection-end-column="60" />
         </state>
       </provider>
     </entry>
@@ -1198,13 +1147,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/QuadricTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="249">
@@ -1212,24 +1154,55 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/MetricTransformation3DTest.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25110">
-          <caret line="1693" selection-start-line="1693" selection-end-line="1693" />
+        <state relative-caret-position="79">
+          <caret line="4382" column="74" lean-forward="true" selection-start-line="4382" selection-start-column="74" selection-end-line="4382" selection-end-column="74" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/calib3d/estimators/LMSEImageOfAbsoluteConicEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="41955">
+        <state relative-caret-position="15">
           <caret line="2835" column="32" selection-start-line="2835" selection-start-column="32" selection-end-line="2835" selection-end-column="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/sfm/SlamPairedViewsSparseReconstructorTest.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/MetricTransformation3DTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
-          <caret line="4383" column="71" selection-start-line="4383" selection-start-column="71" selection-end-line="4383" selection-end-column="71" />
+        <state relative-caret-position="15">
+          <caret line="1693" selection-start-line="1693" selection-end-line="1693" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AffineParameters2DTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Accuracy2DTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="120" column="34" lean-forward="true" selection-start-line="120" selection-start-column="34" selection-end-line="120" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Accuracy3DTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="330" column="54" selection-start-line="330" selection-start-column="54" selection-end-line="330" selection-end-column="54" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

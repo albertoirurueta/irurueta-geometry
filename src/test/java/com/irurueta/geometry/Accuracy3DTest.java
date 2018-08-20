@@ -312,6 +312,12 @@ public class Accuracy3DTest {
                 semiAxesLengths[i] = previous + randomizer.nextDouble();
                 previous = semiAxesLengths[i];
             }
+
+            double[] sqrSemiAxesLengths = new double[Ellipsoid.DIMENSIONS];
+            for (int i = 0; i < Ellipsoid.DIMENSIONS; i++) {
+                sqrSemiAxesLengths[i] = semiAxesLengths[i] * semiAxesLengths[i];
+            }
+
             double roll = Utils.convertToRadians(randomizer.nextDouble(
                     MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
             double pitch = Utils.convertToRadians(randomizer.nextDouble(
@@ -322,7 +328,7 @@ public class Accuracy3DTest {
 
             Matrix rotationMatrix = rotation.asInhomogeneousMatrix();
             Matrix covarianceMatrix = rotationMatrix.multiplyAndReturnNew(
-                    Matrix.diagonal(semiAxesLengths).multiplyAndReturnNew(rotationMatrix));
+                    Matrix.diagonal(sqrSemiAxesLengths).multiplyAndReturnNew(rotationMatrix));
 
             Accuracy3D accuracy = new Accuracy3D(covarianceMatrix);
 
