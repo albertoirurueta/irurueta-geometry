@@ -2820,16 +2820,36 @@ public class LMSEImageOfAbsoluteConicEstimatorTest implements
             iac.normalize();
             iac2.normalize();
 
+            if (Math.abs(Math.abs(iac.getA()) - Math.abs(iac2.getA())) > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(Math.abs(iac.getA()), Math.abs(iac2.getA()), 
                     VERY_LARGE_ABSOLUTE_ERROR);
+
             assertEquals(iac.getB(), 0.0, 0.0);
             assertEquals(iac2.getB(), 0.0, 0.0);
+
+            if (Math.abs(Math.abs(iac.getC()) - Math.abs(iac2.getC())) > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(Math.abs(iac.getC()), Math.abs(iac2.getC()), 
                     VERY_LARGE_ABSOLUTE_ERROR);
+
+            if (Math.abs(Math.abs(iac.getD()) - Math.abs(iac2.getD())) > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(Math.abs(iac.getD()), Math.abs(iac2.getD()), 
                     VERY_LARGE_ABSOLUTE_ERROR);
+
+            if (Math.abs(Math.abs(iac.getE()) - Math.abs(iac2.getE())) > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(Math.abs(iac.getE()), Math.abs(iac2.getE()), 
                     VERY_LARGE_ABSOLUTE_ERROR);
+
+            if (Math.abs(Math.abs(iac.getF()) - Math.abs(iac2.getF())) > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(Math.abs(iac.getF()), Math.abs(iac2.getF()), 
                     VERY_LARGE_ABSOLUTE_ERROR);
             

@@ -46,6 +46,21 @@ public class EuclideanTransformation3DTest {
     private static final double MIN_TRANSLATION2 = -100.0;
     private static final double MAX_TRANSLATION2 = 100.0;
 
+    private static final double MIN_RANDOM_POINT_VALUE = 50.0;
+    private static final double MAX_RANDOM_POINT_VALUE = 100.0;
+
+    private static final double MIN_FOCAL_LENGTH = 110.0;
+    private static final double MAX_FOCAL_LENGTH = 130.0;
+
+    private static final double MIN_SKEWNESS = -0.001;
+    private static final double MAX_SKEWNESS = 0.001;
+
+    private static final double MIN_PRINCIPAL_POINT = 0.0;
+    private static final double MAX_PRINCIPAL_POINT = 100.0;
+
+    private static final double MIN_ANGLE_DEGREES3 = 10.0;
+    private static final double MAX_ANGLE_DEGREES3 = 15.0;
+
     private static final int TIMES = 50;
     
     public EuclideanTransformation3DTest() { }
@@ -1610,9 +1625,9 @@ public class EuclideanTransformation3DTest {
         Plane plane = new Plane(point1, point2, point3);
 
         //check that points belong to the plane
-        assertTrue(plane.isLocus(point1));
-        assertTrue(plane.isLocus(point2));
-        assertTrue(plane.isLocus(point3));
+        assertTrue(plane.isLocus(point1, ABSOLUTE_ERROR));
+        assertTrue(plane.isLocus(point2, ABSOLUTE_ERROR));
+        assertTrue(plane.isLocus(point3, ABSOLUTE_ERROR));
 
         //create transformation
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -2291,6 +2306,145 @@ public class EuclideanTransformation3DTest {
         assertTrue(p1.equals(p2, ABSOLUTE_ERROR));
         assertTrue(p1.equals(p3, ABSOLUTE_ERROR));
         assertTrue(p1.equals(p4, ABSOLUTE_ERROR));        
+    }
+
+    @Test
+    public void testTransformCameraAndPoints() throws AlgebraException,
+            GeometryException {
+        int numValid = 0;
+        for (int t = 0; t < TIMES; t++) {
+            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+
+            //create intrinsic parameters
+            double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
+                    MAX_FOCAL_LENGTH);
+            double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
+                    MAX_FOCAL_LENGTH);
+            double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+            double horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT,
+                    MAX_PRINCIPAL_POINT);
+            double verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT,
+                    MAX_PRINCIPAL_POINT);
+
+            PinholeCameraIntrinsicParameters intrinsic =
+                    new PinholeCameraIntrinsicParameters(horizontalFocalLength,
+                            verticalFocalLength, horizontalPrincipalPoint,
+                            verticalPrincipalPoint, skewness);
+
+            //create rotation parameters
+            double alphaEuler = com.irurueta.geometry.Utils.convertToRadians(
+                    randomizer.nextDouble(MIN_ANGLE_DEGREES3, MAX_ANGLE_DEGREES3));
+            double betaEuler = com.irurueta.geometry.Utils.convertToRadians(
+                    randomizer.nextDouble(MIN_ANGLE_DEGREES3, MAX_ANGLE_DEGREES3));
+            double gammaEuler = com.irurueta.geometry.Utils.convertToRadians(
+                    randomizer.nextDouble(MIN_ANGLE_DEGREES3, MAX_ANGLE_DEGREES3));
+
+            MatrixRotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
+                    gammaEuler);
+
+            //create camra center
+            Point3D cameraCenter = new InhomogeneousPoint3D(
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
+
+            PinholeCamera camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
+
+            //normalize camera to improve accuracy
+            camera.normalize();
+
+            //create 6 random point correspondences
+            Point3D point3D1 = new InhomogeneousPoint3D(
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
+            Point3D point3D2 = new InhomogeneousPoint3D(
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
+            Point3D point3D3 = new InhomogeneousPoint3D(
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
+            Point3D point3D4 = new InhomogeneousPoint3D(
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
+            Point3D point3D5 = new InhomogeneousPoint3D(
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
+            Point3D point3D6 = new InhomogeneousPoint3D(
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
+
+            Point2D point2D1 = camera.project(point3D1);
+            Point2D point2D2 = camera.project(point3D2);
+            Point2D point2D3 = camera.project(point3D3);
+            Point2D point2D4 = camera.project(point3D4);
+            Point2D point2D5 = camera.project(point3D5);
+            Point2D point2D6 = camera.project(point3D6);
+
+            //create transformation
+            double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+            randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            //normalize axis
+            double norm = Utils.normF(rotAxis);
+            ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
+
+            Rotation3D rotation2 = Rotation3D.create(rotAxis, theta);
+
+            double[] translation = new double[
+                    EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
+            randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+
+            EuclideanTransformation3D transformation =
+                    new EuclideanTransformation3D(rotation2, translation);
+
+            //transform camera and points
+            PinholeCamera outCamera = transformation.transformAndReturnNew(camera);
+            Point3D outPoint3D1 = transformation.transformAndReturnNew(point3D1);
+            Point3D outPoint3D2 = transformation.transformAndReturnNew(point3D2);
+            Point3D outPoint3D3 = transformation.transformAndReturnNew(point3D3);
+            Point3D outPoint3D4 = transformation.transformAndReturnNew(point3D4);
+            Point3D outPoint3D5 = transformation.transformAndReturnNew(point3D5);
+            Point3D outPoint3D6 = transformation.transformAndReturnNew(point3D6);
+
+            Point2D outPoint2D1 = outCamera.project(outPoint3D1);
+            Point2D outPoint2D2 = outCamera.project(outPoint3D2);
+            Point2D outPoint2D3 = outCamera.project(outPoint3D3);
+            Point2D outPoint2D4 = outCamera.project(outPoint3D4);
+            Point2D outPoint2D5 = outCamera.project(outPoint3D5);
+            Point2D outPoint2D6 = outCamera.project(outPoint3D6);
+
+            outCamera.decompose();
+
+            Point3D outCameraCenter = transformation.transformAndReturnNew(cameraCenter);
+            Point3D outCameraCenter2 = outCamera.getCameraCenter();
+
+            //check that projection of transformed points on transformed camera does
+            //not change projected points
+            assertTrue(outPoint2D1.equals(point2D1, ABSOLUTE_ERROR));
+            assertTrue(outPoint2D2.equals(point2D2, ABSOLUTE_ERROR));
+            assertTrue(outPoint2D3.equals(point2D3, ABSOLUTE_ERROR));
+            assertTrue(outPoint2D4.equals(point2D4, ABSOLUTE_ERROR));
+            assertTrue(outPoint2D5.equals(point2D5, ABSOLUTE_ERROR));
+            assertTrue(outPoint2D6.equals(point2D6, ABSOLUTE_ERROR));
+
+            //check that camera center has been transformed
+            if (!outCameraCenter.equals(outCameraCenter2, ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(outCameraCenter.equals(outCameraCenter2, ABSOLUTE_ERROR));
+
+            numValid++;
+            break;
+        }
+
+        assertTrue(numValid > 0);
     }
         
     @Test

@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains unit tests for
  * com.irurueta.geometry.estimators.PROSACRadialDistortionRobustEstimator
@@ -31,51 +31,51 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class PROSACRadialDistortionRobustEstimatorTest implements 
-        RadialDistortionRobustEstimatorListener{
+        RadialDistortionRobustEstimatorListener {
     
-    public static final double MIN_POINT_VALUE = -1.0;
-    public static final double MAX_POINT_VALUE = 1.0;    
+    private static final double MIN_POINT_VALUE = -1.0;
+    private static final double MAX_POINT_VALUE = 1.0;
     
-    public static final double MIN_PARAM_VALUE = -1e-4;
-    public static final double MAX_PARAM_VALUE = 1e-4;    
+    private static final double MIN_PARAM_VALUE = -1e-4;
+    private static final double MAX_PARAM_VALUE = 1e-4;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;        
+    private static final double ABSOLUTE_ERROR = 1e-8;
     
-    public static final int MIN_NUM_POINTS = 500;
-    public static final int MAX_NUM_POINTS = 1000;
+    private static final int MIN_NUM_POINTS = 500;
+    private static final int MAX_NUM_POINTS = 1000;
     
-    public static final double THRESHOLD = 1e-8;
+    private static final double THRESHOLD = 1e-8;
     
-    public static final double MIN_SCORE_ERROR = -0.3;
-    public static final double MAX_SCORE_ERROR = 0.3;        
+    private static final double MIN_SCORE_ERROR = -0.3;
+    private static final double MAX_SCORE_ERROR = 0.3;
     
-    public static final double STD_ERROR = 100.0;
+    private static final double STD_ERROR = 100.0;
     
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
     private int estimateStart;
     private int estimateEnd;
     private int estimateNextIteration;
     private int estimateProgressChange;
     
-    public PROSACRadialDistortionRobustEstimatorTest() {}
+    public PROSACRadialDistortionRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         //test constructor without parameters
         PROSACRadialDistortionRobustEstimator estimator =
                 new PROSACRadialDistortionRobustEstimator();
@@ -160,8 +160,8 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //test constructor with points
-        List<Point2D> distortedPoints = new ArrayList<Point2D>();
-        List<Point2D> undistortedPoints = new ArrayList<Point2D>();
+        List<Point2D> distortedPoints = new ArrayList<>();
+        List<Point2D> undistortedPoints = new ArrayList<>();
         for(int i = 0; i < RadialDistortionRobustEstimator.MIN_NUMBER_OF_POINTS; i++){
             distortedPoints.add(Point2D.create());
             undistortedPoints.add(Point2D.create());
@@ -209,28 +209,28 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //Force IllegalArgumentException
-        List<Point2D> emptyPoints = new ArrayList<Point2D>();
+        List<Point2D> emptyPoints = new ArrayList<>();
         estimator = null;
-        try{
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     undistortedPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    (List<Point2D>)null, undistortedPoints);
+                    null, undistortedPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    distortedPoints, (List<Point2D>)null);
+                    distortedPoints, null);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);  
         
         //test constructor with points and listener
@@ -277,26 +277,26 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     undistortedPoints, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     emptyPoints, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    (List<Point2D>)null, undistortedPoints, this);
+                    null, undistortedPoints, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    distortedPoints, (List<Point2D>)null, this);
+                    distortedPoints, null, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
         
         //test constructor with points and center
@@ -345,26 +345,26 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     undistortedPoints, center);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     emptyPoints, center);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    (List<Point2D>)null, undistortedPoints, center);
+                    null, undistortedPoints, center);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    distortedPoints, (List<Point2D>)null, center);
+                    distortedPoints, null, center);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);  
 
         //test constructor with points, center and listener
@@ -411,26 +411,26 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     undistortedPoints, center, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     emptyPoints, center, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    (List<Point2D>)null, undistortedPoints, center, this);
+                    null, undistortedPoints, center, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    distortedPoints, (List<Point2D>)null, center, this);
+                    distortedPoints, null, center, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);      
         
         //test constructor with quality scores
@@ -480,10 +480,10 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         //Force IllegalArgumentException
         double[] emptyScores = new double[0];
         estimator = null;
-        try{
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test construtor with quality scores and listener
@@ -531,11 +531,11 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyScores, 
                     this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with points and quality scores
@@ -583,31 +583,31 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
                 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     undistortedPoints, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     emptyPoints, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
+        try {
+            estimator = new PROSACRadialDistortionRobustEstimator(
+                    null, undistortedPoints, qualityScores);
+            fail("IllegalArgumentException expected but not thrown");
+        } catch (IllegalArgumentException ignore) { }
         try{
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    (List<Point2D>)null, undistortedPoints, qualityScores);
+                    distortedPoints, null, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
-            estimator = new PROSACRadialDistortionRobustEstimator(
-                    distortedPoints, (List<Point2D>)null, qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
                     distortedPoints, undistortedPoints, emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);  
         
         //test constructor with points, quality scores and listener
@@ -655,32 +655,32 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     undistortedPoints, qualityScores, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     emptyPoints, qualityScores, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    (List<Point2D>)null, undistortedPoints, qualityScores, 
+                    null, undistortedPoints, qualityScores,
                     this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    distortedPoints, (List<Point2D>)null, qualityScores, this);
+                    distortedPoints, null, qualityScores, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
                     distortedPoints, undistortedPoints, emptyScores, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
         
         //test constructor with points, quality scores and center
@@ -728,33 +728,33 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     undistortedPoints, qualityScores, center);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     emptyPoints, qualityScores, center);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    (List<Point2D>)null, undistortedPoints, qualityScores, 
+                    null, undistortedPoints, qualityScores,
                     center);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    distortedPoints, (List<Point2D>)null, qualityScores, 
+                    distortedPoints, null, qualityScores,
                     center);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
                     distortedPoints, undistortedPoints, emptyScores, center);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);  
 
         //test constructor with points, center and listener
@@ -802,39 +802,39 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     undistortedPoints, qualityScores, center, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(emptyPoints,
                     emptyPoints, qualityScores, center, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    (List<Point2D>)null, undistortedPoints, qualityScores, 
+                    null, undistortedPoints, qualityScores,
                     center, this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
-                    distortedPoints, (List<Point2D>)null, qualityScores, center,
+                    distortedPoints, null, qualityScores, center,
                     this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACRadialDistortionRobustEstimator(
                     distortedPoints, undistortedPoints, emptyScores, center, 
                     this);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);              
     }
     
     @Test
-    public void testGetSetThreshold() throws LockedException{
+    public void testGetSetThreshold() throws LockedException {
         PROSACRadialDistortionRobustEstimator estimator =
                 new PROSACRadialDistortionRobustEstimator();
         
@@ -849,14 +849,14 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         assertEquals(estimator.getThreshold(), 10.0, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetQualityScores() throws LockedException{
+    public void testGetSetQualityScores() throws LockedException {
         PROSACRadialDistortionRobustEstimator estimator =
                 new PROSACRadialDistortionRobustEstimator();
         
@@ -873,14 +873,14 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         double[] emptyScores = new double[1];
-        try{
+        try {
             estimator.setQualityScores(emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetListener() throws LockedException{
+    public void testGetSetListener() throws LockedException {
         PROSACRadialDistortionRobustEstimator estimator =
                 new PROSACRadialDistortionRobustEstimator();
         
@@ -897,7 +897,7 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
     }
     
     @Test
-    public void testGetSetProgressDelta() throws LockedException{
+    public void testGetSetProgressDelta() throws LockedException {
         PROSACRadialDistortionRobustEstimator estimator =
                 new PROSACRadialDistortionRobustEstimator();
         
@@ -913,18 +913,18 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         assertEquals(estimator.getProgressDelta(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetConfidence() throws LockedException{
+    public void testGetSetConfidence() throws LockedException {
         PROSACRadialDistortionRobustEstimator estimator =
                 new PROSACRadialDistortionRobustEstimator();
         
@@ -939,18 +939,18 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         assertEquals(estimator.getConfidence(), 0.75, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetMaxIterations() throws LockedException{
+    public void testGetSetMaxIterations() throws LockedException {
         PROSACRadialDistortionRobustEstimator estimator =
                 new PROSACRadialDistortionRobustEstimator();
         
@@ -965,17 +965,17 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         assertEquals(estimator.getMaxIterations(), 10);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetPoints() throws LockedException{
-        List<Point2D> distortedPoints = new ArrayList<Point2D>();
-        List<Point2D> undistortedPoints = new ArrayList<Point2D>();
-        for(int i = 0; i < RadialDistortionRobustEstimator.MIN_NUMBER_OF_POINTS; i++){
+    public void testGetSetPoints() throws LockedException {
+        List<Point2D> distortedPoints = new ArrayList<>();
+        List<Point2D> undistortedPoints = new ArrayList<>();
+        for (int i = 0; i < RadialDistortionRobustEstimator.MIN_NUMBER_OF_POINTS; i++) {
             distortedPoints.add(Point2D.create());
             undistortedPoints.add(Point2D.create());
         }
@@ -1010,27 +1010,27 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //Force IllegalArgumentException
-        List<Point2D> emptyPoints = new ArrayList<Point2D>();
-        try{
+        List<Point2D> emptyPoints = new ArrayList<>();
+        try {
             estimator.setPoints(emptyPoints, undistortedPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setPoints(emptyPoints, emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
-            estimator.setPoints((List<Point2D>)null, undistortedPoints);
+        } catch (IllegalArgumentException ignore) { }
+        try {
+            estimator.setPoints(null, undistortedPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
-            estimator.setPoints(distortedPoints, (List<Point2D>)null);
+        } catch (IllegalArgumentException ignore) { }
+        try {
+            estimator.setPoints(distortedPoints, null);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetDistortionCenter() throws LockedException{
+    public void testGetSetDistortionCenter() throws LockedException {
         PROSACRadialDistortionRobustEstimator estimator =
                 new PROSACRadialDistortionRobustEstimator();
         
@@ -1046,7 +1046,7 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
     }
     
     @Test
-    public void testGetSetHorizontalFocalLength() throws LockedException{
+    public void testGetSetHorizontalFocalLength() throws LockedException {
         PROSACRadialDistortionRobustEstimator estimator =
                 new PROSACRadialDistortionRobustEstimator();
         
@@ -1062,7 +1062,7 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
     }
     
     @Test
-    public void testGetSetVerticalFocalLength() throws LockedException{
+    public void testGetSetVerticalFocalLength() throws LockedException {
         PROSACRadialDistortionRobustEstimator estimator =
                 new PROSACRadialDistortionRobustEstimator();
         
@@ -1078,7 +1078,7 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
     }
     
     @Test
-    public void testGetSetSkew() throws LockedException{
+    public void testGetSetSkew() throws LockedException {
         PROSACRadialDistortionRobustEstimator estimator =
                 new PROSACRadialDistortionRobustEstimator();
         
@@ -1094,7 +1094,7 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
     }
     
     @Test
-    public void testGetSetIntrinsic() throws LockedException{
+    public void testGetSetIntrinsic() throws LockedException {
         PROSACRadialDistortionRobustEstimator estimator =
                 new PROSACRadialDistortionRobustEstimator();
         
@@ -1111,8 +1111,8 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
                 RadialDistortionRobustEstimator.DEFAULT_SKEW, 0.0);
         
         //set new value
-        intrinsic = new PinholeCameraIntrinsicParameters(2.0, 3.0, 4.0, 5.0, 
-                6.0);
+        intrinsic = new PinholeCameraIntrinsicParameters(2.0, 3.0,
+                4.0, 5.0, 6.0);
         estimator.setIntrinsic(intrinsic);
         
         //check correctness
@@ -1123,8 +1123,8 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         assertEquals(intrinsic.getSkewness(), 6.0, 0.0);    
         
         //set again
-        estimator.setIntrinsic(new InhomogeneousPoint2D(6.0, 5.0), 4.0, 3.0, 
-                2.0);
+        estimator.setIntrinsic(new InhomogeneousPoint2D(6.0, 5.0), 4.0,
+                3.0, 2.0);
         
         //check correctness
         assertEquals(estimator.getDistortionCenter().getInhomX(), 6.0, 0.0);
@@ -1135,7 +1135,7 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
     }
     
     @Test
-    public void testGetSetNumKParams() throws LockedException{
+    public void testGetSetNumKParams() throws LockedException {
         PROSACRadialDistortionRobustEstimator estimator =
                 new PROSACRadialDistortionRobustEstimator();
 
@@ -1152,10 +1152,11 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
     
     @Test
     public void testEstimate() throws NotSupportedException, LockedException, 
-            NotReadyException, RobustEstimatorException, DistortionException{
+            NotReadyException, RobustEstimatorException, DistortionException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
-        for(int j = 0; j < TIMES; j++){
+
+        int numValid = 0;
+        for (int j = 0; j < TIMES; j++) {
             double k1 = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
             double k2 = randomizer.nextDouble(MIN_PARAM_VALUE, MAX_PARAM_VALUE);
         
@@ -1169,12 +1170,12 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
        
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            List<Point2D> distortedPointsWithError = new ArrayList<Point2D>();
-            List<Point2D> distortedPoints = new ArrayList<Point2D>();
-            List<Point2D> undistortedPoints = new ArrayList<Point2D>();
+            List<Point2D> distortedPointsWithError = new ArrayList<>();
+            List<Point2D> distortedPoints = new ArrayList<>();
+            List<Point2D> undistortedPoints = new ArrayList<>();
             double[] qualityScores = new double[nPoints];
             Point2D distortedPoint, distortedPointWithError, undistortedPoint;
-            for(int i = 0; i < nPoints; i++){
+            for (int i = 0; i < nPoints; i++) {
                 undistortedPoint = new InhomogeneousPoint2D(
                         randomizer.nextDouble(MIN_POINT_VALUE, MAX_POINT_VALUE),
                         randomizer.nextDouble(MIN_POINT_VALUE, 
@@ -1184,7 +1185,7 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
                 double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, 
                         MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //point is outlier
                     double errorX = errorRandomizer.nextDouble();
                     double errorY = errorRandomizer.nextDouble();
@@ -1194,7 +1195,7 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
                     
                     double error = Math.sqrt(errorX * errorX + errorY * errorY);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
-                }else{
+                } else {
                     //point is inlier
                     distortedPointWithError = distortedPoint;
                 }
@@ -1229,16 +1230,28 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
             assertEquals(distortion2.getK1(), k1, ABSOLUTE_ERROR);
             assertEquals(distortion2.getK2(), k2, ABSOLUTE_ERROR);
             assertEquals(distortion2.getCenter(), center);
-            
-            for(int i = 0; i < nPoints; i++){
+
+            boolean allValid = true;
+            for (int i = 0; i < nPoints; i++) {
+                if (distortedPoints.get(i).distanceTo(
+                        distortion2.distort(undistortedPoints.get(i))) > ABSOLUTE_ERROR) {
+                    allValid = false;
+                    break;
+                }
                 assertEquals(distortedPoints.get(i).distanceTo(
                         distortion2.distort(undistortedPoints.get(i))), 0.0, 
                         ABSOLUTE_ERROR);
             }
+
+            if (allValid) {
+                numValid++;
+            }
         }
+
+        assertTrue(numValid > 0);
     }
         
-    private void reset(){
+    private void reset() {
         estimateStart = estimateEnd = estimateNextIteration = 
                 estimateProgressChange = 0;
     }
@@ -1269,44 +1282,44 @@ public class PROSACRadialDistortionRobustEstimatorTest implements
         testLocked((PROSACRadialDistortionRobustEstimator)estimator);
     }
     
-    private void testLocked(PROSACRadialDistortionRobustEstimator estimator){
-        try{
+    private void testLocked(PROSACRadialDistortionRobustEstimator estimator) {
+        try {
             estimator.setConfidence(0.5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setDistortionCenter(null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setListener(this);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setMaxIterations(10);            
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setPoints(null, null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setProgressDelta(0.5f);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setThreshold(0.5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setQualityScores(null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}       
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){
-        }catch(Exception e){
+        } catch (LockedException ignore) {
+        } catch (Exception ignore) {
             fail("LockedException expected but not thrown");
         }
         assertTrue(estimator.isLocked());

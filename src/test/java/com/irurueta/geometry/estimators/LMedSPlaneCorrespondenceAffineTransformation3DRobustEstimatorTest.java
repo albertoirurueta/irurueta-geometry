@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains unit tests for
  * com.irurueta.geometry.estimators.LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
@@ -9,10 +9,8 @@
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.DecomposerException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
-import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.geometry.AffineTransformation3D;
 import com.irurueta.geometry.Plane;
 import com.irurueta.numerical.robust.RobustEstimatorException;
@@ -30,53 +28,45 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest 
-        implements AffineTransformation3DRobustEstimatorListener{
+        implements AffineTransformation3DRobustEstimatorListener {
     
-    public static final double MIN_RANDOM_VALUE = -1000.0;
-    public static final double MAX_RANDOM_VALUE = 1000.0;
+    private static final double MIN_RANDOM_VALUE = -1000.0;
+    private static final double MAX_RANDOM_VALUE = 1000.0;
     
-    public static final int INHOM_COORDS = 3;
+    private static final double ABSOLUTE_ERROR = 5e-6;
     
-    public static final double ABSOLUTE_ERROR = 5e-6;
+    private static final int MIN_PLANES = 500;
+    private static final int MAX_PLANES = 1000;
     
-    public static final int MIN_PLANES = 500;
-    public static final int MAX_PLANES = 1000;
+    private static final double STOP_THRESHOLD = 1e-6;
     
-    public static final double STOP_THRESHOLD = 1e-6;
+    private static final double STD_ERROR = 100.0;
     
-    public static final double STD_ERROR = 100.0;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final double MIN_CONFIDENCE = 0.95;
-    public static final double MAX_CONFIDENCE = 0.99;
-    
-    public static final int MIN_MAX_ITERATIONS = 500;
-    public static final int MAX_MAX_ITERATIONS = 5000;
-        
-    public static final int PERCENTAGE_OUTLIER = 20;
-    
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
 
     private int estimateStart;
     private int estimateEnd;
     private int estimateNextIteration;
     private int estimateProgressChange;
     
-    public LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest() {}
+    public LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         //test constructor without arguments
         LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
                 new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
@@ -108,9 +98,9 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
 
         
         //test constructor with planes
-        List<Plane> inputPlanes = new ArrayList<Plane>();
-        List<Plane> outputPlanes = new ArrayList<Plane>();
-        for(int i = 0; i < PlaneCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE; i++){
+        List<Plane> inputPlanes = new ArrayList<>();
+        List<Plane> outputPlanes = new ArrayList<>();
+        for (int i = 0; i < PlaneCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPlanes.add(new Plane());
             outputPlanes.add(new Plane());
         }
@@ -144,20 +134,20 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertNull(estimator.getCovariance());        
         
         //Force IllegalArgumentException
-        List<Plane> planesEmpty = new ArrayList<Plane>();
+        List<Plane> planesEmpty = new ArrayList<>();
         estimator = null;
-        try{
+        try {
             //not enough planes
             estimator = new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                     planesEmpty, planesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                     inputPlanes, planesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
 
         //test constructor with listener
@@ -220,23 +210,23 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //not enough points
             estimator = new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                     this, planesEmpty, planesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
                     this, inputPlanes, planesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);                
     }
     
     @Test
-    public void testGetSetThreshold() throws LockedException{
+    public void testGetSetThreshold() throws LockedException {
         LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
                 new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
         
@@ -252,14 +242,14 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertEquals(estimator.getStopThreshold(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setStopThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }  
     
     @Test
-    public void testGetSetConfidence() throws LockedException{
+    public void testGetSetConfidence() throws LockedException {
         LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
                 new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
@@ -275,19 +265,19 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertEquals(estimator.getConfidence(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
-        try{
+        try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }    
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException{
+    public void testGetSetMaxIterations() throws LockedException {
         LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
                 new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
@@ -303,14 +293,14 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertEquals(estimator.getMaxIterations(), 10);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetPlanesAndIsReady() throws LockedException{
+    public void testGetSetPlanesAndIsReady() throws LockedException {
         LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
                 new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
         
@@ -320,9 +310,9 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertFalse(estimator.isReady());
         
         //set new value
-        List<Plane> inputPlanes = new ArrayList<Plane>();
-        List<Plane> outputPlanes = new ArrayList<Plane>();
-        for(int i = 0; i < PlaneCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE; i++){
+        List<Plane> inputPlanes = new ArrayList<>();
+        List<Plane> outputPlanes = new ArrayList<>();
+        for (int i = 0; i < PlaneCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPlanes.add(new Plane());
             outputPlanes.add(new Plane());
         }
@@ -335,21 +325,21 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertTrue(estimator.isReady());
 
         //Force IllegalArgumentException
-        List<Plane> planesEmpty = new ArrayList<Plane>();
-        try{
+        List<Plane> planesEmpty = new ArrayList<>();
+        try {
             //not enough planes
             estimator.setPlanes(planesEmpty, planesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator.setPlanes(planesEmpty, planesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
-    public void testGetSetListenerAndIsListenerAvailable() throws LockedException{
+    public void testGetSetListenerAndIsListenerAvailable() throws LockedException {
         LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
                 new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
@@ -366,7 +356,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
     
     @Test
-    public void testGetSetProgressDelta() throws LockedException{
+    public void testGetSetProgressDelta() throws LockedException {
         LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
                 new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
@@ -382,14 +372,14 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
@@ -421,14 +411,13 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
     }    
     
     @Test
-    public void testEstimateWithoutRefinement() throws WrongSizeException, 
-            DecomposerException, LockedException, NotReadyException, 
+    public void testEstimateWithoutRefinement() throws LockedException, NotReadyException,
             RobustEstimatorException, AlgebraException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             //create an affine transformation
-            Matrix A = null;
-            do{
+            Matrix A;
+            do {
                 //ensure A matrix is invertible
                 A = Matrix.createWithUniformRandomValues(
                         AffineTransformation3D.INHOM_COORDS, 
@@ -436,7 +425,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
                 double norm = Utils.normF(A);
                 //normalize T to increase accuracy
                 A.multiplyByScalar(1.0 / norm);
-            }while(Utils.rank(A) < AffineTransformation3D.INHOM_COORDS);
+            } while (Utils.rank(A) < AffineTransformation3D.INHOM_COORDS);
             
             double[] translation = new double[
                     AffineTransformation3D.INHOM_COORDS];
@@ -448,12 +437,12 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
             
             //generate random planes
             int nPlanes = randomizer.nextInt(MIN_PLANES, MAX_PLANES);
-            List<Plane> inputPlanes = new ArrayList<Plane>();
-            List<Plane> outputPlanes = new ArrayList<Plane>();
-            List<Plane> outputPlanesWithError = new ArrayList<Plane>();
+            List<Plane> inputPlanes = new ArrayList<>();
+            List<Plane> outputPlanes = new ArrayList<>();
+            List<Plane> outputPlanesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            for(int i = 0; i < nPlanes; i++){
+            for (int i = 0; i < nPlanes; i++) {
                 Plane inputPlane = new Plane(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
@@ -461,7 +450,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
                 Plane outputPlane = transformation1.transformAndReturnNew(inputPlane);
                 Plane outputPlaneWithError;
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //line is outlier
                     double errorA = errorRandomizer.nextDouble();
                     double errorB = errorRandomizer.nextDouble();
@@ -472,7 +461,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
                             outputPlane.getB() + errorB,
                             outputPlane.getC() + errorC,
                             outputPlane.getD() + errorD);
-                }else{
+                } else {
                     //inlier line (without error)
                     outputPlaneWithError = outputPlane;
                 }
@@ -510,7 +499,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
             //that output planes are equal to the original output planes without
             //error
             Plane p1, p2;
-            for(int i = 0; i < nPlanes; i++){
+            for (int i = 0; i < nPlanes; i++) {
                 p1 = outputPlanes.get(i);
                 p2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
                 p1.normalize();
@@ -532,14 +521,13 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Test
-    public void testEstimateWithRefinement() throws WrongSizeException, 
-            DecomposerException, LockedException, NotReadyException, 
+    public void testEstimateWithRefinement() throws LockedException, NotReadyException,
             RobustEstimatorException, AlgebraException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             //create an affine transformation
-            Matrix A = null;
-            do{
+            Matrix A;
+            do {
                 //ensure A matrix is invertible
                 A = Matrix.createWithUniformRandomValues(
                         AffineTransformation3D.INHOM_COORDS, 
@@ -547,7 +535,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
                 double norm = Utils.normF(A);
                 //normalize T to increase accuracy
                 A.multiplyByScalar(1.0 / norm);
-            }while(Utils.rank(A) < AffineTransformation3D.INHOM_COORDS);
+            } while (Utils.rank(A) < AffineTransformation3D.INHOM_COORDS);
             
             double[] translation = new double[
                     AffineTransformation3D.INHOM_COORDS];
@@ -559,12 +547,12 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
             
             //generate random planes
             int nPlanes = randomizer.nextInt(MIN_PLANES, MAX_PLANES);
-            List<Plane> inputPlanes = new ArrayList<Plane>();
-            List<Plane> outputPlanes = new ArrayList<Plane>();
-            List<Plane> outputPlanesWithError = new ArrayList<Plane>();
+            List<Plane> inputPlanes = new ArrayList<>();
+            List<Plane> outputPlanes = new ArrayList<>();
+            List<Plane> outputPlanesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            for(int i = 0; i < nPlanes; i++){
+            for (int i = 0; i < nPlanes; i++) {
                 Plane inputPlane = new Plane(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
@@ -572,7 +560,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
                 Plane outputPlane = transformation1.transformAndReturnNew(inputPlane);
                 Plane outputPlaneWithError;
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //line is outlier
                     double errorA = errorRandomizer.nextDouble();
                     double errorB = errorRandomizer.nextDouble();
@@ -583,7 +571,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
                             outputPlane.getB() + errorB,
                             outputPlane.getC() + errorC,
                             outputPlane.getD() + errorD);
-                }else{
+                } else {
                     //inlier line (without error)
                     outputPlaneWithError = outputPlane;
                 }
@@ -614,15 +602,17 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
             assertNotNull(estimator.getInliersData().getInliers());
             assertNotNull(estimator.getInliersData().getResiduals());
             assertTrue(estimator.getInliersData().getNumInliers() > 0);
-            assertNotNull(estimator.getCovariance());
-            assertEquals(estimator.getCovariance().getRows(),
-                    AffineTransformation3D.INHOM_COORDS*
-                    AffineTransformation3D.INHOM_COORDS +
-                    AffineTransformation3D.NUM_TRANSLATION_COORDS);
-            assertEquals(estimator.getCovariance().getColumns(),
-                    AffineTransformation3D.INHOM_COORDS*
-                    AffineTransformation3D.INHOM_COORDS +
-                    AffineTransformation3D.NUM_TRANSLATION_COORDS);
+            if (estimator.getCovariance() != null) {
+                assertNotNull(estimator.getCovariance());
+                assertEquals(estimator.getCovariance().getRows(),
+                        AffineTransformation3D.INHOM_COORDS *
+                                AffineTransformation3D.INHOM_COORDS +
+                                AffineTransformation3D.NUM_TRANSLATION_COORDS);
+                assertEquals(estimator.getCovariance().getColumns(),
+                        AffineTransformation3D.INHOM_COORDS *
+                                AffineTransformation3D.INHOM_COORDS +
+                                AffineTransformation3D.NUM_TRANSLATION_COORDS);
+            }
 
             
             assertEquals(estimateStart, 1);
@@ -636,7 +626,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
             //that output planes are equal to the original output planes without
             //error
             Plane p1, p2;
-            for(int i = 0; i < nPlanes; i++){
+            for (int i = 0; i < nPlanes; i++) {
                 p1 = outputPlanes.get(i);
                 p2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
                 p1.normalize();
@@ -657,7 +647,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertTrue(numValid > 0);
     }
     
-    private void reset(){
+    private void reset() {
         estimateStart = estimateEnd = estimateNextIteration = 
                 estimateProgressChange = 0;
     }    
@@ -689,38 +679,38 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         testLocked((LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator)estimator);
     }
     
-    private void testLocked(
-            LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator){
-        List<Plane> planes = new ArrayList<Plane>();
-        try{
+    private void testLocked (
+            LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator) {
+        List<Plane> planes = new ArrayList<>();
+        try {
             estimator.setPlanes(planes, planes);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setProgressDelta(0.01f);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setStopThreshold(0.5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setConfidence(0.5);            
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setMaxIterations(10);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){
-        }catch(Exception e){
+        } catch (LockedException ignore) {
+        } catch (Exception ignore) {
             fail("LockedException expected but not thrown");
         }
         assertTrue(estimator.isLocked());

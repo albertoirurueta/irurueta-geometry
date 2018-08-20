@@ -1405,6 +1405,10 @@ public class AbsoluteOrientationSlamPairedViewsSparseReconstructorTest {
                 continue;
             }
             assertEquals(estimatedBaseline, baseline, absoluteScaleError);
+
+            if (Math.abs(mScale - estimatedBaseline) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(mScale, estimatedBaseline, LARGE_ABSOLUTE_ERROR);
 
             //check cameras

@@ -26,7 +26,7 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-public class AccuracyPoint2DTest {
+public class Accuracy2DTest {
 
     private static final double MIN_ANGLE_DEGREES = -90.0;
     private static final double MAX_ANGLE_DEGREES = 90.0;
@@ -38,7 +38,7 @@ public class AccuracyPoint2DTest {
     public void testConstructor() throws AlgebraException, GeometryException {
         for (int t = 0; t < TIMES; t++) {
             //empty constructor
-            AccuracyPoint2D accuracy = new AccuracyPoint2D();
+            Accuracy2D accuracy = new Accuracy2D();
 
             //check default values
             assertNull(accuracy.getCovarianceMatrix());
@@ -64,10 +64,12 @@ public class AccuracyPoint2DTest {
             Rotation2D rotation2D = new Rotation2D(rotationAngle);
             Matrix rotationMatrix = rotation2D.asInhomogeneousMatrix();
             Matrix covarianceMatrix = rotationMatrix.multiplyAndReturnNew(
-                    Matrix.diagonal(new double[]{semiMajorAxis, semiMinorAxis}).
+                    Matrix.diagonal(new double[]{
+                            semiMajorAxis * semiMajorAxis,
+                            semiMinorAxis * semiMinorAxis}).
                             multiplyAndReturnNew(rotationMatrix));
 
-            accuracy = new AccuracyPoint2D(covarianceMatrix);
+            accuracy = new Accuracy2D(covarianceMatrix);
 
             //check
             assertSame(accuracy.getCovarianceMatrix(), covarianceMatrix);
@@ -97,7 +99,7 @@ public class AccuracyPoint2DTest {
             //force IllegalArgumentException
             accuracy = null;
             try {
-                accuracy = new AccuracyPoint2D(new Matrix(1, 1));
+                accuracy = new Accuracy2D(new Matrix(1, 1));
                 fail("IllegalArgumentException expected but not thrown");
             } catch (IllegalArgumentException ignore) { }
             assertNull(accuracy);
@@ -106,7 +108,7 @@ public class AccuracyPoint2DTest {
             Matrix m = Matrix.diagonal(new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY});
 
             try {
-                accuracy = new AccuracyPoint2D(m);
+                accuracy = new Accuracy2D(m);
                 fail("NonSymmetricPositiveDefiniteMatrixException expected but not thrown");
             } catch (NonSymmetricPositiveDefiniteMatrixException ignore) { }
             assertNull(accuracy);
@@ -114,7 +116,7 @@ public class AccuracyPoint2DTest {
 
             //constructor with confidence
             double conf = randomizer.nextDouble(0.0, 1.0);
-            accuracy = new AccuracyPoint2D(conf);
+            accuracy = new Accuracy2D(conf);
 
             //check default values
             assertNull(accuracy.getCovarianceMatrix());
@@ -130,18 +132,18 @@ public class AccuracyPoint2DTest {
             //force IllegalArgumentException
             accuracy = null;
             try {
-                accuracy = new AccuracyPoint2D(-1.0);
+                accuracy = new Accuracy2D(-1.0);
                 fail("IllegalArgumentException expected but not thrown");
             } catch (IllegalArgumentException ignore) { }
             try {
-                accuracy = new AccuracyPoint2D(2.0);
+                accuracy = new Accuracy2D(2.0);
                 fail("IllegalArgumentException expected but not thrown");
             } catch (IllegalArgumentException ignore) { }
             assertNull(accuracy);
 
 
             //constructor with covariance matrix and confidence
-            accuracy = new AccuracyPoint2D(covarianceMatrix, conf);
+            accuracy = new Accuracy2D(covarianceMatrix, conf);
 
             //check
             assertSame(accuracy.getCovarianceMatrix(), covarianceMatrix);
@@ -171,22 +173,22 @@ public class AccuracyPoint2DTest {
             //force IllegalArgumentException
             accuracy = null;
             try {
-                accuracy = new AccuracyPoint2D(new Matrix(1, 1), conf);
+                accuracy = new Accuracy2D(new Matrix(1, 1), conf);
                 fail("IllegalArgumentException expected but not thrown");
             } catch (IllegalArgumentException ignore) { }
             try {
-                accuracy = new AccuracyPoint2D(covarianceMatrix, -1.0);
+                accuracy = new Accuracy2D(covarianceMatrix, -1.0);
                 fail("IllegalArgumentException expected but not thrown");
             } catch (IllegalArgumentException ignore) { }
             try {
-                accuracy = new AccuracyPoint2D(covarianceMatrix, 2.0);
+                accuracy = new Accuracy2D(covarianceMatrix, 2.0);
                 fail("IllegalArgumentException expected but not thrown");
             } catch (IllegalArgumentException ignore) { }
             assertNull(accuracy);
 
             //force NonSymmetricPositiveDefiniteMatrixException
             try {
-                accuracy = new AccuracyPoint2D(m, conf);
+                accuracy = new Accuracy2D(m, conf);
                 fail("NonSymmetricPositiveDefiniteMatrixException expected but not thrown");
             } catch (NonSymmetricPositiveDefiniteMatrixException ignore) { }
             assertNull(accuracy);
@@ -195,7 +197,7 @@ public class AccuracyPoint2DTest {
 
     @Test
     public void testGetSetCovarianceMatrix() throws AlgebraException {
-        AccuracyPoint2D accuracy = new AccuracyPoint2D();
+        Accuracy2D accuracy = new Accuracy2D();
 
         //check default value
         assertNull(accuracy.getCovarianceMatrix());
@@ -223,7 +225,7 @@ public class AccuracyPoint2DTest {
 
     @Test
     public void testGetSetStandardDeviationFactor() {
-        AccuracyPoint2D accuracy = new AccuracyPoint2D();
+        Accuracy2D accuracy = new Accuracy2D();
 
         //check default value
         assertEquals(accuracy.getStandardDeviationFactor(), 2.0, 0.0);
@@ -247,7 +249,7 @@ public class AccuracyPoint2DTest {
 
     @Test
     public void testGetSetConfidence() {
-        AccuracyPoint2D accuracy = new AccuracyPoint2D();
+        Accuracy2D accuracy = new Accuracy2D();
 
         //check default value
         assertEquals(accuracy.getConfidence(), 0.9544, 1e-2);

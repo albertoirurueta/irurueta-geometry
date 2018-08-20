@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains unit tests for
  * com.irurueta.geometry.estimators.RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator
@@ -38,36 +38,34 @@ import static org.junit.Assert.*;
 public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest 
         implements PinholeCameraRobustEstimatorListener {
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-5;
+    private static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-5;
     
-    public static final double MIN_RANDOM_VALUE = 50.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = 50.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_FOCAL_LENGTH = 110.0;
-    public static final double MAX_FOCAL_LENGTH = 130.0;
+    private static final double MIN_FOCAL_LENGTH = 110.0;
+    private static final double MAX_FOCAL_LENGTH = 130.0;
     
-    public static final double MIN_SKEWNESS = -0.001;
-    public static final double MAX_SKEWNESS = 0.001;    
+    private static final double MIN_SKEWNESS = -0.001;
+    private static final double MAX_SKEWNESS = 0.001;
     
-    public static final double MIN_PRINCIPAL_POINT = 90.0;
-    public static final double MAX_PRINCIPAL_POINT = 100.0;
+    private static final double MIN_PRINCIPAL_POINT = 90.0;
+    private static final double MAX_PRINCIPAL_POINT = 100.0;
     
-    public static final double MIN_ANGLE_DEGREES = 10.0;
-    public static final double MAX_ANGLE_DEGREES = 15.0;
+    private static final double MIN_ANGLE_DEGREES = 10.0;
+    private static final double MAX_ANGLE_DEGREES = 15.0;
     
-    public static final int MIN_POINTS = 500;
-    public static final int MAX_POINTS = 1000;
+    private static final int MIN_POINTS = 500;
+    private static final int MAX_POINTS = 1000;
     
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
     
-    public static final double PLANAR_ERROR_STD = 1e-5; 
+    private static final double THRESHOLD = 1e-6;
     
-    public static final double THRESHOLD = 1e-6;
-    
-    public static final double OUTLIER_STD_ERROR = 100.0;
+    private static final double OUTLIER_STD_ERROR = 100.0;
     
     private int estimateStart;
     private int estimateEnd;
@@ -252,8 +250,8 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         
         
         //test constructor with points
-        List<Point3D> points3D = new ArrayList<Point3D>();
-        List<Point2D> points2D = new ArrayList<Point2D>();
+        List<Point3D> points3D = new ArrayList<>();
+        List<Point2D> points2D = new ArrayList<>();
         for (int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
             points3D.add(Point3D.create());
             points2D.add(Point2D.create());
@@ -339,8 +337,8 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertNull(estimator.getIntrinsic());        
         
         //Force IllegalArgumentException
-        List<Point3D> points3DEmpty = new ArrayList<Point3D>();
-        List<Point2D> points2DEmpty = new ArrayList<Point2D>();
+        List<Point3D> points3DEmpty = new ArrayList<>();
+        List<Point2D> points2DEmpty = new ArrayList<>();
         estimator = null;
         try {        
             //not enough points
@@ -348,14 +346,14 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                     new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
                     points3DEmpty, points2DEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = 
                     new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
                     points3D, points2DEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -447,14 +445,14 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                     new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
                     this, points3DEmpty, points2DEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = 
                     new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
                     this, points3D, points2DEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -711,14 +709,14 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                     new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
                     intrinsic, points3DEmpty, points2DEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = 
                     new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
                     intrinsic, points3D, points2DEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -809,14 +807,14 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                     new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
                     this, intrinsic, points3DEmpty, points2DEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = 
                     new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
                     this, intrinsic, points3D, points2DEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
     }
     
@@ -840,7 +838,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         try {
             estimator.setThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -863,12 +861,12 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         
         try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -891,7 +889,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -959,8 +957,8 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertFalse(estimator.isReady());
         
         //set new value
-        List<Point3D> points3D = new ArrayList<Point3D>();
-        List<Point2D> points2D = new ArrayList<Point2D>();
+        List<Point3D> points3D = new ArrayList<>();
+        List<Point2D> points2D = new ArrayList<>();
         for (int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
             points3D.add(Point3D.create());
             points2D.add(Point2D.create());
@@ -974,18 +972,18 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertFalse(estimator.isReady());
         
         //Force IllegalArgumentException
-        List<Point3D> points3DEmpty = new ArrayList<Point3D>();
-        List<Point2D> points2DEmpty = new ArrayList<Point2D>();
+        List<Point3D> points3DEmpty = new ArrayList<>();
+        List<Point2D> points2DEmpty = new ArrayList<>();
         try {
             //not enough points
             estimator.setPoints(points3DEmpty, points2DEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator.setPoints(points3D, points2DEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -1287,11 +1285,11 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -1340,8 +1338,8 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertNull(estimator.getIntrinsic());
         
         //set new value
-        List<Point3D> points3D = new ArrayList<Point3D>();
-        List<Point2D> points2D = new ArrayList<Point2D>();
+        List<Point3D> points3D = new ArrayList<>();
+        List<Point2D> points2D = new ArrayList<>();
         for (int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
             points3D.add(Point3D.create());
             points2D.add(Point2D.create());
@@ -1442,12 +1440,11 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
 
     @Test
     public void testEstimateGeneralNoSuggestion() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numValidCameras = 0;
         int numValidProjections = 0;
-        for (int t = 0; t < TIMES; t++) {
+        for (int t = 0; t < 2*TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             
             //intrinsic parameters
@@ -1491,7 +1488,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();  
             
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);            
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new InhomogeneousPoint3D(
@@ -1505,7 +1502,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -1651,8 +1648,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimateGeneralNoSuggestionWithRefinement() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numValidCameras = 0;
         int numValidProjections = 0;
@@ -1701,7 +1697,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();  
             
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);            
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new InhomogeneousPoint3D(
@@ -1715,7 +1711,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -1885,8 +1881,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimateGeneralNoSuggestionWithFastRefinement() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numValidCameras = 0;
         int numValidProjections = 0;
@@ -1935,7 +1930,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();  
             
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);            
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new InhomogeneousPoint3D(
@@ -1949,7 +1944,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -2100,8 +2095,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimateGeneralSuggestedRotationEnabled() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
@@ -2148,7 +2142,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();  
             
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);            
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new InhomogeneousPoint3D(
@@ -2162,7 +2156,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -2272,8 +2266,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimateGeneralSuggestedRotationWithRefinement() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;
@@ -2321,7 +2314,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();  
             
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);            
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new InhomogeneousPoint3D(
@@ -2335,7 +2328,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -2454,8 +2447,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimateGeneralSuggestedRotationWithFastRefinement() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;
@@ -2503,7 +2495,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();  
             
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);            
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new InhomogeneousPoint3D(
@@ -2517,7 +2509,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -2637,8 +2629,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimateGeneralSuggestedCenterEnabled() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
@@ -2685,7 +2676,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();  
             
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);            
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new InhomogeneousPoint3D(
@@ -2699,7 +2690,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -2792,8 +2783,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimateGeneralSuggestedCenterWithRefinement() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;
@@ -2841,7 +2831,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();  
             
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);            
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new InhomogeneousPoint3D(
@@ -2855,7 +2845,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -2958,8 +2948,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimateGeneralSuggestedCenterWithFastRefinement() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;
@@ -3007,7 +2996,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();  
             
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);            
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new InhomogeneousPoint3D(
@@ -3021,7 +3010,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -3125,8 +3114,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimatePlanarNoSuggestion() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numValidCameras = 0;
         int numValidProjections = 0;
@@ -3193,7 +3181,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             double c = plane.getC();
             double d = plane.getD();
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 //get a random point belonging to the plane
@@ -3225,7 +3213,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -3371,8 +3359,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimatePlanarNoSuggestionWithRefinement() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numValidCameras = 0;
         int numValidProjections = 0;
@@ -3440,7 +3427,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             double c = plane.getC();
             double d = plane.getD();
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 //get a random point belonging to the plane
@@ -3472,7 +3459,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -3622,8 +3609,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimatePlanarNoSuggestionWithFastRefinement() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numValidCameras = 0;
         int numValidProjections = 0;
@@ -3691,7 +3677,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             double c = plane.getC();
             double d = plane.getD();
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 //get a random point belonging to the plane
@@ -3723,7 +3709,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -3874,8 +3860,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimatePlanarSuggestedRotationEnabled() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < 5*TIMES; t++) {
@@ -3941,7 +3926,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             double c = plane.getC();
             double d = plane.getD();
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 //get a random point belonging to the plane
@@ -3973,7 +3958,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -4082,8 +4067,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimatePlanarSuggestedRotationWithRefinement() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;
@@ -4150,7 +4134,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             double c = plane.getC();
             double d = plane.getD();
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 //get a random point belonging to the plane
@@ -4182,7 +4166,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -4302,8 +4286,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimatePlanarSuggestedRotationWithFastRefinement() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;
@@ -4370,7 +4353,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             double c = plane.getC();
             double d = plane.getD();
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 //get a random point belonging to the plane
@@ -4402,7 +4385,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -4523,8 +4506,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimatePlanarSuggestedCenterEnabled() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < 5*TIMES; t++) {
@@ -4590,7 +4572,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             double c = plane.getC();
             double d = plane.getD();
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 //get a random point belonging to the plane
@@ -4622,7 +4604,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -4714,8 +4696,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimatePlanarSuggestedCenterWithRefinement() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;
@@ -4782,7 +4763,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             double c = plane.getC();
             double d = plane.getD();
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 //get a random point belonging to the plane
@@ -4814,7 +4795,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -4916,8 +4897,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     @Test
     public void testEstimatePlanarSuggestedCenterWithFastRefinement() 
-            throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
+            throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;
@@ -4984,7 +4964,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             double c = plane.getC();
             double d = plane.getD();
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 //get a random point belonging to the plane
@@ -5016,7 +4996,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Point2D point2DWithError;
-            List<Point2D> points2DWithError = new ArrayList<Point2D>();
+            List<Point2D> points2DWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, OUTLIER_STD_ERROR); 
             for (Point2D point2D : points2D) {
@@ -5154,123 +5134,123 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     
     private void checkLocked(
             RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator estimator) {
-        List<Point3D> points3D = new ArrayList<Point3D>();
-        List<Point2D> points2D = new ArrayList<Point2D>();
+        List<Point3D> points3D = new ArrayList<>();
+        List<Point2D> points2D = new ArrayList<>();
         try {
             estimator.setPoints(points3D, points2D);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setProgressDelta(0.01f);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setThreshold(0.5);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setConfidence(0.5);            
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMaxIterations(10);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setNormalizeSubsetPointCorrespondences(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
-        } catch (Exception e) {
+        } catch (LockedException ignore) {
+        } catch (Exception ignore) {
             fail("LockedException expected but not thrown");
         }
         try {
             estimator.setSuggestSkewnessValueEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedSkewnessValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestHorizontalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedHorizontalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e ) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestVerticalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedVerticalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestAspectRatioEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {        
             estimator.setSuggestedAspectRatioValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestPrincipalPointEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedPrincipalPointValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestRotationEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedRotationValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestCenterEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedCenterValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setFastRefinementUsed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setPlanarConfigurationAllowed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setNullspaceDimension2Allowed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setNullspaceDimension3Allowed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setPlanarThreshold(1e9);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setIntrinsic(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         assertTrue(estimator.isLocked());        
     }        
 }

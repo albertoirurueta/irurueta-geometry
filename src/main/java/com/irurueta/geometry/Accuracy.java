@@ -30,7 +30,7 @@ import java.io.Serializable;
  * with the requested confidence.
  */
 @SuppressWarnings("WeakerAccess")
-public abstract class AccuracyPoint implements Serializable {
+public abstract class Accuracy implements Serializable {
 
     /**
      * Default standard deviation factor to account for a given accuracy confidence.
@@ -71,9 +71,9 @@ public abstract class AccuracyPoint implements Serializable {
     protected SingularValueDecomposer mSvdDecomposer = new SingularValueDecomposer();
 
     /**
-     * Singular values of decomposed covariance matrix.
+     * Square root of singular values of decomposed covariance matrix.
      */
-    protected double[] mSingularValues;
+    protected double[] mSqrtSingularValues;
 
     /**
      * Orthonormal matrix representing a rotation after decomposing covariance matrix.
@@ -81,30 +81,30 @@ public abstract class AccuracyPoint implements Serializable {
     protected Matrix mU;
 
     /**
-     * Minimum singular value of decomposed covariance matrix. Can be used to determine the
-     * smallest accuracy on a geometric figure (i.e. the shortest semi-axis on an ellipse or
-     * an ellipsoid).
+     * Minimum square root of singular value of decomposed covariance matrix. Can be used to
+     * determine the smallest accuracy on a geometric figure (i.e. the shortest semi-axis on
+     * an ellipse or an ellipsoid).
      */
-    private double mMinSingularValue = Double.POSITIVE_INFINITY;
+    private double mMinSqrtSingularValue = Double.POSITIVE_INFINITY;
 
     /**
-     * Maximum singular value of decomposed covariance matrix. Can be used to determine the
-     * largest accuracy on a geometric figure (i.e. the largest semi-axis on an ellipse or
-     * an ellipsoid).
+     * Maximum square root of singular value of decomposed covariance matrix. Can be used to
+     * determine the largest accuracy on a geometric figure (i.e. the largest semi-axis on
+     * an ellipse or an ellipsoid).
      */
-    private double mMaxSingularValue = Double.POSITIVE_INFINITY;
+    private double mMaxSqrtSingularValue = Double.POSITIVE_INFINITY;
 
     /**
-     * Average singular value of decomposed covariance matrix. Can be used to determine the
-     * average accuracy on a geomtric figure (i.e. the average semi-axis on an ellipse or
-     * an ellipsoid).
+     * Average square root of singular value of decomposed covariance matrix. Can be used to
+     * determine the average accuracy on a geomtric figure (i.e. the average semi-axis on
+     * an ellipse or an ellipsoid).
      */
-    private double mAvgSingularValue = Double.POSITIVE_INFINITY;
+    private double mAvgSqrtSingularValue = Double.POSITIVE_INFINITY;
 
     /**
      * Constructor.
      */
-    public AccuracyPoint() { }
+    public Accuracy() { }
 
     /**
      * Constructor.
@@ -116,7 +116,7 @@ public abstract class AccuracyPoint implements Serializable {
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
      * positive definite.
      */
-    public AccuracyPoint(Matrix covarianceMatrix) throws IllegalArgumentException,
+    public Accuracy(Matrix covarianceMatrix) throws IllegalArgumentException,
             NonSymmetricPositiveDefiniteMatrixException {
         setCovarianceMatrix(covarianceMatrix);
     }
@@ -126,7 +126,7 @@ public abstract class AccuracyPoint implements Serializable {
      * @param confidence confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public AccuracyPoint(double confidence) throws IllegalArgumentException {
+    public Accuracy(double confidence) throws IllegalArgumentException {
         setConfidence(confidence);
     }
 
@@ -141,7 +141,7 @@ public abstract class AccuracyPoint implements Serializable {
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
      * positive definite.
      */
-    public AccuracyPoint(Matrix covarianceMatrix, double confidence)
+    public Accuracy(Matrix covarianceMatrix, double confidence)
             throws IllegalArgumentException, NonSymmetricPositiveDefiniteMatrixException {
         setCovarianceMatrix(covarianceMatrix);
         setConfidence(confidence);
@@ -177,31 +177,37 @@ public abstract class AccuracyPoint implements Serializable {
             mSvdDecomposer.decompose();
 
             double[] singularValues = mSvdDecomposer.getSingularValues();
+            double [] sqrtSingularValues = new double[dims];
 
-            double minSingularValue = Double.MAX_VALUE;
-            double maxSingularValue = -Double.MAX_VALUE;
-            double avgSingularValue = 0.0;
+            double minSqrtSingularValue = Double.MAX_VALUE;
+            double maxSqrtSingularValue = -Double.MAX_VALUE;
+            double avgSqrtSingularValue = 0.0;
+            int i = 0;
             for (double singularValue : singularValues) {
                 if (singularValue < 0.0) {
                     //matrix is not positive definite
                     throw new NonSymmetricPositiveDefiniteMatrixException();
                 }
 
-                if (singularValue < minSingularValue) {
-                    minSingularValue = singularValue;
+                double sqrtSingularValue = Math.sqrt(singularValue);
+                if (sqrtSingularValue < minSqrtSingularValue) {
+                    minSqrtSingularValue = sqrtSingularValue;
                 }
-                if (singularValue > maxSingularValue) {
-                    maxSingularValue = singularValue;
+                if (sqrtSingularValue > maxSqrtSingularValue) {
+                    maxSqrtSingularValue = sqrtSingularValue;
                 }
-                avgSingularValue += singularValue / singularValues.length;
+                avgSqrtSingularValue += sqrtSingularValue / dims;
+
+                sqrtSingularValues[i] = sqrtSingularValue;
+                i++;
             }
 
-            mSingularValues = singularValues;
+            mSqrtSingularValues = sqrtSingularValues;
             mU = mSvdDecomposer.getU();
 
-            mMinSingularValue = minSingularValue;
-            mMaxSingularValue = maxSingularValue;
-            mAvgSingularValue = avgSingularValue;
+            mMinSqrtSingularValue = minSqrtSingularValue;
+            mMaxSqrtSingularValue = maxSqrtSingularValue;
+            mAvgSqrtSingularValue = avgSqrtSingularValue;
 
             mCovarianceMatrix = covarianceMatrix;
         } catch (AlgebraException e) {
@@ -270,7 +276,7 @@ public abstract class AccuracyPoint implements Serializable {
      * @return smallest accuracy in any direction.
      */
     public double getSmallestAccuracy() {
-        return mMinSingularValue * mStandardDeviationFactor;
+        return mMinSqrtSingularValue * mStandardDeviationFactor;
     }
 
     /**
@@ -278,7 +284,7 @@ public abstract class AccuracyPoint implements Serializable {
      * @return largest accuracy in any direction.
      */
     public double getLargestAccuracy() {
-        return mMaxSingularValue * mStandardDeviationFactor;
+        return mMaxSqrtSingularValue * mStandardDeviationFactor;
     }
 
     /**
@@ -286,7 +292,7 @@ public abstract class AccuracyPoint implements Serializable {
      * @return average accuracy among all directions.
      */
     public double getAverageAccuracy() {
-        return mAvgSingularValue * mStandardDeviationFactor;
+        return mAvgSqrtSingularValue * mStandardDeviationFactor;
     }
 
     /**

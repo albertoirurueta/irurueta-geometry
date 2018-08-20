@@ -16,6 +16,7 @@
 
 package com.irurueta.geometry;
 
+import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.ArrayUtils;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.NonSymmetricPositiveDefiniteMatrixException;
@@ -25,12 +26,12 @@ import com.irurueta.algebra.NonSymmetricPositiveDefiniteMatrixException;
  * with requested confidence.
  */
 @SuppressWarnings("WeakerAccess")
-public class AccuracyPoint3D extends AccuracyPoint {
+public class Accuracy3D extends Accuracy {
 
     /**
      * Constructor.
      */
-    public AccuracyPoint3D() {
+    public Accuracy3D() {
         super();
     }
 
@@ -43,7 +44,7 @@ public class AccuracyPoint3D extends AccuracyPoint {
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
      * positive definite.
      */
-    public AccuracyPoint3D(Matrix covarianceMatrix) throws IllegalArgumentException,
+    public Accuracy3D(Matrix covarianceMatrix) throws IllegalArgumentException,
             NonSymmetricPositiveDefiniteMatrixException {
         super(covarianceMatrix);
     }
@@ -53,7 +54,7 @@ public class AccuracyPoint3D extends AccuracyPoint {
      * @param confidence confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public AccuracyPoint3D(double confidence) throws IllegalArgumentException {
+    public Accuracy3D(double confidence) throws IllegalArgumentException {
         super(confidence);
     }
 
@@ -68,7 +69,7 @@ public class AccuracyPoint3D extends AccuracyPoint {
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
      * positive definite.
      */
-    public AccuracyPoint3D(Matrix covarianceMatrix, double confidence)
+    public Accuracy3D(Matrix covarianceMatrix, double confidence)
             throws IllegalArgumentException, NonSymmetricPositiveDefiniteMatrixException {
         super(covarianceMatrix, confidence);
     }
@@ -91,10 +92,7 @@ public class AccuracyPoint3D extends AccuracyPoint {
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
     public Ellipsoid toEllipsoid() throws NullPointerException, InvalidRotationMatrixException {
-        double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(
-                mSingularValues, mStandardDeviationFactor);
-        Rotation3D rotation = new MatrixRotation3D(mU);
-        return new Ellipsoid(Point3D.create(), semiAxesLengths, rotation);
+        return toEllipsoid(mStandardDeviationFactor);
     }
 
     /**
@@ -102,38 +100,83 @@ public class AccuracyPoint3D extends AccuracyPoint {
      * ignoring variance related to z coordinates.
      * @return flattenned accuracy representation in 2D.
      * @throws NullPointerException if covariance matrix is not defined.
-     * @throws NonSymmetricPositiveDefiniteMatrixException if covariance matrix is not symmetric and
-     * positive definite.
+     * @throws GeometryException if intersection cannot be computed.
      */
-    public AccuracyPoint2D flattenTo2D() throws NullPointerException,
-            NonSymmetricPositiveDefiniteMatrixException {
-        //consider as covariance matrix only the topleft submatrix related to x and y coordinates
-        Matrix subCovarianceMatrix = mCovarianceMatrix.getSubmatrix(
-                0, 0, 1, 1);
-        return new AccuracyPoint2D(subCovarianceMatrix, mConfidence);
+    public Accuracy2D flattenTo2D() throws NullPointerException,
+            GeometryException {
+        //get intersected ellipse for unitary standard deviation
+        Ellipse ellipse = intersectWithPlane(1.0);
+
+        double semiMajorAxis = ellipse.getSemiMajorAxis();
+        double semiMinorAxis = ellipse.getSemiMinorAxis();
+        Rotation2D rotation = ellipse.getRotation();
+
+        Matrix u = rotation.asInhomogeneousMatrix();
+        Matrix s2 = Matrix.diagonal(new double[] {
+                semiMajorAxis * semiMajorAxis,
+                semiMinorAxis * semiMinorAxis}) ;
+
+        try {
+            //compute covariance as the squared matrix M = U*S*V'
+            //Hence: M*M' = U*S*V'*(U*S*V')' = U*S*V'*V'*S*U' = U*S^2*U'
+
+            s2.multiply(u);
+            u.multiply(s2);
+
+            return new Accuracy2D(u, mConfidence);
+        } catch (AlgebraException e) {
+            throw new GeometryException(e);
+        }
     }
 
     /**
-     * Projects current accuracy using provided camera to obtain projected ellipse of accuracy.
-     * @param camera camera to project 3D ellipsoid of accuracy into an ellipse.
-     * @return projected ellipse.
+     * Intersects ellipsoid representing this accuracy with horizontal xy plane.
+     * @return intersected ellipse.
      * @throws NullPointerException if covariance matrix is not defined.
-     * @throws GeometryException if projection fails.
+     * @throws GeometryException if intersection cannot be computed.
      */
-    public Ellipse project(PinholeCamera camera) throws NullPointerException, GeometryException {
-        Ellipsoid ellipsoid = toEllipsoid();
+    public Ellipse intersectWithPlane() throws NullPointerException,
+            GeometryException {
+        return intersectWithPlane(mStandardDeviationFactor);
+    }
+
+    /**
+     * Converts provided covariance matrix into a 3D ellipsoid taking into account current
+     * confidence and standard deviation factor.
+     * @param standardDeviationFactor standard deviation factor.
+     * @return ellipsoid representinc accuracy of covariance matrix with provided standard
+     * deviation factor.
+     * @throws NullPointerException if covariance matrix has not been provided yet.
+     * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
+     */
+    private Ellipsoid toEllipsoid(double standardDeviationFactor) throws NullPointerException,
+            InvalidRotationMatrixException {
+        double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(
+                mSqrtSingularValues, standardDeviationFactor);
+        Rotation3D rotation = new MatrixRotation3D(mU);
+        return new Ellipsoid(Point3D.create(), semiAxesLengths, rotation);
+    }
+
+    /**
+     * Intersects ellipsoid representing this accuracy with provided standard
+     * deviation factor and with horizontal xy plane.
+     * @param standardDeviationFactor standard deviation factor.
+     * @return intersected ellipse.
+     * @throws NullPointerException if covariance matrix is not defined.
+     * @throws GeometryException if intersection cannot be computed.
+     */
+    private Ellipse intersectWithPlane(double standardDeviationFactor)
+            throws NullPointerException, GeometryException {
+        Ellipsoid ellipsoid = toEllipsoid(standardDeviationFactor);
         Quadric quadric = ellipsoid.toQuadric();
-        Conic conic = camera.project(quadric);
-        return new Ellipse(conic);
-    }
 
-    /**
-     * Projects current accuracy using default camera to obtain projected ellipse of accuracy.
-     * @return projected ellipse.
-     * @throws NullPointerException if covariance matrix is not defined.
-     * @throws GeometryException if projection fails.
-     */
-    public Ellipse project() throws NullPointerException, GeometryException {
-        return project(new PinholeCamera());
+        //create horizontal xy plane located at ellipsoid center
+        Point3D center = ellipsoid.getCenter();
+        double[] directorVector = new double[] { 0.0, 0.0, 1.0 };
+        Plane plane = new Plane(center, directorVector);
+
+        Conic conic = quadric.intersectWith(plane);
+
+        return new Ellipse(conic);
     }
 }

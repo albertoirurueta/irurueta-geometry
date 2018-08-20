@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains unit tests for
  * com.irurueta.geometry.PinholeCamera
@@ -33,91 +33,83 @@ import org.junit.Test;
 
 public class PinholeCameraTest {
     
-    public static final int PINHOLE_CAMERA_ROWS = 3;
-    public static final int PINHOLE_CAMERA_COLS = 4;
+    private static final int PINHOLE_CAMERA_ROWS = 3;
+    private static final int PINHOLE_CAMERA_COLS = 4;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
-    public static final double LARGE_ABSOLUTE_ERROR = 5e-5;
-    public static final double VERY_LARGE_ABSOLUTE_ERROR = 1e-4;
+    private static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double LARGE_ABSOLUTE_ERROR = 5e-5;
+    private static final double VERY_LARGE_ABSOLUTE_ERROR = 1e-4;
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_FOCAL_LENGTH = 1.0;
-    public static final double MAX_FOCAL_LENGTH = 100.0;
+    private static final double MIN_FOCAL_LENGTH = 1.0;
+    private static final double MAX_FOCAL_LENGTH = 100.0;
     
-    public static final double MIN_SKEWNESS = -1.0;
-    public static final double MAX_SKEWNESS = 1.0;
+    private static final double MIN_SKEWNESS = -1.0;
+    private static final double MAX_SKEWNESS = 1.0;
     
-    public static final double MIN_PRINCIPAL_POINT = 0.0;
-    public static final double MAX_PRINCIPAL_POINT = 100.0;
+    private static final double MIN_PRINCIPAL_POINT = 0.0;
+    private static final double MAX_PRINCIPAL_POINT = 100.0;
     
-    public static final double MIN_ANGLE_DEGREES = -90.0;
-    public static final double MAX_ANGLE_DEGREES = 90.0;
+    private static final double MIN_ANGLE_DEGREES = -90.0;
+    private static final double MAX_ANGLE_DEGREES = 90.0;
     
-    public static final int INHOM_2D_COORDS = 2;
-    public static final int INHOM_3D_COORDS = 3;
+    private static final int INHOM_2D_COORDS = 2;
+    private static final int INHOM_3D_COORDS = 3;
     
-    public static final int HOM_2D_COORDS = 3;
-    public static final int HOM_3D_COORDS = 4;
+    private static final int HOM_2D_COORDS = 3;
+    private static final int HOM_3D_COORDS = 4;
     
-    public static final int MIN_NUMBER_POINTS = 10;
-    public static final int MAX_NUMBER_POINTS = 100;
+    private static final int MIN_NUMBER_POINTS = 10;
+    private static final int MAX_NUMBER_POINTS = 100;
     
-    public static final double MIN_DEPTH = 0.5;
-    public static final double MAX_DEPTH = 100.0;
+    private static final double MIN_DEPTH = 0.5;
+    private static final double MAX_DEPTH = 100.0;
     
-    public static final int MIN_N_POINTS = 10;
-    public static final int MAX_N_POINTS = 100;
+    private static final int MIN_N_POINTS = 10;
+    private static final int MAX_N_POINTS = 100;
     
-    public static final double MIN_RANDOM_POINT_VALUE = 50.0;
-    public static final double MAX_RANDOM_POINT_VALUE = 100.0;
+    private static final double MIN_RANDOM_POINT_VALUE = 50.0;
+    private static final double MAX_RANDOM_POINT_VALUE = 100.0;
     
-    public static final double MIN_RANDOM_LINE_VALUE = 0.0;
-    public static final double MAX_RANDOM_LINE_VALUE = 1.0;
+    private static final double MIN_RANDOM_LINE_VALUE = 0.0;
+    private static final double MAX_RANDOM_LINE_VALUE = 1.0;
     
-    public static final double MIN_FOCAL_LENGTH2 = 110.0;
-    public static final double MAX_FOCAL_LENGTH2 = 130.0;
+    private static final double MIN_FOCAL_LENGTH2 = 110.0;
+    private static final double MAX_FOCAL_LENGTH2 = 130.0;
     
-    public static final double MIN_SKEWNESS2 = -0.001;
-    public static final double MAX_SKEWNESS2 = 0.001;
+    private static final double MIN_SKEWNESS2 = -0.001;
+    private static final double MAX_SKEWNESS2 = 0.001;
+
+    private static final double MIN_ANGLE_DEGREES2 = 10.0;
+    private static final double MAX_ANGLE_DEGREES2 = 15.0;
     
-    public static final double MIN_PRINCIPAL_POINT2 = 90.0;
-    public static final double MAX_PRINCIPAL_POINT2 = 100.0;
+    private static final int N_POINTS = 6;
+    private static final int N_CORRESPONDENCES = 4;
     
-    public static final double MIN_ANGLE_DEGREES2 = 10.0;
-    public static final double MAX_ANGLE_DEGREES2 = 15.0;
+    private static final int TIMES = 10;
     
-    public static final int N_POINTS = 6;
-    public static final int N_CORRESPONDENCES = 4;
-    
-    public static final int TIMES = 10;
-    
-    public PinholeCameraTest() {
-    }
+    public PinholeCameraTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
     public void testConstructors() throws WrongSizeException, RotationException,
         CameraException, NotAvailableException, WrongListSizesException, 
         com.irurueta.geometry.estimators.LockedException, 
         com.irurueta.geometry.estimators.NotReadyException, 
-        PinholeCameraEstimatorException{
+        PinholeCameraEstimatorException {
         
         //test default constructor
         PinholeCamera camera = new PinholeCamera();
@@ -143,10 +135,10 @@ public class PinholeCameraTest {
                 PINHOLE_CAMERA_ROWS + 1, PINHOLE_CAMERA_COLS + 1, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         camera = null;
-        try{
+        try {
             camera = new PinholeCamera(cameraMatrix);
             fail("WrongSizeException expected but not thrown");
-        }catch(WrongSizeException e){}
+        } catch (WrongSizeException ignore) { }
         assertNull(camera);
         
         
@@ -214,8 +206,8 @@ public class PinholeCameraTest {
         Matrix cameraMatrix2 = new Matrix(PINHOLE_CAMERA_ROWS, 
                 PINHOLE_CAMERA_COLS);
         Matrix Mp = intrinsicMatrix.multiplyAndReturnNew(rotationMatrix);
-        for(int v = 0; v < PINHOLE_CAMERA_ROWS; v++){
-            for(int u = 0; u < PINHOLE_CAMERA_ROWS; u++){
+        for (int v = 0; v < PINHOLE_CAMERA_ROWS; v++) {
+            for (int u = 0; u < PINHOLE_CAMERA_ROWS; u++) {
                 cameraMatrix2.setElementAt(u, v, Mp.getElementAt(u, v));
             }
         }
@@ -261,9 +253,9 @@ public class PinholeCameraTest {
         
         //if sign of rotation axis is the opposite (-1.0), then theta will be
         //-theta (opposite sign)
-        if(scaleAxisX > 0.0){
+        if (scaleAxisX > 0.0) {
             assertEquals(theta, theta2, ABSOLUTE_ERROR);
-        }else{
+        } else {
             assertEquals(theta, -theta2, ABSOLUTE_ERROR);
         }
         
@@ -296,8 +288,8 @@ public class PinholeCameraTest {
         //build internal matrix
         cameraMatrix2 = new Matrix(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS);
         Mp = intrinsicMatrix.multiplyAndReturnNew(rotationMatrix);
-        for(int v = 0; v < PINHOLE_CAMERA_ROWS; v++){
-            for(int u = 0; u < PINHOLE_CAMERA_ROWS; u++){
+        for (int v = 0; v < PINHOLE_CAMERA_ROWS; v++) {
+            for (int u = 0; u < PINHOLE_CAMERA_ROWS; u++) {
                 cameraMatrix2.setElementAt(u, v, Mp.getElementAt(u, v));
             }
         }
@@ -374,9 +366,9 @@ public class PinholeCameraTest {
         
         //if sign of rotation axis is the opposite (-1.0), then theta will be
         //-theta (opposite sign)
-        if(scaleAxisX > 0.0){
+        if (scaleAxisX > 0.0) {
             assertEquals(theta, theta2, ABSOLUTE_ERROR);
-        }else{
+        } else {
             assertEquals(theta, -theta2, ABSOLUTE_ERROR);
         }
         
@@ -485,7 +477,7 @@ public class PinholeCameraTest {
         Point2D point2D5 = camera.project(point3D5);
         Point2D point2D6 = camera.project(point3D6);
         
-        List<Point3D> points3D = new ArrayList<Point3D>(N_POINTS);
+        List<Point3D> points3D = new ArrayList<>(N_POINTS);
         points3D.add(point3D1);
         points3D.add(point3D2);
         points3D.add(point3D3);
@@ -538,12 +530,12 @@ public class PinholeCameraTest {
         point3D2 = point3D1;
         point2D2 = camera.project(point3D2);
         camera = null;
-        try{
+        try {
             camera = new PinholeCamera(point3D1, point3D2, point3D3, point3D4, 
                 point3D5, point3D6, point2D1, point2D2, point2D3, point2D4, 
                 point2D5, point2D6);
             fail("CameraException expected but not thrown");
-        }catch(CameraException e){}
+        } catch (CameraException ignore) { }
         assertNull(camera);
         
         
@@ -583,7 +575,7 @@ public class PinholeCameraTest {
         Plane plane3 = camera.backProject(line2D3);
         Plane plane4 = camera.backProject(line2D4);
         
-        List<Line2D> lines2D = new ArrayList<Line2D>(N_CORRESPONDENCES);
+        List<Line2D> lines2D = new ArrayList<>(N_CORRESPONDENCES);
         lines2D.add(line2D1);
         lines2D.add(line2D2);
         lines2D.add(line2D3);
@@ -632,17 +624,16 @@ public class PinholeCameraTest {
         line2D2 = line2D1;
         plane2 = camera.backProject(line2D2);
         camera = null;
-        try{
+        try {
             camera = new PinholeCamera(plane1, plane2, plane3, plane4, 
                     line2D1, line2D4, line2D3, line2D4);
             fail("CameraException expected but not thrown");
-        }catch(CameraException e){}
+        } catch (CameraException ignore) { }
         assertNull(camera);
-        
     }
     
     @Test
-    public void testProjectPoints() throws WrongSizeException{
+    public void testProjectPoints() throws WrongSizeException {
         //create intrinsic parameters
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, 
@@ -690,10 +681,10 @@ public class PinholeCameraTest {
         //project list of world points
         int nPoints = randomizer.nextInt(MIN_NUMBER_POINTS, MAX_NUMBER_POINTS);
         
-        List<Point3D> worldPointList = new ArrayList<Point3D>(nPoints);
+        List<Point3D> worldPointList = new ArrayList<>(nPoints);
         Matrix worldPointListMatrix = new Matrix(nPoints, 
                 Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
-        for(int i = 0; i < nPoints; i++){
+        for (int i = 0; i < nPoints; i++) {
             double[] pointArray = new double[
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH];
             randomizer.fill(pointArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -714,8 +705,8 @@ public class PinholeCameraTest {
                 transImagePointListMatrix.transposeAndReturnNew();
         
         //list of image points projected by ourselves
-        List<Point2D> imagePointList = new ArrayList<Point2D>(nPoints);
-        for(int i = 0; i < nPoints; i++){
+        List<Point2D> imagePointList = new ArrayList<>(nPoints);
+        for (int i = 0; i < nPoints; i++) {
             double[] pointArray = new double[
                     Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH];
             imagePointListMatrix.getSubmatrixAsArray(i, 0, i, 
@@ -737,8 +728,8 @@ public class PinholeCameraTest {
 
         Point2D imagePoint;
         Point2D imagePoint2;
-        while(iterator.hasNext() && iterator2.hasNext() && 
-                iteratorWorld.hasNext()){
+        while (iterator.hasNext() && iterator2.hasNext() &&
+                iteratorWorld.hasNext()) {
             imagePoint = iterator.next();
             imagePoint2 = iterator2.next();
             
@@ -794,7 +785,7 @@ public class PinholeCameraTest {
     @Test
     public void testBackProjectLines() throws WrongSizeException, 
         NotReadyException, LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException{
+        com.irurueta.algebra.NotAvailableException {
         
         //create intrinsic parameters
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -920,7 +911,7 @@ public class PinholeCameraTest {
     }
     
     @Test
-    public void testBackprojectPoints() throws CameraException{
+    public void testBackprojectPoints() throws CameraException {
         
         //create intrinsic parameters
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -980,8 +971,8 @@ public class PinholeCameraTest {
         //now make a list of world points
         int nPoints = randomizer.nextInt(MIN_N_POINTS, MAX_N_POINTS);
         
-        List<Point3D> worldPointList = new ArrayList<Point3D>(nPoints);
-        for(int i = 0; i < nPoints; i++){
+        List<Point3D> worldPointList = new ArrayList<>(nPoints);
+        for (int i = 0; i < nPoints; i++) {
             HomogeneousPoint3D point = new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -1006,7 +997,7 @@ public class PinholeCameraTest {
         Iterator<Point2D> iterator1 = imagePointList.iterator();
         Iterator<Point2D> iterator2 = imagePointList2.iterator();
         
-        while(iterator1.hasNext() && iterator2.hasNext()){
+        while (iterator1.hasNext() && iterator2.hasNext()) {
             imagePoint = iterator1.next();
             imagePoint2 = iterator2.next();
             
@@ -1017,7 +1008,7 @@ public class PinholeCameraTest {
     @Test
     public void testDecomposeGetCameraRotationIntrinsicsCenterAndImageOfWorldOrigin() 
             throws RotationException, WrongSizeException, CameraException, 
-            NotAvailableException{
+            NotAvailableException {
         
         //create intrinsic parameters
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1077,8 +1068,8 @@ public class PinholeCameraTest {
         Matrix cameraMatrix2 = new Matrix(PINHOLE_CAMERA_ROWS,
                 PINHOLE_CAMERA_COLS);
         Matrix Mp = intrinsicMatrix.multiplyAndReturnNew(rotationMatrix);
-        for(int v = 0; v < PINHOLE_CAMERA_ROWS; v++){
-            for(int u = 0; u < PINHOLE_CAMERA_ROWS; u++){
+        for (int v = 0; v < PINHOLE_CAMERA_ROWS; v++) {
+            for (int u = 0; u < PINHOLE_CAMERA_ROWS; u++) {
                 cameraMatrix2.setElementAt(u, v, Mp.getElementAt(u, v));
             }
         }
@@ -1124,9 +1115,9 @@ public class PinholeCameraTest {
         
         //if sign of rotation axis is the opposite (-1.0), then theta will be
         //-theta (opposite sign)
-        if(scaleAxisX > 0.0){
+        if (scaleAxisX > 0.0) {
             assertEquals(theta, theta2, ABSOLUTE_ERROR);
-        }else{
+        } else {
             assertEquals(theta, -theta2, ABSOLUTE_ERROR);
         }
         
@@ -1156,8 +1147,8 @@ public class PinholeCameraTest {
         //build internal matrix
         cameraMatrix2 = new Matrix(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS);
         Mp = intrinsicMatrix.multiplyAndReturnNew(rotationMatrix);
-        for(int v = 0; v < PINHOLE_CAMERA_ROWS; v++){
-            for(int u = 0; u < PINHOLE_CAMERA_ROWS; u++){
+        for (int v = 0; v < PINHOLE_CAMERA_ROWS; v++) {
+            for (int u = 0; u < PINHOLE_CAMERA_ROWS; u++) {
                 cameraMatrix2.setElementAt(u, v, Mp.getElementAt(u, v));
             }
         }
@@ -1234,9 +1225,9 @@ public class PinholeCameraTest {
         
         //if sign of rotation axis is the opposite (-1.0), then theta will be
         //-theta (opposite sign)
-        if(scaleAxisX > 0.0){
+        if (scaleAxisX > 0.0) {
             assertEquals(theta, theta2, ABSOLUTE_ERROR);
-        }else{
+        } else {
             assertEquals(theta, -theta2, ABSOLUTE_ERROR);
         }
         
@@ -1308,7 +1299,7 @@ public class PinholeCameraTest {
     }
     
     @Test
-    public void testNormalize() throws WrongSizeException{
+    public void testNormalize() throws WrongSizeException {
         
         Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
                 PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE, 
@@ -1335,7 +1326,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testCameraSign() throws WrongSizeException, DecomposerException, 
-        CameraException{
+        CameraException {
         
         Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
                 PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE, 
@@ -1367,7 +1358,7 @@ public class PinholeCameraTest {
     }
     
     @Test
-    public void testGetSetInternalMatrix() throws WrongSizeException{
+    public void testGetSetInternalMatrix() throws WrongSizeException {
         
         Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
                 PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE, 
@@ -1388,7 +1379,7 @@ public class PinholeCameraTest {
     }
     
     @Test
-    public void testGetSetCameraRotation() throws CameraException, NotAvailableException{
+    public void testGetSetCameraRotation() throws CameraException, NotAvailableException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
@@ -1406,10 +1397,10 @@ public class PinholeCameraTest {
         assertFalse(camera.isCameraRotationAvailable());
         
         //Force NotAvailableException
-        try{
+        try {
             camera.getCameraRotation();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         
         //set new rotation
         camera.setCameraRotation(rotation);
@@ -1432,7 +1423,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testGetSetIntrinsicsAndAvailability() throws CameraException, 
-        NotAvailableException{
+        NotAvailableException {
         
         UniformRandomizer randomizer = 
                 new UniformRandomizer(new Random());
@@ -1458,10 +1449,10 @@ public class PinholeCameraTest {
         assertFalse(camera.areIntrinsicParametersAvailable());
         
         //Force NotAvailableException
-        try{
+        try {
             camera.getIntrinsicParameters();
             fail("NotAvailableException expected but not thrown");
-        }catch(NotAvailableException e){}
+        } catch (NotAvailableException ignore) { }
         
         //set new intrinsic parameters
         camera.setIntrinsicParameters(K);
@@ -1491,7 +1482,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testRotate() throws WrongSizeException, CameraException, 
-        NotAvailableException, RotationException{
+        NotAvailableException, RotationException {
         
         Matrix axisMatrix = Matrix.createWithUniformRandomValues(
                 INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1535,10 +1526,10 @@ public class PinholeCameraTest {
         assertEquals(scaleY, scaleZ, ABSOLUTE_ERROR);
         assertEquals(scaleZ, scaleX, ABSOLUTE_ERROR);
         
-        if(scaleX > 0.0){
+        if (scaleX > 0.0) {
             //rotation angle remains equal
             assertEquals(theta3, theta1 + theta2, ABSOLUTE_ERROR);
-        }else{
+        } else {
             //rotation axis has opposite sign, and so does rotation angle
             assertEquals(theta3, -(theta1 + theta2), ABSOLUTE_ERROR);
         }
@@ -1546,7 +1537,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testPointAt() throws WrongSizeException, CameraException, 
-        NotAvailableException{
+        NotAvailableException {
         
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
@@ -1674,7 +1665,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testGetSetCameraCenterAvailabilityAndComputeCameraCenterSVDDetAndFinite() 
-            throws WrongSizeException, CameraException, NotAvailableException{
+            throws WrongSizeException, CameraException, NotAvailableException {
         
         Matrix cameraCenterMatrix = Matrix.createWithUniformRandomValues(
                 INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1772,7 +1763,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testSetIntrinsicParametersAndRotation() throws CameraException, 
-        NotAvailableException{
+        NotAvailableException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
@@ -1826,12 +1817,12 @@ public class PinholeCameraTest {
         assertEquals(cameraCenter2.getInhomZ(), 0.0, ABSOLUTE_ERROR);
         
         //check camera rotation correctness
-        assertTrue(rotation != rotation2); //are different instances
+        assertNotSame(rotation, rotation2); //are different instances
         assertTrue(rotation.asInhomogeneousMatrix().equals(
                 rotation2.asInhomogeneousMatrix(), ABSOLUTE_ERROR));
         
         //check camera intrinsic parameters
-        assertTrue(intrinsic != intrinsic2); //are different instances
+        assertNotSame(intrinsic, intrinsic2); //are different instances
         assertEquals(intrinsic.getHorizontalFocalLength(),
                 intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic.getVerticalFocalLength(),
@@ -1846,7 +1837,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testSetIntrinsicAndExtrinsicParameters() 
-            throws WrongSizeException, CameraException, NotAvailableException{
+            throws WrongSizeException, CameraException, NotAvailableException {
         
         Matrix centerMatrix = Matrix.createWithUniformRandomValues(
                 INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1994,7 +1985,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testGetSetVanishingPointsAndImageOfWorldOrigin() 
-            throws WrongSizeException{
+            throws WrongSizeException {
         
         Matrix internalMatrix = Matrix.createWithUniformRandomValues(
                 PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE, 
@@ -2130,7 +2121,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testGetSetHorizontalVerticalAndPrincipalPlanesAndAxis() 
-            throws WrongSizeException, CameraException{
+            throws WrongSizeException, CameraException {
         
         Matrix internalMatrix = Matrix.createWithUniformRandomValues(
                 PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE, 
@@ -2252,7 +2243,7 @@ public class PinholeCameraTest {
     }
     
     @Test
-    public void testGetPrincipalPoint() throws WrongSizeException{
+    public void testGetPrincipalPoint() throws WrongSizeException {
         
         Matrix centerMatrix = Matrix.createWithUniformRandomValues(
                 INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -2303,7 +2294,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testGetAndFixCameraSign() throws WrongSizeException, 
-        DecomposerException, CameraException{
+        DecomposerException, CameraException {
         
         Matrix internalMatrix = Matrix.createWithUniformRandomValues(
                 PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE, 
@@ -2332,7 +2323,7 @@ public class PinholeCameraTest {
     public void testGetDepthCheiralityAndFrontOfCamera() 
             throws WrongSizeException, CameraException, NotReadyException, 
             LockedException, DecomposerException, 
-            com.irurueta.algebra.NotAvailableException{
+            com.irurueta.algebra.NotAvailableException {
         
         Matrix centerMatrix = Matrix.createWithUniformRandomValues(
                 INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -2477,7 +2468,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testGetDepthsCheiralitiesAndInFrontOfCamera() 
-            throws WrongSizeException, CameraException{
+            throws WrongSizeException, CameraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int nPoints = randomizer.nextInt(MIN_N_POINTS, MAX_N_POINTS);
@@ -2487,8 +2478,8 @@ public class PinholeCameraTest {
         //using the methods that have been previously tested
         
         //list of random points
-        List<Point3D> worldPointList = new ArrayList<Point3D>(nPoints);
-        for(int i = 0; i < nPoints; i++){
+        List<Point3D> worldPointList = new ArrayList<>(nPoints);
+        for (int i = 0; i < nPoints; i++) {
             HomogeneousPoint3D point = new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -2524,10 +2515,7 @@ public class PinholeCameraTest {
                 MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
         double verticalPrincipalPoint = randomizer.nextDouble(
                 MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        
-        double positiveDepth = randomizer.nextDouble(MIN_DEPTH, MAX_DEPTH);
-        double negativeDepth = randomizer.nextDouble(-MAX_DEPTH, -MIN_DEPTH);
-        
+
         Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler, 
                 gammaEuler);
         PinholeCameraIntrinsicParameters intrinsic =
@@ -2543,7 +2531,7 @@ public class PinholeCameraTest {
         //get cheiralities for all points in the list
         List<Double> cheiralities = camera.getCheiralities(worldPointList);
         List<Boolean> fronts = camera.arePointsInFrontOfCamera(worldPointList);
-        List<Boolean> fronts2 = new ArrayList<Boolean>(worldPointList.size());
+        List<Boolean> fronts2 = new ArrayList<>(worldPointList.size());
         camera.arePointsInFrontOfCamera(worldPointList, fronts2);
         
         //iterate over lists to test each points individually
@@ -2557,7 +2545,7 @@ public class PinholeCameraTest {
         Boolean front, front2;
         double camDepth, camCheirality;
         boolean camFront;
-        while(pointsIterator.hasNext()){
+        while (pointsIterator.hasNext()) {
             point = pointsIterator.next();
             
             depth = depthsIterator.next();
@@ -2569,16 +2557,16 @@ public class PinholeCameraTest {
             camCheirality = camera.getCheirality(point);
             camFront = camera.isPointInFrontOfCamera(point);
             
-            assertEquals(depth.doubleValue(), camDepth, ABSOLUTE_ERROR);
-            assertEquals(cheirality.doubleValue(), camCheirality, 
+            assertEquals(depth, camDepth, ABSOLUTE_ERROR);
+            assertEquals(cheirality, camCheirality,
                     ABSOLUTE_ERROR);
-            assertEquals(front.booleanValue(), camFront);
-            assertEquals(front2.booleanValue(), camFront);
+            assertEquals(front, camFront);
+            assertEquals(front2, camFront);
         }
     }
     
     @Test
-    public void testCreateCanonicalCamera() throws WrongSizeException{
+    public void testCreateCanonicalCamera() throws WrongSizeException {
         
         PinholeCamera camera = PinholeCamera.createCanonicalCamera();
         Matrix internalMatrix = camera.getInternalMatrix();
@@ -2589,7 +2577,7 @@ public class PinholeCameraTest {
     }
     
     @Test
-    public void testIsNormalized() throws WrongSizeException, CameraException{
+    public void testIsNormalized() throws WrongSizeException, CameraException {
         //test that whenever a parameter is modified in a camera, it becomes non
         //normalized
         
@@ -2807,7 +2795,7 @@ public class PinholeCameraTest {
     @Test
     public void testProjectBackProjectDualQuadricAndDualConic() 
             throws DecomposerException, WrongSizeException, 
-            CoincidentLinesException, CameraException{
+            CoincidentLinesException {
 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
@@ -3018,7 +3006,7 @@ public class PinholeCameraTest {
     @Test
     public void testProjectBackProjectQuadricAndConic() 
             throws WrongSizeException, DecomposerException, 
-            CoincidentPointsException, CameraException{
+            CoincidentPointsException, CameraException {
         
         //create conic
         Matrix m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS, 
@@ -3046,7 +3034,7 @@ public class PinholeCameraTest {
         double x = point1.getHomX();
         double y = point1.getHomY();
         double w = point1.getHomW();
-	conicMatrix.setElementAt(0, 0, x * x);
+	    conicMatrix.setElementAt(0, 0, x * x);
         conicMatrix.setElementAt(0, 1, x * y);
         conicMatrix.setElementAt(0, 2, y * y);
         conicMatrix.setElementAt(0, 3, x * w);
@@ -3089,7 +3077,7 @@ public class PinholeCameraTest {
         conicMatrix.setElementAt(4, 4, y * w);
         conicMatrix.setElementAt(4, 5, w * w);
         
-        while(com.irurueta.algebra.Utils.rank(conicMatrix) < 5){
+        while (com.irurueta.algebra.Utils.rank(conicMatrix) < 5) {
             m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             

@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains unit tests for
  * com.irurueta.geometry.estimators.WeightedLinePlaneCorrespondencePinholeCameraEstimator
@@ -36,39 +36,37 @@ import static org.junit.Assert.*;
 public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest 
     implements PinholeCameraEstimatorListener {
     
-    public static final double ABSOLUTE_ERROR = 1e-5;
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-3;
-    public static final double VERY_LARGE_ABSOLUTE_ERROR = 2.0;
+    private static final double ABSOLUTE_ERROR = 1e-5;
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
+    private static final double VERY_LARGE_ABSOLUTE_ERROR = 2.0;
     
-    public static final double MIN_RANDOM_VALUE = 0.0;
-    public static final double MAX_RANDOM_VALUE = 1.0;
+    private static final double MIN_RANDOM_VALUE = 0.0;
+    private static final double MAX_RANDOM_VALUE = 1.0;
     
-    public static final double MIN_FOCAL_LENGTH = 110.0;
-    public static final double MAX_FOCAL_LENGTH = 130.0;
+    private static final double MIN_FOCAL_LENGTH = 110.0;
+    private static final double MAX_FOCAL_LENGTH = 130.0;
     
-    public static final double MIN_SKEWNESS = -0.001;
-    public static final double MAX_SKEWNESS = 0.001;
+    private static final double MIN_SKEWNESS = -0.001;
+    private static final double MAX_SKEWNESS = 0.001;
     
-    public static final double MIN_PRINCIPAL_POINT = 90.0;
-    public static final double MAX_PRINCIPAL_POINT = 100.0;
+    private static final double MIN_PRINCIPAL_POINT = 90.0;
+    private static final double MAX_PRINCIPAL_POINT = 100.0;
     
-    public static final double MIN_ANGLE_DEGREES = 10.0;
-    public static final double MAX_ANGLE_DEGREES = 15.0;
+    private static final double MIN_ANGLE_DEGREES = 10.0;
+    private static final double MAX_ANGLE_DEGREES = 15.0;
 
-    public static final int INHOM_3D_COORDS = 3;
-    public static final int LINE_PARAMS = 3;
-    public static final int PLANE_PARAMS = 4;
+    private static final int INHOM_3D_COORDS = 3;
+
+    private static final int N_CORRESPONDENCES = 4;
+    private static final int MIN_NUMBER_CORRESPONDENCES = 5;
+    private static final int MAX_NUMBER_CORRESPONDENCES = 100;
     
-    public static final int N_CORRESPONDENCES = 4;
-    public static final int MIN_NUMBER_CORRESPONDENCES = 5;
-    public static final int MAX_NUMBER_CORRESPONDENCES = 100;
+    private static final int TIMES = 10;
     
-    public static final int TIMES = 10;
+    private static final double MIN_WEIGHT_VALUE = 0.75;
+    private static final double MAX_WEIGHT_VALUE = 1.0;
     
-    public static final double MIN_WEIGHT_VALUE = 0.75;
-    public static final double MAX_WEIGHT_VALUE = 1.0;
-    
-    public static final double ERROR_STD = 1e-5;
+    private static final double ERROR_STD = 1e-5;
     
     private int startCount = 0;
     private int endCount = 0;
@@ -113,15 +111,15 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         try {
             estimator.getLines2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPlanes();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getWeights();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertNull(estimator.getListener());
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -178,15 +176,15 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         try {
             estimator.getLines2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPlanes();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getWeights();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getListener(), this);
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -223,8 +221,8 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         
         //testing constructor with lists
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        List<Plane> planes = new ArrayList<Plane>(N_CORRESPONDENCES);
-        List<Line2D> lines2D = new ArrayList<Line2D>(N_CORRESPONDENCES);
+        List<Plane> planes = new ArrayList<>(N_CORRESPONDENCES);
+        List<Line2D> lines2D = new ArrayList<>(N_CORRESPONDENCES);
         for (int i = 0; i < N_CORRESPONDENCES; i++) {
             planes.add(new Plane(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -258,7 +256,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         try {
             estimator.getWeights();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertNull(estimator.getListener());
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -294,31 +292,31 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
                 PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);        
         
         //Force WrongListSizesException
-        List<Plane> wrongPlanes = new ArrayList<Plane>();
-        List<Line2D> wrongLines2D = new ArrayList<Line2D>();
+        List<Plane> wrongPlanes = new ArrayList<>();
+        List<Line2D> wrongLines2D = new ArrayList<>();
         estimator = null;
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     wrongPlanes, lines2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, wrongLines2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     null, lines2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //testing constructor with lists and listener
@@ -343,7 +341,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         try {
             estimator.getWeights();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getListener(), this);
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -379,31 +377,31 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
                 PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
         
         //Force WrongListSizesException
-        wrongPlanes = new ArrayList<Plane>();
-        wrongLines2D = new ArrayList<Line2D>();
+        wrongPlanes = new ArrayList<>();
+        wrongLines2D = new ArrayList<>();
         estimator = null;
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     wrongPlanes, lines2D, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, wrongLines2D, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     null, lines2D, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, null, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //testing constructor with lists and weights
@@ -468,34 +466,34 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     wrongPlanes, lines2D, weights);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, wrongLines2D, weights);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, lines2D, wrongWeights);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     null, lines2D, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, null, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, lines2D, (double[])null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -562,34 +560,34 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     wrongPlanes, lines2D, weights, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, wrongLines2D, weights, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, lines2D, wrongWeights, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     null, lines2D, weights, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, null, weights, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, lines2D, null, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
     }    
     
@@ -606,15 +604,15 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         try {
             estimator.getLines2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPlanes();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        List<Plane> planes = new ArrayList<Plane>(N_CORRESPONDENCES);
-        List<Line2D> lines2D = new ArrayList<Line2D>(N_CORRESPONDENCES);
+        List<Plane> planes = new ArrayList<>(N_CORRESPONDENCES);
+        List<Line2D> lines2D = new ArrayList<>(N_CORRESPONDENCES);
         for (int i = 0; i < N_CORRESPONDENCES; i++) {
             planes.add(new Plane(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -639,20 +637,20 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         assertTrue(estimator.areListsAvailable());
         
         //Force WrongListSizesException
-        List<Plane> wrongPlanes = new ArrayList<Plane>();
-        List<Line2D> wrongLines = new ArrayList<Line2D>();
+        List<Plane> wrongPlanes = new ArrayList<>();
+        List<Line2D> wrongLines = new ArrayList<>();
         assertFalse(DLTLinePlaneCorrespondencePinholeCameraEstimator.
                 areValidLists(wrongPlanes, lines2D));
         try {
             estimator.setLists(wrongPlanes, lines2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         assertFalse(DLTLinePlaneCorrespondencePinholeCameraEstimator.
                 areValidLists(planes, wrongLines));
         try {
             estimator.setLists(planes, wrongLines);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         assertFalse(DLTLinePlaneCorrespondencePinholeCameraEstimator.
@@ -660,13 +658,13 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         try {
             estimator.setLists(null, lines2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertFalse(DLTLinePlaneCorrespondencePinholeCameraEstimator.
                 areValidLists(planes, null));
         try {
             estimator.setLists(planes, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }    
 
     @Test
@@ -684,19 +682,19 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         try {
             estimator.getLines2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPlanes();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getWeights();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        List<Plane> planes = new ArrayList<Plane>(N_CORRESPONDENCES);
-        List<Line2D> lines2D = new ArrayList<Line2D>(N_CORRESPONDENCES);        
+        List<Plane> planes = new ArrayList<>(N_CORRESPONDENCES);
+        List<Line2D> lines2D = new ArrayList<>(N_CORRESPONDENCES);
         double[] weights = new double[N_CORRESPONDENCES];
         for (int i = 0; i < N_CORRESPONDENCES; i++) {
             planes.add(new Plane(
@@ -725,27 +723,27 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         assertTrue(estimator.areWeightsAvailable());
         
         //Force WrongListSizesException
-        List<Plane> wrongPlanes = new ArrayList<Plane>();
-        List<Line2D> wrongLines2D = new ArrayList<Line2D>();
+        List<Plane> wrongPlanes = new ArrayList<>();
+        List<Line2D> wrongLines2D = new ArrayList<>();
         double[] wrongWeights = new double[1];
         assertFalse(WeightedLinePlaneCorrespondencePinholeCameraEstimator.
                 areValidListsAndWeights(wrongPlanes, lines2D, weights));
         try {
             estimator.setListsAndWeights(wrongPlanes, lines2D, weights);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         assertFalse(WeightedLinePlaneCorrespondencePinholeCameraEstimator.
                 areValidListsAndWeights(planes, wrongLines2D, weights));
         try {
             estimator.setListsAndWeights(planes, wrongLines2D, weights);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         assertFalse(WeightedLinePlaneCorrespondencePinholeCameraEstimator.
                 areValidListsAndWeights(planes, lines2D, wrongWeights));
         try {
             estimator.setListsAndWeights(planes, lines2D, wrongWeights);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         assertFalse(WeightedLinePlaneCorrespondencePinholeCameraEstimator.
@@ -753,19 +751,19 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         try {
             estimator.setListsAndWeights(null, lines2D, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertFalse(WeightedLinePlaneCorrespondencePinholeCameraEstimator.
                 areValidListsAndWeights(planes, null, weights));
         try {
             estimator.setListsAndWeights(planes, null, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertFalse(WeightedLinePlaneCorrespondencePinholeCameraEstimator.
                 areValidListsAndWeights(planes, lines2D, null));
         try {
             estimator.setListsAndWeights(planes, lines2D, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }      
     
     @Test
@@ -1082,7 +1080,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         try {
             estimator.setMinMaxSuggestionWeight(10.0, 10.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
@@ -1104,7 +1102,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         try {
             estimator.setSuggestionWeightStep(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }        
     
     @Test
@@ -1198,7 +1196,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             
             //test the case where there are exactly 4 correspondences
             int nCorrespondences = N_CORRESPONDENCES;
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             double[] weights = new double[nCorrespondences];
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
@@ -1318,31 +1316,25 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
                 if (Math.abs(alphaEuler - estimatedAlphaEuler) <= 
                         LARGE_ABSOLUTE_ERROR) {
                     validAlphaEuler = true;
-                } else if ((Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) - 
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                    validAlphaEuler = true;
                 } else {
-                    validAlphaEuler = false;
+                    validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
+                            Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
 
                 if (Math.abs(betaEuler - estimatedBetaEuler) <= 
                         LARGE_ABSOLUTE_ERROR) {
                     validBetaEuler = true;
-                } else if ((Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) - 
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                    validBetaEuler = true;
                 } else {
-                    validBetaEuler = false;
+                    validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
+                            Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
 
                 if (Math.abs(gammaEuler - estimatedGammaEuler) <= 
                         LARGE_ABSOLUTE_ERROR) {
                     validGammaEuler = true;
-                } else if ((Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) - 
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                    validGammaEuler = true;
                 } else {
-                    validGammaEuler = false;
+                    validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
+                            Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
             
             
@@ -1450,31 +1442,25 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
                 if (Math.abs(alphaEuler - estimatedAlphaEuler) <= 
                         LARGE_ABSOLUTE_ERROR) {
                     validAlphaEuler = true;
-                } else if ((Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) - 
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                    validAlphaEuler = true;
                 } else {
-                    validAlphaEuler = false;
+                    validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
+                            Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
 
                 if (Math.abs(betaEuler - estimatedBetaEuler) <= 
                         LARGE_ABSOLUTE_ERROR) {
                     validBetaEuler = true;
-                } else if ((Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) - 
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                    validBetaEuler = true;
                 } else {
-                    validBetaEuler = false;
+                    validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
+                            Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
 
                 if (Math.abs(gammaEuler - estimatedGammaEuler) <= 
                         LARGE_ABSOLUTE_ERROR) {
                     validGammaEuler = true;
-                } else if ((Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) - 
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                    validGammaEuler = true;
                 } else {
-                    validGammaEuler = false;
+                    validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
+                            Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
             
             
@@ -1529,7 +1515,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             try {
                 estimatedCamera = estimator.estimate();
                 fail("PinholeCameraEstimatorException expected but not thrown");
-            } catch (PinholeCameraEstimatorException e) { }
+            } catch (PinholeCameraEstimatorException ignore) { }
             
             //Force NotReadyException
             estimator = 
@@ -1537,7 +1523,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             try {
                 estimatedCamera = estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            } catch (NotReadyException e) { }
+            } catch (NotReadyException ignore) { }
             assertNull(estimatedCamera);
             
             passedAtLeastOnce = true;
@@ -1548,8 +1534,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
 
     @Test
     public void testEstimateSuggestedSkewness() throws WrongListSizesException, 
-            LockedException, NotReadyException, PinholeCameraEstimatorException, 
-            NotAvailableException, CameraException {
+            LockedException, NotReadyException, NotAvailableException, CameraException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -1598,7 +1583,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             double[] weights = new double[nCorrespondences];
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
@@ -1697,8 +1682,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
     @Test
     public void testEstimateSuggestedHorizontalFocalLengthEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -1747,7 +1731,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             double[] weights = new double[nCorrespondences];
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
@@ -1849,11 +1833,10 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
     @Test
     public void testEstimateSuggestedVerticalFocalLengthEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
-        for (int t = 0; t < TIMES; t++) {
+        for (int t = 0; t < 2*TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double horizontalFocalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
@@ -1899,7 +1882,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             double[] weights = new double[nCorrespondences];
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
@@ -2001,8 +1984,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
     @Test
     public void testEstimateSuggestedAspectRatioEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -2053,7 +2035,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             double[] weights = new double[nCorrespondences];
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
@@ -2153,8 +2135,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
     @Test
     public void testEstimateSuggestedPrincipalPointEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -2205,7 +2186,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             double[] weights = new double[nCorrespondences];
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
@@ -2310,8 +2291,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
     @Test
     public void testEstimateSuggestedRotationEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -2362,7 +2342,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             double[] weights = new double[nCorrespondences];
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
@@ -2469,8 +2449,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
     @Test
     public void testEstimateSuggestedCenterEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -2519,7 +2498,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             double[] weights = new double[nCorrespondences];
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
@@ -2614,24 +2593,22 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
     @Test
     public void testEstimateZeroSkewnesssZeroPrincipalPointAndEqualFocalLength() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            double horizontalFocalLength = randomizer.nextDouble(
+            double focalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            double verticalFocalLength = horizontalFocalLength;
-            
+
             double skewness = 0.0;
             double horizontalPrincipalPoint = 0.0;
             double verticalPrincipalPoint = 0.0;
             InhomogeneousPoint2D principalPoint = new InhomogeneousPoint2D();
 
             PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                    verticalFocalLength, horizontalPrincipalPoint, 
+                    new PinholeCameraIntrinsicParameters(focalLength,
+                            focalLength, horizontalPrincipalPoint,
                     verticalPrincipalPoint, skewness);
             
             double aspectRatio = intrinsic.getAspectRatio();
@@ -2665,7 +2642,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             double[] weights = new double[nCorrespondences];
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
@@ -2810,12 +2787,12 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         
         try {
             estimator.setLists(null, null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Throwable t) {
             fail("LockedException expected but not thrown");
         }
@@ -2823,7 +2800,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         try {
             estimator.setListsAndWeights(null, null, null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Throwable t) {
             fail("LockedException expected but not thrown");
         }
@@ -2831,80 +2808,80 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest
         try {
             estimator.setMaxCorrespondences(0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         
         try {
             estimator.setSortWeightsEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         
         try {
             estimator.setSuggestSkewnessValueEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedSkewnessValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestHorizontalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedHorizontalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestVerticalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedVerticalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestAspectRatioEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedAspectRatioValue(1.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestPrincipalPointEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedPrincipalPointValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestRotationEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedRotationValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestCenterEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedCenterValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMinSuggestionWeight(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMaxSuggestionWeight(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestionWeightStep(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }        
+        } catch (LockedException ignore) { }
     }
 }

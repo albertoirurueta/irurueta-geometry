@@ -1,4 +1,4 @@
-/**
+/*
  * @file
  * This file contains unit tests for
  * com.irurueta.geometry.estimators.MetricTransformation3DEstimator
@@ -30,21 +30,21 @@ import static org.junit.Assert.*;
 public class MetricTransformation3DEstimatorTest implements 
         MetricTransformation3DEstimatorListener {
     
-    public static final double MIN_ANGLE_DEGREES = -90.0;
-    public static final double MAX_ANGLE_DEGREES = 90.0;
+    private static final double MIN_ANGLE_DEGREES = -90.0;
+    private static final double MAX_ANGLE_DEGREES = 90.0;
     
-    public static final double MIN_TRANSLATION = -100.0;
-    public static final double MAX_TRANSLATION = 100.0;
+    private static final double MIN_TRANSLATION = -100.0;
+    private static final double MAX_TRANSLATION = 100.0;
     
-    public static final double MIN_RANDOM_VALUE = 50.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;    
+    private static final double MIN_RANDOM_VALUE = 50.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_SCALE = 0.5;
-    public static final double MAX_SCALE = 2.0;
+    private static final double MIN_SCALE = 0.5;
+    private static final double MAX_SCALE = 2.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final int TIMES = 50;
+    private static final int TIMES = 50;
     
     private int estimateStart;
     private int estimateEnd;
@@ -82,13 +82,13 @@ public class MetricTransformation3DEstimatorTest implements
         
         
         //constructor with points
-        List<Point3D> inputPoints = new ArrayList<Point3D>();
+        List<Point3D> inputPoints = new ArrayList<>();
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         
-        List<Point3D> outputPoints = new ArrayList<Point3D>();
+        List<Point3D> outputPoints = new ArrayList<>();
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
@@ -109,24 +109,24 @@ public class MetricTransformation3DEstimatorTest implements
                 MetricTransformation3DEstimator.MINIMUM_SIZE);
         
         //Force IllegalArgumentException
-        List<Point3D> wrong = new ArrayList<Point3D>();
+        List<Point3D> wrong = new ArrayList<>();
         wrong.add(Point3D.create());
 
         estimator = null;
         try {
             estimator = new MetricTransformation3DEstimator(wrong, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new MetricTransformation3DEstimator(wrong, 
                     outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new MetricTransformation3DEstimator(inputPoints,
                     wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -164,17 +164,17 @@ public class MetricTransformation3DEstimatorTest implements
             estimator = new MetricTransformation3DEstimator(this, wrong, 
                     wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new MetricTransformation3DEstimator(this, wrong, 
                     outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new MetricTransformation3DEstimator(this, 
                     inputPoints, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);   
         
         //constructor with weak minimum size allowed
@@ -192,12 +192,12 @@ public class MetricTransformation3DEstimatorTest implements
                 MetricTransformation3DEstimator.WEAK_MINIMUM_SIZE);
         
         //constructor with points and weak minimum size allowed
-        inputPoints = new ArrayList<Point3D>();
+        inputPoints = new ArrayList<>();
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         
-        outputPoints = new ArrayList<Point3D>();
+        outputPoints = new ArrayList<>();
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
@@ -221,17 +221,17 @@ public class MetricTransformation3DEstimatorTest implements
         try {
             estimator = new MetricTransformation3DEstimator(wrong, wrong, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new MetricTransformation3DEstimator(wrong, outputPoints, 
                     true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new MetricTransformation3DEstimator(inputPoints, wrong,
                     true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -271,17 +271,17 @@ public class MetricTransformation3DEstimatorTest implements
             estimator = new MetricTransformation3DEstimator(this, wrong, 
                     wrong, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new MetricTransformation3DEstimator(this, wrong, 
                     outputPoints, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new MetricTransformation3DEstimator(this, 
                     inputPoints, wrong, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);           
     }
 
@@ -295,13 +295,13 @@ public class MetricTransformation3DEstimatorTest implements
         assertNull(estimator.getOutputPoints());
         
         //set values
-        List<Point3D> inputPoints = new ArrayList<Point3D>();
+        List<Point3D> inputPoints = new ArrayList<>();
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         
-        List<Point3D> outputPoints = new ArrayList<Point3D>();
+        List<Point3D> outputPoints = new ArrayList<>();
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
@@ -314,19 +314,19 @@ public class MetricTransformation3DEstimatorTest implements
         assertSame(estimator.getOutputPoints(), outputPoints);
         
         //Force IllegalArgumentException
-        List<Point3D> wrong = new ArrayList<Point3D>();
+        List<Point3D> wrong = new ArrayList<>();
         try {
             estimator.setPoints(wrong, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setPoints(wrong, outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setPoints(inputPoints, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -393,7 +393,7 @@ public class MetricTransformation3DEstimatorTest implements
                     new MetricTransformation3D(q, translation, scale);
         
             //generate random list of input points and transform them
-            List<Point3D> inputPoints = new ArrayList<Point3D>();
+            List<Point3D> inputPoints = new ArrayList<>();
             InhomogeneousPoint3D inputPoint;
             for (int i = 0; i < MetricTransformation3DEstimator.MINIMUM_SIZE; i++) {
                 double x = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
@@ -528,7 +528,7 @@ public class MetricTransformation3DEstimatorTest implements
                     new MetricTransformation3D(q, translation, scale);
         
             //generate random list of input points and transform them
-            List<Point3D> inputPoints = new ArrayList<Point3D>();
+            List<Point3D> inputPoints = new ArrayList<>();
             InhomogeneousPoint3D inputPoint;
             for (int i = 0; i < MetricTransformation3DEstimator.MINIMUM_SIZE + 1; i++) {
                 double x = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
@@ -672,7 +672,7 @@ public class MetricTransformation3DEstimatorTest implements
                     MAX_RANDOM_VALUE);
             Plane plane = new Plane(a, b, c, d);
             
-            List<Point3D> inputPoints = new ArrayList<Point3D>();
+            List<Point3D> inputPoints = new ArrayList<>();
             HomogeneousPoint3D inputPoint;
             for (int i = 0; i < MetricTransformation3DEstimator.WEAK_MINIMUM_SIZE; i++) {
                 
@@ -761,6 +761,16 @@ public class MetricTransformation3DEstimatorTest implements
             assertEquals(q.getB(), q2.getB(), ABSOLUTE_ERROR);
             assertEquals(q.getC(), q2.getC(), ABSOLUTE_ERROR);
             assertEquals(q.getD(), q2.getD(), ABSOLUTE_ERROR);
+            isValid = true;
+            for (int i = 0; i < translation.length; i++) {
+                if (Math.abs(translation[i] - translation2[i]) > ABSOLUTE_ERROR) {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (!isValid) continue;
+
             assertArrayEquals(translation, translation2, ABSOLUTE_ERROR);
             assertEquals(scale, scale2, ABSOLUTE_ERROR);
             
@@ -814,28 +824,28 @@ public class MetricTransformation3DEstimatorTest implements
         try {
             estimator.setPoints(null, null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setListener(this);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
-        } catch (Exception e) {
+        } catch (LockedException ignore) {
+        } catch (Exception ignore) {
             fail("LockedException expected but not thrown");
         }
         try {
             estimator.estimate(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
-        } catch (Exception e) {
+        } catch (LockedException ignore) {
+        } catch (Exception ignore) {
             fail("LockedException expected but not thrown");
         }
         try {
             estimator.setWeakMinimumSizeAllowed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
     }       
 }

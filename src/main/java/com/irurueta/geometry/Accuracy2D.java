@@ -24,12 +24,12 @@ import com.irurueta.algebra.NonSymmetricPositiveDefiniteMatrixException;
  * with requested confidence.
  */
 @SuppressWarnings("WeakerAccess")
-public class AccuracyPoint2D extends AccuracyPoint {
+public class Accuracy2D extends Accuracy {
 
     /**
      * Constructor.
      */
-    public AccuracyPoint2D() {
+    public Accuracy2D() {
         super();
     }
 
@@ -42,7 +42,7 @@ public class AccuracyPoint2D extends AccuracyPoint {
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
      * positive definite.
      */
-    public AccuracyPoint2D(Matrix covarianceMatrix) throws IllegalArgumentException,
+    public Accuracy2D(Matrix covarianceMatrix) throws IllegalArgumentException,
             NonSymmetricPositiveDefiniteMatrixException {
         super(covarianceMatrix);
     }
@@ -52,7 +52,7 @@ public class AccuracyPoint2D extends AccuracyPoint {
      * @param confidence confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public AccuracyPoint2D(double confidence) throws IllegalArgumentException {
+    public Accuracy2D(double confidence) throws IllegalArgumentException {
         super(confidence);
     }
 
@@ -67,7 +67,7 @@ public class AccuracyPoint2D extends AccuracyPoint {
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
      * positive definite.
      */
-    public AccuracyPoint2D(Matrix covarianceMatrix, double confidence)
+    public Accuracy2D(Matrix covarianceMatrix, double confidence)
             throws IllegalArgumentException, NonSymmetricPositiveDefiniteMatrixException {
         super(covarianceMatrix, confidence);
     }
@@ -91,7 +91,7 @@ public class AccuracyPoint2D extends AccuracyPoint {
      */
     public Ellipse toEllipse() throws NullPointerException, InvalidRotationMatrixException {
         double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(
-                mSingularValues, mStandardDeviationFactor);
+                mSqrtSingularValues, mStandardDeviationFactor);
         Rotation2D rotation = new Rotation2D(mU);
         return new Ellipse(Point2D.create(), semiAxesLengths[0], semiAxesLengths[1], rotation);
     }

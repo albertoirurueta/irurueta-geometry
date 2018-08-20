@@ -1484,8 +1484,8 @@ public class QuadricTest {
             assertTrue(plane.equals(plane2, ABSOLUTE_ERROR));
             
             //check that point is also at plane's locus
-            assertTrue(plane.isLocus(point));
-            assertTrue(plane2.isLocus(point));
+            assertTrue(plane.isLocus(point, ABSOLUTE_ERROR));
+            assertTrue(plane2.isLocus(point, ABSOLUTE_ERROR));
             
             double[] directorVector = plane.getDirectorVector();
             double[] directorVector2 = plane2.getDirectorVector();
