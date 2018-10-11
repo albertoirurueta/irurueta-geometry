@@ -273,6 +273,7 @@ public abstract class Accuracy implements Serializable {
 
     /**
      * Gets smallest (best) accuracy in any direction (i.e. either 2D or 3D).
+     * This value is represented by the smallest semi axis representing the ellipse or ellipsoid of accuracy.
      * @return smallest accuracy in any direction.
      */
     public double getSmallestAccuracy() {
@@ -281,6 +282,7 @@ public abstract class Accuracy implements Serializable {
 
     /**
      * Gets largest (worse) accuracy in any direction (i.e. either 2D or 3D).
+     * This value is represented by the largest semi axis representing the ellipse or ellipsoid of accuracy.
      * @return largest accuracy in any direction.
      */
     public double getLargestAccuracy() {
@@ -289,6 +291,8 @@ public abstract class Accuracy implements Serializable {
 
     /**
      * Gets average accuracy among all directions.
+     * This value is equal to the average value of all semi axes representing the ellipse or ellipsoid of
+     * accuracy.
      * @return average accuracy among all directions.
      */
     public double getAverageAccuracy() {
