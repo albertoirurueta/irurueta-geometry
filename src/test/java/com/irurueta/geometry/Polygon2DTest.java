@@ -1,76 +1,60 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.Polygon2D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 18, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.ArrayUtils;
 import com.irurueta.algebra.Utils;
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+import org.junit.*;
+
+import java.util.*;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class Polygon2DTest {
     
-    public static final int MIN_SIDES = 6;
-    public static final int MAX_SIDES = 12;
+    private static final int MIN_SIDES = 6;
+    private static final int MAX_SIDES = 12;
     
-    public static final double MIN_RADIUS = 1.0;
-    public static final double MAX_RADIUS = 10.0;
+    private static final double MIN_RADIUS = 1.0;
+    private static final double MAX_RADIUS = 10.0;
     
-    public static final double MIN_ANGLE_DEGREES = -180.0;
-    public static final double MAX_ANGLE_DEGREES = 180.0;
+    private static final double MIN_ANGLE_DEGREES = -180.0;
+    private static final double MAX_ANGLE_DEGREES = 180.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double ABSOLUTE_ERROR = 1e-8;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
-    public Polygon2DTest() {
-    }
+    public Polygon2DTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
-    
-    private List<Point2D> buildPolygonVertices(int sides, double radius){
-        List<Point2D> vertices = new ArrayList<Point2D>(sides);
-        Point2D vertex;        
-        for(int i = 0; i < sides; i++){
-            double angle = (double)i / (double)sides * 2.0 * Math.PI;
-            vertex = new InhomogeneousPoint2D(radius * Math.cos(angle),
-                    radius * Math.sin(angle));
-            vertices.add(vertex);
-        }
-        return vertices;
-    }
-    
+    public void tearDown() { }
+
     @Test
-    public void testConstructor() throws NotEnoughVerticesException{
+    public void testConstructor() throws NotEnoughVerticesException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
@@ -91,7 +75,7 @@ public class Polygon2DTest {
         Iterator<Point2D> iterator2 = vertices.iterator();
         
         Point2D vertex1, vertex2;
-        while(iterator1.hasNext() && iterator2.hasNext()){
+        while (iterator1.hasNext() && iterator2.hasNext()) {
             vertex1 = iterator1.next();
             vertex2 = iterator2.next();
             assertTrue(vertex1.equals(vertex2, ABSOLUTE_ERROR));
@@ -104,15 +88,15 @@ public class Polygon2DTest {
         vertices.add(vertex1);
         vertices.add(vertex2);
         polygon = null;
-        try{
+        try {
             polygon = new Polygon2D(vertices);
             fail("NotEnoughVerticesException expected but not thrown");
-        }catch(NotEnoughVerticesException e){}
+        } catch (NotEnoughVerticesException ignore) { }
         assertNull(polygon);
     }
     
     @Test
-    public void testGetSetTriangulatorMethod() throws NotEnoughVerticesException{
+    public void testGetSetTriangulatorMethod() throws NotEnoughVerticesException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
@@ -135,7 +119,7 @@ public class Polygon2DTest {
     }
     
     @Test
-    public void testGetSetVertices() throws NotEnoughVerticesException{
+    public void testGetSetVertices() throws NotEnoughVerticesException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
@@ -159,7 +143,7 @@ public class Polygon2DTest {
     
     @Test
     public void testTriangulateIsTriangulatedAndArea() 
-            throws NotEnoughVerticesException, TriangulatorException{
+            throws NotEnoughVerticesException, TriangulatorException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
@@ -193,7 +177,7 @@ public class Polygon2DTest {
     
     @Test
     public void testGetAreaSignedAreaAndAreVerticesClockwise() 
-            throws NotEnoughVerticesException{
+            throws NotEnoughVerticesException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
@@ -250,7 +234,7 @@ public class Polygon2DTest {
     }
     
     @Test
-    public void testPerimeter() throws NotEnoughVerticesException{
+    public void testPerimeter() throws NotEnoughVerticesException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
@@ -264,7 +248,7 @@ public class Polygon2DTest {
         Point2D prevVertex = iterator.next();
         Point2D curVertex;
         double perimeter = 0.0;
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             curVertex = iterator.next();
             perimeter += curVertex.distanceTo(prevVertex);
             prevVertex = curVertex;
@@ -288,7 +272,7 @@ public class Polygon2DTest {
     
     @Test
     public void testIsInside() throws NotEnoughVerticesException, 
-        TriangulatorException{
+            TriangulatorException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
@@ -317,20 +301,20 @@ public class Polygon2DTest {
         assertFalse(polygon.isInside(outside, ABSOLUTE_ERROR));
         
         //check that vertices are inside
-        for(Point2D vertex: vertices){
+        for (Point2D vertex: vertices) {
             assertTrue(polygon.isInside(vertex));
             assertTrue(polygon.isInside(vertex, ABSOLUTE_ERROR));
         }
         
         //Force IllegalArgumentException
-        try{
+        try {
             polygon.isInside(inside, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testCenter() throws NotEnoughVerticesException{
+    public void testCenter() throws NotEnoughVerticesException {
         //Generate random vertices
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
@@ -341,7 +325,7 @@ public class Polygon2DTest {
 
         
         double inhomX = 0.0, inhomY = 0.0;
-        for(Point2D vertex: vertices){
+        for (Point2D vertex: vertices) {
             inhomX += vertex.getInhomX() / (double)sides;
             inhomY += vertex.getInhomY() / (double)sides;
         }
@@ -358,10 +342,10 @@ public class Polygon2DTest {
     
     @Test
     public void testIsLocusGetShortestDistanceAndClosestPoint() 
-            throws NotEnoughVerticesException, TriangulatorException{
+            throws NotEnoughVerticesException, TriangulatorException {
 
         int numValid = 0;
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
             double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
@@ -402,7 +386,7 @@ public class Polygon2DTest {
             //ensure that notLocusPoint lies outside of polygon
             Polygon2D polygon = new Polygon2D(vertices);
         
-            if(polygon.isInside(notLocusPoint)){
+            if (polygon.isInside(notLocusPoint)) {
                 //change sign of dist to move point in opposite direction
                 dist *= -1.0;
                 notLocusPoint.setInhomogeneousCoordinates(
@@ -432,7 +416,7 @@ public class Polygon2DTest {
                 
         
             assertFalse(polygon.isLocus(notLocusPoint));
-            if(polygon.isLocus(notLocusPoint, ABSOLUTE_ERROR)) {
+            if (polygon.isLocus(notLocusPoint, ABSOLUTE_ERROR)) {
                 continue;
             }
             assertFalse(polygon.isLocus(notLocusPoint, ABSOLUTE_ERROR));
@@ -453,7 +437,7 @@ public class Polygon2DTest {
             assertTrue(polygon.isLocus(notLocusPoint, radius * radius));
         
             //all vertices of polygon are also locus
-            for(Point2D vertex : vertices){
+            for (Point2D vertex : vertices) {
                 assertTrue(polygon.isLocus(vertex));
                 assertTrue(polygon.isLocus(vertex, ABSOLUTE_ERROR));
                 //because vertices are locus, shortest distance is 0.0 and it is
@@ -468,14 +452,26 @@ public class Polygon2DTest {
             }
         
             //Force IllegalArgumentException
-            try{
+            try {
                 polygon.isLocus(locusPoint, -ABSOLUTE_ERROR);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
+            } catch (IllegalArgumentException ignore) { }
 
             numValid++;
         }
 
         assertTrue(numValid > 0);
+    }
+
+    private List<Point2D> buildPolygonVertices(int sides, double radius) {
+        List<Point2D> vertices = new ArrayList<>(sides);
+        Point2D vertex;
+        for (int i = 0; i < sides; i++) {
+            double angle = (double)i / (double)sides * 2.0 * Math.PI;
+            vertex = new InhomogeneousPoint2D(radius * Math.cos(angle),
+                    radius * Math.sin(angle));
+            vertices.add(vertex);
+        }
+        return vertices;
     }
 }

@@ -1,17 +1,26 @@
 /*
- * @file
- * This file contains Unit Tests for
- * com.irurueta.geometry.Conic
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date July 6, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
 import org.junit.*;
+
+import java.util.Random;
+
 import static org.junit.Assert.*;
 
 public class ConicTest {
@@ -48,8 +57,8 @@ public class ConicTest {
     
     @Test
     public void testConstructor() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException, 
-        DecomposerException, CoincidentPointsException {
+            IllegalArgumentException, NonSymmetricMatrixException,
+            DecomposerException, CoincidentPointsException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -293,7 +302,7 @@ public class ConicTest {
     
     @Test
     public void testGettersAndSetters() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException {
+            IllegalArgumentException, NonSymmetricMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -388,7 +397,7 @@ public class ConicTest {
     
     @Test
     public void testAsMatrix() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException {
+            IllegalArgumentException, NonSymmetricMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Conic conic = new Conic();
@@ -646,7 +655,7 @@ public class ConicTest {
     
     @Test
     public void testAngleBetweenPoints() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException {
+            IllegalArgumentException, NonSymmetricMatrixException {
         
         //initial 2D points
         Matrix point1Matrix = Matrix.createWithUniformRandomValues(HOM_COORDS, 
@@ -698,8 +707,8 @@ public class ConicTest {
     
     @Test
     public void testArePerpendicularPoints() throws WrongSizeException, 
-        DecomposerException, RankDeficientMatrixException, 
-        IllegalArgumentException, NonSymmetricMatrixException {
+            DecomposerException, RankDeficientMatrixException,
+            IllegalArgumentException, NonSymmetricMatrixException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             Matrix matrixPoint1 = Matrix.createWithUniformRandomValues(
@@ -801,9 +810,9 @@ public class ConicTest {
     
     @Test
     public void testGetDualConic() throws WrongSizeException, 
-        DecomposerException, RankDeficientMatrixException, 
-        IllegalArgumentException, NonSymmetricMatrixException, 
-        DualConicNotAvailableException {
+            DecomposerException, RankDeficientMatrixException,
+            IllegalArgumentException, NonSymmetricMatrixException,
+            DualConicNotAvailableException {
         
         Matrix transformMatrix = Matrix.createWithUniformRandomValues(
                 HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -893,7 +902,7 @@ public class ConicTest {
     
     @Test
     public void testNormalize() throws WrongSizeException, 
-        IllegalArgumentException, NonSymmetricMatrixException {
+            IllegalArgumentException, NonSymmetricMatrixException {
         
         Matrix t = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);

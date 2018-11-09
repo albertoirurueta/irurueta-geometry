@@ -1,29 +1,32 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.PROSACPoint2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 1, 2015
- * 
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.NoIntersectionException;
 import com.irurueta.geometry.Point2D;
-import com.irurueta.numerical.robust.PROSACRobustEstimator;
-import com.irurueta.numerical.robust.PROSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best 2D point for provided collection of 2D lines using PROSAC
- * algorithm
+ * algorithm.
  */
-public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
+public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
     
     /**
      * Constant defining default threshold to determine whether points are 
@@ -53,13 +56,13 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
      * Threshold to determine whether lines are inliers or not when testing
      * possible estimation solutions.
      * The threshold refers to the amount of error (i.e. distance) a possible 
-     * solution has on a sampled line
+     * solution has on a sampled line.
      */
     private double mThreshold;     
     
     /**
      * Quality scores corresponding to each provided point.
-     * The larger the score value the betther the quality of the sample
+     * The larger the score value the better the quality of the sample
      */
     private double[] mQualityScores;   
     
@@ -74,9 +77,9 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
     private boolean mComputeAndKeepResiduals;    
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public PROSACPoint2DRobustEstimator(){
+    public PROSACPoint2DRobustEstimator() {
         super();
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -84,13 +87,13 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
     }
 
     /**
-     * Constructor with lines
-     * @param lines 2D lines to estimate a 2D point
+     * Constructor with lines.
+     * @param lines 2D lines to estimate a 2D point.
      * @throws IllegalArgumentException if provided list of lines don't have 
-     * a size greater or equal than MINIMUM_SIZE
+     * a size greater or equal than MINIMUM_SIZE.
      */
     public PROSACPoint2DRobustEstimator(List<Line2D> lines) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(lines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -98,11 +101,11 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
-    public PROSACPoint2DRobustEstimator(Point2DRobustEstimatorListener listener){
+    public PROSACPoint2DRobustEstimator(Point2DRobustEstimatorListener listener) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -111,15 +114,15 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
     
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
-     * @param lines 2D lines to estimate a 2D point
+     * starts, ends or its progress significantly changes.
+     * @param lines 2D lines to estimate a 2D point.
      * @throws IllegalArgumentException if provided list of lines don't have 
-     * a size greater or equal than MINIMUM_SIZE
+     * a size greater or equal than MINIMUM_SIZE.
      */
     public PROSACPoint2DRobustEstimator(Point2DRobustEstimatorListener listener,
-            List<Line2D> lines) throws IllegalArgumentException{
+            List<Line2D> lines) throws IllegalArgumentException {
         super(listener, lines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -127,13 +130,13 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
     }
     
     /**
-     * Constructor
-     * @param qualityScores quality scores corresponding to each provided line
+     * Constructor.
+     * @param qualityScores quality scores corresponding to each provided line.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 2 lines)
+     * smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
     public PROSACPoint2DRobustEstimator(double[] qualityScores) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super();
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -142,19 +145,20 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
     }
 
     /**
-     * Constructor with lines
-     * @param lines 2D lines to estimate a 2D point
-     * @param qualityScores quality scores corresponding to each provided line
+     * Constructor with lines.
+     * @param lines 2D lines to estimate a 2D point.
+     * @param qualityScores quality scores corresponding to each provided line.
      * @throws IllegalArgumentException if provided list of lines don't have 
-     * the same size as the list of provided quality scores, or it their size 
-     * is not greater or equal than MINIMUM_SIZE
+     * the same size as the list of provided quality scores, or it their size
+     * is not greater or equal than MINIMUM_SIZE.
      */
     public PROSACPoint2DRobustEstimator(List<Line2D> lines,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         super(lines);
         
-        if(qualityScores.length != lines.size()) 
+        if (qualityScores.length != lines.size()) {
             throw new IllegalArgumentException();
+        }
         
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -163,15 +167,15 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
-     * @param qualityScores quality scores corresponding to each provided line
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each provided line.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 2 lines)
+     * smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
     public PROSACPoint2DRobustEstimator(Point2DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -181,21 +185,21 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
     
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
-     * @param lines 2D lines to estimate a 2D point
-     * @param qualityScores quality scores corresponding to each provided line
+     * starts, ends or its progress significantly changes.
+     * @param lines 2D lines to estimate a 2D point.
+     * @param qualityScores quality scores corresponding to each provided line.
      * @throws IllegalArgumentException if provided list of lines don't have 
      * the same size as the list of provided quality scores, or it their size 
-     * is not greater or equal than MINIMUM_SIZE
+     * is not greater or equal than MINIMUM_SIZE.
      */
     public PROSACPoint2DRobustEstimator(Point2DRobustEstimatorListener listener,
             List<Line2D> lines, double[] qualityScores) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener, lines);
         
-        if(qualityScores.length != lines.size()) {
+        if (qualityScores.length != lines.size()) {
             throw new IllegalArgumentException();
         }
         
@@ -209,66 +213,72 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
      * Returns threshold to determine whether lines are inliers or not when 
      * testing possible estimation solutions.
      * The threshold refers to the amount of error a possible solution has on a 
-     * given line
+     * given line.
      * @return threshold to determine whether lines are inliers or not when 
-     * testing possible estimation solutions
+     * testing possible estimation solutions.
      */
-    public double getThreshold(){
+    public double getThreshold() {
         return mThreshold;
     }
     
     /**
      * Sets threshold to determine whether lines are inliers or not when 
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error a possible solution has on 
-     * a given line
-     * @param threshold threshold to be set
+     * The threshold refers to the amount of error a possible solution has on
+     * a given line.
+     * @param threshold threshold to be set.
      * @throws IllegalArgumentException if provided value is equal or less than 
-     * zero
+     * zero.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException{
-        if(isLocked()) throw new LockedException();
-        if(threshold <= MIN_THRESHOLD) throw new IllegalArgumentException();
+            LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (threshold <= MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         mThreshold = threshold;
     }
     
     /**
      * Returns quality scores corresponding to each provided line.
-     * The larger the score value the betther the quality of the sampled line
-     * @return quality scores corresponding to each line
+     * The larger the score value the better the quality of the sampled line.
+     * @return quality scores corresponding to each line.
      */
     @Override
-    public double[] getQualityScores(){
+    public double[] getQualityScores() {
         return mQualityScores;
     }
     
     /**
      * Sets quality scores corresponding to each provided line.
-     * The larger the score value the better the quality of the sampled line
-     * @param qualityScores quality scores corresponding to each line
+     * The larger the score value the better the quality of the sampled line.
+     * @param qualityScores quality scores corresponding to each line.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 2 samples)
+     * smaller than MINIMUM_SIZE (i.e. 2 samples).
      */
     @Override
     public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetQualityScores(qualityScores);
     }
     
     /**
-     * Indicates if eatimator is ready to start the 2D point estimation.
+     * Indicates if estimator is ready to start the 2D point estimation.
      * This is true when input data (i.e. 2D lines and quality scores) are 
-     * provided and a minimum of MINIMUM_SIZE points are available
-     * @return true if estimator is ready, false otherwise
+     * provided and a minimum of MINIMUM_SIZE points are available.
+     * @return true if estimator is ready, false otherwise.
      */
     @Override
-    public boolean isReady(){
+    public boolean isReady() {
         return super.isReady() && mQualityScores != null && 
                 mQualityScores.length == mLines.size();
     }      
@@ -321,24 +331,28 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
     
     /**
      * Estimates a 2D point using a robust estimator and the best set of 2D 
-     * lines that intersect into the estimated 2D point
-     * @return a 2D point
+     * lines that intersect into the estimated 2D point.
+     * @return a 2D point.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */
     @Override
     public Point2D estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         PROSACRobustEstimator<Point2D> innerEstimator =
-                new PROSACRobustEstimator<Point2D>(
-                        new PROSACRobustEstimatorListener<Point2D>(){
+                new PROSACRobustEstimator<>(
+                        new PROSACRobustEstimatorListener<Point2D>() {
 
             @Override
             public double getThreshold() {
@@ -361,10 +375,10 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
                 Line2D line1 = mLines.get(samplesIndices[0]);
                 Line2D line2 = mLines.get(samplesIndices[1]);
                 
-                try{
+                try {
                     Point2D point = line1.getIntersection(line2);
                     solutions.add(point);
-                }catch(NoIntersectionException e){
+                } catch (NoIntersectionException e) {
                     //if points are coincident, no solution is added
                 }
             }
@@ -381,14 +395,14 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
 
             @Override
             public void onEstimateStart(RobustEstimator<Point2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(PROSACPoint2DRobustEstimator.this);
                 }
             }
 
             @Override
             public void onEstimateEnd(RobustEstimator<Point2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(PROSACPoint2DRobustEstimator.this);
                 }
             }
@@ -396,7 +410,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator<Point2D> estimator, int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             PROSACPoint2DRobustEstimator.this, iteration);
                 }
@@ -405,7 +419,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator<Point2D> estimator, float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             PROSACPoint2DRobustEstimator.this, progress);
                 }
@@ -417,7 +431,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
             }            
         });
         
-        try{
+        try {
             mLocked = true;
             mInliersData = null;
             innerEstimator.setComputeAndKeepInliersEnabled(
@@ -430,18 +444,18 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
             Point2D result = innerEstimator.estimate();
             mInliersData = innerEstimator.getInliersData();
             return attemptRefine(result);
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
@@ -466,15 +480,16 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator{
     /**
      * Sets quality scores corresponding to each provided line.
      * This method is used internally and does not check whether instance is
-     * locked or not
-     * @param qualityScores quality scores to be set
+     * locked or not.
+     * @param qualityScores quality scores to be set.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE
+     * smaller than MINIMUM_SIZE.
      */
     private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException{
-        if(qualityScores.length < MINIMUM_SIZE) 
+            throws IllegalArgumentException {
+        if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
+        }
         
         mQualityScores = qualityScores;        
     }        

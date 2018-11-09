@@ -1,22 +1,27 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.EuclideanTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 26, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Point2D;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class EuclideanTransformation2DRobustEstimatorTest {
@@ -40,8 +45,8 @@ public EuclideanTransformation2DRobustEstimatorTest() { }
         EuclideanTransformation2DRobustEstimator estimator;
                 
         //create with points and method
-        List<Point2D> inputPoints = new ArrayList<Point2D>();
-        List<Point2D> outputPoints = new ArrayList<Point2D>();
+        List<Point2D> inputPoints = new ArrayList<>();
+        List<Point2D> outputPoints = new ArrayList<>();
         for (int i = 0; i < EuclideanTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point2D.create());
             outputPoints.add(Point2D.create());
@@ -113,19 +118,19 @@ public EuclideanTransformation2DRobustEstimatorTest() { }
         assertNull(estimator.getCovariance());        
         
         //Force IllegalArgumentException
-        List<Point2D> emptyPoints = new ArrayList<Point2D>();
+        List<Point2D> emptyPoints = new ArrayList<>();
         
         estimator = null;
-        try{
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     emptyPoints, outputPoints, RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     inputPoints, emptyPoints, RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
                                 
         //test with listener and points
@@ -298,24 +303,24 @@ public EuclideanTransformation2DRobustEstimatorTest() { }
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     emptyPoints, outputPoints, qualityScores, 
                     RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     inputPoints, emptyPoints, qualityScores, 
                     RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     inputPoints, outputPoints, wrongQualityScores, 
                     RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, points, quality scores and method
@@ -391,24 +396,24 @@ public EuclideanTransformation2DRobustEstimatorTest() { }
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     listener, emptyPoints, outputPoints, qualityScores,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     listener, inputPoints, emptyPoints, qualityScores,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     listener, inputPoints, outputPoints, wrongQualityScores,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with points
@@ -427,16 +432,16 @@ public EuclideanTransformation2DRobustEstimatorTest() { }
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     emptyPoints, outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     inputPoints, emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener and points
@@ -455,16 +460,16 @@ public EuclideanTransformation2DRobustEstimatorTest() { }
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     listener, emptyPoints, outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     listener, inputPoints, emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with points and quality scores
@@ -497,8 +502,8 @@ public EuclideanTransformation2DRobustEstimatorTest() { }
         
         
         //create with points and method and weak points
-        inputPoints = new ArrayList<Point2D>();
-        outputPoints = new ArrayList<Point2D>();
+        inputPoints = new ArrayList<>();
+        outputPoints = new ArrayList<>();
         for (int i = 0; i < EuclideanTransformation2DRobustEstimator.WEAK_MINIMUM_SIZE; i++) {
             inputPoints.add(Point2D.create());
             outputPoints.add(Point2D.create());
@@ -571,18 +576,18 @@ public EuclideanTransformation2DRobustEstimatorTest() { }
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     emptyPoints, outputPoints, true, 
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     inputPoints, emptyPoints, true, 
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
                                 
         //test with listener and points        
@@ -732,24 +737,24 @@ public EuclideanTransformation2DRobustEstimatorTest() { }
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     emptyPoints, outputPoints, qualityScores, true,
                     RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     inputPoints, emptyPoints, qualityScores, true,
                     RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     inputPoints, outputPoints, wrongQualityScores, true, 
                     RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, points, quality scores and method
@@ -825,24 +830,24 @@ public EuclideanTransformation2DRobustEstimatorTest() { }
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     listener, emptyPoints, outputPoints, qualityScores, true,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     listener, inputPoints, emptyPoints, qualityScores, true,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     listener, inputPoints, outputPoints, wrongQualityScores, 
                     true, RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with points
@@ -861,16 +866,16 @@ public EuclideanTransformation2DRobustEstimatorTest() { }
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     emptyPoints, outputPoints, true);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     inputPoints, emptyPoints, true);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener and points
@@ -889,16 +894,16 @@ public EuclideanTransformation2DRobustEstimatorTest() { }
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     listener, emptyPoints, outputPoints, true);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = EuclideanTransformation2DRobustEstimator.create(
                     listener, inputPoints, emptyPoints, true);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with points and quality scores

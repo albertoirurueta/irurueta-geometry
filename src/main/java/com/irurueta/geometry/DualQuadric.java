@@ -1,41 +1,52 @@
 /*
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.DualQuadric
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date August 14, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.*;
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.WrongSizeException;
+
 import java.io.Serializable;
 
 /**
- *  This class contains implementation of a dual quadric
+ *  This class contains implementation of a dual quadric.
  */
 public class DualQuadric extends BaseQuadric implements Serializable {
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public DualQuadric(){
+    public DualQuadric() {
         super();
     }
     
     /**
      * Constructor of this class. This constructor accepts every parameter
-     * describing a dual quadric (parameters a, b, c, d, e, f, g, h, i, j)
-     * @param a Parameter A of the quadric
-     * @param b Parameter B of the quadric
-     * @param c Parameter C of the quadric
-     * @param d Parameter D of the quadric
-     * @param e Parameter E of the quadric
-     * @param f Parameter F of the quadric
-     * @param g Parameter G of the quadric
-     * @param h Parameter H of the quadric
-     * @param i Parameter I of the quadric
-     * @param j Parameter J of the quadric
+     * describing a dual quadric (parameters a, b, c, d, e, f, g, h, i, j).
+     * @param a Parameter A of the quadric.
+     * @param b Parameter B of the quadric.
+     * @param c Parameter C of the quadric.
+     * @param d Parameter D of the quadric.
+     * @param e Parameter E of the quadric.
+     * @param f Parameter F of the quadric.
+     * @param g Parameter G of the quadric.
+     * @param h Parameter H of the quadric.
+     * @param i Parameter I of the quadric.
+     * @param j Parameter J of the quadric.
      */
     public DualQuadric(double a, double b, double c, double d, double e, 
             double f, double g, double h, double i, double j) {
@@ -44,12 +55,12 @@ public class DualQuadric extends BaseQuadric implements Serializable {
     
     /**
      * This method sets the matrix used to describe a dual quadric.
-     * This matrix must be 4x4 and symmetric
+     * This matrix must be 4x4 and symmetric.
      * @param m  4x4 Matrix describing the quadric.
      * @throws IllegalArgumentException Raised when the size of the matrix is 
-     * not 4x4
+     * not 4x4.
      * @throws NonSymmetricMatrixException Raised when the quadric matrix is not
-     * symmetric
+     * symmetric.
      */
     public DualQuadric(Matrix m) throws IllegalArgumentException,
             NonSymmetricMatrixException {
@@ -59,19 +70,19 @@ public class DualQuadric extends BaseQuadric implements Serializable {
     /**
      * Creates a dual matrix where provided planes are its locus, or in other
      * words, provided planes are tangent to the quadric corresponding to the
-     * created dual quadric
-     * @param plane1 1st plane
-     * @param plane2 2nd plane
-     * @param plane3 3rd plane
-     * @param plane4 4th plane
-     * @param plane5 5th plane
-     * @param plane6 6th plane
-     * @param plane7 7th plane
-     * @param plane8 8th plane
-     * @param plane9 9th plane
+     * created dual quadric.
+     * @param plane1 1st plane.
+     * @param plane2 2nd plane.
+     * @param plane3 3rd plane.
+     * @param plane4 4th plane.
+     * @param plane5 5th plane.
+     * @param plane6 6th plane.
+     * @param plane7 7th plane.
+     * @param plane8 8th plane.
+     * @param plane9 9th plane.
      * @throws CoincidentPlanesException if provided planes are in a 
      * configuration where more than one plane is coincident, creating a 
-     * degeneracy
+     * degeneracy.
      */
     public DualQuadric(Plane plane1, Plane plane2, Plane plane3, Plane plane4,
             Plane plane5, Plane plane6, Plane plane7, Plane plane8, 
@@ -85,18 +96,20 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * words, checks whether provided plane lies within this quadric, or whether
      * provided plane is tangent to the quadric corresponding to this dual 
      * quadric.
-     * @param plane Plane to be tested
+     * @param plane Plane to be tested.
      * @param threshold Threshold of tolerance to determine whether this plane
      * is locus or not. This is needed because of limited machine precision. If
      * threshold is not provided, then DEFAULT_LOCUS_THRESHOLD is used instead.
      * @return True if provided plane is locus of this dual quadric, false
      * otherwise.
-     * @throws IllegalArgumentException Raised if provided threshold is negative
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean isLocus(Plane plane, double threshold) 
             throws IllegalArgumentException {
 
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         
         try {
             normalize();
@@ -117,12 +130,12 @@ public class DualQuadric extends BaseQuadric implements Serializable {
         }
     }
     
-        /**
+    /**
      * Checks if provided plane is locus of this dual quadric, or in other 
      * words, checks whether provided plane lies within this quadric, or whether
      * provided plane is tangent to the quadric corresponding to this dual 
      * quadric.
-     * @param plane Plane to be tested
+     * @param plane Plane to be tested.
      * @return True if provided plane is locus of this dual quadric, false
      * otherwise.
      * @see #isLocus(Plane, double)
@@ -132,13 +145,13 @@ public class DualQuadric extends BaseQuadric implements Serializable {
     }
     
     /**
-     * Computes the angle between two planes in radians
-     * @param planeA First plane to be tested
-     * @param planeB Second plane to be tested
+     * Computes the angle between two planes in radians.
+     * @param planeA First plane to be tested.
+     * @param planeB Second plane to be tested.
      * @return Angle between the two provided planes in radians. This angle is
      * equal to the angle of their corresponding director vectors in an 
      * euclidean geometry, but it might not be the case for the geometry defined
-     * by this dual quadric
+     * by this dual quadric.
      */
     public double angleBetweenPlanes(Plane planeA, Plane planeB) {
         try {
@@ -187,8 +200,8 @@ public class DualQuadric extends BaseQuadric implements Serializable {
     /**
      * Checks if two planes are perpendicular attending to the geometry defined
      * by this dual quadric, or in other words, if lA' * dualQ * lB is zero.
-     * @param planeA First plane to be checked
-     * @param planeB Second plane to be checked
+     * @param planeA First plane to be checked.
+     * @param planeB Second plane to be checked.
      * @param threshold Threshold of tolerance to determine whether the planes
      * are perpendicular or not. This is needed because of limited machine
      * precision. If threshold is not provided, then
@@ -200,7 +213,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
     public boolean arePerpendicularPlanes(Plane planeA, Plane planeB, 
             double threshold) throws IllegalArgumentException {
         try {
-            //retrueve quadric as matrix
+            //retrieve quadric as matrix
             Matrix transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);
             planeA.normalize();
             transHomPlaneA.setElementAt(0, 0, planeA.getA());
@@ -234,8 +247,8 @@ public class DualQuadric extends BaseQuadric implements Serializable {
     /**
      * Checks if two planes are perpendicular attending to the geometry defined
      * by this dual quadric, or in other words, if lA' * dualQ * lB is zero.
-     * @param planeA First plane to be checked
-     * @param planeB Second plane to be checked
+     * @param planeA First plane to be checked.
+     * @param planeB Second plane to be checked.
      * @return True if provided planes are perpendicular, false otherwise.
      */    
     public boolean arePerpendicularPlanes(Plane planeA, Plane planeB) {
@@ -248,7 +261,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @return A new quadric instance of this dual quadric.
      * @throws QuadricNotAvailableException Raised if the rank of the dual 
      * quadric matrix is not complete due to wrong parameters or numerical 
-     * instability
+     * instability.
      */
     public Quadric getQuadric() throws QuadricNotAvailableException {
         Quadric q = new Quadric();
@@ -258,11 +271,11 @@ public class DualQuadric extends BaseQuadric implements Serializable {
     
     /**
      * Computes the quadric correpsonding to this dual quadric and stores the
-     * result in provided instance
+     * result in provided instance.
      * @param quadric Quadric where result is stored.
      * @throws QuadricNotAvailableException Raised if the rank of the dual 
      * quadric matrix is not complete due to wrong parameters or numerical
-     * instability
+     * instability.
      */
     public void quadric(Quadric quadric) throws QuadricNotAvailableException {
         
@@ -295,19 +308,20 @@ public class DualQuadric extends BaseQuadric implements Serializable {
     
     /**
      * Sets parameters of this dual quadric so that provided planes lie within
-     * it (are locus)
-     * @param plane1 1st plane
-     * @param plane2 2nd plane
-     * @param plane3 3rd plane
-     * @param plane4 4th plane
-     * @param plane5 5th plane
-     * @param plane6 6th plane
-     * @param plane7 7th plane
-     * @param plane8 8th plane
-     * @param plane9 9th plane
+     * it (are locus).
+     * @param plane1 1st plane.
+     * @param plane2 2nd plane.
+     * @param plane3 3rd plane.
+     * @param plane4 4th plane.
+     * @param plane5 5th plane.
+     * @param plane6 6th plane.
+     * @param plane7 7th plane.
+     * @param plane8 8th plane.
+     * @param plane9 9th plane.
      * @throws CoincidentPlanesException Raised if planes are coincident or
-     * produce a degenerated configuration
+     * produce a degenerated configuration.
      */
+    @SuppressWarnings("WeakerAccess")
     public final void setParametersFromPlanes(Plane plane1, Plane plane2,
             Plane plane3, Plane plane4, Plane plane5, Plane plane6, 
             Plane plane7, Plane plane8, Plane plane9) 

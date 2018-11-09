@@ -1,28 +1,32 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.MSACPoint3DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 2, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.NoIntersectionException;
 import com.irurueta.geometry.Plane;
 import com.irurueta.geometry.Point3D;
-import com.irurueta.numerical.robust.MSACRobustEstimator;
-import com.irurueta.numerical.robust.MSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best 3D point for provided collection of 3D planes using MSAC
- * algorithm
+ * algorithm.
  */
-public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator{
+public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
     
     /**
      * Constant defining default threshold to determine whether points are 
@@ -34,7 +38,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator{
         
     /**
      * Minimum value that can be set as threshold.
-     * Threshold must be strictly greater than 0.0
+     * Threshold must be strictly greater than 0.0.
      */
     public static final double MIN_THRESHOLD = 0.0;
     
@@ -42,51 +46,51 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator{
      * Threshold to determine whether lines are inliers or not when testing
      * possible estimation solutions.
      * The threshold refers to the amount of error (i.e. distance) a possible 
-     * solution has on a sampled line
+     * solution has on a sampled line.
      */
     private double mThreshold;     
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public MSACPoint3DRobustEstimator(){
+    public MSACPoint3DRobustEstimator() {
         super();
         mThreshold = DEFAULT_THRESHOLD;
     }
 
     /**
-     * Constructor with planes
-     * @param planes 3D planes to estimate a 3D point
+     * Constructor with planes.
+     * @param planes 3D planes to estimate a 3D point.
      * @throws IllegalArgumentException if provided list of planes doesn't have 
-     * a size greater or equal than MINIMUM_SIZE
+     * a size greater or equal than MINIMUM_SIZE.
      */
     public MSACPoint3DRobustEstimator(List<Plane> planes) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(planes);
         mThreshold = DEFAULT_THRESHOLD;
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
-    public MSACPoint3DRobustEstimator(Point3DRobustEstimatorListener listener){
+    public MSACPoint3DRobustEstimator(Point3DRobustEstimatorListener listener) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
     }
     
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
-     * @param planes 3D planes to estimate a 3D point
+     * starts, ends or its progress significantly changes.
+     * @param planes 3D planes to estimate a 3D point.
      * @throws IllegalArgumentException if provided list of planes doesn't have 
-     * a size greater or equal than MINIMUM_SIZE
+     * a size greater or equal than MINIMUM_SIZE.
      */
     public MSACPoint3DRobustEstimator(Point3DRobustEstimatorListener listener,
-            List<Plane> planes) throws IllegalArgumentException{
+            List<Plane> planes) throws IllegalArgumentException {
         super(listener, planes);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -95,11 +99,11 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator{
      * Returns threshold to determine whether planes are inliers or not when 
      * testing possible estimation solutions.
      * The threshold refers to the amount of error a possible solution has on a 
-     * given plane
+     * given plane.
      * @return threshold to determine whether planes are inliers or not when 
-     * testing possible estimation solutions
+     * testing possible estimation solutions.
      */
-    public double getThreshold(){
+    public double getThreshold() {
         return mThreshold;
     }
     
@@ -107,41 +111,49 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator{
      * Sets threshold to determine whether planes are inliers or not when 
      * testing possible estimation solutions.
      * Thre threshold refers to the amount of error a possible solution has on 
-     * a given plane
-     * @param threshold threshold to be set
+     * a given plane.
+     * @param threshold threshold to be set.
      * @throws IllegalArgumentException if provided value is equal or less than 
-     * zero
+     * zero.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException{
-        if(isLocked()) throw new LockedException();
-        if(threshold <= MIN_THRESHOLD) throw new IllegalArgumentException();
+            LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (threshold <= MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         mThreshold = threshold;
     }
     
             
     /**
      * Estimates a 3D point using a robust estimator and the best set of 3D 
-     * planes that intersect into the estimated 3D point
-     * @return a 3D point
+     * planes that intersect into the estimated 3D point.
+     * @return a 3D point.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */
     @Override
     public Point3D estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         MSACRobustEstimator<Point3D> innerEstimator =
-                new MSACRobustEstimator<Point3D>(
-                        new MSACRobustEstimatorListener<Point3D>(){
+                new MSACRobustEstimator<>(
+                        new MSACRobustEstimatorListener<Point3D>() {
 
             @Override
             public double getThreshold() {
@@ -165,10 +177,10 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator{
                 Plane plane2 = mPlanes.get(samplesIndices[1]);
                 Plane plane3 = mPlanes.get(samplesIndices[2]);
                 
-                try{
+                try {
                     Point3D point = plane1.getIntersection(plane2, plane3);
                     solutions.add(point);
-                }catch(NoIntersectionException e){
+                } catch (NoIntersectionException e) {
                     //if points are coincident, no solution is added
                 }
             }
@@ -185,14 +197,14 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator{
 
             @Override
             public void onEstimateStart(RobustEstimator<Point3D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(MSACPoint3DRobustEstimator.this);
                 }
             }
 
             @Override
             public void onEstimateEnd(RobustEstimator<Point3D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(MSACPoint3DRobustEstimator.this);
                 }
             }
@@ -200,7 +212,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator{
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator<Point3D> estimator, int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             MSACPoint3DRobustEstimator.this, iteration);
                 }
@@ -209,7 +221,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator{
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator<Point3D> estimator, float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             MSACPoint3DRobustEstimator.this, progress);
                 }
@@ -227,7 +239,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator{
             return attemptRefine(result);
         } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        } catch(com.irurueta.numerical.NotReadyException e) {
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
             mLocked = false;
@@ -235,8 +247,8 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator{
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */    
     @Override
     public RobustEstimatorMethod getMethod() {

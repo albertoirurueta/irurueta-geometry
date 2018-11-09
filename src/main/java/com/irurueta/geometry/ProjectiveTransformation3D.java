@@ -1,21 +1,23 @@
 /*
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.ProjectiveTransformation3D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 30, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.LUDecomposer;
-import com.irurueta.algebra.Matrix;
-import com.irurueta.algebra.RQDecomposer;
-import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.*;
 import com.irurueta.algebra.Utils;
-import com.irurueta.algebra.WrongSizeException;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -26,48 +28,50 @@ import java.util.Arrays;
  */
 public class ProjectiveTransformation3D extends Transformation3D 
         implements Serializable {
+
     /**
-     * Internal 4x4 matrix containing transformation
-     */
-    private Matrix T;
-    
-    /**
-     * Indicates whether internal matrix is normalized
-     */
-    private boolean normalized;
-    
-    /**
-     * Constant indicating number of coordinates required in translation arrays
+     * Constant indicating number of coordinates required in translation arrays.
      */
     public static final int NUM_TRANSLATION_COORDS = 3;
-    
+
     /**
      * Constant indicating the number of projective parameters that can be set
-     * in projective parameters array
+     * in projective parameters array.
      */
+    @SuppressWarnings("all")
     public static final int NUM_PROJECTIVE_PARAMS = 4;
-    
-    /*
+
+    /**
      * Constant defining number of inhomogeneous coordinates in 3D space
      */
     public static final int INHOM_COORDS = 3;
-    
+
     /**
      * Constant defining number of homogeneous coordinates in 3D space
      */
     public static final int HOM_COORDS = 4;
-    
+
     /**
      * Machine precision
      */
     public static final double EPS = 1e-12;
-    
+
     /**
-     * Constant defining a large threshold to consider a matrix valid as 
+     * Constant defining a large threshold to consider a matrix valid as
      * rotation
      */
     private static final double LARGE_ROTATION_MATRIX_THRESHOLD = 1.0;
+
+    /**
+     * Internal 4x4 matrix containing transformation.
+     */
+    private Matrix T;
     
+    /**
+     * Indicates whether internal matrix is normalized.
+     */
+    private boolean normalized;
+
     /**
      * Empty constructor.
      * Creates transformation that has no effect.
@@ -80,7 +84,7 @@ public class ProjectiveTransformation3D extends Transformation3D
         normalize();
     }
     
-    /*
+    /**
      * Creates transformation with provided internal matrix.
      * Notice that provided matrix should usually be invertible, otherwise the
      * transformation will be degenerate and its inverse will not be available.
@@ -530,7 +534,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public final void setT(Matrix T) throws NullPointerException,
             IllegalArgumentException {
-        if(T.getRows() != HOM_COORDS || T.getColumns() != HOM_COORDS) {
+        if (T.getRows() != HOM_COORDS || T.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -545,11 +549,11 @@ public class ProjectiveTransformation3D extends Transformation3D
      * transformation.
      * @return true if matrix will produce a degenerate transformation, false
      * otherwise.
-     * @throws IllegalArgumentException raised if provided matrix is not 4x4
+     * @throws IllegalArgumentException raised if provided matrix is not 4x4.
      */
     public static boolean isDegenerate(Matrix T) 
             throws IllegalArgumentException {
-        if(T.getRows() != HOM_COORDS || T.getColumns() != HOM_COORDS) {
+        if (T.getRows() != HOM_COORDS || T.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -579,7 +583,8 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @return linear mapping matrix.
      */
     public Matrix getA() {
-        Matrix A = T.getSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1);
+        Matrix A = T.getSubmatrix(0, 0, INHOM_COORDS - 1,
+                INHOM_COORDS - 1);
         A.multiplyByScalar(1.0 / T.getElementAt(HOM_COORDS - 1, 
                 HOM_COORDS - 1));
         return A;
@@ -595,14 +600,15 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public final void setA(Matrix A) throws NullPointerException, 
             IllegalArgumentException {
-        if(A == null) {
+        if (A == null) {
             throw new NullPointerException();
         }
-        if(A.getRows() != INHOM_COORDS || A.getColumns() != INHOM_COORDS) {
+        if (A.getRows() != INHOM_COORDS || A.getColumns() != INHOM_COORDS) {
             throw new IllegalArgumentException();
         }
 
-        T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, 
+        T.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                INHOM_COORDS - 1,
                 A.multiplyByScalarAndReturnNew(1.0 * T.getElementAt(
                 HOM_COORDS - 1, HOM_COORDS - 1)));
     }
@@ -611,9 +617,9 @@ public class ProjectiveTransformation3D extends Transformation3D
      * Normalizes current matrix instance.
      */
     public final void normalize() {
-        if(!normalized) {
+        if (!normalized) {
             double norm = Utils.normF(T);
-            if(norm > EPS) {
+            if (norm > EPS) {
                 T.multiplyByScalar(1.0 / norm);
             }
             normalized = true;
@@ -662,7 +668,8 @@ public class ProjectiveTransformation3D extends Transformation3D
         decomposer.decompose();
         Matrix localA = decomposer.getR(); //retrieves params matrix
         localA.multiply(rotMatrix);
-        T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, localA);
+        T.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                INHOM_COORDS - 1, localA);
         normalized = false;
     }
     
@@ -764,7 +771,8 @@ public class ProjectiveTransformation3D extends Transformation3D
         params.multiply(rotation);  //params is equivalent to A because it
                                     //has been multiplied by rotation
         params.multiplyByScalar(value); //normalize
-        T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, params);
+        T.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                INHOM_COORDS - 1, params);
         normalized = false;
     }    
     
@@ -798,12 +806,12 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public final void setProjectiveParameters(double[] params) 
             throws IllegalArgumentException {
-        if(params.length != HOM_COORDS) {
+        if (params.length != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
-        T.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1, HOM_COORDS - 1, 
-                params);
+        T.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1,
+                HOM_COORDS - 1, params);
         normalized = false;
     }    
     
@@ -849,7 +857,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public void setTranslation(double[] translation)
             throws IllegalArgumentException {
-        if(translation.length != NUM_TRANSLATION_COORDS) {
+        if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -1053,7 +1061,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     @Override
     public void asMatrix(Matrix m) throws IllegalArgumentException {
-        if(m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
+        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -1149,8 +1157,8 @@ public class ProjectiveTransformation3D extends Transformation3D
      */        
     @Override
     public void transform(DualQuadric inputDualQuadric, 
-        DualQuadric outputDualQuadric) throws NonSymmetricMatrixException, 
-        AlgebraException {
+            DualQuadric outputDualQuadric) throws NonSymmetricMatrixException,
+            AlgebraException {
         //plane' * dualQuadric * plane = 0
         //plane' * T^-1 * T * dualQuadric * T' * T^-1'*plane
 
@@ -1729,7 +1737,9 @@ public class ProjectiveTransformation3D extends Transformation3D
             
             //ensure that matrix m has enough rank and there is a unique 
             //solution (up to scale)
-            if(decomposer.getRank() < 15) throw new CoincidentPointsException();
+            if (decomposer.getRank() < 15) {
+                throw new CoincidentPointsException();
+            }
             V = decomposer.getV(); //V is 16x16
             
             //last column of V will contain parameters of transformation
@@ -2149,7 +2159,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(14, 13, -oCiB / norm);
             m.setElementAt(14, 14, -oCiC / norm);
             m.setElementAt(14, 15, -oCiD / norm);
-        }catch(WrongSizeException ignore){}
+        } catch (WrongSizeException ignore) { }
                         
         //use SVD to decompose matrix m
         Matrix V;
@@ -2159,12 +2169,15 @@ public class ProjectiveTransformation3D extends Transformation3D
             
             //ensure that matrix m has enough rank and there is a unique 
             //solution (up to scale)
-            if(decomposer.getRank() < 15) throw new CoincidentPlanesException();
+            if (decomposer.getRank() < 15) {
+                throw new CoincidentPlanesException();
+            }
             V = decomposer.getV(); //V is 16x16
             
             //last column of V will contain parameters of transformation
             Matrix transInvT = new Matrix(HOM_COORDS, HOM_COORDS);
-            transInvT.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1,
+            transInvT.setSubmatrix(0, 0, HOM_COORDS - 1,
+                    HOM_COORDS - 1,
                     V.getSubmatrix(0, 15, 15, 15).toArray(),
                     false);
             transInvT.transpose(); //this is now invT

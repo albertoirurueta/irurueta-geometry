@@ -29,7 +29,7 @@ import java.io.Serializable;
  * setting the w coordinate to one (w=1, not at infinity) as follows:
  * Inhomogeneous 2d point (x,y) -&lt; Homogeneous 2d point (x,y,1).
  */
-public class HomogeneousPoint2D extends Point2D implements Serializable{
+public class HomogeneousPoint2D extends Point2D implements Serializable {
 
     /**
      * Default threshold to consider a point is located at infinity.
@@ -57,7 +57,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable{
     private double mW;
     
     /**
-     * Determines whether this point is already mNormalized.
+     * Determines whether this point is already normalized.
      */
     private boolean mNormalized;
 
@@ -111,7 +111,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable{
      * Returns the X coordinate of the given homogeneous 2D point instance.
      * @return X coordinate.
      */
-    public double getX(){
+    public double getX() {
         return mX;
     }
     
@@ -182,7 +182,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable{
     @Override
     public final void setCoordinates(double[] v) 
             throws IllegalArgumentException {
-        if(v.length != POINT2D_HOMOGENEOUS_COORDINATES_LENGTH) {
+        if (v.length != POINT2D_HOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         } else {
             mX = v[0];
@@ -194,30 +194,28 @@ public class HomogeneousPoint2D extends Point2D implements Serializable{
     
     /**
      * Sets coordinates of this instance using the coordinates of provided 2D 
-     * point
-     * @param point Input point
+     * point.
+     * @param point Input point.
      */    
     @Override
     public final void setCoordinates(Point2D point) {
-        switch(point.getType()){
-            case INHOMOGENEOUS_COORDINATES: {
-                
+        switch (point.getType()) {
+            case INHOMOGENEOUS_COORDINATES:
                 InhomogeneousPoint2D inhomPoint = (InhomogeneousPoint2D)point;
                 mX = inhomPoint.getX();
                 mY = inhomPoint.getY();
                 mW = 1.0;
                 mNormalized = false;
                 break;
-            }
+
             case HOMOGENEOUS_COORDINATES:
-            default: {
+            default:
                 HomogeneousPoint2D homPoint = (HomogeneousPoint2D)point;
                 mX = homPoint.getX();
                 mY = homPoint.getY();
                 mW = homPoint.getW();
                 mNormalized = false;
                 break;
-            }
         }
     }
 
@@ -301,9 +299,9 @@ public class HomogeneousPoint2D extends Point2D implements Serializable{
 
     /**
      * Sets coordinates of this 2d point instance using provided inhomogeneous
-     * coordinates
-     * @param inhomX x inhomogeneous coordinate
-     * @param inhomY y inhomogeneous coordinate
+     * coordinates.
+     * @param inhomX x inhomogeneous coordinate.
+     * @param inhomY y inhomogeneous coordinate.
      */    
     @Override
     public void setInhomogeneousCoordinates(double inhomX, double inhomY) {
@@ -378,10 +376,10 @@ public class HomogeneousPoint2D extends Point2D implements Serializable{
      * @param threshold threshold grade of tolerance to determine whether the
      * points are equal or not. It is used because due to machine precision, the
      * values might not be exactly equal (if not provided 
-     * DEFAULT_COMPARISON_THRESHOLD is used)
+     * DEFAULT_COMPARISON_THRESHOLD is used).
      * @return True if current point and input point are the same, false 
-     * otherwise
-     * @throws IllegalArgumentException Raised if threshold is negative
+     * otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean equals(HomogeneousPoint2D point, double threshold)
             throws IllegalArgumentException {
@@ -548,7 +546,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable{
      */
     @Override
     public void asArray(double[] array) throws IllegalArgumentException {
-        if(array.length != POINT2D_HOMOGENEOUS_COORDINATES_LENGTH) {
+        if (array.length != POINT2D_HOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         }
         array[0] = mX;

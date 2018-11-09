@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.LineCorrespondenceAffineTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 11, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,19 +19,20 @@ import com.irurueta.geometry.AffineTransformation2D;
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.refiners.LineCorrespondenceAffineTransformation2DRefiner;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
 import java.util.List;
 
 /**
  * This is an abstract class for algorithms to robustly find the best affine
  * 2D transformation for collections of matching 2D lines.
  * Implementations of this class should be able to detect and discard outliers
- * in order to find the best solution
+ * in order to find the best solution.
  */
 public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator extends 
-        AffineTransformation2DRobustEstimator{
+        AffineTransformation2DRobustEstimator {
     
     /**
-     * Default robust estimator method when none is provided
+     * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
             RobustEstimatorMethod.PROMedS;
@@ -34,7 +42,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * Each line in the list of input lines must be matched with the
      * corresponding line in the list of output lines located at the same
      * position. Hence, both input lines and output lines must have the
-     * same size, and their size must be greater or equal than MINIMUM_SIZE
+     * same size, and their size must be greater or equal than MINIMUM_SIZE.
      */
     protected List<Line2D> mInputLines;
     
@@ -43,14 +51,14 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * Each point in the list of output lines must be matched with the
      * corresponding line in the list of input lines located at the same
      * position. Hence, both input lines and output lines must have the
-     * same size, and their size must be greater or equal than MINIMUM_SIZE
+     * same size, and their size must be greater or equal than MINIMUM_SIZE.
      */
     protected List<Line2D> mOutputLines;
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public LineCorrespondenceAffineTransformation2DRobustEstimator(){
+    public LineCorrespondenceAffineTransformation2DRobustEstimator() {
         super();
     }
     
@@ -59,17 +67,17 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * transformation.
      * Lines in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param inputLines list of input lines to be used to estimate an affine 2D
-     * transformation
+     * transformation.
      * @param outputLines list of output lines ot be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LineCorrespondenceAffineTransformation2DRobustEstimator(
             List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super();
         internalSetLines(inputLines, outputLines);
     }
@@ -77,10 +85,10 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
     /**
      * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * stars, ends or its progress significantly changes
+     * stars, ends or its progress significantly changes.
      */
     public LineCorrespondenceAffineTransformation2DRobustEstimator(
-            AffineTransformation2DRobustEstimatorListener listener){
+            AffineTransformation2DRobustEstimatorListener listener) {
         super(listener);
     }
     
@@ -89,20 +97,20 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * affine 2D tranformation.
      * Lines in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param listener listener to be notified of events such as when estimation 
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputLines list of input lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener);
         internalSetLines(inputLines, outputLines);
     }
@@ -113,11 +121,11 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * Each line in the list of input lines must be matched with the
      * corresponding line in the list of output lines located at the same
      * position. Hence, both input lines and output lines must have the same
-     * size, and their size must be greater or equal than MINIMUM_SIZE
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
      * @return list of input lines to be used to estimate an affine 2D
-     * transformation
+     * transformation.
      */
-    public List<Line2D> getInputLines(){
+    public List<Line2D> getInputLines() {
         return mInputLines;
     }
     
@@ -127,11 +135,11 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * Each line in the list of output lines must be matched with the
      * corresponding line in the list of input lines located at the same
      * position. Hence, both input lines and output lines must have the same
-     * size, and their size must be greater or equal than MINIMUM_SIZE
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
      * @return list of output lines to be used to estimate an affine 2D
-     * transformation
+     * transformation.
      */
-    public List<Line2D> getOutputLines(){
+    public List<Line2D> getOutputLines() {
         return mOutputLines;
     }
     
@@ -139,20 +147,22 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * Sets lists of lines to be used to estimate an affine 2D transformation.
      * Lines in the list located at the same position are considered to be 
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param inputLines list of input lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      * @throws LockedException if estimator is locked because a computation is
-     * already in progress
+     * already in progress.
      */
     public final void setLines(List<Line2D> inputLines, 
             List<Line2D> outputLines) throws IllegalArgumentException,
-            LockedException{
-        if(isLocked()) throw new LockedException();
+            LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetLines(inputLines, outputLines);
     }
     
@@ -160,10 +170,10 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * Indicates if estimator is ready to start the affine 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched lines) are provided
-     * and a minimum of MINIMUM_SIZE lines are available
-     * @return true if estimator is ready, false otherwise
+     * and a minimum of MINIMUM_SIZE lines are available.
+     * @return true if estimator is ready, false otherwise.
      */
-    public boolean isReady(){
+    public boolean isReady() {
         return mInputLines != null && mOutputLines != null &&
                 mInputLines.size() == mOutputLines.size() &&
                 mInputLines.size() >= MINIMUM_SIZE;
@@ -174,9 +184,9 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * The larger the score value the betther the quality of the matching.
      * This implementation always returns null.
      * Subclasses using quality scores must implement proper behaviour.
-     * @return quality scores corresponding to each pair of matched points
+     * @return quality scores corresponding to each pair of matched points.
      */
-    public double[] getQualityScores(){
+    public double[] getQualityScores() {
         return null;
     }    
     
@@ -186,25 +196,25 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * This implementation makes no action.
      * Subclasses using quality scores must implement proper behaviour.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points
+     * points.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples)
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException{}        
+            IllegalArgumentException { }
     
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences an using provided robust estimator method
+     * correspondences an using provided robust estimator method.
      * @param method method of a robust estimator algorithm to estimate
-     * best affine 2D transformation
-     * @return an instance of affine 2D transformation estimator
+     * best affine 2D transformation.
+     * @return an instance of affine 2D transformation estimator.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
-            create(RobustEstimatorMethod method){
-        switch(method){
+            create(RobustEstimatorMethod method) {
+        switch (method) {
             case LMedS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
             case MSAC:
@@ -221,21 +231,21 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param inputLines list of input lines to be used to estimate an
-     * affine 2D transformation
+     * affine 2D transformation.
      * @param outputLines list of output lines to be used to estimate an
-     * affine 2D transformation
+     * affine 2D transformation.
      * @param method method of a robust estimator algorithm to estimate
-     * best affine 2D transformation
-     * @return an instance of affine 2D transformation estimator
+     * best affine 2D transformation.
+     * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(List<Line2D> inputLines, List<Line2D> outputLines,
-            RobustEstimatorMethod method) throws IllegalArgumentException{
-        switch(method){
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+        switch (method) {
             case LMedS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         inputLines, outputLines);
@@ -257,17 +267,17 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param method method of a robust estimator algorithm to estimate best
-     * affine 2D transformation
-     * @return an instance of affine 2D transformation estimator
+     * affine 2D transformation.
+     * @return an instance of affine 2D transformation estimator.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
-            RobustEstimatorMethod method){
-        switch(method){
+            RobustEstimatorMethod method) {
+        switch (method) {
             case LMedS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener);
@@ -289,24 +299,24 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputLines list of input lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param method method of a robust estimator algorithm to estimate best
-     * affine 2D transformation
-     * @return an instance of affine 2D transformation estimator
+     * affine 2D transformation.
+     * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines,
-            RobustEstimatorMethod method) throws IllegalArgumentException{
-        switch(method){
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+        switch (method) {
             case LMedS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputLines, outputLines);
@@ -328,16 +338,16 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param qualityScores quality scores corresponding to each pair of matched
      * points.
      * @param method method of a robust estimator algorithm to estimate best
-     * affine 2D transformation
-     * @return an instance of affine 2D transformation estimator
+     * affine 2D transformation.
+     * @return an instance of affine 2D transformation estimator.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
-            create(double[] qualityScores, RobustEstimatorMethod method){
-        switch(method){
+            create(double[] qualityScores, RobustEstimatorMethod method) {
+        switch (method) {
             case LMedS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
             case MSAC:
@@ -356,24 +366,24 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param inputLines list of input lines to be used to estimate an
-     * affine 2D transformation
+     * affine 2D transformation.
      * @param outputLines list of output lines to be used to estimate an
-     * affine 2D transformation
+     * affine 2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      * lines.
      * @param method method of a robust estimator algorithm to estimate best
-     * affine 2D transformation
-     * @return an instance of affine 2D transformation estimator
+     * affine 2D transformation.
+     * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(List<Line2D> inputLines, List<Line2D> outputLines,
             double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException{
-        switch(method){
+            throws IllegalArgumentException {
+        switch (method) {
             case LMedS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         inputLines, outputLines);
@@ -395,19 +405,19 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
      * lines.
      * @param method method of a robust estimator algorithm to estimate best
-     * affine 2D transformation
-     * @return an instance of affine 2D transformation estimator
+     * affine 2D transformation.
+     * @return an instance of affine 2D transformation estimator.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
-            double[] qualityScores, RobustEstimatorMethod method){
-        switch(method){
+            double[] qualityScores, RobustEstimatorMethod method) {
+        switch (method) {
             case LMedS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener);
@@ -429,27 +439,27 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputLines list of input lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      * lines.
      * @param method method of a robust estimator algorithm to estimate best
-     * affine 2D transformation
-     * @return an instance of affine 2D transformation estimator
+     * affine 2D transformation.
+     * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines,
             double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException{
-        switch(method){
+            throws IllegalArgumentException {
+        switch (method) {
             case LMedS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
                         listener, inputLines, outputLines);
@@ -471,130 +481,130 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
     
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using default robust estimator method
-     * @return an instance of affine 2D transformation estimator
+     * correspondences and using default robust estimator method.
+     * @return an instance of affine 2D transformation estimator.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
-            create(){
+            create() {
         return create(DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param inputLines list of input lines to be used to estimate an
-     * affine 2D transformation
+     * affine 2D transformation.
      * @param outputLines list of output lines to be used to estimate an
-     * affine 2D transformation
-     * @return an instance of affine 2D transformation estimator
+     * affine 2D transformation.
+     * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(List<Line2D> inputLines, List<Line2D> outputLines)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return create(inputLines, outputLines, DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line 
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
-     * @return an instance of affine 2D transformation estimator
+     * starts, ends or its progress significantly changes.
+     * @return an instance of affine 2D transformation estimator.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
-            create(AffineTransformation2DRobustEstimatorListener listener){
+            create(AffineTransformation2DRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputLines list of input lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate an affine
-     * 2D transformation
-     * @return an instance of affine 2D transformation estimator
+     * 2D transformation.
+     * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return create(listener, inputLines, outputLines, 
                 DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param qualityScores quality scores corresponding to each pair of matched
      * points.
-     * @return an instance of affine 2D transformation estimator 
+     * @return an instance of affine 2D transformation estimator.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
-            create(double[] qualityScores){
+            create(double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param inputLines list of input lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      * points.
-     * @return an instance of affine 2D transformation estimator
+     * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(List<Line2D> inputLines, List<Line2D> outputLines,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         return create(inputLines, outputLines, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
      * points.
-     * @return an instance of affine 2D transformation estimator
+     * @return an instance of affine 2D transformation estimator.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
-            double[] qualityScores){
+            double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates an affine 2D transformation estimator based on 2D line
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputLines list of input lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      * lines.
-     * @return an instance of affine 2D transformation estimator
+     * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         return create(listener, inputLines, outputLines, qualityScores,
                 DEFAULT_ROBUST_METHOD);
     }
@@ -602,20 +612,22 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
     /**
      * Internal method to set lists of lines to be used to estimate an affine
      * 2D transformation.
-     * This method does not check whether estimator is locked or not
+     * This method does not check whether estimator is locked or not.
      * @param inputLines list of input lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @throws IllegalArgumentException if provided lists of lines don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetLines(List<Line2D> inputLines, 
-            List<Line2D> outputLines) throws IllegalArgumentException{
-        if(inputLines.size() < MINIMUM_SIZE) 
+            List<Line2D> outputLines) throws IllegalArgumentException {
+        if (inputLines.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
-        if(inputLines.size() != outputLines.size())
+        }
+        if (inputLines.size() != outputLines.size()) {
             throw new IllegalArgumentException();
+        }
         mInputLines = inputLines;
         mOutputLines = outputLines;
     }
@@ -628,13 +640,13 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * A residual of 1 indicates that dot product was 0 and lines were 
      * orthogonal.
      * If dot product was -1, then although their director vectors are opposed,
-     * lines are considered equal, since sign changes are not taken into account
-     * @param line originally sampled output line line
+     * lines are considered equal, since sign changes are not taken into account.
+     * @param line originally sampled output line line.
      * @param transformedLine estimated output line obtained after using 
-     * estimated transformation
-     * @return computed residual
+     * estimated transformation.
+     * @return computed residual.
      */
-    protected static double getResidual(Line2D line, Line2D transformedLine){
+    protected static double getResidual(Line2D line, Line2D transformedLine) {
         line.normalize();
         transformedLine.normalize();
         

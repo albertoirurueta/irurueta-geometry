@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 13, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,19 +19,16 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.geometry.AffineTransformation2D;
 import com.irurueta.geometry.CoincidentLinesException;
 import com.irurueta.geometry.Line2D;
-import com.irurueta.numerical.robust.PROSACRobustEstimator;
-import com.irurueta.numerical.robust.PROSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best affine 2D transformation for provided collections of matched
- * 2D lines using PROSAC algorithm
+ * 2D lines using PROSAC algorithm.
  */
 public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator 
-        extends LineCorrespondenceAffineTransformation2DRobustEstimator{
+        extends LineCorrespondenceAffineTransformation2DRobustEstimator {
     
     /**
      * Constant defining default threshold to determine whether lines are
@@ -38,13 +42,13 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * orthogonal.
      * If dot product between lines is -1, then although their director vectors 
      * are opposed, lines are considered equal, since sign changes are not taken 
-     * into account and their residuals will be 0
+     * into account and their residuals will be 0.
      */
     public static final double DEFAULT_THRESHOLD = 1e-6;
     
     /**
      * Minimum value that can be set as threshold.
-     * Threshold must be strictly greater than 0.0
+     * Threshold must be strictly greater than 0.0.
      */
     public static final double MIN_THRESHOLD = 0.0;
     
@@ -63,13 +67,13 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * possible estimation solutions.
      * The threshold refers to the amount of error (i.e. distance and director
      * vector angle difference) a possible solution has on a matched pair of 
-     * lines
+     * lines.
      */
     private double mThreshold;   
     
     /**
      * Quality scores corresponding to each pair of matched lines.
-     * The larger the score value the betther the quality of the matching
+     * The larger the score value the betther the quality of the matching.
      */
     private double[] mQualityScores;   
     
@@ -84,9 +88,9 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
     private boolean mComputeAndKeepResiduals;
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(){
+    public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator() {
         super();
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -98,17 +102,17 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * transformation.
      * Lines in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE
+     * be greter or equal than MINIMUM_SIZE.
      * @param inputLines list of input lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @throws IllegalArgumentException if provided lists of lines don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
             List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(inputLines, outputLines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -116,12 +120,12 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
     public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-            AffineTransformation2DRobustEstimatorListener listener){
+            AffineTransformation2DRobustEstimatorListener listener) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -133,20 +137,20 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * affine 2D transformation.
      * Lines in the list located at the same position are considered to be 
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
-     * @param listener lsitener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * be greater or equal than MINIMUM_SIZE.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
      * @param inputLines list of input lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener, inputLines, outputLines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -154,14 +158,14 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * points.
      * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples)
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         super();
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -174,23 +178,23 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * transformation.
      * Lines in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE
+     * be greter or equal than MINIMUM_SIZE.
      * @param inputLines list of input lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * lines.
      * @throws IllegalArgumentException if provided lists of lines and array
      * of quality scores don't have the same size or their size is smaller than 
-     * MINIMUM_SIZE
+     * MINIMUM_SIZE.
      */
     public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
             List<Line2D> inputLines, List<Line2D> outputLines, 
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         super(inputLines, outputLines);
         
-        if(qualityScores.length != inputLines.size()) {
+        if (qualityScores.length != inputLines.size()) {
             throw new IllegalArgumentException();
         }
         
@@ -201,17 +205,17 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * lines.
      * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples)
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -224,25 +228,25 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * affine 2D transformation.
      * Lines in the list located at the same position are considered to be 
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
-     * @param listener lsitener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * be greater or equal than MINIMUM_SIZE.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
      * @param inputLines list of input lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate an affine
-     * 2D transformation
+     * 2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * lines.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         super(listener, inputLines, outputLines);
         
-        if(qualityScores.length != inputLines.size()) {
+        if (qualityScores.length != inputLines.size()) {
             throw new IllegalArgumentException();
         }
         
@@ -264,10 +268,10 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * orthogonal.
      * If dot product between lines is -1, then although their director vectors 
      * are opposed, lines are considered equal, since sign changes are not taken 
-     * into account and their residuals will be 0
-     * @return threshold to determine whether matched lines are inliers or not
+     * into account and their residuals will be 0.
+     * @return threshold to determine whether matched lines are inliers or not.
      */
-    public double getThreshold(){
+    public double getThreshold() {
         return mThreshold;
     }
     
@@ -283,45 +287,51 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * orthogonal.
      * If dot product between lines is -1, then although their director vectors 
      * are opposed, lines are considered equal, since sign changes are not taken 
-     * into account and their residuals will be 0
+     * into account and their residuals will be 0.
      * @param threshold threshold to determine whether matched lines are inliers
-     * or not
+     * or not.
      * @throws IllegalArgumentException if provided value is equal or less than
-     * zero
+     * zero.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException{
-        if(isLocked()) throw new LockedException();
-        if(threshold <= MIN_THRESHOLD) throw new IllegalArgumentException();
+            LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (threshold <= MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         mThreshold = threshold;
     }    
     
     /**
      * Returns quality scores corresponding to each pair of matched lines.
-     * The larger the score value the betther the quality of the matching
-     * @return quality scores corresponding to each pair of matched lines
+     * The larger the score value the better the quality of the matching.
+     * @return quality scores corresponding to each pair of matched lines.
      */
     @Override
-    public double[] getQualityScores(){
+    public double[] getQualityScores() {
         return mQualityScores;
     }
     
     /**
      * Sets quality scores corresponding to each pair of matched lines.
-     * The larger the score value the better the quality of the matching
+     * The larger the score value the better the quality of the matching.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * lines
+     * lines.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples)
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
     public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetQualityScores(qualityScores);
     }    
     
@@ -329,11 +339,11 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * Indicates if eatimator is ready to start the affine 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched lines and quality
-     * scores) are provided and a minimum of MINIMUM_SIZE lines are available
-     * @return true if estimator is ready, false otherwise
+     * scores) are provided and a minimum of MINIMUM_SIZE lines are available.
+     * @return true if estimator is ready, false otherwise.
      */
     @Override
-    public boolean isReady(){
+    public boolean isReady() {
         return super.isReady() && mQualityScores != null && 
                 mQualityScores.length == mInputLines.size();
     }    
@@ -387,24 +397,28 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
     /**
      * Estimates an affine 2D transformation using a robust estimator and
      * the best set of matched 2D lines correspondences found using the robust
-     * estimator
-     * @return an affine 2D transformation
+     * estimator.
+     * @return an affine 2D transformation.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */        
     @Override
     public AffineTransformation2D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         PROSACRobustEstimator<AffineTransformation2D> innerEstimator =
-                new PROSACRobustEstimator<AffineTransformation2D>(
-                new PROSACRobustEstimatorListener<AffineTransformation2D>(){
+                new PROSACRobustEstimator<>(
+                new PROSACRobustEstimatorListener<AffineTransformation2D>() {
                     
             //line to be reused when computing residuals
             private Line2D mTestLine = new Line2D();
@@ -435,12 +449,12 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
                 Line2D outputLine2 = mOutputLines.get(samplesIndices[1]);
                 Line2D outputLine3 = mOutputLines.get(samplesIndices[2]);
                 
-                try{
+                try {
                     AffineTransformation2D transformation =
                             new AffineTransformation2D(inputLine1, inputLine2, 
                             inputLine3, outputLine1, outputLine2, outputLine3);
                     solutions.add(transformation);
-                }catch(CoincidentLinesException e){
+                } catch (CoincidentLinesException e) {
                     //if lines are coincident, no solution is added
                 }
             }
@@ -451,11 +465,11 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
                 Line2D outputLine = mOutputLines.get(i);
                 
                 //transform input line and store result in mTestLine
-                try{
+                try {
                     currentEstimation.transform(inputLine, mTestLine);
                     
                     return getResidual(outputLine, mTestLine);
-                }catch(AlgebraException e){
+                } catch (AlgebraException e) {
                     //this happens when internal matrix of affine transformation
                     //cannot be reverse (i.e. transformation is not well defined,
                     //numerical instabilities, etc)
@@ -472,7 +486,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
             @Override
             public void onEstimateStart(
                     RobustEstimator<AffineTransformation2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(
                             PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.this);
                 }
@@ -481,7 +495,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
             @Override
             public void onEstimateEnd(
                     RobustEstimator<AffineTransformation2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(
                             PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.this);
                 }
@@ -491,7 +505,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
             public void onEstimateNextIteration(
                     RobustEstimator<AffineTransformation2D> estimator, 
                     int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.this, 
                             iteration);
@@ -502,7 +516,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
             public void onEstimateProgressChange(
                     RobustEstimator<AffineTransformation2D> estimator, 
                     float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.this, 
                             progress);
@@ -515,7 +529,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
             }            
         });
         
-        try{
+        try {
             mLocked = true;
             mInliersData = null;
             innerEstimator.setComputeAndKeepInliersEnabled(
@@ -528,18 +542,18 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
             AffineTransformation2D transformation = innerEstimator.estimate();
             mInliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }        
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */        
     @Override
     public RobustEstimatorMethod getMethod() {
@@ -564,15 +578,16 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
     /**
      * Sets quality scores corresponding to each pair of matched lines.
      * This method is used internally and does not check whether instance is
-     * locked or not
-     * @param qualityScores quality scores to be set
+     * locked or not.
+     * @param qualityScores quality scores to be set.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE
+     * smaller than MINIMUM_SIZE.
      */
     private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException{
-        if(qualityScores.length < MINIMUM_SIZE) 
+            throws IllegalArgumentException {
+        if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
+        }
         
         mQualityScores = qualityScores;        
     }        

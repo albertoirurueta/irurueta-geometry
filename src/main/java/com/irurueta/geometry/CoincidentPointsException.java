@@ -1,47 +1,54 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.CoincidentPointsException
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date July 3, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 /**
- * Raised when providing points which are assumed to be equal
+ * Raised when providing points which are assumed to be equal.
  */
 public class CoincidentPointsException extends GeometryException {
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public CoincidentPointsException(){
+    public CoincidentPointsException() {
         super();
     }
     
     /**
-     * Constructor with String containing message
-     * @param message Message indicating the cause of the exception
+     * Constructor with String containing message.
+     * @param message Message indicating the cause of the exception.
      */
-    public CoincidentPointsException(String message){
+    public CoincidentPointsException(String message) {
         super(message);
     }
     
     /**
-     * Constructor with message and cause
-     * @param message Message describing the cause of the exception
-     * @param cause Instance containing the cause of the exception
+     * Constructor with message and cause.
+     * @param message Message describing the cause of the exception.
+     * @param cause Instance containing the cause of the exception.
      */
-    public CoincidentPointsException(String message, Throwable cause){
+    public CoincidentPointsException(String message, Throwable cause) {
         super(message, cause);
     }
     
     /**
-     * Constructor with cause
-     * @param cause Instance containing the cause of the exception
+     * Constructor with cause.
+     * @param cause Instance containing the cause of the exception.
      */
-    public CoincidentPointsException(Throwable cause){
+    public CoincidentPointsException(Throwable cause) {
         super(cause);
     }
 }

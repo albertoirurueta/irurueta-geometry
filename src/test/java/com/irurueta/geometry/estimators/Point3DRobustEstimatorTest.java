@@ -1,43 +1,48 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.Point3DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March3, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.CoordinatesType;
 import com.irurueta.geometry.Plane;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class Point3DRobustEstimatorTest {
     
-    public Point3DRobustEstimatorTest() {}
+    public Point3DRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testCreate(){
+    public void testCreate() {
         Point3DRobustEstimator estimator;
         
         //test with robust method
@@ -147,11 +152,11 @@ public class Point3DRobustEstimatorTest {
         assertNull(estimator.getCovariance());
         
         //test with planes and method
-        List<Plane> planes = new ArrayList<Plane>();
-        for(int i = 0; i < Point3DRobustEstimator.MINIMUM_SIZE; i++){
+        List<Plane> planes = new ArrayList<>();
+        for (int i = 0; i < Point3DRobustEstimator.MINIMUM_SIZE; i++) {
             planes.add(new Plane());
         }
-        List<Plane> emptyPlanes = new ArrayList<Plane>();
+        List<Plane> emptyPlanes = new ArrayList<>();
         
         estimator = Point3DRobustEstimator.create(planes, 
                 RobustEstimatorMethod.RANSAC);
@@ -177,11 +182,11 @@ public class Point3DRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(emptyPlanes, 
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         estimator = Point3DRobustEstimator.create(planes, 
@@ -208,11 +213,11 @@ public class Point3DRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(emptyPlanes, 
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);    
         
         estimator = Point3DRobustEstimator.create(planes, 
@@ -239,11 +244,11 @@ public class Point3DRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(emptyPlanes, 
                     RobustEstimatorMethod.MSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);    
         
         estimator = Point3DRobustEstimator.create(planes, 
@@ -270,11 +275,11 @@ public class Point3DRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(emptyPlanes, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator); 
         
         estimator = Point3DRobustEstimator.create(planes, 
@@ -301,29 +306,29 @@ public class Point3DRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(emptyPlanes, 
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);   
         
         //test with listener
         Point3DRobustEstimatorListener listener = new Point3DRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(Point3DRobustEstimator estimator) {}
+            public void onEstimateStart(Point3DRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(Point3DRobustEstimator estimator) {}
+            public void onEstimateEnd(Point3DRobustEstimator estimator) { }
 
             @Override
             public void onEstimateNextIteration(Point3DRobustEstimator estimator, 
-                    int iteration) {}
+                    int iteration) { }
 
             @Override
             public void onEstimateProgressChange(Point3DRobustEstimator estimator, 
-                    float progress) {}
+                    float progress) { }
         };
         
         estimator = Point3DRobustEstimator.create(listener, 
@@ -549,11 +554,11 @@ public class Point3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(listener, emptyPlanes,
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with quality scores
@@ -672,11 +677,11 @@ public class Point3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(emptyScores,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //Test with planes and quality scores
@@ -792,16 +797,16 @@ public class Point3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(emptyPlanes, qualityScores,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = Point3DRobustEstimator.create(planes, emptyScores,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener and quality scores
@@ -917,11 +922,11 @@ public class Point3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(listener, emptyScores,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, planes and qualityScores
@@ -1036,16 +1041,16 @@ public class Point3DRobustEstimatorTest {
         assertNull(estimator.getCovariance());
         
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(listener, emptyPlanes,
                     qualityScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = Point3DRobustEstimator.create(listener, planes, 
                     emptyScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test without arguments
@@ -1094,10 +1099,10 @@ public class Point3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(emptyPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener
@@ -1146,10 +1151,10 @@ public class Point3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(listener, emptyPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with quality scores
@@ -1176,10 +1181,10 @@ public class Point3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with planes and quality scores
@@ -1206,14 +1211,14 @@ public class Point3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(emptyPlanes, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = Point3DRobustEstimator.create(planes, emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener and quality scores
@@ -1240,10 +1245,10 @@ public class Point3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(listener, emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, planes and quality scores
@@ -1271,16 +1276,16 @@ public class Point3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point3DRobustEstimator.create(listener, emptyPlanes, 
                     qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = Point3DRobustEstimator.create(listener, planes, 
                     emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
     }    
 }

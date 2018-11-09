@@ -1,42 +1,47 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.DualQuadricRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 24, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Plane;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class DualQuadricRobustEstimatorTest {
     
-    public DualQuadricRobustEstimatorTest() {}
+    public DualQuadricRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testCreate(){
+    public void testCreate() {
         DualQuadricRobustEstimator estimator;
         
         //test with robust method
@@ -120,11 +125,11 @@ public class DualQuadricRobustEstimatorTest {
         assertNull(estimator.getQualityScores());  
         
         //test with lines and method
-        List<Plane> planes = new ArrayList<Plane>();
-        for(int i = 0; i < DualQuadricRobustEstimator.MINIMUM_SIZE; i++){
+        List<Plane> planes = new ArrayList<>();
+        for (int i = 0; i < DualQuadricRobustEstimator.MINIMUM_SIZE; i++) {
             planes.add(new Plane());
         }
-        List<Plane> emptyPlanes = new ArrayList<Plane>();
+        List<Plane> emptyPlanes = new ArrayList<>();
         
         estimator = DualQuadricRobustEstimator.create(planes, 
                 RobustEstimatorMethod.RANSAC);
@@ -144,11 +149,11 @@ public class DualQuadricRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(emptyPlanes, 
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         estimator = DualQuadricRobustEstimator.create(planes, 
@@ -169,11 +174,11 @@ public class DualQuadricRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(emptyPlanes, 
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);    
         
         estimator = DualQuadricRobustEstimator.create(planes, 
@@ -194,11 +199,11 @@ public class DualQuadricRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(emptyPlanes, 
                     RobustEstimatorMethod.MSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);    
         
         estimator = DualQuadricRobustEstimator.create(planes, 
@@ -219,11 +224,11 @@ public class DualQuadricRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(emptyPlanes, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator); 
         
         estimator = DualQuadricRobustEstimator.create(planes, 
@@ -244,11 +249,11 @@ public class DualQuadricRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(emptyPlanes, 
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);   
         
         //test with listener
@@ -256,18 +261,18 @@ public class DualQuadricRobustEstimatorTest {
                 new DualQuadricRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(DualQuadricRobustEstimator estimator) {}
+            public void onEstimateStart(DualQuadricRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(DualQuadricRobustEstimator estimator) {}
+            public void onEstimateEnd(DualQuadricRobustEstimator estimator) { }
 
             @Override
             public void onEstimateNextIteration(
-                    DualQuadricRobustEstimator estimator, int iteration) {}
+                    DualQuadricRobustEstimator estimator, int iteration) { }
 
             @Override
             public void onEstimateProgressChange(
-                    DualQuadricRobustEstimator estimator, float progress) {}
+                    DualQuadricRobustEstimator estimator, float progress) { }
         };
         
         estimator = DualQuadricRobustEstimator.create(listener, 
@@ -433,11 +438,11 @@ public class DualQuadricRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(listener, emptyPlanes,
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with quality scores
@@ -527,11 +532,11 @@ public class DualQuadricRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(emptyScores,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //Test with lines and quality scores
@@ -617,16 +622,16 @@ public class DualQuadricRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(emptyPlanes, 
                     qualityScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = DualQuadricRobustEstimator.create(planes, emptyScores,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener and quality scores
@@ -712,11 +717,11 @@ public class DualQuadricRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(listener, emptyScores,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, lines and qualityScores
@@ -801,16 +806,16 @@ public class DualQuadricRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(listener, emptyPlanes,
                     qualityScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = DualQuadricRobustEstimator.create(listener, planes, 
                     emptyScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test without arguments
@@ -847,10 +852,10 @@ public class DualQuadricRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(emptyPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener
@@ -887,11 +892,11 @@ public class DualQuadricRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(listener, 
                     emptyPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with quality scores
@@ -912,10 +917,10 @@ public class DualQuadricRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with lines and quality scores
@@ -936,15 +941,15 @@ public class DualQuadricRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(emptyPlanes, 
                     qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = DualQuadricRobustEstimator.create(planes, emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener and quality scores
@@ -965,11 +970,11 @@ public class DualQuadricRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(listener, 
                     emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, lines and quality scores
@@ -991,16 +996,16 @@ public class DualQuadricRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DualQuadricRobustEstimator.create(listener, emptyPlanes, 
                     qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = DualQuadricRobustEstimator.create(listener, planes, 
                     emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
     }    
 }

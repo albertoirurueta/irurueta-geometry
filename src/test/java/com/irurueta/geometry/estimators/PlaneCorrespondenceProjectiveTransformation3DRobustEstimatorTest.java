@@ -1,42 +1,48 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irureuta.geometry.estimators.PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 7, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Plane;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class PlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest {
     
-    public PlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest() {}
+    public PlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testCreate(){
+    public void testCreate() {
         PlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator;
         
         //create with robust estimator method
@@ -116,9 +122,9 @@ public class PlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getCovariance());        
         
         //create with lines and method
-        List<Plane> inputPlanes = new ArrayList<Plane>();
-        List<Plane> outputPlanes = new ArrayList<Plane>();
-        for(int i = 0; i < PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE; i++){
+        List<Plane> inputPlanes = new ArrayList<>();
+        List<Plane> outputPlanes = new ArrayList<>();
+        for (int i = 0; i < PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPlanes.add(new Plane());
             outputPlanes.add(new Plane());
         }
@@ -199,37 +205,39 @@ public class PlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest {
         assertNull(estimator.getCovariance());        
         
         //Force IllegalArgumentException
-        List<Plane> emptyLines = new ArrayList<Plane>();
+        List<Plane> emptyLines = new ArrayList<>();
         
         estimator = null;
-        try{
+        try {
             estimator = PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                     create(emptyLines, outputPlanes, 
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                     create(inputPlanes, emptyLines, 
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //create with listener and method
-        ProjectiveTransformation3DRobustEstimatorListener listener = new ProjectiveTransformation3DRobustEstimatorListener() {
+        ProjectiveTransformation3DRobustEstimatorListener listener =
+                new ProjectiveTransformation3DRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(ProjectiveTransformation3DRobustEstimator estimator) {}
+            public void onEstimateStart(ProjectiveTransformation3DRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(ProjectiveTransformation3DRobustEstimator estimator) {}
+            public void onEstimateEnd(ProjectiveTransformation3DRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateNextIteration(ProjectiveTransformation3DRobustEstimator estimator, int iteration) {}
+            public void onEstimateNextIteration(ProjectiveTransformation3DRobustEstimator estimator, int iteration) { }
 
             @Override
-            public void onEstimateProgressChange(ProjectiveTransformation3DRobustEstimator estimator, float progress) {}
+            public void onEstimateProgressChange(ProjectiveTransformation3DRobustEstimator estimator,
+                                                 float progress) { }
         };
         
         
@@ -552,24 +560,24 @@ public class PlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(emptyLines, outputPlanes, qualityScores, 
                 RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPlanes, emptyLines, qualityScores, 
                 RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes, wrongQualityScores, 
                 RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, quality scores and method
@@ -731,24 +739,24 @@ public class PlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, emptyLines, outputPlanes, qualityScores,
                 RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPlanes, emptyLines, qualityScores,
                 RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes, wrongQualityScores,
                 RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test no arguments
@@ -785,16 +793,16 @@ public class PlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(emptyLines, outputPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPlanes, emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener
@@ -831,16 +839,16 @@ public class PlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, emptyLines, outputPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPlanes, emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with quality scores

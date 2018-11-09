@@ -1,47 +1,45 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.EuclideanTransformation3DEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date January 23, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.geometry.CoincidentPointsException;
-import com.irurueta.geometry.EuclideanTransformation3D;
-import com.irurueta.geometry.HomogeneousPoint3D;
-import com.irurueta.geometry.InhomogeneousPoint3D;
-import com.irurueta.geometry.Plane;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Quaternion;
-import com.irurueta.geometry.Utils;
+import com.irurueta.geometry.*;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class EuclideanTransformation3DEstimatorTest implements 
         EuclideanTransformation3DEstimatorListener {
     
-    public static final double MIN_ANGLE_DEGREES = -90.0;
-    public static final double MAX_ANGLE_DEGREES = 90.0;
+    private static final double MIN_ANGLE_DEGREES = -90.0;
+    private static final double MAX_ANGLE_DEGREES = 90.0;
     
-    public static final double MIN_TRANSLATION = -100.0;
-    public static final double MAX_TRANSLATION = 100.0;
+    private static final double MIN_TRANSLATION = -100.0;
+    private static final double MAX_TRANSLATION = 100.0;
     
-    public static final double MIN_RANDOM_VALUE = 50.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;        
+    private static final double MIN_RANDOM_VALUE = 50.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final int TIMES = 50;
+    private static final int TIMES = 50;
     
     private int estimateStart;
     private int estimateEnd;
@@ -79,13 +77,13 @@ public class EuclideanTransformation3DEstimatorTest implements
         
         
         //constructor with points
-        List<Point3D> inputPoints = new ArrayList<Point3D>();
+        List<Point3D> inputPoints = new ArrayList<>();
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         
-        List<Point3D> outputPoints = new ArrayList<Point3D>();
+        List<Point3D> outputPoints = new ArrayList<>();
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
@@ -106,24 +104,24 @@ public class EuclideanTransformation3DEstimatorTest implements
                 EuclideanTransformation3DEstimator.MINIMUM_SIZE);
         
         //Force IllegalArgumentException
-        List<Point3D> wrong = new ArrayList<Point3D>();
+        List<Point3D> wrong = new ArrayList<>();
         wrong.add(Point3D.create());
 
         estimator = null;
         try {
             estimator = new EuclideanTransformation3DEstimator(wrong, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation3DEstimator(wrong, 
                     outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation3DEstimator(inputPoints,
                     wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -163,17 +161,17 @@ public class EuclideanTransformation3DEstimatorTest implements
             estimator = new EuclideanTransformation3DEstimator(this, wrong, 
                     wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation3DEstimator(this, wrong, 
                     outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation3DEstimator(this, 
                     inputPoints, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);    
         
         
@@ -193,12 +191,12 @@ public class EuclideanTransformation3DEstimatorTest implements
         
         
         //constructor with points
-        inputPoints = new ArrayList<Point3D>();
+        inputPoints = new ArrayList<>();
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         
-        outputPoints = new ArrayList<Point3D>();
+        outputPoints = new ArrayList<>();
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
@@ -223,17 +221,17 @@ public class EuclideanTransformation3DEstimatorTest implements
             estimator = new EuclideanTransformation3DEstimator(wrong, wrong, 
                     true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation3DEstimator(wrong, 
                     outputPoints, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation3DEstimator(inputPoints,
                     wrong, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -273,17 +271,17 @@ public class EuclideanTransformation3DEstimatorTest implements
             estimator = new EuclideanTransformation3DEstimator(this, wrong, 
                     wrong, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation3DEstimator(this, wrong, 
                     outputPoints, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation3DEstimator(this, 
                     inputPoints, wrong, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);            
     }
     
@@ -297,13 +295,13 @@ public class EuclideanTransformation3DEstimatorTest implements
         assertNull(estimator.getOutputPoints());
         
         //set values
-        List<Point3D> inputPoints = new ArrayList<Point3D>();
+        List<Point3D> inputPoints = new ArrayList<>();
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         inputPoints.add(Point3D.create());
         
-        List<Point3D> outputPoints = new ArrayList<Point3D>();
+        List<Point3D> outputPoints = new ArrayList<>();
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
         outputPoints.add(Point3D.create());
@@ -316,19 +314,19 @@ public class EuclideanTransformation3DEstimatorTest implements
         assertSame(estimator.getOutputPoints(), outputPoints);
         
         //Force IllegalArgumentException
-        List<Point3D> wrong = new ArrayList<Point3D>();
+        List<Point3D> wrong = new ArrayList<>();
         try {
             estimator.setPoints(wrong, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setPoints(wrong, outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setPoints(inputPoints, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -393,7 +391,7 @@ public class EuclideanTransformation3DEstimatorTest implements
                     new EuclideanTransformation3D(q, translation);
         
             //generate random list of input points and transform them
-            List<Point3D> inputPoints = new ArrayList<Point3D>();
+            List<Point3D> inputPoints = new ArrayList<>();
             InhomogeneousPoint3D inputPoint;
             for (int i = 0; i < EuclideanTransformation3DEstimator.MINIMUM_SIZE; i++) {
                 double x = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
@@ -515,7 +513,7 @@ public class EuclideanTransformation3DEstimatorTest implements
                     new EuclideanTransformation3D(q, translation);
         
             //generate random list of input points and transform them
-            List<Point3D> inputPoints = new ArrayList<Point3D>();
+            List<Point3D> inputPoints = new ArrayList<>();
             InhomogeneousPoint3D inputPoint;
             for (int i = 0; i < EuclideanTransformation3DEstimator.MINIMUM_SIZE + 1; i++) {
                 double x = randomizer.nextDouble(MIN_TRANSLATION, MAX_TRANSLATION);
@@ -576,7 +574,9 @@ public class EuclideanTransformation3DEstimatorTest implements
                         ABSOLUTE_ERROR));
             }
             
-            if(!valid) continue;
+            if (!valid) {
+                continue;
+            }
         
             Quaternion q2 = transformation2.getRotation().toQuaternion();
             q2.normalize();
@@ -652,7 +652,7 @@ public class EuclideanTransformation3DEstimatorTest implements
                     MAX_RANDOM_VALUE);
             Plane plane = new Plane(a, b, c, d);
             
-            List<Point3D> inputPoints = new ArrayList<Point3D>();
+            List<Point3D> inputPoints = new ArrayList<>();
             HomogeneousPoint3D inputPoint;
             for (int i = 0; i < MetricTransformation3DEstimator.WEAK_MINIMUM_SIZE; i++) {
                 
@@ -661,11 +661,11 @@ public class EuclideanTransformation3DEstimatorTest implements
                         MAX_RANDOM_VALUE);
                 double homZ = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);                
-                if(Math.abs(b) > ABSOLUTE_ERROR){
+                if (Math.abs(b) > ABSOLUTE_ERROR) {
                     homX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);
                     homY = -(a * homX + c * homZ + d * homW) / b;
-                }else{
+                } else {
                     homY = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);
                     homX = -(b * homY + c * homZ + d * homW) / a;
@@ -720,7 +720,7 @@ public class EuclideanTransformation3DEstimatorTest implements
             assertEquals(outputPoints.size(), outputPoints2.size());
             boolean isValid = true;
             for (int i = 0; i < outputPoints.size(); i++) {
-                if(!outputPoints.get(i).equals(outputPoints2.get(i), 
+                if (!outputPoints.get(i).equals(outputPoints2.get(i),
                         ABSOLUTE_ERROR)) {
                     isValid = false;
                     break;
@@ -769,11 +769,6 @@ public class EuclideanTransformation3DEstimatorTest implements
         
         assertTrue(numValid > 0);
     }
-    
-    
-    private void reset() {
-        estimateStart = estimateEnd = 0;
-    }
 
     @Override
     public void onEstimateStart(EuclideanTransformation3DEstimator estimator) {
@@ -786,33 +781,37 @@ public class EuclideanTransformation3DEstimatorTest implements
         estimateEnd++;
         checkLocked(estimator);
     }
+
+    private void reset() {
+        estimateStart = estimateEnd = 0;
+    }
     
     private void checkLocked(EuclideanTransformation3DEstimator estimator) {
         try {
             estimator.setPoints(null, null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setListener(this);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             estimator.estimate(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             estimator.setWeakMinimumSizeAllowed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }        
+        } catch (LockedException ignore) { }
     }    
 }

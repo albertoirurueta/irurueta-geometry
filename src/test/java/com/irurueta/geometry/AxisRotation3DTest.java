@@ -1,74 +1,67 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.geometry.AxisRotation3D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 11, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.DecomposerException;
-import com.irurueta.algebra.LockedException;
-import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.*;
 import com.irurueta.algebra.NotAvailableException;
-import com.irurueta.algebra.NotReadyException;
-import com.irurueta.algebra.SingularValueDecomposer;
 import com.irurueta.algebra.Utils;
-import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class AxisRotation3DTest {
-    public static final int ROTATION_COLS = 3;    
-    public static final int INHOM_COORDS = 3;
-    public static final int HOM_COORDS = 4;
+    private static final int ROTATION_COLS = 3;
+    private static final int INHOM_COORDS = 3;
+    private static final int HOM_COORDS = 4;
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_RANDOM_SCALE = 2.0;
-    public static final double MAX_RANDOM_SCALE = 3.0;
+    private static final double MIN_RANDOM_SCALE = 2.0;
+    private static final double MAX_RANDOM_SCALE = 3.0;
     
-    public static final double MIN_ANGLE_DEGREES = 0.0;
-    public static final double MAX_ANGLE_DEGREES = 90.0;
+    private static final double MIN_ANGLE_DEGREES = 0.0;
+    private static final double MAX_ANGLE_DEGREES = 90.0;
     
-    public static final double ABSOLUTE_ERROR = 5e-6;    
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-5;
-    public static final double VERY_LARGE_ABSOLUTE_ERROR = 1e-4;
+    private static final double ABSOLUTE_ERROR = 5e-6;
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-5;
     
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
     
-    public AxisRotation3DTest() {
-    }
+    public AxisRotation3DTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
     public void testConstructor() throws RotationException, WrongSizeException, 
-        NotReadyException, LockedException, DecomposerException, 
-        NotAvailableException{
+            NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
         //Test empty constructor
         AxisRotation3D rotation = new AxisRotation3D();
         assertNotNull(rotation);
@@ -94,10 +87,10 @@ public class AxisRotation3DTest {
         double[] axis = new double[INHOM_COORDS + 1];
             
         rotation = null;
-        try{
+        try {
             rotation = new AxisRotation3D(axis, theta);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(rotation);
             
         //Find any 3 orthogonal vectors, 1st will be axis of rotation, and
@@ -167,9 +160,9 @@ public class AxisRotation3DTest {
         assertEquals(Math.abs(theta), Math.abs(theta2), ABSOLUTE_ERROR);
             
         //check correctness of angles (including sign) for method in class
-        if(scaleX > 0.0){
+        if (scaleX > 0.0) {
             assertEquals(theta, theta2b, ABSOLUTE_ERROR);
-        }else{
+        } else {
             assertEquals(theta, -theta2b, ABSOLUTE_ERROR);
         }    
         
@@ -184,7 +177,7 @@ public class AxisRotation3DTest {
     @Test
     public void testGetSetAxisAndRotation() throws WrongSizeException, 
         NotReadyException, LockedException, DecomposerException, 
-        NotAvailableException, RotationException{
+        NotAvailableException, RotationException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
@@ -195,10 +188,10 @@ public class AxisRotation3DTest {
         //Force IllegalArgumentException
         double[] axis = new double[INHOM_COORDS + 1];
         
-        try{
+        try {
             rotation.setAxisAndRotation(axis, theta);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Find any 3 orthogonal vectors, 1st will be axis of rotation, and the
         //remaining two will lie on the rotation plane and will be used to test
@@ -260,9 +253,9 @@ public class AxisRotation3DTest {
         assertEquals(Math.abs(theta), Math.abs(theta2), ABSOLUTE_ERROR);
             
         //check correctness of angles (including sign) for method in class
-        if(scaleX > 0.0){
+        if (scaleX > 0.0) {
             assertEquals(theta, theta2b, ABSOLUTE_ERROR);
-        }else{
+        } else {
             assertEquals(theta, -theta2b, ABSOLUTE_ERROR);
         }                
     }    
@@ -270,7 +263,7 @@ public class AxisRotation3DTest {
     @Test
     public void testIsValidRotationMatrix() 
             throws WrongSizeException, NotReadyException, LockedException, 
-            DecomposerException, NotAvailableException{
+            DecomposerException, NotAvailableException {
         
         Matrix a = Matrix.createWithUniformRandomValues(INHOM_COORDS, 
                 INHOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -309,8 +302,8 @@ public class AxisRotation3DTest {
     
     @Test
     public void testInverseRotation() throws WrongSizeException, 
-        NotReadyException, LockedException, DecomposerException, 
-        NotAvailableException, InvalidRotationMatrixException{
+            NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
@@ -328,10 +321,8 @@ public class AxisRotation3DTest {
         
         //axis of rotation
         Matrix axisMatrix = v.getSubmatrix(0, 0, 2, 0);
-        
+
         //inhomogeneous coordinates of point laying on rotation plane
-        Matrix pointMatrix = v.getSubmatrix(0, 1, 2, 1);
-        
         double[] axis = axisMatrix.toArray();
 
         AxisRotation3D rotation = new AxisRotation3D(axis, 
@@ -364,10 +355,10 @@ public class AxisRotation3DTest {
     
     @Test
     public void testAsInhomogeneousMatrix() throws WrongSizeException, 
-        NotReadyException, LockedException, DecomposerException, 
-        NotAvailableException, InvalidRotationMatrixException{
+            NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
 
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                     MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -384,10 +375,8 @@ public class AxisRotation3DTest {
         
             //axis of rotation
             Matrix axisMatrix = v.getSubmatrix(0, 0, 2, 0);
-        
+
             //inhomogeneous coordinates of point laying on rotation plane
-            Matrix pointMatrix = v.getSubmatrix(0, 1, 2, 1);
-        
             double[] axis = axisMatrix.toArray();
 
             AxisRotation3D rotation = new AxisRotation3D(
@@ -405,20 +394,20 @@ public class AxisRotation3DTest {
             assertTrue(rotationMatrix.equals(rotationMatrix2, ABSOLUTE_ERROR));
         
             //Force IllegalArgumentException
-            try{
+            try {
                 rotation.asInhomogeneousMatrix(new Matrix(HOM_COORDS, 
                         HOM_COORDS));
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
+            } catch (IllegalArgumentException ignore) { }
         }
     }
     
     @Test
     public void testAsHomogeneousMatrix() throws WrongSizeException, 
-        NotReadyException, LockedException, DecomposerException, 
-        NotAvailableException, InvalidRotationMatrixException{
+            NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
         
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                     MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -437,8 +426,6 @@ public class AxisRotation3DTest {
             Matrix axisMatrix = v.getSubmatrix(0, 0, 2, 0);
         
             //inhomogeneous coordinates of point laying on rotation plane
-            Matrix pointMatrix = v.getSubmatrix(0, 1, 2, 1);
-        
             double[] axis = axisMatrix.toArray();
 
             AxisRotation3D rotation = new AxisRotation3D(
@@ -464,20 +451,19 @@ public class AxisRotation3DTest {
                     ABSOLUTE_ERROR));
         
             //Force IllegalArgumentException
-            try{
+            try {
                 rotation.asHomogeneousMatrix(new Matrix(INHOM_COORDS, 
                         INHOM_COORDS));
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
+            } catch (IllegalArgumentException ignore) { }
         }
     } 
     
     @Test
-    public void testFromMatrix() throws WrongSizeException, NotReadyException, 
-        LockedException, DecomposerException, NotAvailableException, 
-        InvalidRotationMatrixException{
+    public void testFromMatrix() throws WrongSizeException,
+            InvalidRotationMatrixException {
 
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             
             UniformRandomizer randomizer = new UniformRandomizer(new Random());       
             double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
@@ -526,29 +512,29 @@ public class AxisRotation3DTest {
             //Attempt to force InvalidRotationMatrixException (using a tiny 
             //threshold). This exception might not always be thrown even for
             //the smallest threshold
-            try{
+            try {
                 rotation.fromMatrix(rotationMatrix, 0.0);
-            }catch(InvalidRotationMatrixException e){}
+            } catch (InvalidRotationMatrixException ignore) { }
             
-            //Force IllegalArugmentException
-            try{
+            //Force IllegalArgumentException
+            try {
                 rotation.fromMatrix(rotationMatrix, -ABSOLUTE_ERROR);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
+            } catch (IllegalArgumentException ignore) { }
         
             //or using a non orthonormal matrix
             homRotationMatrix.setElementAt(3, 3, 0.0); //makes matrix singular
-            try{
+            try {
                 rotation.fromMatrix(homRotationMatrix, ABSOLUTE_ERROR);
                 fail("InvalidRotationMatrixException expected but not thrown");
-            }catch(InvalidRotationMatrixException e){}        
+            } catch (InvalidRotationMatrixException ignore) { }
         }
     }
     
     @Test
     public void testFromInhomogeneousMatrix() throws WrongSizeException, 
-        NotReadyException, LockedException, DecomposerException, 
-        NotAvailableException, InvalidRotationMatrixException{
+            NotReadyException, LockedException, DecomposerException,
+            NotAvailableException, InvalidRotationMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
@@ -568,8 +554,6 @@ public class AxisRotation3DTest {
         Matrix axisMatrix = v.getSubmatrix(0, 0, 2, 0);
         
         //inhomogeneous coordinates of point laying on rotation plane
-        Matrix pointMatrix = v.getSubmatrix(0, 1, 2, 1);
-        
         double[] axis = axisMatrix.toArray();
         MatrixRotation3D rotation2 = new MatrixRotation3D(axis, theta);
         Matrix rotationMatrix = rotation2.getInternalMatrix();
@@ -593,7 +577,7 @@ public class AxisRotation3DTest {
             try {
                 rotation.fromInhomogeneousMatrix(rotationMatrix, 0.0);
                 continue;
-            } catch (InvalidRotationMatrixException e) { }
+            } catch (InvalidRotationMatrixException ignore) { }
 
             //or using a non orthonormal matrix
             //because matrix is orthonormal, it's enough to scale it to some value
@@ -603,7 +587,7 @@ public class AxisRotation3DTest {
             try {
                 rotation.fromInhomogeneousMatrix(rotationMatrix, ABSOLUTE_ERROR);
                 continue;
-            } catch (InvalidRotationMatrixException e) { }
+            } catch (InvalidRotationMatrixException ignore) { }
 
             numValid++;
 
@@ -615,8 +599,8 @@ public class AxisRotation3DTest {
     
     @Test
     public void testFromHomogeneousMatrix() throws WrongSizeException, 
-        NotReadyException, LockedException, DecomposerException, 
-        NotAvailableException, InvalidRotationMatrixException{
+            NotReadyException, LockedException, DecomposerException,
+            NotAvailableException, InvalidRotationMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
@@ -636,8 +620,6 @@ public class AxisRotation3DTest {
         Matrix axisMatrix = v.getSubmatrix(0, 0, 2, 0);
         
         //inhomogeneous coordinates of point laying on rotation plane
-        Matrix pointMatrix = v.getSubmatrix(0, 1, 2, 1);
-        
         double[] axis = axisMatrix.toArray();
         MatrixRotation3D rotation2 = new MatrixRotation3D(axis, theta);
         Matrix rotationMatrix = rotation2.getInternalMatrix();
@@ -666,23 +648,23 @@ public class AxisRotation3DTest {
         
         
         //Force InvalidRotationMatrixException (using a tiny threshold)
-        try{
+        try {
             rotation.fromHomogeneousMatrix(rotationMatrix, 0.0);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}
+        } catch (InvalidRotationMatrixException ignore) { }
         
         //or using a non orthonormal matrix
         homRotationMatrix.setElementAt(3, 3, 0.0); //makes matrix singular
-        try{
+        try {
             rotation.fromHomogeneousMatrix(homRotationMatrix, ABSOLUTE_ERROR);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}
+        } catch (InvalidRotationMatrixException ignore) { }
     }        
     
     @Test
     public void testRotate() throws WrongSizeException, ColinearPointsException, 
-        NotReadyException, LockedException, DecomposerException, 
-        NotAvailableException{
+            NotReadyException, LockedException, DecomposerException,
+            NotAvailableException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
@@ -702,8 +684,6 @@ public class AxisRotation3DTest {
         Matrix axisMatrix = v.getSubmatrix(0, 0, 2, 0);
         
         //inhomogeneous coordinates of point laying on rotation plane
-        Matrix pointMatrix = v.getSubmatrix(0, 1, 2, 1);
-        
         double[] axis = axisMatrix.toArray();
         
         AxisRotation3D rotation = new AxisRotation3D(axis, 
@@ -733,7 +713,7 @@ public class AxisRotation3DTest {
         
         //ensure that points are not colinear
         
-        while(Plane.areColinearPoints(point1, point2, point3)){
+        while (Plane.areColinearPoints(point1, point2, point3)) {
             point2.setInhomogeneousCoordinates(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -775,12 +755,10 @@ public class AxisRotation3DTest {
         //check points have been correctly rotated   
         Matrix point1Mat = Matrix.newFromArray(point1.asArray(), true);
         Matrix point2Mat = Matrix.newFromArray(point2.asArray(), true);
-        Matrix point3Mat = Matrix.newFromArray(point3.asArray(), true);
         Matrix R = rotation.asHomogeneousMatrix();
         Matrix rotPoint1Mat = R.multiplyAndReturnNew(point1Mat);
         Matrix rotPoint2Mat = R.multiplyAndReturnNew(point2Mat);
-        Matrix rotPoint3Mat = R.multiplyAndReturnNew(point3Mat);
-        
+
         //check correctness
         double scaleX = rotPoint1A.getHomX() / 
                 rotPoint1Mat.getElementAtIndex(0);
@@ -859,7 +837,7 @@ public class AxisRotation3DTest {
     
     @Test
     public void testCombine() throws WrongSizeException, NotReadyException, 
-        LockedException, DecomposerException, NotAvailableException{
+            LockedException, DecomposerException, NotAvailableException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta1 = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
@@ -888,9 +866,6 @@ public class AxisRotation3DTest {
         Matrix axisMatrix2 = v2.getSubmatrix(0, 0, 2, 0);
         
         //inhomogeneous coordinates of point laying on rotation plane
-        Matrix pointMatrix1 = v1.getSubmatrix(0, 1, 2, 1);
-        Matrix pointMatrix2 = v2.getSubmatrix(0, 1, 2, 1);
-        
         double[] axis1 = axisMatrix1.toArray();
         double[] axis2 = axisMatrix2.toArray();
 
@@ -910,7 +885,7 @@ public class AxisRotation3DTest {
         AxisRotation3D rot3 = rot.combineAndReturnNew(rot2);
         assertTrue(rot3.asInhomogeneousMatrix().equals(
                 rot.asInhomogeneousMatrix().multiplyAndReturnNew(
-                rot2.asInhomogeneousMatrix()), ABSOLUTE_ERROR));
+                rot2.asInhomogeneousMatrix()), LARGE_ABSOLUTE_ERROR));
         
         Matrix rotationMatrix = rot.asInhomogeneousMatrix();
         rot.combine(rot1);
@@ -920,13 +895,13 @@ public class AxisRotation3DTest {
     }    
     
     @Test
-    public void testType(){
+    public void testType() {
         AxisRotation3D rotation = new AxisRotation3D();
         assertEquals(rotation.getType(), Rotation3DType.AXIS_ROTATION3D);
     }
     
     @Test
-    public void testFromRotation() throws AlgebraException{
+    public void testFromRotation() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -946,7 +921,8 @@ public class AxisRotation3DTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2,
+                0);
         
         MatrixRotation3D matrixRotation = new MatrixRotation3D();
         AxisRotation3D axisRotation = new AxisRotation3D();
@@ -961,6 +937,7 @@ public class AxisRotation3DTest {
         rotation1.fromRotation(matrixRotation);
         
         //check correctness
+        //noinspection all
         assertEquals(matrixRotation, rotation1);
         
         //test from axis rotation
@@ -975,11 +952,12 @@ public class AxisRotation3DTest {
         rotation3.fromRotation(quaternion);
         
         //check correctness
+        //noinspection all
         assertEquals(quaternion, rotation3);
     }
     
     @Test
-    public void testToMatrixRotation() throws AlgebraException{
+    public void testToMatrixRotation() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -999,7 +977,8 @@ public class AxisRotation3DTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2,
+                0);
         
         AxisRotation3D rotation = new AxisRotation3D(axis, theta);
         
@@ -1009,12 +988,14 @@ public class AxisRotation3DTest {
         MatrixRotation3D matrixRotation2 = rotation.toMatrixRotation();
         
         //check correctness
+        //noinspection all
         assertEquals(rotation, matrixRotation1);
+        //noinspection all
         assertEquals(rotation, matrixRotation2);
     }
     
     @Test
-    public void testToAxisRotation() throws AlgebraException{
+    public void testToAxisRotation() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -1034,7 +1015,8 @@ public class AxisRotation3DTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2,
+                0);
         
         AxisRotation3D rotation = new AxisRotation3D(axis, theta);
         
@@ -1049,7 +1031,7 @@ public class AxisRotation3DTest {
     }
 
     @Test
-    public void testToQuaternion() throws AlgebraException{
+    public void testToQuaternion() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -1069,7 +1051,8 @@ public class AxisRotation3DTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2,
+                0);
         
         AxisRotation3D rotation = new AxisRotation3D(axis, theta);
                 
@@ -1079,7 +1062,9 @@ public class AxisRotation3DTest {
         Quaternion quaternion2 = rotation.toQuaternion();
         
         //check correctness
+        //noinspection all
         assertEquals(rotation, quaternion1);
+        //noinspection all
         assertEquals(rotation, quaternion2);
     }    
 }

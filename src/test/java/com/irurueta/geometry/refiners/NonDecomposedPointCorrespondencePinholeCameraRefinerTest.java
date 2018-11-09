@@ -1,24 +1,21 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.refiners.NonDecomposedPointCorrespondencePinholeCameraRefiner
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 29, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.refiners;
 
-import com.irurueta.geometry.HomogeneousPoint2D;
-import com.irurueta.geometry.HomogeneousPoint3D;
-import com.irurueta.geometry.InhomogeneousPoint2D;
-import com.irurueta.geometry.InhomogeneousPoint3D;
-import com.irurueta.geometry.MatrixRotation3D;
-import com.irurueta.geometry.PinholeCamera;
-import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
-import com.irurueta.geometry.Point2D;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Quaternion;
-import com.irurueta.geometry.Rotation3D;
+import com.irurueta.geometry.*;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.geometry.estimators.RANSACDLTPointCorrespondencePinholeCameraRobustEstimator;
@@ -26,47 +23,45 @@ import com.irurueta.numerical.robust.InliersData;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class NonDecomposedPointCorrespondencePinholeCameraRefinerTest implements 
         RefinerListener<PinholeCamera> {
     
-    public static final double MIN_RANDOM_VALUE = 50.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = 50.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_FOCAL_LENGTH = 110.0;
-    public static final double MAX_FOCAL_LENGTH = 130.0;
+    private static final double MIN_FOCAL_LENGTH = 110.0;
+    private static final double MAX_FOCAL_LENGTH = 130.0;
     
-    public static final double MIN_SKEWNESS = -0.001;
-    public static final double MAX_SKEWNESS = 0.001;    
+    private static final double MIN_SKEWNESS = -0.001;
+    private static final double MAX_SKEWNESS = 0.001;
     
-    public static final double MIN_PRINCIPAL_POINT = 90.0;
-    public static final double MAX_PRINCIPAL_POINT = 100.0;
+    private static final double MIN_PRINCIPAL_POINT = 90.0;
+    private static final double MAX_PRINCIPAL_POINT = 100.0;
     
-    public static final double MIN_ANGLE_DEGREES = 10.0;
-    public static final double MAX_ANGLE_DEGREES = 15.0;
+    private static final double MIN_ANGLE_DEGREES = 10.0;
+    private static final double MAX_ANGLE_DEGREES = 15.0;
     
-    public static final int INHOM_3D_COORDS = 3;
+    private static final int INHOM_3D_COORDS = 3;
     
-    public static final int MIN_POINTS = 500;
-    public static final int MAX_POINTS = 1000;
+    private static final int MIN_POINTS = 500;
+    private static final int MAX_POINTS = 1000;
     
-    public static final double THRESHOLD = 1e-5;
+    private static final double THRESHOLD = 1e-5;
     
-    public static final double STD_ERROR = 100.0;
+    private static final double STD_ERROR = 100.0;
     
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
     private int mRefineStart;
     private int mRefineEnd;
@@ -508,7 +503,7 @@ public class NonDecomposedPointCorrespondencePinholeCameraRefinerTest implements
         assertNull(refiner.getSamples1());
         
         //new value
-        List<Point3D> samples1 = new ArrayList<Point3D>();
+        List<Point3D> samples1 = new ArrayList<>();
         refiner.setSamples1(samples1);
         
         //check correctness
@@ -524,7 +519,7 @@ public class NonDecomposedPointCorrespondencePinholeCameraRefinerTest implements
         assertNull(refiner.getSamples2());
         
         //new value
-        List<Point2D> samples2 = new ArrayList<Point2D>();
+        List<Point2D> samples2 = new ArrayList<>();
         refiner.setSamples2(samples2);
         
         //check correctness
@@ -603,7 +598,7 @@ public class NonDecomposedPointCorrespondencePinholeCameraRefinerTest implements
         try {
             refiner.setNumInliers(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -779,7 +774,7 @@ public class NonDecomposedPointCorrespondencePinholeCameraRefinerTest implements
         camera.normalize();            
             
         int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        List<Point3D> points3D = new ArrayList<Point3D>();
+        List<Point3D> points3D = new ArrayList<>();
         Point3D point3D;
         for (int i = 0; i < nPoints; i++) {
             point3D = new HomogeneousPoint3D(
@@ -794,7 +789,7 @@ public class NonDecomposedPointCorrespondencePinholeCameraRefinerTest implements
             
         //create outliers
         Point2D point2DWithError;
-        List<Point2D> points2DWithError = new ArrayList<Point2D>();
+        List<Point2D> points2DWithError = new ArrayList<>();
         GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                 new Random(), 0.0, STD_ERROR);
         for (Point2D point2D : points2D) {
@@ -827,10 +822,6 @@ public class NonDecomposedPointCorrespondencePinholeCameraRefinerTest implements
                 
         return estimator;
     }
-            
-    private void reset() {
-        mRefineStart = mRefineEnd = 0;
-    }
 
     @Override
     public void onRefineStart(Refiner<PinholeCamera> refiner, 
@@ -848,119 +839,123 @@ public class NonDecomposedPointCorrespondencePinholeCameraRefinerTest implements
         checkLocked(
                 (NonDecomposedPointCorrespondencePinholeCameraRefiner)refiner);        
     }
-    
+
+    private void reset() {
+        mRefineStart = mRefineEnd = 0;
+    }
+
     private void checkLocked(
             NonDecomposedPointCorrespondencePinholeCameraRefiner refiner) {
         assertTrue(refiner.isLocked());
         try {
             refiner.setInitialEstimation(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setCovarianceKept(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.refine(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { 
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             refiner.refine();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { 
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             refiner.setInliers(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setResiduals(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setNumInliers(0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setInliersData(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSamples1(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSamples2(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setRefinementStandardDeviation(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestionErrorWeight(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestSkewnessValueEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestedSkewnessValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestHorizontalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestedHorizontalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestVerticalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestedVerticalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestAspectRatioEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestedAspectRatioValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestPrincipalPointEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestedPrincipalPointValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestRotationEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestedRotationValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestCenterEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSuggestedCenterValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
     }    
 }

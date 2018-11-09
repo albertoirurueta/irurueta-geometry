@@ -1,28 +1,32 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.PROMedSLine2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 1, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.CoincidentPointsException;
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.Point2D;
-import com.irurueta.numerical.robust.PROMedSRobustEstimator;
-import com.irurueta.numerical.robust.PROMedSRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best 2D line for provided collection of 2D points using PROMedS
- * algorithm
+ * algorithm.
  */
-public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator{
+public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
     
     /**
      * Default value to be used for stop threshold. Stop threshold can be used 
@@ -38,12 +42,12 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator{
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      */
     public static final double DEFAULT_STOP_THRESHOLD = 1e-3;
     
     /**
-     * Minimum allowed stop threshold value
+     * Minimum allowed stop threshold value.
      */
     public static final double MIN_STOP_THRESHOLD = 0.0;
 
@@ -61,103 +65,104 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator{
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      */
     private double mStopThreshold;    
     
     /**
      * Quality scores corresponding to each provided point.
-     * The larger the score value the betther the quality of the sample
+     * The larger the score value the betther the quality of the sample.
      */
     private double[] mQualityScores;     
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public PROMedSLine2DRobustEstimator(){
+    public PROMedSLine2DRobustEstimator() {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
-     * Constructor with points
-     * @param points 2D points to estimate a 2D line
+     * Constructor with points.
+     * @param points 2D points to estimate a 2D line.
      * @throws IllegalArgumentException if provided list of points doesn't have 
-     * a size greater or equal than MINIMUM_SIZE
+     * a size greater or equal than MINIMUM_SIZE.
      */
     public PROMedSLine2DRobustEstimator(List<Point2D> points) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
-    public PROMedSLine2DRobustEstimator(Line2DRobustEstimatorListener listener){
+    public PROMedSLine2DRobustEstimator(Line2DRobustEstimatorListener listener) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
     
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
-     * @param points 2D points to estimate a 2D line
+     * starts, ends or its progress significantly changes.
+     * @param points 2D points to estimate a 2D line.
      * @throws IllegalArgumentException if provided list of points doesn't have 
-     * a size greater or equal than MINIMUM_SIZE
+     * a size greater or equal than MINIMUM_SIZE.
      */
     public PROMedSLine2DRobustEstimator(Line2DRobustEstimatorListener listener,
-            List<Point2D> points) throws IllegalArgumentException{
+            List<Point2D> points) throws IllegalArgumentException {
         super(listener, points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
     
     /**
-     * Constructor
-     * @param qualityScores quality scores corresponding to each provided point
+     * Constructor.
+     * @param qualityScores quality scores corresponding to each provided point.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 2 points)
+     * smaller than MINIMUM_SIZE (i.e. 2 points).
      */
     public PROMedSLine2DRobustEstimator(double[] qualityScores)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
     /**
-     * Constructor with points
-     * @param points 2D points to estimate a 2D line
-     * @param qualityScores quality scores corresponding to each provided point
+     * Constructor with points.
+     * @param points 2D points to estimate a 2D line.
+     * @param qualityScores quality scores corresponding to each provided point.
      * @throws IllegalArgumentException if provided list of points don't have 
      * the same size as the list of provided quality scores, or it their size 
-     * is not greater or equal than MINIMUM_SIZE
+     * is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSLine2DRobustEstimator(List<Point2D> points, 
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         super(points);
         
-        if(qualityScores.length != points.size()) 
+        if (qualityScores.length != points.size()) {
             throw new IllegalArgumentException();
+        }
         
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
-     * @param qualityScores quality scores corresponding to each provided point
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each provided point.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 2 points)
+     * smaller than MINIMUM_SIZE (i.e. 2 points).
      */
     public PROMedSLine2DRobustEstimator(Line2DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -165,22 +170,23 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator{
     
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
-     * @param points 2D points to estimate a 2D line
-     * @param qualityScores quality scores corresponding to each provided point
+     * starts, ends or its progress significantly changes.
+     * @param points 2D points to estimate a 2D line.
+     * @param qualityScores quality scores corresponding to each provided point.
      * @throws IllegalArgumentException if provided list of points don't have 
      * the same size as the list of provided quality scores, or it their size 
-     * is not greater or equal than MINIMUM_SIZE
+     * is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSLine2DRobustEstimator(Line2DRobustEstimatorListener listener,
             List<Point2D> points, double[] qualityScores) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener, points);
         
-        if(qualityScores.length != points.size()) 
+        if (qualityScores.length != points.size()) {
             throw new IllegalArgumentException();
+        }
         
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -200,11 +206,11 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator{
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      * @return stop threshold to stop the algorithm prematurely when a certain
-     * accuracy has been reached
+     * accuracy has been reached.
      */
-    public double getStopThreshold(){
+    public double getStopThreshold() {
         return mStopThreshold;
     }
     
@@ -222,80 +228,89 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator{
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      * @param stopThreshold stop threshold to stop the algorithm prematurely 
-     * when a certain accuracy has been reached
-     * @throws IllegalArgumentException if provided value is zero or negative
+     * when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException{
-        if(isLocked()) throw new LockedException();
-        if(stopThreshold <= MIN_STOP_THRESHOLD) 
+            throws IllegalArgumentException, LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (stopThreshold <= MIN_STOP_THRESHOLD) {
             throw new IllegalArgumentException();
+        }
         
         mStopThreshold = stopThreshold;
     }
     
     /**
      * Returns quality scores corresponding to each provided point.
-     * The larger the score value the betther the quality of the sampled point
-     * @return quality scores corresponding to each point
+     * The larger the score value the better the quality of the sampled point.
+     * @return quality scores corresponding to each point.
      */
     @Override
-    public double[] getQualityScores(){
+    public double[] getQualityScores() {
         return mQualityScores;
     }
     
     /**
      * Sets quality scores corresponding to each provided point.
-     * The larger the score value the better the quality of the sampled point
-     * @param qualityScores quality scores corresponding to each point
+     * The larger the score value the better the quality of the sampled point.
+     * @param qualityScores quality scores corresponding to each point.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 2 samples)
+     * smaller than MINIMUM_SIZE (i.e. 2 samples).
      */
     @Override
     public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetQualityScores(qualityScores);
     }
     
     /**
      * Indicates if eatimator is ready to start the 2D line estimation.
      * This is true when input data (i.e. 2D points and quality scores) are 
-     * provided and a minimum of MINIMUM_SIZE points are available
-     * @return true if estimator is ready, false otherwise
+     * provided and a minimum of MINIMUM_SIZE points are available.
+     * @return true if estimator is ready, false otherwise.
      */
     @Override
-    public boolean isReady(){
+    public boolean isReady() {
         return super.isReady() && mQualityScores != null && 
                 mQualityScores.length == mPoints.size();
     }      
             
     /**
      * Estimates a 2D line using a robust estimator and the best set of 2D 
-     * points that pass through the estimated 2D line (i.e. belong to its locus)
-     * @return a 2D line
+     * points that pass through the estimated 2D line (i.e. belong to its locus).
+     * @return a 2D line.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */
     @Override
     public Line2D estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         PROMedSRobustEstimator<Line2D> innerEstimator =
-                new PROMedSRobustEstimator<Line2D>(
-                        new PROMedSRobustEstimatorListener<Line2D>(){
+                new PROMedSRobustEstimator<>(
+                        new PROMedSRobustEstimatorListener<Line2D>() {
 
             @Override
             public double getThreshold() {
@@ -318,10 +333,10 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator{
                 Point2D point1 = mPoints.get(samplesIndices[0]);
                 Point2D point2 = mPoints.get(samplesIndices[1]);
                 
-                try{
+                try {
                     Line2D line = new Line2D(point1, point2, false);
                     solutions.add(line);
-                }catch(CoincidentPointsException e){
+                } catch (CoincidentPointsException e) {
                     //if points are coincident, no solution is added
                 }
             }
@@ -338,7 +353,7 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator{
 
             @Override
             public void onEstimateStart(RobustEstimator<Line2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(
                             PROMedSLine2DRobustEstimator.this);
                 }
@@ -346,7 +361,7 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator{
 
             @Override
             public void onEstimateEnd(RobustEstimator<Line2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(PROMedSLine2DRobustEstimator.this);
                 }
             }
@@ -354,7 +369,7 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator{
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator<Line2D> estimator, int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             PROMedSLine2DRobustEstimator.this, iteration);
                 }
@@ -363,7 +378,7 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator{
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator<Line2D> estimator, float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             PROMedSLine2DRobustEstimator.this, progress);
                 }
@@ -375,24 +390,24 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator{
             }              
         });
         
-        try{
+        try {
             mLocked = true;
             innerEstimator.setConfidence(mConfidence);
             innerEstimator.setMaxIterations(mMaxIterations);
             innerEstimator.setProgressDelta(mProgressDelta);
             return innerEstimator.estimate();
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
@@ -402,15 +417,16 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator{
     /**
      * Sets quality scores corresponding to each provided point.
      * This method is used internally and does not check whether instance is
-     * locked or not
-     * @param qualityScores quality scores to be set
+     * locked or not.
+     * @param qualityScores quality scores to be set.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE
+     * smaller than MINIMUM_SIZE.
      */
     private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException{
-        if(qualityScores.length < MINIMUM_SIZE) 
+            throws IllegalArgumentException {
+        if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
+        }
         
         mQualityScores = qualityScores;        
     }     

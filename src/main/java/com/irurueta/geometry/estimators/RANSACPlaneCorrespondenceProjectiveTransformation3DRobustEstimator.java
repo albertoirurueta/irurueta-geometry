@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 6, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,16 +19,13 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.geometry.CoincidentPlanesException;
 import com.irurueta.geometry.Plane;
 import com.irurueta.geometry.ProjectiveTransformation3D;
-import com.irurueta.numerical.robust.RANSACRobustEstimator;
-import com.irurueta.numerical.robust.RANSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best projective transformation for provided collections of matched
- * 3D planes using RANSAC algorithm
+ * 3D planes using RANSAC algorithm.
  */
 public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator 
         extends PlaneCorrespondenceProjectiveTransformation3DRobustEstimator {
@@ -38,13 +42,13 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * orthogonal.
      * If dot product between lines is -1, then although their director vectors 
      * are opposed, lines are considered equal, since sign changes are not taken 
-     * into account and their residuals will be 0
+     * into account and their residuals will be 0.
      */
     public static final double DEFAULT_THRESHOLD = 1e-6;
     
     /**
      * Minimum value that can be set as threshold.
-     * Threshold must be strictly greater than 0.0
+     * Threshold must be strictly greater than 0.0.
      */
     public static final double MIN_THRESHOLD = 0.0;
 
@@ -62,7 +66,7 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * Threshold to determine whether lines are inliers or not when testing
      * possible estimation solutions.
      * The threshold refers to the amount of error a possible solution has on a 
-     * matched pair of lines
+     * matched pair of lines.
      */
     private double mThreshold;   
     
@@ -77,9 +81,9 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
     private boolean mComputeAndKeepResiduals;
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(){
+    public RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator() {
         super();
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -91,17 +95,17 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * transformation.
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @throws IllegalArgumentException if provided lists of planes don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(inputPlanes, outputPlanes);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -109,12 +113,12 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
     public RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-            ProjectiveTransformation3DRobustEstimatorListener listener){
+            ProjectiveTransformation3DRobustEstimatorListener listener) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -126,20 +130,20 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * projective 3D transformation.
      * Planes in the list located at the same position are considered to be 
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener, inputPlanes, outputPlanes);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -158,10 +162,10 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * orthogonal.
      * If dot product between planes is -1, then although their director vectors 
      * are opposed, planes are considered equal, since sign changes are not 
-     * taken into account and their residuals will be 0
-     * @return threshold to determine whether matched planes are inliers or not
+     * taken into account and their residuals will be 0.
+     * @return threshold to determine whether matched planes are inliers or not.
      */
-    public double getThreshold(){
+    public double getThreshold() {
         return mThreshold;
     }
     
@@ -177,18 +181,22 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * orthogonal.
      * If dot product between planes is -1, then although their director vectors 
      * are opposed, planes are considered equal, since sign changes are not 
-     * taken into account and their residuals will be 0
+     * taken into account and their residuals will be 0.
      * @param threshold threshold to determine whether matched planes are 
-     * inliers or not
+     * inliers or not.
      * @throws IllegalArgumentException if provided value is equal or less than
-     * zero
+     * zero.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException{
-        if(isLocked()) throw new LockedException();
-        if(threshold <= MIN_THRESHOLD) throw new IllegalArgumentException();
+            LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (threshold <= MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         mThreshold = threshold;
     }    
     
@@ -241,24 +249,28 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
     /**
      * Estimates a projective 3D transformation using a robust estimator and
      * the best set of matched 3D planes correspondences found using the robust
-     * estimator
-     * @return a projective 3D transformation
+     * estimator.
+     * @return a projective 3D transformation.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */        
     @Override
     public ProjectiveTransformation3D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         RANSACRobustEstimator<ProjectiveTransformation3D> innerEstimator =
-                new RANSACRobustEstimator<ProjectiveTransformation3D>(
-                new RANSACRobustEstimatorListener<ProjectiveTransformation3D>(){
+                new RANSACRobustEstimator<>(
+                new RANSACRobustEstimatorListener<ProjectiveTransformation3D>() {
                     
             //plane to be reused when computing residuals
             private Plane mTestPlane = new Plane();
@@ -293,14 +305,14 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
                 Plane outputPlane4 = mOutputPlanes.get(samplesIndices[3]);
                 Plane outputPlane5 = mOutputPlanes.get(samplesIndices[4]);
                 
-                try{
+                try {
                     ProjectiveTransformation3D transformation =
                             new ProjectiveTransformation3D(inputPlane1, 
                             inputPlane2, inputPlane3, inputPlane4, inputPlane5, 
                             outputPlane1, outputPlane2, outputPlane3, 
                             outputPlane4, outputPlane5);
                     solutions.add(transformation);
-                }catch(CoincidentPlanesException e){
+                } catch (CoincidentPlanesException e) {
                     //if lines are coincident, no solution is added
                 }
             }
@@ -312,11 +324,11 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
                 Plane outputPlane = mOutputPlanes.get(i);
                 
                 //transform input plane and store result in mTestPlane
-                try{
+                try {
                     currentEstimation.transform(inputPlane, mTestPlane);
                     
                     return getResidual(outputPlane, mTestPlane);
-                }catch(AlgebraException e){
+                } catch (AlgebraException e) {
                     //this happens when internal matrix of affine transformation
                     //cannot be reverse (i.e. transformation is not well defined,
                     //numerical instabilities, etc)
@@ -333,7 +345,7 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             @Override
             public void onEstimateStart(
                     RobustEstimator<ProjectiveTransformation3D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(
                             RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.this);
                 }
@@ -342,7 +354,7 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             @Override
             public void onEstimateEnd(
                     RobustEstimator<ProjectiveTransformation3D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(
                             RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.this);
                 }
@@ -352,7 +364,7 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             public void onEstimateNextIteration(
                     RobustEstimator<ProjectiveTransformation3D> estimator, 
                     int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.this, 
                             iteration);
@@ -363,7 +375,7 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             public void onEstimateProgressChange(
                     RobustEstimator<ProjectiveTransformation3D> estimator, 
                     float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.this, 
                             progress);
@@ -371,7 +383,7 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             }
         });
         
-        try{
+        try {
             mLocked = true;
             mInliersData = null;
             innerEstimator.setComputeAndKeepInliersEnabled(
@@ -385,18 +397,18 @@ public class RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
                     innerEstimator.estimate();
             mInliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);            
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }        
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */        
     @Override
     public RobustEstimatorMethod getMethod() {

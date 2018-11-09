@@ -1,9 +1,17 @@
-/**
- * @file
- * This file contains implementation of 
- * com.irurueta.geometry.Polygon3D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
@@ -12,67 +20,67 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *  This class defines a polygon in 3D space
+ *  This class defines a polygon in 3D space.
  */
-public class Polygon3D implements Serializable{
-    
-    /**
-     * List containing vertices of this polygon. Each vertex is a 3D point
-     */
-    private List<Point3D> mVertices;
-    
-    /**
-     * Boolean indicating whether polygon has already been triangulated
-     */
-    private boolean mTriangulated;
-    
-    /**
-     * List containing triangles found after triangulating this polygon.
-     * Initially this list will be null until triangulation is done
-     */
-    private List<Triangle3D> mTriangles;
-    
-    /**
-     * Method to do triangulation
-     */
-    private TriangulatorMethod mTriangulatorMethod;
-    
+public class Polygon3D implements Serializable {
+
     /**
      * Default threshold value. Thresholds are used to determine whether a point
      * lies inside the polygon or not, or if it's locus or not, etc.
      */
     public static final double DEFAULT_THRESHOLD = 1e-9;
-    
+
     /**
-     * Minimum allowed threshold value
+     * Minimum allowed threshold value.
      */
     public static final double MIN_THRESHOLD = 0.0;
-    
+
     /**
-     * Minimum number of vertices that a polygon is allowed to have
+     * Minimum number of vertices that a polygon is allowed to have.
      */
+    @SuppressWarnings("WeakerAccess")
     public static final int MIN_VERTICES = 3;
-    
+
     /**
-     * Constant defining inhomogeneous coordinates
+     * Constant defining inhomogeneous coordinates.
      */
     public static final int INHOM_COORDS = 3;
-    
+
     /**
-     * Default method for triangulation
+     * Default method for triangulation.
      */
-    public static final TriangulatorMethod DEFAULT_TRIANGULATOR_METHOD = 
+    public static final TriangulatorMethod DEFAULT_TRIANGULATOR_METHOD =
             TriangulatorMethod.VAN_GOGH_TRIANGULATOR;
-    
+
+    /**
+     * List containing vertices of this polygon. Each vertex is a 3D point.
+     */
+    private List<Point3D> mVertices;
     
     /**
-     * Constructor
-     * @param vertices List of vertices forming this polygon.
+     * Boolean indicating whether polygon has already been triangulated.
+     */
+    private boolean mTriangulated;
+    
+    /**
+     * List containing triangles found after triangulating this polygon.
+     * Initially this list will be null until triangulation is done.
+     */
+    private List<Triangle3D> mTriangles;
+    
+    /**
+     * Method to do triangulation.
+     */
+    private TriangulatorMethod mTriangulatorMethod;
+    
+    /**
+     * Constructor.
+     * @param vertices List of vertices forming this polygon..
      * @throws NotEnoughVerticesException Raised if list does not contain enough
-     * vertices
+     * vertices.
      * @see #MIN_VERTICES
      */
-    public Polygon3D(List<Point3D> vertices) throws NotEnoughVerticesException{
+    public Polygon3D(List<Point3D> vertices) throws NotEnoughVerticesException {
         setVertices(vertices);
         mTriangulatorMethod = DEFAULT_TRIANGULATOR_METHOD;
     }
@@ -80,41 +88,42 @@ public class Polygon3D implements Serializable{
     /**
      * Returns triangulator method. Triangulator method determines the way a
      * polygon is divided into triangles.
-     * If none has been provided DEFAULT_TRIANGULATOR_METHOD will be returned
-     * @return Triangulator method
+     * If none has been provided DEFAULT_TRIANGULATOR_METHOD will be returned.
+     * @return Triangulator method.
      */
-    public TriangulatorMethod getTriangulatorMethod(){
+    public TriangulatorMethod getTriangulatorMethod() {
         return mTriangulatorMethod;
     }
     
     /**
      * Sets triangulator method. A triangulator method determines the way a
      * polygon is divided into triangles.
-     * @param triangulatorMethod A triangulator method
+     * @param triangulatorMethod A triangulator method.
      */
-    public void setTriangulatorMethod(TriangulatorMethod triangulatorMethod){
+    public void setTriangulatorMethod(TriangulatorMethod triangulatorMethod) {
         mTriangulatorMethod = triangulatorMethod;
     }
     
     /**
-     * Returns the list of vertices forming this polygon
-     * @return List of vertices
+     * Returns the list of vertices forming this polygon.
+     * @return List of vertices.
      */
-    public List<Point3D> getVertices(){
+    public List<Point3D> getVertices() {
         return mVertices;
     }
     
     /**
-     * Sets list of vertices forming this polygon
-     * @param vertices List of vertices
+     * Sets list of vertices forming this polygon.
+     * @param vertices List of vertices.
      * @throws NotEnoughVerticesException Raised if provided list does not have
-     * enough vertices
+     * enough vertices.
      * @see #MIN_VERTICES
      */
     public final void setVertices(List<Point3D> vertices) 
-            throws NotEnoughVerticesException{
-        if(vertices.size() < MIN_VERTICES) 
+            throws NotEnoughVerticesException {
+        if (vertices.size() < MIN_VERTICES) {
             throw new NotEnoughVerticesException();
+        }
         
         mVertices = vertices;
         mTriangulated = false;
@@ -125,22 +134,24 @@ public class Polygon3D implements Serializable{
      * Determines whether this polygon has already been triangulated.
      * A polygon will only need to be triangulated once, unless the list of
      * vertices is reset.
-     * @return True if polygon has already been triangulated, false otherwise
+     * @return True if polygon has already been triangulated, false otherwise.
      */
-    public boolean isTriangulated(){
+    public boolean isTriangulated() {
         return mTriangulated;
     }
     
     /**
      * Returns a list of triangles forming this polygon.
      * This method checks whether this polygon has already been triangulated,
-     * if not, it performs triangulation first
-     * @return A list of triangles forming this polygon
+     * if not, it performs triangulation first.
+     * @return A list of triangles forming this polygon.
      * @throws TriangulatorException Raised if triangulation was needed and 
-     * failed
+     * failed.
      */
-    public List<Triangle3D> getTriangles() throws TriangulatorException{
-        if(!isTriangulated()) triangulate();
+    public List<Triangle3D> getTriangles() throws TriangulatorException {
+        if (!isTriangulated()) {
+            triangulate();
+        }
         return mTriangles;
     }
      
@@ -148,9 +159,9 @@ public class Polygon3D implements Serializable{
      * Returns signed area of this polygon.
      * The sign of the area determines whether vertices of the polygon are 
      * provided in clockwise (negative sign) or clockwise (positive sign) order.
-     * @return Signed area of this polygon
+     * @return Signed area of this polygon.
      */
-    public double getArea(){
+    public double getArea() {
         Point3D origin = mVertices.get(0);
         double inhomX0 = origin.getInhomX();
         double inhomY0 = origin.getInhomY();
@@ -162,7 +173,7 @@ public class Polygon3D implements Serializable{
                                             //vertices
         Point3D curPoint;
         double avgX = 0.0, avgY = 0.0, avgZ = 0.0;
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             curPoint = iterator.next();
             
             double inhomX1 = prevPoint.getInhomX();
@@ -201,16 +212,16 @@ public class Polygon3D implements Serializable{
     /**
      * Returns perimeter of this polygon.
      * The perimeter is computed as the sum of the distances between consecutive
-     * pairs of vertices
+     * pairs of vertices.
      * @return Perimeter of this polygon.
      */
-    public double getPerimeter(){
+    public double getPerimeter() {
         //iterate over all vertices and compute their distance
         Iterator<Point3D> iterator = mVertices.iterator();
         Point3D prevPoint = iterator.next();
         Point3D point;
         double perimeter = 0.0;
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             point = iterator.next();
             perimeter += prevPoint.distanceTo(point);
             prevPoint = point;
@@ -225,14 +236,14 @@ public class Polygon3D implements Serializable{
      * polygon.
      * Notice that this method is only ensured to work for polygons having no
      * holes or crossing borders. It will safely work on any other polygon,
-     * no matter if it is regular, non-regular, convex or concave
-     * @param point Point to be checked
+     * no matter if it is regular, non-regular, convex or concave.
+     * @param point Point to be checked.
      * @return True if point lies within the area defined by this polygon, false
-     * otherwise
+     * otherwise.
      * @throws TriangulatorException Raised if triangulation was required but
-     * failed
+     * failed.
      */
-    public boolean isInside(Point3D point) throws TriangulatorException{
+    public boolean isInside(Point3D point) throws TriangulatorException {
         return isInside(point, DEFAULT_THRESHOLD);
     }
 
@@ -246,17 +257,21 @@ public class Polygon3D implements Serializable{
      * @param threshold Threshold to determine whether point lies inside this
      * polygon. Usually this value should be small.
      * @return True if point lies within the area defined by this polygon, false
-     * otherwise
-     * @throws IllegalArgumentException Raised if provided threshold is negative
+     * otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
      * @throws TriangulatorException Raised if triangulation was required but
-     * failed
+     * failed.
      */
     public boolean isInside(Point3D point, double threshold)
-            throws IllegalArgumentException, TriangulatorException{
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+            throws IllegalArgumentException, TriangulatorException {
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         
-        for(Triangle3D triangle : getTriangles()){
-            if(triangle.isInside(point, threshold)) return true;
+        for (Triangle3D triangle : getTriangles()) {
+            if (triangle.isInside(point, threshold)) {
+                return true;
+            }
         }
         return false;
     }
@@ -267,7 +282,7 @@ public class Polygon3D implements Serializable{
      * The center is not ensure to lie within the area formed by this polygon.
      * @return Center of this polygon.
      */
-    public Point3D getCenter(){
+    public Point3D getCenter() {
         Point3D result = Point3D.create();
         center(result);
         return result;        
@@ -279,12 +294,12 @@ public class Polygon3D implements Serializable{
      * The center is not ensured to lie within the area formed by this polygon.
      * @param result Instance where the computed center will be stored.
      */
-    public void center(Point3D result){
+    public void center(Point3D result) {
         //compute average location of all vertices
         double inhomX = 0.0, inhomY = 0.0, inhomZ = 0.0;
         int total = mVertices.size();
         
-        for(Point3D point : mVertices){
+        for (Point3D point : mVertices) {
             inhomX += point.getInhomX() / (double)total;
             inhomY += point.getInhomY() / (double)total;
             inhomZ += point.getInhomZ() / (double)total;
@@ -296,19 +311,19 @@ public class Polygon3D implements Serializable{
      * Determines whether provided point is locus of the borders defined by
      * the vertices of this polygon. A point will be locus if it lies in the
      * line defined by two consecutive vertices up to a certain threshold of
-     * error
-     * @param point Point to be checked
+     * error.
+     * @param point Point to be checked.
      * @param threshold Threshold of allowed error. This should usually be a 
-     * small value
+     * small value.
      * @return True if provided point lies in a border of this polygon, false
-     * otherwise
-     * @throws IllegalArgumentException Raised if provided threshold is negative
-     * @throws TriangulatorException Raised if triangulation was required but
-     * failed
+     * otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean isLocus(Point3D point, double threshold) 
-            throws IllegalArgumentException, TriangulatorException{
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+            throws IllegalArgumentException {
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         
         //normalize point to increase accuracy
         point.normalize();
@@ -319,10 +334,12 @@ public class Polygon3D implements Serializable{
         prevPoint.normalize(); //normalize to increase accuracy
         
         Point3D curPoint;
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             curPoint = iterator.next();
             curPoint.normalize(); //normalize to increase accuracy
-            if(point.isBetween(prevPoint, curPoint, threshold)) return true;            
+            if (point.isBetween(prevPoint, curPoint, threshold)) {
+                return true;
+            }
             prevPoint = curPoint;
         }
         
@@ -333,14 +350,12 @@ public class Polygon3D implements Serializable{
     /**
      * Determines whether provided point is locus of the borders defined by the
      * vertices of this polygon. A point will be locus if it lies in the line
-     * defined by two consecutive vertices
-     * @param point Point to be checked
+     * defined by two consecutive vertices.
+     * @param point Point to be checked.
      * @return True if provided point lies in a border of this polygon, false
-     * otherwise
-     * @throws TriangulatorException Raised if triangulation was required but
-     * failed
+     * otherwise.
      */
-    public boolean isLocus(Point3D point) throws TriangulatorException{
+    public boolean isLocus(Point3D point) {
         return isLocus(point, DEFAULT_THRESHOLD);
     }  
     
@@ -350,10 +365,10 @@ public class Polygon3D implements Serializable{
      * @param point Point to be checked.
      * @return Shortest distance from provided point to this polygon.
      * @throws CoincidentPointsException Raised if points in a polygon are too
-     * close. This usually indicates numerical instability or polygon degeneracy
+     * close. This usually indicates numerical instability or polygon degeneracy.
      */
     public double getShortestDistance(Point3D point) 
-            throws CoincidentPointsException{        
+            throws CoincidentPointsException {
         //iterate over all vertices and compute their distance
         Iterator<Point3D> iterator = mVertices.iterator();
         Point3D prevPoint = iterator.next();
@@ -364,16 +379,18 @@ public class Polygon3D implements Serializable{
         Line3D line = null;
         Point3D pointInLine = Point3D.create();
         
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             curPoint = iterator.next();
             curPoint.normalize(); //to increase accuracy
             
             //check if point lies in the segment of the boundary of this polygon
-            if(point.isBetween(curPoint, prevPoint)) return 0.0;
+            if (point.isBetween(curPoint, prevPoint)) {
+                return 0.0;
+            }
             
-            if(line == null){
+            if (line == null) {
                 line = new Line3D(curPoint, prevPoint);
-            }else{
+            } else {
                 line.setPlanesFromPoints(curPoint, prevPoint);
             }
             line.normalize(); //to increase accuracy
@@ -382,11 +399,11 @@ public class Polygon3D implements Serializable{
             line.closestPoint(point, pointInLine);
             pointInLine.normalize(); //to increase accuracy
             
-            if(pointInLine.isBetween(curPoint, prevPoint)){
+            if (pointInLine.isBetween(curPoint, prevPoint)) {
                 //closest point lies within segment of polygon boundary, so we
                 //keep distance
                 dist = point.distanceTo(pointInLine);
-                if(dist < bestDist){
+                if (dist < bestDist) {
                     //a better point has been found
                     bestDist = dist;
                     found = true;
@@ -399,11 +416,13 @@ public class Polygon3D implements Serializable{
         //try last vertex with first
         //check if point lies in the segment of the boundary of this polygon
         Point3D first = mVertices.get(0);
-        if(point.isBetween(prevPoint, first)) return 0.0;
+        if (point.isBetween(prevPoint, first)) {
+            return 0.0;
+        }
             
-        if(line == null){
+        if (line == null) {
             line = new Line3D(prevPoint, first);
-        }else{
+        } else {
             line.setPlanesFromPoints(prevPoint, first);
         }
         line.normalize(); //to increase accuracy
@@ -412,11 +431,11 @@ public class Polygon3D implements Serializable{
         line.closestPoint(point, pointInLine);
         pointInLine.normalize(); //to increase accuracy
             
-        if(pointInLine.isBetween(prevPoint, first)){
+        if (pointInLine.isBetween(prevPoint, first)) {
             //closest point lies within segment of polygon boundary, so we
             //keep distance
             dist = point.distanceTo(pointInLine);
-            if(dist < bestDist){
+            if (dist < bestDist) {
                 //a better point has been found
                 bestDist = dist;
                 found = true;
@@ -425,15 +444,17 @@ public class Polygon3D implements Serializable{
         
         
         
-        if(!found){
+        if (!found) {
             //no closest point was found on a segment belonging to polygon 
             //boundary so we search for the closest vertex
             iterator = mVertices.iterator();
-            while(iterator.hasNext()){
+            while (iterator.hasNext()) {
                 //a better vertex has been found
                 curPoint = iterator.next();
                 dist = point.distanceTo(curPoint);
-                if(dist < bestDist) bestDist = dist;
+                if (dist < bestDist) {
+                    bestDist = dist;
+                }
             }
         }
         
@@ -442,14 +463,14 @@ public class Polygon3D implements Serializable{
     
     /**
      * Returns the closest point to provided point that is locus of this
-     * polygon (i.e. lies on a border of this polygon)
-     * @param point Point to be checked
-     * @return Closest point being locus of this polygon
+     * polygon (i.e. lies on a border of this polygon).
+     * @param point Point to be checked.
+     * @return Closest point being locus of this polygon.
      * @throws CoincidentPointsException Raised if points in a polygon are too
-     * close. This usually indicates numerical instability or polygon degeneracy
+     * close. This usually indicates numerical instability or polygon degeneracy.
      */
     public Point3D getClosestPoint(Point3D point) 
-            throws CoincidentPointsException{
+            throws CoincidentPointsException {
         Point3D result = Point3D.create();
         closestPoint(point, result);
         return result;        
@@ -457,14 +478,14 @@ public class Polygon3D implements Serializable{
     
     /**
      * Computes the closes point to provided point that is locus of this
-     * polygon (i.e. lies on a border of this polygon)
-     * @param point Point to be checked
-     * @param result Instance where the closest point will be stored
+     * polygon (i.e. lies on a border of this polygon).
+     * @param point Point to be checked.
+     * @param result Instance where the closest point will be stored.
      * @throws CoincidentPointsException Raised if points in a polygon are too
-     * close. This usually indicates numerical instability or polygon degeneracy
+     * close. This usually indicates numerical instability or polygon degeneracy.
      */
     public void closestPoint(Point3D point, Point3D result) 
-            throws CoincidentPointsException{
+            throws CoincidentPointsException {
         //iterate over all vertices and compute their distance
         Iterator<Point3D> iterator = mVertices.iterator();
         Point3D prevPoint = iterator.next();
@@ -476,19 +497,19 @@ public class Polygon3D implements Serializable{
         Line3D line = null;
         Point3D pointInLine = Point3D.create();
         
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             curPoint = iterator.next();
             curPoint.normalize(); //to increase accuracy
             
             //check if point lies in the segment of the boundary of this polygon
-            if(point.isBetween(curPoint, prevPoint)){
+            if (point.isBetween(curPoint, prevPoint)) {
                 result.setCoordinates(point);
                 return;
             }
             
-            if(line == null){
+            if (line == null) {
                 line = new Line3D(curPoint, prevPoint);
-            }else{
+            } else {
                 line.setPlanesFromPoints(curPoint, prevPoint);
             }
             line.normalize(); //to increase accuracy
@@ -497,11 +518,11 @@ public class Polygon3D implements Serializable{
             line.closestPoint(point, pointInLine);
             pointInLine.normalize(); //to increase accuracy
             
-            if(pointInLine.isBetween(curPoint, prevPoint)){
+            if (pointInLine.isBetween(curPoint, prevPoint)) {
                 //closest point lies within segment of polygon boundary, so we
                 //keep distance and point
                 dist = point.distanceTo(pointInLine);
-                if(dist < bestDist){
+                if (dist < bestDist) {
                     //a better point has been found
                     bestDist = dist; 
                     result.setCoordinates(pointInLine);
@@ -515,14 +536,14 @@ public class Polygon3D implements Serializable{
         //try last vertex with first
         //check if point lies in the segment of the boundary of this polygon
         Point3D first = mVertices.get(0);
-        if(point.isBetween(prevPoint, first)){
+        if (point.isBetween(prevPoint, first)) {
             result.setCoordinates(point);
             return;
         }
             
-        if(line == null){
+        if (line == null) {
             line = new Line3D(prevPoint, first);
-        }else{
+        } else {
             line.setPlanesFromPoints(prevPoint, first);
         }
         line.normalize(); //to increase accuracy
@@ -531,11 +552,11 @@ public class Polygon3D implements Serializable{
         line.closestPoint(point, pointInLine);
         pointInLine.normalize(); //to increase accuracy
             
-        if(pointInLine.isBetween(prevPoint, first)){
+        if (pointInLine.isBetween(prevPoint, first)) {
             //closest point lies within segment of polygon boundary, so we
             //keep distance
             dist = point.distanceTo(pointInLine);
-            if(dist < bestDist){
+            if (dist < bestDist) {
                 //a better point has been found
                 bestDist = dist;
                 result.setCoordinates(pointInLine);
@@ -544,14 +565,14 @@ public class Polygon3D implements Serializable{
         }        
         
         
-        if(!found){
+        if (!found) {
             //no closest point was found on a segment belonging to polygon 
             //boundary so we search for the closest vertex
             iterator = mVertices.iterator();
-            while(iterator.hasNext()){
+            while (iterator.hasNext()) {
                 curPoint = iterator.next();
                 dist = point.distanceTo(curPoint);
-                if(dist < bestDist){
+                if (dist < bestDist) {
                     //a better vertex has been found
                     bestDist = dist;
                     result.setCoordinates(curPoint);
@@ -566,12 +587,12 @@ public class Polygon3D implements Serializable{
      * called.
      * This method will make no action if a polygon is already triangulated 
      * unless it's vertices are reset.
-     * @throws TriangulatorException Raised if triangulation failed
+     * @throws TriangulatorException Raised if triangulation failed.
      * @see #getTriangulatorMethod
      * @see #setTriangulatorMethod(TriangulatorMethod)
      */
-    public void triangulate() throws TriangulatorException{
-        if(!mTriangulated){
+    public void triangulate() throws TriangulatorException {
+        if (!mTriangulated) {
             Triangulator3D triangulator = Triangulator3D.create(
                     mTriangulatorMethod);
             mTriangles = triangulator.triangulate(mVertices);
@@ -586,9 +607,9 @@ public class Polygon3D implements Serializable{
      * then the estimated orientation will be exact, otherwise an average
      * orientation will be estimated.
      * Estimated orientation will be normalized (the norm of the estimated 
-     * vector will be 1)
-     * @param vertices List of vertices forming a polygon in 3D
-     * @param result Array where the estimated orientation will be stored
+     * vector will be 1).
+     * @param vertices List of vertices forming a polygon in 3D.
+     * @param result Array where the estimated orientation will be stored.
      * @param threshold Threshold to determine whether the orientation can be
      * estimated or not. Because the estimated orientation needs to be 
      * normalized, it will only be possible to do so when norm has a reasonable
@@ -600,15 +621,21 @@ public class Polygon3D implements Serializable{
      * least three vertices, or if provided threshold is negative.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      */
     public static void orientation(List<Point3D> vertices, double[] result,
             double threshold) throws IllegalArgumentException, 
-            CoincidentPointsException{
+            CoincidentPointsException {
         int numVertices = vertices.size();
-        if(numVertices < MIN_VERTICES) throw new IllegalArgumentException();        
-        if(result.length != INHOM_COORDS) throw new IllegalArgumentException();
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+        if (numVertices < MIN_VERTICES) {
+            throw new IllegalArgumentException();
+        }
+        if (result.length != INHOM_COORDS) {
+            throw new IllegalArgumentException();
+        }
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         
         
         double avgX = 0.0, avgY = 0.0, avgZ = 0.0;
@@ -621,7 +648,7 @@ public class Polygon3D implements Serializable{
         double inhomZ0 = origin.getInhomZ();
         
         
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             curPoint = iterator.next();
             double inhomX1 = prevPoint.getInhomX();
             double inhomY1 = prevPoint.getInhomY();
@@ -654,7 +681,9 @@ public class Polygon3D implements Serializable{
 
         double norm = Math.sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ);
         
-        if(norm < threshold) throw new CoincidentPointsException();
+        if (norm < threshold) {
+            throw new CoincidentPointsException();
+        }
         
         avgX /= norm;
         avgY /= norm;
@@ -672,18 +701,18 @@ public class Polygon3D implements Serializable{
      * then the estimated orientation will be exact, otherwise an average
      * orientation will be estimated.
      * Estimated orientation will be normalized (the norm of the estimated 
-     * vector will be 1)
-     * @param vertices List of vertices forming a polygon in 3D
-     * @param result Array where the estimated orientation will be stored
+     * vector will be 1).
+     * @param vertices List of vertices forming a polygon in 3D.
+     * @param result Array where the estimated orientation will be stored.
      * @throws IllegalArgumentException Raised if provided result array does not
      * have length 3, or if the list of provided vertices does not contain at
      * least three vertices.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      */    
     public static void orientation(List<Point3D> vertices, double[] result) 
-            throws IllegalArgumentException, CoincidentPointsException{
+            throws IllegalArgumentException, CoincidentPointsException {
         orientation(vertices, result, DEFAULT_THRESHOLD);
     }    
     
@@ -694,24 +723,24 @@ public class Polygon3D implements Serializable{
      * then the estimated orientation will be exact, otherwise an average
      * orientation will be estimated.
      * Estimated orientation will be normalized (the norm of the estimated 
-     * vector will be 1)
-     * @param vertices List of vertices forming a polygon in 3D
+     * vector will be 1).
+     * @param vertices List of vertices forming a polygon in 3D.
      * @param threshold Threshold to determine whether the orientation can be
      * estimated or not. Because the estimated orientation needs to be 
      * normalized, it will only be possible to do so when norm has a reasonable
      * value. If estimated norm happens to be smaller than provided value, then
      * it will be assumed that polygon contains a degeneracy or that a 
      * consecutive pair of vertices are coincident.
-     * @return Array containing estimated orientation
+     * @return Array containing estimated orientation.
      * @throws IllegalArgumentException Raised if the list of provided vertices 
      * does not contain at least three vertices, or if provided threshold is 
      * negative.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      */    
     public static double[] orientation(List<Point3D> vertices, double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException{
+            throws IllegalArgumentException, CoincidentPointsException {
         double[] out = new double[INHOM_COORDS];
         orientation(vertices, out, threshold);
         return out;
@@ -724,17 +753,17 @@ public class Polygon3D implements Serializable{
      * then the estimated orientation will be exact, otherwise an average
      * orientation will be estimated.
      * Estimated orientation will be normalized (the norm of the estimated 
-     * vector will be 1)
+     * vector will be 1).
      * @param vertices List of vertices forming a polygon in 3D
-     * @return Array containing estimated orientation
+     * @return Array containing estimated orientation.
      * @throws IllegalArgumentException Raised if the list of provided vertices 
-     * does not contain at least three vertices
+     * does not contain at least three vertices.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      */        
     public static double[] orientation(List<Point3D> vertices) 
-            throws IllegalArgumentException, CoincidentPointsException{
+            throws IllegalArgumentException, CoincidentPointsException {
         return orientation(vertices, DEFAULT_THRESHOLD);
     }
     
@@ -745,9 +774,9 @@ public class Polygon3D implements Serializable{
      * then the estimated orientation will be exact, otherwise an average
      * orientation will be estimated.
      * Estimated orientation will be normalized (the norm of the estimated 
-     * vector will be 1)
-     * @param polygon A polygon in 3D
-     * @param result Array where the estimated orientation will be stored
+     * vector will be 1).
+     * @param polygon A polygon in 3D.
+     * @param result Array where the estimated orientation will be stored.
      * @param threshold Threshold to determine whether the orientation can be
      * estimated or not. Because the estimated orientation needs to be 
      * normalized, it will only be possible to do so when norm has a reasonable
@@ -758,11 +787,11 @@ public class Polygon3D implements Serializable{
      * have length 3 or if provided threshold is negative.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      */    
     public static void orientation(Polygon3D polygon, double[] result, 
             double threshold) throws IllegalArgumentException, 
-            CoincidentPointsException{
+            CoincidentPointsException {
         orientation(polygon.getVertices(), result, threshold);
     }
 
@@ -773,17 +802,17 @@ public class Polygon3D implements Serializable{
      * then the estimated orientation will be exact, otherwise an average
      * orientation will be estimated.
      * Estimated orientation will be normalized (the norm of the estimated 
-     * vector will be 1)
-     * @param polygon A polygon in 3D
-     * @param result Array where the estimated orientation will be stored
+     * vector will be 1).
+     * @param polygon A polygon in 3D.
+     * @param result Array where the estimated orientation will be stored.
      * @throws IllegalArgumentException Raised if provided result array does not
-     * have length 3
+     * have length 3.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      */        
     public static void orientation(Polygon3D polygon, double[] result) 
-            throws IllegalArgumentException, CoincidentPointsException{
+            throws IllegalArgumentException, CoincidentPointsException {
         orientation(polygon, result, DEFAULT_THRESHOLD);
     }    
     
@@ -794,23 +823,23 @@ public class Polygon3D implements Serializable{
      * then the estimated orientation will be exact, otherwise an average
      * orientation will be estimated.
      * Estimated orientation will be normalized (the norm of the estimated 
-     * vector will be 1)
-     * @param polygon A polygon in 3D
+     * vector will be 1).
+     * @param polygon A polygon in 3D.
      * @param threshold Threshold to determine whether the orientation can be
      * estimated or not. Because the estimated orientation needs to be 
      * normalized, it will only be possible to do so when norm has a reasonable
      * value. If estimated norm happens to be smaller than provided value, then
      * it will be assumed that polygon contains a degeneracy or that a 
      * consecutive pair of vertices are coincident.
-     * @return Array containing estimated orientation
+     * @return Array containing estimated orientation.
      * @throws IllegalArgumentException Raised if provided threshold is 
      * negative.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      */        
     public static double[] orientation(Polygon3D polygon, double threshold)
-        throws IllegalArgumentException, CoincidentPointsException{
+            throws IllegalArgumentException, CoincidentPointsException {
         return orientation(polygon.getVertices(), threshold);
     }
     
@@ -821,15 +850,15 @@ public class Polygon3D implements Serializable{
      * then the estimated orientation will be exact, otherwise an average
      * orientation will be estimated.
      * Estimated orientation will be normalized (the norm of the estimated 
-     * vector will be 1)
-     * @param polygon A polygon in 3D
-     * @return Array containing estimated orientation
+     * vector will be 1).
+     * @param polygon A polygon in 3D.
+     * @return Array containing estimated orientation.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      */            
     public static double[] orientation(Polygon3D polygon)
-        throws CoincidentPointsException{
+            throws CoincidentPointsException {
         return orientation(polygon, DEFAULT_THRESHOLD);
     }    
     
@@ -840,8 +869,8 @@ public class Polygon3D implements Serializable{
      * then the estimated orientation will be exact, otherwise an average
      * orientation will be estimated.
      * Estimated orientation will be normalized (the norm of the estimated 
-     * vector will be 1)
-     * @param result Array where the estimated orientation will be stored
+     * vector will be 1).
+     * @param result Array where the estimated orientation will be stored.
      * @param threshold Threshold to determine whether the orientation can be
      * estimated or not. Because the estimated orientation needs to be 
      * normalized, it will only be possible to do so when norm has a reasonable
@@ -852,10 +881,10 @@ public class Polygon3D implements Serializable{
      * have length 3 or if provided threshold is negative.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      */        
     public void orientation(double[] result, double threshold)
-        throws IllegalArgumentException, CoincidentPointsException{
+            throws IllegalArgumentException, CoincidentPointsException {
         orientation(mVertices, result, threshold);
     }
     
@@ -866,16 +895,16 @@ public class Polygon3D implements Serializable{
      * then the estimated orientation will be exact, otherwise an average
      * orientation will be estimated.
      * Estimated orientation will be normalized (the norm of the estimated 
-     * vector will be 1)
-     * @param result Array where the estimated orientation will be stored
+     * vector will be 1).
+     * @param result Array where the estimated orientation will be stored.
      * @throws IllegalArgumentException Raised if provided result array does not
-     * have length 3
+     * have length 3.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      */        
     public void orientation(double[] result) throws IllegalArgumentException, 
-            CoincidentPointsException{
+            CoincidentPointsException {
         orientation(result, DEFAULT_THRESHOLD);
     }
     
@@ -886,22 +915,22 @@ public class Polygon3D implements Serializable{
      * then the estimated orientation will be exact, otherwise an average
      * orientation will be estimated.
      * Estimated orientation will be normalized (the norm of the estimated 
-     * vector will be 1)
+     * vector will be 1).
      * @param threshold Threshold to determine whether the orientation can be
      * estimated or not. Because the estimated orientation needs to be 
      * normalized, it will only be possible to do so when norm has a reasonable
      * value. If estimated norm happens to be smaller than provided value, then
      * it will be assumed that polygon contains a degeneracy or that a 
      * consecutive pair of vertices are coincident.
-     * @return Array containing estimated orientation
+     * @return Array containing estimated orientation.
      * @throws IllegalArgumentException Raised if provided threshold is 
      * negative.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      */        
     public double[] getOrientation(double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException{
+            throws IllegalArgumentException, CoincidentPointsException {
         return orientation(mVertices, threshold);
     }
 
@@ -912,13 +941,13 @@ public class Polygon3D implements Serializable{
      * then the estimated orientation will be exact, otherwise an average
      * orientation will be estimated.
      * Estimated orientation will be normalized (the norm of the estimated 
-     * vector will be 1)
-     * @return Array containing estimated orientation
+     * vector will be 1).
+     * @return Array containing estimated orientation.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      */            
-    public double[] getOrientation() throws CoincidentPointsException{
+    public double[] getOrientation() throws CoincidentPointsException {
         return getOrientation(DEFAULT_THRESHOLD);
     }
     
@@ -928,20 +957,20 @@ public class Polygon3D implements Serializable{
      * estimating the angle between the planes formed by two polygons.
      * The angle between two polygons is estimated by first estimating their
      * orientation.
-     * @param polygon1 1st polygon
-     * @param polygon2 2nd polygon
+     * @param polygon1 1st polygon.
+     * @param polygon2 2nd polygon.
      * @param threshold Threshold to determine when polygon orientation can be
      * estimated.
-     * @return Angle between two polygons in radians
-     * @throws IllegalArgumentException Raised if provided threshold is negative
+     * @return Angle between two polygons in radians.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      * @see #orientation(Polygon3D, double[])
      */
     public static double getAngleBetweenPolygons(Polygon3D polygon1, 
             Polygon3D polygon2, double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException{
+            throws IllegalArgumentException, CoincidentPointsException {
         return getAngleBetweenPolygons(polygon1.getVertices(), 
                 polygon2.getVertices(), threshold);
     }
@@ -952,16 +981,16 @@ public class Polygon3D implements Serializable{
      * estimating the angle between the planes formed by two polygons.
      * The angle between two polygons is estimated by first estimating their
      * orientation.
-     * @param polygon1 1st polygon
-     * @param polygon2 2nd polygon
-     * @return Angle between two polygons in radians
+     * @param polygon1 1st polygon.
+     * @param polygon2 2nd polygon.
+     * @return Angle between two polygons in radians.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      * @see #orientation(Polygon3D, double[])
      */    
     public static double getAngleBetweenPolygons(Polygon3D polygon1, 
-            Polygon3D polygon2) throws CoincidentPointsException{
+            Polygon3D polygon2) throws CoincidentPointsException {
         return getAngleBetweenPolygons(polygon1, polygon2, DEFAULT_THRESHOLD);
     }
     
@@ -972,22 +1001,22 @@ public class Polygon3D implements Serializable{
      * estimating the angle between the planes formed by two polygons.
      * The angle between two polygons is estimated by first estimating their
      * orientation.
-     * @param vertices1 Vertices of 1st polygon
-     * @param vertices2 2nd polygon
+     * @param vertices1 Vertices of 1st polygon.
+     * @param vertices2 2nd polygon.
      * @param threshold Threshold to determine when polygon orientation can be
      * estimated.
-     * @return Angle between two polygons in radians
+     * @return Angle between two polygons in radians.
      * @throws IllegalArgumentException Raised if provided threshold is negative
      * or if list of vertices do not contain at least 3 vertices for each 
-     * polygon
+     * polygon.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      * @see #orientation(Polygon3D, double[])
      */    
     public static double getAngleBetweenPolygons(List<Point3D> vertices1,
             List<Point3D> vertices2, double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException{
+            throws IllegalArgumentException, CoincidentPointsException {
         return getAngleBetweenOrientations(Polygon3D.orientation(vertices1, 
                 threshold), Polygon3D.orientation(vertices2, threshold));
     }
@@ -999,19 +1028,19 @@ public class Polygon3D implements Serializable{
      * estimating the angle between the planes formed by two polygons.
      * The angle between two polygons is estimated by first estimating their
      * orientation.
-     * @param vertices1 Vertices of 1st polygon
-     * @param vertices2 2nd polygon
-     * @return Angle between two polygons in radians
+     * @param vertices1 Vertices of 1st polygon.
+     * @param vertices2 2nd polygon.
+     * @return Angle between two polygons in radians.
      * @throws IllegalArgumentException Raised if list of vertices do not 
-     * contain at least 3 vertices for each polygon
+     * contain at least 3 vertices for each polygon.
      * @throws CoincidentPointsException Raised usually when it is determined
      * that consecutive vertices of the polygon are too close (i.e. coincident)
-     * or when there are polygon degeneracies or numerical instabilities
+     * or when there are polygon degeneracies or numerical instabilities.
      * @see #orientation(Polygon3D, double[])
      */        
     public static double getAngleBetweenPolygons(List<Point3D> vertices1,
             List<Point3D> vertices2) throws IllegalArgumentException, 
-            CoincidentPointsException{
+            CoincidentPointsException {
         return getAngleBetweenPolygons(vertices1, vertices2, DEFAULT_THRESHOLD);
     }
     
@@ -1019,18 +1048,19 @@ public class Polygon3D implements Serializable{
      * Internal method to compute polygon orientation from their respective
      * orientation vectors.
      * Orientation vectors are provided as arrays and can be obtained by calling
-     * orientation(Polygon3D, double[]) among other methods
-     * @param orientation1 Orientation of 1st polygon
-     * @param orientation2 Orientation of 2nd polygon
-     * @return Angle between two polygons in radians
+     * orientation(Polygon3D, double[]) among other methods.
+     * @param orientation1 Orientation of 1st polygon.
+     * @param orientation2 Orientation of 2nd polygon.
+     * @return Angle between two polygons in radians.
      * @throws IllegalArgumentException Raised if any of the orientation arrays
-     * do not have length 3
+     * do not have length 3.
      */
     private static double getAngleBetweenOrientations(double[] orientation1, 
-            double[] orientation2) throws IllegalArgumentException{
-        if(orientation1.length != INHOM_COORDS || 
-                orientation2.length != INHOM_COORDS) 
+            double[] orientation2) throws IllegalArgumentException {
+        if (orientation1.length != INHOM_COORDS ||
+                orientation2.length != INHOM_COORDS) {
             throw new IllegalArgumentException();
+        }
         
         double x1 = orientation1[0];
         double y1 = orientation1[1];

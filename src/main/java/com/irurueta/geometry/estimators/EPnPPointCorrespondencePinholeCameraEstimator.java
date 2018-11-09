@@ -1,27 +1,24 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.EPnPPointCorrespondencePinholeCameraEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 7, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.Matrix;
-import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.*;
 import com.irurueta.algebra.Utils;
-import com.irurueta.geometry.CoincidentPointsException;
-import com.irurueta.geometry.ColinearPointsException;
-import com.irurueta.geometry.InhomogeneousPoint3D;
-import com.irurueta.geometry.MetricTransformation3D;
-import com.irurueta.geometry.PinholeCamera;
-import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
-import com.irurueta.geometry.Point2D;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Rotation3D;
+import com.irurueta.geometry.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -513,7 +510,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             buildM();
             solveNullspace();
             
-            mSolutions = new ArrayList<Solution>();
+            mSolutions = new ArrayList<>();
             
             //general case
             try {
@@ -537,15 +534,13 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
                 mListener.onEstimateEnd(this);
             }
             
-            if(bestSolution == null) {
+            if (bestSolution == null) {
                 throw new PinholeCameraEstimatorException();
             }
             
             return attemptRefine(bestSolution.camera);
         } catch (AlgebraException e) {
             throw new PinholeCameraEstimatorException(e);
-        } catch (PinholeCameraEstimatorException e) {
-            throw e;
         } finally {
             mLocked = false;
         }
@@ -571,12 +566,10 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @param points2D list of 2D points. Points might or might not be 
      * normalized.
      * @return matrix of estimated pinhole camera.
-     * @throws PinholeCameraEstimatorException if estimation fails for some
-     * reason (i.e. numerical instability or geometric degeneracy).
-     */    
+     */
     @Override
     protected Matrix internalEstimate(List<Point3D> points3D, 
-            List<Point2D> points2D) throws PinholeCameraEstimatorException {
+            List<Point2D> points2D) {
         return null;
     }    
         
@@ -630,11 +623,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws LockedException never happens.
      * @throws NotReadyException never happens.
      * @throws CoincidentPointsException if a point degeneracy has occurred.
-     * @throws ColinearPointsException if a point degeneracy has occurred.
      */
     private void generalSolution3() throws AlgebraException, 
-            LockedException, NotReadyException, CoincidentPointsException, 
-            ColinearPointsException {
+            LockedException, NotReadyException, CoincidentPointsException {
         if (mIsPlanar) {
             return;
         }
@@ -873,10 +864,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws LockedException never happens.
      * @throws NotReadyException never happens.
      * @throws CoincidentPointsException if a point degeneracy has occurred.
-     * @throws ColinearPointsException if a point degeneracy has occurred.
      */
     private void generalSolution2() throws AlgebraException, 
-            LockedException, NotReadyException, CoincidentPointsException, ColinearPointsException {
+            LockedException, NotReadyException, CoincidentPointsException {
         //we have the distance constraints between control world points (c) and
         //control camera points (v):
         //||beta*vi - beta*vj||^2 = ||ci - cj||^2, i,j 1...4
@@ -936,7 +926,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         //alpha3 = beta2^2
         
         double beta1, beta2;
-        if(a[0] < 0.0) {
+        if (a[0] < 0.0) {
             beta1 = Math.sqrt(-a[0]);
             beta2 = a[2] < 0.0 ? Math.sqrt(-a[2]) : 0.0;
         } else {
@@ -1209,12 +1199,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws LockedException never happens.
      * @throws NotReadyException never happens.
      * @throws CoincidentPointsException if a point degeneracy has occurred.
-     * @throws ColinearPointsException if a point degeneracy has occurred.
-     * @throws AlgebraException if there are numerical instabilities.
      */
     private void generalSolution1() throws LockedException, 
-            NotReadyException, CoincidentPointsException, 
-            ColinearPointsException, AlgebraException {
+            NotReadyException, CoincidentPointsException {
         //pick last column of nullspace, contains control points in camera
         //coordinates up to scale (including sign change)        
         double[] v = mNullspace.get(0);    
@@ -1261,13 +1248,10 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws LockedException never happens.
      * @throws NotReadyException never happens.
      * @throws CoincidentPointsException if a point degeneracy has occurred.
-     * @throws ColinearPointsException if a point degeneracy has occurred.
-     * @throws AlgebraException if there are numerical instabilities.
      */
     private Solution computePossibleSolutionWithPoseAndReprojectionError(
             List<Point3D> controlCameraPoints) throws LockedException, 
-            NotReadyException, CoincidentPointsException, 
-            ColinearPointsException, AlgebraException {
+            NotReadyException, CoincidentPointsException {
                 
         MetricTransformation3D worldToCameraTransformation = 
                     worldToCameraTransformationMetric(controlCameraPoints);
@@ -1321,7 +1305,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     private static int numEquations(int numControl) {
         int numEquations = 0;
-        for(int i = 1; i < numControl; i++) {
+        for (int i = 1; i < numControl; i++) {
             numEquations += i;
         }
         return numEquations;        
@@ -1385,7 +1369,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     private List<Point3D> controlPointsFromV(double[] v) {
         int numControl = mControlWorldPoints.size();
-        List<Point3D> points = new ArrayList<Point3D>();
+        List<Point3D> points = new ArrayList<>();
         
         InhomogeneousPoint3D p;
         for (int j = 0; j < numControl; j++) {
@@ -1433,10 +1417,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         //for planar configuration we pick the last 3.
      
         //extract null points from the null space
-        mNullspace = new ArrayList<double[]>();
+        mNullspace = new ArrayList<>();
         int colsMinusOne = cols - 1;
         double[] vCol;
-        InhomogeneousPoint3D p;
         for (int i = 0; i < numControl; i++) {
             int column = colsMinusOne - i;
 
@@ -1725,7 +1708,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             mIsPlanar = true;
         }
         
-        mControlWorldPoints = new ArrayList<Point3D>();
+        mControlWorldPoints = new ArrayList<>();
                 
         double centroidX = centroid.getInhomX();
         double centroidY = centroid.getInhomY();

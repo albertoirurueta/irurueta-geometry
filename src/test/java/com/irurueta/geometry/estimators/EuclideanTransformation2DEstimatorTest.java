@@ -1,47 +1,45 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimator.EuclideanTransformation2DEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date January 23, 2017
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.geometry.CoincidentPointsException;
-import com.irurueta.geometry.EuclideanTransformation2D;
-import com.irurueta.geometry.HomogeneousPoint2D;
-import com.irurueta.geometry.InhomogeneousPoint2D;
-import com.irurueta.geometry.Line2D;
-import com.irurueta.geometry.Point2D;
-import com.irurueta.geometry.Rotation2D;
-import com.irurueta.geometry.Utils;
+import com.irurueta.geometry.*;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class EuclideanTransformation2DEstimatorTest implements 
         EuclideanTransformation2DEstimatorListener {
     
-    public static final double MIN_ANGLE_DEGREES = -90.0;
-    public static final double MAX_ANGLE_DEGREES = 90.0;
+    private static final double MIN_ANGLE_DEGREES = -90.0;
+    private static final double MAX_ANGLE_DEGREES = 90.0;
     
-    public static final double MIN_TRANSLATION = -100.0;
-    public static final double MAX_TRANSLATION = 100.0;
+    private static final double MIN_TRANSLATION = -100.0;
+    private static final double MAX_TRANSLATION = 100.0;
     
-    public static final double MIN_RANDOM_VALUE = 50.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;            
+    private static final double MIN_RANDOM_VALUE = 50.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final int TIMES = 50;
+    private static final int TIMES = 50;
     
     private int estimateStart;
     private int estimateEnd;
@@ -79,12 +77,12 @@ public class EuclideanTransformation2DEstimatorTest implements
         
         
         //constructor with points
-        List<Point2D> inputPoints = new ArrayList<Point2D>();
+        List<Point2D> inputPoints = new ArrayList<>();
         inputPoints.add(Point2D.create());
         inputPoints.add(Point2D.create());
         inputPoints.add(Point2D.create());
         
-        List<Point2D> outputPoints = new ArrayList<Point2D>();
+        List<Point2D> outputPoints = new ArrayList<>();
         outputPoints.add(Point2D.create());
         outputPoints.add(Point2D.create());
         outputPoints.add(Point2D.create());
@@ -104,24 +102,24 @@ public class EuclideanTransformation2DEstimatorTest implements
                 EuclideanTransformation2DEstimator.MINIMUM_SIZE);        
         
         //Force IllegalArgumentException
-        List<Point2D> wrong = new ArrayList<Point2D>();
+        List<Point2D> wrong = new ArrayList<>();
         wrong.add(Point2D.create());
 
         estimator = null;
         try {
             estimator = new EuclideanTransformation2DEstimator(wrong, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation2DEstimator(wrong, 
                     outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation2DEstimator(inputPoints,
                     wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -161,17 +159,17 @@ public class EuclideanTransformation2DEstimatorTest implements
             estimator = new EuclideanTransformation2DEstimator(this, wrong, 
                     wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation2DEstimator(this, wrong, 
                     outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation2DEstimator(this, 
                     inputPoints, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);   
         
                         
@@ -191,11 +189,11 @@ public class EuclideanTransformation2DEstimatorTest implements
         
         
         //constructor with points
-        inputPoints = new ArrayList<Point2D>();
+        inputPoints = new ArrayList<>();
         inputPoints.add(Point2D.create());
         inputPoints.add(Point2D.create());
         
-        outputPoints = new ArrayList<Point2D>();
+        outputPoints = new ArrayList<>();
         outputPoints.add(Point2D.create());
         outputPoints.add(Point2D.create());
                 
@@ -219,17 +217,17 @@ public class EuclideanTransformation2DEstimatorTest implements
             estimator = new EuclideanTransformation2DEstimator(wrong, wrong, 
                     true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation2DEstimator(wrong, 
                     outputPoints, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation2DEstimator(inputPoints,
                     wrong, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -269,17 +267,17 @@ public class EuclideanTransformation2DEstimatorTest implements
             estimator = new EuclideanTransformation2DEstimator(this, wrong, 
                     wrong, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation2DEstimator(this, wrong, 
                     outputPoints, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new EuclideanTransformation2DEstimator(this, 
                     inputPoints, wrong, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
     }
     
@@ -293,12 +291,12 @@ public class EuclideanTransformation2DEstimatorTest implements
         assertNull(estimator.getOutputPoints());
         
         //set values
-        List<Point2D> inputPoints = new ArrayList<Point2D>();
+        List<Point2D> inputPoints = new ArrayList<>();
         inputPoints.add(Point2D.create());
         inputPoints.add(Point2D.create());
         inputPoints.add(Point2D.create());
         
-        List<Point2D> outputPoints = new ArrayList<Point2D>();
+        List<Point2D> outputPoints = new ArrayList<>();
         outputPoints.add(Point2D.create());
         outputPoints.add(Point2D.create());
         outputPoints.add(Point2D.create());
@@ -310,19 +308,19 @@ public class EuclideanTransformation2DEstimatorTest implements
         assertSame(estimator.getOutputPoints(), outputPoints);
         
         //Force IllegalArgumentException
-        List<Point2D> wrong = new ArrayList<Point2D>();
+        List<Point2D> wrong = new ArrayList<>();
         try {
             estimator.setPoints(wrong, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setPoints(wrong, outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setPoints(inputPoints, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -382,7 +380,7 @@ public class EuclideanTransformation2DEstimatorTest implements
                     new EuclideanTransformation2D(rotation, translation);
         
             //generate random list of input points and transform them
-            List<Point2D> inputPoints = new ArrayList<Point2D>();
+            List<Point2D> inputPoints = new ArrayList<>();
             InhomogeneousPoint2D inputPoint;
             for (int i = 0; i < EuclideanTransformation2DEstimator.MINIMUM_SIZE; 
                     i++) {
@@ -481,7 +479,7 @@ public class EuclideanTransformation2DEstimatorTest implements
                     new EuclideanTransformation2D(rotation, translation);
         
             //generate random list of input points and transform them
-            List<Point2D> inputPoints = new ArrayList<Point2D>();
+            List<Point2D> inputPoints = new ArrayList<>();
             InhomogeneousPoint2D inputPoint;
             for (int i = 0; i < EuclideanTransformation2DEstimator.MINIMUM_SIZE + 1; i++) {
                 double x = randomizer.nextDouble(MIN_TRANSLATION, 
@@ -588,18 +586,18 @@ public class EuclideanTransformation2DEstimatorTest implements
                     MAX_RANDOM_VALUE);
             Line2D line = new Line2D(a, b, c);
 
-            List<Point2D> inputPoints = new ArrayList<Point2D>();
+            List<Point2D> inputPoints = new ArrayList<>();
             HomogeneousPoint2D inputPoint;
             for (int i = 0; i < EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE; 
                     i++) {
                 double homX, homY;
                 double homW = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE);                
-                if(Math.abs(b) > ABSOLUTE_ERROR){
+                if (Math.abs(b) > ABSOLUTE_ERROR) {
                     homX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);
                     homY = -(a * homX + c * homW) / b;
-                }else{
+                } else {
                     homY = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);
                     homX = -(b * homY + c * homW) / a;
@@ -655,7 +653,7 @@ public class EuclideanTransformation2DEstimatorTest implements
             assertEquals(outputPoints.size(), outputPoints2.size());
             boolean isValid = true;
             for (int i = 0; i < outputPoints.size(); i++) {
-                if(!outputPoints.get(i).equals(outputPoints2.get(i), 
+                if (!outputPoints.get(i).equals(outputPoints2.get(i),
                         ABSOLUTE_ERROR)) {
                     isValid = false;
                     break;
@@ -664,7 +662,9 @@ public class EuclideanTransformation2DEstimatorTest implements
                         ABSOLUTE_ERROR));
             }
             
-            if(!isValid) continue;
+            if (!isValid) {
+                continue;
+            }
                     
             Rotation2D rotation2 = transformation2.getRotation();        
             double[] translation2 = transformation2.getTranslation();
@@ -691,11 +691,6 @@ public class EuclideanTransformation2DEstimatorTest implements
         
         assertTrue(numValid > 0);
     }
-    
-
-    private void reset() {
-        estimateStart = estimateEnd = 0;
-    }
 
     @Override
     public void onEstimateStart(EuclideanTransformation2DEstimator estimator) {
@@ -708,33 +703,37 @@ public class EuclideanTransformation2DEstimatorTest implements
         estimateEnd++;
         checkLocked(estimator);
     }
+
+    private void reset() {
+        estimateStart = estimateEnd = 0;
+    }
     
     private void checkLocked(EuclideanTransformation2DEstimator estimator) {
         try {
             estimator.setPoints(null, null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setListener(this);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             estimator.estimate(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             estimator.setWeakMinimumSizeAllowed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }        
+        } catch (LockedException ignore) { }
     }
 }

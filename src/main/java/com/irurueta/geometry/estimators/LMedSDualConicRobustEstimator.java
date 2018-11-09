@@ -1,26 +1,30 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimator.LMedSDualConicRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 22, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.CoincidentLinesException;
 import com.irurueta.geometry.DualConic;
 import com.irurueta.geometry.Line2D;
-import com.irurueta.numerical.robust.LMedSRobustEstimator;
-import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best dual conic for provided collection of 2D lines using LMedS
- * algorithm
+ * algorithm.
  */
 public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
     /**
@@ -37,12 +41,12 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      */
     public static final double DEFAULT_STOP_THRESHOLD = 1e-9;
     
     /**
-     * Minimum allowed stop threshold value
+     * Minimum allowed stop threshold value.
      */
     public static final double MIN_STOP_THRESHOLD = 0.0;    
     
@@ -60,52 +64,52 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      */
     private double mStopThreshold;    
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public LMedSDualConicRobustEstimator(){
+    public LMedSDualConicRobustEstimator() {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
     
     /**
-     * Constructor with points
-     * @param lines 2D lines to estimate a dual conic
+     * Constructor with points.
+     * @param lines 2D lines to estimate a dual conic.
      * @throws IllegalArgumentException if provided list of lines don't have
-     * a size greater or equal than MINIMUM_SIZE
+     * a size greater or equal than MINIMUM_SIZE.
      */
     public LMedSDualConicRobustEstimator(List<Line2D> lines) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(lines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
     public LMedSDualConicRobustEstimator(
-            DualConicRobustEstimatorListener listener){
+            DualConicRobustEstimatorListener listener) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
-     * @param lines 2D lines to estimate a dual conic
+     * starts, ends or its progress significantly changes.
+     * @param lines 2D lines to estimate a dual conic.
      * @throws IllegalArgumentException if provided list of lines don't have a
-     * size greater or equal than MINIMUM_SIZE
+     * size greater or equal than MINIMUM_SIZE.
      */
     public LMedSDualConicRobustEstimator(
             DualConicRobustEstimatorListener listener, 
-            List<Line2D> lines) throws IllegalArgumentException{
+            List<Line2D> lines) throws IllegalArgumentException {
         super(listener, lines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }    
@@ -124,11 +128,11 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      * @return stop threshold to stop the algorithm prematurely when a certain
-     * accuracy has been reached
+     * accuracy has been reached.
      */
-    public double getStopThreshold(){
+    public double getStopThreshold() {
         return mStopThreshold;
     }
     
@@ -146,18 +150,21 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      * @param stopThreshold stop threshold to stop the algorithm prematurely 
-     * when a certain accuracy has been reached
-     * @throws IllegalArgumentException if provided value is zero or negative
+     * when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException{
-        if(isLocked()) throw new LockedException();
-        if(stopThreshold <= MIN_STOP_THRESHOLD) 
+            throws IllegalArgumentException, LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (stopThreshold <= MIN_STOP_THRESHOLD) {
             throw new IllegalArgumentException();
+        }
         
         mStopThreshold = stopThreshold;
     }  
@@ -165,24 +172,28 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
     /**
      * Estimates a dual conic using a robust estimator and the best set of 2D 
      * lines that fit into the locus of the estimated dual conic found using the
-     * robust estimator
-     * @return a dual conic
+     * robust estimator.
+     * @return a dual conic.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */    
     @Override
     public DualConic estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         LMedSRobustEstimator<DualConic> innerEstimator =
-                new LMedSRobustEstimator<DualConic>(
-                        new LMedSRobustEstimatorListener<DualConic>(){
+                new LMedSRobustEstimator<>(
+                        new LMedSRobustEstimatorListener<DualConic>() {
 
             @Override
             public int getTotalSamples() {
@@ -203,11 +214,11 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
                 Line2D line4 = mLines.get(samplesIndices[3]);
                 Line2D line5 = mLines.get(samplesIndices[4]);
                 
-                try{
+                try {
                     DualConic dualConic = new DualConic(line1, line2, line3, 
                             line4, line5);
                     solutions.add(dualConic);
-                }catch(CoincidentLinesException e){
+                } catch (CoincidentLinesException e) {
                     //if points are coincident, no solution is added
                 }
             }
@@ -224,7 +235,7 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
 
             @Override
             public void onEstimateStart(RobustEstimator<DualConic> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(
                             LMedSDualConicRobustEstimator.this);
                 }
@@ -232,7 +243,7 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
 
             @Override
             public void onEstimateEnd(RobustEstimator<DualConic> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(LMedSDualConicRobustEstimator.this);
                 }
             }
@@ -240,7 +251,7 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator<DualConic> estimator, int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             LMedSDualConicRobustEstimator.this, iteration);
                 }
@@ -249,32 +260,32 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator<DualConic> estimator, float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             LMedSDualConicRobustEstimator.this, progress);
                 }
             }
         });
         
-        try{
+        try {
             mLocked = true;
             innerEstimator.setConfidence(mConfidence);
             innerEstimator.setMaxIterations(mMaxIterations);
             innerEstimator.setProgressDelta(mProgressDelta);
             innerEstimator.setStopThreshold(mStopThreshold);
             return innerEstimator.estimate();
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */    
     @Override
     public RobustEstimatorMethod getMethod() {

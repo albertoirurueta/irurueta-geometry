@@ -1,77 +1,77 @@
-/**
- * @file
- * This class contains unit tests for
- * com.irurueta.geometry.PinholeCameraIntrinsicParameters
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 5, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.AlgebraException;
-import com.irurueta.geometry.calib3d.ImageOfAbsoluteConic;
-import com.irurueta.geometry.calib3d.DualImageOfAbsoluteConic;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
+import com.irurueta.ar.calibration.DualImageOfAbsoluteConic;
+import com.irurueta.ar.calibration.ImageOfAbsoluteConic;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class PinholeCameraIntrinsicParametersTest {
     
-    public static final int INTRINSIC_ROWS = 3;
-    public static final int INTRINSIC_COLS = 3;
+    private static final int INTRINSIC_ROWS = 3;
+    private static final int INTRINSIC_COLS = 3;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_FOCAL_LENGTH = 1.0;
-    public static final double MAX_FOCAL_LENGTH = 100.0;
+    private static final double MIN_FOCAL_LENGTH = 1.0;
+    private static final double MAX_FOCAL_LENGTH = 100.0;
     
-    public static final double MIN_SKEWNESS = -1.0;
-    public static final double MAX_SKEWNESS = 1.0;
+    private static final double MIN_SKEWNESS = -1.0;
+    private static final double MAX_SKEWNESS = 1.0;
     
-    public static final double MIN_PRINCIPAL_POINT = 0.0;
-    public static final double MAX_PRINCIPAL_POINT = 100.0;
+    private static final double MIN_PRINCIPAL_POINT = 0.0;
+    private static final double MAX_PRINCIPAL_POINT = 100.0;
     
-    public static final double MIN_ASPECT_RATIO = 0.5;
-    public static final double MAX_ASPECT_RATIO = 2.0;
+    private static final double MIN_ASPECT_RATIO = 0.5;
+    private static final double MAX_ASPECT_RATIO = 2.0;
     
-    public static final int MIN_IMAGE_WIDTH = 640;
-    public static final int MAX_IMAGE_WIDTH = 1024;
+    private static final int MIN_IMAGE_WIDTH = 640;
+    private static final int MAX_IMAGE_WIDTH = 1024;
     
-    public static final int MIN_IMAGE_HEIGHT = 480;
-    public static final int MAX_IMAGE_HEIGHT = 768;
+    private static final int MIN_IMAGE_HEIGHT = 480;
+    private static final int MAX_IMAGE_HEIGHT = 768;
     
-    public PinholeCameraIntrinsicParametersTest() {
-    }
+    public PinholeCameraIntrinsicParametersTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
     public void testConstructor() throws WrongSizeException, 
-        InvalidPinholeCameraIntrinsicParametersException{
+            InvalidPinholeCameraIntrinsicParametersException {
         
         PinholeCameraIntrinsicParameters K = 
                 new PinholeCameraIntrinsicParameters();
@@ -88,8 +88,8 @@ public class PinholeCameraIntrinsicParametersTest {
         Matrix triangularMatrix = Matrix.createWithUniformRandomValues(
                 INTRINSIC_ROWS, INTRINSIC_COLS, MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
-        for(int u = 0; u < INTRINSIC_ROWS; u++){
-            for(int v = 0; v < u; v++){
+        for (int u = 0; u < INTRINSIC_ROWS; u++) {
+            for (int v = 0; v < u; v++) {
                 triangularMatrix.setElementAt(u, v, 0.0);
             }
         }
@@ -104,20 +104,20 @@ public class PinholeCameraIntrinsicParametersTest {
         //Force InvalidPinholeCameraIntrinsicParametersException when matrix is
         //not upper triangular
         K = null;
-        try{
+        try {
             K = new PinholeCameraIntrinsicParameters(KMatrix);
             fail("InvalidPinholeCameraIntrinsicParametersException expected but not thrown");
-        }catch(InvalidPinholeCameraIntrinsicParametersException e){}
-        try{
+        } catch (InvalidPinholeCameraIntrinsicParametersException ignore) { }
+        try {
             K = new PinholeCameraIntrinsicParameters(KMatrix, ABSOLUTE_ERROR);
             fail("InvalidPinholeCameraIntrinsicParametersException expected but not thrown");
-        }catch(InvalidPinholeCameraIntrinsicParametersException e){}        
+        } catch (InvalidPinholeCameraIntrinsicParametersException ignore) { }
         //Force IllegalArgumentException
-        try{
+        try {
             K = new PinholeCameraIntrinsicParameters(triangularMatrix, 
                     -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(K);
         
         //Use upper-triangular matrix as KMatrix but set last element to a value
@@ -187,14 +187,14 @@ public class PinholeCameraIntrinsicParametersTest {
     
     @Test
     public void testGetSetInternalMatrix() throws WrongSizeException, 
-        InvalidPinholeCameraIntrinsicParametersException{
+            InvalidPinholeCameraIntrinsicParametersException {
         
         //Build a random upper triangular matrix
         Matrix triangularMatrix = Matrix.createWithUniformRandomValues(
                 INTRINSIC_ROWS, INTRINSIC_COLS, MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
-        for(int u = 0; u < INTRINSIC_ROWS; u++){
-            for(int v = 0; v < u; v++){
+        for (int u = 0; u < INTRINSIC_ROWS; u++) {
+            for (int v = 0; v < u; v++) {
                 triangularMatrix.setElementAt(u, v, 0.0);
             }
         }
@@ -211,19 +211,19 @@ public class PinholeCameraIntrinsicParametersTest {
         
         //Force InvalidPinholeCameraIntrinsicParametersException when matrix is
         //not upper triangular
-        try{
+        try {
             K.setInternalMatrix(KMatrix);
             fail("InvalidPinholeCameraIntrinsicParametersException expected but not thrown");
-        }catch(InvalidPinholeCameraIntrinsicParametersException e){}
-        try{
+        } catch (InvalidPinholeCameraIntrinsicParametersException ignore) { }
+        try {
             K.setInternalMatrix(KMatrix, ABSOLUTE_ERROR);
             fail("InvalidPinholeCameraIntrinsicParametersException expected but not thrown");
-        }catch(InvalidPinholeCameraIntrinsicParametersException e){}
+        } catch (InvalidPinholeCameraIntrinsicParametersException ignore) { }
         //Force IllegalArgumentException
-        try{
+        try {
             K.setInternalMatrix(triangularMatrix, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Use upper-triangular matrix as KMatrix
         KMatrix = triangularMatrix;
@@ -277,7 +277,7 @@ public class PinholeCameraIntrinsicParametersTest {
     }
     
     @Test
-    public void testGetSetParameters() throws WrongSizeException{
+    public void testGetSetParameters() throws WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, 
                 MAX_FOCAL_LENGTH);
@@ -385,7 +385,7 @@ public class PinholeCameraIntrinsicParametersTest {
     
     @Test
     public void testCreateCanonicalIntrinsicParameters() 
-            throws WrongSizeException{
+            throws WrongSizeException {
         PinholeCameraIntrinsicParameters K = PinholeCameraIntrinsicParameters.
                 createCanonicalIntrinsicParameters();
         
@@ -395,7 +395,7 @@ public class PinholeCameraIntrinsicParametersTest {
     
     @Test
     public void testCreateTypicalIntrinsicParameters() 
-            throws WrongSizeException{
+            throws WrongSizeException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int imageWidth = randomizer.nextInt(MIN_IMAGE_WIDTH, MAX_IMAGE_WIDTH);
@@ -427,7 +427,7 @@ public class PinholeCameraIntrinsicParametersTest {
     }
     
     @Test
-    public void testClone(){
+    public void testClone() {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, 
@@ -482,14 +482,14 @@ public class PinholeCameraIntrinsicParametersTest {
     }
     
     @Test
-    public void testIsValidMatrix() throws WrongSizeException{
+    public void testIsValidMatrix() throws WrongSizeException {
         
         //Build a random upper triangular matrix
         Matrix triangularMatrix = Matrix.createWithUniformRandomValues(
                 INTRINSIC_ROWS, INTRINSIC_COLS, MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
-        for(int u = 0; u < INTRINSIC_ROWS; u++){
-            for(int v = 0; v < u; v++){
+        for (int u = 0; u < INTRINSIC_ROWS; u++) {
+            for (int v = 0; v < u; v++) {
                 triangularMatrix.setElementAt(u, v, 0.0);
             }
         }
@@ -525,7 +525,7 @@ public class PinholeCameraIntrinsicParametersTest {
     
     @Test
     public void testGetDualImageOfAbsoluteConic() 
-            throws InvalidPinholeCameraIntrinsicParametersException{
+            throws InvalidPinholeCameraIntrinsicParametersException {
         //create intrinsic parameters
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, 
@@ -564,7 +564,7 @@ public class PinholeCameraIntrinsicParametersTest {
     
     @Test
     public void testGetImageOfAbsoluteConic() 
-            throws InvalidPinholeCameraIntrinsicParametersException{
+            throws InvalidPinholeCameraIntrinsicParametersException {
         //create intrinsic parameters
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, 
@@ -602,7 +602,7 @@ public class PinholeCameraIntrinsicParametersTest {
     }    
     
     @Test
-    public void testCreate(){
+    public void testCreate() {
         //For nexus 5
         double focalLength = 3.97; //mm
         double sensorWidth = 4.6032; //mm

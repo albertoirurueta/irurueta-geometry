@@ -1,10 +1,17 @@
 /*
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.ProjectiveTransformation3D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 31, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
@@ -12,16 +19,14 @@ import com.irurueta.algebra.*;
 import com.irurueta.algebra.NotAvailableException;
 import com.irurueta.algebra.Utils;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class ProjectiveTransformation3DTest {
     
@@ -270,6 +275,7 @@ public class ProjectiveTransformation3DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation3D((Rotation3D)null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -323,6 +329,7 @@ public class ProjectiveTransformation3DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation3D(scale, 
                     (Rotation3D)null);
             fail("NullPointerException expected but not thrown");
@@ -389,10 +396,12 @@ public class ProjectiveTransformation3DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation3D(null, rotation);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation3D(params, null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -453,6 +462,7 @@ public class ProjectiveTransformation3DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation3D((double[])null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -507,6 +517,7 @@ public class ProjectiveTransformation3DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation3D(A, null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -575,6 +586,7 @@ public class ProjectiveTransformation3DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation3D(scale, 
                     (double[])null);
             fail("NullPointerException expected but not thrown");
@@ -646,6 +658,7 @@ public class ProjectiveTransformation3DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation3D(rotation, null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -717,6 +730,7 @@ public class ProjectiveTransformation3DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation3D(scale, rotation, 
                     null);
             fail("NullPointerException expected but not thrown");
@@ -740,7 +754,7 @@ public class ProjectiveTransformation3DTest {
             //large enough (we use positive values to ensure that rotations 
             //don't change sign
             randomizer.fill(projectiveParameters2, 0, MAX_RANDOM_VALUE);
-        } while(Math.abs(projectiveParameters2[
+        } while (Math.abs(projectiveParameters2[
                 ProjectiveTransformation2D.HOM_COORDS - 1]) < ABSOLUTE_ERROR);
         transformation = new ProjectiveTransformation3D(scale, rotation, 
                 translation, projectiveParameters2);
@@ -802,6 +816,7 @@ public class ProjectiveTransformation3DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation3D(scale, rotation, 
                     null, projectiveParameters);
             fail("NullPointerException expected but not thrown");
@@ -891,6 +906,7 @@ public class ProjectiveTransformation3DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation3D(params, rotation, 
                     null);
             fail("NullPointerException expected but not thrown");
@@ -972,6 +988,7 @@ public class ProjectiveTransformation3DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation3D(params, rotation, 
                     null, projectiveParameters);
             fail("NullPointerException expected but not thrown");
@@ -982,7 +999,7 @@ public class ProjectiveTransformation3DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         
-        //Force IllegalARgumentException
+        //Force IllegalArgumentException
         try {
             transformation = new ProjectiveTransformation3D(params, rotation, 
                     badTranslation, projectiveParameters);
@@ -1022,6 +1039,7 @@ public class ProjectiveTransformation3DTest {
         
         //Force NullPointerException
         try {
+            //noinspection all
             transformation.setT(null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -1037,7 +1055,7 @@ public class ProjectiveTransformation3DTest {
     
     @Test
     public void testIsDegenerate() throws WrongSizeException, LockedException, 
-        NotReadyException, DecomposerException, NotAvailableException {
+            NotReadyException, DecomposerException, NotAvailableException {
         //create non singular matrix
         Matrix T;
         LUDecomposer decomposer = new LUDecomposer();
@@ -2448,7 +2466,7 @@ public class ProjectiveTransformation3DTest {
         decomposer.decompose();
 
         //ensure we create a matrix with 3 non linear dependent rows
-        while(decomposer.getRank() < 3){
+        while (decomposer.getRank() < 3) {
             m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
@@ -2614,7 +2632,7 @@ public class ProjectiveTransformation3DTest {
         
         ArrayList<Plane> inputPlanes = new ArrayList<>(size);
         ArrayList<Plane> expectedPlanes = new ArrayList<>(size);
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             double[] params = new double[Plane.PLANE_NUMBER_PARAMS];
             randomizer.fill(params, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         
@@ -2673,7 +2691,7 @@ public class ProjectiveTransformation3DTest {
                     MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(T);
             decomposer.decompose();            
-        } while(decomposer.isSingular());
+        } while (decomposer.isSingular());
                 
         ProjectiveTransformation3D transformation = 
                 new ProjectiveTransformation3D(T);             
@@ -2930,7 +2948,7 @@ public class ProjectiveTransformation3DTest {
     
     @Test
     public void testTransformPolygon() throws NotEnoughVerticesException, 
-        AlgebraException {
+            AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -3785,7 +3803,7 @@ public class ProjectiveTransformation3DTest {
                 m.setElementAt(14, 14, -oZiZ / norm);
                 m.setElementAt(14, 15, -oZiW / norm);
                 
-            }while(Utils.rank(m) < 8);
+            } while (Utils.rank(m) < 8);
                 
         
             //Now build another transformation
@@ -3816,13 +3834,13 @@ public class ProjectiveTransformation3DTest {
                     5 * LARGE_ABSOLUTE_ERROR));
         
             //Force CoincidentPointsException
-            try{
+            try {
                 transformation2.setTransformationFromPoints(inputPoint1, 
                         inputPoint1, inputPoint3, inputPoint4, inputPoint5,
                         outputPoint1, outputPoint1, outputPoint3, outputPoint4,
                         outputPoint5);
                 fail("CoincidentPointsException expected but not thrown");
-            }catch(CoincidentPointsException ignore) { }
+            } catch (CoincidentPointsException ignore) { }
         }
     }    
     
@@ -4317,7 +4335,7 @@ public class ProjectiveTransformation3DTest {
                 double norm = Utils.normF(T);
                 //normalize T to increase accuracy
                 T.multiplyByScalar(1.0 / norm);
-            } while(Utils.rank(T) < ProjectiveTransformation3D.HOM_COORDS);
+            } while (Utils.rank(T) < ProjectiveTransformation3D.HOM_COORDS);
             
             ProjectiveTransformation3D transformation1 = 
                     new ProjectiveTransformation3D(T);
@@ -4810,7 +4828,7 @@ public class ProjectiveTransformation3DTest {
                         outputPlane1, outputPlane1, outputPlane3, outputPlane4,
                         outputPlane5);
                 fail("CoincidentPlanesException expected but not thrown");
-            } catch(CoincidentPlanesException ignore) { }
+            } catch (CoincidentPlanesException ignore) { }
         }
     }        
     
@@ -5329,7 +5347,7 @@ public class ProjectiveTransformation3DTest {
     
     @Test
     public void testSetTransformationFromLines() throws CoincidentLinesException,
-            AlgebraException, CoincidentPlanesException{
+            AlgebraException, CoincidentPlanesException {
         
         for (int t = 0; t < 1; t++) {
         
@@ -5851,12 +5869,12 @@ public class ProjectiveTransformation3DTest {
                     Math.abs(p.getD()), LARGE_ABSOLUTE_ERROR);
             
             //Force CoincidentLinesException
-            try{
+            try {
                 transformation2.setTransformationFromLines(inputLine1, 
                         inputLine1, inputLine3, outputLine1, outputLine1, 
                         outputLine3);
                 fail("CoincidentLinesException expected but not thrown");
-            }catch(CoincidentLinesException ignore) { }
+            } catch (CoincidentLinesException ignore) { }
         }
     }            
     

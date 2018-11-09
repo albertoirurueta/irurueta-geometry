@@ -1,42 +1,47 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.PointCorrespondenceAffineTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 11, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Point2D;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class PointCorrespondenceAffineTransformation2DRobustEstimatorTest {
     
-    public PointCorrespondenceAffineTransformation2DRobustEstimatorTest() {}
+    public PointCorrespondenceAffineTransformation2DRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testCreate(){
+    public void testCreate() {
         PointCorrespondenceAffineTransformation2DRobustEstimator estimator;
         
         //create with robust estimator method
@@ -116,9 +121,9 @@ public class PointCorrespondenceAffineTransformation2DRobustEstimatorTest {
         assertNull(estimator.getCovariance());        
         
         //create with points and method
-        List<Point2D> inputPoints = new ArrayList<Point2D>();
-        List<Point2D> outputPoints = new ArrayList<Point2D>();
-        for(int i = 0; i < PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE; i++){
+        List<Point2D> inputPoints = new ArrayList<>();
+        List<Point2D> outputPoints = new ArrayList<>();
+        for (int i = 0; i < PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point2D.create());
             outputPoints.add(Point2D.create());
         }
@@ -199,37 +204,37 @@ public class PointCorrespondenceAffineTransformation2DRobustEstimatorTest {
         assertNull(estimator.getCovariance());        
         
         //Force IllegalArgumentException
-        List<Point2D> emptyPoints = new ArrayList<Point2D>();
+        List<Point2D> emptyPoints = new ArrayList<>();
         
         estimator = null;
-        try{
+        try {
             estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
                     create(emptyPoints, outputPoints, 
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
                     create(inputPoints, emptyPoints, 
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //create with listener and method
         AffineTransformation2DRobustEstimatorListener listener = new AffineTransformation2DRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(AffineTransformation2DRobustEstimator estimator) {}
+            public void onEstimateStart(AffineTransformation2DRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(AffineTransformation2DRobustEstimator estimator) {}
+            public void onEstimateEnd(AffineTransformation2DRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateNextIteration(AffineTransformation2DRobustEstimator estimator, int iteration) {}
+            public void onEstimateNextIteration(AffineTransformation2DRobustEstimator estimator, int iteration) { }
 
             @Override
-            public void onEstimateProgressChange(AffineTransformation2DRobustEstimator estimator, float progress) {}
+            public void onEstimateProgressChange(AffineTransformation2DRobustEstimator estimator, float progress) { }
         };
         
         
@@ -552,24 +557,24 @@ public class PointCorrespondenceAffineTransformation2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
                 create(emptyPoints, outputPoints, qualityScores, 
                 RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
                 create(inputPoints, emptyPoints, qualityScores, 
                 RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
                 create(inputPoints, outputPoints, wrongQualityScores, 
                 RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, quality scores and method
@@ -731,24 +736,24 @@ public class PointCorrespondenceAffineTransformation2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
                 create(listener, emptyPoints, outputPoints, qualityScores,
                 RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
                 create(listener, inputPoints, emptyPoints, qualityScores,
                 RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
                 create(listener, inputPoints, outputPoints, wrongQualityScores,
                 RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test no arguments
@@ -785,16 +790,16 @@ public class PointCorrespondenceAffineTransformation2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
                 create(emptyPoints, outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
                 create(inputPoints, emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener
@@ -831,16 +836,16 @@ public class PointCorrespondenceAffineTransformation2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
                 create(listener, emptyPoints, outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = PointCorrespondenceAffineTransformation2DRobustEstimator.
                 create(listener, inputPoints, emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with quality scores

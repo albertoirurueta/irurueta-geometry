@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 14, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,16 +19,13 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.geometry.AffineTransformation3D;
 import com.irurueta.geometry.CoincidentPlanesException;
 import com.irurueta.geometry.Plane;
-import com.irurueta.numerical.robust.RANSACRobustEstimator;
-import com.irurueta.numerical.robust.RANSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best affine 3D transformation for provided collections of matched
- * planes using RANSAC algorithm
+ * planes using RANSAC algorithm.
  */
 public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator 
         extends PlaneCorrespondenceAffineTransformation3DRobustEstimator {
@@ -38,13 +42,13 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * orthogonal.
      * If dot product between planes is -1, then although their director vectors 
      * are opposed, planes are considered equal, since sign changes are not 
-     * taken into account and their residuals will be 0
+     * taken into account and their residuals will be 0.
      */
     public static final double DEFAULT_THRESHOLD = 1e-6;
     
     /**
      * Minimum value that can be set as threshold.
-     * Threshold must be strictly greater than 0.0
+     * Threshold must be strictly greater than 0.0.
      */
     public static final double MIN_THRESHOLD = 0.0;
         
@@ -62,8 +66,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * Threshold to determine whether planes are inliers or not when testing
      * possible estimation solutions.
      * The threshold refers to the amount of error a possible solution has on a 
-     * matched pair of 
-     * lines
+     * matched pair of lines.
      */
     private double mThreshold;   
     
@@ -78,9 +81,9 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
     private boolean mComputeAndKeepResiduals;
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(){
+    public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator() {
         super();
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -92,17 +95,17 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * transformation.
      * Lines in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE
+     * be greter or equal than MINIMUM_SIZE.
      * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation
+     * 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate an affine
-     * 3D transformation
+     * 3D transformation.
      * @throws IllegalArgumentException if provided lists of planes don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(inputPlanes, outputPlanes);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -110,12 +113,12 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
     public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            AffineTransformation3DRobustEstimatorListener listener){
+            AffineTransformation3DRobustEstimatorListener listener) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -127,20 +130,20 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * affine 3D transformation.
      * Planes in the list located at the same position are considered to be 
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
-     * @param listener lsitener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * be greater or equal than MINIMUM_SIZE.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
      * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation
+     * 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate an 
-     * affine 3D transformation
+     * affine 3D transformation.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener, inputPlanes, outputPlanes);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -159,10 +162,10 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * orthogonal.
      * If dot product between planes is -1, then although their director vectors 
      * are opposed, planes are considered equal, since sign changes are not 
-     * taken into account and their residuals will be 0
-     * @return threshold to determine whether matched planes are inliers or not
+     * taken into account and their residuals will be 0.
+     * @return threshold to determine whether matched planes are inliers or not.
      */
-    public double getThreshold(){
+    public double getThreshold() {
         return mThreshold;
     }
     
@@ -178,18 +181,22 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * orthogonal.
      * If dot product between planes is -1, then although their director vectors 
      * are opposed, planes are considered equal, since sign changes are not 
-     * taken into account and their residuals will be 0
+     * taken into account and their residuals will be 0.
      * @param threshold threshold to determine whether matched planes are 
-     * inliers or not
+     * inliers or not.
      * @throws IllegalArgumentException if provided value is equal or less than
-     * zero
+     * zero.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException{
-        if(isLocked()) throw new LockedException();
-        if(threshold <= MIN_THRESHOLD) throw new IllegalArgumentException();
+            LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (threshold <= MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         mThreshold = threshold;
     }    
     
@@ -242,24 +249,28 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
     /**
      * Estimates an affine 3D transformation using a robust estimator and
      * the best set of matched 3D lines correspondences found using the robust
-     * estimator
-     * @return an affine 3D transformation
+     * estimator.
+     * @return an affine 3D transformation.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */        
     @Override
     public AffineTransformation3D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         RANSACRobustEstimator<AffineTransformation3D> innerEstimator =
-                new RANSACRobustEstimator<AffineTransformation3D>(
-                new RANSACRobustEstimatorListener<AffineTransformation3D>(){
+                new RANSACRobustEstimator<>(
+                new RANSACRobustEstimatorListener<AffineTransformation3D>() {
                     
             //plane to be reused when computing residuals
             private Plane mTestPlane = new Plane();
@@ -292,13 +303,13 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
                 Plane outputPlane3 = mOutputPlanes.get(samplesIndices[2]);
                 Plane outputPlane4 = mOutputPlanes.get(samplesIndices[3]);
                 
-                try{
+                try {
                     AffineTransformation3D transformation =
                             new AffineTransformation3D(inputPlane1, inputPlane2, 
                             inputPlane3, inputPlane4, outputPlane1, 
                             outputPlane2, outputPlane3, outputPlane4);
                     solutions.add(transformation);
-                }catch(CoincidentPlanesException e){
+                } catch (CoincidentPlanesException e) {
                     //if lines are coincident, no solution is added
                 }
             }
@@ -310,11 +321,11 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
                 Plane outputPlane = mOutputPlanes.get(i);
                 
                 //transform input plane and store result in mTestPlane
-                try{
+                try {
                     currentEstimation.transform(inputPlane, mTestPlane);
                     
                     return getResidual(outputPlane, mTestPlane);
-                }catch(AlgebraException e){
+                } catch (AlgebraException e) {
                     //this happens when internal matrix of affine transformation
                     //cannot be reversed (i.e. transformation is not well defined,
                     //numerical instabilities, etc)
@@ -331,7 +342,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
             @Override
             public void onEstimateStart(
                     RobustEstimator<AffineTransformation3D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(
                             RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
                 }
@@ -340,7 +351,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
             @Override
             public void onEstimateEnd(
                     RobustEstimator<AffineTransformation3D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(
                             RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
                 }
@@ -350,7 +361,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
             public void onEstimateNextIteration(
                     RobustEstimator<AffineTransformation3D> estimator, 
                     int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this, 
                             iteration);
@@ -361,7 +372,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
             public void onEstimateProgressChange(
                     RobustEstimator<AffineTransformation3D> estimator, 
                     float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this, 
                             progress);
@@ -369,7 +380,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
             }
         });
         
-        try{
+        try {
             mLocked = true;
             mInliersData = null;
             innerEstimator.setComputeAndKeepInliersEnabled(
@@ -382,18 +393,18 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
             AffineTransformation3D transformation = innerEstimator.estimate();
             mInliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);            
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }        
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */        
     @Override
     public RobustEstimatorMethod getMethod() {

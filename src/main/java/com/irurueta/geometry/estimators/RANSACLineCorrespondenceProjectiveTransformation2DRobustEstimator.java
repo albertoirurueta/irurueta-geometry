@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 4, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,19 +19,16 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.geometry.CoincidentLinesException;
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.ProjectiveTransformation2D;
-import com.irurueta.numerical.robust.RANSACRobustEstimator;
-import com.irurueta.numerical.robust.RANSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best projective transformation for provided collections of matched
- * 2D lines using RANSAC algorithm
+ * 2D lines using RANSAC algorithm.
  */
 public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator 
-        extends LineCorrespondenceProjectiveTransformation2DRobustEstimator{
+        extends LineCorrespondenceProjectiveTransformation2DRobustEstimator {
 
     /**
      * Constant defining default threshold to determine whether lines are
@@ -38,13 +42,13 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * orthogonal.
      * If dot product between lines is -1, then although their director vectors 
      * are opposed, lines are considered equal, since sign changes are not taken 
-     * into account and their residuals will be 0
+     * into account and their residuals will be 0.
      */
     public static final double DEFAULT_THRESHOLD = 1e-6;
     
     /**
      * Minimum value that can be set as threshold.
-     * Threshold must be strictly greater than 0.0
+     * Threshold must be strictly greater than 0.0.
      */
     public static final double MIN_THRESHOLD = 0.0;
         
@@ -77,9 +81,9 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
     private boolean mComputeAndKeepResiduals;
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(){
+    public RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator() {
         super();
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -101,7 +105,7 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     public RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(inputLines, outputLines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -109,12 +113,12 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
     public RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-            ProjectiveTransformation2DRobustEstimatorListener listener){
+            ProjectiveTransformation2DRobustEstimatorListener listener) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -126,20 +130,20 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * projective 2D transformation.
      * Lines in the list located at the same position are considered to be 
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param listener lsitener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputLines list of input lines to be used to estimate a projective
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener, inputLines, outputLines);
         mThreshold = DEFAULT_THRESHOLD; 
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -158,10 +162,10 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * orthogonal.
      * If dot product between lines is -1, then although their director vectors 
      * are opposed, lines are considered equal, since sign changes are not taken 
-     * into account and their residuals will be 0
-     * @return threshold to determine whether matched lines are inliers or not
+     * into account and their residuals will be 0.
+     * @return threshold to determine whether matched lines are inliers or not.
      */
-    public double getThreshold(){
+    public double getThreshold() {
         return mThreshold;
     }
     
@@ -177,18 +181,22 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * orthogonal.
      * If dot product between lines is -1, then although their director vectors 
      * are opposed, lines are considered equal, since sign changes are not taken 
-     * into account and their residuals will be 0
+     * into account and their residuals will be 0.
      * @param threshold threshold to determine whether matched lines are inliers
-     * or not
+     * or not.
      * @throws IllegalArgumentException if provided value is equal or less than
-     * zero
+     * zero.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException{
-        if(isLocked()) throw new LockedException();
-        if(threshold <= MIN_THRESHOLD) throw new IllegalArgumentException();
+            LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (threshold <= MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         mThreshold = threshold;
     }    
     
@@ -241,24 +249,28 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
     /**
      * Estimates a projective 2D transformation using a robust estimator and
      * the best set of matched 2D lines correspondences found using the robust
-     * estimator
-     * @return a projective 2D transformation
+     * estimator.
+     * @return a projective 2D transformation.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */        
     @Override
     public ProjectiveTransformation2D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         RANSACRobustEstimator<ProjectiveTransformation2D> innerEstimator =
-                new RANSACRobustEstimator<ProjectiveTransformation2D>(
-                new RANSACRobustEstimatorListener<ProjectiveTransformation2D>(){
+                new RANSACRobustEstimator<>(
+                new RANSACRobustEstimatorListener<ProjectiveTransformation2D>() {
                     
             //line to be reused when computing residuals
             private Line2D mTestLine = new Line2D();
@@ -291,13 +303,13 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
                 Line2D outputLine3 = mOutputLines.get(samplesIndices[2]);
                 Line2D outputLine4 = mOutputLines.get(samplesIndices[3]);
                 
-                try{
+                try {
                     ProjectiveTransformation2D transformation =
                             new ProjectiveTransformation2D(inputLine1, inputLine2, 
                             inputLine3, inputLine4, outputLine1, outputLine2, 
                             outputLine3, outputLine4);
                     solutions.add(transformation);
-                }catch(CoincidentLinesException e){
+                } catch (CoincidentLinesException e) {
                     //if lines are coincident, no solution is added
                 }
             }
@@ -309,11 +321,11 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
                 Line2D outputLine = mOutputLines.get(i);
                 
                 //transform input line and store result in mTestLine
-                try{
+                try {
                     currentEstimation.transform(inputLine, mTestLine);
                     
                     return getResidual(outputLine, mTestLine);
-                }catch(AlgebraException e){
+                } catch (AlgebraException e) {
                     //this happens when internal matrix of affine transformation
                     //cannot be reverse (i.e. transformation is not well defined,
                     //numerical instabilities, etc)
@@ -330,7 +342,7 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
             @Override
             public void onEstimateStart(
                     RobustEstimator<ProjectiveTransformation2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(
                             RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.this);
                 }
@@ -339,7 +351,7 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
             @Override
             public void onEstimateEnd(
                     RobustEstimator<ProjectiveTransformation2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(
                             RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.this);
                 }
@@ -349,7 +361,7 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
             public void onEstimateNextIteration(
                     RobustEstimator<ProjectiveTransformation2D> estimator, 
                     int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.this, 
                             iteration);
@@ -360,7 +372,7 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
             public void onEstimateProgressChange(
                     RobustEstimator<ProjectiveTransformation2D> estimator, 
                     float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.this, 
                             progress);
@@ -368,7 +380,7 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
             }
         });
         
-        try{
+        try {
             mLocked = true;
             mInliersData = null;
             innerEstimator.setComputeAndKeepInliersEnabled(
@@ -382,18 +394,18 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
                     innerEstimator.estimate();
             mInliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);            
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }        
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */        
     @Override
     public RobustEstimatorMethod getMethod() {

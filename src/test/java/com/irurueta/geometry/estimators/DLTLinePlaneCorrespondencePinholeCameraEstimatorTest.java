@@ -1,71 +1,63 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.DLTLinePlaneCorrespondencePinholeCameraEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 24, 2013
+/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.geometry.CameraException;
-import com.irurueta.geometry.InhomogeneousPoint2D;
-import com.irurueta.geometry.InhomogeneousPoint3D;
-import com.irurueta.geometry.Line2D;
-import com.irurueta.geometry.MatrixRotation3D;
-import com.irurueta.geometry.NotAvailableException;
-import com.irurueta.geometry.PinholeCamera;
-import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
-import com.irurueta.geometry.Plane;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Quaternion;
-import com.irurueta.geometry.Rotation3D;
+import com.irurueta.geometry.*;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
         PinholeCameraEstimatorListener {
     
-    public static final double ABSOLUTE_ERROR = 1e-5;
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-3;
-    public static final double VERY_LARGE_ABSOLUTE_ERROR = 1.0;
+    private static final double ABSOLUTE_ERROR = 1e-5;
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
+    private static final double VERY_LARGE_ABSOLUTE_ERROR = 1.0;
     
-    public static final double MIN_RANDOM_VALUE = 0.0;
-    public static final double MAX_RANDOM_VALUE = 1.0;
+    private static final double MIN_RANDOM_VALUE = 0.0;
+    private static final double MAX_RANDOM_VALUE = 1.0;
     
-    public static final double MIN_FOCAL_LENGTH = 110.0;
-    public static final double MAX_FOCAL_LENGTH = 130.0;
+    private static final double MIN_FOCAL_LENGTH = 110.0;
+    private static final double MAX_FOCAL_LENGTH = 130.0;
     
-    public static final double MIN_SKEWNESS = -0.001;
-    public static final double MAX_SKEWNESS = 0.001;
+    private static final double MIN_SKEWNESS = -0.001;
+    private static final double MAX_SKEWNESS = 0.001;
     
-    public static final double MIN_PRINCIPAL_POINT = 90.0;
-    public static final double MAX_PRINCIPAL_POINT = 100.0;
+    private static final double MIN_PRINCIPAL_POINT = 90.0;
+    private static final double MAX_PRINCIPAL_POINT = 100.0;
     
-    public static final double MIN_ANGLE_DEGREES = 10.0;
-    public static final double MAX_ANGLE_DEGREES = 15.0;
+    private static final double MIN_ANGLE_DEGREES = 10.0;
+    private static final double MAX_ANGLE_DEGREES = 15.0;
 
-    public static final int INHOM_3D_COORDS = 3;
-    public static final int LINE_PARAMS = 3;
-    public static final int PLANE_PARAMS = 4;
+    private static final int INHOM_3D_COORDS = 3;
+
+    private static final int N_CORRESPONDENCES = 4;
+    private static final int MIN_NUMBER_CORRESPONDENCES = 5;
+    private static final int MAX_NUMBER_CORRESPONDENCES = 100;
     
-    public static final int N_CORRESPONDENCES = 4;
-    public static final int MIN_NUMBER_CORRESPONDENCES = 5;
-    public static final int MAX_NUMBER_CORRESPONDENCES = 100;
+    private static final int TIMES = 100;
     
-    public static final int TIMES = 100;
-    
-    public static final double ERROR_STD = 1e-5;
+    private static final double ERROR_STD = 1e-5;
     
     private int startCount = 0;
     private int endCount = 0;
@@ -87,7 +79,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
     
     @Test
     public void testConstructor() throws WrongListSizesException, 
-        NotAvailableException {
+            NotAvailableException {
         
         //testing constructor without parameters
         DLTLinePlaneCorrespondencePinholeCameraEstimator estimator =
@@ -106,11 +98,11 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getLines2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPlanes();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertNull(estimator.getListener());
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -162,11 +154,11 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getLines2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPlanes();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getListener(), this);
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -204,8 +196,8 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
         
         //testing constructor with lists
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        List<Plane> planes = new ArrayList<Plane>(N_CORRESPONDENCES);
-        List<Line2D> lines2D = new ArrayList<Line2D>(N_CORRESPONDENCES);
+        List<Plane> planes = new ArrayList<>(N_CORRESPONDENCES);
+        List<Line2D> lines2D = new ArrayList<>(N_CORRESPONDENCES);
         for (int i = 0; i < N_CORRESPONDENCES; i++) {
             planes.add(new Plane(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -266,31 +258,31 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
                 PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
         
         //Force WrongListSizesException
-        List<Plane> wrongPlanes = new ArrayList<Plane>();
-        List<Line2D> wrongLines = new ArrayList<Line2D>();
+        List<Plane> wrongPlanes = new ArrayList<>();
+        List<Line2D> wrongLines = new ArrayList<>();
         estimator = null;
         try {
             estimator = new DLTLinePlaneCorrespondencePinholeCameraEstimator(
                     wrongPlanes, lines2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new DLTLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, wrongLines);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new DLTLinePlaneCorrespondencePinholeCameraEstimator(
                     null, lines2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new DLTLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //testing constructor with lists and listener
@@ -347,24 +339,24 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             estimator = new DLTLinePlaneCorrespondencePinholeCameraEstimator(
                     wrongPlanes, lines2D, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new DLTLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, wrongLines, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new DLTLinePlaneCorrespondencePinholeCameraEstimator(
                     null, lines2D, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new DLTLinePlaneCorrespondencePinholeCameraEstimator(
                     planes, null, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
     }
     
@@ -403,15 +395,15 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getLines2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPlanes();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        List<Plane> planes = new ArrayList<Plane>(N_CORRESPONDENCES);
-        List<Line2D> lines2D = new ArrayList<Line2D>(N_CORRESPONDENCES);
+        List<Plane> planes = new ArrayList<>(N_CORRESPONDENCES);
+        List<Line2D> lines2D = new ArrayList<>(N_CORRESPONDENCES);
         for (int i = 0; i < N_CORRESPONDENCES; i++) {
             planes.add(new Plane(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -436,20 +428,20 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
         assertTrue(estimator.areListsAvailable());
         
         //Force WrongListSizesException
-        List<Plane> wrongPlanes = new ArrayList<Plane>();
-        List<Line2D> wrongLines = new ArrayList<Line2D>();
+        List<Plane> wrongPlanes = new ArrayList<>();
+        List<Line2D> wrongLines = new ArrayList<>();
         assertFalse(DLTLinePlaneCorrespondencePinholeCameraEstimator.
                 areValidLists(wrongPlanes, lines2D));
         try {
             estimator.setLists(wrongPlanes, lines2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         assertFalse(DLTLinePlaneCorrespondencePinholeCameraEstimator.
                 areValidLists(planes, wrongLines));
         try {
             estimator.setLists(planes, wrongLines);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         assertFalse(DLTLinePlaneCorrespondencePinholeCameraEstimator.
@@ -457,13 +449,13 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setLists(null, lines2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertFalse(DLTLinePlaneCorrespondencePinholeCameraEstimator.
                 areValidLists(planes, null));
         try {
             estimator.setLists(planes, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -780,7 +772,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setMinMaxSuggestionWeight(10.0, 10.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -802,7 +794,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setSuggestionWeightStep(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
@@ -811,7 +803,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             NotAvailableException, CameraException {
         
        boolean passedAtLeastOnce = false; //to account for random degeneracies
-       for(int t = 0; t < TIMES; t++){
+       for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double horizontalFocalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
@@ -857,9 +849,9 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //allowing an LMSE solution        
             int nCorrespondences = randomizer.nextInt(
                     MIN_NUMBER_CORRESPONDENCES, MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             Line2D line2D;
-            for(int i = 0; i < nCorrespondences; i++){
+            for (int i = 0; i < nCorrespondences; i++) {
                 line2D = new Line2D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE),
@@ -884,9 +876,9 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
 
             reset();
             PinholeCamera estimatedCamera;
-            try{
+            try {
                 estimatedCamera = estimator.estimate();
-            }catch(PinholeCameraEstimatorException e){
+            } catch (PinholeCameraEstimatorException e) {
                 continue;
             }
             
@@ -902,7 +894,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //test the case where there are exactly six correspondences
             nCorrespondences = N_CORRESPONDENCES;
             lines2D.clear();
-            for(int i = 0; i < nCorrespondences; i++){
+            for (int i = 0; i < nCorrespondences; i++) {
                 line2D = new Line2D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE),
@@ -935,7 +927,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             double estimatedAlphaEuler, estimatedBetaEuler, estimatedGammaEuler;
             boolean validAlphaEuler, validBetaEuler, validGammaEuler;
             Point3D estimatedCameraCenter;
-            try{
+            try {
                 estimatedCamera = estimator.estimate();
 
                 assertFalse(estimator.isLocked());        
@@ -950,7 +942,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
                 planesIt = planes.iterator();
                 estimatedPlanesIt = estimatedPlanes.iterator();
             
-                while(planesIt.hasNext() && estimatedPlanesIt.hasNext()){
+                while (planesIt.hasNext() && estimatedPlanesIt.hasNext()) {
                     plane = planesIt.next();
                     estimatedPlane = estimatedPlanesIt.next();
 
@@ -989,42 +981,39 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
                 estimatedBetaEuler = estimatedRotation2.getBetaEulerAngle();
                 estimatedGammaEuler = estimatedRotation2.getGammaEulerAngle();
             
-                if(Math.abs(alphaEuler - estimatedAlphaEuler) <= 
-                        LARGE_ABSOLUTE_ERROR){
+                if (Math.abs(alphaEuler - estimatedAlphaEuler) <=
+                        LARGE_ABSOLUTE_ERROR) {
                     validAlphaEuler = true;
-                }else if((Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) - 
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR){
-                    validAlphaEuler = true;
-                }else{
-                    validAlphaEuler = false;
+                } else {
+                    validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
+                            Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
 
-                if(Math.abs(betaEuler - estimatedBetaEuler) <= 
-                        LARGE_ABSOLUTE_ERROR){
+                if (Math.abs(betaEuler - estimatedBetaEuler) <=
+                        LARGE_ABSOLUTE_ERROR) {
                     validBetaEuler = true;
-                }else if((Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) - 
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR){
-                    validBetaEuler = true;
-                }else{
-                    validBetaEuler = false;
+                }else {
+                    validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
+                            Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
 
-                if(Math.abs(gammaEuler - estimatedGammaEuler) <= 
-                        LARGE_ABSOLUTE_ERROR){
+                if (Math.abs(gammaEuler - estimatedGammaEuler) <=
+                        LARGE_ABSOLUTE_ERROR) {
                     validGammaEuler = true;
-                }else if((Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) - 
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR){
-                    validGammaEuler = true;
-                }else{
-                    validGammaEuler = false;
+                } else {
+                    validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
+                            Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
             
             
-                if(!validAlphaEuler || !validBetaEuler || !validGammaEuler) {
+                if (!validAlphaEuler || !validBetaEuler || !validGammaEuler) {
                     continue;
                 }
+                //noinspection all
                 assertTrue(validAlphaEuler);
+                //noinspection all
                 assertTrue(validBetaEuler);
+                //noinspection all
                 assertTrue(validGammaEuler);
             
             
@@ -1032,7 +1021,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
                 estimatedCameraCenter = estimatedCamera.getCameraCenter();
                 assertTrue(cameraCenter.equals(estimatedCameraCenter, 
                     VERY_LARGE_ABSOLUTE_ERROR));
-            }catch(PinholeCameraEstimatorException e){
+            } catch (PinholeCameraEstimatorException e) {
                 continue;
             }
 
@@ -1044,7 +1033,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
             lines2D.clear();
-            for(int i = 0; i < nCorrespondences; i++){
+            for (int i = 0; i < nCorrespondences; i++) {
                 line2D = new Line2D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE),
@@ -1067,7 +1056,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             assertTrue(estimator.isReady());
 
             reset();
-            try{
+            try {
                 estimatedCamera = estimator.estimate();
 
                 assertFalse(estimator.isLocked());        
@@ -1082,7 +1071,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
                 planesIt = planes.iterator();
                 estimatedPlanesIt = estimatedPlanes.iterator();
 
-                while(planesIt.hasNext() && estimatedPlanesIt.hasNext()){
+                while (planesIt.hasNext() && estimatedPlanesIt.hasNext()) {
                     plane = planesIt.next();
                     estimatedPlane = estimatedPlanesIt.next();
 
@@ -1120,48 +1109,45 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
                 estimatedBetaEuler = estimatedRotation2.getBetaEulerAngle();
                 estimatedGammaEuler = estimatedRotation2.getGammaEulerAngle();
             
-                if(Math.abs(alphaEuler - estimatedAlphaEuler) <= 
-                        LARGE_ABSOLUTE_ERROR){
+                if (Math.abs(alphaEuler - estimatedAlphaEuler) <=
+                        LARGE_ABSOLUTE_ERROR) {
                     validAlphaEuler = true;
-                }else if((Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) - 
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR){
-                    validAlphaEuler = true;
-                }else{
-                    validAlphaEuler = false;
+                } else {
+                    validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
+                            Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
 
-                if(Math.abs(betaEuler - estimatedBetaEuler) <= 
-                        LARGE_ABSOLUTE_ERROR){
+                if (Math.abs(betaEuler - estimatedBetaEuler) <=
+                        LARGE_ABSOLUTE_ERROR) {
                     validBetaEuler = true;
-                }else if((Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) - 
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR){
-                    validBetaEuler = true;
-                }else{
-                    validBetaEuler = false;
+                } else {
+                    validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
+                            Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
 
-                if(Math.abs(gammaEuler - estimatedGammaEuler) <= 
-                        LARGE_ABSOLUTE_ERROR){
+                if (Math.abs(gammaEuler - estimatedGammaEuler) <=
+                        LARGE_ABSOLUTE_ERROR) {
                     validGammaEuler = true;
-                }else if((Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) - 
-                        Math.PI) <= LARGE_ABSOLUTE_ERROR){
-                    validGammaEuler = true;
-                }else{
-                    validGammaEuler = false;
+                } else {
+                    validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
+                            Math.PI) <= LARGE_ABSOLUTE_ERROR;
                 }
             
 
                 if (!validAlphaEuler) {
                     continue;
                 }
+                //noinspection all
                 assertTrue(validAlphaEuler);
                 if (!validBetaEuler) {
                     continue;
                 }
+                //noinspection all
                 assertTrue(validBetaEuler);
                 if (!validGammaEuler) {
                     continue;
                 }
+                //noinspection all
                 assertTrue(validGammaEuler);
             
         
@@ -1169,14 +1155,14 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
                 estimatedCameraCenter = estimatedCamera.getCameraCenter();
                 assertTrue(cameraCenter.equals(estimatedCameraCenter, 
                     VERY_LARGE_ABSOLUTE_ERROR));
-            }catch(PinholeCameraEstimatorException e){
+            } catch (PinholeCameraEstimatorException e) {
                 continue;
             }
             
             //Force PinholeCameraEstimatorException
             nCorrespondences = N_CORRESPONDENCES;
             lines2D.clear();
-            for(int i = 0; i < nCorrespondences - 2; i++){
+            for (int i = 0; i < nCorrespondences - 2; i++) {
                 line2D = new Line2D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE),
@@ -1203,35 +1189,32 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
 
             reset();
             estimatedCamera = null;
-            try{
+            try {
                 estimatedCamera = estimator.estimate();
                 fail("PinholeCameraEstimatorException expected but not thrown");
-            }catch(PinholeCameraEstimatorException e){}
+            } catch (PinholeCameraEstimatorException ignore) { }
             
             //Force NotReadyException
             estimator = new DLTLinePlaneCorrespondencePinholeCameraEstimator();
-            try{
+            try {
                 estimatedCamera = estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            }catch(NotReadyException e){}
+            } catch (NotReadyException ignore) { }
             assertNull(estimatedCamera);
             
             passedAtLeastOnce = true;
-            
-            if (passedAtLeastOnce) {
-                break;
-            }
-        }  
+           break;
+        }
         assertTrue(passedAtLeastOnce);
     }
 
     @Test
     public void testEstimateSuggestedSkewness() throws WrongListSizesException, 
-            LockedException, NotReadyException, PinholeCameraEstimatorException, 
-            NotAvailableException, CameraException {
+            LockedException, NotReadyException, NotAvailableException,
+            CameraException {
         
        boolean passedAtLeastOnce = false; //to account for random degeneracies
-       for(int t = 0; t < TIMES; t++){
+       for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double horizontalFocalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
@@ -1277,7 +1260,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
                 line2D = new Line2D(
@@ -1296,7 +1279,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //add error to lines
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
-            for(Line2D line : lines2D) {
+            for (Line2D line : lines2D) {
                 double errorC = errorRandomizer.nextDouble();
                 line.setParameters(line.getA(), line.getB(), 
                         line.getC() + errorC);
@@ -1318,9 +1301,9 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
 
             reset();
             PinholeCamera estimatedCamera;
-            try{
+            try {
                 estimatedCamera = estimator.estimate();
-            }catch(PinholeCameraEstimatorException e){
+            } catch (PinholeCameraEstimatorException e) {
                 continue;
             }
             
@@ -1373,11 +1356,10 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedHorizontalFocalLengthEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
        boolean passedAtLeastOnce = false; //to account for random degeneracies
-       for(int t = 0; t < TIMES; t++){
+       for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double horizontalFocalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
@@ -1423,7 +1405,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(
                     MIN_NUMBER_CORRESPONDENCES, MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
                 line2D = new Line2D(
@@ -1464,9 +1446,9 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
 
             reset();
             PinholeCamera estimatedCamera;
-            try{
+            try {
                 estimatedCamera = estimator.estimate();
-            }catch(PinholeCameraEstimatorException e){
+            } catch (PinholeCameraEstimatorException e) {
                 continue;
             }
             
@@ -1521,11 +1503,10 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedVerticalFocalLengthEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
        boolean passedAtLeastOnce = false; //to account for random degeneracies
-       for(int t = 0; t < TIMES; t++){
+       for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double horizontalFocalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
@@ -1571,7 +1552,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
                 line2D = new Line2D(
@@ -1590,7 +1571,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //add error to lines
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
-            for(Line2D line : lines2D) {
+            for (Line2D line : lines2D) {
                 double errorC = errorRandomizer.nextDouble();
                 line.setParameters(line.getA(), line.getB(), 
                         line.getC() + errorC);
@@ -1612,9 +1593,9 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
 
             reset();
             PinholeCamera estimatedCamera;
-            try{
+            try {
                 estimatedCamera = estimator.estimate();
-            }catch(PinholeCameraEstimatorException e){
+            } catch (PinholeCameraEstimatorException e) {
                 continue;
             }
             
@@ -1669,11 +1650,10 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedAspectRatioEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
        boolean passedAtLeastOnce = false; //to account for random degeneracies
-       for(int t = 0; t < TIMES; t++){
+       for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double horizontalFocalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
@@ -1721,7 +1701,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
                 line2D = new Line2D(
@@ -1740,7 +1720,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //add error to lines
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
-            for(Line2D line : lines2D) {
+            for (Line2D line : lines2D) {
                 double errorC = errorRandomizer.nextDouble();
                 line.setParameters(line.getA(), line.getB(), 
                         line.getC() + errorC);
@@ -1761,9 +1741,9 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
 
             reset();
             PinholeCamera estimatedCamera;
-            try{
+            try {
                 estimatedCamera = estimator.estimate();
-            }catch(PinholeCameraEstimatorException e){
+            } catch (PinholeCameraEstimatorException e) {
                 continue;
             }
             
@@ -1817,11 +1797,10 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedPrincipalPointEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
        boolean passedAtLeastOnce = false; //to account for random degeneracies
-       for(int t = 0; t < TIMES; t++){
+       for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double horizontalFocalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
@@ -1869,7 +1848,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
                 line2D = new Line2D(
@@ -1888,7 +1867,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //add error to lines
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
-            for(Line2D line : lines2D) {
+            for (Line2D line : lines2D) {
                 double errorC = errorRandomizer.nextDouble();
                 line.setParameters(line.getA(), line.getB(), 
                         line.getC() + errorC);
@@ -1910,9 +1889,9 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
 
             reset();
             PinholeCamera estimatedCamera;
-            try{
+            try {
                 estimatedCamera = estimator.estimate();
-            }catch(PinholeCameraEstimatorException e){
+            } catch (PinholeCameraEstimatorException e) {
                 continue;
             }
             
@@ -1970,11 +1949,10 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedRotationEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
        boolean passedAtLeastOnce = false; //to account for random degeneracies
-       for(int t = 0; t < TIMES; t++){
+       for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double horizontalFocalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
@@ -2022,7 +2000,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
                 line2D = new Line2D(
@@ -2041,7 +2019,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //add error to lines
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
-            for(Line2D line : lines2D) {
+            for (Line2D line : lines2D) {
                 double errorC = errorRandomizer.nextDouble();
                 line.setParameters(line.getA(), line.getB(), 
                         line.getC() + errorC);
@@ -2062,9 +2040,9 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
 
             reset();
             PinholeCamera estimatedCamera;
-            try{
+            try {
                 estimatedCamera = estimator.estimate();
-            }catch(PinholeCameraEstimatorException e){
+            } catch (PinholeCameraEstimatorException e) {
                 continue;
             }
             
@@ -2125,11 +2103,10 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedCenterEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
        boolean passedAtLeastOnce = false; //to account for random degeneracies
-       for(int t = 0; t < TIMES; t++){
+       for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double horizontalFocalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
@@ -2175,7 +2152,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
                 line2D = new Line2D(
@@ -2194,7 +2171,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //add error to lines
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
-            for(Line2D line : lines2D) {
+            for (Line2D line : lines2D) {
                 double errorC = errorRandomizer.nextDouble();
                 line.setParameters(line.getA(), line.getB(), 
                         line.getC() + errorC);
@@ -2215,9 +2192,9 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
 
             reset();
             PinholeCamera estimatedCamera;
-            try{
+            try {
                 estimatedCamera = estimator.estimate();
-            }catch(PinholeCameraEstimatorException e){
+            } catch (PinholeCameraEstimatorException e) {
                 continue;
             }
             
@@ -2266,24 +2243,22 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateZeroSkewnesssZeroPrincipalPointAndEqualFocalLength() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, NotAvailableException, 
-            CameraException {
+            NotAvailableException, CameraException {
         
        boolean passedAtLeastOnce = false; //to account for random degeneracies
-       for(int t = 0; t < TIMES; t++){
+       for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            double horizontalFocalLength = randomizer.nextDouble(
+            double focalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            double verticalFocalLength = horizontalFocalLength;
-            
-            double skewness = 0.0;
+
+           double skewness = 0.0;
             double horizontalPrincipalPoint = 0.0;
             double verticalPrincipalPoint = 0.0;
             InhomogeneousPoint2D principalPoint = new InhomogeneousPoint2D();
 
             PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                    verticalFocalLength, horizontalPrincipalPoint, 
+                    new PinholeCameraIntrinsicParameters(focalLength,
+                            focalLength, horizontalPrincipalPoint,
                     verticalPrincipalPoint, skewness);            
 
             double aspectRatio = intrinsic.getAspectRatio();
@@ -2317,7 +2292,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //the LMSE solution is allowed
             int nCorrespondences = randomizer.nextInt(MIN_NUMBER_CORRESPONDENCES, 
                     MAX_NUMBER_CORRESPONDENCES);
-            List<Line2D> lines2D = new ArrayList<Line2D>(nCorrespondences);
+            List<Line2D> lines2D = new ArrayList<>(nCorrespondences);
             Line2D line2D;
             for (int i = 0; i < nCorrespondences; i++) {
                 line2D = new Line2D(
@@ -2336,7 +2311,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             //add error to lines
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
-            for(Line2D line : lines2D) {
+            for (Line2D line : lines2D) {
                 double errorC = errorRandomizer.nextDouble();
                 line.setParameters(line.getA(), line.getB(), 
                         line.getC() + errorC);
@@ -2358,9 +2333,9 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
 
             reset();
             PinholeCamera estimatedCamera;
-            try{
+            try {
                 estimatedCamera = estimator.estimate();
-            }catch(PinholeCameraEstimatorException e){
+            } catch (PinholeCameraEstimatorException e) {
                 continue;
             }
             
@@ -2460,17 +2435,17 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setLMSESolutionAllowed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         
         try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         
         try {
             estimator.setLists(null, null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Throwable t) {
             fail("LockedException expected but not thrown");
         }
@@ -2478,70 +2453,70 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setSuggestSkewnessValueEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedSkewnessValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestHorizontalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedHorizontalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestVerticalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedVerticalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestAspectRatioEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedAspectRatioValue(1.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestPrincipalPointEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedPrincipalPointValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestRotationEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedRotationValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestCenterEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedCenterValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMinSuggestionWeight(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMaxSuggestionWeight(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestionWeightStep(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }        
+        } catch (LockedException ignore) { }
     }
 }

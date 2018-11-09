@@ -27,12 +27,12 @@ import static org.junit.Assert.*;
 
 public class KDTree3DTest {
 
-    public static final double ABSOLUTE_ERROR = 1e-9;
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double ABSOLUTE_ERROR = 1e-9;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
 
-    public static final int MIN_POINTS = 50;
-    public static final int MAX_POINTS = 500;
+    private static final int MIN_POINTS = 50;
+    private static final int MAX_POINTS = 500;
 
     public KDTree3DTest() { }
 
@@ -822,6 +822,7 @@ public class KDTree3DTest {
     }
 
     @Test
+    @SuppressWarnings("all")
     public void testLocateNear() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int numberPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -915,6 +916,7 @@ public class KDTree3DTest {
     }
 
     @Test
+    @SuppressWarnings("all")
     public void testLocateNear2() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int numberPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);

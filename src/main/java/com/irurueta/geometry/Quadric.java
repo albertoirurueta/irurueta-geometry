@@ -1,79 +1,90 @@
 /*
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.Quadric
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date August 13, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.*;
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.WrongSizeException;
+
 import java.io.Serializable;
 
 /**
- * This class contains the implementation of a quadric
+ * This class contains the implementation of a quadric.
  */
 @SuppressWarnings("WeakerAccess")
-public class Quadric extends BaseQuadric implements Serializable{
+public class Quadric extends BaseQuadric implements Serializable {
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public Quadric(){
+    public Quadric() {
         super();
     }
     
     /**
      * Constructor of this class. This constructor accepts every parameter
-     * describing a quadric (parameters a, b, c, d, e, f, g, h, i, j
-     * @param a Parameter A of the quadric
-     * @param b Parameter B of the quadric
-     * @param c Parameter C of the quadric
-     * @param d Parameter D of the quadric
-     * @param e Parameter E of the quadric
-     * @param f Parameter F of the quadric
-     * @param g Parameter G of the quadric
-     * @param h Parameter H of the quadric
-     * @param i Parameter I of the quadric
-     * @param j Parameter J of the quadric
+     * describing a quadric (parameters a, b, c, d, e, f, g, h, i, j).
+     * @param a Parameter A of the quadric.
+     * @param b Parameter B of the quadric.
+     * @param c Parameter C of the quadric.
+     * @param d Parameter D of the quadric.
+     * @param e Parameter E of the quadric.
+     * @param f Parameter F of the quadric.
+     * @param g Parameter G of the quadric.
+     * @param h Parameter H of the quadric.
+     * @param i Parameter I of the quadric.
+     * @param j Parameter J of the quadric.
      */
     public Quadric(double a, double b, double c, double d, double e, double f,
-            double g, double h, double i, double j){
+            double g, double h, double i, double j) {
         super(a, b, c, d, e, f, g, h, i, j);
     }
     
     /**
      * Constructor of this class. This constructor accepts a Matrix describing
-     * a quadric
-     * @param m Matrix describing a quadric 4x4 Matrix describing the quadric
+     * a quadric.
+     * @param m Matrix describing a quadric 4x4 Matrix describing the quadric.
      * @throws IllegalArgumentException Raised when the size of the matrix is 
-     * not 4x4
+     * not 4x4.
      * @throws NonSymmetricMatrixException Raised when the quadric matrix is not
-     * symmetric
+     * symmetric.
      */
     public Quadric(Matrix m) throws IllegalArgumentException,
-            NonSymmetricMatrixException{
+            NonSymmetricMatrixException {
         super(m);
     }
     
     /**
-     * Creates quadric where provided points are contained (are locus)
-     * @param point1 1st point
-     * @param point2 2nd point
-     * @param point3 3rd point
-     * @param point4 4th point
-     * @param point5 5th point
-     * @param point6 6th point
-     * @param point7 7th point
-     * @param point8 8th point
-     * @param point9 9th point
+     * Creates quadric where provided points are contained (are locus).
+     * @param point1 1st point.
+     * @param point2 2nd point.
+     * @param point3 3rd point.
+     * @param point4 4th point.
+     * @param point5 5th point.
+     * @param point6 6th point.
+     * @param point7 7th point.
+     * @param point8 8th point.
+     * @param point9 9th point.
      * @throws CoincidentPointsException Raised if points are coincident or
-     * produce a degenerated configuration
+     * produce a degenerated configuration.
      */
     public Quadric(Point3D point1, Point3D point2, Point3D point3, 
             Point3D point4, Point3D point5, Point3D point6, Point3D point7,
-            Point3D point8, Point3D point9) throws CoincidentPointsException{
+            Point3D point8, Point3D point9) throws CoincidentPointsException {
         setParametersFromPoints(point1, point2, point3, point4, point5, point6,
                 point7, point8, point9);
     }
@@ -85,15 +96,17 @@ public class Quadric extends BaseQuadric implements Serializable{
      * is locus of the quadric or not. Threshold might be needed because of 
      * machine precision. If not provided DEFAULT_LOCUS_THRESHOLD will be used
      * instead.
-     * @return True if the point lies within this quadric, false otherwise
-     * @throws IllegalArgumentException Raised if threshold is negative
+     * @return True if the point lies within this quadric, false otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean isLocus(Point3D point, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         
-        try{
+        try {
             normalize();
             Matrix Q = asMatrix();
             Matrix homPoint = new Matrix(
@@ -108,7 +121,7 @@ public class Quadric extends BaseQuadric implements Serializable{
             locusMatrix.multiply(homPoint);
             
             return Math.abs(locusMatrix.getElementAt(0, 0)) < threshold;
-        }catch(WrongSizeException ignore){
+        } catch (WrongSizeException ignore) {
             return false;
         }
     }
@@ -119,19 +132,19 @@ public class Quadric extends BaseQuadric implements Serializable{
      * @return True if the point lies within this conic, false otherwise
      * @see #isLocus(Point3D, double)
      */
-    public boolean isLocus(Point3D point){
+    public boolean isLocus(Point3D point) {
         return isLocus(point, DEFAULT_LOCUS_THRESHOLD);
     }
     
     /**
      * Computes the angle between two 3D points using this quadric as a geometry
      * base.
-     * @param pointA First point
-     * @param pointB Second point
+     * @param pointA First point.
+     * @param pointB Second point.
      * @return Angle between provided points given in radians.
      */
-    public double angleBetweenPoints(Point3D pointA, Point3D pointB){
-        try{
+    public double angleBetweenPoints(Point3D pointA, Point3D pointB) {
+        try {
             //retrieve quadric as matrix
             Matrix Q = asMatrix();
             Matrix transHomPointA = new Matrix(1, 
@@ -170,7 +183,7 @@ public class Quadric extends BaseQuadric implements Serializable{
             
             double cosTheta = angleNumerator / Math.sqrt(normA * normB);
             return Math.acos(cosTheta);
-        }catch(WrongSizeException ignore){
+        } catch (WrongSizeException ignore) {
             return 0.0; //This will never happen
         }
     }
@@ -178,8 +191,8 @@ public class Quadric extends BaseQuadric implements Serializable{
     /**
      * Checks if two points are perpendicular in the geometry base generated by
      * this quadric.
-     * @param pointA First point
-     * @param pointB Second point
+     * @param pointA First point.
+     * @param pointB Second point.
      * @param threshold Threshold to determine whether the points are 
      * perpendicular or not. If the dot product between provided points and this
      * quadric is greater than provided threshold, then points won't be assumed
@@ -190,9 +203,9 @@ public class Quadric extends BaseQuadric implements Serializable{
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean arePerpendicularPoints(Point3D pointA, Point3D pointB,
-            double threshold) throws IllegalArgumentException{
+            double threshold) throws IllegalArgumentException {
         
-        try{
+        try {
             //retrieve quadric as matrix
             Matrix transHomPointA = new Matrix(1, 
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
@@ -219,7 +232,7 @@ public class Quadric extends BaseQuadric implements Serializable{
             double perpend = transHomPointA.getElementAt(0, 0);
             
             return Math.abs(perpend) < threshold;
-        }catch(WrongSizeException ignore){
+        } catch (WrongSizeException ignore) {
             return false; //This will never happen
         }
     }
@@ -227,12 +240,12 @@ public class Quadric extends BaseQuadric implements Serializable{
     /**
      * Checks if two points are perpendicular in the geometry base generated by
      * this quadric.
-     * @param pointA First point
-     * @param pointB Second point
+     * @param pointA First point.
+     * @param pointB Second point.
      * @return True if points are perpendicular, false otherwise.
      * @see #arePerpendicularPoints(Point3D, Point3D, double)
      */
-    public boolean arePerpendicularPoints(Point3D pointA, Point3D pointB){
+    public boolean arePerpendicularPoints(Point3D pointA, Point3D pointB) {
         return arePerpendicularPoints(pointA, pointB, 
                 DEFAULT_PERPENDICULAR_THRESHOLD);
     }
@@ -245,13 +258,13 @@ public class Quadric extends BaseQuadric implements Serializable{
      * quadric of this quadric instance will be stored.
      * @throws DualQuadricNotAvailableException Raised if the dual quadric does 
      * not exists because this quadric instance is degenerate (its inverse 
-     * cannot be computed)
+     * cannot be computed).
      */
     public void dualQuadric(DualQuadric dualQuadric) 
-            throws DualQuadricNotAvailableException{
+            throws DualQuadricNotAvailableException {
         
         Matrix quadricMatrix = asMatrix();
-        try{
+        try {
             Matrix invMatrix = com.irurueta.algebra.Utils.inverse(quadricMatrix);
             
             //ensure that resulting matrix after inversion is symmetric
@@ -273,7 +286,7 @@ public class Quadric extends BaseQuadric implements Serializable{
                     invMatrix.getElementAt(2, 3));
             double j = invMatrix.getElementAt(3, 3);
             dualQuadric.setParameters(a, b, c, d, e, f, g, h, i, j);
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             throw new DualQuadricNotAvailableException(e);
         }
     }
@@ -285,9 +298,9 @@ public class Quadric extends BaseQuadric implements Serializable{
      * instance.
      * @throws DualQuadricNotAvailableException Raised if the dual quadric does
      * not exist because this quadric instance is degenerate (its inverse cannot
-     * be computed)
+     * be computed).
      */
-    public DualQuadric getDualQuadric() throws DualQuadricNotAvailableException{
+    public DualQuadric getDualQuadric() throws DualQuadricNotAvailableException {
         DualQuadric dualQuadric = new DualQuadric();
         dualQuadric(dualQuadric);
         return dualQuadric;
@@ -295,23 +308,23 @@ public class Quadric extends BaseQuadric implements Serializable{
     
     /**
      * Sets parameters of this quadric so that provided points lie within it 
-     * (are locus)
-     * @param point1 1st point
-     * @param point2 2nd point
-     * @param point3 3rd point
-     * @param point4 4th point
-     * @param point5 5th point
-     * @param point6 6th point
-     * @param point7 7th point
-     * @param point8 8th point
-     * @param point9 9th point
-     * @throws CoincidentPointsException Raisef if points are coincident or
-     * produce a degenerated configuration
+     * (are locus).
+     * @param point1 1st point.
+     * @param point2 2nd point.
+     * @param point3 3rd point.
+     * @param point4 4th point.
+     * @param point5 5th point.
+     * @param point6 6th point.
+     * @param point7 7th point.
+     * @param point8 8th point.
+     * @param point9 9th point.
+     * @throws CoincidentPointsException Raised if points are coincident or
+     * produce a degenerated configuration.
      */
     public final void setParametersFromPoints(Point3D point1, Point3D point2,
             Point3D point3, Point3D point4, Point3D point5, Point3D point6,
             Point3D point7, Point3D point8, Point3D point9) 
-            throws CoincidentPointsException{
+            throws CoincidentPointsException {
         
         //normalize points to increase accuracy
         point1.normalize();
@@ -324,7 +337,7 @@ public class Quadric extends BaseQuadric implements Serializable{
         point8.normalize();
         point9.normalize();
         
-        try{
+        try {
             //each point belonging to a quadric follows equation:
             //p' * Q * p = 0 ==>
             //x^2 + y^2 + z^2 + 2*x*y + 2*x*z + 2*y*z + 2*x*w + 2*y*w + 
@@ -462,17 +475,20 @@ public class Quadric extends BaseQuadric implements Serializable{
             double[] row = new double[10];
             double rowNorm;
                         
-            for(int j = 0; j < 9; j++){
+            for (int j = 0; j < 9; j++) {
                 m.getSubmatrixAsArray(j, 0, j, 9, row);
                 rowNorm = com.irurueta.algebra.Utils.normF(row);
-                for(int i = 0; i < 10; i++) 
+                for (int i = 0; i < 10; i++) {
                     m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);
+                }
             }     
             
             SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
             
-            if(decomposer.getRank() < 9) throw new CoincidentPointsException();
+            if (decomposer.getRank() < 9) {
+                throw new CoincidentPointsException();
+            }
             
             //the right null-space of m contains the parameters a, b, c, d, e ,f
             //of the conic
@@ -492,33 +508,33 @@ public class Quadric extends BaseQuadric implements Serializable{
             double j = V.getElementAt(9, 9);            
             
             setParameters(a, b, c, d, e, f, g, h, i, j);            
-        }catch(AlgebraException ex){
+        } catch (AlgebraException ex) {
             throw new CoincidentPointsException(ex);
         }
     }
     
     /**
      * Returns a plane tangent to this quadric at provided point, as long as
-     * the provided point is locus of this quadric
-     * @param point point where plane must be tangent to quadric
-     * @return a plane tangent to this quadric
-     * @throws NotLocusException if provided point is not locus of this quadric
+     * the provided point is locus of this quadric.
+     * @param point point where plane must be tangent to quadric.
+     * @return a plane tangent to this quadric.
+     * @throws NotLocusException if provided point is not locus of this quadric.
      */
-    public Plane getTangentPlaneAt(Point3D point) throws NotLocusException{
+    public Plane getTangentPlaneAt(Point3D point) throws NotLocusException {
         return getTangentPlaneAt(point, DEFAULT_LOCUS_THRESHOLD);
     }
     
     /**
      * Returns a plane tangent to this quadric at provided point, as long as the
-     * provided point is locus of this quadric up to provided threshold
-     * @param point point where plane must be tangent to quadric
+     * provided point is locus of this quadric up to provided threshold.
+     * @param point point where plane must be tangent to quadric.
      * @param threshold threshold to determine if provided point is locus or not
-     * of this quadric. Usually this is a small value close to zero
-     * @return a plane tangent to this quadric
-     * @throws NotLocusException if provided point is not locus of this quadric
+     * of this quadric. Usually this is a small value close to zero.
+     * @return a plane tangent to this quadric.
+     * @throws NotLocusException if provided point is not locus of this quadric.
      */
     public Plane getTangentPlaneAt(Point3D point, double threshold) 
-            throws NotLocusException{
+            throws NotLocusException {
         Plane plane = new Plane();
         tangentPlaneAt(point, plane, threshold);
         return plane;
@@ -527,24 +543,26 @@ public class Quadric extends BaseQuadric implements Serializable{
     /**
      * Computes a plane tangent to this quadric at provided point, as long as 
      * the provided point is locus of this quadric up to provided threshold.
-     * @param point point where plane must be tangent to quadric
-     * @param plane plane where computed result will be stored
+     * @param point point where plane must be tangent to quadric.
+     * @param plane plane where computed result will be stored.
      * @param threshold threshold to determine if provided point is locus or not
-     * of this quadric. Usually this is a small value close to zero
-     * @throws NotLocusException  if provided point is not locus of this quadric
-     * @throws IllegalArgumentException if provided threshold is negtive
+     * of this quadric. Usually this is a small value close to zero.
+     * @throws NotLocusException  if provided point is not locus of this quadric.
+     * @throws IllegalArgumentException if provided threshold is negtive.
      */
     public void tangentPlaneAt(Point3D point, Plane plane, double threshold)
-            throws NotLocusException, IllegalArgumentException{
+            throws NotLocusException, IllegalArgumentException {
         
-        if(!isLocus(point, threshold)) throw new NotLocusException();
+        if (!isLocus(point, threshold)) {
+            throw new NotLocusException();
+        }
         
         point.normalize();
         normalize();
         
         Matrix Q = asMatrix();
         
-        try{
+        try {
             Matrix p = new Matrix(
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             p.setElementAt(0, 0, point.getHomX());
@@ -553,7 +571,7 @@ public class Quadric extends BaseQuadric implements Serializable{
             p.setElementAt(3, 0, point.getHomW());
             
             Q.multiply(p);
-        }catch(WrongSizeException ignore){}
+        } catch (WrongSizeException ignore) { }
         
         plane.setParameters(Q.getElementAt(0, 0), Q.getElementAt(1, 0), 
                 Q.getElementAt(2, 0), Q.getElementAt(3, 0));

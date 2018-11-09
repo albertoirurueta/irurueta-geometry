@@ -1,44 +1,49 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.Rectangle
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 3, 2016
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class RectangleTest {
     
-    public static final double ABSOLUTE_ERROR = 1e-9;
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double ABSOLUTE_ERROR = 1e-9;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public RectangleTest() {}
+    public RectangleTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
     
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         //test empty constructor
         Rectangle r = new Rectangle();
         
@@ -121,7 +126,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetSetTopLeft(){
+    public void testGetSetTopLeft() {
         Rectangle r = new Rectangle();
         
         //check default value
@@ -140,7 +145,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetSetBottomRight(){
+    public void testGetSetBottomRight() {
         Rectangle r = new Rectangle();
         
         //check default value
@@ -159,7 +164,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testSetBounds(){
+    public void testSetBounds() {
         Rectangle r = new Rectangle();
 
         //initial values
@@ -201,7 +206,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetSetCenter(){        
+    public void testGetSetCenter() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double left = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double top = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -279,12 +284,8 @@ public class RectangleTest {
                 bottom);
         Rectangle rectangle = new Rectangle(topLeft, bottomRight);
 
-        double lowX = left;
-        double lowY = bottom;
-        double highX = right;
-        double highY = top;
-        Point2D lo = new InhomogeneousPoint2D(lowX, lowY);
-        Point2D hi = new InhomogeneousPoint2D(highX, highY);
+        Point2D lo = new InhomogeneousPoint2D(left, bottom);
+        Point2D hi = new InhomogeneousPoint2D(right, top);
         Box2D box = new Box2D(lo, hi);
 
         //from box
@@ -309,7 +310,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetSignedWidth(){
+    public void testGetSignedWidth() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double left = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double top = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -334,7 +335,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetWidth(){
+    public void testGetWidth() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double left = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double top = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -359,7 +360,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetSignedHeight(){
+    public void testGetSignedHeight() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double left = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double top = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -384,7 +385,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetHeight(){
+    public void testGetHeight() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double left = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double top = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -409,7 +410,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetArea(){
+    public void testGetArea() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double left = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double top = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -440,7 +441,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testSetCenterAndSize(){
+    public void testSetCenterAndSize() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double left = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double top = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -487,7 +488,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetPerimeter(){
+    public void testGetPerimeter() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double left = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double top = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -517,7 +518,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testIsInside(){
+    public void testIsInside() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -683,7 +684,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testIsAtLeftSide(){
+    public void testIsAtLeftSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -1059,7 +1060,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testIsAtTopLeftCorner(){
+    public void testIsAtTopLeftCorner() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -1456,7 +1457,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testIsAtTopSide(){
+    public void testIsAtTopSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -1853,7 +1854,7 @@ public class RectangleTest {
     }
 
     @Test
-    public void testIsAtTopRightCorner(){
+    public void testIsAtTopRightCorner() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -2258,7 +2259,7 @@ public class RectangleTest {
     }
 
     @Test
-    public void testIsAtRightSide(){
+    public void testIsAtRightSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -2655,7 +2656,7 @@ public class RectangleTest {
     }
 
     @Test
-    public void testIsAtBottomRightCorner(){
+    public void testIsAtBottomRightCorner() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -3074,7 +3075,7 @@ public class RectangleTest {
     }
 
     @Test
-    public void testIsAtBottomSide(){
+    public void testIsAtBottomSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -3493,7 +3494,7 @@ public class RectangleTest {
     }
 
     @Test
-    public void testIsAtBottomLeftCorner(){
+    public void testIsAtBottomLeftCorner() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -3912,7 +3913,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetSignedDistanceToLeftSide(){
+    public void testGetSignedDistanceToLeftSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -4223,7 +4224,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetSignedDistanceToTopSide(){
+    public void testGetSignedDistanceToTopSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -4532,7 +4533,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetSignedDistanceToRightSide(){
+    public void testGetSignedDistanceToRightSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -4855,7 +4856,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetSignedDistanceToBottomSide(){
+    public void testGetSignedDistanceToBottomSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -5203,7 +5204,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetSignedDistance(){
+    public void testGetSignedDistance() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -5552,7 +5553,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetDistanceToLeftSide(){
+    public void testGetDistanceToLeftSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -5921,7 +5922,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetDistanceToTopSide(){
+    public void testGetDistanceToTopSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -6289,7 +6290,7 @@ public class RectangleTest {
     }
 
     @Test
-    public void testGetDistanceToRightSide(){
+    public void testGetDistanceToRightSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -6661,7 +6662,7 @@ public class RectangleTest {
     }
 
     @Test
-    public void testGetDistanceToBottomSide(){
+    public void testGetDistanceToBottomSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -7046,7 +7047,7 @@ public class RectangleTest {
     }
 
     @Test
-    public void testGetDistance(){
+    public void testGetDistance() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -7371,7 +7372,7 @@ public class RectangleTest {
     }
 
     @Test
-    public void testClosestPoint(){
+    public void testClosestPoint() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -7425,21 +7426,21 @@ public class RectangleTest {
         double rightDist = r.getDistanceToRightSide(insidePoint);
         double bottomDist = r.getDistanceToBottomSide(insidePoint);
         Point2D closestInside;
-        if(leftDist < topDist && leftDist < rightDist && leftDist < bottomDist){
+        if (leftDist < topDist && leftDist < rightDist && leftDist < bottomDist){
             //lest is closest
             closestInside = new InhomogeneousPoint2D(left, 
                     insidePoint.getInhomY());
-        }else if(topDist < leftDist && topDist < rightDist && 
-                topDist < bottomDist){
+        } else if (topDist < leftDist && topDist < rightDist &&
+                topDist < bottomDist) {
             //top is closest
             closestInside = new InhomogeneousPoint2D(insidePoint.getInhomX(), 
                     top);
-        }else if(rightDist < leftDist && rightDist < topDist && 
-                rightDist < bottomDist){
+        } else if (rightDist < leftDist && rightDist < topDist &&
+                rightDist < bottomDist) {
             //right is closest
             closestInside = new InhomogeneousPoint2D(right, 
                     insidePoint.getInhomY());            
-        }else{
+        } else {
             //bottom is closest
             closestInside = new InhomogeneousPoint2D(insidePoint.getInhomX(), 
                     bottom);
@@ -7781,7 +7782,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testGetClosestPoint(){
+    public void testGetClosestPoint() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -7835,21 +7836,21 @@ public class RectangleTest {
         double rightDist = r.getDistanceToRightSide(insidePoint);
         double bottomDist = r.getDistanceToBottomSide(insidePoint);
         Point2D closestInside;
-        if(leftDist < topDist && leftDist < rightDist && leftDist < bottomDist){
+        if (leftDist < topDist && leftDist < rightDist && leftDist < bottomDist){
             //lest is closest
             closestInside = new InhomogeneousPoint2D(left, 
                     insidePoint.getInhomY());
-        }else if(topDist < leftDist && topDist < rightDist && 
-                topDist < bottomDist){
+        } else if (topDist < leftDist && topDist < rightDist &&
+                topDist < bottomDist) {
             //top is closest
             closestInside = new InhomogeneousPoint2D(insidePoint.getInhomX(), 
                     top);
-        }else if(rightDist < leftDist && rightDist < topDist && 
-                rightDist < bottomDist){
+        } else if (rightDist < leftDist && rightDist < topDist &&
+                rightDist < bottomDist) {
             //right is closest
             closestInside = new InhomogeneousPoint2D(right, 
                     insidePoint.getInhomY());            
-        }else{
+        } else {
             //bottom is closest
             closestInside = new InhomogeneousPoint2D(insidePoint.getInhomX(), 
                     bottom);
@@ -8114,7 +8115,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testIsLocusToLeftSide(){
+    public void testIsLocusToLeftSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -8678,7 +8679,7 @@ public class RectangleTest {
     }
 
     @Test
-    public void testIsLocusToTopSide(){
+    public void testIsLocusToTopSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -9242,7 +9243,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testIsLocusToRightSide(){
+    public void testIsLocusToRightSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -9812,7 +9813,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testIsLocusToBottomSide(){
+    public void testIsLocusToBottomSide() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -10382,7 +10383,7 @@ public class RectangleTest {
     }
     
     @Test
-    public void testIsLocus(){
+    public void testIsLocus() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double centerX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);

@@ -1,20 +1,22 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.refiners.MetricTransformation2DRefiner
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 1, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.refiners;
 
 import com.irurueta.algebra.AlgebraException;
-import com.irurueta.geometry.EuclideanTransformation2D;
-import com.irurueta.geometry.InhomogeneousPoint2D;
-import com.irurueta.geometry.MetricTransformation2D;
-import com.irurueta.geometry.Point2D;
-import com.irurueta.geometry.Rotation2D;
-import com.irurueta.geometry.Utils;
+import com.irurueta.geometry.*;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.geometry.estimators.RANSACMetricTransformation2DRobustEstimator;
@@ -22,42 +24,38 @@ import com.irurueta.numerical.robust.InliersData;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class MetricTransformation2DRefinerTest implements 
         RefinerListener<MetricTransformation2D> {
     
-    public static final double MIN_RANDOM_VALUE = -1000.0;
-    public static final double MAX_RANDOM_VALUE = 1000.0;
+    private static final double MIN_RANDOM_VALUE = -1000.0;
+    private static final double MAX_RANDOM_VALUE = 1000.0;
     
-    public static final double MIN_RANDOM_DEGREES = -180.0;
-    public static final double MAX_RANDOM_DEGREES = 180.0;
+    private static final double MIN_RANDOM_DEGREES = -180.0;
+    private static final double MAX_RANDOM_DEGREES = 180.0;
     
-    public static final double MIN_SCALE = 0.5;
-    public static final double MAX_SCALE = 2.0;
+    private static final double MIN_SCALE = 0.5;
+    private static final double MAX_SCALE = 2.0;
     
-    public static final int INHOM_COORDS = 2;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final int MIN_POINTS = 50;
+    private static final int MAX_POINTS = 100;
     
-    public static final int MIN_POINTS = 50;
-    public static final int MAX_POINTS = 100;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final double STD_ERROR = 100.0;
+    private static final double THRESHOLD = 1e-6;
     
-    public static final double STD_ERROR = 100.0;
-    public static final double THRESHOLD = 1e-6;
-    
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
     private int mRefineStart;
     private int mRefineEnd;
@@ -196,7 +194,7 @@ public class MetricTransformation2DRefinerTest implements
         assertNull(refiner.getSamples1());
         
         //set new value
-        List<Point2D> samples1 = new ArrayList<Point2D>();
+        List<Point2D> samples1 = new ArrayList<>();
         refiner.setSamples1(samples1);
         
         //check correctness
@@ -212,7 +210,7 @@ public class MetricTransformation2DRefinerTest implements
         assertNull(refiner.getSamples2());
         
         //set new value
-        List<Point2D> samples2 = new ArrayList<Point2D>();
+        List<Point2D> samples2 = new ArrayList<>();
         refiner.setSamples2(samples2);
         
         //check correctness
@@ -220,7 +218,7 @@ public class MetricTransformation2DRefinerTest implements
     }
     
     @Test
-    public void testGetSetInliers() throws AlgebraException, LockedException, 
+    public void testGetSetInliers() throws LockedException,
             NotReadyException, RobustEstimatorException {
         RANSACMetricTransformation2DRobustEstimator estimator = 
                 createRobustEstimator();
@@ -243,7 +241,7 @@ public class MetricTransformation2DRefinerTest implements
     }
     
     @Test
-    public void testGetSetResiduals() throws AlgebraException, LockedException, 
+    public void testGetSetResiduals() throws LockedException,
             NotReadyException, RobustEstimatorException {
         RANSACMetricTransformation2DRobustEstimator estimator = 
                 createRobustEstimator();
@@ -266,8 +264,8 @@ public class MetricTransformation2DRefinerTest implements
     }
     
     @Test
-    public void testGetSetNumInliers() throws AlgebraException, 
-            LockedException, NotReadyException, RobustEstimatorException {
+    public void testGetSetNumInliers() throws LockedException,
+            NotReadyException, RobustEstimatorException {
         RANSACMetricTransformation2DRobustEstimator estimator = 
                 createRobustEstimator();
         
@@ -291,11 +289,11 @@ public class MetricTransformation2DRefinerTest implements
         try {
             refiner.setNumInliers(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testSetInliersData() throws AlgebraException, LockedException, 
+    public void testSetInliersData() throws LockedException,
             NotReadyException, RobustEstimatorException {
         RANSACMetricTransformation2DRobustEstimator estimator = 
                 createRobustEstimator();
@@ -353,7 +351,7 @@ public class MetricTransformation2DRefinerTest implements
     }
     
     @Test
-    public void testRefine() throws AlgebraException, LockedException, 
+    public void testRefine() throws LockedException,
             NotReadyException, RobustEstimatorException, RefinerException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
@@ -400,7 +398,7 @@ public class MetricTransformation2DRefinerTest implements
     }
     
     private RANSACMetricTransformation2DRobustEstimator 
-            createRobustEstimator() throws AlgebraException, LockedException {
+            createRobustEstimator() throws LockedException {
             
         MetricTransformation2D transformation = createTransformation();
         
@@ -408,8 +406,8 @@ public class MetricTransformation2DRefinerTest implements
         
         int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
         
-        List<Point2D> inputPoints = new ArrayList<Point2D>();
-        List<Point2D> outputPointsWithError = new ArrayList<Point2D>();
+        List<Point2D> inputPoints = new ArrayList<>();
+        List<Point2D> outputPointsWithError = new ArrayList<>();
         Point2D inputPoint, outputPoint, outputPointWithError;
         GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                 new Random(), 0.0, STD_ERROR);
@@ -462,10 +460,6 @@ public class MetricTransformation2DRefinerTest implements
         
         return new MetricTransformation2D(rotation, translation, scale);
     }
-    
-    private void reset() {
-        mRefineStart = mRefineEnd = 0;
-    }
 
     @Override
     public void onRefineStart(Refiner<MetricTransformation2D> refiner, 
@@ -481,58 +475,62 @@ public class MetricTransformation2DRefinerTest implements
         mRefineEnd++;
         checkLocked((MetricTransformation2DRefiner)refiner);
     }
-    
+
+    private void reset() {
+        mRefineStart = mRefineEnd = 0;
+    }
+
     private void checkLocked(MetricTransformation2DRefiner refiner) {
         assertTrue(refiner.isLocked());
         try {
             refiner.setInitialEstimation(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setCovarianceKept(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.refine(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             refiner.refine();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {            
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             refiner.setInliers(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setResiduals(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setNumInliers(0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setInliersData(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSamples1(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSamples2(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }        
+        } catch (LockedException ignore) { }
         try {
             refiner.setRefinementStandardDeviation(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }                
+        } catch (LockedException ignore) { }
     }
 }

@@ -1,39 +1,31 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.DLTPointCorrespondencePinholeCameraEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 19, 2013
+/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.geometry.CameraException;
-import com.irurueta.geometry.HomogeneousPoint2D;
-import com.irurueta.geometry.HomogeneousPoint3D;
-import com.irurueta.geometry.InhomogeneousPoint2D;
-import com.irurueta.geometry.InhomogeneousPoint3D;
-import com.irurueta.geometry.MatrixRotation3D;
-import com.irurueta.geometry.NotAvailableException;
-import com.irurueta.geometry.PinholeCamera;
-import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
-import com.irurueta.geometry.Point2D;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Quaternion;
-import com.irurueta.geometry.Rotation3D;
-import com.irurueta.geometry.RotationException;
+import com.irurueta.geometry.*;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class DLTPointCorrespondencePinholeCameraEstimatorTest implements 
         PinholeCameraEstimatorListener {
@@ -57,19 +49,10 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
     public static final double MAX_ANGLE_DEGREES = 15.0;
     
     public static final int INHOM_3D_COORDS = 3;
-        
-    public static final int MIN_NUMBER_POINTS = 10;
-    public static final int MAX_NUMBER_POINTS = 100;
-    
-    public static final double MIN_DEPTH = 0.5;
-    public static final double MAX_DEPTH = 100.0;
-    
+
     public static final int N_POINTS = 6;
     public static final int MIN_POINTS = 7;
     public static final int MAX_POINTS = 100;
-    
-    public static final double MIN_RANDOM_ERROR = 0.99;
-    public static final double MAX_RANDOM_ERROR = 1.01;
     
     public static final int TIMES = 100;
     
@@ -115,11 +98,11 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getPoints2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPoints3D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertNull(estimator.getListener());
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -172,11 +155,11 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getPoints2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPoints3D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getListener(), this);
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -214,8 +197,8 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
                 
         //testing constructor with lists
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        List<Point3D> points3D = new ArrayList<Point3D>(N_POINTS);
-        List<Point2D> points2D = new ArrayList<Point2D>(N_POINTS);        
+        List<Point3D> points3D = new ArrayList<>(N_POINTS);
+        List<Point2D> points2D = new ArrayList<>(N_POINTS);
         for (int i = 0; i < N_POINTS; i++) {
             points3D.add(new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -278,31 +261,31 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
                 PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);        
         
         //Force WrongListSizesException
-        List<Point3D> wrong3D = new ArrayList<Point3D>();        
-        List<Point2D> wrong2D = new ArrayList<Point2D>();
+        List<Point3D> wrong3D = new ArrayList<>();
+        List<Point2D> wrong2D = new ArrayList<>();
         estimator = null;
         try {
             estimator = new DLTPointCorrespondencePinholeCameraEstimator(
                     wrong3D, points2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new DLTPointCorrespondencePinholeCameraEstimator(
                     points3D, wrong2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new DLTPointCorrespondencePinholeCameraEstimator(null,
                     points2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new DLTPointCorrespondencePinholeCameraEstimator(
                     points3D, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -362,24 +345,24 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             estimator = new DLTPointCorrespondencePinholeCameraEstimator(
                     wrong3D, points2D, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new DLTPointCorrespondencePinholeCameraEstimator(
                     points3D, wrong2D, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new DLTPointCorrespondencePinholeCameraEstimator(null,
                     points2D, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new DLTPointCorrespondencePinholeCameraEstimator(
                     points3D, null, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
     }
     
@@ -443,15 +426,15 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getPoints2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPoints3D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        List<Point3D> points3D = new ArrayList<Point3D>(N_POINTS);
-        List<Point2D> points2D = new ArrayList<Point2D>(N_POINTS);        
+        List<Point3D> points3D = new ArrayList<>(N_POINTS);
+        List<Point2D> points2D = new ArrayList<>(N_POINTS);
         for (int i = 0; i < N_POINTS; i++) {
             points3D.add(new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -477,20 +460,20 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
         assertTrue(estimator.isReady());
         
         //Force WrongListSizesException
-        List<Point3D> wrong3D = new ArrayList<Point3D>();        
-        List<Point2D> wrong2D = new ArrayList<Point2D>();
+        List<Point3D> wrong3D = new ArrayList<>();
+        List<Point2D> wrong2D = new ArrayList<>();
         assertFalse(DLTPointCorrespondencePinholeCameraEstimator.areValidLists(
                 wrong3D, points2D));
         try {
             estimator.setLists(wrong3D, points2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         assertFalse(DLTPointCorrespondencePinholeCameraEstimator.areValidLists(
                 points3D, wrong2D));
         try {
             estimator.setLists(points3D, wrong2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         assertFalse(DLTPointCorrespondencePinholeCameraEstimator.areValidLists(
@@ -498,13 +481,13 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setLists(null, points2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertFalse(DLTPointCorrespondencePinholeCameraEstimator.areValidLists(
                 points3D, null));
         try {
             estimator.setLists(points3D, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -821,7 +804,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setMinMaxSuggestionWeight(10.0, 10.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -843,13 +826,13 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setSuggestionWeightStep(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testEstimateNoSuggestion() throws WrongListSizesException, 
         LockedException, NotReadyException, PinholeCameraEstimatorException, 
-        CameraException, NotAvailableException, RotationException {
+        CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -897,7 +880,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             //testing the case where there are more than six points without 
             //allowing an LMSE solution        
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new HomogeneousPoint3D(
@@ -1034,31 +1017,25 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             if (Math.abs(alphaEuler - estimatedAlphaEuler) <= 
                     ABSOLUTE_ERROR) {
                 validAlphaEuler = true;
-            } else if ((Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) - 
-                    Math.PI) <= ABSOLUTE_ERROR) {
-                validAlphaEuler = true;
             } else {
-                validAlphaEuler = false;
+                validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
+                        Math.PI) <= ABSOLUTE_ERROR;
             }
 
             if (Math.abs(betaEuler - estimatedBetaEuler) <= 
                     ABSOLUTE_ERROR) {
                 validBetaEuler = true;
-            } else if ((Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) - 
-                    Math.PI) <= ABSOLUTE_ERROR) {
-                validBetaEuler = true;
             } else {
-                validBetaEuler = false;
+                validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
+                        Math.PI) <= ABSOLUTE_ERROR;
             }
 
             if (Math.abs(gammaEuler - estimatedGammaEuler) <= 
                     ABSOLUTE_ERROR) {
                 validGammaEuler = true;
-            } else if ((Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) - 
-                    Math.PI) <= ABSOLUTE_ERROR) {
-                validGammaEuler = true;
             } else {
-                validGammaEuler = false;
+                validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
+                        Math.PI) <= ABSOLUTE_ERROR;
             }
             
             
@@ -1163,31 +1140,25 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             if (Math.abs(alphaEuler - estimatedAlphaEuler) <= 
                     LARGE_ABSOLUTE_ERROR) {
                 validAlphaEuler = true;
-            } else if ((Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) - 
-                    Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                validAlphaEuler = true;
             } else {
-                validAlphaEuler = false;
+                validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
+                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
             }
 
             if (Math.abs(betaEuler - estimatedBetaEuler) <= 
                     LARGE_ABSOLUTE_ERROR) {
                 validBetaEuler = true;
-            } else if ((Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) - 
-                    Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                validBetaEuler = true;
             } else {
-                validBetaEuler = false;
+                validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
+                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
             }
 
             if (Math.abs(gammaEuler - estimatedGammaEuler) <= 
                     LARGE_ABSOLUTE_ERROR) {
                 validGammaEuler = true;
-            } else if ((Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) - 
-                    Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                validGammaEuler = true;
             } else {
-                validGammaEuler = false;
+                validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
+                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
             }
             
             
@@ -1238,29 +1209,26 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             try {
                 estimatedCamera = estimator.estimate();
                 fail("PinholeCameraEstimatorException expected but not thrown");
-            } catch (PinholeCameraEstimatorException e) { }
+            } catch (PinholeCameraEstimatorException ignore) { }
             
             //Force NotReadyException
             estimator = new DLTPointCorrespondencePinholeCameraEstimator();
             try {
                 estimatedCamera = estimator.estimate();
                 fail("NotReadyException expected but not thrown");
-            } catch (NotReadyException e) { }
+            } catch (NotReadyException ignore) { }
             assertNull(estimatedCamera);            
             
             passedAtLeastOnce = true;
-            
-            if (passedAtLeastOnce) {
-                break;
-            }
+            break;
         }
         assertTrue(passedAtLeastOnce);
     }
 
     @Test
     public void testEstimateSuggestedSkewness() throws WrongListSizesException,
-            LockedException, NotReadyException, PinholeCameraEstimatorException,
-            CameraException, NotAvailableException, RotationException {
+            LockedException, NotReadyException, CameraException,
+            NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -1309,7 +1277,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             
             //testing the case where there are exactly six points
             int nPoints = N_POINTS;
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new HomogeneousPoint3D(
@@ -1407,8 +1375,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimatedSuggestedHorizontalFocalLengthEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException, RotationException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -1457,7 +1424,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             
             //testing the case where there are exactly six points
             int nPoints = N_POINTS;
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new HomogeneousPoint3D(
@@ -1558,8 +1525,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimatedSuggestedVerticalFocalLengthEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException, RotationException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -1608,7 +1574,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             
             //testing the case where there are exactly six points
             int nPoints = N_POINTS;
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new HomogeneousPoint3D(
@@ -1709,8 +1675,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedAspectRatioEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException, RotationException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -1761,7 +1726,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             
             //testing the case where there are exactly six points
             int nPoints = N_POINTS;
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new HomogeneousPoint3D(
@@ -1782,7 +1747,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
             
-            for(Point2D point2D : points2D) {
+            for (Point2D point2D : points2D) {
                 double errorX = errorRandomizer.nextDouble();
                 double errorY = errorRandomizer.nextDouble();
                 point2D.setInhomogeneousCoordinates(
@@ -1860,8 +1825,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedPrincipalPointEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException,
-            NotAvailableException, RotationException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -1912,7 +1876,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             
             //testing the case where there are exactly six points
             int nPoints = N_POINTS;
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new HomogeneousPoint3D(
@@ -1933,7 +1897,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
             
-            for(Point2D point2D : points2D) {
+            for (Point2D point2D : points2D) {
                 double errorX = errorRandomizer.nextDouble();
                 double errorY = errorRandomizer.nextDouble();
                 point2D.setInhomogeneousCoordinates(
@@ -2016,8 +1980,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedRotationEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException, RotationException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -2068,7 +2031,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             
             //testing the case where there are exactly six points
             int nPoints = N_POINTS;
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new HomogeneousPoint3D(
@@ -2174,8 +2137,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedCenterEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException, RotationException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -2224,7 +2186,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             
             //testing the case where there are exactly six points
             int nPoints = N_POINTS;
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new HomogeneousPoint3D(
@@ -2245,7 +2207,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
             
-            for(Point2D point2D : points2D) {
+            for (Point2D point2D : points2D) {
                 double errorX = errorRandomizer.nextDouble();
                 double errorY = errorRandomizer.nextDouble();
                 point2D.setInhomogeneousCoordinates(
@@ -2318,23 +2280,21 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateZeroSkewnesssZeroPrincipalPointAndEqualFocalLength() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException, RotationException {
+            CameraException, NotAvailableException {
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            double horizontalFocalLength = randomizer.nextDouble(
+            double focalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            double verticalFocalLength = horizontalFocalLength;
-            
+
             double skewness = 0.0;
             double horizontalPrincipalPoint = 0.0;
             double verticalPrincipalPoint = 0.0;
             InhomogeneousPoint2D principalPoint = new InhomogeneousPoint2D();
             
             PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                    verticalFocalLength, horizontalPrincipalPoint, 
+                    new PinholeCameraIntrinsicParameters(focalLength,
+                            focalLength, horizontalPrincipalPoint,
                     verticalPrincipalPoint, skewness);
             
             double aspectRatio = intrinsic.getAspectRatio();
@@ -2366,7 +2326,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             
             //testing the case where there are exactly six points
             int nPoints = N_POINTS;
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new HomogeneousPoint3D(
@@ -2387,7 +2347,7 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
             
-            for(Point2D point2D : points2D) {
+            for (Point2D point2D : points2D) {
                 double errorX = errorRandomizer.nextDouble();
                 double errorY = errorRandomizer.nextDouble();
                 point2D.setInhomogeneousCoordinates(
@@ -2508,17 +2468,17 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setLMSESolutionAllowed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         
         try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         
         try {
             estimator.setLists(null, null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Throwable t) {
             fail("LockedException expected but not thrown");
         }
@@ -2526,75 +2486,75 @@ public class DLTPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setPointCorrespondencesNormalized(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         
         try {
             estimator.setSuggestSkewnessValueEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedSkewnessValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestHorizontalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedHorizontalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestVerticalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedVerticalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestAspectRatioEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedAspectRatioValue(1.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestPrincipalPointEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedPrincipalPointValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestRotationEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedRotationValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestCenterEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedCenterValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMinSuggestionWeight(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMaxSuggestionWeight(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestionWeightStep(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
     }
 }

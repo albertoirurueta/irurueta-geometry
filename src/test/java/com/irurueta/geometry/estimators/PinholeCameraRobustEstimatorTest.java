@@ -1,52 +1,53 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.PinholeCameraRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 13, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.geometry.Line2D;
-import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
-import com.irurueta.geometry.Plane;
-import com.irurueta.geometry.Point2D;
-import com.irurueta.geometry.Point3D;
+import com.irurueta.geometry.*;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class PinholeCameraRobustEstimatorTest {
     
-    public PinholeCameraRobustEstimatorTest() {}
+    public PinholeCameraRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testCreateFromPoints(){
+    public void testCreateFromPoints() {
         PinholeCameraRobustEstimator estimator;
         
         //create with points
-        List<Point2D> points2D = new ArrayList<Point2D>();
-        List<Point3D> points3D = new ArrayList<Point3D>();
-        for(int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++){
+        List<Point2D> points2D = new ArrayList<>();
+        List<Point3D> points3D = new ArrayList<>();
+        for (int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
             points2D.add(Point2D.create());
             points3D.add(Point3D.create());
         }
@@ -130,16 +131,16 @@ public class PinholeCameraRobustEstimatorTest {
         PinholeCameraRobustEstimatorListener listener = new PinholeCameraRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(PinholeCameraRobustEstimator estimator) {}
+            public void onEstimateStart(PinholeCameraRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(PinholeCameraRobustEstimator estimator) {}
+            public void onEstimateEnd(PinholeCameraRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, int iteration) {}
+            public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, int iteration) { }
 
             @Override
-            public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator, float progress) {}
+            public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator, float progress) { }
         };
         
         estimator = PinholeCameraRobustEstimator.createFromPoints(listener, 
@@ -443,16 +444,16 @@ public class PinholeCameraRobustEstimatorTest {
     }
 
     @Test
-    public void testCreateFromPointsWithIntrinsic(){
+    public void testCreateFromPointsWithIntrinsic() {
         PinholeCameraIntrinsicParameters intrinsic = 
                 new PinholeCameraIntrinsicParameters();
         
         PinholeCameraRobustEstimator estimator;
         
         //create with points
-        List<Point2D> points2D = new ArrayList<Point2D>();
-        List<Point3D> points3D = new ArrayList<Point3D>();
-        for(int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++){
+        List<Point2D> points2D = new ArrayList<>();
+        List<Point3D> points3D = new ArrayList<>();
+        for (int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
             points2D.add(Point2D.create());
             points3D.add(Point3D.create());
         }
@@ -536,16 +537,16 @@ public class PinholeCameraRobustEstimatorTest {
         PinholeCameraRobustEstimatorListener listener = new PinholeCameraRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(PinholeCameraRobustEstimator estimator) {}
+            public void onEstimateStart(PinholeCameraRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(PinholeCameraRobustEstimator estimator) {}
+            public void onEstimateEnd(PinholeCameraRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, int iteration) {}
+            public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, int iteration) { }
 
             @Override
-            public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator, float progress) {}
+            public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator, float progress) { }
         };
         
         estimator = PinholeCameraRobustEstimator.createFromPoints(listener, 
@@ -854,7 +855,7 @@ public class PinholeCameraRobustEstimatorTest {
     }
 
     @Test
-    public void testCreateFromPointsWithSkewnessAndPrincipalPoint(){
+    public void testCreateFromPointsWithSkewnessAndPrincipalPoint() {
         double skewness = 0.0;
         double horizontalPrincipalPoint = 0.0;
         double verticalPrincipalPoint = 0.0;
@@ -862,9 +863,9 @@ public class PinholeCameraRobustEstimatorTest {
         PinholeCameraRobustEstimator estimator;
         
         //create with points
-        List<Point2D> points2D = new ArrayList<Point2D>();
-        List<Point3D> points3D = new ArrayList<Point3D>();
-        for(int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++){
+        List<Point2D> points2D = new ArrayList<>();
+        List<Point3D> points3D = new ArrayList<>();
+        for (int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
             points2D.add(Point2D.create());
             points3D.add(Point3D.create());
         }
@@ -953,16 +954,16 @@ public class PinholeCameraRobustEstimatorTest {
         PinholeCameraRobustEstimatorListener listener = new PinholeCameraRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(PinholeCameraRobustEstimator estimator) {}
+            public void onEstimateStart(PinholeCameraRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(PinholeCameraRobustEstimator estimator) {}
+            public void onEstimateEnd(PinholeCameraRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, int iteration) {}
+            public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, int iteration) { }
 
             @Override
-            public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator, float progress) {}
+            public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator, float progress) { }
         };
         
         estimator = PinholeCameraRobustEstimator.createFromPoints(listener, 
@@ -1285,13 +1286,13 @@ public class PinholeCameraRobustEstimatorTest {
     }
     
     @Test
-    public void testCreateFromPlanesAndLines(){
+    public void testCreateFromPlanesAndLines() {
         PinholeCameraRobustEstimator estimator;
         
         //create with planes and lines
-        List<Line2D> lines = new ArrayList<Line2D>();
-        List<Plane> planes = new ArrayList<Plane>();
-        for(int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++){
+        List<Line2D> lines = new ArrayList<>();
+        List<Plane> planes = new ArrayList<>();
+        for (int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
             lines.add(new Line2D());
             planes.add(new Plane());
         }
@@ -1375,16 +1376,16 @@ public class PinholeCameraRobustEstimatorTest {
         PinholeCameraRobustEstimatorListener listener = new PinholeCameraRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(PinholeCameraRobustEstimator estimator) {}
+            public void onEstimateStart(PinholeCameraRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(PinholeCameraRobustEstimator estimator) {}
+            public void onEstimateEnd(PinholeCameraRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, int iteration) {}
+            public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, int iteration) { }
 
             @Override
-            public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator, float progress) {}
+            public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator, float progress) { }
         };
         
         estimator = PinholeCameraRobustEstimator.createFromPlanesAndLines(

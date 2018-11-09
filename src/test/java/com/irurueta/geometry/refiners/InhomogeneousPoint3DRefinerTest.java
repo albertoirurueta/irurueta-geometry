@@ -1,18 +1,21 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.refiners.InhomogeneousPoint3DRefiner
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date April 7, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.refiners;
 
-import com.irurueta.geometry.ColinearPointsException;
-import com.irurueta.geometry.HomogeneousPoint3D;
-import com.irurueta.geometry.InhomogeneousPoint3D;
-import com.irurueta.geometry.Plane;
-import com.irurueta.geometry.Point3D;
+import com.irurueta.geometry.*;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.geometry.estimators.RANSACPoint3DRobustEstimator;
@@ -20,15 +23,13 @@ import com.irurueta.numerical.robust.InliersData;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class InhomogeneousPoint3DRefinerTest implements 
@@ -46,9 +47,6 @@ public class InhomogeneousPoint3DRefinerTest implements
     
     public static final double STD_ERROR = 100.0;
     
-    public static final int MIN_MAX_ITERATIONS = 500;
-    public static final int MAX_MAX_ITERATIONS = 5000;
-        
     public static final int PERCENTAGE_OUTLIER = 20;
     
     public static final int TIMES = 100;    
@@ -258,7 +256,7 @@ public class InhomogeneousPoint3DRefinerTest implements
         try {
             refiner.setNumInliers(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -318,7 +316,7 @@ public class InhomogeneousPoint3DRefinerTest implements
     public void testRefine() throws ColinearPointsException, LockedException, 
             NotReadyException, RobustEstimatorException, RefinerException {
         int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+        for (int t = 0; t < 2 * TIMES; t++) {
             RANSACPoint3DRobustEstimator estimator = createRobustEstimator();
             
             InhomogeneousPoint3D point = new InhomogeneousPoint3D(
@@ -374,7 +372,7 @@ public class InhomogeneousPoint3DRefinerTest implements
         int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
         GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                 new Random(), 0.0, STD_ERROR);
-        List<Plane> planesWithError = new ArrayList<Plane>();
+        List<Plane> planesWithError = new ArrayList<>();
         Plane plane, planeWithError;
         for (int i = 0; i < nPlanes; i++) {
             //get two more points(far enough to compute a plane)
@@ -457,48 +455,48 @@ public class InhomogeneousPoint3DRefinerTest implements
         try {
             refiner.setInitialEstimation(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setCovarianceKept(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.refine(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {            
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             refiner.refine();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {            
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             refiner.setInliers(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setResiduals(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setNumInliers(0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setInliersData(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSamples(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setRefinementStandardDeviation(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
     }
 }

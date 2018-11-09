@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 4, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,31 +19,28 @@ import com.irurueta.geometry.CoincidentPointsException;
 import com.irurueta.geometry.CoordinatesType;
 import com.irurueta.geometry.Point2D;
 import com.irurueta.geometry.ProjectiveTransformation2D;
-import com.irurueta.numerical.robust.MSACRobustEstimator;
-import com.irurueta.numerical.robust.MSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best projective 2D transformation for provided collections of matched
- * 2D points using MSAC algorithm
+ * 2D points using MSAC algorithm.
  */
 public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator 
-        extends PointCorrespondenceProjectiveTransformation2DRobustEstimator{
+        extends PointCorrespondenceProjectiveTransformation2DRobustEstimator {
     
     /**
      * Constant defining default threshold to determine whether points are 
      * inliers or not.
      * By defaul 1.0 is considered a good value for cases where measures are
-     * done on pixels, since typically the minimum resolution is 1 pixel
+     * done on pixels, since typically the minimum resolution is 1 pixel.
      */
     public static final double DEFAULT_THRESHOLD = 1.0;
         
     /**
      * Minimum value that can be set as threshold.
-     * Threshold must be strictly greater than 0.0
+     * Threshold must be strictly greater than 0.0.
      */
     public static final double MIN_THRESHOLD = 0.0;
     
@@ -44,14 +48,14 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
      * Threshold to determine whether points are inliers or not when testing
      * possible estimation solutions.
      * The threshold refers to the amount of error (i.e. distance) a possible 
-     * solution has on a matched pair of points
+     * solution has on a matched pair of points.
      */
     private double mThreshold;            
     
     /**
-     * Constructor
+     * Constructor.
      */    
-    public MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(){
+    public MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator() {
         super();
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -61,17 +65,17 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param inputPoints list of input points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */    
     public MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
             List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(inputPoints, outputPoints);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -79,33 +83,33 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
     /**
      * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */    
     public MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-            ProjectiveTransformation2DRobustEstimatorListener listener){
+            ProjectiveTransformation2DRobustEstimatorListener listener) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
     }
     
     /**
      * Constructor with listener and lists of points to be used to estimate a
-     * projective 2D transformation
+     * projective 2D transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param listener listener to be notified of events such as when estimation
-     * stars, ends or its progress significantly changes
+     * stars, ends or its progress significantly changes.
      * @param inputPoints list of input points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */    
     public MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener,
             List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener, inputPoints, outputPoints);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -114,11 +118,11 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
      * Returns threshold to determine whether points are inliers or not when 
      * testing possible estimation solutions.
      * The threshold refers to the amount of error (i.e. euclidean distance) a 
-     * possible solution has on a matched pair of points
+     * possible solution has on a matched pair of points.
      * @return threshold to determine whether points are inliers or not when 
-     * testing possible estimation solutions
+     * testing possible estimation solutions.
      */
-    public double getThreshold(){
+    public double getThreshold() {
         return mThreshold;
     }
     
@@ -126,40 +130,48 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
      * Sets threshold to determine whether points are inliers or not when 
      * testing possible estimation solutions.
      * Thre threshold refers to the amount of error (i.e. euclidean distance) a
-     * possible solution has on a matched pair of points
-     * @param threshold threshold to determine whether points are inliers or not
+     * possible solution has on a matched pair of points.
+     * @param threshold threshold to determine whether points are inliers or not.
      * @throws IllegalArgumentException if provided values is equal or less than 
-     * zero
+     * zero.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException{
-        if(isLocked()) throw new LockedException();
-        if(threshold <= MIN_THRESHOLD) throw new IllegalArgumentException();
+            LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (threshold <= MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         mThreshold = threshold;
     }
     
     /**
      * Estimates a projective 2D transformation using a robust estimator and
      * the best set of matched 2D point correspondences found using the robust
-     * estimator
-     * @return a projective 2D transformation
+     * estimator.
+     * @return a projective 2D transformation.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */    
     @Override
     public ProjectiveTransformation2D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         MSACRobustEstimator<ProjectiveTransformation2D> innerEstimator = 
-                new MSACRobustEstimator<ProjectiveTransformation2D>(
+                new MSACRobustEstimator<>(
                     new MSACRobustEstimatorListener<ProjectiveTransformation2D>() {
                     
             //point to be reused when computing residuals
@@ -194,13 +206,13 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
                 Point2D outputPoint3 = mOutputPoints.get(samplesIndices[2]);
                 Point2D outputPoint4 = mOutputPoints.get(samplesIndices[3]);
 
-                try{
+                try {
                     ProjectiveTransformation2D transformation = 
                         new ProjectiveTransformation2D(inputPoint1, inputPoint2, 
                         inputPoint3, inputPoint4, outputPoint1, outputPoint2, 
                         outputPoint3, outputPoint4);
                     solutions.add(transformation);
-                }catch(CoincidentPointsException e){
+                } catch (CoincidentPointsException e) {
                     //if points are coincident, no solution is added
                 }
             }
@@ -226,7 +238,7 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
             @Override
             public void onEstimateStart(
                     RobustEstimator<ProjectiveTransformation2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(
                             MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this);
                 }
@@ -235,7 +247,7 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
             @Override
             public void onEstimateEnd(
                     RobustEstimator<ProjectiveTransformation2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(
                             MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this);
                 }
@@ -245,7 +257,7 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
             public void onEstimateNextIteration(
                     RobustEstimator<ProjectiveTransformation2D> estimator, 
                     int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this, 
                             iteration);
@@ -256,7 +268,7 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
             public void onEstimateProgressChange(
                     RobustEstimator<ProjectiveTransformation2D> estimator, 
                     float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this, 
                             progress);
@@ -264,7 +276,7 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
             }
         });
         
-        try{
+        try {
             mLocked = true;
             mInliersData = null;
             innerEstimator.setConfidence(mConfidence);
@@ -274,18 +286,18 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
                     innerEstimator.estimate();
             mInliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);            
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */    
     @Override
     public RobustEstimatorMethod getMethod() {

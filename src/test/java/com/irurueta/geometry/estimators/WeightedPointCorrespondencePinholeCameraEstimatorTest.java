@@ -1,84 +1,67 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.WeightedPointCorrespondencePinholeCameraEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 27, 2013
+/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.geometry.CameraException;
-import com.irurueta.geometry.HomogeneousPoint2D;
-import com.irurueta.geometry.HomogeneousPoint3D;
-import com.irurueta.geometry.InhomogeneousPoint2D;
-import com.irurueta.geometry.InhomogeneousPoint3D;
-import com.irurueta.geometry.MatrixRotation3D;
-import com.irurueta.geometry.NotAvailableException;
-import com.irurueta.geometry.PinholeCamera;
-import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
-import com.irurueta.geometry.Point2D;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Quaternion;
-import com.irurueta.geometry.Rotation3D;
+import com.irurueta.geometry.*;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         PinholeCameraEstimatorListener {
     
     public WeightedPointCorrespondencePinholeCameraEstimatorTest() { }
+
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
+    private static final double VERY_LARGE_ABSOLUTE_ERROR = 5e-1;
     
-    public static final double ABSOLUTE_ERROR = 1e-5;
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-3;
-    public static final double VERY_LARGE_ABSOLUTE_ERROR = 5e-1;
+    private static final double MIN_RANDOM_VALUE = 50.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_RANDOM_VALUE = 50.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_FOCAL_LENGTH = 110.0;
+    private static final double MAX_FOCAL_LENGTH = 130.0;
     
-    public static final double MIN_FOCAL_LENGTH = 110.0;
-    public static final double MAX_FOCAL_LENGTH = 130.0;
+    private static final double MIN_SKEWNESS = -0.001;
+    private static final double MAX_SKEWNESS = 0.001;
     
-    public static final double MIN_SKEWNESS = -0.001;
-    public static final double MAX_SKEWNESS = 0.001;
+    private static final double MIN_PRINCIPAL_POINT = 90.0;
+    private static final double MAX_PRINCIPAL_POINT = 100.0;
     
-    public static final double MIN_PRINCIPAL_POINT = 90.0;
-    public static final double MAX_PRINCIPAL_POINT = 100.0;
+    private static final double MIN_ANGLE_DEGREES = 10.0;
+    private static final double MAX_ANGLE_DEGREES = 15.0;
     
-    public static final double MIN_ANGLE_DEGREES = 10.0;
-    public static final double MAX_ANGLE_DEGREES = 15.0;
+    private static final int INHOM_3D_COORDS = 3;
+
+    private static final int N_POINTS = 6;
+    private static final int MIN_POINTS = 7;
+    private static final int MAX_POINTS = 100;
     
-    public static final int INHOM_3D_COORDS = 3;
-        
-    public static final int MIN_NUMBER_POINTS = 10;
-    public static final int MAX_NUMBER_POINTS = 100;
+    private static final int TIMES = 100;
     
-    public static final double MIN_DEPTH = 0.5;
-    public static final double MAX_DEPTH = 100.0;
+    private static final double MIN_WEIGHT_VALUE = 0.5;
+    private static final double MAX_WEIGHT_VALUE = 1.0;
     
-    public static final int N_POINTS = 6;
-    public static final int MIN_POINTS = 7;
-    public static final int MAX_POINTS = 100;
-    
-    public static final double MIN_RANDOM_ERROR = 0.99;
-    public static final double MAX_RANDOM_ERROR = 1.01;
-    
-    public static final int TIMES = 100;
-    
-    public static final double MIN_WEIGHT_VALUE = 0.5;
-    public static final double MAX_WEIGHT_VALUE = 1.0;
-    
-    public static final double ERROR_STD = 1e-5;
+    private static final double ERROR_STD = 1e-5;
     
     private int startCount = 0;
     private int endCount = 0;
@@ -124,15 +107,15 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getPoints2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPoints3D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getWeights();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertNull(estimator.getListener());
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -191,15 +174,15 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getPoints2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPoints3D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getWeights();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getListener(), this);
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -237,8 +220,8 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         
         //testing constructor with lists
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        List<Point3D> points3D = new ArrayList<Point3D>(N_POINTS);
-        List<Point2D> points2D = new ArrayList<Point2D>(N_POINTS);        
+        List<Point3D> points3D = new ArrayList<>(N_POINTS);
+        List<Point2D> points2D = new ArrayList<>(N_POINTS);
         for (int i = 0; i < N_POINTS; i++) {
             points3D.add(new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -275,7 +258,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getWeights();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertNull(estimator.getListener());
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -311,31 +294,31 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                 PinholeCameraEstimator.DEFAULT_SUGGESTION_WEIGHT_STEP, 0.0);
         
         //Force WrongListSizesException
-        List<Point3D> wrong3D = new ArrayList<Point3D>();
-        List<Point2D> wrong2D = new ArrayList<Point2D>();
+        List<Point3D> wrong3D = new ArrayList<>();
+        List<Point2D> wrong2D = new ArrayList<>();
         estimator = null;
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     wrong3D, points2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     points3D, wrong2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     null, points2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     points3D, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -364,7 +347,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getWeights();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertEquals(estimator.getListener(), this);
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -405,24 +388,24 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     wrong3D, points2D, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     points3D, wrong2D, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     null, points2D, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     points3D, null, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
         
         
@@ -492,34 +475,34 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     wrong3D, points2D, weights);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     points3D, wrong2D, weights);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     points3D, points2D, wrongWeights);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     null, points2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     points3D, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     points3D, points2D, (double[])null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -584,34 +567,34 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     wrong3D, points2D, weights, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     points3D, wrong2D, weights, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     points3D, points2D, wrongWeights, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     null, points2D, weights, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
                     points3D, null, weights, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new WeightedPointCorrespondencePinholeCameraEstimator(
-                    points3D, points2D, (double[])null, this);
+                    points3D, points2D, null, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
     }
     
@@ -653,15 +636,15 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getPoints2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPoints3D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        List<Point3D> points3D = new ArrayList<Point3D>(N_POINTS);
-        List<Point2D> points2D = new ArrayList<Point2D>(N_POINTS);        
+        List<Point3D> points3D = new ArrayList<>(N_POINTS);
+        List<Point2D> points2D = new ArrayList<>(N_POINTS);
         for (int i = 0; i < N_POINTS; i++) {
             points3D.add(new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -686,20 +669,20 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         assertTrue(estimator.areListsAvailable());
         
         //Force WrongListSizesException
-        List<Point3D> wrong3D = new ArrayList<Point3D>();        
-        List<Point2D> wrong2D = new ArrayList<Point2D>();
+        List<Point3D> wrong3D = new ArrayList<>();
+        List<Point2D> wrong2D = new ArrayList<>();
         assertFalse(WeightedPointCorrespondencePinholeCameraEstimator.
                 areValidLists(wrong3D, points2D));
         try {
             estimator.setLists(wrong3D, points2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         assertFalse(DLTPointCorrespondencePinholeCameraEstimator.areValidLists(
                 points3D, wrong2D));
         try {
             estimator.setLists(points3D, wrong2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         assertFalse(DLTPointCorrespondencePinholeCameraEstimator.areValidLists(
@@ -707,13 +690,13 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setLists(null, points2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertFalse(DLTPointCorrespondencePinholeCameraEstimator.areValidLists(
                 points3D, null));
         try {
             estimator.setLists(points3D, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     } 
     
     @Test
@@ -731,19 +714,19 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getPoints2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPoints3D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getWeights();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        List<Point3D> points3D = new ArrayList<Point3D>(N_POINTS);
-        List<Point2D> points2D = new ArrayList<Point2D>(N_POINTS);        
+        List<Point3D> points3D = new ArrayList<>(N_POINTS);
+        List<Point2D> points2D = new ArrayList<>(N_POINTS);
         double[] weights = new double[N_POINTS];
         for (int i = 0; i < N_POINTS; i++) {
             points3D.add(new HomogeneousPoint3D(
@@ -772,27 +755,27 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         assertTrue(estimator.areWeightsAvailable());
         
         //Force WrongListSizesException
-        List<Point3D> wrong3D = new ArrayList<Point3D>();        
-        List<Point2D> wrong2D = new ArrayList<Point2D>();
+        List<Point3D> wrong3D = new ArrayList<>();
+        List<Point2D> wrong2D = new ArrayList<>();
         double[] wrongWeights = new double[1];
         assertFalse(WeightedPointCorrespondencePinholeCameraEstimator.
                 areValidListsAndWeights(wrong3D, points2D, weights));
         try {
             estimator.setListsAndWeights(wrong3D, points2D, weights);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         assertFalse(WeightedPointCorrespondencePinholeCameraEstimator.
                 areValidListsAndWeights(points3D, wrong2D, weights));
         try {
             estimator.setListsAndWeights(points3D, wrong2D, weights);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         assertFalse(WeightedPointCorrespondencePinholeCameraEstimator.
                 areValidListsAndWeights(points3D, points2D, wrongWeights));
         try {
             estimator.setListsAndWeights(points3D, points2D, wrongWeights);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         assertFalse(WeightedPointCorrespondencePinholeCameraEstimator.
@@ -800,19 +783,19 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setListsAndWeights(null, points2D, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertFalse(WeightedPointCorrespondencePinholeCameraEstimator.
                 areValidListsAndWeights(points3D, null, weights));
         try {
             estimator.setListsAndWeights(points3D, null, weights);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertFalse(WeightedPointCorrespondencePinholeCameraEstimator.
                 areValidListsAndWeights(points3D, points2D, null));
         try {
             estimator.setListsAndWeights(points3D, points2D, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }       
     
     @Test
@@ -1129,7 +1112,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setMinMaxSuggestionWeight(10.0, 10.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -1151,7 +1134,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setSuggestionWeightStep(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
@@ -1196,8 +1179,8 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
     
     @Test
     public void testEstimateNoSuggestion() throws WrongListSizesException, 
-            LockedException, NotReadyException, PinholeCameraEstimatorException, 
-            CameraException, NotAvailableException {
+            LockedException, NotReadyException, CameraException,
+            NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -1229,7 +1212,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
                     gammaEuler);
         
-            //create cxamera center
+            //create camera center
             double[] cameraCenterArray = new double[INHOM_3D_COORDS];
             randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -1244,7 +1227,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         
             //testing case where there are exactly six points
             int nPoints = N_POINTS;
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             double[] weights = new double[nPoints];
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
@@ -1253,9 +1236,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
                         MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE),
-                        //randomizer.nextDouble(MIN_RANDOM_VALUE, 
-                        //MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, 
+                        randomizer.nextDouble(MIN_RANDOM_VALUE,
                         MAX_RANDOM_VALUE));
                 points3D.add(point3D);
                 
@@ -1357,31 +1338,25 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             if (Math.abs(alphaEuler - estimatedAlphaEuler) <= 
                     LARGE_ABSOLUTE_ERROR) {
                 validAlphaEuler = true;
-            } else if ((Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) - 
-                    Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                validAlphaEuler = true;
             } else {
-                validAlphaEuler = false;
+                validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
+                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
             }
 
             if (Math.abs(betaEuler - estimatedBetaEuler) <= 
                     LARGE_ABSOLUTE_ERROR) {
                 validBetaEuler = true;
-            } else if ((Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) - 
-                    Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                validBetaEuler = true;
             } else {
-                validBetaEuler = false;
+                validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
+                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
             }
 
             if (Math.abs(gammaEuler - estimatedGammaEuler) <= 
                     LARGE_ABSOLUTE_ERROR) {
                 validGammaEuler = true;
-            } else if ((Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) - 
-                    Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                validGammaEuler = true;
             } else {
-                validGammaEuler = false;
+                validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
+                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
             }
             
             
@@ -1488,31 +1463,25 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             if (Math.abs(alphaEuler - estimatedAlphaEuler) <= 
                     VERY_LARGE_ABSOLUTE_ERROR) {
                 validAlphaEuler = true;
-            } else if ((Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) - 
-                    Math.PI) <= VERY_LARGE_ABSOLUTE_ERROR) {
-                validAlphaEuler = true;
             } else {
-                validAlphaEuler = false;
+                validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
+                        Math.PI) <= VERY_LARGE_ABSOLUTE_ERROR;
             }
 
             if (Math.abs(betaEuler - estimatedBetaEuler) <= 
                     VERY_LARGE_ABSOLUTE_ERROR) {
                 validBetaEuler = true;
-            } else if ((Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) - 
-                    Math.PI) <= VERY_LARGE_ABSOLUTE_ERROR) {
-                validBetaEuler = true;
             } else {
-                validBetaEuler = false;
+                validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
+                        Math.PI) <= VERY_LARGE_ABSOLUTE_ERROR;
             }
 
             if (Math.abs(gammaEuler - estimatedGammaEuler) <= 
                     VERY_LARGE_ABSOLUTE_ERROR) {
                 validGammaEuler = true;
-            } else if ((Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) - 
-                    Math.PI) <= VERY_LARGE_ABSOLUTE_ERROR) {
-                validGammaEuler = true;
             } else {
-                validGammaEuler = false;
+                validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
+                        Math.PI) <= VERY_LARGE_ABSOLUTE_ERROR;
             }
             
             
@@ -1526,10 +1495,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             assertTrue(cameraCenter.equals(estimatedCameraCenter, 
                     VERY_LARGE_ABSOLUTE_ERROR));            
             passedAtLeastOnce = true;
-            
-            if (passedAtLeastOnce) {
-                break;
-            }
+            break;
         }
         assertTrue(passedAtLeastOnce);
     }
@@ -1537,8 +1503,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedSkewnessEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -1570,7 +1535,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
                     gammaEuler);
         
-            //create cxamera center
+            //create camera center
             double[] cameraCenterArray = new double[INHOM_3D_COORDS];
             randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -1586,7 +1551,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             //testing case where there are exactly six points
             //testing the case where there are more than six points
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             double[] weights = new double[nPoints];
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
@@ -1685,8 +1650,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedHorizontalFocalLengthEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -1718,7 +1682,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
                     gammaEuler);
         
-            //create cxamera center
+            //create camera center
             double[] cameraCenterArray = new double[INHOM_3D_COORDS];
             randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -1734,7 +1698,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             //testing case where there are exactly six points
             //testing the case where there are more than six points
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             double[] weights = new double[nPoints];
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
@@ -1837,8 +1801,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedVerticalFocalLengthEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -1870,7 +1833,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
                     gammaEuler);
         
-            //create cxamera center
+            //create camera center
             double[] cameraCenterArray = new double[INHOM_3D_COORDS];
             randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -1886,7 +1849,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             //testing case where there are exactly six points
             //testing the case where there are more than six points
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             double[] weights = new double[nPoints];
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
@@ -1909,7 +1872,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
             
-            for(Point2D point2D : points2D) {
+            for (Point2D point2D : points2D) {
                 double errorX = errorRandomizer.nextDouble();
                 double errorY = errorRandomizer.nextDouble();
                 point2D.setInhomogeneousCoordinates(
@@ -1989,8 +1952,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedAspectRatioEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -2024,7 +1986,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
                     gammaEuler);
         
-            //create cxamera center
+            //create camera center
             double[] cameraCenterArray = new double[INHOM_3D_COORDS];
             randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -2040,7 +2002,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             //testing case where there are exactly six points
             //testing the case where there are more than six points
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             double[] weights = new double[nPoints];
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
@@ -2063,7 +2025,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
             
-            for(Point2D point2D : points2D) {
+            for (Point2D point2D : points2D) {
                 double errorX = errorRandomizer.nextDouble();
                 double errorY = errorRandomizer.nextDouble();
                 point2D.setInhomogeneousCoordinates(
@@ -2140,8 +2102,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedPrincipalPointEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -2175,7 +2136,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
                     gammaEuler);
         
-            //create cxamera center
+            //create camera center
             double[] cameraCenterArray = new double[INHOM_3D_COORDS];
             randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -2191,7 +2152,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             //testing case where there are exactly six points
             //testing the case where there are more than six points
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             double[] weights = new double[nPoints];
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
@@ -2214,7 +2175,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
             
-            for(Point2D point2D : points2D) {
+            for (Point2D point2D : points2D) {
                 double errorX = errorRandomizer.nextDouble();
                 double errorY = errorRandomizer.nextDouble();
                 point2D.setInhomogeneousCoordinates(
@@ -2297,8 +2258,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedRotationEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -2348,7 +2308,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             //testing case where there are exactly six points
             //testing the case where there are more than six points
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             double[] weights = new double[nPoints];
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
@@ -2371,7 +2331,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
             
-            for(Point2D point2D : points2D) {
+            for (Point2D point2D : points2D) {
                 double errorX = errorRandomizer.nextDouble();
                 double errorY = errorRandomizer.nextDouble();
                 point2D.setInhomogeneousCoordinates(
@@ -2456,8 +2416,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateSuggestedCenterEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
@@ -2489,7 +2448,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
                     gammaEuler);
         
-            //create cxamera center
+            //create camera center
             double[] cameraCenterArray = new double[INHOM_3D_COORDS];
             randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -2505,7 +2464,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         
             //testing the case where there are more than six points
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             double[] weights = new double[nPoints];
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
@@ -2528,7 +2487,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
             
-            for(Point2D point2D : points2D) {
+            for (Point2D point2D : points2D) {
                 double errorX = errorRandomizer.nextDouble();
                 double errorY = errorRandomizer.nextDouble();
                 point2D.setInhomogeneousCoordinates(
@@ -2601,25 +2560,23 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateZeroSkewnesssZeroPrincipalPointAndEqualFocalLength() 
             throws WrongListSizesException, LockedException, NotReadyException, 
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         
         boolean passedAtLeastOnce = false; //to account for random degeneracies
         for (int t = 0; t < TIMES; t++) {
             //create intrinsic parameters
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            double horizontalFocalLength = randomizer.nextDouble(
+            double focalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            double verticalFocalLength = horizontalFocalLength;
-            
+
             double skewness = 0.0;
             double horizontalPrincipalPoint = 0.0;
             double verticalPrincipalPoint = 0.0;
             InhomogeneousPoint2D principalPoint = new InhomogeneousPoint2D();
         
             PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                    verticalFocalLength, horizontalPrincipalPoint,
+                    new PinholeCameraIntrinsicParameters(focalLength,
+                            focalLength, horizontalPrincipalPoint,
                     verticalPrincipalPoint, skewness);            
         
             double aspectRatio = intrinsic.getAspectRatio();
@@ -2635,7 +2592,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
                     gammaEuler);
         
-            //create cxamera center
+            //create camera center
             double[] cameraCenterArray = new double[INHOM_3D_COORDS];
             randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -2651,7 +2608,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         
             //testing the case where there are more than six points
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             double[] weights = new double[nPoints];
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
@@ -2674,7 +2631,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, ERROR_STD);
             
-            for(Point2D point2D : points2D) {
+            for (Point2D point2D : points2D) {
                 double errorX = errorRandomizer.nextDouble();
                 double errorY = errorRandomizer.nextDouble();
                 point2D.setInhomogeneousCoordinates(
@@ -2797,12 +2754,12 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         
         try {
             estimator.setLists(null, null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Throwable t) {
             fail("LockedException expected but not thrown");
         }
@@ -2810,7 +2767,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setListsAndWeights(null, null, null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Throwable t) {
             fail("LockedException expected but not thrown");            
         }
@@ -2818,85 +2775,85 @@ public class WeightedPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setMaxPoints(0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         
         try {
             estimator.setPointCorrespondencesNormalized(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         
         try {
             estimator.setSortWeightsEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         
         try {
             estimator.setSuggestSkewnessValueEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedSkewnessValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestHorizontalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedHorizontalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestVerticalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedVerticalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestAspectRatioEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedAspectRatioValue(1.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestPrincipalPointEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedPrincipalPointValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestRotationEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedRotationValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestCenterEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedCenterValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMinSuggestionWeight(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMaxSuggestionWeight(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestionWeightStep(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }        
+        } catch (LockedException ignore) { }
     }
 }

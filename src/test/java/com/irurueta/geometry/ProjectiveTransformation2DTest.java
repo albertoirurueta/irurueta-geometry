@@ -1,10 +1,17 @@
 /*
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.ProjectiveTransformation2D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 30, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
@@ -12,16 +19,14 @@ import com.irurueta.algebra.*;
 import com.irurueta.algebra.NotAvailableException;
 import com.irurueta.algebra.Utils;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class ProjectiveTransformation2DTest {
 
@@ -199,6 +204,7 @@ public class ProjectiveTransformation2DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation2D((Rotation2D)null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -235,6 +241,7 @@ public class ProjectiveTransformation2DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation2D(scale, 
                     (Rotation2D)null);
             fail("NullPointerException expected but not thrown");
@@ -278,11 +285,13 @@ public class ProjectiveTransformation2DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation2D(
                     null, rotation);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation2D(params, 
                     null);
             fail("NullPointerException expected but not thrown");
@@ -327,6 +336,7 @@ public class ProjectiveTransformation2DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation2D((double[])null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -377,6 +387,7 @@ public class ProjectiveTransformation2DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation2D(A, null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -428,6 +439,7 @@ public class ProjectiveTransformation2DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation2D(scale, 
                     (double[])null);
             fail("NullPointerException expected but not thrown");
@@ -480,6 +492,7 @@ public class ProjectiveTransformation2DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation2D(rotation, 
                     null);
             fail("NullPointerException expected but not thrown");
@@ -533,6 +546,7 @@ public class ProjectiveTransformation2DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation2D(scale, rotation, 
                     null);
             fail("NullPointerException expected but not thrown");
@@ -599,6 +613,7 @@ public class ProjectiveTransformation2DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation2D(scale, rotation, 
                     null, projectiveParameters);
             fail("NullPointerException expected but not thrown");
@@ -669,6 +684,7 @@ public class ProjectiveTransformation2DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation2D(params, rotation, 
                     null);
             fail("NullPointerException expected but not thrown");
@@ -731,6 +747,7 @@ public class ProjectiveTransformation2DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new ProjectiveTransformation2D(params, rotation, 
                     null, projectiveParameters);
             fail("NullPointerException expected but not thrown");
@@ -781,6 +798,7 @@ public class ProjectiveTransformation2DTest {
         
         //Force NullPointerException
         try {
+            //noinspection all
             transformation.setT(null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -820,7 +838,8 @@ public class ProjectiveTransformation2DTest {
         //make matrix singular
         double[] row = new double[ProjectiveTransformation2D.HOM_COORDS];
         Arrays.fill(row, 0.0);
-        T.setSubmatrix(ProjectiveTransformation2D.HOM_COORDS - 1, 0, ProjectiveTransformation2D.HOM_COORDS - 1, 
+        T.setSubmatrix(ProjectiveTransformation2D.HOM_COORDS - 1,
+                0, ProjectiveTransformation2D.HOM_COORDS - 1,
                 ProjectiveTransformation2D.HOM_COORDS - 1, row);
         
         decomposer.setInputMatrix(T);
@@ -2083,7 +2102,7 @@ public class ProjectiveTransformation2DTest {
     
     @Test
     public void testTransformPolygon() throws NotEnoughVerticesException, 
-        AlgebraException {
+            AlgebraException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
@@ -2575,25 +2594,29 @@ public class ProjectiveTransformation2DTest {
                     outputPoint2, outputPoint3, outputPoint4);
         
             //check correctness of transformation by checking transformed points
-            if (!outputPoint1.equals(new InhomogeneousPoint2D(transformation2.transformAndReturnNew(inputPoint1)), LARGE_ABSOLUTE_ERROR)) {
+            if (!outputPoint1.equals(new InhomogeneousPoint2D(transformation2.transformAndReturnNew(inputPoint1)),
+                    LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
             assertTrue(outputPoint1.equals(new InhomogeneousPoint2D(
                     transformation2.transformAndReturnNew(inputPoint1)), 
                     LARGE_ABSOLUTE_ERROR));
-            if (!outputPoint2.equals(new InhomogeneousPoint2D(transformation2.transformAndReturnNew(inputPoint2)), LARGE_ABSOLUTE_ERROR)) {
+            if (!outputPoint2.equals(new InhomogeneousPoint2D(transformation2.transformAndReturnNew(inputPoint2)),
+                    LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
             assertTrue(outputPoint2.equals(new InhomogeneousPoint2D(
                     transformation2.transformAndReturnNew(inputPoint2)), 
                     LARGE_ABSOLUTE_ERROR));
-            if (!outputPoint3.equals(new InhomogeneousPoint2D(transformation2.transformAndReturnNew(inputPoint3)), LARGE_ABSOLUTE_ERROR)) {
+            if (!outputPoint3.equals(new InhomogeneousPoint2D(transformation2.transformAndReturnNew(inputPoint3)),
+                    LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
             assertTrue(outputPoint3.equals(new InhomogeneousPoint2D(
                     transformation2.transformAndReturnNew(inputPoint3)), 
                     LARGE_ABSOLUTE_ERROR));
-            if (!outputPoint4.equals(new InhomogeneousPoint2D(transformation2.transformAndReturnNew(inputPoint4)), LARGE_ABSOLUTE_ERROR)) {
+            if (!outputPoint4.equals(new InhomogeneousPoint2D(transformation2.transformAndReturnNew(inputPoint4)),
+                    LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
             assertTrue(outputPoint4.equals(new InhomogeneousPoint2D(
@@ -2616,7 +2639,7 @@ public class ProjectiveTransformation2DTest {
     
     @Test
     public void testConstructorFromPoints() throws WrongSizeException, 
-        DecomposerException, CoincidentPointsException {
+            DecomposerException, CoincidentPointsException {
         
         for (int t = 0; t < TIMES; t++) {
         
@@ -2631,7 +2654,7 @@ public class ProjectiveTransformation2DTest {
                 double norm = Utils.normF(T);
                 //normalize T to increase accuracy
                 T.multiplyByScalar(1.0 / norm);
-            } while(Utils.rank(T) < ProjectiveTransformation2D.HOM_COORDS);
+            } while (Utils.rank(T) < ProjectiveTransformation2D.HOM_COORDS);
             
             ProjectiveTransformation2D transformation1 = 
                     new ProjectiveTransformation2D(T);
@@ -2894,7 +2917,7 @@ public class ProjectiveTransformation2DTest {
                 double norm = Utils.normF(T);
                 //normalize T to increase accuracy
                 T.multiplyByScalar(1.0 / norm);
-            } while(Utils.rank(T) < ProjectiveTransformation2D.HOM_COORDS);
+            } while (Utils.rank(T) < ProjectiveTransformation2D.HOM_COORDS);
             
             ProjectiveTransformation2D transformation1 = 
                     new ProjectiveTransformation2D(T);

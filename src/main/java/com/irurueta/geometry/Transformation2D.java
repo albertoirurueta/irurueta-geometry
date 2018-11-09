@@ -76,7 +76,7 @@ public abstract class Transformation2D {
             List<Point2D> outputPoints) {
         
         outputPoints.clear();
-        for(Point2D point : inputPoints){
+        for (Point2D point : inputPoints) {
             outputPoints.add(Transformation2D.this.transformAndReturnNew(point));
         }
     }
@@ -88,7 +88,7 @@ public abstract class Transformation2D {
      */
     public void transformAndOverwritePoints(List<Point2D> points) {
         
-        for(Point2D point : points){
+        for (Point2D point : points) {
             transform(point, point);            
         }
     }
@@ -208,7 +208,7 @@ public abstract class Transformation2D {
      * Transforms provided input line using this transformation and stores the
      * result into provided output line instance.
      * @param inputLine line to be transformed.
-     * @param outputLine instance where data of transformed line will be stored
+     * @param outputLine instance where data of transformed line will be stored.
      * @throws AlgebraException Raised if transform cannot be computed because
      * of numerical instabilities.
      */
@@ -244,7 +244,7 @@ public abstract class Transformation2D {
             List<Line2D> outputLines) throws AlgebraException {
         
         outputLines.clear();
-        for(Line2D line : inputLines){
+        for (Line2D line : inputLines) {
             outputLines.add(Transformation2D.this.transformAndReturnNew(line));
         }
     }
@@ -254,12 +254,12 @@ public abstract class Transformation2D {
      * overwriting their previous values.
      * @param lines lines to be transformed and overwritten.
      * @throws AlgebraException raised if transform cannot be computed because
-     * of numerical instabilities
+     * of numerical instabilities.
      */
     public void transformAndOverwriteLines(List<Line2D> lines) 
             throws AlgebraException {
         
-        for(Line2D line : lines){
+        for (Line2D line : lines) {
             transform(line, line);            
         }
     }

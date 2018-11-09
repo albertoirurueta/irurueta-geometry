@@ -17,6 +17,7 @@
 package com.irurueta.geometry;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Subclass of Point3D defining an inhomogeneous 3D point.
@@ -32,7 +33,7 @@ import java.io.Serializable;
  * and their inhomogeneous counterparts are better suited when computing 
  * euclidean distances, etc.
  */
-public class InhomogeneousPoint3D extends Point3D implements Serializable{
+public class InhomogeneousPoint3D extends Point3D implements Serializable {
     
     /**
      * Defines the X coordinate of an inhomogeneous 2D point.
@@ -96,7 +97,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable{
      * Returns the X coordinate of the given homogeneous 3D point instance.
      * @return X coordinate.
      */
-    public double getX(){
+    public double getX() {
         return mX;
     }
     
@@ -104,7 +105,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable{
      * Sets the X coordinate of this homogeneous point.
      * @param x X coordinate.
      */
-    public void setX(double x){
+    public void setX(double x) {
         mX = x;
     }    
     
@@ -112,7 +113,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable{
      * Returns the Y coordinate of the given homogeneous 3D point instance.
      * @return Y coordinate.
      */
-    public double getY(){
+    public double getY() {
         return mY;
     }    
         
@@ -120,7 +121,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable{
      * Sets the Y coordinate of this homogeneous point.
      * @param y Y coordinate.
      */
-    public void setY(double y){
+    public void setY(double y) {
         mY = y;
     }
 
@@ -128,7 +129,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable{
      * Returns the Z coordinate of the given homogeneous 3D point instance.
      * @return Z coordinate.
      */
-    public double getZ(){
+    public double getZ() {
         return mZ;
     }    
         
@@ -136,7 +137,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable{
      * Sets the Z coordinate of this homogeneous point.
      * @param z Z coordinate.
      */
-    public void setZ(double z){
+    public void setZ(double z) {
         mZ = z;
     }
     
@@ -163,7 +164,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable{
     @Override
     public final void setCoordinates(double[] v) 
             throws IllegalArgumentException {
-        if(v.length != POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {
+        if (v.length != POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         } else {
             mX = v[0];
@@ -180,21 +181,20 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable{
     @Override
     public final void setCoordinates(Point3D point) {
         switch (point.getType()) {
-            case INHOMOGENEOUS_COORDINATES: {
+            case INHOMOGENEOUS_COORDINATES:
                 InhomogeneousPoint3D inhomPoint = (InhomogeneousPoint3D)point;
                 mX = inhomPoint.getX();
                 mY = inhomPoint.getY();
                 mZ = inhomPoint.getZ();
                 break;
-            }
+
             case HOMOGENEOUS_COORDINATES:
-            default: {
+            default:
                 HomogeneousPoint3D homPoint = (HomogeneousPoint3D)point;
                 mX = homPoint.getInhomX();
                 mY = homPoint.getInhomY();
                 mZ = homPoint.getInhomZ();
                 break;
-            }
         }
     }
     
@@ -342,14 +342,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable{
      */        
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 37 * hash + (int) (Double.doubleToLongBits(this.mX) ^ 
-                (Double.doubleToLongBits(this.mX) >>> 32));
-        hash = 37 * hash + (int) (Double.doubleToLongBits(this.mY) ^ 
-                (Double.doubleToLongBits(this.mY) >>> 32));
-        hash = 37 * hash + (int) (Double.doubleToLongBits(this.mZ) ^ 
-                (Double.doubleToLongBits(this.mZ) >>> 32));
-        return hash;
+        return Objects.hash(mX, mY, mZ);
     }
     
     /**
@@ -392,7 +385,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable{
     public boolean equals(HomogeneousPoint3D point, double threshold)
         throws IllegalArgumentException {
         
-        if(threshold < MIN_THRESHOLD) {
+        if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
         
@@ -410,7 +403,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable{
      * @return True if current point and input point are the same, false 
      * otherwise
      */    
-    public boolean equals(HomogeneousPoint3D point){
+    public boolean equals(HomogeneousPoint3D point) {
        return equals(point, DEFAULT_COMPARISON_THRESHOLD);
     }
     
@@ -429,7 +422,9 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable{
     public boolean equals(InhomogeneousPoint3D point, double threshold)
             throws IllegalArgumentException {
         
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         
         boolean dX = Math.abs(point.getX() - mX) <= threshold;
         boolean dY = Math.abs(point.getY() - mY) <= threshold;
@@ -445,7 +440,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable{
      * @return True if current point and input point are the same, false 
      * otherwise.
      */        
-    public boolean equals(InhomogeneousPoint3D point){
+    public boolean equals(InhomogeneousPoint3D point) {
         return equals(point, DEFAULT_COMPARISON_THRESHOLD);
     }
     

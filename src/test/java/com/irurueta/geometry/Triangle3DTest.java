@@ -1,63 +1,60 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.geometry.Triangle3D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.DecomposerException;
-import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.*;
 import com.irurueta.algebra.Utils;
-import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class Triangle3DTest {
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double ABSOLUTE_ERROR = 1e-8;
     
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-5;
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-5;
     
-    public static final int INHOM_COORDS = 3;
-    public static final int HOM_COORDS = 4;
+    private static final int INHOM_COORDS = 3;
     
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
     
-    public Triangle3DTest() {
-    }
+    public Triangle3DTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point3D point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
@@ -81,23 +78,23 @@ public class Triangle3DTest {
         
         //Force NullPointerException
         triangle = null;
-        try{
+        try {
             triangle = new Triangle3D(null, point2, point3);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}        
-        try{
+        } catch (NullPointerException ignore) { }
+        try {
             triangle = new Triangle3D(point1, null, point3);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
-        try{
+        } catch (NullPointerException ignore) { }
+        try {
             triangle = new Triangle3D(point1, point2, null);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
         assertNull(triangle);        
     }
     
     @Test
-    public void testGetSetVertex1(){
+    public void testGetSetVertex1() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point3D point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
@@ -132,14 +129,14 @@ public class Triangle3DTest {
         assertEquals(triangle.getVertex3(), point3);
 
         //Force NullPointerException
-        try{
+        try {
             triangle.setVertex1(null);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
     }
     
     @Test
-    public void testGetSetVertex2(){
+    public void testGetSetVertex2() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point3D point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
@@ -174,14 +171,14 @@ public class Triangle3DTest {
         assertEquals(triangle.getVertex3(), point3);
 
         //Force NullPointerException
-        try{
+        try {
             triangle.setVertex2(null);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
     }
     
     @Test
-    public void testGetSetVertex3(){
+    public void testGetSetVertex3() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point3D point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
@@ -216,14 +213,14 @@ public class Triangle3DTest {
         assertEquals(triangle.getVertex3(), vertex3);
 
         //Force NullPointerException
-        try{
+        try {
             triangle.setVertex3(null);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
     }
     
     @Test
-    public void testGetSetVertices(){
+    public void testGetSetVertices() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point3D point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
@@ -268,7 +265,7 @@ public class Triangle3DTest {
         
         //get vertices as a list
         List<Point3D> vertices = triangle.getVertices();
-        List<Point3D> vertices2 = new ArrayList<Point3D>();
+        List<Point3D> vertices2 = new ArrayList<>();
         triangle.vertices(vertices2);
         
         assertEquals(vertices.size(), Triangle2D.NUM_VERTICES);
@@ -283,23 +280,22 @@ public class Triangle3DTest {
         assertTrue(vertices2.get(2).equals(point3b, ABSOLUTE_ERROR));
         
         //Force NullPointerException
-        try{
+        try {
             triangle.setVertices(null, point2, point3);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
-        try{
+        } catch (NullPointerException ignore) { }
+        try {
             triangle.setVertices(point1, null, point3);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
-        try{
+        } catch (NullPointerException ignore) { }
+        try {
             triangle.setVertices(point1, point2, null);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
     }
     
     @Test
-    public void testAreaAndColinearPoints() throws WrongSizeException, 
-        DecomposerException{
+    public void testAreaAndColinearPoints() throws WrongSizeException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());                
         double base = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, 
@@ -325,9 +321,9 @@ public class Triangle3DTest {
         assertEquals(Math.abs(triangle.getArea()), expectedArea,
                 ABSOLUTE_ERROR);
                 
-        if(expectedArea > Triangle2D.DEFAULT_THRESHOLD){
+        if (expectedArea > Triangle2D.DEFAULT_THRESHOLD) {
             assertFalse(triangle.areVerticesColinear());
-        }else{
+        } else {
             assertTrue(triangle.areVerticesColinear());
         }
         
@@ -373,9 +369,9 @@ public class Triangle3DTest {
         assertEquals(triangle.getArea(), expectedArea,
                 ABSOLUTE_ERROR);
         
-        if(expectedArea > Triangle2D.DEFAULT_THRESHOLD){
+        if (expectedArea > Triangle2D.DEFAULT_THRESHOLD) {
             assertFalse(triangle.areVerticesColinear());
-        }else{
+        } else {
             assertTrue(triangle.areVerticesColinear());
         }
         
@@ -396,17 +392,17 @@ public class Triangle3DTest {
         assertTrue(triangle.areVerticesColinear(ABSOLUTE_ERROR));
         
         //Force IllegalArgumentException
-        try{
+        try {
             triangle.areVerticesColinear(-ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testIsInsideShortestDistanceAndIsLocus() 
-            throws CoincidentPointsException{
+            throws CoincidentPointsException {
         
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             //Test for known values
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double base = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, 
@@ -505,24 +501,24 @@ public class Triangle3DTest {
                     0.0));
         
             //Force IllegalArgumentException
-            try{
+            try {
                 triangle.isInside(point1, -ABSOLUTE_ERROR);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
-            try{
+            } catch (IllegalArgumentException ignore) { }
+            try {
                 Triangle3D.isInside(triangle, point1, - ABSOLUTE_ERROR);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
-            try{
+            } catch (IllegalArgumentException ignore) { }
+            try {
                 Triangle3D.isInside(point1, point2, point3, point1, 
                         -ABSOLUTE_ERROR);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
+            } catch (IllegalArgumentException ignore) { }
             
-            try{
+            try {
                 triangle.isLocus(point3, -ABSOLUTE_ERROR);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
+            } catch (IllegalArgumentException ignore) { }
             
             //Check point outside
             Point3D outside = new InhomogeneousPoint3D(-dist, 0.0, zValue);
@@ -665,7 +661,7 @@ public class Triangle3DTest {
     }
     
     @Test
-    public void testCenter(){
+    public void testCenter() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point3D point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
@@ -709,7 +705,7 @@ public class Triangle3DTest {
     }
     
     @Test
-    public void testPerimeter(){
+    public void testPerimeter() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point3D point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
@@ -737,9 +733,9 @@ public class Triangle3DTest {
     }
  
     @Test
-    public void testClosestPoint() throws CoincidentPointsException{
+    public void testClosestPoint() throws CoincidentPointsException {
         
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             //Test for known values
             UniformRandomizer randomizer = new UniformRandomizer(new Random());                
             double base = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, 
@@ -748,10 +744,7 @@ public class Triangle3DTest {
                     MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
             double zValue = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);            
-            double dist = randomizer.nextDouble(Triangle2D.DEFAULT_THRESHOLD, 
-                    MAX_RANDOM_VALUE);
-            double area = 0.5 * base * height;
-        
+
             //Test known and simple values
             Point3D point1 = new InhomogeneousPoint3D(0.0, 0.0, zValue);
             Point3D point2 = new InhomogeneousPoint3D(base, 0.0, zValue);
@@ -874,13 +867,13 @@ public class Triangle3DTest {
         
             Point3D linePoint = Point3D.create();
         
-            if(dist1 < dist2 && dist1 < dist3){
+            if (dist1 < dist2 && dist1 < dist3) {
                 //pick pointLine1
                 linePoint.setCoordinates(pointLine1);
-            }else if(dist2 < dist1 && dist2 < dist3){
+            } else if (dist2 < dist1 && dist2 < dist3) {
                 //pick pointLine2
                 linePoint.setCoordinates(pointLine2);
-            }else{
+            } else {
                 //pick pointLine3
                 linePoint.setCoordinates(pointLine3);
             }
@@ -900,7 +893,7 @@ public class Triangle3DTest {
     
     @Test
     public void testOrientationAndToPlane() throws ColinearPointsException, 
-        CoincidentPointsException{
+            CoincidentPointsException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -965,7 +958,7 @@ public class Triangle3DTest {
         Triangle3D.orientation(point1, point2, point3, orientation12, 
                 ABSOLUTE_ERROR);
         
-        if(Math.signum(expectedOrientation[0]) != Math.signum(orientation1[0])){
+        if (Math.signum(expectedOrientation[0]) != Math.signum(orientation1[0])) {
             //change sign of expectedOrientation, because it is equal up to
             //sign
             ArrayUtils.multiplyByScalar(expectedOrientation, -1.0, 
@@ -986,115 +979,115 @@ public class Triangle3DTest {
         assertArrayEquals(expectedOrientation, orientation12, ABSOLUTE_ERROR);
         
         //Force IllegalArgumentException
-        try{
+        try {
             triangle.getOrientation(-ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             Triangle3D.orientation(triangle, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             Triangle3D.orientation(point1, point2, point3, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             triangle.orientation(orientation8, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             Triangle3D.orientation(triangle, orientation10, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             Triangle3D.orientation(point1, point2, point3, orientation12, 
                -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}    
+        } catch (IllegalArgumentException ignore) { }
         
         double[] wrong = new double[INHOM_COORDS + 1];
-        try{
+        try {
             triangle.orientation(wrong);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             triangle.orientation(wrong, ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             Triangle3D.orientation(triangle, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             Triangle3D.orientation(triangle, wrong, ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             Triangle3D.orientation(point1, point2, point3, wrong);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             Triangle3D.orientation(point1, point2, point3, wrong, 
                     ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Force CoincidentPointsException
         triangle = new Triangle3D(point1, point1, point2);
         
-        try{
+        try {
             triangle.getOrientation();
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}
-        try{
+        } catch (CoincidentPointsException ignore) { }
+        try {
             triangle.getOrientation(ABSOLUTE_ERROR);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}
-        try{
+        } catch (CoincidentPointsException ignore) { }
+        try {
             Triangle3D.orientation(triangle);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}            
-        try{
+        } catch (CoincidentPointsException ignore) { }
+        try {
             Triangle3D.orientation(triangle, ABSOLUTE_ERROR);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}            
-        try{
+        } catch (CoincidentPointsException ignore) { }
+        try {
             Triangle3D.orientation(point1, point1, point2);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}            
-        try{
+        } catch (CoincidentPointsException ignore) { }
+        try {
             Triangle3D.orientation(point1, point1, point2, ABSOLUTE_ERROR);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}            
-        try{
+        } catch (CoincidentPointsException ignore) { }
+        try {
             triangle.orientation(orientation7);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}            
-        try{
+        } catch (CoincidentPointsException ignore) { }
+        try {
             triangle.orientation(orientation8, ABSOLUTE_ERROR);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}        
-        try{
+        } catch (CoincidentPointsException ignore) { }
+        try {
             Triangle3D.orientation(triangle, orientation9);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}            
-        try{
+        } catch (CoincidentPointsException ignore) { }
+        try {
             Triangle3D.orientation(triangle, orientation10, ABSOLUTE_ERROR);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}
-        try{
+        } catch (CoincidentPointsException ignore) { }
+        try {
             Triangle3D.orientation(point1, point1, point2, orientation11);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}        
-        try{
+        } catch (CoincidentPointsException ignore) { }
+        try {
             Triangle3D.orientation(point1, point1, point2, orientation12, 
                 ABSOLUTE_ERROR);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}
+        } catch (CoincidentPointsException ignore) { }
     }
     
     @Test
-    public void testGetAngleBetweenTriangles() throws CoincidentPointsException{
+    public void testGetAngleBetweenTriangles() throws CoincidentPointsException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point3D point1a = new InhomogeneousPoint3D(randomizer.nextDouble(

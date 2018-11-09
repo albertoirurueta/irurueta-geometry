@@ -1,15 +1,23 @@
 /*
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.Transformation3D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 25, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +30,7 @@ public abstract class Transformation3D {
     /**
      * Empty constructor.
      */
-    public Transformation3D(){ }
+    public Transformation3D() { }
     
     /**
      * Transforms provided point using this transformation and returns a new 
@@ -111,10 +119,10 @@ public abstract class Transformation3D {
     
     /**
      * Transforms and updates provided quadric.
-     * @param quadric quadric to be transformed
+     * @param quadric quadric to be transformed.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      * the resulting quadric matrix is not considered to be symmetric.
-     * @throws AlgebraException raised if transform cannot be computed becauseof
+     * @throws AlgebraException raised if transform cannot be computed because of
      * numerical instabilities.
      */
     public void transform(Quadric quadric) throws NonSymmetricMatrixException,
@@ -130,7 +138,7 @@ public abstract class Transformation3D {
      * stored.
      * @throws NonSymmetricMatrixException raised if due to numerical precision
      * the resulting output quadric matrix is not considered to be symmetric.
-     * @throws AlgebraException raised if transform cannot be computed becauseof
+     * @throws AlgebraException raised if transform cannot be computed because of
      * numerical instabilities.
      */
     public abstract void transform(Quadric inputQuadric, Quadric outputQuadric)
@@ -242,7 +250,7 @@ public abstract class Transformation3D {
      * calling this method.
      * @param inputPlanes planes to be transformed.
      * @param outputPlanes transformed planes.
-     * @throws AlgebraException taised if transform cannot be computed because 
+     * @throws AlgebraException raised if transform cannot be computed because
      * of numerical instabilities.
      */
     public void transformPlanes(List<Plane> inputPlanes,
@@ -258,7 +266,7 @@ public abstract class Transformation3D {
      * Transforms provided list of planes using this transformation and
      * overwriting their previous values.
      * @param planes planes to be transformed and overwritten.
-     * @throws AlgebraException taised if transform cannot be computed because 
+     * @throws AlgebraException raised if transform cannot be computed because
      * of numerical instabilities.
      */
     public void transformAndOverwritePlanes(List<Plane> planes) 
@@ -348,7 +356,7 @@ public abstract class Transformation3D {
      */
     public void transformLines(List<Line3D> inputLines, 
             List<Line3D> outputLines) throws CoincidentPlanesException, 
-            AlgebraException{
+            AlgebraException {
         
         outputLines.clear();
         for (Line3D line : inputLines) {
@@ -382,9 +390,9 @@ public abstract class Transformation3D {
     public Polygon3D transformAndReturnNew(Polygon3D inputPolygon){
         List<Point3D> outVertices = transformPointsAndReturnNew(
                 inputPolygon.getVertices());
-        try{
+        try {
             return new Polygon3D(outVertices);
-        }catch(NotEnoughVerticesException ignore){
+        } catch (NotEnoughVerticesException ignore) {
             //this will never happen because all existing polygons have enough
             //vertices
             return null;
@@ -422,7 +430,7 @@ public abstract class Transformation3D {
      * @param inputTriangle triangle to be transformed.
      * @return a new transformed triangle.
      */
-    public Triangle3D transformAndReturnNew(Triangle3D inputTriangle){
+    public Triangle3D transformAndReturnNew(Triangle3D inputTriangle) {
         Point3D vertex1 = transformAndReturnNew(inputTriangle.getVertex1());
         Point3D vertex2 = transformAndReturnNew(inputTriangle.getVertex2());
         Point3D vertex3 = transformAndReturnNew(inputTriangle.getVertex3());
@@ -444,7 +452,7 @@ public abstract class Transformation3D {
      * @param outputTriangle instance where transformed triangle data will be
      * stored.
      */
-    public void transform(Triangle3D inputTriangle, Triangle3D outputTriangle){
+    public void transform(Triangle3D inputTriangle, Triangle3D outputTriangle) {
         transform(inputTriangle.getVertex1(), outputTriangle.getVertex1());
         transform(inputTriangle.getVertex2(), outputTriangle.getVertex2());
         transform(inputTriangle.getVertex3(), outputTriangle.getVertex3());
@@ -462,7 +470,7 @@ public abstract class Transformation3D {
      * Represents this transformation as a 4x4 matrix and stores the result in
      * provided instance.
      * @param m instance where transformation matrix will be stored.
-     * @throws IllegalArgumentException taised if provided instance is not a 3x3
+     * @throws IllegalArgumentException raised if provided instance is not a 3x3
      * matrix.
      */
     public abstract void asMatrix(Matrix m) throws IllegalArgumentException;

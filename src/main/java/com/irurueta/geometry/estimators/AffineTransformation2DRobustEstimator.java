@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.AffineTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 8, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -15,6 +22,7 @@ import com.irurueta.geometry.Point2D;
 import com.irurueta.numerical.robust.InliersData;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
 import java.util.List;
 
 /**
@@ -412,7 +420,7 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromPoints(
             List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException{
+            RobustEstimatorMethod method) throws IllegalArgumentException {
         return PointCorrespondenceAffineTransformation2DRobustEstimator.create(
                 inputPoints, outputPoints, method);
     }            
@@ -435,7 +443,7 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromPoints(
             AffineTransformation2DRobustEstimatorListener listener, 
             List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException{
+            RobustEstimatorMethod method) throws IllegalArgumentException {
         return PointCorrespondenceAffineTransformation2DRobustEstimator.create(
                 listener, inputPoints, outputPoints, method);
     }            
@@ -458,7 +466,7 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromPoints(
             List<Point2D> inputPoints, List<Point2D> outputPoints, 
             double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return PointCorrespondenceAffineTransformation2DRobustEstimator.create(
                 inputPoints, outputPoints, qualityScores, method);
     }            
@@ -484,7 +492,7 @@ public abstract class AffineTransformation2DRobustEstimator {
             AffineTransformation2DRobustEstimatorListener listener, 
             List<Point2D> inputPoints, List<Point2D> outputPoints, 
             double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return PointCorrespondenceAffineTransformation2DRobustEstimator.create(
                 listener, inputPoints, outputPoints, qualityScores, method);
     }            
@@ -502,7 +510,7 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromPoints(
             List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return PointCorrespondenceAffineTransformation2DRobustEstimator.
                 create(inputPoints, outputPoints);
     }            
@@ -523,7 +531,7 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromPoints(
             AffineTransformation2DRobustEstimatorListener listener, 
             List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return PointCorrespondenceAffineTransformation2DRobustEstimator.create(
                 listener, inputPoints, outputPoints);
     }            
@@ -543,7 +551,7 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromPoints(
             List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         return PointCorrespondenceAffineTransformation2DRobustEstimator.create(
                 inputPoints, outputPoints, qualityScores);
     }            
@@ -566,7 +574,7 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromPoints(
             AffineTransformation2DRobustEstimatorListener listener, 
             List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         return PointCorrespondenceAffineTransformation2DRobustEstimator.create(
                 listener, inputPoints, outputPoints, qualityScores);
     }     
@@ -586,7 +594,7 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromLines(
             List<Line2D> inputLines, List<Line2D> outputLines,
-            RobustEstimatorMethod method) throws IllegalArgumentException{
+            RobustEstimatorMethod method) throws IllegalArgumentException {
         return LineCorrespondenceAffineTransformation2DRobustEstimator.create(
                 inputLines, outputLines, method);
     }
@@ -609,7 +617,7 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromLines(
             AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines,
-            RobustEstimatorMethod method) throws IllegalArgumentException{
+            RobustEstimatorMethod method) throws IllegalArgumentException {
         return LineCorrespondenceAffineTransformation2DRobustEstimator.create(
                 listener, inputLines, outputLines, method);
     }
@@ -632,7 +640,7 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromLines(
             List<Line2D> inputLines, List<Line2D> outputLines,
             double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return LineCorrespondenceAffineTransformation2DRobustEstimator.create(
                 inputLines, outputLines, qualityScores, method);
     }
@@ -658,7 +666,7 @@ public abstract class AffineTransformation2DRobustEstimator {
             AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines,
             double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return LineCorrespondenceAffineTransformation2DRobustEstimator.create(
                 listener, inputLines, outputLines, qualityScores, method);
     }
@@ -676,7 +684,7 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromLines(
             List<Line2D> inputLines, List<Line2D> outputLines)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return LineCorrespondenceAffineTransformation2DRobustEstimator.create(
                 inputLines, outputLines);
     }
@@ -697,7 +705,7 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromLines(
             AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return LineCorrespondenceAffineTransformation2DRobustEstimator.create(
                 listener, inputLines, outputLines);
     }
@@ -717,7 +725,7 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromLines(
             List<Line2D> inputLines, List<Line2D> outputLines,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         return LineCorrespondenceAffineTransformation2DRobustEstimator.create(
                 inputLines, outputLines, qualityScores);
     }
@@ -740,7 +748,7 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromLines(
             AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         return LineCorrespondenceAffineTransformation2DRobustEstimator.create(
                 listener, inputLines, outputLines, qualityScores);
     } 

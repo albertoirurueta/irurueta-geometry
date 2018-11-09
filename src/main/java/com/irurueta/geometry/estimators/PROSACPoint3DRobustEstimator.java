@@ -1,26 +1,30 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.PROSACPoint3DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 2, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.NoIntersectionException;
 import com.irurueta.geometry.Plane;
 import com.irurueta.geometry.Point3D;
-import com.irurueta.numerical.robust.PROSACRobustEstimator;
-import com.irurueta.numerical.robust.PROSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best 3D point for provided collection of 3D planes using PROSAC
- * algorithm
+ * algorithm.
  */
 public class PROSACPoint3DRobustEstimator extends Point3DRobustEstimator {
     
@@ -58,7 +62,7 @@ public class PROSACPoint3DRobustEstimator extends Point3DRobustEstimator {
     
     /**
      * Quality scores corresponding to each provided point.
-     * The larger the score value the betther the quality of the sample.
+     * The larger the score value the better the quality of the sample.
      */
     private double[] mQualityScores;   
     
@@ -242,7 +246,7 @@ public class PROSACPoint3DRobustEstimator extends Point3DRobustEstimator {
     
     /**
      * Returns quality scores corresponding to each provided plane.
-     * The larger the score value the betther the quality of the sampled plane.
+     * The larger the score value the better the quality of the sampled plane.
      * @return quality scores corresponding to each plane.
      */
     @Override
@@ -348,7 +352,7 @@ public class PROSACPoint3DRobustEstimator extends Point3DRobustEstimator {
         }
         
         PROSACRobustEstimator<Point3D> innerEstimator =
-                new PROSACRobustEstimator<Point3D>(
+                new PROSACRobustEstimator<>(
                         new PROSACRobustEstimatorListener<Point3D>() {
 
             @Override
@@ -453,8 +457,8 @@ public class PROSACPoint3DRobustEstimator extends Point3DRobustEstimator {
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
@@ -479,10 +483,10 @@ public class PROSACPoint3DRobustEstimator extends Point3DRobustEstimator {
     /**
      * Sets quality scores corresponding to each provided line.
      * This method is used internally and does not check whether instance is
-     * locked or not
-     * @param qualityScores quality scores to be set
+     * locked or not.
+     * @param qualityScores quality scores to be set.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE
+     * smaller than MINIMUM_SIZE.
      */
     private void internalSetQualityScores(double[] qualityScores) 
             throws IllegalArgumentException {

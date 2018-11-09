@@ -1,43 +1,42 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.InvalidPinholeCameraIntrinsicParametersException
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 5, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.*;
+
+import static org.junit.Assert.assertNotNull;
 
 public class InvalidPinholeCameraIntrinsicParametersExceptionTest {
     
-    public InvalidPinholeCameraIntrinsicParametersExceptionTest() {
-    }
+    public InvalidPinholeCameraIntrinsicParametersExceptionTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         InvalidPinholeCameraIntrinsicParametersException ex;
         
         ex = new InvalidPinholeCameraIntrinsicParametersException();
@@ -54,9 +53,4 @@ public class InvalidPinholeCameraIntrinsicParametersExceptionTest {
                 new Exception());
         assertNotNull(ex);
     }
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
 }

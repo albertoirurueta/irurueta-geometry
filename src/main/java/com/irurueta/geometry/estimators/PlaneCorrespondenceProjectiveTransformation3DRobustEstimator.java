@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 4, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,19 +19,20 @@ import com.irurueta.geometry.Plane;
 import com.irurueta.geometry.ProjectiveTransformation3D;
 import com.irurueta.geometry.refiners.PlaneCorrespondenceProjectiveTransformation3DRefiner;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
 import java.util.List;
 
 /**
  * This is an abstract class for algorithms to robustly find the best projective
  * 3D transformation for collections of matching planes.
  * Implementations of this class should be able to detect and discard outliers
- * in order to find the best solution
+ * in order to find the best solution.
  */
 public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimator 
-        extends ProjectiveTransformation3DRobustEstimator{
+        extends ProjectiveTransformation3DRobustEstimator {
     
     /**
-     * Default robust estimator method when none is provided
+     * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
             RobustEstimatorMethod.PROMedS;
@@ -34,7 +42,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * Each line in the list of input lines must be matched with the
      * corresponding line in the list of output lines located at the same
      * position. Hence, both input lines and output lines must have the
-     * same size, and their size must be greater or equal than MINIMUM_SIZE
+     * same size, and their size must be greater or equal than MINIMUM_SIZE.
      */
     protected List<Plane> mInputPlanes;
     
@@ -43,14 +51,14 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * Each point in the list of output lines must be matched with the
      * corresponding line in the list of input lines located at the same
      * position. Hence, both input lines and output lines must have the
-     * same size, and their size must be greater or equal than MINIMUM_SIZE
+     * same size, and their size must be greater or equal than MINIMUM_SIZE.
      */
     protected List<Plane> mOutputPlanes;
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public PlaneCorrespondenceProjectiveTransformation3DRobustEstimator(){
+    public PlaneCorrespondenceProjectiveTransformation3DRobustEstimator() {
         super();
     }
     
@@ -59,17 +67,17 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * transformation.
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output planes ot be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super();
         internalSetPlanes(inputPlanes, outputPlanes);
     }
@@ -77,10 +85,10 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
     /**
      * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
     public PlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-            ProjectiveTransformation3DRobustEstimatorListener listener){
+            ProjectiveTransformation3DRobustEstimatorListener listener) {
         super(listener);
     }
     
@@ -89,20 +97,20 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * projective 3D tranformation.
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param listener listener to be notified of events such as when estimation 
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener);
         internalSetPlanes(inputPlanes, outputPlanes);
     }
@@ -115,9 +123,9 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * position. Hence, both input planes and output planes must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE
      * @return list of input planes to be used to estimate an affine 3D
-     * transformation
+     * transformation.
      */
-    public List<Plane> getInputPlanes(){
+    public List<Plane> getInputPlanes() {
         return mInputPlanes;
     }
     
@@ -127,11 +135,11 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * Each plane in the list of output planes must be matched with the
      * corresponding plane in the list of input planes located at the same
      * position. Hence, both input planes and output planes must have the same
-     * size, and their size must be greater or equal than MINIMUM_SIZE
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
      * @return list of output planes to be used to estimate a projective 3D
-     * transformation
+     * transformation.
      */
-    public List<Plane> getOutputPlanes(){
+    public List<Plane> getOutputPlanes() {
         return mOutputPlanes;
     }
     
@@ -140,20 +148,22 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * transformation.
      * Planes in the list located at the same position are considered to be 
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      * @throws LockedException if estimator is locked because a computation is
-     * already in progress
+     * already in progress.
      */
     public final void setPlanes(List<Plane> inputPlanes, 
             List<Plane> outputPlanes) throws IllegalArgumentException,
-            LockedException{
-        if(isLocked()) throw new LockedException();
+            LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetPlanes(inputPlanes, outputPlanes);
     }
     
@@ -161,10 +171,10 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * Indicates if estimator is ready to start the projective 3D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched planes) are provided
-     * and a minimum of MINIMUM_SIZE lines are available
-     * @return true if estimator is ready, false otherwise
+     * and a minimum of MINIMUM_SIZE lines are available.
+     * @return true if estimator is ready, false otherwise.
      */
-    public boolean isReady(){
+    public boolean isReady() {
         return mInputPlanes != null && mOutputPlanes != null &&
                 mInputPlanes.size() == mOutputPlanes.size() &&
                 mInputPlanes.size() >= MINIMUM_SIZE;
@@ -172,12 +182,12 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
     
     /**
      * Returns quality scores corresponding to each pair of matched planes.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      * This implementation always returns null.
      * Subclasses using quality scores must implement proper behaviour.
-     * @return quality scores corresponding to each pair of matched points
+     * @return quality scores corresponding to each pair of matched points.
      */
-    public double[] getQualityScores(){
+    public double[] getQualityScores() {
         return null;
     }    
     
@@ -187,25 +197,25 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * This implementation makes no action.
      * Subclasses using quality scores must implement proper behaviour.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points
+     * points.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples)
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException{}        
+            IllegalArgumentException { }
     
     /**
      * Creates a projective 3D transformation estimator based on 3D plane
-     * correspondences an using provided robust estimator method
+     * correspondences an using provided robust estimator method.
      * @param method method of a robust estimator algorithm to estimate
-     * best projective 3D transformation
-     * @return an instance of projective 3D transformation estimator
+     * best projective 3D transformation.
+     * @return an instance of projective 3D transformation estimator.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
-            create(RobustEstimatorMethod method){
-        switch(method){
+            create(RobustEstimatorMethod method) {
+        switch (method) {
             case LMedS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
             case MSAC:
@@ -222,21 +232,21 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             
     /**
      * Creates a projective 3D transformation estimator based on 3D plane
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param inputPlanes list of input planes to be used to estimate a
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param method method of a robust estimator algorithm to estimate
-     * best projective 3D transformation
-     * @return an instance of projective 3D transformation estimator
+     * best projective 3D transformation.
+     * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(List<Plane> inputPlanes, List<Plane> outputPlanes,
-            RobustEstimatorMethod method) throws IllegalArgumentException{
-        switch(method){
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+        switch (method) {
             case LMedS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes);
@@ -258,17 +268,17 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             
     /**
      * Creates a projective 3D transformation estimator based on 3D plane
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param method method of a robust estimator algorithm to estimate best
-     * projective 3D transformation
-     * @return an instance of projective 3D transformation estimator
+     * projective 3D transformation.
+     * @return an instance of projective 3D transformation estimator.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
-            RobustEstimatorMethod method){
-        switch(method){
+            RobustEstimatorMethod method) {
+        switch (method) {
             case LMedS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener);
@@ -290,24 +300,24 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             
     /**
      * Creates a projective 3D transformation estimator based on 3D line
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputPlanes list of input lines to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output lines to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param method method of a robust estimator algorithm to estimate best
-     * projective 3D transformation
-     * @return an instance of projective 3D transformation estimator
+     * projective 3D transformation.
+     * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            RobustEstimatorMethod method) throws IllegalArgumentException{
-        switch(method){
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+        switch (method) {
             case LMedS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes);
@@ -329,16 +339,16 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             
     /**
      * Creates a projective 3D transformation estimator based on 3D plane
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * planes.
      * @param method method of a robust estimator algorithm to estimate best
-     * projective 3D transformation
-     * @return an instance of projective 3D transformation estimator
+     * projective 3D transformation.
+     * @return an instance of projective 3D transformation estimator.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
-            create(double[] qualityScores, RobustEstimatorMethod method){
-        switch(method){
+            create(double[] qualityScores, RobustEstimatorMethod method) {
+        switch (method) {
             case LMedS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
             case MSAC:
@@ -357,24 +367,24 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             
     /**
      * Creates a projective 3D transformation estimator based on plane
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param inputPlanes list of input planes to be used to estimate a
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      * planes.
      * @param method method of a robust estimator algorithm to estimate best
-     * projective 3D transformation
-     * @return an instance of projective 3D transformation estimator
+     * projective 3D transformation.
+     * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(List<Plane> inputPlanes, List<Plane> outputPlanes,
             double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException{
-        switch(method){
+            throws IllegalArgumentException {
+        switch (method) {
             case LMedS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         inputPlanes, outputPlanes);
@@ -396,19 +406,19 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             
     /**
      * Creates a projective 3D transformation estimator based on plane
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
      * lines.
      * @param method method of a robust estimator algorithm to estimate best
-     * projective 3D transformation
-     * @return an instance of projective 3D transformation estimator
+     * projective 3D transformation.
+     * @return an instance of projective 3D transformation estimator.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
-            double[] qualityScores, RobustEstimatorMethod method){
-        switch(method){
+            double[] qualityScores, RobustEstimatorMethod method) {
+        switch (method) {
             case LMedS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener);
@@ -430,27 +440,27 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             
     /**
      * Creates a projective 3D transformation estimator based on plane
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      * planes.
      * @param method method of a robust estimator algorithm to estimate best
-     * projective 3D transformation
-     * @return an instance of projective 3D transformation estimator
+     * projective 3D transformation.
+     * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes,
             double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException{
-        switch(method){
+            throws IllegalArgumentException {
+        switch (method) {
             case LMedS:
                 return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                         listener, inputPlanes, outputPlanes);
@@ -472,130 +482,130 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
     
     /**
      * Creates a projective 3D transformation estimator based on plane
-     * correspondences and using default robust estimator method
-     * @return an instance of projective 3D transformation estimator
+     * correspondences and using default robust estimator method.
+     * @return an instance of projective 3D transformation estimator.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
-            create(){
+            create() {
         return create(DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates a projective 3D transformation estimator based on plane
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param inputPlanes list of input planes to be used to estimate a
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a
-     * projective 3D transformation
-     * @return an instance of projective 3D transformation estimator
+     * projective 3D transformation.
+     * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(List<Plane> inputPlanes, List<Plane> outputPlanes)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return create(inputPlanes, outputPlanes, DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates a projective 3D transformation estimator based on plane
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
-     * @return an instance of projective 3D transformation estimator
+     * starts, ends or its progress significantly changes.
+     * @return an instance of projective 3D transformation estimator.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
-            create(ProjectiveTransformation3DRobustEstimatorListener listener){
+            create(ProjectiveTransformation3DRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates a projective 3D transformation estimator based on plane
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation
-     * @return an instance of projective 3D transformation estimator
+     * projective 3D transformation.
+     * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return create(listener, inputPlanes, outputPlanes, 
                 DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates an projective 3D transformation estimator based on plane
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param qualityScores quality scores corresponding to each pair of matched
      * planes.
-     * @return an instance of projective 3D transformation estimator 
+     * @return an instance of projective 3D transformation estimator.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
-            create(double[] qualityScores){
+            create(double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates a projective 3D transformation estimator based on 3D line
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      * planes.
-     * @return an instance of projective 3D transformation estimator
+     * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         return create(inputPlanes, outputPlanes, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates a projective 3D transformation estimator based on 3D line
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched
      * points.
-     * @return an instance of projective 3D transformation estimator
+     * @return an instance of projective 3D transformation estimator.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
-            double[] qualityScores){
+            double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates a projective 3D transformation estimator based on plane
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched
      * lines.
-     * @return an instance of projective 3D transformation estimator
+     * @return an instance of projective 3D transformation estimator.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         return create(listener, inputPlanes, outputPlanes, qualityScores,
                 DEFAULT_ROBUST_METHOD);
     }
@@ -605,18 +615,20 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * projective 3D transformation.
      * This method does not check whether estimator is locked or not
      * @param inputPlanes list of input planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @throws IllegalArgumentException if provided lists of lines don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetPlanes(List<Plane> inputPlanes, 
-            List<Plane> outputPlanes) throws IllegalArgumentException{
-        if(inputPlanes.size() < MINIMUM_SIZE) 
+            List<Plane> outputPlanes) throws IllegalArgumentException {
+        if (inputPlanes.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
-        if(inputPlanes.size() != outputPlanes.size())
+        }
+        if (inputPlanes.size() != outputPlanes.size()) {
             throw new IllegalArgumentException();
+        }
         mInputPlanes = inputPlanes;
         mOutputPlanes = outputPlanes;
     }
@@ -629,13 +641,13 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * A residual of 1 indicates that dot product was 0 and lines were 
      * orthogonal.
      * If dot product was -1, then although their director vectors are opposed,
-     * lines are considered equal, since sign changes are not taken into account
-     * @param plane originally sampled output plane
+     * lines are considered equal, since sign changes are not taken into account.
+     * @param plane originally sampled output plane.
      * @param transformedPlane estimated output plane obtained after using 
-     * estimated transformation
-     * @return computed residual
+     * estimated transformation.
+     * @return computed residual.
      */
-    protected static double getResidual(Plane plane, Plane transformedPlane){
+    protected static double getResidual(Plane plane, Plane transformedPlane) {
         plane.normalize();
         transformedPlane.normalize();
         

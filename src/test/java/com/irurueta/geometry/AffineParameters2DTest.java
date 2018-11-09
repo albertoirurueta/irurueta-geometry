@@ -1,54 +1,54 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.AffineParameters2D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 28, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class AffineParameters2DTest {
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final int INHOM_COORDS = 2;
+    private static final int INHOM_COORDS = 2;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double ABSOLUTE_ERROR = 1e-8;
     
-    public AffineParameters2DTest() {
-    }
+    public AffineParameters2DTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testConstructors() throws WrongSizeException{
+    public void testConstructors() throws WrongSizeException {
         //Test empty constructor
         AffineParameters2D params = new AffineParameters2D();
         
@@ -111,18 +111,18 @@ public class AffineParameters2DTest {
         //Force IllegalArgumentException (invalid size)
         Matrix badM1 = new Matrix(INHOM_COORDS + 1, INHOM_COORDS + 1);
         params = null;
-        try{
+        try {
             params = new AffineParameters2D(badM1);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Force IllegalArgumentException (non upper triangular matrix
         Matrix badM2 = new Matrix(INHOM_COORDS, INHOM_COORDS);
         badM2.setElementAt(1, 0, 1.0);
-        try{
+        try {
             params = new AffineParameters2D(badM2);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(params);
         
         //Test constructor with matrix and threshold
@@ -136,28 +136,28 @@ public class AffineParameters2DTest {
         
         //Force IllegalArgumentException (invalid size)
         params = null;
-        try{
+        try {
             params = new AffineParameters2D(badM1, threshold);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Force IllegalArgumentException (non upper triangular matrix)
         badM2.setElementAt(1, 0, threshold + 1.0);
-        try{
+        try {
             params = new AffineParameters2D(badM2);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Force IllegalArgumentException (with negative threshold)
-        try{
+        try {
             params = new AffineParameters2D(m, -threshold);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(params);
     }
     
     @Test
-    public void testGetSetScaleX(){
+    public void testGetSetScaleX() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double scaleX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -175,7 +175,7 @@ public class AffineParameters2DTest {
     }
     
     @Test
-    public void testGetSetScaleY(){
+    public void testGetSetScaleY() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double scaleY = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -193,7 +193,7 @@ public class AffineParameters2DTest {
     }
     
     @Test
-    public void testSetScale(){
+    public void testSetScale() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -213,7 +213,7 @@ public class AffineParameters2DTest {
     }
     
     @Test
-    public void testGetSetSkewness(){
+    public void testGetSetSkewness() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double skewness = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -232,7 +232,7 @@ public class AffineParameters2DTest {
     }
     
     @Test
-    public void testAsMatrix() throws WrongSizeException{
+    public void testAsMatrix() throws WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double scaleX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -259,7 +259,7 @@ public class AffineParameters2DTest {
     }
     
     @Test
-    public void testFromMatrixAndIsValidMatrix() throws WrongSizeException{
+    public void testFromMatrixAndIsValidMatrix() throws WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());        
         double scaleX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE);
@@ -281,10 +281,10 @@ public class AffineParameters2DTest {
         
         //Force IllegalArgumentException when checking validity (negative 
         //threshold)
-        try{
+        try {
             AffineParameters2D.isValidMatrix(m, -threshold);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
                 
         AffineParameters2D params = new AffineParameters2D();        
         
@@ -298,18 +298,18 @@ public class AffineParameters2DTest {
         
         //Force IllegalArgumentException (invalid size)
         Matrix badM1 = new Matrix(INHOM_COORDS + 1, INHOM_COORDS + 1);
-        try{
+        try {
             params.fromMatrix(badM1);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Force IllegalArgumentException (non upper triangular matrix
         Matrix badM2 = new Matrix(INHOM_COORDS, INHOM_COORDS);
         badM2.setElementAt(1, 0, 1.0);
-        try{
+        try {
             params.fromMatrix(badM2);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Test from matrix with threshold
         params.fromMatrix(m, threshold);
@@ -320,22 +320,22 @@ public class AffineParameters2DTest {
         assertEquals(params.getSkewness(), skewness, 0.0);
         
         //Force IllegalArgumentException (invalid size)
-        try{
+        try {
             params.fromMatrix(badM1, threshold);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Force IllegalArgumentException (non upper triangular matrix
         badM2.setElementAt(1, 0, threshold + 1.0);
-        try{
+        try {
             params.fromMatrix(badM2, threshold);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Force IllegalArgumentException (with negative threshold)
-        try{
+        try {
             params.fromMatrix(m, -threshold);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }
 }

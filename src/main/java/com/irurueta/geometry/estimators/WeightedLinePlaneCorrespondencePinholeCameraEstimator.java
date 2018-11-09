@@ -1,7 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.WeightedLinePlaneCorrespondencePinholeCameraEstimator
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -13,57 +23,53 @@ import com.irurueta.geometry.NotAvailableException;
 import com.irurueta.geometry.PinholeCamera;
 import com.irurueta.geometry.Plane;
 import com.irurueta.numerical.robust.WeightSelection;
+
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * This class implements pinhole camera estimator using a weighted algorithm and
- * point correspondences
+ * point correspondences.
  */
 public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
-        LinePlaneCorrespondencePinholeCameraEstimator{
+        LinePlaneCorrespondencePinholeCameraEstimator {
 
     /**
-     * Minimum number of required equations to estimate a pinhole camera
-     */
-    public static final int MIN_NUMBER_OF_EQUATIONS = 11;
-    
-    /**
-     * Default number of correspondences to be weighted and taken into account
+     * Default number of correspondences to be weighted and taken into account.
      */
     public static final int DEFAULT_MAX_CORRESPONDENCES = 50;
     
     /**
      * Indicates if weights are sorted by default so that largest weighted
-     * correspondences are used first
+     * correspondences are used first.
      */
     public static final boolean DEFAULT_SORT_WEIGHTS = true;
     
     /**
-     * Defines tiny value considered as machine precision
+     * Defines tiny value considered as machine precision.
      */
     public static final double EPS = 1e-8;
     
     /**
-     * Maximum number of  correspondences to be weighted and taken into account
+     * Maximum number of  correspondences to be weighted and taken into account.
      */
     private int mMaxCorrespondences;
     
     /**
      * Indicates if weights are sorted by default so that largest weighted
-     * correspondences are used first
+     * correspondences are used first.
      */
     private boolean mSortWeights;
     
     /**
-     * Array containing weights for all point correspondences
+     * Array containing weights for all point correspondences.
      */
     private double[] mWeights;
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public WeightedLinePlaneCorrespondencePinholeCameraEstimator(){
+    public WeightedLinePlaneCorrespondencePinholeCameraEstimator() {
         super();       
         mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
         mSortWeights = DEFAULT_SORT_WEIGHTS;
@@ -71,12 +77,12 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
     }
     
     /**
-     * Constructor with listener
+     * Constructor with listener.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or estimation progress changes
+     * starts, ends or estimation progress changes.
      */
     public WeightedLinePlaneCorrespondencePinholeCameraEstimator(
-            PinholeCameraEstimatorListener listener){
+            PinholeCameraEstimatorListener listener) {
         super(listener);
         mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
         mSortWeights = DEFAULT_SORT_WEIGHTS;
@@ -84,16 +90,16 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
     }
     
     /**
-     * Constructor
-     * @param planes list of corresponding 3D planes
-     * @param lines2D list of corresponding 2D lines
-     * @throws IllegalArgumentException if any of the lists are null
+     * Constructor.
+     * @param planes list of corresponding 3D planes.
+     * @param lines2D list of corresponding 2D lines.
+     * @throws IllegalArgumentException if any of the lists are null.
      * @throws WrongListSizesException if provided lists of correspondences 
-     * don't have the same size and enough correspondences
+     * don't have the same size and enough correspondences.
      */
     public WeightedLinePlaneCorrespondencePinholeCameraEstimator(
             List<Plane> planes, List<Line2D> lines2D) 
-            throws IllegalArgumentException, WrongListSizesException{
+            throws IllegalArgumentException, WrongListSizesException {
         super(planes, lines2D);
         mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
         mSortWeights = DEFAULT_SORT_WEIGHTS;
@@ -101,19 +107,19 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
     }
     
     /**
-     * Constructor
-     * @param planes list of corresponding 3D planes
-     * @param lines2D list of corresponding 2D lines
+     * Constructor.
+     * @param planes list of corresponding 3D planes.
+     * @param lines2D list of corresponding 2D lines.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or estimation progress changes
-     * @throws IllegalArgumentException if any of the lists are null
+     * starts, ends or estimation progress changes.
+     * @throws IllegalArgumentException if any of the lists are null.
      * @throws WrongListSizesException if provided lists of correspondences 
-     * don't have the same size and enough correspondences
+     * don't have the same size and enough correspondences.
      */
     public WeightedLinePlaneCorrespondencePinholeCameraEstimator(
             List<Plane> planes, List<Line2D> lines2D, 
             PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException{
+            throws IllegalArgumentException, WrongListSizesException {
         super(planes, lines2D, listener);
         mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
         mSortWeights = DEFAULT_SORT_WEIGHTS;
@@ -121,19 +127,19 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
     }    
     
     /**
-     * Constructor
-     * @param planes list of corresponding 3D planes
-     * @param lines2D list of corresponding 2D lines
+     * Constructor.
+     * @param planes list of corresponding 3D planes.
+     * @param lines2D list of corresponding 2D lines.
      * @param weights array containing a weight amount for each correspondence.
      * The larger the value of a weight, the most significant the
      * correspondence will be.
-     * @throws IllegalArgumentException if any of the lists are null
+     * @throws IllegalArgumentException if any of the lists are null.
      * @throws WrongListSizesException if provided lists of correspondences 
-     * don't have the same size and enough correspondences
+     * don't have the same size and enough correspondences.
      */
     public WeightedLinePlaneCorrespondencePinholeCameraEstimator(
             List<Plane> planes, List<Line2D> lines2D, double[] weights) 
-            throws IllegalArgumentException, WrongListSizesException{
+            throws IllegalArgumentException, WrongListSizesException {
         super();
         mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
         mSortWeights = DEFAULT_SORT_WEIGHTS;
@@ -142,22 +148,22 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
     }
     
     /**
-     * Constructor
-     * @param planes list of corresponding 3D planes
-     * @param lines2D list of corresponding 2D lines
+     * Constructor.
+     * @param planes list of corresponding 3D planes.
+     * @param lines2D list of corresponding 2D lines.
      * @param weights array containing a weight amount for each correspondence.
      * The larger the value of a weight, the most significant the
      * correspondence will be.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or estimation progress changes
-     * @throws IllegalArgumentException if any of the lists are null
+     * starts, ends or estimation progress changes.
+     * @throws IllegalArgumentException if any of the lists are null.
      * @throws WrongListSizesException if provided lists of correspondences 
-     * don't have the same size and enough correspondences
+     * don't have the same size and enough correspondences.
      */
     public WeightedLinePlaneCorrespondencePinholeCameraEstimator(
             List<Plane> planes, List<Line2D> lines2D, double[] weights,
             PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException{
+            throws IllegalArgumentException, WrongListSizesException {
         super(listener);
         mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;
         mSortWeights = DEFAULT_SORT_WEIGHTS;
@@ -167,26 +173,28 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
     
     /**
      * Internal method to set list of corresponding points (it does not check
-     * if estimator is locked)
-     * @param planes list of corresponding 3D planes
-     * @param lines2D list of corresponding 2D lines
+     * if estimator is locked).
+     * @param planes list of corresponding 3D planes.
+     * @param lines2D list of corresponding 2D lines.
      * @param weights array containing a weight amount for each correspondence.
      * The larger the value of a weight, the most significant the
      * correspondence will be.
-     * @throws IllegalArgumentException if any of the lists or arrays are null
+     * @throws IllegalArgumentException if any of the lists or arrays are null.
      * @throws WrongListSizesException if provided lists of correspondences 
-     * don't have the same size and enough correspondences
+     * don't have the same size and enough correspondences.
      */
     private void internalSetListsAndWeights(List<Plane> planes, 
             List<Line2D> lines2D, double[] weights) 
             throws IllegalArgumentException,
-            WrongListSizesException{
+            WrongListSizesException {
         
-        if(planes == null || lines2D == null || weights == null) 
+        if (planes == null || lines2D == null || weights == null) {
             throw new IllegalArgumentException();
+        }
         
-        if(!areValidListsAndWeights(planes, lines2D, weights))
+        if (!areValidListsAndWeights(planes, lines2D, weights)) {
             throw new WrongListSizesException();
+        }
         
         mPlanes = planes;
         mLines2D = lines2D;
@@ -194,22 +202,24 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
     }    
     
     /**
-     * Sets list of corresponding planes and lines
-     * @param planes list of corresponding 3D planes
-     * @param lines2D list of corresponding 2D lines
+     * Sets list of corresponding planes and lines.
+     * @param planes list of corresponding 3D planes.
+     * @param lines2D list of corresponding 2D lines.
      * @param weights array containing a weight amount for each correspondence.
      * The larger the value of a weight, the most significant the
      * correspondence will be.
-     * @throws LockedException if estimator is locked
-     * @throws IllegalArgumentException if any of the lists are null
+     * @throws LockedException if estimator is locked.
+     * @throws IllegalArgumentException if any of the lists are null.
      * @throws WrongListSizesException if provided lists of correspondences 
-     * don't have the same size and enough correspondences
+     * don't have the same size and enough correspondences.
      */
     public void setListsAndWeights(List<Plane> planes, 
             List<Line2D> lines2D, double[] weights)
             throws LockedException, IllegalArgumentException, 
-            WrongListSizesException{
-        if(isLocked()) throw new LockedException();
+            WrongListSizesException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         
         internalSetListsAndWeights(planes, lines2D, weights);
     }    
@@ -218,18 +228,19 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * Indicates if lists of corresponding planes and lines are valid.
      * Lists are considered valid if they have the same number of 
      * correspondences and both have more than the required minimum of 
-     * correspondences (which is 4)
-     * @param planes list of corresponding 3D planes
-     * @param lines2D list of corresponding 2D lines
+     * correspondences (which is 4).
+     * @param planes list of corresponding 3D planes.
+     * @param lines2D list of corresponding 2D lines.
      * @param weights array containing a weight amount for each correspondence.
      * The larger the value of a weight, the most significant the
      * correspondence will be.
-     * @return true if corresponding planes and lines are valid, false otherwise
+     * @return true if corresponding planes and lines are valid, false otherwise.
      */
     public static boolean areValidListsAndWeights(List<Plane> planes, 
-            List<Line2D> lines2D, double[] weights){
-        if(planes == null || lines2D == null || weights == null) 
+            List<Line2D> lines2D, double[] weights) {
+        if (planes == null || lines2D == null || weights == null) {
             return false;
+        }
         return planes.size() == lines2D.size() && 
                 lines2D.size() == weights.length &&
                 planes.size() >= MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;
@@ -240,75 +251,82 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * The larger the value of a weight, the most significant the
      * correspondence will be.
      * @return array containing weights for each correspondence.
-     * @throws NotAvailableException if weights are not available
+     * @throws NotAvailableException if weights are not available.
      */
-    public double[] getWeights() throws NotAvailableException{
-        if(!areWeightsAvailable()) throw new NotAvailableException();
+    public double[] getWeights() throws NotAvailableException {
+        if (!areWeightsAvailable()) {
+            throw new NotAvailableException();
+        }
         return mWeights;
     }
     
     /**
      * Returns boolean indicating whether weights have been provided and are
-     * available for retrieval
+     * available for retrieval.
      * @return true if weights are available, false otherwise.
      */
-    public boolean areWeightsAvailable(){
+    public boolean areWeightsAvailable() {
         return mWeights != null;
     }    
     
  /**
      * Returns maximum number of correspondences to be weighted and taken into 
-     * account
-     * @return maximum number of points to be weighted
+     * account.
+     * @return maximum number of points to be weighted.
      */
-    public int getMaxCorrespondences(){
+    public int getMaxCorrespondences() {
         return mMaxCorrespondences;
     }
     
     /**
-     * Sets maximum number of correspondences to be weighted and taken into 
-     * account
+     * Sets maximum number of correspondences to be weighted and taken into
+     * account.
      * @param maxCorrespondences maximum number of correspondences to be 
-     * weighted
+     * weighted.
      * @throws IllegalArgumentException if provided value is less than the 
-     * minimum allowed number of point correspondences
-     * @throws LockedException if this instance is locked
+     * minimum allowed number of point correspondences.
+     * @throws LockedException if this instance is locked.
      */
     public void setMaxCorrespondences(int maxCorrespondences) 
-            throws IllegalArgumentException, LockedException{
-        if(isLocked()) throw new LockedException();
-        if(maxCorrespondences < MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES)
+            throws IllegalArgumentException, LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (maxCorrespondences < MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES) {
             throw new IllegalArgumentException();
+        }
         
         mMaxCorrespondences = maxCorrespondences;
     }
     
     /**
      * Indicates if weights are sorted by so that largest weighted
-     * correspondences are used first
-     * @return true if weights are sorted, false otherwise
+     * correspondences are used first.
+     * @return true if weights are sorted, false otherwise.
      */
-    public boolean isSortWeightsEnabled(){
+    public boolean isSortWeightsEnabled() {
         return mSortWeights;
     }
     
     /**
      * Specifies whether weights are sorted by so that largest weighted
-     * correspondences are used first
-     * @param sortWeights true if weights are sorted, false otherwise
-     * @throws LockedException if this instance is locked
+     * correspondences are used first.
+     * @param sortWeights true if weights are sorted, false otherwise.
+     * @throws LockedException if this instance is locked.
      */
     public void setSortWeightsEnabled(boolean sortWeights) 
-            throws LockedException{
-        if(isLocked()) throw new LockedException();
+            throws LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         
         mSortWeights = sortWeights;
     }    
     
     /**
      * Indicates if this estimator is ready to start the estimation.
-     * Estimator will be ready once both lists and weights are available
-     * @return true if estimator is ready, false otherwise
+     * Estimator will be ready once both lists and weights are available.
+     * @return true if estimator is ready, false otherwise.
      */    
     @Override
     public boolean isReady() {
@@ -316,21 +334,25 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
     }
 
     /**
-     * Estimates a pinhole camera
-     * @return estimated pinhole camera
-     * @throws LockedException if estimator is locked
-     * @throws NotReadyException if input has not yet been provided
+     * Estimates a pinhole camera.
+     * @return estimated pinhole camera.
+     * @throws LockedException if estimator is locked.
+     * @throws NotReadyException if input has not yet been provided.
      * @throws PinholeCameraEstimatorException if an error occurs during 
-     * estimation, usually because input data is not valid
+     * estimation, usually because input data is not valid.
      */        
     @Override
     public PinholeCamera estimate() throws LockedException, NotReadyException, 
-        PinholeCameraEstimatorException {
+            PinholeCameraEstimatorException {
         
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
-        try{
+        try {
             mLocked = true;
             if(mListener != null) mListener.onEstimateStart(this);
             
@@ -355,14 +377,14 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
             double weight;
             double previousNorm = 1.0;
             double rowNorm;
-            while(iterator2D.hasNext() && iterator3D.hasNext()){
+            while (iterator2D.hasNext() && iterator3D.hasNext()) {
                 line2D = iterator2D.next();
                 plane = iterator3D.next();
                 
-                if(selected[index]){
+                if (selected[index]) {
                     weight = mWeights[index];
                     
-                    if(Math.abs(weight) < EPS){
+                    if (Math.abs(weight) < EPS) {
                         //skip, because weight is too small
                         index++;
                         continue;
@@ -483,14 +505,14 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
                 index++;
             }
             
-            if(nMatches < MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES){
+            if (nMatches < MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES) {
                 throw new PinholeCameraEstimatorException();
             }
             
             SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
             decomposer.decompose();
             
-            if(decomposer.getNullity() > 1){
+            if (decomposer.getNullity() > 1) {
                 //line/plane configuration is degenerate and exists a linear 
                 //combination of possible pinhole cameras (i.e. solution is not
                 //unique up to scale)
@@ -530,7 +552,9 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
             
             PinholeCamera camera = new PinholeCamera(pinholeCameraMatrix);
             
-            if(mListener != null) mListener.onEstimateEnd(this);
+            if (mListener != null) {
+                mListener.onEstimateEnd(this);
+            }
             
             return attemptRefine(camera);
             
@@ -546,8 +570,8 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
     }
 
     /**
-     * Returns type of pinhole camera estimator
-     * @return type of pinhole camera estimator
+     * Returns type of pinhole camera estimator.
+     * @return type of pinhole camera estimator.
      */    
     @Override
     public PinholeCameraEstimatorType getType() {

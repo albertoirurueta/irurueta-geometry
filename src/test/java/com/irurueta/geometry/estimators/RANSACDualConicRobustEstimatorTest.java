@@ -1,72 +1,71 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.RANSACDualConicRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 22, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.geometry.Circle;
-import com.irurueta.geometry.Conic;
-import com.irurueta.geometry.DualConic;
-import com.irurueta.geometry.DualConicNotAvailableException;
-import com.irurueta.geometry.HomogeneousPoint2D;
-import com.irurueta.geometry.Line2D;
-import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.*;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class RANSACDualConicRobustEstimatorTest implements 
-        DualConicRobustEstimatorListener{
+        DualConicRobustEstimatorListener {
     
-    public static final int MIN_LINES = 500;
-    public static final int MAX_LINES = 1000;
+    private static final int MIN_LINES = 500;
+    private static final int MAX_LINES = 1000;
     
-    public static final double MIN_RANDOM_POINT_VALUE = -1.0;
-    public static final double MAX_RANDOM_POINT_VALUE = 1.0;
+    private static final double MIN_RANDOM_POINT_VALUE = -1.0;
+    private static final double MAX_RANDOM_POINT_VALUE = 1.0;
     
-    public static final double STD_ERROR = 1.0;
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final double STD_ERROR = 1.0;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final double THRESHOLD = 1e-7;
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double THRESHOLD = 1e-7;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
     private int estimateStart;
     private int estimateEnd;
     private int estimateNextIteration;
     private int estimateProgressChange;
     
-    public RANSACDualConicRobustEstimatorTest(){}
+    public RANSACDualConicRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
     
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         RANSACDualConicRobustEstimator estimator;
         
         //test constructor without arguments
@@ -90,8 +89,8 @@ public class RANSACDualConicRobustEstimatorTest implements
         assertNull(estimator.getQualityScores());
         
         //test constructor with lines
-        List<Line2D> lines = new ArrayList<Line2D>();
-        for(int i = 0; i < DualConicRobustEstimator.MINIMUM_SIZE; i++){
+        List<Line2D> lines = new ArrayList<>();
+        for (int i = 0; i < DualConicRobustEstimator.MINIMUM_SIZE; i++) {
             lines.add(new Line2D());
         }
         
@@ -114,31 +113,31 @@ public class RANSACDualConicRobustEstimatorTest implements
         assertNull(estimator.getQualityScores());
         
         //Force IllegalArgumentException
-        List<Line2D> emptyLines = new ArrayList<Line2D>();
+        List<Line2D> emptyLines = new ArrayList<>();
         estimator = null;
-        try{
+        try {
             estimator = new RANSACDualConicRobustEstimator(emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener
         DualConicRobustEstimatorListener listener =
-                new DualConicRobustEstimatorListener(){
+                new DualConicRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(DualConicRobustEstimator estimator) {}
+            public void onEstimateStart(DualConicRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(DualConicRobustEstimator estimator) {}
+            public void onEstimateEnd(DualConicRobustEstimator estimator) { }
 
             @Override
             public void onEstimateNextIteration(
-                    DualConicRobustEstimator estimator, int iteration) {}
+                    DualConicRobustEstimator estimator, int iteration) { }
 
             @Override
             public void onEstimateProgressChange(
-                    DualConicRobustEstimator estimator, float progress) {}
+                    DualConicRobustEstimator estimator, float progress) { }
         };
         
         estimator = new RANSACDualConicRobustEstimator(listener);
@@ -182,16 +181,16 @@ public class RANSACDualConicRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new RANSACDualConicRobustEstimator(listener, 
                     emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
     }
     
     @Test
-    public void testGetSetThreshold() throws LockedException{
+    public void testGetSetThreshold() throws LockedException {
         RANSACDualConicRobustEstimator estimator = 
                 new RANSACDualConicRobustEstimator();
         
@@ -206,14 +205,14 @@ public class RANSACDualConicRobustEstimatorTest implements
         assertEquals(estimator.getThreshold(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetListener() throws LockedException{
+    public void testGetSetListener() throws LockedException {
         RANSACDualConicRobustEstimator estimator = 
                 new RANSACDualConicRobustEstimator();
         
@@ -230,7 +229,7 @@ public class RANSACDualConicRobustEstimatorTest implements
     }
     
     @Test
-    public void testGetSetProgressDelta() throws LockedException{
+    public void testGetSetProgressDelta() throws LockedException {
         RANSACDualConicRobustEstimator estimator = 
                 new RANSACDualConicRobustEstimator();
         
@@ -245,18 +244,18 @@ public class RANSACDualConicRobustEstimatorTest implements
         assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetConfidence() throws LockedException{
+    public void testGetSetConfidence() throws LockedException {
         RANSACDualConicRobustEstimator estimator = 
                 new RANSACDualConicRobustEstimator();
         
@@ -271,18 +270,18 @@ public class RANSACDualConicRobustEstimatorTest implements
         assertEquals(estimator.getConfidence(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetMaxIterations() throws LockedException{
+    public void testGetSetMaxIterations() throws LockedException {
         RANSACDualConicRobustEstimator estimator = 
                 new RANSACDualConicRobustEstimator();
         
@@ -297,14 +296,14 @@ public class RANSACDualConicRobustEstimatorTest implements
         assertEquals(estimator.getMaxIterations(), 1);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetLines() throws LockedException{
+    public void testGetSetLines() throws LockedException {
         RANSACDualConicRobustEstimator estimator = 
                 new RANSACDualConicRobustEstimator();
         
@@ -313,8 +312,8 @@ public class RANSACDualConicRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //set new value
-        List<Line2D> lines = new ArrayList<Line2D>();
-        for(int i = 0; i < DualConicRobustEstimator.MINIMUM_SIZE; i++){
+        List<Line2D> lines = new ArrayList<>();
+        for (int i = 0; i < DualConicRobustEstimator.MINIMUM_SIZE; i++) {
             lines.add(new Line2D());
         }
         estimator.setLines(lines);
@@ -329,15 +328,15 @@ public class RANSACDualConicRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //Force IllegalArgumentException
-        List<Line2D> emptyLines = new ArrayList<Line2D>();
-        try{
+        List<Line2D> emptyLines = new ArrayList<>();
+        try {
             estimator.setLines(emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetQualityScores() throws LockedException{
+    public void testGetSetQualityScores() throws LockedException {
         RANSACDualConicRobustEstimator estimator = 
                 new RANSACDualConicRobustEstimator();
         
@@ -353,11 +352,11 @@ public class RANSACDualConicRobustEstimatorTest implements
     
     @Test
     public void testEstimate() throws LockedException, NotReadyException, 
-            RobustEstimatorException, DualConicNotAvailableException{
+            RobustEstimatorException, DualConicNotAvailableException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
-        for(int t = 0;  t < TIMES; t++){
+        for (int t = 0;  t < TIMES; t++) {
             //instantiate a random circle
             Point2D center = new HomogeneousPoint2D(
                 randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
@@ -375,13 +374,13 @@ public class RANSACDualConicRobustEstimatorTest implements
             double theta = (double)nLines / 360.0 * Math.PI / 180.0;
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            List<Line2D> lines = new ArrayList<Line2D>();
-            List<Line2D> linesWithError = new ArrayList<Line2D>();
+            List<Line2D> lines = new ArrayList<>();
+            List<Line2D> linesWithError = new ArrayList<>();
             Point2D point;
             Line2D line, lineWithError;
             double[] directorVector = new double[
                     Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
-            for(int i = 0; i < nLines; i++){
+            for (int i = 0; i < nLines; i++) {
                 double angle = theta * (double)i;
                 point = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
@@ -391,13 +390,13 @@ public class RANSACDualConicRobustEstimatorTest implements
                 
                 line = new Line2D(point, directorVector);
 
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //point is outlier
                     double errorA = errorRandomizer.nextDouble();
                     double errorB = errorRandomizer.nextDouble();
                     lineWithError = new Line2D(line.getA() + errorA,
                         line.getB() + errorB, line.getC());
-                }else{
+                } else {
                     //inlier line
                     lineWithError = line;
                 }
@@ -433,73 +432,73 @@ public class RANSACDualConicRobustEstimatorTest implements
             
             //check correctness of estimation by checking that all lines
             //are within the estimated conic locus
-            for(Line2D l : lines){
+            for (Line2D l : lines) {
                 assertTrue(dualConic2.isLocus(l, ABSOLUTE_ERROR));
             }    
         }
     }
-    
-    private void reset(){
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
-    }
-    
+
     @Override
     public void onEstimateStart(DualConicRobustEstimator estimator) {
         estimateStart++;
-        testLocked((RANSACDualConicRobustEstimator)estimator);
+        checkLocked((RANSACDualConicRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateEnd(DualConicRobustEstimator estimator) {
         estimateEnd++;
-        testLocked((RANSACDualConicRobustEstimator)estimator);
+        checkLocked((RANSACDualConicRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateNextIteration(DualConicRobustEstimator estimator, 
             int iteration) {
         estimateNextIteration++;
-        testLocked((RANSACDualConicRobustEstimator)estimator);
+        checkLocked((RANSACDualConicRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateProgressChange(DualConicRobustEstimator estimator, 
             float progress) {
         estimateProgressChange++;
-        testLocked((RANSACDualConicRobustEstimator)estimator);
+        checkLocked((RANSACDualConicRobustEstimator)estimator);
     }
-    
-    private void testLocked(RANSACDualConicRobustEstimator estimator){
-        try{
+
+    private void reset() {
+        estimateStart = estimateEnd = estimateNextIteration =
+                estimateProgressChange = 0;
+    }
+
+    private void checkLocked(RANSACDualConicRobustEstimator estimator) {
+        try {
             estimator.setThreshold(0.5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setProgressDelta(0.5f);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setConfidence(0.5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setMaxIterations(5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setLines(null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){
-        }catch(Exception e){
+        } catch (LockedException ignore) {
+        } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         assertTrue(estimator.isLocked());

@@ -17,32 +17,34 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.*;
+
 import static org.junit.Assert.*;
 
 public class Point3DTest {
     
-    public static final int HOM_COORDS = 4;
-    public static final int INHOM_COORDS = 3;
+    private static final int HOM_COORDS = 4;
+    private static final int INHOM_COORDS = 3;
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final int MIN_POINTS = 100;
-    public static final int MAX_POINTS = 500;
+    private static final int MIN_POINTS = 100;
+    private static final int MAX_POINTS = 500;
     
     public Point3DTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception { }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception { }
+    public static void tearDownClass() { }
     
     @Before
     public void setUp() { }
@@ -440,9 +442,9 @@ public class Point3DTest {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int numPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
         
-        List<Point3D> points = new ArrayList<Point3D>();
+        List<Point3D> points = new ArrayList<>();
         double x, y, z, meanX = 0.0, meanY = 0.0, meanZ = 0.0;
-        for(int i = 0; i < numPoints; i++) {
+        for (int i = 0; i < numPoints; i++) {
             x = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             y = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             z = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);

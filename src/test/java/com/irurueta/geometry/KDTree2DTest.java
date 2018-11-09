@@ -27,12 +27,12 @@ import static org.junit.Assert.*;
 
 public class KDTree2DTest {
 
-    public static final double ABSOLUTE_ERROR = 1e-9;
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double ABSOLUTE_ERROR = 1e-9;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
 
-    public static final int MIN_POINTS = 50;
-    public static final int MAX_POINTS = 500;
+    private static final int MIN_POINTS = 50;
+    private static final int MAX_POINTS = 500;
 
     public KDTree2DTest() { }
 

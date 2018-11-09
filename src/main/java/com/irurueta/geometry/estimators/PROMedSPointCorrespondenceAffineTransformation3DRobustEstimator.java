@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February1 4, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,19 +19,16 @@ import com.irurueta.geometry.AffineTransformation3D;
 import com.irurueta.geometry.CoincidentPointsException;
 import com.irurueta.geometry.CoordinatesType;
 import com.irurueta.geometry.Point3D;
-import com.irurueta.numerical.robust.PROMedSRobustEstimator;
-import com.irurueta.numerical.robust.PROMedSRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best affine 3D transformation for provided collections of matched
- * 3D points using PROSAC algorithm
+ * 3D points using PROSAC algorithm.
  */
 public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator 
-        extends PointCorrespondenceAffineTransformation3DRobustEstimator{
+        extends PointCorrespondenceAffineTransformation3DRobustEstimator {
     
    
     /**
@@ -41,12 +45,12 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      */
     public static final double DEFAULT_STOP_THRESHOLD = 1.0;
     
     /**
-     * Minimum allowed stop threshold value
+     * Minimum allowed stop threshold value.
      */
     public static final double MIN_STOP_THRESHOLD = 0.0;
 
@@ -64,20 +68,20 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      */
     private double mStopThreshold;
         
     /**
-     * Quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching
+     * Quality scores corresponding to each pair of matched points..
+     * The larger the score value the betther the quality of the matching.
      */
     private double[] mQualityScores;
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(){
+    public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator() {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -87,17 +91,17 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param inputPoints list of input points to be used to estimate an 
-     * affine 3D transformation
+     * affine 3D transformation.
      * @param outputPoints list of output points to be used to estimate an 
-     * affine 3D transformation
+     * affine 3D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
             List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(inputPoints, outputPoints);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -105,46 +109,46 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
     /**
      * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
     public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
-            AffineTransformation3DRobustEstimatorListener listener){
+            AffineTransformation3DRobustEstimatorListener listener) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
-     * affine 3D transformation
+     * affine 3D transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param listener listener to be notified of events such as when estimation
-     * stars, ends or its progress significantly changes
+     * stars, ends or its progress significantly changes.
      * @param inputPoints list of input points to be used to estimate an 
-     * affine 3D transformation
+     * affine 3D transformation.
      * @param outputPoints list of output points to be used to estimate an 
-     * affine 3D transformation
+     * affine 3D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener, inputPoints, outputPoints);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
-     * Constructor
+     * Constructor.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * points.
      * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples)
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -155,24 +159,25 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param inputPoints list of input points to be used to estimate an 
-     * affine 3D transformation
+     * affine 3D transformation.
      * @param outputPoints list of output points to be used to estimate an 
-     * affine 3D transformation
+     * affine 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * points.
      * @throws IllegalArgumentException if provided lists of points and array
      * of quality scores don't have the same size or their size is smaller than 
-     * MINIMUM_SIZE
+     * MINIMUM_SIZE.
      */
     public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         super(inputPoints, outputPoints);
 
-        if(qualityScores.length != inputPoints.size())
+        if (qualityScores.length != inputPoints.size()) {
             throw new IllegalArgumentException();
+        }
         
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -185,11 +190,11 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      * @param qualityScores quality scores corresponding to each pair of matched 
      * points.
      * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples)
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -197,29 +202,30 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
-     * affine 3D transformation
+     * affine 3D transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param listener listener to be notified of events such as when estimation
-     * stars, ends or its progress significantly changes
+     * stars, ends or its progress significantly changes.
      * @param inputPoints list of input points to be used to estimate an 
-     * affine 3D transformation
+     * affine 3D transformation.
      * @param outputPoints list of output points to be used to estimate an 
-     * affine 3D transformation
+     * affine 3D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * points.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         super(listener, inputPoints, outputPoints);
         
-        if(qualityScores.length != inputPoints.size())
+        if (qualityScores.length != inputPoints.size()) {
             throw new IllegalArgumentException();
+        }
         
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -240,11 +246,11 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      * @return stop threshold to stop the algorithm prematurely when a certain
-     * accuracy has been reached
+     * accuracy has been reached.
      */
-    public double getStopThreshold(){
+    public double getStopThreshold() {
         return mStopThreshold;
     }
     
@@ -263,46 +269,51 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      * @param stopThreshold stop threshold to stop the algorithm prematurely 
-     * when a certain accuracy has been reached
-     * @throws IllegalArgumentException if provided value is zero or negative
+     * when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException{
-        if(isLocked()) throw new LockedException();
-        if(stopThreshold <= MIN_STOP_THRESHOLD) 
+            throws IllegalArgumentException, LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (stopThreshold <= MIN_STOP_THRESHOLD) {
             throw new IllegalArgumentException();
+        }
         
         mStopThreshold = stopThreshold;
     }
     
     /**
      * Returns quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching
-     * @return quality scores corresponding to each pair of matched points
+     * The larger the score value the betther the quality of the matching.
+     * @return quality scores corresponding to each pair of matched points.
      */
     @Override
-    public double[] getQualityScores(){
+    public double[] getQualityScores() {
         return mQualityScores;
     }
     
     /**
      * Sets quality scores corresponding to each pair of matched points.
-     * The larger the score value the better the quality of the matching
+     * The larger the score value the better the quality of the matching.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points
+     * points.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples)
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
     public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException{
-        if(isLocked()) throw new LockedException();
+            IllegalArgumentException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetQualityScores(qualityScores);
     }
         
@@ -310,11 +321,11 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
      * Indicates if eatimator is ready to start the affine 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points and quality
-     * scores) are provided and a minimum of MINIMUM_SIZE points are available
-     * @return true if estimator is ready, false otherwise
+     * scores) are provided and a minimum of MINIMUM_SIZE points are available.
+     * @return true if estimator is ready, false otherwise.
      */
     @Override
-    public boolean isReady(){
+    public boolean isReady() {
         return super.isReady() && mQualityScores != null && 
                 mQualityScores.length == mInputPoints.size();
     }
@@ -322,23 +333,27 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
     /**
      * Estimates an affine 2D transformation using a robust estimator and
      * the best set of matched 2D point correspondences found using the robust
-     * estimator
-     * @return an affine 2D transformation
+     * estimator.
+     * @return an affine 2D transformation.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */    
     @Override
     public AffineTransformation3D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         PROMedSRobustEstimator<AffineTransformation3D> innerEstimator = 
-                new PROMedSRobustEstimator<AffineTransformation3D>(
+                new PROMedSRobustEstimator<>(
                     new PROMedSRobustEstimatorListener<AffineTransformation3D>() {
                     
             //point to be reused when computing residuals
@@ -373,13 +388,13 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
                 Point3D outputPoint3 = mOutputPoints.get(samplesIndices[2]);
                 Point3D outputPoint4 = mOutputPoints.get(samplesIndices[3]);
 
-                try{
+                try {
                     AffineTransformation3D transformation = 
                         new AffineTransformation3D(inputPoint1, inputPoint2, 
                         inputPoint3, inputPoint4, outputPoint1, outputPoint2, 
                         outputPoint3, outputPoint4);
                     solutions.add(transformation);
-                }catch(CoincidentPointsException e){
+                } catch (CoincidentPointsException e) {
                     //if points are coincident, no solution is added
                 }
             }
@@ -405,7 +420,7 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
             @Override
             public void onEstimateStart(
                     RobustEstimator<AffineTransformation3D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(
                             PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.this);
                 }
@@ -414,7 +429,7 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
             @Override
             public void onEstimateEnd(
                     RobustEstimator<AffineTransformation3D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(
                             PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.this);
                 }
@@ -424,7 +439,7 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
             public void onEstimateNextIteration(
                     RobustEstimator<AffineTransformation3D> estimator, 
                     int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.this, 
                             iteration);
@@ -435,7 +450,7 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
             public void onEstimateProgressChange(
                     RobustEstimator<AffineTransformation3D> estimator, 
                     float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.this, 
                             progress);
@@ -448,7 +463,7 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
             }
         });
         
-        try{
+        try {
             mLocked = true;
             mInliersData = null;
             innerEstimator.setConfidence(mConfidence);
@@ -457,18 +472,18 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
             AffineTransformation3D transformation = innerEstimator.estimate();
             mInliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);            
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
@@ -495,15 +510,16 @@ public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
     /**
      * Sets quality scores corresponding to each pair of matched points.
      * This method is used internally and does not check whether instance is
-     * locked or not
-     * @param qualityScores quality scores to be set
+     * locked or not.
+     * @param qualityScores quality scores to be set.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE
+     * smaller than MINIMUM_SIZE.
      */
     private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException{
-        if(qualityScores.length < MINIMUM_SIZE) 
+            throws IllegalArgumentException {
+        if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
+        }
         
         mQualityScores = qualityScores;        
     }            

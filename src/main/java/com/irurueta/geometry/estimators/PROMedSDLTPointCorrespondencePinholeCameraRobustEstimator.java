@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.PROMedSPointCorrespondencePinholeCameraRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 10, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,11 +19,8 @@ import com.irurueta.geometry.CoordinatesType;
 import com.irurueta.geometry.PinholeCamera;
 import com.irurueta.geometry.Point2D;
 import com.irurueta.geometry.Point3D;
-import com.irurueta.numerical.robust.PROMedSRobustEstimator;
-import com.irurueta.numerical.robust.PROMedSRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -384,7 +388,7 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
                 getSuggestedCenterValue());        
         
         PROMedSRobustEstimator<PinholeCamera> innerEstimator = 
-                new PROMedSRobustEstimator<PinholeCamera>(
+                new PROMedSRobustEstimator<>(
                     new PROMedSRobustEstimatorListener<PinholeCamera>() {
                     
             //point to be reused when computing residuals
@@ -392,10 +396,10 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
                     CoordinatesType.HOMOGENEOUS_COORDINATES); 
             
             //3D points for a subset of samples
-            private List<Point3D> mSubset3D = new ArrayList<Point3D>();
+            private List<Point3D> mSubset3D = new ArrayList<>();
             
             //2D points for a subset of samples
-            private List<Point2D> mSubset2D = new ArrayList<Point2D>();
+            private List<Point2D> mSubset2D = new ArrayList<>();
             
             @Override
             public double getThreshold() {
@@ -467,7 +471,8 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
             public void onEstimateStart(
                     RobustEstimator<PinholeCamera> estimator) {
                 if (mListener != null) {
-                    mListener.onEstimateStart(PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.this);
+                    mListener.onEstimateStart(
+                            PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.this);
                 }
             }
 
@@ -475,7 +480,8 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
             public void onEstimateEnd(
                     RobustEstimator<PinholeCamera> estimator) {
                 if (mListener != null) {
-                    mListener.onEstimateEnd(PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.this);
+                    mListener.onEstimateEnd(
+                            PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.this);
                 }
             }
 
@@ -484,7 +490,8 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
                     RobustEstimator<PinholeCamera> estimator, 
                     int iteration) {
                 if (mListener != null) {
-                    mListener.onEstimateNextIteration(PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.this, 
+                    mListener.onEstimateNextIteration(
+                            PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.this,
                             iteration);
                 }
             }
@@ -494,7 +501,8 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
                     RobustEstimator<PinholeCamera> estimator, 
                     float progress) {
                 if (mListener != null) {
-                    mListener.onEstimateProgressChange(PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.this, 
+                    mListener.onEstimateProgressChange(
+                            PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.this,
                             progress);
                 }
             }

@@ -1,25 +1,25 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.refiners.PinholeCameraRefiner
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 29, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.refiners;
 
-import com.irurueta.geometry.CameraException;
-import com.irurueta.geometry.InhomogeneousPoint2D;
-import com.irurueta.geometry.InhomogeneousPoint3D;
-import com.irurueta.geometry.NotAvailableException;
-import com.irurueta.geometry.PinholeCamera;
-import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Quaternion;
-import com.irurueta.geometry.Rotation3D;
+import com.irurueta.geometry.*;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.numerical.robust.InliersData;
+
 import java.util.BitSet;
 import java.util.List;
 
@@ -34,6 +34,7 @@ import java.util.List;
  * @param <S1> type of matched samples in 1st set.
  * @param <S2> type of matched samples in 2nd set.
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class PinholeCameraRefiner<S1, S2> extends 
         PairMatchesAndInliersDataRefiner<PinholeCamera, S1, S2> {
     
@@ -864,13 +865,8 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * horizontal principal point, vertical principal point, quaternion A,
      * quaternion B, quaternion C, quaternion D, center x, center y, center z.
      * @param result instance where parameters will be set.
-     * @throws CameraException if camera cannot be decomposed.
-     * @throws NotAvailableException if any camera component cannot be 
-     * retrieved.
      */
-    protected void parametersToCamera(double[] params, 
-            PinholeCamera result) throws CameraException, 
-            NotAvailableException {
+    protected void parametersToCamera(double[] params, PinholeCamera result) {
         
         if (mResidualIntrinsic == null) {
             mResidualIntrinsic = new PinholeCameraIntrinsicParameters();

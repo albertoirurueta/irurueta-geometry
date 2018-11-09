@@ -1,42 +1,47 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.Point2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 1, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Line2D;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class Point2DRobustEstimatorTest {
     
-    public Point2DRobustEstimatorTest() {}
+    public Point2DRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testCreate(){
+    public void testCreate() {
         Point2DRobustEstimator estimator;
         
         //test with robust method
@@ -116,11 +121,11 @@ public class Point2DRobustEstimatorTest {
         assertNull(estimator.getQualityScores());  
         
         //test with lines and method
-        List<Line2D> lines = new ArrayList<Line2D>();
-        for(int i = 0; i < Point2DRobustEstimator.MINIMUM_SIZE; i++){
+        List<Line2D> lines = new ArrayList<>();
+        for (int i = 0; i < Point2DRobustEstimator.MINIMUM_SIZE; i++) {
             lines.add(new Line2D());
         }
-        List<Line2D> emptyLines = new ArrayList<Line2D>();
+        List<Line2D> emptyLines = new ArrayList<>();
         
         estimator = Point2DRobustEstimator.create(lines, 
                 RobustEstimatorMethod.RANSAC);
@@ -140,11 +145,11 @@ public class Point2DRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(emptyLines, 
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         estimator = Point2DRobustEstimator.create(lines, 
@@ -165,11 +170,11 @@ public class Point2DRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(emptyLines, 
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);    
         
         estimator = Point2DRobustEstimator.create(lines, 
@@ -190,11 +195,11 @@ public class Point2DRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(emptyLines, 
                     RobustEstimatorMethod.MSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);    
         
         estimator = Point2DRobustEstimator.create(lines, 
@@ -215,11 +220,11 @@ public class Point2DRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(emptyLines, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator); 
         
         estimator = Point2DRobustEstimator.create(lines, 
@@ -240,29 +245,29 @@ public class Point2DRobustEstimatorTest {
 
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(emptyLines, 
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);   
         
         //test with listener
         Point2DRobustEstimatorListener listener = new Point2DRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(Point2DRobustEstimator estimator) {}
+            public void onEstimateStart(Point2DRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(Point2DRobustEstimator estimator) {}
+            public void onEstimateEnd(Point2DRobustEstimator estimator) { }
 
             @Override
             public void onEstimateNextIteration(Point2DRobustEstimator estimator, 
-                    int iteration) {}
+                    int iteration) { }
 
             @Override
             public void onEstimateProgressChange(Point2DRobustEstimator estimator, 
-                    float progress) {}
+                    float progress) { }
         };
         
         estimator = Point2DRobustEstimator.create(listener, 
@@ -428,11 +433,11 @@ public class Point2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(listener, emptyLines,
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with quality scores
@@ -521,11 +526,11 @@ public class Point2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(emptyScores,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //Test with lines and quality scores
@@ -611,16 +616,16 @@ public class Point2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(emptyLines, qualityScores,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = Point2DRobustEstimator.create(lines, emptyScores,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener and quality scores
@@ -706,11 +711,11 @@ public class Point2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(listener, emptyScores,
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, lines and qualityScores
@@ -795,16 +800,16 @@ public class Point2DRobustEstimatorTest {
         assertSame(estimator.getQualityScores(), qualityScores);
         
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(listener, emptyLines,
                     qualityScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = Point2DRobustEstimator.create(listener, lines, 
                     emptyScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test without arguments
@@ -841,10 +846,10 @@ public class Point2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener
@@ -881,10 +886,10 @@ public class Point2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(listener, emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with quality scores
@@ -905,10 +910,10 @@ public class Point2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with lines and quality scores
@@ -929,14 +934,14 @@ public class Point2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(emptyLines, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = Point2DRobustEstimator.create(lines, emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener and quality scores
@@ -957,10 +962,10 @@ public class Point2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(listener, emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, lines and quality scores
@@ -982,16 +987,16 @@ public class Point2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = Point2DRobustEstimator.create(listener, emptyLines, 
                     qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = Point2DRobustEstimator.create(listener, lines, 
                     emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
     }    
 }

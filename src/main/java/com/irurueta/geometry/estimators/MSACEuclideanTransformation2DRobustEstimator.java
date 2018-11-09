@@ -1,21 +1,25 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.MSACEuclideanTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date January 25, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.CoordinatesType;
 import com.irurueta.geometry.EuclideanTransformation2D;
 import com.irurueta.geometry.Point2D;
-import com.irurueta.numerical.robust.MSACRobustEstimator;
-import com.irurueta.numerical.robust.MSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -236,7 +240,7 @@ public class MSACEuclideanTransformation2DRobustEstimator extends
         }
         
         MSACRobustEstimator<EuclideanTransformation2D> innerEstimator = 
-                new MSACRobustEstimator<EuclideanTransformation2D>(
+                new MSACRobustEstimator<>(
                     new MSACRobustEstimatorListener<EuclideanTransformation2D>() {
                     
             //point to be reused when computing residuals
@@ -248,9 +252,9 @@ public class MSACEuclideanTransformation2DRobustEstimator extends
                             isWeakMinimumSizeAllowed());
             
             private List<Point2D> mSubsetInputPoints = 
-                    new ArrayList<Point2D>();
+                    new ArrayList<>();
             private List<Point2D> mSubsetOutputPoints = 
-                    new ArrayList<Point2D>();
+                    new ArrayList<>();
             
             @Override
             public double getThreshold() {
@@ -272,17 +276,17 @@ public class MSACEuclideanTransformation2DRobustEstimator extends
                     List<EuclideanTransformation2D> solutions) {
                 mSubsetInputPoints.clear();
                 mSubsetOutputPoints.clear();
-                for(int i = 0; i < samplesIndices.length; i++) {
-                    mSubsetInputPoints.add(mInputPoints.get(samplesIndices[i]));
+                for (int samplesIndex : samplesIndices) {
+                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));
                     mSubsetOutputPoints.add(mOutputPoints.get(
-                            samplesIndices[i]));
+                            samplesIndex));
                 }
 
-                try{
+                try {
                     mNonRobustEstimator.setPoints(mSubsetInputPoints, 
                             mSubsetOutputPoints);
                     solutions.add(mNonRobustEstimator.estimate());
-                }catch(Exception e){
+                } catch (Exception e) {
                     //if points are coincident, no solution is added
                 }
             }
@@ -308,7 +312,7 @@ public class MSACEuclideanTransformation2DRobustEstimator extends
             @Override
             public void onEstimateStart(
                     RobustEstimator<EuclideanTransformation2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(
                             MSACEuclideanTransformation2DRobustEstimator.this);
                 }
@@ -317,7 +321,7 @@ public class MSACEuclideanTransformation2DRobustEstimator extends
             @Override
             public void onEstimateEnd(
                     RobustEstimator<EuclideanTransformation2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(
                             MSACEuclideanTransformation2DRobustEstimator.this);
                 }
@@ -327,7 +331,7 @@ public class MSACEuclideanTransformation2DRobustEstimator extends
             public void onEstimateNextIteration(
                     RobustEstimator<EuclideanTransformation2D> estimator, 
                     int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             MSACEuclideanTransformation2DRobustEstimator.this, 
                             iteration);
@@ -338,7 +342,7 @@ public class MSACEuclideanTransformation2DRobustEstimator extends
             public void onEstimateProgressChange(
                     RobustEstimator<EuclideanTransformation2D> estimator, 
                     float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             MSACEuclideanTransformation2DRobustEstimator.this, 
                             progress);

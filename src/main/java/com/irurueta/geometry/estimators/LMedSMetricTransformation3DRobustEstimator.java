@@ -275,8 +275,8 @@ public class LMedSMetricTransformation3DRobustEstimator extends
         }
         
         LMedSRobustEstimator<MetricTransformation3D> innerEstimator =
-                new LMedSRobustEstimator<MetricTransformation3D>(
-                new LMedSRobustEstimatorListener<MetricTransformation3D>(){
+                new LMedSRobustEstimator<>(
+                new LMedSRobustEstimatorListener<MetricTransformation3D>() {
                             
             //point to be reused when computing residuals
             private Point3D mTestPoint = Point3D.create(
@@ -287,9 +287,9 @@ public class LMedSMetricTransformation3DRobustEstimator extends
                             isWeakMinimumSizeAllowed());
             
             private List<Point3D> mSubsetInputPoints = 
-                    new ArrayList<Point3D>();
+                    new ArrayList<>();
             private List<Point3D> mSubsetOutputPoints = 
-                    new ArrayList<Point3D>();
+                    new ArrayList<>();
                             
             @Override
             public int getTotalSamples() {
@@ -306,10 +306,10 @@ public class LMedSMetricTransformation3DRobustEstimator extends
                     List<MetricTransformation3D> solutions) {
                 mSubsetInputPoints.clear();
                 mSubsetOutputPoints.clear();
-                for(int i = 0; i < samplesIndices.length; i++) {
-                    mSubsetInputPoints.add(mInputPoints.get(samplesIndices[i]));
+                for (int samplesIndex : samplesIndices) {
+                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));
                     mSubsetOutputPoints.add(mOutputPoints.get(
-                            samplesIndices[i]));
+                            samplesIndex));
                 }
                 
                 try {

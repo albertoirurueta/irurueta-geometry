@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.DLTLinePlaneCorrespondencePinholeCameraEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 24, 2013
+/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -13,6 +20,7 @@ import com.irurueta.algebra.SingularValueDecomposer;
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.PinholeCamera;
 import com.irurueta.geometry.Plane;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,6 +28,7 @@ import java.util.List;
  * This class implements an algorithm to estimate pinhole camera using the DLT
  * algorithm and point correspondences.
  */
+@SuppressWarnings("WeakerAccess")
 public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
         LinePlaneCorrespondencePinholeCameraEstimator {
     
@@ -268,8 +277,9 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
                 
                 //in case we want an exact solution (up to scale) when LMSE is
                 //disabled, we stop after 11 equations
-                if(!isLMSESolutionAllowed() && (counter >= MIN_NUMBER_OF_EQUATIONS))
+                if (!isLMSESolutionAllowed() && (counter >= MIN_NUMBER_OF_EQUATIONS)) {
                     break;
+                }
                 
                 //third row
                 

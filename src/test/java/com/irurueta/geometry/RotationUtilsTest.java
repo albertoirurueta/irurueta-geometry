@@ -1,47 +1,52 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.RotationUtils
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 6, 2016.
+/*
+ * Copyright (C) 2016 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class RotationUtilsTest {
     
-    public static final double MIN_ANGLE_DEGREES = 0.0;
-    public static final double MAX_ANGLE_DEGREES = 90.0;    
+    private static final double MIN_ANGLE_DEGREES = 0.0;
+    private static final double MAX_ANGLE_DEGREES = 90.0;
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public RotationUtilsTest() {}
+    public RotationUtilsTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
     
     @Test
     public void testW2omega() throws AlgebraException {
@@ -57,7 +62,7 @@ public class RotationUtilsTest {
         //check correctness
         Matrix resultB = new Matrix(4,4);
         resultB.setSubmatrix(0, 0, 3, 3,
-                new double[]{ 
+                new double[] {
                     0.0, w1, w2, w3,
                     -w1, 0.0, -w3, w2,
                     -w2, w3, 0.0, -w1,
@@ -70,7 +75,7 @@ public class RotationUtilsTest {
         try {
             RotationUtils.w2omega(w1, w2, w3, new Matrix(1,1));
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         
         //test with array
         double[] w = new double[]{ w1, w2, w3 };
@@ -83,11 +88,11 @@ public class RotationUtilsTest {
         try {
             RotationUtils.w2omega(new double[1], result);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             RotationUtils.w2omega(w, new Matrix(1,1));
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
 
         //test with new instance
         result = RotationUtils.w2omega(w1, w2, w3);
@@ -106,12 +111,12 @@ public class RotationUtilsTest {
         try {
             result = RotationUtils.w2omega(new double[1]);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(result);
     }
     
     @Test
-    public void testQuaternionToPiMatrix() throws AlgebraException{
+    public void testQuaternionToPiMatrix() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
@@ -152,7 +157,7 @@ public class RotationUtilsTest {
     }
     
     @Test
-    public void testQuaternionToConjugatedPiMatrix() throws AlgebraException{
+    public void testQuaternionToConjugatedPiMatrix() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
@@ -193,7 +198,7 @@ public class RotationUtilsTest {
     }    
     
     @Test
-    public void testPiMatrixToConjugatedPiMatrix() throws AlgebraException{
+    public void testPiMatrixToConjugatedPiMatrix() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
@@ -218,7 +223,7 @@ public class RotationUtilsTest {
     }
     
     @Test
-    public void testRotationMatrixTimesVector() throws AlgebraException{
+    public void testRotationMatrixTimesVector() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
@@ -280,16 +285,16 @@ public class RotationUtilsTest {
         assertEquals(jacobianQ.getElementAt(2, 3), bxcydz, ABSOLUTE_ERROR);
         
         //Force IllegalArgumentException
-        try{
+        try {
             RotationUtils.rotationMatrixTimesVector(q, point, result, 
                     new Matrix(1,1), jacobianP);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             RotationUtils.rotationMatrixTimesVector(q, point, result, jacobianQ, 
                     new Matrix(1,1));
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         
         
         //test without result
@@ -338,16 +343,16 @@ public class RotationUtilsTest {
         
         //Force IllegalArgumentException
         double[] result3 = null;
-        try{
+        try {
             result3 = RotationUtils.rotationMatrixTimesVector(q, point, 
                     new Matrix(1,1), jacobianP);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             result3 = RotationUtils.rotationMatrixTimesVector(q, point, 
                     jacobianQ, new Matrix(1,1));
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(result3);
 
         
@@ -379,7 +384,7 @@ public class RotationUtilsTest {
     
     @Test
     public void testTransposedRotationMatrixTimesVector() 
-            throws AlgebraException{
+            throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
@@ -443,16 +448,16 @@ public class RotationUtilsTest {
         assertEquals(jacobianQ.getElementAt(2, 3), bxcydz, ABSOLUTE_ERROR);
         
         //Force IllegalArgumentException
-        try{
+        try {
             RotationUtils.transposedRotationMatrixTimesVector(q, point, result, 
                     new Matrix(1,1), jacobianP);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             RotationUtils.transposedRotationMatrixTimesVector(q, point, result, 
                     jacobianQ, new Matrix(1,1));
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         
         
         //test without result
@@ -502,16 +507,16 @@ public class RotationUtilsTest {
         
         //Force IllegalArgumentException
         double[] result3 = null;
-        try{
+        try {
             result3 = RotationUtils.transposedRotationMatrixTimesVector(q, 
                     point, new Matrix(1,1), jacobianP);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             result3 = RotationUtils.transposedRotationMatrixTimesVector(q, 
                     point, jacobianQ, new Matrix(1,1));
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(result3);
 
         
@@ -544,7 +549,7 @@ public class RotationUtilsTest {
     }
     
     @Test
-    public void testCameraBodyToCameraSensorRotation() throws RotationException{
+    public void testCameraBodyToCameraSensorRotation() throws RotationException {
         MatrixRotation3D rot = new MatrixRotation3D();
         RotationUtils.cameraBodyToCameraSensorRotation(rot);
         
@@ -564,7 +569,7 @@ public class RotationUtilsTest {
     }
     
     @Test
-    public void testQuaternionToEulerGaussian() throws AlgebraException{
+    public void testQuaternionToEulerGaussian() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
@@ -594,7 +599,7 @@ public class RotationUtilsTest {
     }
     
     @Test
-    public void testAngularRatesToSkew() throws AlgebraException{
+    public void testAngularRatesToSkew() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         double wx = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -634,20 +639,20 @@ public class RotationUtilsTest {
         assertEquals(skew2, skew3);
         
         //Force IllegalArgumentException
-        try{
+        try {
             RotationUtils.angularRatesToSkew(new double[1], skew1);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             RotationUtils.angularRatesToSkew(angularRates, new Matrix(1,1));
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         skew2 = null;
-        try{
+        try {
             skew2 = RotationUtils.angularRatesToSkew(new double[1]);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(skew2);
     }
     

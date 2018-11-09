@@ -115,7 +115,7 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
      * using DEFAULT_COORDINATES_TYPE.
      * @return Create Point3D.
      */
-    public static Point3D create(){
+    public static Point3D create() {
         return create(DEFAULT_COORDINATES_TYPE);
     }
     
@@ -251,7 +251,7 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
      * @return True if current point and input point are the same, false 
      * otherwise.
      */    
-    public boolean equals(Point3D point){
+    public boolean equals(Point3D point) {
         return equals(point, DEFAULT_COMPARISON_THRESHOLD);
     }
 
@@ -291,7 +291,7 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
     
     /**
      * Returns the type of coordinates used to represent a Point3D.
-     * @return Type of coordinates of this 2d point
+     * @return Type of coordinates of this 2d point.
      */
     public abstract CoordinatesType getType();
     
@@ -309,7 +309,7 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
      * true, to indicate that no further normalization is possible.
      * @return True if normalized, false otherwise.
      */
-    public boolean isNormalized(){
+    public boolean isNormalized() {
         return true;
     }
 
@@ -418,9 +418,8 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
         double denom = Math.sqrt(thisNormSqr * otherNormSqr);
         double num = thisHomX * otherHomX + thisHomY * otherHomY +
                 thisHomZ * otherHomZ + thisHomW * otherHomW;
-        
-        double dot = num / denom;
-        return dot;
+
+        return num / denom;
     }    
     
     /**
@@ -444,7 +443,9 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
      */    
     public boolean isBetween(Point3D point1, Point3D point2, double threshold)
             throws IllegalArgumentException {
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         //If this point is between point1 and point2 then,
         //dist(point1,this) + dist(point2, this) == dist(point1,point2) except
         //for some small difference due to machine precision
@@ -462,7 +463,7 @@ public abstract class Point3D implements Serializable, Point<Point3D> {
         double x = 0.0, y = 0.0, z = 0.0;
         if (points != null) {
             int n = points.size();
-            for(Point3D point : points) {
+            for (Point3D point : points) {
                 x += point.getInhomX();
                 y += point.getInhomY();
                 z += point.getInhomZ();

@@ -1,28 +1,32 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.MSACConicRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 17, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.CoincidentPointsException;
 import com.irurueta.geometry.Conic;
 import com.irurueta.geometry.Point2D;
-import com.irurueta.numerical.robust.MSACRobustEstimator;
-import com.irurueta.numerical.robust.MSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best conic for provided collection of 2D points using MSAC 
- * algorithm
+ * algorithm.
  */
-public class MSACConicRobustEstimator extends ConicRobustEstimator{
+public class MSACConicRobustEstimator extends ConicRobustEstimator {
     
     /**
      * Constant defining default threshold to determine whether points are 
@@ -36,7 +40,7 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator{
         
     /**
      * Minimum value that can be set as threshold.
-     * Threshold must be strictly greater than 0.0
+     * Threshold must be strictly greater than 0.0.
      */
     public static final double MIN_THRESHOLD = 0.0;
     
@@ -44,50 +48,50 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator{
      * Threshold to determine whether points are inliers or not when testing
      * possible estimation solutions.
      * The threshold refers to the amount of error (i.e. distance) a possible 
-     * solution has on a matched pair of points
+     * solution has on a matched pair of points.
      */
     private double mThreshold;
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public MSACConicRobustEstimator(){
+    public MSACConicRobustEstimator() {
         super();
         mThreshold = DEFAULT_THRESHOLD;
     }
     
     /**
-     * Constructor with points
-     * @param points 2D points to estimate a conic
+     * Constructor with points.
+     * @param points 2D points to estimate a conic.
      * @throws IllegalArgumentException if provided list of points don't have
-     * a size greater or equal than MINIMUM_SIZE
+     * a size greater or equal than MINIMUM_SIZE.
      */
     public MSACConicRobustEstimator(List<Point2D> points)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(points);
         mThreshold = DEFAULT_THRESHOLD;
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
-    public MSACConicRobustEstimator(ConicRobustEstimatorListener listener){
+    public MSACConicRobustEstimator(ConicRobustEstimatorListener listener) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
-     * @param points 2D points to estimate a conic
+     * starts, ends or its progress significantly changes.
+     * @param points 2D points to estimate a conic.
      * @throws IllegalArgumentException if provided list of points don't have a
-     * size greater or equal than MINIMUM_SIZE
+     * size greater or equal than MINIMUM_SIZE.
      */
     public MSACConicRobustEstimator(ConicRobustEstimatorListener listener,
-            List<Point2D> points) throws IllegalArgumentException{
+            List<Point2D> points) throws IllegalArgumentException {
         super(listener, points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -96,11 +100,11 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator{
      * Returns threshold to determine whether points are inliers or not when 
      * testing possible estimation solutions.
      * The threshold refers to the amount of error a possible solution has on a 
-     * given point
+     * given point.
      * @return threshold to determine whether points are inliers or not when 
-     * testing possible estimation solutions
+     * testing possible estimation solutions.
      */
-    public double getThreshold(){
+    public double getThreshold() {
         return mThreshold;
     }
     
@@ -108,40 +112,48 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator{
      * Sets threshold to determine whether points are inliers or not when 
      * testing possible estimation solutions.
      * Thre threshold refers to the amount of error a possible solution has on 
-     * a given point
-     * @param threshold threshold to be set
+     * a given point.
+     * @param threshold threshold to be set.
      * @throws IllegalArgumentException if provided value is equal or less than 
-     * zero
+     * zero.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException{
-        if(isLocked()) throw new LockedException();
-        if(threshold <= MIN_THRESHOLD) throw new IllegalArgumentException();
+            LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (threshold <= MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         mThreshold = threshold;
     }
     
     /**
      * Estimates a conic using a robust estimator and the best set of 2D points 
      * that fit into the locus of the estimated conic found using the robust 
-     * estimator
-     * @return a conic
+     * estimator.
+     * @return a conic.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */    
     @Override
     public Conic estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         MSACRobustEstimator<Conic> innerEstimator =
-                new MSACRobustEstimator<Conic>(new MSACRobustEstimatorListener<Conic>(){
+                new MSACRobustEstimator<>(new MSACRobustEstimatorListener<Conic>() {
 
             @Override
             public double getThreshold() {
@@ -167,11 +179,11 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator{
                 Point2D point4 = mPoints.get(samplesIndices[3]);
                 Point2D point5 = mPoints.get(samplesIndices[4]);
                 
-                try{
+                try {
                     Conic conic = new Conic(point1, point2, point3, point4, 
                             point5);
                     solutions.add(conic);
-                }catch(CoincidentPointsException e){
+                } catch (CoincidentPointsException e) {
                     //if points are coincident, no solution is added
                 }
             }
@@ -188,14 +200,14 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator{
 
             @Override
             public void onEstimateStart(RobustEstimator<Conic> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(MSACConicRobustEstimator.this);
                 }
             }
 
             @Override
             public void onEstimateEnd(RobustEstimator<Conic> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(MSACConicRobustEstimator.this);
                 }
             }
@@ -203,7 +215,7 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator{
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator<Conic> estimator, int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             MSACConicRobustEstimator.this, iteration);
                 }
@@ -212,31 +224,31 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator{
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator<Conic> estimator, float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             MSACConicRobustEstimator.this, progress);
                 }
             }
         });
         
-        try{
+        try {
             mLocked = true;
             innerEstimator.setConfidence(mConfidence);
             innerEstimator.setMaxIterations(mMaxIterations);
             innerEstimator.setProgressDelta(mProgressDelta);
             return innerEstimator.estimate();
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */    
     @Override
     public RobustEstimatorMethod getMethod() {

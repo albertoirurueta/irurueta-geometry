@@ -1,14 +1,25 @@
 /*
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.Plane
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date July 17, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.*;
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.ArrayUtils;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+
 import java.io.Serializable;
 
 /**
@@ -17,73 +28,74 @@ import java.io.Serializable;
  * A * x + B * y + C * z + D = 0
  */
 public class Plane implements Serializable {
-    
+
     /**
-     * Parameter A of a plane
-     */
-    private double mA;
-    
-    /**
-     * Parameter B of a plane
-     */
-    private double mB;
-    
-    /**
-     * Parameter C of a plane
-     */
-    private double mC;
-    
-    /**
-     * Parameter D of a plane
-     */
-    private double mD;
-    
-    /**
-     * Defines whether the plane is already normalized or not
-     */
-    private boolean mNormalized;
-        
-    /**
-     * Constant defining error threshold, which is a small value close to
-     * machine precision
-     */
-    private static final double DEFAULT_ERROR_THRESHOLD = 1e-12;
-    
-    /**
-     * Constant defining the size of vector that define the direction of a plane
-     */
-    private static final int INHOM_VECTOR_SIZE = 3;
-    
-    /**
-     * Constant defining the size of the vector that contains plane parameters
+     * Constant defining the size of the vector that contains plane parameters.
      */
     public static final int PLANE_NUMBER_PARAMS = 4;
-    
+
     /**
      * Constant defining the distance threshold to determine whether a point
      * lays inside (is locus) this plane or not.
      */
+    @SuppressWarnings("WeakerAccess")
     public static final double DEFAULT_LOCUS_THRESHOLD = 1e-12;
-    
+
     /**
-     * Machine precision
+     * Minimum allowed threshold.
      */
-    private static final double PRECISION = 1e-12;    
-    
-    /**
-     * Minimum allowed threshold
-     */
-    public static final double MIN_THRESHOLD = 0.0; 
-    
+    public static final double MIN_THRESHOLD = 0.0;
+
     /**
      * Defines the threshold used when comparing two values.
      */
-    public static final double DEFAULT_COMPARISON_THRESHOLD = 1e-10;    
+    public static final double DEFAULT_COMPARISON_THRESHOLD = 1e-10;
+
+    /**
+     * Machine precision.
+     */
+    private static final double PRECISION = 1e-12;
+
+    /**
+     * Constant defining error threshold, which is a small value close to
+     * machine precision.
+     */
+    private static final double DEFAULT_ERROR_THRESHOLD = 1e-12;
+
+    /**
+     * Constant defining the size of vector that define the direction of a plane.
+     */
+    private static final int INHOM_VECTOR_SIZE = 3;
+
+    /**
+     * Parameter A of a plane.
+     */
+    private double mA;
     
+    /**
+     * Parameter B of a plane.
+     */
+    private double mB;
+    
+    /**
+     * Parameter C of a plane.
+     */
+    private double mC;
+    
+    /**
+     * Parameter D of a plane.
+     */
+    private double mD;
+    
+    /**
+     * Defines whether the plane is already normalized or not.
+     */
+    private boolean mNormalized;
+
     /**
      * Default constructor of this class.
      */
-    public Plane(){
+    public Plane() {
         mA = mB = mC = mD = 0.0;
         mNormalized = false;
     }
@@ -93,12 +105,12 @@ public class Plane implements Serializable {
      * This constructor accepts every parameter describing a plane in its
      * homogeneous form:
      * Ax + By + Cz + D = 0
-     * @param a Parameter A of this plane
-     * @param b Parameter B of this plane
-     * @param c Parameter C of this plane
-     * @param d Parameter D of this plane
+     * @param a Parameter A of this plane.
+     * @param b Parameter B of this plane.
+     * @param c Parameter C of this plane.
+     * @param d Parameter D of this plane.
      */
-    public Plane(double a, double b, double c, double d){
+    public Plane(double a, double b, double c, double d) {
         setParameters(a, b, c, d);
     }
     
@@ -106,10 +118,10 @@ public class Plane implements Serializable {
      * Constructor.
      * This constructor accepts an array containing all the parameters (a, b, c, 
      * d) describing a plane.
-     * @param array Array containing plane parameters
-     * @throws IllegalArgumentException Raised if length of array is not 4
+     * @param array Array containing plane parameters.
+     * @throws IllegalArgumentException Raised if length of array is not 4.
      */
-    public Plane(double[] array) throws IllegalArgumentException{
+    public Plane(double[] array) throws IllegalArgumentException {
         setParameters(array);
     }
     
@@ -118,84 +130,84 @@ public class Plane implements Serializable {
      * This constructor accepts three 3D points and computes the plane 
      * parameters so that the plane passes through provided points (they are
      * locus).
-     * @param pointA First 3D point to compute the plane
-     * @param pointB Second 3D point to compute the plane
-     * @param pointC Third 3D point to compute the plane
+     * @param pointA First 3D point to compute the plane.
+     * @param pointB Second 3D point to compute the plane.
+     * @param pointC Third 3D point to compute the plane.
      * @throws ColinearPointsException Raised if provided points lay in a line
      * preventing a single plane to be estimated. This happens in degenerate
      * configurations where points are colinear and an infinite set of planes
      * pass through them.
      */
     public Plane(Point3D pointA, Point3D pointB, Point3D pointC) 
-            throws ColinearPointsException{
+            throws ColinearPointsException {
         setParametersFromThreePoints(pointA, pointB, pointC);
     }
     
     /**
-     * Constructor
-     * @param point Point laying inside the plane
-     * @param vectorA First vector laying in the plane
-     * @param vectorB Second vector laying in the plane
-     * @throws IllegalArgumentException Raised if vectors length is not 3
-     * @throws ParallelVectorsException Raised if provided vectors are parallel
+     * Constructor.
+     * @param point Point laying inside the plane.
+     * @param vectorA First vector laying in the plane.
+     * @param vectorB Second vector laying in the plane.
+     * @throws IllegalArgumentException Raised if vectors length is not 3.
+     * @throws ParallelVectorsException Raised if provided vectors are parallel.
      */
     public Plane(Point3D point, double[] vectorA, double[] vectorB)
-            throws IllegalArgumentException, ParallelVectorsException{
+            throws IllegalArgumentException, ParallelVectorsException {
         setParametersFrom1PointAnd2Vectors(point, vectorA, vectorB);
     }
     
     
     /**
-     * Constructor of a plane from one point and its director vector
-     * @param point Point laying inside the plane
-     * @param vector Director vector
-     * @throws IllegalArgumentException Raised if vector length is not 3
+     * Constructor of a plane from one point and its director vector.
+     * @param point Point laying inside the plane.
+     * @param vector Director vector.
+     * @throws IllegalArgumentException Raised if vector length is not 3.
      */    
     public Plane(Point3D point, double[] vector) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         setParametersFromPointAndDirectorVector(point, vector);
     }
     
     /**
-     * Returns parameter A of this plane
-     * @return Parameter A of this plane
+     * Returns parameter A of this plane.
+     * @return Parameter A of this plane.
      */
-    public double getA(){
+    public double getA() {
         return mA;
     }
     
     /**
-     * Returns parameter B of this plane
-     * @return Parameter B of this plane
+     * Returns parameter B of this plane.
+     * @return Parameter B of this plane.
      */
-    public double getB(){
+    public double getB() {
         return mB;
     }
     
     /**
-     * Returns parameter C of this plane
-     * @return Parameter C of this plane
+     * Returns parameter C of this plane.
+     * @return Parameter C of this plane.
      */
-    public double getC(){
+    public double getC() {
         return mC;
     }
     
     /**
-     * Returns parameter D of this plane
-     * @return Parameter D of this plane
+     * Returns parameter D of this plane.
+     * @return Parameter D of this plane.
      */
-    public double getD(){
+    public double getD() {
         return mD;
     }
         
     /**
-     * Sets parameters of this plane
-     * @param a Parameter A of this plane
-     * @param b Parameter B of this plane
-     * @param c Parameter C of this plane
-     * @param d Parameter D of this plane
+     * Sets parameters of this plane.
+     * @param a Parameter A of this plane.
+     * @param b Parameter B of this plane.
+     * @param c Parameter C of this plane.
+     * @param d Parameter D of this plane.
      */
-    public final void setParameters(double a, double b, double c, double d){
+    public final void setParameters(double a, double b, double c, double d) {
         mA = a;
         mB = b;
         mC = c;
@@ -204,15 +216,16 @@ public class Plane implements Serializable {
     }
     
     /**
-     * Sets parameters of this plane
+     * Sets parameters of this plane.
      * @param array Array containing parameters of this plane.
      * @throws IllegalArgumentException Raised if provided array does not
-     * have length equal to 4
+     * have length equal to 4.
      */    
     public final void setParameters(double[] array) 
-            throws IllegalArgumentException{
-        if(array.length != PLANE_NUMBER_PARAMS) 
+            throws IllegalArgumentException {
+        if (array.length != PLANE_NUMBER_PARAMS) {
             throw new IllegalArgumentException();
+        }
         
         mA = array[0];
         mB = array[1];
@@ -224,14 +237,14 @@ public class Plane implements Serializable {
     /**
      * Computes and sets plane parameters using provided 3D points.
      * A plane can be defined from just 3 points.
-     * @param pointA 1st point
-     * @param pointB 2nd point
-     * @param pointC 3rd point
+     * @param pointA 1st point.
+     * @param pointB 2nd point.
+     * @param pointC 3rd point.
      * @throws ColinearPointsException if provided points are in a colinear or
-     * degenerate configuration
+     * degenerate configuration.
      */
     public final void setParametersFromThreePoints(Point3D pointA, 
-            Point3D pointB, Point3D pointC) throws ColinearPointsException{
+            Point3D pointB, Point3D pointC) throws ColinearPointsException {
         
         //normalize points to increase accuracy
         pointA.normalize();
@@ -239,7 +252,7 @@ public class Plane implements Serializable {
         pointC.normalize();
         
         //we use 3 points to find one plane
-        try{
+        try {
             //set homogeneous coordinates of each point on each row of the 
             //matrix
             Matrix m = new Matrix(3, PLANE_NUMBER_PARAMS);
@@ -262,7 +275,7 @@ public class Plane implements Serializable {
             SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
-            if(decomposer.getRank() < 3){
+            if (decomposer.getRank() < 3) {
                 //points where colinear, and so the null-space of those 3 points
                 //has dimension greater than one (a pencil of planes instead
                 //of just one plane can be defined)
@@ -283,7 +296,7 @@ public class Plane implements Serializable {
             //there is no need to normalize this plane to increase accuracy
             mNormalized = true;
             
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             //should only fail if decomposition fails for numerical reasons
             throw new ColinearPointsException(e);
         }
@@ -293,20 +306,20 @@ public class Plane implements Serializable {
      * Determines if provided points are colinear or have a degenerate 
      * configuration. If returned value is true, then such points cannot be used
      * to estimate a plane.
-     * @param pointA 1st plane
-     * @param pointB 2nd plane
-     * @param pointC 3rd plane
-     * @return true if provided points colinear, false otherwise
+     * @param pointA 1st plane.
+     * @param pointB 2nd plane.
+     * @param pointC 3rd plane.
+     * @return true if provided points colinear, false otherwise.
      */
     public static boolean areColinearPoints(Point3D pointA, Point3D pointB, 
-            Point3D pointC){
+            Point3D pointC) {
         //normalize points to increase accuracy
         pointA.normalize();
         pointB.normalize();
         pointC.normalize();
         
         //we use 3 points to find one plane
-        try{
+        try {
             //set homogeneous coordinates of each point on each row of the 
             //matrix
             Matrix m = new Matrix(3, PLANE_NUMBER_PARAMS);
@@ -333,62 +346,63 @@ public class Plane implements Serializable {
             //than one (a pencil of planes instead of just one plane can be 
             //defined)
             return (decomposer.getRank() < 3);
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             return true;
         }        
     }
     
     /**
-     * Sets parameter A of this plane
-     * @param a Parameter A
+     * Sets parameter A of this plane.
+     * @param a Parameter A.
      */
-    public void setA(double a){
+    public void setA(double a) {
         mA = a;
         mNormalized = false;
     }
     
     /**
-     * Sets parameter B of this plane
-     * @param b Parameter B
+     * Sets parameter B of this plane.
+     * @param b Parameter B.
      */
-    public void setB(double b){
+    public void setB(double b) {
         mB = b;
         mNormalized = false;
     }
     
     /**
-     * Sets parameter C of this plane
-     * @param c Parameter C
+     * Sets parameter C of this plane.
+     * @param c Parameter C.
      */
-    public void setC(double c){
+    public void setC(double c) {
         mC = c;
         mNormalized = false;
     }
     
     /**
-     * Sets parameter D of this plane
-     * @param d Parameter D
+     * Sets parameter D of this plane.
+     * @param d Parameter D.
      */
-    public void setD(double d){
+    public void setD(double d) {
         mD = d;
         mNormalized = false;
     }
     
     /**
-     * Sets the parameters of a plane from one point and two vectors
-     * @param point Point laying inside the plane
-     * @param vectorA First vector laying in the plane
-     * @param vectorB Second vector laying in the plane
-     * @throws IllegalArgumentException Raised if vectors length is not 3
-     * @throws ParallelVectorsException Raised if provided vectors are parallel
+     * Sets the parameters of a plane from one point and two vectors.
+     * @param point Point laying inside the plane.
+     * @param vectorA First vector laying in the plane.
+     * @param vectorB Second vector laying in the plane.
+     * @throws IllegalArgumentException Raised if vectors length is not 3.
+     * @throws ParallelVectorsException Raised if provided vectors are parallel.
      */
     public final void setParametersFrom1PointAnd2Vectors(Point3D point,
             double[] vectorA, double[] vectorB) throws IllegalArgumentException,
-            ParallelVectorsException{
+            ParallelVectorsException {
         
-        if(vectorA.length != INHOM_VECTOR_SIZE || 
-                vectorB.length != INHOM_VECTOR_SIZE) 
+        if (vectorA.length != INHOM_VECTOR_SIZE ||
+                vectorB.length != INHOM_VECTOR_SIZE) {
             throw new IllegalArgumentException();
+        }
         
         //normalize vectors to increase accuracy (we make a copy to avoid 
         //changing provied arrays)
@@ -399,15 +413,16 @@ public class Plane implements Serializable {
         double[] vB = ArrayUtils.multiplyByScalarAndReturnNew(vectorB, 
                 1.0 / norm);
         
-        try{
+        try {
             double[] cross = com.irurueta.algebra.Utils.crossProduct(vA, vB);
             
             //check if resulting vector from cross product is too small (vectors
             //are almost parallel, and machine precision might worsen things)
-            if(Math.abs(cross[0]) < DEFAULT_ERROR_THRESHOLD &&
+            if (Math.abs(cross[0]) < DEFAULT_ERROR_THRESHOLD &&
                     Math.abs(cross[1]) < DEFAULT_ERROR_THRESHOLD &&
-                    Math.abs(cross[2]) < DEFAULT_ERROR_THRESHOLD)
+                    Math.abs(cross[2]) < DEFAULT_ERROR_THRESHOLD) {
                 throw new ParallelVectorsException();
+            }
             
             //the point and the two vectors will define a plane computing the
             //cross product of the two vectors gives the values for (a,b,c), 
@@ -418,22 +433,23 @@ public class Plane implements Serializable {
             //and solving
             //d = -(a*xp + b*xy + c*xz) / wp -> the plane is fully defined
             setParametersFromPointAndDirectorVector(point, cross);
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             throw new ParallelVectorsException(e);
         }
     }
     
     /**
-     * Sets parameters of a plane from one point and its director vector
-     * @param point Point laying inside the plane
-     * @param vector Director vector
-     * @throws IllegalArgumentException Raised if vector length is not 3
+     * Sets parameters of a plane from one point and its director vector.
+     * @param point Point laying inside the plane.
+     * @param vector Director vector.
+     * @throws IllegalArgumentException Raised if vector length is not 3.
      */
     public final void setParametersFromPointAndDirectorVector(Point3D point,
-            double[] vector) throws IllegalArgumentException{
+            double[] vector) throws IllegalArgumentException {
         
-        if(vector.length != INHOM_VECTOR_SIZE) 
+        if (vector.length != INHOM_VECTOR_SIZE) {
             throw new IllegalArgumentException();
+        }
         
         //normalize point to increase accuracy
         point.normalize();
@@ -450,24 +466,26 @@ public class Plane implements Serializable {
     
     /**
      * Check if provided point is locus (lays into) of the plane.
-     * @param point Point to be checked
-     * @return True if point is locus of this plane, false otherwise
+     * @param point Point to be checked.
+     * @return True if point is locus of this plane, false otherwise.
      */
-    public boolean isLocus(Point3D point){
+    public boolean isLocus(Point3D point) {
         return isLocus(point, DEFAULT_LOCUS_THRESHOLD);
     }
     
     /**
      * Check if provided point is locus (lays into) of the plane.
-     * @param point Point to be checked
+     * @param point Point to be checked.
      * @param threshold Threshold (non-negative small value) to decide if a 
-     * point is locus of this plane
-     * @return True if point is locus of this plane, false otherwise
-     * @throws IllegalArgumentException Raised if threshold is negative
+     * point is locus of this plane.
+     * @return True if point is locus of this plane, false otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean isLocus(Point3D point, double threshold) 
-            throws IllegalArgumentException{
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+            throws IllegalArgumentException {
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         
         //make dot product of homogeneous coordinates with plane
         //m = [x, y, z, w], P = [a, b, c, d], then
@@ -486,10 +504,10 @@ public class Plane implements Serializable {
      * Distance between a plane and a 3D point. Returned distance equals to the 
      * euclidean distance between this plane and provided point but having sign.
      * Sign indicates whether point is at one side or the other of the plane.
-     * @param point Point whose distance to this line will be computed
-     * @return Distance between this line and provided point
+     * @param point Point whose distance to this line will be computed.
+     * @return Distance between this line and provided point.
      */    
-    public double signedDistance(Point3D point){
+    public double signedDistance(Point3D point) {
         point.normalize();
         normalize();
         
@@ -506,11 +524,11 @@ public class Plane implements Serializable {
      * Returns the point belonging to this line closest to provided point, which
      * will be located at signedDistance(Point2D) from this line.
      * If provided point belong to this line, then the same point will be 
-     * returned as a result
-     * @param point Point to be checked
-     * @return Closest point
+     * returned as a result.
+     * @param point Point to be checked.
+     * @return Closest point.
      */
-    public Point3D getClosestPoint(Point3D point){
+    public Point3D getClosestPoint(Point3D point) {
         return getClosestPoint(point, DEFAULT_LOCUS_THRESHOLD);
     }
 
@@ -518,15 +536,15 @@ public class Plane implements Serializable {
      * Returns the point belonging to this line closest to provided point, which
      * will be located at signedDistance(Point2D) from this line.
      * If provided point belong to this line, then the same point will be 
-     * returned as a result
-     * @param point Point to be checked
+     * returned as a result.
+     * @param point Point to be checked.
      * @param threshold Threshold to determine whether point is locus of line or
-     * not
-     * @return Closest point
-     * @throws IllegalArgumentException Raised if threshold is negative
+     * not.
+     * @return Closest point.
+     * @throws IllegalArgumentException Raised if threshold is negative.
      */    
     public Point3D getClosestPoint(Point3D point, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         Point3D result = Point3D.create();
         closestPoint(point, result, threshold);
         return result;
@@ -536,11 +554,11 @@ public class Plane implements Serializable {
      * Computes the point belonging to this plane closest to provided point, 
      * which will be located at signedDistance(Point3D) from this plane.
      * If provided point belongs to this plane, then the same point will be
-     * returned as a result
-     * @param point Point to be checked
-     * @param result Instance where the closest point will be stored
+     * returned as a result.
+     * @param point Point to be checked.
+     * @param result Instance where the closest point will be stored.
      */
-    public void closestPoint(Point3D point, Point3D result){
+    public void closestPoint(Point3D point, Point3D result) {
         closestPoint(point, result, DEFAULT_LOCUS_THRESHOLD);
     }
 
@@ -548,21 +566,23 @@ public class Plane implements Serializable {
      * Computes the point belonging to this plane closest to provided point, 
      * which will be located at signedDistance(Point3D) from this plane.
      * If provided point belongs to this plane, then the same point will be
-     * returned as a result
-     * @param point Point to be checked
-     * @param result Instance where the closest point will be stored
+     * returned as a result.
+     * @param point Point to be checked.
+     * @param result Instance where the closest point will be stored.
      * @param threshold threshold to determine whether a point is locus of
-     * this plane
-     * @throws IllegalArgumentException Raised if threshold is negative
+     * this plane.
+     * @throws IllegalArgumentException Raised if threshold is negative.
      */    
     public void closestPoint(Point3D point, Point3D result, double threshold)
-            throws IllegalArgumentException{
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+            throws IllegalArgumentException {
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         
         //normalize point to increase accuracy
         point.normalize();
         
-        if(isLocus(point, threshold)){
+        if (isLocus(point, threshold)) {
             //if point belongs to line, then it is returned as result
             result.setCoordinates(point);
             return;
@@ -584,10 +604,10 @@ public class Plane implements Serializable {
     }    
     
     /**
-     * Returns parameters of this plane as an array containing [a, b, c, d]
-     * @return Array containing all the parameters that describe this plane
+     * Returns parameters of this plane as an array containing [a, b, c, d].
+     * @return Array containing all the parameters that describe this plane.
      */
-    public double[] asArray(){
+    public double[] asArray() {
         double[] array = new double[PLANE_NUMBER_PARAMS];
         asArray(array);
         return array;
@@ -595,13 +615,14 @@ public class Plane implements Serializable {
     
     /**
      * Stores the parameters of this plane in provided array as [a, b, c, d].
-     * @param array Array where parameters of this plane will be stored
+     * @param array Array where parameters of this plane will be stored.
      * @throws IllegalArgumentException Raised if provided array doesn't have
-     * length 4
+     * length 4.
      */
-    public void asArray(double[] array) throws IllegalArgumentException{
-        if(array.length != PLANE_NUMBER_PARAMS)
+    public void asArray(double[] array) throws IllegalArgumentException {
+        if (array.length != PLANE_NUMBER_PARAMS) {
             throw new IllegalArgumentException();
+        }
         
         array[0] = mA;
         array[1] = mB;
@@ -611,13 +632,13 @@ public class Plane implements Serializable {
     
     /**
      * Normalizes the parameters of this line to increase the accuracy of some
-     * computations
+     * computations.
      */
-    public void normalize(){
-        if(!mNormalized){
+    public void normalize() {
+        if (!mNormalized) {
             double norm = Math.sqrt(mA * mA + mB * mB + mC * mC + mD * mD);
             
-            if(norm > PRECISION){
+            if (norm > PRECISION) {
                 mA /= norm;
                 mB /= norm;
                 mC /= norm;
@@ -631,17 +652,17 @@ public class Plane implements Serializable {
     /**
      * Returns boolean indicating whether this plane has already been 
      * normalized.
-     * @return True if this plane is normalized, false otherwise
+     * @return True if this plane is normalized, false otherwise.
      */
-    public boolean isNormalized(){
+    public boolean isNormalized() {
         return mNormalized;
     }
     
     /**
-     * Returns director vector of this plane
-     * @return Director vector of this plane
+     * Returns director vector of this plane.
+     * @return Director vector of this plane.
      */
-    public double[] getDirectorVector(){
+    public double[] getDirectorVector() {
         double[] out = new double[INHOM_VECTOR_SIZE];
         directorVector(out);
         return out;
@@ -649,15 +670,16 @@ public class Plane implements Serializable {
     
     /**
      * Computes director vector of this plane and stores the result in provided 
-     * array
-     * @param directorVector Array containing director vector
+     * array.
+     * @param directorVector Array containing director vector.
      * @throws IllegalArgumentException Raised if provided array does not have
-     * length 3
+     * length 3.
      */
     public void directorVector(double[] directorVector) 
-            throws IllegalArgumentException{
-        if(directorVector.length != INHOM_VECTOR_SIZE) 
+            throws IllegalArgumentException {
+        if (directorVector.length != INHOM_VECTOR_SIZE) {
             throw new IllegalArgumentException();
+        }
         
         directorVector[0] = mA;
         directorVector[1] = mB;
@@ -666,15 +688,15 @@ public class Plane implements Serializable {
 
     /**
      * Computes and returns the intersection point between this plane and the 
-     * other 2 provided planes
-     * @param otherPlane1 other plane 1
-     * @param otherPlane2 other plane 2
-     * @return point where the three planes intersect
+     * other 2 provided planes.
+     * @param otherPlane1 other plane 1.
+     * @param otherPlane2 other plane 2.
+     * @return point where the three planes intersect.
      * @throws NoIntersectionException if the three planes do not intersect in
-     * a single point.
+     * a single point..
      */
     public Point3D getIntersection(Plane otherPlane1, Plane otherPlane2) 
-            throws NoIntersectionException{
+            throws NoIntersectionException {
         Point3D result = Point3D.create();
         intersection(otherPlane1, otherPlane2, result);
         return result;
@@ -682,15 +704,15 @@ public class Plane implements Serializable {
     
     /**
      * Computes the intersection point between this plane and the other 2 
-     * provided planes
-     * @param otherPlane1 other plane 1 
-     * @param otherPlane2 other plane 2
-     * @param result point where the intersection will be stored
+     * provided planes.
+     * @param otherPlane1 other plane 1.
+     * @param otherPlane2 other plane 2.
+     * @param result point where the intersection will be stored.
      * @throws NoIntersectionException if the three planes do not intersect in
-     * a single point
+     * a single point.
      */
     public void intersection(Plane otherPlane1, Plane otherPlane2, 
-            Point3D result) throws NoIntersectionException{
+            Point3D result) throws NoIntersectionException {
         
         //normalize planes to increase accuracy
         normalize();
@@ -698,7 +720,7 @@ public class Plane implements Serializable {
         otherPlane2.normalize();
         
         //set matrix where each row contains the parameters of the plane
-        try{
+        try {
             Matrix m = new Matrix(3, 4);
             m.setElementAt(0, 0, mA);
             m.setElementAt(0, 1, mB);
@@ -721,7 +743,9 @@ public class Plane implements Serializable {
             decomposer.decompose();
         
             //planes are parallel
-            if(decomposer.getRank() < 3) throw new NoIntersectionException();
+            if (decomposer.getRank() < 3) {
+                throw new NoIntersectionException();
+            }
         
             Matrix V = decomposer.getV();
         
@@ -732,7 +756,7 @@ public class Plane implements Serializable {
             result.setHomogeneousCoordinates(V.getElementAt(0, 3), 
                     V.getElementAt(1, 3), V.getElementAt(2, 3), 
                     V.getElementAt(3, 3));
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             //lines are numerically unstable
             throw new NoIntersectionException(e);
         }
@@ -741,11 +765,11 @@ public class Plane implements Serializable {
     /**
      * Computes the dot product between the parameters A, B, C, D of this plane
      * and the ones of provided plane.
-     * This method normalizes both planes to compute dot product
-     * @param plane plane to compute dot product with
-     * @return dot product value
+     * This method normalizes both planes to compute dot product.
+     * @param plane plane to compute dot product with.
+     * @return dot product value.
      */
-    public double dotProduct(Plane plane){
+    public double dotProduct(Plane plane) {
         normalize();
         plane.normalize();
         return mA * plane.mA + mB * plane.mB + mC * plane.mC + mD * plane.mD;
@@ -753,20 +777,22 @@ public class Plane implements Serializable {
     
     /**
      * Checks if the plane described by this instance equals provided plane
-     * up to provided threshold
+     * up to provided threshold.
      * @param plane plane to be compared to.
      * @param threshold threshold grade of tolerance to determine whether the
      * planes are equal or not. It is used because due to machine precision,
      * the values might not be exactly equal (if not provided 
-     * DEFAULT_COMPARISON_THRESHOLD is used)
+     * DEFAULT_COMPARISON_THRESHOLD is used).
      * @return true if current plane and provided one are the same, false 
-     * otherwise
-     * @throws IllegalArgumentException if threshold is negative
+     * otherwise.
+     * @throws IllegalArgumentException if threshold is negative.
      */
     public boolean equals(Plane plane, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         
         normalize();
         plane.normalize();
@@ -776,24 +802,28 @@ public class Plane implements Serializable {
     
     /**
      * Checks if the plane described by this instance equals provided plane
-     * up to default comparison threshold
+     * up to default comparison threshold.
      * @param plane plane to be compared to.
      * @return true if current plane and provided one are the same, false 
-     * otherwise
+     * otherwise.
      */    
-    public boolean equals(Plane plane){
+    public boolean equals(Plane plane) {
         return equals(plane, DEFAULT_COMPARISON_THRESHOLD);
     }
     
     /**
-     * Checks if provided object equals current plane
-     * @param obj object to compare
-     * @return true if both objects are considered to be equal, false otherwise
+     * Checks if provided object equals current plane.
+     * @param obj object to compare.
+     * @return true if both objects are considered to be equal, false otherwise.
      */
     @Override
-    public boolean equals(Object obj){
-        if(!(obj instanceof Plane)) return false;
-        if(obj == this) return true;
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Plane)) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
         
         Plane plane = (Plane)obj;
         return equals(plane);
@@ -802,7 +832,7 @@ public class Plane implements Serializable {
     /**
      * Returns hash code value. This is only defined to keep the compiler happy.
      * This method must be overridden in subclasses of this class.
-     * @return Hash code
+     * @return Hash code.
      */    
     @Override
     public int hashCode() {
@@ -823,9 +853,9 @@ public class Plane implements Serializable {
      * Creates a new instance of a plane located the canonical infinity.
      * The canonical infinity corresponds to all 3D points located at infinity
      * (i.e. M = (X,Y,Z,W = 0), hence P = (A = 0,B = 0,C = 0, W = 1))
-     * @return a new instance of a plane located at the canonical infinity
+     * @return a new instance of a plane located at the canonical infinity.
      */
-    public static Plane createCanonicalPlaneAtInfinity(){
+    public static Plane createCanonicalPlaneAtInfinity() {
         Plane p = new Plane();
         setAsCanonicalPlaneAtInfinity(p);
         return p;
@@ -835,9 +865,9 @@ public class Plane implements Serializable {
      * Sets provided plane into the canonical infinity.
      * The canonical infinity corresponds to all 3D points located at infinity
      * (i.e. M = (X,Y,Z,W = 0), hence P = (A = 0,B = 0,C = 0, W = 1))
-     * @param plane plane to be set at infinity
+     * @param plane plane to be set at infinity.
      */
-    public static void setAsCanonicalPlaneAtInfinity(Plane plane){
+    public static void setAsCanonicalPlaneAtInfinity(Plane plane) {
         plane.mA = plane.mB = plane.mC = 0.0;
         plane.mD = 1.0;
         plane.mNormalized = true;

@@ -1,21 +1,25 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.RANSACLinePlaneCorrespondencePinholeCameraRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 10, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.PinholeCamera;
 import com.irurueta.geometry.Plane;
-import com.irurueta.numerical.robust.RANSACRobustEstimator;
-import com.irurueta.numerical.robust.RANSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -303,14 +307,14 @@ public class RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
         nonRobustEstimator.setSuggestedCenterValue(getSuggestedCenterValue());
         
         RANSACRobustEstimator<PinholeCamera> innerEstimator =
-                new RANSACRobustEstimator<PinholeCamera>(
+                new RANSACRobustEstimator<>(
                 new RANSACRobustEstimatorListener<PinholeCamera>() {
 
             //3D planes for a subset of samples
-            private List<Plane> mSubsetPlanes = new ArrayList<Plane>();
+            private List<Plane> mSubsetPlanes = new ArrayList<>();
             
             //2D lines for a subset of samples
-            private List<Line2D> mSubsetLines = new ArrayList<Line2D>();
+            private List<Line2D> mSubsetLines = new ArrayList<>();
                     
             @Override
             public double getThreshold() {

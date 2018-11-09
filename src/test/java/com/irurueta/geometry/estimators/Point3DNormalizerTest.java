@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.Point3DNormalizer
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 10, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -14,49 +21,47 @@ import com.irurueta.geometry.InhomogeneousPoint3D;
 import com.irurueta.geometry.Point3D;
 import com.irurueta.geometry.ProjectiveTransformation3D;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class Point3DNormalizerTest {
-    public static final int MIN_POINTS = 2;
-    public static final int MAX_POINTS = 10;
+    private static final int MIN_POINTS = 2;
+    private static final int MAX_POINTS = 10;
     
-    public static final double MIN_VALUE = -10.0;
-    public static final double MAX_VALUE = 10.0;
+    private static final double MIN_VALUE = -10.0;
+    private static final double MAX_VALUE = 10.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
-    public Point3DNormalizerTest() {}
+    public Point3DNormalizerTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        List<Point3D> points = new ArrayList<Point3D>();
+        List<Point3D> points = new ArrayList<>();
         InhomogeneousPoint3D point;
-        for(int i = 0; i < nPoints; i++){
+        for (int i = 0; i < nPoints; i++) {
             double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             double z = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
@@ -90,21 +95,21 @@ public class Point3DNormalizerTest {
         assertFalse(normalizer.isReady());
         
         normalizer = null;
-        try{
+        try {
             normalizer = new Point3DNormalizer(points);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(normalizer);
     }
     
     @Test
-    public void testGetSetPoints() throws LockedException{
+    public void testGetSetPoints() throws LockedException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         int nPoints1 = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        List<Point3D> points1 = new ArrayList<Point3D>();
+        List<Point3D> points1 = new ArrayList<>();
         InhomogeneousPoint3D point;
-        for(int i = 0; i < nPoints1; i++){
+        for (int i = 0; i < nPoints1; i++) {
             double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             double z = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
@@ -113,8 +118,8 @@ public class Point3DNormalizerTest {
         }
         
         int nPoints2 = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        List<Point3D> points2 = new ArrayList<Point3D>();
-        for(int i = 0; i < nPoints2; i++){
+        List<Point3D> points2 = new ArrayList<>();
+        for (int i = 0; i < nPoints2; i++) {
             double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
             double z = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
@@ -136,17 +141,17 @@ public class Point3DNormalizerTest {
     
     @Test
     public void testCompute() throws NotReadyException, LockedException, 
-            WrongSizeException, NormalizerException{
+            WrongSizeException, NormalizerException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> points = new ArrayList<Point3D>();
+            List<Point3D> points = new ArrayList<>();
             InhomogeneousPoint3D point;
             double minX = Double.MAX_VALUE, minY = Double.MAX_VALUE,
                     minZ = Double.MAX_VALUE, maxX = -Double.MAX_VALUE,
                     maxY = -Double.MAX_VALUE, maxZ = -Double.MAX_VALUE;
-            for(int i = 0; i < nPoints; i++){
+            for (int i = 0; i < nPoints; i++) {
                 double x = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
                 double y = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
                 double z = randomizer.nextDouble(MIN_VALUE, MAX_VALUE);
@@ -218,7 +223,7 @@ public class Point3DNormalizerTest {
             //compute centroid and scales
             minX = minY = minZ = Double.MAX_VALUE;
             maxX = maxY = maxZ = -Double.MAX_VALUE;
-            for(Point3D normPoint : normPoints){
+            for (Point3D normPoint : normPoints) {
                 double x = normPoint.getInhomX();
                 double y = normPoint.getInhomY();
                 double z = normPoint.getInhomZ();
@@ -257,7 +262,7 @@ public class Point3DNormalizerTest {
             List<Point3D> denomPoints = invTransformation.transformPointsAndReturnNew(
                     normPoints);
             
-            for(int i = 0; i < nPoints; i++){
+            for (int i = 0; i < nPoints; i++) {
                 assertEquals(points.get(i).distanceTo(denomPoints.get(i)), 0.0, 
                         ABSOLUTE_ERROR);
             }

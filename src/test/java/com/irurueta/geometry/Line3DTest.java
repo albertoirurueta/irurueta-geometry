@@ -1,66 +1,60 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.geometry.Line3D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 15, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.DecomposerException;
-import com.irurueta.algebra.LockedException;
-import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.*;
 import com.irurueta.algebra.NotAvailableException;
-import com.irurueta.algebra.NotReadyException;
-import com.irurueta.algebra.SingularValueDecomposer;
 import com.irurueta.algebra.Utils;
-import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class Line3DTest {
     
-    public static final double MIN_RANDOM_VALUE = -10.0;
-    public static final double MAX_RANDOM_VALUE = 10.0;
+    private static final double MIN_RANDOM_VALUE = -10.0;
+    private static final double MAX_RANDOM_VALUE = 10.0;
     
-    public static final int INHOM_COORDS = 3;
-    public static final int HOM_COORDS = 4;
+    private static final int INHOM_COORDS = 3;
+    private static final int HOM_COORDS = 4;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-6;
     
-    public Line3DTest() {
-    }
+    public Line3DTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
     public void testConstructor() throws WrongSizeException, NotReadyException, 
-        LockedException, DecomposerException, NotAvailableException, 
-        CoincidentPlanesException, NoIntersectionException, 
-        CoincidentPointsException{
+            LockedException, DecomposerException, NotAvailableException,
+            CoincidentPlanesException, NoIntersectionException,
+            CoincidentPointsException {
         
         //Create random homogeneous coordinates for a point
         Matrix m = Matrix.createWithUniformRandomValues(1, HOM_COORDS, 
@@ -78,9 +72,12 @@ public class Line3DTest {
         
         HomogeneousPoint3D point = new HomogeneousPoint3D(m.toArray());
         
-        Plane plane1 = new Plane(V.getSubmatrixAsArray(0, 1, 3, 1));
-        Plane plane2 = new Plane(V.getSubmatrixAsArray(0, 2, 3, 2));
-        Plane plane3 = new Plane(V.getSubmatrixAsArray(0, 3, 3, 3));
+        Plane plane1 = new Plane(V.getSubmatrixAsArray(0, 1,
+                3, 1));
+        Plane plane2 = new Plane(V.getSubmatrixAsArray(0, 2,
+                3, 2));
+        Plane plane3 = new Plane(V.getSubmatrixAsArray(0, 3,
+                3, 3));
         
         //ensure that point is the intersection of all 3 points
         assertTrue(plane1.getIntersection(plane2, plane3).equals(
@@ -96,25 +93,25 @@ public class Line3DTest {
         
         //Force ParallelPlanesException (by using the same plane)
         line = null;
-        try{
+        try {
             line = new Line3D(plane1, plane1);
             fail("CoincidentPlanesException expected but not thrown");
-        }catch(CoincidentPlanesException e){}
+        } catch (CoincidentPlanesException ignore) { }
         assertNull(line);
         
         
         //test constructor from 2 non-coincident points
         m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        while(Utils.rank(m) < 2){
+        while (Utils.rank(m) < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
         
-        Point3D point1 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0, 0, 0, 
-                HOM_COORDS - 1));
-        Point3D point2 = new HomogeneousPoint3D(m.getSubmatrixAsArray(1, 0, 1, 
-                HOM_COORDS - 1));
+        Point3D point1 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0,
+                0, 0, HOM_COORDS - 1));
+        Point3D point2 = new HomogeneousPoint3D(m.getSubmatrixAsArray(1,
+                0, 1, HOM_COORDS - 1));
         
         line = new Line3D(point1, point2);
         
@@ -134,17 +131,17 @@ public class Line3DTest {
         
         //Force CoincidentPointsException (by using the same point)
         line = null;
-        try{
+        try {
             line = new Line3D(point1, point1);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}
+        } catch (CoincidentPointsException ignore) { }
         assertNull(line);
     }
     
     @Test
     public void testAreParallelPlanes() throws WrongSizeException, 
-        NotReadyException, LockedException, DecomposerException,
-        NotAvailableException, NoIntersectionException{
+            NotReadyException, LockedException, DecomposerException,
+            NotAvailableException, NoIntersectionException {
         
         //Create random homogeneous coordinates for a point
         Matrix m = Matrix.createWithUniformRandomValues(1, HOM_COORDS, 
@@ -162,9 +159,12 @@ public class Line3DTest {
         
         HomogeneousPoint3D point = new HomogeneousPoint3D(m.toArray());
         
-        Plane plane1 = new Plane(V.getSubmatrixAsArray(0, 1, 3, 1));
-        Plane plane2 = new Plane(V.getSubmatrixAsArray(0, 2, 3, 2));
-        Plane plane3 = new Plane(V.getSubmatrixAsArray(0, 3, 3, 3));
+        Plane plane1 = new Plane(V.getSubmatrixAsArray(0, 1,
+                3, 1));
+        Plane plane2 = new Plane(V.getSubmatrixAsArray(0, 2,
+                3, 2));
+        Plane plane3 = new Plane(V.getSubmatrixAsArray(0, 3,
+                3, 3));
         
         //ensure that point is the intersection of all 3 points
         assertTrue(plane1.getIntersection(plane2, plane3).equals(
@@ -183,8 +183,8 @@ public class Line3DTest {
     
     @Test
     public void testGetSetPlanes() throws WrongSizeException, NotReadyException, 
-        LockedException, DecomposerException, NotAvailableException, 
-        CoincidentPlanesException{
+            LockedException, DecomposerException, NotAvailableException,
+            CoincidentPlanesException {
         
         //Create random homogeneous coordinates for a point
         Matrix m = Matrix.createWithUniformRandomValues(1, HOM_COORDS, 
@@ -200,11 +200,12 @@ public class Line3DTest {
         
         Matrix V = decomposer.getV();
         
-        HomogeneousPoint3D point = new HomogeneousPoint3D(m.toArray());
-        
-        Plane plane1 = new Plane(V.getSubmatrixAsArray(0, 1, 3, 1));
-        Plane plane2 = new Plane(V.getSubmatrixAsArray(0, 2, 3, 2));
-        Plane plane3 = new Plane(V.getSubmatrixAsArray(0, 3, 3, 3));
+        Plane plane1 = new Plane(V.getSubmatrixAsArray(0, 1,
+                3, 1));
+        Plane plane2 = new Plane(V.getSubmatrixAsArray(0, 2,
+                3, 2));
+        Plane plane3 = new Plane(V.getSubmatrixAsArray(0, 3,
+                3, 3));
 
         Line3D line = new Line3D(plane1, plane2);
         assertEquals(line.getPlane1(), plane1);
@@ -216,28 +217,28 @@ public class Line3DTest {
         assertEquals(line.getPlane2(), plane3);
         
         //Force ParallelPlanesException
-        try{
+        try {
             line.setPlanes(plane1, plane1);
             fail("CoincidentPlanesException expected but not thrown");
-        }catch(CoincidentPlanesException e){}
+        } catch (CoincidentPlanesException ignore) { }
     }
     
     @Test
     public void testSetPlanesFromPoints() throws WrongSizeException, 
-        DecomposerException, CoincidentPointsException{
+            DecomposerException, CoincidentPointsException {
         
         //test constructor from 2 non-coincident points
         Matrix m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        while(Utils.rank(m) < 2){
+        while (Utils.rank(m) < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
         
-        Point3D point1 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0, 0, 0, 
-                HOM_COORDS - 1));
-        Point3D point2 = new HomogeneousPoint3D(m.getSubmatrixAsArray(1, 0, 1, 
-                HOM_COORDS - 1));
+        Point3D point1 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0,
+                0, 0, HOM_COORDS - 1));
+        Point3D point2 = new HomogeneousPoint3D(m.getSubmatrixAsArray(1,
+                0, 1, HOM_COORDS - 1));
                 
         
         Line3D line = new Line3D(point1, point2);
@@ -258,15 +259,15 @@ public class Line3DTest {
         //now build another set of points        
         m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        while(Utils.rank(m) < 2){
+        while (Utils.rank(m) < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
         
-        Point3D point3 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0, 0, 0, 
-                HOM_COORDS - 1));
-        Point3D point4 = new HomogeneousPoint3D(m.getSubmatrixAsArray(1, 0, 1, 
-                HOM_COORDS - 1));        
+        Point3D point3 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0,
+                0, 0, HOM_COORDS - 1));
+        Point3D point4 = new HomogeneousPoint3D(m.getSubmatrixAsArray(1,
+                0, 1, HOM_COORDS - 1));
         
         line.setPlanesFromPoints(point3, point4);
         //ensure that both point3 and point4 belong to line 3D
@@ -285,9 +286,9 @@ public class Line3DTest {
     
     @Test
     public void testIsLocusDistanceAndClosestPoint() throws WrongSizeException, 
-        NotReadyException, LockedException, DecomposerException,
-        NotAvailableException, NoIntersectionException, 
-        CoincidentPlanesException{
+            NotReadyException, LockedException, DecomposerException,
+            NotAvailableException, NoIntersectionException,
+            CoincidentPlanesException {
         
         //Create random homogeneous coordinates for a point
         Matrix m = Matrix.createWithUniformRandomValues(1, HOM_COORDS, 
@@ -305,9 +306,12 @@ public class Line3DTest {
         
         HomogeneousPoint3D point = new HomogeneousPoint3D(m.toArray());
         
-        Plane plane1 = new Plane(V.getSubmatrixAsArray(0, 1, 3, 1));
-        Plane plane2 = new Plane(V.getSubmatrixAsArray(0, 2, 3, 2));
-        Plane plane3 = new Plane(V.getSubmatrixAsArray(0, 3, 3, 3));
+        Plane plane1 = new Plane(V.getSubmatrixAsArray(0, 1,
+                3, 1));
+        Plane plane2 = new Plane(V.getSubmatrixAsArray(0, 2,
+                3, 2));
+        Plane plane3 = new Plane(V.getSubmatrixAsArray(0, 3,
+                3, 3));
         
         //ensure that point is the intersection of all 3 points
         assertTrue(plane1.getIntersection(plane2, plane3).equals(
@@ -321,15 +325,16 @@ public class Line3DTest {
         assertTrue(line.isLocus(point, ABSOLUTE_ERROR));
         
         //Force IllegalArgumentException
-        try{
+        try {
             line.isLocus(point, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //build another point at a given distance in perpendicular direction of
         //line.
         m = new Matrix(1, INHOM_COORDS);
-        m.setSubmatrix(0, 0, 0, INHOM_COORDS - 1, line.getDirection());
+        m.setSubmatrix(0, 0, 0,
+                INHOM_COORDS - 1, line.getDirection());
         
         decomposer.setInputMatrix(m);
         decomposer.decompose();
@@ -338,8 +343,8 @@ public class Line3DTest {
         
         //because m has rank 1, the null space of m has rank 2, which are the 
         //last 2 columns of V, which are perpendicular to m
-        Matrix perpendicular = V.getSubmatrix(0, 2, 2, 2); //pick last column 
-                                                            //of V
+        Matrix perpendicular = V.getSubmatrix(0, 2,
+                2, 2); //pick last column of V
         
         //determine amount of distance
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -374,32 +379,32 @@ public class Line3DTest {
                 ABSOLUTE_ERROR));
         
         //Force IllegalArgumentException
-        try{
+        try {
             line.getClosestPoint(distPoint, -dist);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             line.closestPoint(distPoint, closestPoint, -dist);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testNormalizeAndIsNormalized() throws WrongSizeException, 
-        DecomposerException, CoincidentPointsException{
+            DecomposerException, CoincidentPointsException {
         
         //test constructor from 2 non-coincident points
         Matrix m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        while(Utils.rank(m) < 2){
+        while (Utils.rank(m) < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
         
-        Point3D point1 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0, 0, 0, 
-                HOM_COORDS - 1));
-        Point3D point2 = new HomogeneousPoint3D(m.getSubmatrixAsArray(1, 0, 1, 
-                HOM_COORDS - 1));
+        Point3D point1 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0,
+                0, 0, HOM_COORDS - 1));
+        Point3D point2 = new HomogeneousPoint3D(m.getSubmatrixAsArray(1,
+                0, 1, HOM_COORDS - 1));
         
         Line3D line = new Line3D(point1, point2);
         
@@ -418,21 +423,20 @@ public class Line3DTest {
     
     @Test
     public void testGetDirection() throws WrongSizeException, 
-        DecomposerException,
-        CoincidentPointsException{
+            DecomposerException, CoincidentPointsException {
         
         //test constructor from 2 non-coincident points
         Matrix m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        while(Utils.rank(m) < 2){
+        while (Utils.rank(m) < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         }
         
-        Point3D point1 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0, 0, 0, 
-                HOM_COORDS - 1));
-        Point3D point2 = new HomogeneousPoint3D(m.getSubmatrixAsArray(1, 0, 1, 
-                HOM_COORDS - 1));
+        Point3D point1 = new HomogeneousPoint3D(m.getSubmatrixAsArray(0,
+                0, 0, HOM_COORDS - 1));
+        Point3D point2 = new HomogeneousPoint3D(m.getSubmatrixAsArray(1,
+                0, 1, HOM_COORDS - 1));
         
         Line3D line = new Line3D(point1, point2);        
         
@@ -459,8 +463,8 @@ public class Line3DTest {
     
     @Test
     public void testIntersection() throws WrongSizeException, NotReadyException, 
-        LockedException, DecomposerException, NotAvailableException, 
-        NoIntersectionException, CoincidentPlanesException{
+            LockedException, DecomposerException, NotAvailableException,
+            NoIntersectionException, CoincidentPlanesException {
         //Create random homogeneous coordinates for a point
         Matrix m = Matrix.createWithUniformRandomValues(1, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -477,9 +481,12 @@ public class Line3DTest {
         
         HomogeneousPoint3D point = new HomogeneousPoint3D(m.toArray());
         
-        Plane plane1 = new Plane(V.getSubmatrixAsArray(0, 1, 3, 1));
-        Plane plane2 = new Plane(V.getSubmatrixAsArray(0, 2, 3, 2));
-        Plane plane3 = new Plane(V.getSubmatrixAsArray(0, 3, 3, 3));
+        Plane plane1 = new Plane(V.getSubmatrixAsArray(0, 1,
+                3, 1));
+        Plane plane2 = new Plane(V.getSubmatrixAsArray(0, 2,
+                3, 2));
+        Plane plane3 = new Plane(V.getSubmatrixAsArray(0, 3,
+                3, 3));
         
         //ensure that point is the intersection of all 3 points
         assertTrue(plane1.getIntersection(plane2, plane3).equals(

@@ -115,7 +115,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * using DEFAULT_COORDINATES_TYPE.
      * @return Create Point2D.
      */
-    public static Point2D create(){
+    public static Point2D create() {
         return create(DEFAULT_COORDINATES_TYPE);
     }
     
@@ -204,9 +204,9 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
     
     /**
      * Sets coordinates of this 2d point instance using provided inhomogeneous
-     * coordinates
-     * @param inhomX x inhomogeneous coordinate
-     * @param inhomY y inhomogeneous coordinate
+     * coordinates.
+     * @param inhomX x inhomogeneous coordinate.
+     * @param inhomY y inhomogeneous coordinate.
      */
     public abstract void setInhomogeneousCoordinates(double inhomX, 
             double inhomY);
@@ -218,8 +218,8 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @param threshold threshold used to check that the difference of the 
      * values is close to zero with an absolute error defined by threshold.
      * @return True if current point and input point are the same, false 
-     * otherwise
-     * @throws IllegalArgumentException Raised if threshold is negative
+     * otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public abstract boolean equals(Point2D point, double threshold)
             throws IllegalArgumentException;
@@ -231,7 +231,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @return True if current point and input point are the same, false 
      * otherwise.
      */    
-    public boolean equals(Point2D point){
+    public boolean equals(Point2D point) {
         return equals(point, DEFAULT_COMPARISON_THRESHOLD);
     }
 
@@ -271,7 +271,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
     
     /**
      * Returns the type of coordinates used to represent a Point2D.
-     * @return Type of coordinates of this 2d point
+     * @return Type of coordinates of this 2d point.
      */
     public abstract CoordinatesType getType();
     
@@ -289,7 +289,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * true, to indicate that no further normalization is possible.
      * @return True if normalized, false otherwise.
      */
-    public boolean isNormalized(){
+    public boolean isNormalized() {
         return true;
     }
 
@@ -397,10 +397,10 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
     
     /**
      * Returns true if this point is between points point1 and point2, in other
-     * words, is inside the segment formed by those 2 points
-     * @param point1 Point 1
-     * @param point2 Point 2
-     * @return True if point is between point1 and point2, false otherwise
+     * words, is inside the segment formed by those 2 points.
+     * @param point1 Point 1.
+     * @param point2 Point 2.
+     * @return True if point is between point1 and point2, false otherwise.
      */
     public boolean isBetween(Point2D point1, Point2D point2) {
         return isBetween(point1, point2, DEFAULT_COMPARISON_THRESHOLD);
@@ -416,7 +416,9 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      */    
     public boolean isBetween(Point2D point1, Point2D point2, double threshold)
             throws IllegalArgumentException {
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         //If this point is between point1 and point2 then,
         //dist(point1,this) + dist(point2, this) == dist(point1,point2) except
         //for some small difference due to machine precision

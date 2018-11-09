@@ -1,23 +1,28 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.LinePlaneCorrespondencePinholeCameraRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 12, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.Plane;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
@@ -171,9 +176,10 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getCovariance());
         
         //create with robust estimator method and lines and planes
-        List<Plane> planes = new ArrayList<Plane>();
-        List<Line2D> lines = new ArrayList<Line2D>();
-        for (int i = 0; i < LinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES; i++) {
+        List<Plane> planes = new ArrayList<>();
+        List<Line2D> lines = new ArrayList<>();
+        for (int i = 0;
+             i < LinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES; i++) {
             planes.add(new Plane());
             lines.add(new Line2D());
         }
@@ -309,8 +315,8 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
         assertNull(estimator.getCovariance());
         
         //Force IllegalArgumentException
-        List<Plane> emptyPlanes = new ArrayList<Plane>();
-        List<Line2D> emptyLines = new ArrayList<Line2D>();
+        List<Plane> emptyPlanes = new ArrayList<>();
+        List<Line2D> emptyLines = new ArrayList<>();
         estimator = null;
         try {
             //empty points
@@ -318,30 +324,30 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
                     create(emptyPlanes, emptyLines, 
                     RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(planes, emptyLines, RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //create with listener and robust estimator method
         PinholeCameraRobustEstimatorListener listener =
-                new PinholeCameraRobustEstimatorListener(){
+                new PinholeCameraRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(PinholeCameraRobustEstimator estimator) {}
+            public void onEstimateStart(PinholeCameraRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(PinholeCameraRobustEstimator estimator) {}
+            public void onEstimateEnd(PinholeCameraRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, int iteration) {}
+            public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, int iteration) { }
 
             @Override
-            public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator, float progress) {}
+            public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator, float progress) { }
         };
         
         estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
@@ -746,7 +752,7 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(shortScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with points, quality scores and robust estimator method
@@ -892,21 +898,21 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
                     create(emptyPlanes, emptyLines, qualityScores, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(planes, emptyLines, qualityScores, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //short scores
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(planes, lines, shortScores, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, quality scores and method
@@ -1045,7 +1051,7 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(listener, shortScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, points, quality scores and method
@@ -1191,21 +1197,21 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
                     create(listener, emptyPlanes, emptyLines, qualityScores, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(listener, planes, emptyLines, qualityScores, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //short scores
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(listener, planes, lines, shortScores, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with no arguments
@@ -1268,13 +1274,13 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(emptyPlanes, emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(planes, emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);     
         
         
@@ -1338,13 +1344,13 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(listener, emptyPlanes, emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(listener, planes, emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);     
         
         
@@ -1380,7 +1386,7 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(shortScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -1417,19 +1423,19 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(emptyPlanes, emptyLines, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(planes, emptyLines, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //short scores
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(planes, lines, shortScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);     
         
         
@@ -1465,7 +1471,7 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(listener, shortScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -1502,19 +1508,19 @@ public class LinePlaneCorrespondencePinholeCameraRobustEstimatorTest {
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(emptyPlanes, emptyLines, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(planes, emptyLines, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //short scores
             estimator = LinePlaneCorrespondencePinholeCameraRobustEstimator.
                     create(planes, lines, shortScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
     }
 }

@@ -1,85 +1,78 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 7, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.DecomposerException;
-import com.irurueta.algebra.Matrix;
-import com.irurueta.algebra.Utils;
-import com.irurueta.algebra.WrongSizeException;
+import com.irurueta.algebra.*;
 import com.irurueta.geometry.Plane;
 import com.irurueta.geometry.ProjectiveTransformation3D;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest 
-        implements ProjectiveTransformation3DRobustEstimatorListener{
+        implements ProjectiveTransformation3DRobustEstimatorListener {
     
-    public static final double MIN_RANDOM_VALUE = -1000.0;
-    public static final double MAX_RANDOM_VALUE = 1000.0;
+    private static final double MIN_RANDOM_VALUE = -1000.0;
+    private static final double MAX_RANDOM_VALUE = 1000.0;
     
-    public static final int INHOM_COORDS = 2;
+    private static final double ABSOLUTE_ERROR = 5e-6;
     
-    public static final double ABSOLUTE_ERROR = 5e-6;
+    private static final int MIN_LINES = 500;
+    private static final int MAX_LINES = 1000;
     
-    public static final int MIN_LINES = 500;
-    public static final int MAX_LINES = 1000;
+    private static final double THRESHOLD = 1e-6;
     
-    public static final double THRESHOLD = 1e-6;
+    private static final double STD_ERROR = 100.0;
     
-    public static final double STD_ERROR = 100.0;
+    private static final double MIN_SCORE_ERROR = -0.3;
+    private static final double MAX_SCORE_ERROR = 0.3;
     
-    public static final double MIN_SCORE_ERROR = -0.3;
-    public static final double MAX_SCORE_ERROR = 0.3;    
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final double MIN_CONFIDENCE = 0.95;
-    public static final double MAX_CONFIDENCE = 0.99;
-    
-    public static final int MIN_MAX_ITERATIONS = 500;
-    public static final int MAX_MAX_ITERATIONS = 5000;
-        
-    public static final int PERCENTAGE_OUTLIER = 20;
-    
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
 
     private int estimateStart;
     private int estimateEnd;
     private int estimateNextIteration;
     private int estimateProgressChange;
     
-    public PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest() {}
+    public PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
      @Test
-    public void testConstructor(){
+    public void testConstructor() {
         //test constructor without arguments
         PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
                 new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
@@ -114,9 +107,9 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
 
         
         //test constructor with points
-        List<Plane> inputPlanes = new ArrayList<Plane>();
-        List<Plane> outputPlanes = new ArrayList<Plane>();
-        for(int i = 0; i < PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE; i++){
+        List<Plane> inputPlanes = new ArrayList<>();
+        List<Plane> outputPlanes = new ArrayList<>();
+        for (int i = 0; i < PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPlanes.add(new Plane());
             outputPlanes.add(new Plane());
         }
@@ -153,20 +146,20 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());        
         
         //Force IllegalArgumentException
-        List<Plane> planesEmpty = new ArrayList<Plane>();
+        List<Plane> planesEmpty = new ArrayList<>();
         estimator = null;
-        try{
+        try {
             //not enough points
             estimator = new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                     planesEmpty, planesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                     inputPlanes, planesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
 
         
@@ -237,18 +230,18 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //not enough points
             estimator = new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                     this, planesEmpty, planesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                     this, inputPlanes, planesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);   
         
         
@@ -290,11 +283,11 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                     shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with planes and quality scores
@@ -331,24 +324,24 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //not enough planes
             estimator = new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                     planesEmpty, planesEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                     inputPlanes, planesEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //not enough scores
             estimator = new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                     inputPlanes, outputPlanes, shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
 
         
@@ -386,11 +379,11 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                     this, shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         
@@ -428,29 +421,29 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //not enough points
             estimator = new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                     this, planesEmpty, planesEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                     this, inputPlanes, planesEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //not enough scores
             estimator = new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
                     this, inputPlanes, outputPlanes, shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);           
     }
     
     @Test
-    public void testGetSetThreshold() throws LockedException{
+    public void testGetSetThreshold() throws LockedException {
         PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
                 new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
         
@@ -466,14 +459,14 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         assertEquals(estimator.getThreshold(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }  
     
     @Test
-    public void testGetSetQualityScores() throws LockedException{
+    public void testGetSetQualityScores() throws LockedException {
         PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
                 new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
         
@@ -490,14 +483,14 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         
         //Force IllegalArgumentException
         qualityScores = new double[1];
-        try{
+        try {
             estimator.setQualityScores(qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetConfidence() throws LockedException{
+    public void testGetSetConfidence() throws LockedException {
         PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
                 new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
@@ -513,19 +506,19 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         assertEquals(estimator.getConfidence(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
-        try{
+        try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }    
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException{
+    public void testGetSetMaxIterations() throws LockedException {
         PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
                 new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
@@ -541,14 +534,14 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         assertEquals(estimator.getMaxIterations(), 10);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetPlanesAndIsReady() throws LockedException{
+    public void testGetSetPlanesAndIsReady() throws LockedException {
         PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
                 new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
         
@@ -558,9 +551,9 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         assertFalse(estimator.isReady());
         
         //set new value
-        List<Plane> inputPlanes = new ArrayList<Plane>();
-        List<Plane> outputPlanes = new ArrayList<Plane>();
-        for(int i = 0; i < PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE; i++){
+        List<Plane> inputPlanes = new ArrayList<>();
+        List<Plane> outputPlanes = new ArrayList<>();
+        for (int i = 0; i < PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPlanes.add(new Plane());
             outputPlanes.add(new Plane());
         }
@@ -580,21 +573,21 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         assertTrue(estimator.isReady());
 
         //Force IllegalArgumentException
-        List<Plane> pointsEmpty = new ArrayList<Plane>();
-        try{
+        List<Plane> pointsEmpty = new ArrayList<>();
+        try {
             //not enough lines
             estimator.setPlanes(pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator.setPlanes(pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
-    public void testGetSetListenerAndIsListenerAvailable() throws LockedException{
+    public void testGetSetListenerAndIsListenerAvailable() throws LockedException {
         PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
                 new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
@@ -611,7 +604,7 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
     }
     
     @Test
-    public void testGetSetProgressDelta() throws LockedException{
+    public void testGetSetProgressDelta() throws LockedException {
         PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
                 new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
@@ -627,14 +620,14 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
         assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
@@ -695,14 +688,13 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
     }    
     
     @Test
-    public void testEstimateWithoutRefinement() throws WrongSizeException, 
-            DecomposerException, LockedException, NotReadyException, 
+    public void testEstimateWithoutRefinement() throws LockedException, NotReadyException,
             RobustEstimatorException, AlgebraException {
         int numValid = 0;
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             //create an affine transformation
-            Matrix A = null;
-            do{
+            Matrix A;
+            do {
                 //ensure A matrix is invertible
                 A = Matrix.createWithUniformRandomValues(
                         ProjectiveTransformation3D.INHOM_COORDS, 
@@ -710,7 +702,7 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
                 double norm = Utils.normF(A);
                 //normalize T to increase accuracy
                 A.multiplyByScalar(1.0 / norm);
-            }while(Utils.rank(A) < ProjectiveTransformation3D.INHOM_COORDS);
+            } while (Utils.rank(A) < ProjectiveTransformation3D.INHOM_COORDS);
             
             double[] translation = new double[
                     ProjectiveTransformation3D.INHOM_COORDS];
@@ -722,13 +714,13 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
             
             //generate random planes
             int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
-            List<Plane> inputPlanes = new ArrayList<Plane>();
-            List<Plane> outputPlanes = new ArrayList<Plane>();
-            List<Plane> outputPlanesWithError = new ArrayList<Plane>();
+            List<Plane> inputPlanes = new ArrayList<>();
+            List<Plane> outputPlanes = new ArrayList<>();
+            List<Plane> outputPlanesWithError = new ArrayList<>();
             double[] qualityScores = new double[nPlanes];
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            for(int i = 0; i < nPlanes; i++){
+            for (int i = 0; i < nPlanes; i++) {
                 Plane inputPlane = new Plane(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
@@ -739,7 +731,7 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
                 double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, 
                         MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;                
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //plane is outlier
                     double errorA = errorRandomizer.nextDouble();
                     double errorB = errorRandomizer.nextDouble();
@@ -753,7 +745,7 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
                     double error = Math.sqrt(errorA * errorA + errorB * errorB +
                             errorC * errorC + errorD * errorD);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
-                }else{
+                } else {
                     //inlier plane (without error)
                     outputPlaneWithError = outputPlane;
                 }
@@ -792,7 +784,7 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
             //error
             boolean failed = false;
             Plane plane1, plane2;
-            for(int i = 0; i < nPlanes; i++){
+            for (int i = 0; i < nPlanes; i++) {
                 plane1 = outputPlanes.get(i);
                 plane2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
                 plane1.normalize();
@@ -821,14 +813,13 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
     }
 
     @Test
-    public void testEstimateWithRefinement() throws WrongSizeException, 
-            DecomposerException, LockedException, NotReadyException, 
+    public void testEstimateWithRefinement() throws LockedException, NotReadyException,
             RobustEstimatorException, AlgebraException {
         int numValid = 0;
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             //create an affine transformation
-            Matrix A = null;
-            do{
+            Matrix A;
+            do {
                 //ensure A matrix is invertible
                 A = Matrix.createWithUniformRandomValues(
                         ProjectiveTransformation3D.INHOM_COORDS, 
@@ -836,7 +827,7 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
                 double norm = Utils.normF(A);
                 //normalize T to increase accuracy
                 A.multiplyByScalar(1.0 / norm);
-            }while(Utils.rank(A) < ProjectiveTransformation3D.INHOM_COORDS);
+            } while (Utils.rank(A) < ProjectiveTransformation3D.INHOM_COORDS);
             
             double[] translation = new double[
                     ProjectiveTransformation3D.INHOM_COORDS];
@@ -848,13 +839,13 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
             
             //generate random planes
             int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
-            List<Plane> inputPlanes = new ArrayList<Plane>();
-            List<Plane> outputPlanes = new ArrayList<Plane>();
-            List<Plane> outputPlanesWithError = new ArrayList<Plane>();
+            List<Plane> inputPlanes = new ArrayList<>();
+            List<Plane> outputPlanes = new ArrayList<>();
+            List<Plane> outputPlanesWithError = new ArrayList<>();
             double[] qualityScores = new double[nPlanes];
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            for(int i = 0; i < nPlanes; i++){
+            for (int i = 0; i < nPlanes; i++) {
                 Plane inputPlane = new Plane(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
@@ -865,7 +856,7 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
                 double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, 
                         MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;                
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //plane is outlier
                     double errorA = errorRandomizer.nextDouble();
                     double errorB = errorRandomizer.nextDouble();
@@ -879,7 +870,7 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
                     double error = Math.sqrt(errorA * errorA + errorB * errorB +
                             errorC * errorC + errorD * errorD);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
-                }else{
+                } else {
                     //inlier plane (without error)
                     outputPlaneWithError = outputPlane;
                 }
@@ -933,7 +924,7 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
             //error
             Plane plane1, plane2;
             boolean failed = false;
-            for(int i = 0; i < nPlanes; i++){
+            for (int i = 0; i < nPlanes; i++) {
                 plane1 = outputPlanes.get(i);
                 plane2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
                 plane1.normalize();
@@ -959,71 +950,71 @@ public class PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorT
 
         assertTrue(numValid > 0);
     }
-    
-    private void reset(){
-        estimateStart = estimateEnd = estimateNextIteration = 
-                estimateProgressChange = 0;
-    }    
-    
+
     @Override
     public void onEstimateStart(ProjectiveTransformation3DRobustEstimator estimator) {
         estimateStart++;
-        testLocked((PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator)estimator);
+        checkLocked((PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateEnd(
             ProjectiveTransformation3DRobustEstimator estimator) {
         estimateEnd++;
-        testLocked((PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator)estimator);
+        checkLocked((PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateNextIteration(
             ProjectiveTransformation3DRobustEstimator estimator, int iteration) {
         estimateNextIteration++;
-        testLocked((PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator)estimator);
+        checkLocked((PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateProgressChange(
             ProjectiveTransformation3DRobustEstimator estimator, float progress) {
         estimateProgressChange++;
-        testLocked((PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator)estimator);
+        checkLocked((PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator)estimator);
     }
-    
-    private void testLocked(
-            PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator){
-        List<Plane> planes = new ArrayList<Plane>();
-        try{
+
+    private void reset() {
+        estimateStart = estimateEnd = estimateNextIteration =
+                estimateProgressChange = 0;
+    }
+
+    private void checkLocked(
+            PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator) {
+        List<Plane> planes = new ArrayList<>();
+        try {
             estimator.setPlanes(planes, planes);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setProgressDelta(0.01f);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setThreshold(0.5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setConfidence(0.5);            
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setMaxIterations(10);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){
-        }catch(Exception e){
+        } catch (LockedException ignore) {
+        } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         assertTrue(estimator.isLocked());

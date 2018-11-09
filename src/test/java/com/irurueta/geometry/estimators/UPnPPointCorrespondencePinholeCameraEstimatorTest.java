@@ -1,69 +1,62 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.UPnPPointCorrespondencePinholeCameraEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 5, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.algebra.Matrix;
-import com.irurueta.geometry.AxisRotation3D;
-import com.irurueta.geometry.CameraException;
-import com.irurueta.geometry.HomogeneousPoint2D;
-import com.irurueta.geometry.HomogeneousPoint3D;
-import com.irurueta.geometry.InhomogeneousPoint2D;
-import com.irurueta.geometry.InhomogeneousPoint3D;
-import com.irurueta.geometry.NotAvailableException;
-import com.irurueta.geometry.PinholeCamera;
-import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
-import com.irurueta.geometry.Plane;
-import com.irurueta.geometry.Point2D;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Quaternion;
+import com.irurueta.geometry.*;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements 
         PinholeCameraEstimatorListener {
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-3;
-    public static final double VERY_LARGE_ABSOLUTE_ERROR = 1e-1;
-    public static final double ULTRA_LARGE_ABSOLUTE_ERROR = 1.0;
+    private static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
+    private static final double VERY_LARGE_ABSOLUTE_ERROR = 1e-1;
+    private static final double ULTRA_LARGE_ABSOLUTE_ERROR = 1.0;
     
-    public static final double MIN_RANDOM_VALUE = 50.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = 50.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_FOCAL_LENGTH = 110.0;
-    public static final double MAX_FOCAL_LENGTH = 130.0;
+    private static final double MIN_FOCAL_LENGTH = 110.0;
+    private static final double MAX_FOCAL_LENGTH = 130.0;
     
-    public static final double MIN_SKEWNESS = -0.001;
-    public static final double MAX_SKEWNESS = 0.001;    
+    private static final double MIN_SKEWNESS = -0.001;
+    private static final double MAX_SKEWNESS = 0.001;
     
-    public static final double MIN_PRINCIPAL_POINT = 90.0;
-    public static final double MAX_PRINCIPAL_POINT = 100.0;
+    private static final double MIN_PRINCIPAL_POINT = 90.0;
+    private static final double MAX_PRINCIPAL_POINT = 100.0;
     
-    public static final double MIN_ANGLE_DEGREES = 10.0;
-    public static final double MAX_ANGLE_DEGREES = 15.0;
+    private static final double MIN_ANGLE_DEGREES = 10.0;
+    private static final double MAX_ANGLE_DEGREES = 15.0;
     
-    public static final int N_POINTS = 6;
+    private static final int N_POINTS = 6;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
-    public static final double ERROR_STD = 1e-5;    
+    private static final double ERROR_STD = 1e-5;
     
-    public static final double PLANE_SLANT_DEGREES = 45.0;
+    private static final double PLANE_SLANT_DEGREES = 45.0;
     
     private int estimateStart;
     private int estimateEnd;
@@ -99,11 +92,11 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getPoints2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPoints3D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertNull(estimator.getListener());
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -166,11 +159,11 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getPoints2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPoints3D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         assertSame(estimator.getListener(), this);
         assertEquals(estimator.isSuggestSkewnessValueEnabled(), 
                 PinholeCameraEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
@@ -223,8 +216,8 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
 
         //testing constructor with lists
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        List<Point3D> points3D = new ArrayList<Point3D>(N_POINTS);
-        List<Point2D> points2D = new ArrayList<Point2D>(N_POINTS);        
+        List<Point3D> points3D = new ArrayList<>(N_POINTS);
+        List<Point2D> points2D = new ArrayList<>(N_POINTS);
         for (int i = 0; i < N_POINTS; i++) {
             points3D.add(new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -298,31 +291,31 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
         assertFalse(estimator.isPlanar());
         
         //Force WrongListSizesException
-        List<Point3D> wrong3D = new ArrayList<Point3D>();
-        List<Point2D> wrong2D = new ArrayList<Point2D>();
+        List<Point3D> wrong3D = new ArrayList<>();
+        List<Point2D> wrong2D = new ArrayList<>();
         estimator = null;
         try {
             estimator = new UPnPPointCorrespondencePinholeCameraEstimator(
                     wrong3D, points2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new UPnPPointCorrespondencePinholeCameraEstimator(
                     points3D, wrong2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new UPnPPointCorrespondencePinholeCameraEstimator(null,
                     points2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new UPnPPointCorrespondencePinholeCameraEstimator(
                     points3D, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);        
         
         
@@ -393,24 +386,24 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             estimator = new UPnPPointCorrespondencePinholeCameraEstimator(
                     wrong3D, points2D, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         try {
             estimator = new UPnPPointCorrespondencePinholeCameraEstimator(
                     points3D, wrong2D, this);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         try {
             estimator = new UPnPPointCorrespondencePinholeCameraEstimator(null,
                     points2D, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = new UPnPPointCorrespondencePinholeCameraEstimator(
                     points3D, null, this);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);                
     }
     
@@ -443,15 +436,15 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.getPoints2D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         try {
             estimator.getPoints3D();
             fail("NotAvailableException expected but not thrown");
-        } catch (NotAvailableException e) { }
+        } catch (NotAvailableException ignore) { }
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        List<Point3D> points3D = new ArrayList<Point3D>(N_POINTS);
-        List<Point2D> points2D = new ArrayList<Point2D>(N_POINTS);        
+        List<Point3D> points3D = new ArrayList<>(N_POINTS);
+        List<Point2D> points2D = new ArrayList<>(N_POINTS);
         for (int i = 0; i < N_POINTS; i++) {
             points3D.add(new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -477,20 +470,20 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
         assertTrue(estimator.isReady());
         
         //Force WrongListSizesException
-        List<Point3D> wrong3D = new ArrayList<Point3D>();        
-        List<Point2D> wrong2D = new ArrayList<Point2D>();
+        List<Point3D> wrong3D = new ArrayList<>();
+        List<Point2D> wrong2D = new ArrayList<>();
         assertFalse(UPnPPointCorrespondencePinholeCameraEstimator.areValidLists(
                 wrong3D, points2D));
         try {
             estimator.setLists(wrong3D, points2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         assertFalse(UPnPPointCorrespondencePinholeCameraEstimator.areValidLists(
                 points3D, wrong2D));
         try {
             estimator.setLists(points3D, wrong2D);
             fail("WrongListSizesException expected but not thrown");
-        } catch (WrongListSizesException e) { }
+        } catch (WrongListSizesException ignore) { }
         
         //Force IllegalArgumentException
         assertFalse(UPnPPointCorrespondencePinholeCameraEstimator.areValidLists(
@@ -498,13 +491,13 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setLists(null, points2D);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertFalse(UPnPPointCorrespondencePinholeCameraEstimator.areValidLists(
                 points3D, null));
         try {
             estimator.setLists(points3D, null);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -821,7 +814,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setMinMaxSuggestionWeight(10.0, 10.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     } 
     
     @Test
@@ -843,7 +836,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
         try {
             estimator.setSuggestionWeightStep(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
@@ -953,8 +946,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateGeneralNoSuggestion() 
             throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1000,7 +992,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             int nPoints = UPnPPointCorrespondencePinholeCameraEstimator.
                     MIN_NUMBER_OF_POINT_CORRESPONDENCES;
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new InhomogeneousPoint3D(
@@ -1052,7 +1044,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             PinholeCameraIntrinsicParameters estimatedIntrinsic =
                     estimatedCamera.getIntrinsicParameters();
 
-            if(Math.abs(focalLength - estimatedIntrinsic.getHorizontalFocalLength()) > 
+            if (Math.abs(focalLength - estimatedIntrinsic.getHorizontalFocalLength()) >
                     VERY_LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
@@ -1074,7 +1066,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             //comparing estimated camera center
             Point3D estimatedCameraCenter = new InhomogeneousPoint3D(
                     estimatedCamera.getCameraCenter());
-            if(!cameraCenter.equals(estimatedCameraCenter, 
+            if (!cameraCenter.equals(estimatedCameraCenter,
                     VERY_LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
@@ -1143,8 +1135,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimatePlanarNoSuggestion() 
             throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < 5*TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1221,7 +1212,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             double c = plane.getC();
             double d = plane.getD();
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 //get a random point belonging to the plane
@@ -1231,11 +1222,11 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
                 double homW = 1.0;
                 double homZ = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);                
-                if(Math.abs(b) > ABSOLUTE_ERROR){
+                if (Math.abs(b) > ABSOLUTE_ERROR) {
                     homX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);
                     homY = -(a * homX + c * homZ + d * homW) / b;
-                }else{
+                } else {
                     homY = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);
                     homX = -(b * homY + c * homZ + d * homW) / a;
@@ -1287,7 +1278,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             PinholeCameraIntrinsicParameters estimatedIntrinsic =
                     estimatedCamera.getIntrinsicParameters();
 
-            if(Math.abs(focalLength - estimatedIntrinsic.getHorizontalFocalLength()) > 
+            if (Math.abs(focalLength - estimatedIntrinsic.getHorizontalFocalLength()) >
                     ULTRA_LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
@@ -1309,7 +1300,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             //comparing estimated camera center
             Point3D estimatedCameraCenter = new InhomogeneousPoint3D(
                     estimatedCamera.getCameraCenter());
-            if(!cameraCenter.equals(estimatedCameraCenter, 
+            if (!cameraCenter.equals(estimatedCameraCenter,
                     VERY_LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
@@ -1324,13 +1315,25 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             Matrix rotMatrix = rotation.asInhomogeneousMatrix();
             Matrix estimatedRotMatrix = estimatedRotation.
                     asInhomogeneousMatrix();
-            
+
+            if (Math.abs(rotation.getA() - estimatedRotation.getA()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(rotation.getA(), estimatedRotation.getA(), 
                     LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(rotation.getB() - estimatedRotation.getB()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(rotation.getB(), estimatedRotation.getB(), 
                     LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(rotation.getC() - estimatedRotation.getC()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(rotation.getC(), estimatedRotation.getC(), 
                     LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(rotation.getD() - estimatedRotation.getD()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(rotation.getD(), estimatedRotation.getD(), 
                     LARGE_ABSOLUTE_ERROR);  
             
@@ -1363,8 +1366,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateGeneralSuggestedRotationEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1410,7 +1412,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             int nPoints = UPnPPointCorrespondencePinholeCameraEstimator.
                     MIN_NUMBER_OF_POINT_CORRESPONDENCES;
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new InhomogeneousPoint3D(
@@ -1519,8 +1521,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateGeneralSuggestedCenterEnabled() 
             throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1566,7 +1567,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             int nPoints = UPnPPointCorrespondencePinholeCameraEstimator.
                     MIN_NUMBER_OF_POINT_CORRESPONDENCES;
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new InhomogeneousPoint3D(
@@ -1663,8 +1664,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimateGeneralZeroSkewnessZeroPrincipalPointNoSuggestion() 
             throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1708,7 +1708,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             int nPoints = UPnPPointCorrespondencePinholeCameraEstimator.
                     MIN_NUMBER_OF_POINT_CORRESPONDENCES;
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 point3D = new InhomogeneousPoint3D(
@@ -1778,7 +1778,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             //comparing estimated camera center
             Point3D estimatedCameraCenter = new InhomogeneousPoint3D(
                     estimatedCamera.getCameraCenter());
-            if(!cameraCenter.equals(estimatedCameraCenter, 
+            if (!cameraCenter.equals(estimatedCameraCenter,
                     VERY_LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
@@ -1832,8 +1832,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
     @Test
     public void testEstimatePlanarZeroSkewnessZeroPrincipalPointNoSuggestion() 
             throws WrongListSizesException, LockedException, NotReadyException,
-            PinholeCameraEstimatorException, CameraException, 
-            NotAvailableException {
+            CameraException, NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < 5*TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1907,7 +1906,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             double c = plane.getC();
             double d = plane.getD();
             
-            List<Point3D> points3D = new ArrayList<Point3D>(nPoints);
+            List<Point3D> points3D = new ArrayList<>(nPoints);
             Point3D point3D;
             for (int i = 0; i < nPoints; i++) {
                 //get a random point belonging to the plane
@@ -1917,11 +1916,11 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
                 double homW = 1.0;
                 double homZ = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);                
-                if(Math.abs(b) > ABSOLUTE_ERROR){
+                if (Math.abs(b) > ABSOLUTE_ERROR) {
                     homX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);
                     homY = -(a * homX + c * homZ + d * homW) / b;
-                }else{
+                } else {
                     homY = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);
                     homX = -(b * homY + c * homZ + d * homW) / a;
@@ -1973,7 +1972,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             PinholeCameraIntrinsicParameters estimatedIntrinsic =
                     estimatedCamera.getIntrinsicParameters();
 
-            if(Math.abs(focalLength - estimatedIntrinsic.getHorizontalFocalLength()) > 
+            if (Math.abs(focalLength - estimatedIntrinsic.getHorizontalFocalLength()) >
                     ULTRA_LARGE_ABSOLUTE_ERROR) {
                 continue;
             }            
@@ -1995,7 +1994,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
             //comparing estimated camera center
             Point3D estimatedCameraCenter = new InhomogeneousPoint3D(
                     estimatedCamera.getCameraCenter());
-            if(!cameraCenter.equals(estimatedCameraCenter, 
+            if (!cameraCenter.equals(estimatedCameraCenter,
                     VERY_LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
@@ -2065,127 +2064,127 @@ public class UPnPPointCorrespondencePinholeCameraEstimatorTest implements
         estimationProgressChange++;
         checkIsLocked((UPnPPointCorrespondencePinholeCameraEstimator)estimator);
     }
-    
+
     private void reset() {
         estimateStart = estimateEnd = estimationProgressChange = 0;
-    }   
-    
+    }
+
     private void checkIsLocked(
             UPnPPointCorrespondencePinholeCameraEstimator estimator) {
         try {
             estimator.setLists(null, null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             estimator.setPlanarConfigurationAllowed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setNullspaceDimension2Allowed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setPlanarThreshold(1e9);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSkewness(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setHorizontalPrincipalPoint(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setVerticalPrincipalPoint(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setPointCorrespondencesNormalized(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { 
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             estimator.setSuggestSkewnessValueEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedSkewnessValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestHorizontalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedHorizontalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestVerticalFocalLengthEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedVerticalFocalLengthValue(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestAspectRatioEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedAspectRatioValue(1.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestPrincipalPointEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedPrincipalPointValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestRotationEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedRotationValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestCenterEnabled(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestedCenterValue(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMinSuggestionWeight(1.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMaxSuggestionWeight(1.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMinMaxSuggestionWeight(1.0, 1.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setSuggestionWeightStep(0.2);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }        
+        } catch (LockedException ignore) { }
         assertTrue(estimator.isLocked());
     }
 }

@@ -1,21 +1,25 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.LMedSEuclideanTransformation3DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date January 25, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.CoordinatesType;
 import com.irurueta.geometry.EuclideanTransformation3D;
 import com.irurueta.geometry.Point3D;
-import com.irurueta.numerical.robust.LMedSRobustEstimator;
-import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -277,8 +281,8 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
         }
         
         LMedSRobustEstimator<EuclideanTransformation3D> innerEstimator =
-                new LMedSRobustEstimator<EuclideanTransformation3D>(
-                new LMedSRobustEstimatorListener<EuclideanTransformation3D>(){
+                new LMedSRobustEstimator<>(
+                new LMedSRobustEstimatorListener<EuclideanTransformation3D>() {
                             
             //point to be reused when computing residuals
             private Point3D mTestPoint = Point3D.create(
@@ -289,9 +293,9 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
                             isWeakMinimumSizeAllowed());
             
             private List<Point3D> mSubsetInputPoints = 
-                    new ArrayList<Point3D>();
+                    new ArrayList<>();
             private List<Point3D> mSubsetOutputPoints = 
-                    new ArrayList<Point3D>();
+                    new ArrayList<>();
                             
             @Override
             public int getTotalSamples() {
@@ -308,10 +312,10 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
                     List<EuclideanTransformation3D> solutions) {
                 mSubsetInputPoints.clear();
                 mSubsetOutputPoints.clear();
-                for(int i = 0; i < samplesIndices.length; i++) {
-                    mSubsetInputPoints.add(mInputPoints.get(samplesIndices[i]));
+                for (int samplesIndex : samplesIndices) {
+                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));
                     mSubsetOutputPoints.add(mOutputPoints.get(
-                            samplesIndices[i]));
+                            samplesIndex));
                 }
                 
                 try {

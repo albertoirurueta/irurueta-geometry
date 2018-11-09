@@ -1,21 +1,25 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.PROSACLinePlaneCorrespondencePinholeCameraRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 12, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.PinholeCamera;
 import com.irurueta.geometry.Plane;
-import com.irurueta.numerical.robust.PROSACRobustEstimator;
-import com.irurueta.numerical.robust.PROSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +72,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
     
     /**
      * Quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      */
     private double[] mQualityScores;
     
@@ -307,7 +311,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
     
     /**
      * Returns quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      * @return quality scores corresponding to each pair of matched points.
      */
     @Override
@@ -335,7 +339,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
     }
         
     /**
-     * Indicates if eatimator is ready to start the affine 2D transformation
+     * Indicates if estimator is ready to start the affine 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points and quality
      * scores) are provided and a minimum of MINIMUM_SIZE points are available.
@@ -450,14 +454,14 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
         nonRobustEstimator.setSuggestedCenterValue(getSuggestedCenterValue());
         
         PROSACRobustEstimator<PinholeCamera> innerEstimator =
-                new PROSACRobustEstimator<PinholeCamera>(
+                new PROSACRobustEstimator<>(
                 new PROSACRobustEstimatorListener<PinholeCamera>() {
 
             //3D planes for a subset of samples
-            private List<Plane> mSubsetPlanes = new ArrayList<Plane>();
+            private List<Plane> mSubsetPlanes = new ArrayList<>();
             
             //2D lines for a subset of samples
-            private List<Line2D> mSubsetLines = new ArrayList<Line2D>();
+            private List<Line2D> mSubsetLines = new ArrayList<>();
                     
             @Override
             public double getThreshold() {

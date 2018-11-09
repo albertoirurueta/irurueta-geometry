@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.geometry.Triangle2D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 12, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
@@ -13,46 +20,39 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class Triangle2DTest {
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double ABSOLUTE_ERROR = 1e-8;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
-    public Triangle2DTest() {
-    }
+    public Triangle2DTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point2D point1 = new InhomogeneousPoint2D(randomizer.nextDouble(
@@ -73,23 +73,23 @@ public class Triangle2DTest {
         
         //Force NullPointerException
         triangle = null;
-        try{
+        try {
             triangle = new Triangle2D(null, point2, point3);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}        
-        try{
+        } catch (NullPointerException ignore) { }
+        try {
             triangle = new Triangle2D(point1, null, point3);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
-        try{
+        } catch (NullPointerException ignore) { }
+        try {
             triangle = new Triangle2D(point1, point2, null);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
         assertNull(triangle);
     }
     
     @Test
-    public void testGetSetVertex1(){
+    public void testGetSetVertex1() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point2D point1 = new InhomogeneousPoint2D(randomizer.nextDouble(
@@ -120,14 +120,14 @@ public class Triangle2DTest {
         assertEquals(triangle.getVertex3(), point3);
 
         //Force NullPointerException
-        try{
+        try {
             triangle.setVertex1(null);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
     }
     
     @Test
-    public void testGetSetVertex2(){
+    public void testGetSetVertex2() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point2D point1 = new InhomogeneousPoint2D(randomizer.nextDouble(
@@ -158,14 +158,14 @@ public class Triangle2DTest {
         assertEquals(triangle.getVertex3(), point3);
 
         //Force NullPointerException
-        try{
+        try {
             triangle.setVertex2(null);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
     }
 
     @Test
-    public void testGetSetVertex3(){
+    public void testGetSetVertex3() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point2D point1 = new InhomogeneousPoint2D(randomizer.nextDouble(
@@ -196,14 +196,14 @@ public class Triangle2DTest {
         assertEquals(triangle.getVertex3(), vertex3);
 
         //Force NullPointerException
-        try{
+        try {
             triangle.setVertex3(null);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
     }
     
     @Test
-    public void testGetSetVertices(){
+    public void testGetSetVertices() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point2D point1 = new InhomogeneousPoint2D(randomizer.nextDouble(
@@ -242,7 +242,7 @@ public class Triangle2DTest {
         
         //get vertices as a list
         List<Point2D> vertices = triangle.getVertices();
-        List<Point2D> vertices2 = new ArrayList<Point2D>();
+        List<Point2D> vertices2 = new ArrayList<>();
         triangle.vertices(vertices2);
         
         assertEquals(vertices.size(), Triangle2D.NUM_VERTICES);
@@ -257,23 +257,23 @@ public class Triangle2DTest {
         assertTrue(vertices2.get(2).equals(point3b, ABSOLUTE_ERROR));
         
         //Force NullPointerException
-        try{
+        try {
             triangle.setVertices(null, point2, point3);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
-        try{
+        } catch (NullPointerException ignore) { }
+        try {
             triangle.setVertices(point1, null, point3);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
-        try{
+        } catch (NullPointerException ignore) { }
+        try {
             triangle.setVertices(point1, point2, null);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
     }
     
     @Test
     public void testAreaSignedAreaAndAreColinearPoints() throws WrongSizeException, 
-        DecomposerException{
+            DecomposerException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());                
         double base = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, 
@@ -302,9 +302,9 @@ public class Triangle2DTest {
                 ABSOLUTE_ERROR);
         assertEquals(triangle.getArea(), expectedArea, ABSOLUTE_ERROR);
         
-        if(expectedArea > Triangle2D.DEFAULT_THRESHOLD){
+        if (expectedArea > Triangle2D.DEFAULT_THRESHOLD) {
             assertFalse(triangle.areVerticesColinear());
-        }else{
+        } else {
             assertTrue(triangle.areVerticesColinear());
         }
         
@@ -351,9 +351,9 @@ public class Triangle2DTest {
                 ABSOLUTE_ERROR);
         assertEquals(triangle.getArea(), expectedArea, ABSOLUTE_ERROR);   
         
-        if(expectedArea > Triangle2D.DEFAULT_THRESHOLD){
+        if (expectedArea > Triangle2D.DEFAULT_THRESHOLD) {
             assertFalse(triangle.areVerticesColinear());
-        }else{
+        } else {
             assertTrue(triangle.areVerticesColinear());
         }
         
@@ -379,27 +379,27 @@ public class Triangle2DTest {
         assertTrue(triangle.areVerticesColinear(ABSOLUTE_ERROR));
         
         //Force IllegalArgumentException
-        try{
+        try {
             triangle.areVerticesColinear(-ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testIsInsideShortestDistanceAndIsLocus(){
+    public void testIsInsideShortestDistanceAndIsLocus() {
         
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             //Test for known values
             UniformRandomizer randomizer = new UniformRandomizer(new Random());                
             double base, height, area;
-            do{
+            do {
                 //we iterate until we ensure that triangle is not too small
                 base = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE));
                 height = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, 
                         MAX_RANDOM_VALUE));
                 area = 0.5 * Math.abs(base * height);
-            }while(area < 1.0);
+            } while (area < 1.0);
             double dist = randomizer.nextDouble(Triangle2D.DEFAULT_THRESHOLD, 
                     MAX_RANDOM_VALUE);
         
@@ -489,24 +489,24 @@ public class Triangle2DTest {
                     0.0));
         
             //Force IllegalArgumentException
-            try{
+            try {
                 triangle.isInside(point1, -ABSOLUTE_ERROR);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
-            try{
+            } catch (IllegalArgumentException ignore) { }
+            try {
                 Triangle2D.isInside(triangle, point1, - ABSOLUTE_ERROR);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
-            try{
+            } catch (IllegalArgumentException ignore) { }
+            try {
                 Triangle2D.isInside(point1, point2, point3, point1, 
                         -ABSOLUTE_ERROR);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
-            
-            try{
+            } catch (IllegalArgumentException ignore) { }
+
+            try {
                 triangle.isLocus(point3, -ABSOLUTE_ERROR);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){}
+            } catch (IllegalArgumentException ignore) { }
         
             //Check point outside
             Point2D outside = new InhomogeneousPoint2D(-dist, 0.0);
@@ -646,7 +646,7 @@ public class Triangle2DTest {
     }
     
     @Test
-    public void testCenter(){
+    public void testCenter() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point2D point1 = new InhomogeneousPoint2D(randomizer.nextDouble(
@@ -686,7 +686,7 @@ public class Triangle2DTest {
     }
     
     @Test
-    public void testPerimeter(){
+    public void testPerimeter() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
         Point2D point1 = new InhomogeneousPoint2D(randomizer.nextDouble(
@@ -711,19 +711,16 @@ public class Triangle2DTest {
     }
     
     @Test
-    public void testClosestPoint(){
+    public void testClosestPoint() {
         
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             //Test for known values
             UniformRandomizer randomizer = new UniformRandomizer(new Random());                
             double base = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, 
                     MAX_RANDOM_VALUE));
             double height = Math.abs(randomizer.nextDouble(
                     MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
-            double dist = randomizer.nextDouble(Triangle2D.DEFAULT_THRESHOLD, 
-                    MAX_RANDOM_VALUE);
-            double area = 0.5 * base * height;
-        
+
             //Test known and simple values
             Point2D point1 = new InhomogeneousPoint2D(0.0, 0.0);
             Point2D point2 = new InhomogeneousPoint2D(base, 0.0);
@@ -845,13 +842,13 @@ public class Triangle2DTest {
         
             Point2D linePoint = Point2D.create();
         
-            if(dist1 < dist2 && dist1 < dist3){
+            if (dist1 < dist2 && dist1 < dist3) {
                 //pick pointLine1
                 linePoint.setCoordinates(pointLine1);
-            }else if(dist2 < dist1 && dist2 < dist3){
+            } else if (dist2 < dist1 && dist2 < dist3) {
                 //pick pointLine2
                 linePoint.setCoordinates(pointLine2);
-            }else{
+            } else {
                 //pick pointLine3
                 linePoint.setCoordinates(pointLine3);
             }
@@ -869,7 +866,7 @@ public class Triangle2DTest {
     }
     
     @Test
-    public void testAreVerticesClockwise(){
+    public void testAreVerticesClockwise() {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());                
         double base = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, 
@@ -906,11 +903,11 @@ public class Triangle2DTest {
         //create triangle with vertices in reversed order
         triangle2 = new Triangle2D(point3, point2, point1);
         
-        if(signedArea > 0.0){
+        if (signedArea > 0.0) {
             //points are clockwise
             assertFalse(triangle1.areVerticesClockwise());
             assertTrue(triangle2.areVerticesClockwise());
-        }else{
+        } else {
             assertTrue(triangle1.areVerticesClockwise());
             assertFalse(triangle2.areVerticesClockwise());
         }

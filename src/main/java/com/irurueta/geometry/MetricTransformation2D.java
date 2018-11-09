@@ -1,10 +1,17 @@
 /*
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.MetricTransformation2D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 25, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
@@ -14,6 +21,7 @@ import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.MetricTransformation2DEstimator;
 import com.irurueta.geometry.estimators.NotReadyException;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -153,7 +161,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      */
     @Override
     public void asMatrix(Matrix m) throws IllegalArgumentException {
-        if(m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
+        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         

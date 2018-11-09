@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.PROSACQuadricRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 21, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -16,58 +23,56 @@ import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class PROSACQuadricRobustEstimatorTest implements 
-        QuadricRobustEstimatorListener{
+        QuadricRobustEstimatorListener {
     
-    public static final int MIN_POINTS = 500;
-    public static final int MAX_POINTS = 1000;
+    private static final int MIN_POINTS = 500;
+    private static final int MAX_POINTS = 1000;
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double STD_ERROR = 100.0;
+    private static final double STD_ERROR = 100.0;
     
-    public static final double MIN_SCORE_ERROR = -0.3;
-    public static final double MAX_SCORE_ERROR = 0.3;
+    private static final double MIN_SCORE_ERROR = -0.3;
+    private static final double MAX_SCORE_ERROR = 0.3;
     
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final double THRESHOLD = 1e-6;
-    public static final double ABSOLUTE_ERROR = 1e-5;
+    private static final double THRESHOLD = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-5;
     
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
     
     private int estimateStart;
     private int estimateEnd;
     private int estimateNextIteration;
     private int estimateProgressChange;    
     
-    public PROSACQuadricRobustEstimatorTest() {}
+    public PROSACQuadricRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         PROSACQuadricRobustEstimator estimator;
         
         //test constructor without arguments
@@ -91,8 +96,8 @@ public class PROSACQuadricRobustEstimatorTest implements
         assertNull(estimator.getQualityScores());
         
         //test constructor with points
-        List<Point3D> points = new ArrayList<Point3D>();
-        for(int i = 0; i < QuadricRobustEstimator.MINIMUM_SIZE; i++){
+        List<Point3D> points = new ArrayList<>();
+        for (int i = 0; i < QuadricRobustEstimator.MINIMUM_SIZE; i++) {
             points.add(Point3D.create());
         }
         
@@ -116,31 +121,31 @@ public class PROSACQuadricRobustEstimatorTest implements
         assertNull(estimator.getQualityScores());
         
         //Force IllegalArgumentException
-        List<Point3D> emptyPoints = new ArrayList<Point3D>();
+        List<Point3D> emptyPoints = new ArrayList<>();
         estimator = null;
-        try{
+        try {
             estimator = new PROSACQuadricRobustEstimator(emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener
         QuadricRobustEstimatorListener listener = 
-                new QuadricRobustEstimatorListener(){
+                new QuadricRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(QuadricRobustEstimator estimator) {}
+            public void onEstimateStart(QuadricRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(QuadricRobustEstimator estimator) {}
+            public void onEstimateEnd(QuadricRobustEstimator estimator) { }
 
             @Override
             public void onEstimateNextIteration(
-                    QuadricRobustEstimator estimator, int iteration) {}
+                    QuadricRobustEstimator estimator, int iteration) { }
 
             @Override
             public void onEstimateProgressChange(
-                    QuadricRobustEstimator estimator, float progress) {}
+                    QuadricRobustEstimator estimator, float progress) { }
         };
         
         estimator = new PROSACQuadricRobustEstimator(listener);
@@ -184,10 +189,10 @@ public class PROSACQuadricRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACQuadricRobustEstimator(listener, emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);  
         
         //test constructor with quality scores
@@ -214,10 +219,10 @@ public class PROSACQuadricRobustEstimatorTest implements
         //Force IllegalArgumentException
         double[] emptyScores = new double[0];
         estimator = null;
-        try{
+        try {
             estimator = new PROSACQuadricRobustEstimator(emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with points and quality scores
@@ -242,15 +247,15 @@ public class PROSACQuadricRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACQuadricRobustEstimator(emptyPoints, 
                     qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACQuadricRobustEstimator(points, emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener and quality scores
@@ -275,10 +280,10 @@ public class PROSACQuadricRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACQuadricRobustEstimator(listener, emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener, points and quality scores
@@ -304,21 +309,21 @@ public class PROSACQuadricRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACQuadricRobustEstimator(listener, emptyPoints, 
                     qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACQuadricRobustEstimator(listener, points, 
                     emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);                  
     }
     
     @Test
-    public void testGetSetThreshold() throws LockedException{
+    public void testGetSetThreshold() throws LockedException {
         PROSACQuadricRobustEstimator estimator = 
                 new PROSACQuadricRobustEstimator();
         
@@ -333,14 +338,14 @@ public class PROSACQuadricRobustEstimatorTest implements
         assertEquals(estimator.getThreshold(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetListener() throws LockedException{
+    public void testGetSetListener() throws LockedException {
         PROSACQuadricRobustEstimator estimator = 
                 new PROSACQuadricRobustEstimator();
         
@@ -357,7 +362,7 @@ public class PROSACQuadricRobustEstimatorTest implements
     }
     
     @Test
-    public void testGetSetProgressDelta() throws LockedException{
+    public void testGetSetProgressDelta() throws LockedException {
         PROSACQuadricRobustEstimator estimator = 
                 new PROSACQuadricRobustEstimator();
         
@@ -372,18 +377,18 @@ public class PROSACQuadricRobustEstimatorTest implements
         assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetConfidence() throws LockedException{
+    public void testGetSetConfidence() throws LockedException {
         PROSACQuadricRobustEstimator estimator = 
                 new PROSACQuadricRobustEstimator();
         
@@ -398,18 +403,18 @@ public class PROSACQuadricRobustEstimatorTest implements
         assertEquals(estimator.getConfidence(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetMaxIterations() throws LockedException{
+    public void testGetSetMaxIterations() throws LockedException {
         PROSACQuadricRobustEstimator estimator = 
                 new PROSACQuadricRobustEstimator();
         
@@ -424,14 +429,14 @@ public class PROSACQuadricRobustEstimatorTest implements
         assertEquals(estimator.getMaxIterations(), 1);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetPoints() throws LockedException{
+    public void testGetSetPoints() throws LockedException {
         PROSACQuadricRobustEstimator estimator = 
                 new PROSACQuadricRobustEstimator();
         
@@ -440,8 +445,8 @@ public class PROSACQuadricRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //set new value
-        List<Point3D> points = new ArrayList<Point3D>();
-        for(int i = 0; i < QuadricRobustEstimator.MINIMUM_SIZE; i++){
+        List<Point3D> points = new ArrayList<>();
+        for (int i = 0; i < QuadricRobustEstimator.MINIMUM_SIZE; i++) {
             points.add(Point3D.create());
         }
         estimator.setPoints(points);
@@ -462,15 +467,15 @@ public class PROSACQuadricRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //Force IllegalArgumentException
-        List<Point3D> emptyPoints = new ArrayList<Point3D>();
-        try{
+        List<Point3D> emptyPoints = new ArrayList<>();
+        try {
             estimator.setPoints(emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetQualityScores() throws LockedException{
+    public void testGetSetQualityScores() throws LockedException {
         PROSACQuadricRobustEstimator estimator = 
                 new PROSACQuadricRobustEstimator();
         
@@ -485,19 +490,19 @@ public class PROSACQuadricRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         qualityScores = new double[1];
-        try{
+        try {
             estimator.setQualityScores(qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testEstimate() throws LockedException, NotReadyException, 
-            RobustEstimatorException{
+            RobustEstimatorException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             //instantiate a random circle
             Point3D center = new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -516,14 +521,14 @@ public class PROSACQuadricRobustEstimatorTest implements
             double[] qualityScores = new double[nPoints];
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);        
-            List<Point3D> points = new ArrayList<Point3D>();
-            List<Point3D> pointsWithError = new ArrayList<Point3D>();
+            List<Point3D> points = new ArrayList<>();
+            List<Point3D> pointsWithError = new ArrayList<>();
             Point3D point, pointWithError;
-            for(int i = 0; i < nPoints; i++){
+            for (int i = 0; i < nPoints; i++) {
                 double angle1 = 0.0, angle2 = 0.0;
-                if(i < halfPoints){
+                if (i < halfPoints) {
                     angle1 = theta * (double)i;
-                }else{
+                } else {
                     angle2 = theta * (double)(i - halfPoints);
                 }
                 point = new HomogeneousPoint3D(
@@ -536,7 +541,7 @@ public class PROSACQuadricRobustEstimatorTest implements
                 double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, 
                         MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;                
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //point is outlier
                     double errorX = errorRandomizer.nextDouble();
                     double errorY = errorRandomizer.nextDouble();
@@ -549,7 +554,7 @@ public class PROSACQuadricRobustEstimatorTest implements
                     double error = Math.sqrt(errorX * errorX + errorY * errorY +
                             errorZ * errorZ);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;                    
-                }else{
+                } else {
                     //inlier point
                     pointWithError = point;
                 }
@@ -585,73 +590,73 @@ public class PROSACQuadricRobustEstimatorTest implements
             
             //check correctness of estimation by checking that all points
             //are within the estimated quadric locus
-            for(Point3D p : points){
+            for (Point3D p : points) {
                 assertTrue(quadric2.isLocus(p, ABSOLUTE_ERROR));
             }
         }
     }
-    
-    private void reset(){
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
-    }
-    
+
     @Override
     public void onEstimateStart(QuadricRobustEstimator estimator) {
         estimateStart++;
-        testLocked((PROSACQuadricRobustEstimator)estimator);
+        checkLocked((PROSACQuadricRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateEnd(QuadricRobustEstimator estimator) {
         estimateEnd++;
-        testLocked((PROSACQuadricRobustEstimator)estimator);
+        checkLocked((PROSACQuadricRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateNextIteration(QuadricRobustEstimator estimator, 
             int iteration) {
         estimateNextIteration++;
-        testLocked((PROSACQuadricRobustEstimator)estimator);
+        checkLocked((PROSACQuadricRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateProgressChange(QuadricRobustEstimator estimator, 
             float progress) {
         estimateProgressChange++;
-        testLocked((PROSACQuadricRobustEstimator)estimator);
+        checkLocked((PROSACQuadricRobustEstimator)estimator);
     }
-    
-    private void testLocked(PROSACQuadricRobustEstimator estimator){
-        try{
+
+    private void reset() {
+        estimateStart = estimateEnd = estimateNextIteration =
+                estimateProgressChange = 0;
+    }
+
+    private void checkLocked(PROSACQuadricRobustEstimator estimator) {
+        try {
             estimator.setThreshold(0.5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setProgressDelta(0.5f);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setConfidence(0.5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setMaxIterations(5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setPoints(null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){
-        }catch(Exception e){
+        } catch (LockedException ignore) {
+        } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
     }        

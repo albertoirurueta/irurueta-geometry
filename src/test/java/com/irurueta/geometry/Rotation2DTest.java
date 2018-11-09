@@ -1,56 +1,56 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.geometry.Rotation2D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date August 17, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class Rotation2DTest {
     
-    public static final double MIN_THETA = -Math.PI;
-    public static final double MAX_THETA = Math.PI;
-    public static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double MIN_THETA = -Math.PI;
+    private static final double MAX_THETA = Math.PI;
+    private static final double ABSOLUTE_ERROR = 1e-8;
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final int INHOM_COORDS = 2;
+    private static final int INHOM_COORDS = 2;
     
-    public Rotation2DTest() {
-    }
+    public Rotation2DTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testConstructor() throws WrongSizeException, InvalidRotationMatrixException{
+    public void testConstructor() throws WrongSizeException, InvalidRotationMatrixException {
         
         Rotation2D rotation;
         
@@ -87,10 +87,12 @@ public class Rotation2DTest {
         assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
         
         //Force IllegalArgumentException by using a negative threshold
-        try{
+        rotation = null;
+        try {
             rotation = new Rotation2D(inhomRotMat, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
+        assertNull(rotation);
         
         //test from homogeneous rotation matrix
         Matrix homRotMat = Matrix.identity(
@@ -107,36 +109,34 @@ public class Rotation2DTest {
         
         //Force IllegalArgumentException by using a negative threshold
         rotation = null;
-        try{
+        try {
             rotation = new Rotation2D(inhomRotMat, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(rotation);
         
         //Force InvalidRotationMatrixException
         //because of wrong size
         Matrix m = new Matrix(2, 3);
-        rotation = null;
-        try{
+        try {
             rotation = new Rotation2D(m);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}
+        } catch (InvalidRotationMatrixException ignore) { }
         assertNull(rotation);
         
         //because determinant is not 1
         m = Matrix.identity(Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS,
                 Rotation2D.ROTATION2D_INHOM_MATRIX_COLS);
         m.multiplyByScalar(2.0);
-        rotation = null;
-        try{
+        try {
             rotation = new Rotation2D(m);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}
+        } catch (InvalidRotationMatrixException ignore) { }
         assertNull(rotation);        
     }
     
     @Test
-    public void testGetSetTheta(){
+    public void testGetSetTheta() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
         
@@ -150,7 +150,7 @@ public class Rotation2DTest {
     }
     
     @Test
-    public void testInverseRotation() throws WrongSizeException{
+    public void testInverseRotation() throws WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
         
@@ -197,7 +197,7 @@ public class Rotation2DTest {
     
     @Test
     public void testAsInhomogeneousMatrix() 
-            throws InvalidRotationMatrixException, WrongSizeException{
+            throws InvalidRotationMatrixException, WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
         
@@ -245,15 +245,15 @@ public class Rotation2DTest {
         //Force IllegalArgumentException
         rotMatrix = new Matrix(Rotation2D.ROTATION2D_HOM_MATRIX_ROWS,
                 Rotation2D.ROTATION2D_HOM_MATRIX_COLS);
-        try{
+        try {
             rotation.asInhomogeneousMatrix(rotMatrix);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testAsHomogeneousMatrix() 
-            throws InvalidRotationMatrixException, WrongSizeException{
+            throws InvalidRotationMatrixException, WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
         
@@ -311,15 +311,15 @@ public class Rotation2DTest {
         //Force IllegalArgumentException
         rotMatrix = new Matrix(Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS,
                 Rotation2D.ROTATION2D_INHOM_MATRIX_COLS);
-        try{
+        try {
             rotation.asHomogeneousMatrix(rotMatrix);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
     public void testFromMatrixAndIsValidRotationMatrix() 
-            throws WrongSizeException, InvalidRotationMatrixException{
+            throws WrongSizeException, InvalidRotationMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
@@ -383,24 +383,24 @@ public class Rotation2DTest {
         assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);
         
         //Force IllegalArgumentException by using a negative threshold
-        try{
+        try {
             rotation.fromMatrix(homRotMat, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Force InvalidRotationMatrix
         //because of wrong size
         Matrix m = new Matrix(2, 3);
         assertFalse(Rotation2D.isValidRotationMatrix(m));
         assertFalse(Rotation2D.isValidRotationMatrix(m, ABSOLUTE_ERROR));
-        try{
+        try {
             rotation.fromMatrix(m);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}
-        try{
+        } catch (InvalidRotationMatrixException ignore) { }
+        try {
             rotation.fromMatrix(m, ABSOLUTE_ERROR);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}
+        } catch (InvalidRotationMatrixException ignore) { }
         
         
         //because determinant is not 1
@@ -409,26 +409,26 @@ public class Rotation2DTest {
         m.multiplyByScalar(2.0);
         assertFalse(Rotation2D.isValidRotationMatrix(m));
         assertFalse(Rotation2D.isValidRotationMatrix(m, ABSOLUTE_ERROR));
-        try{
+        try {
             rotation.fromMatrix(m);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}
-        try{
+        } catch (InvalidRotationMatrixException ignore) { }
+        try {
             rotation.fromMatrix(m, ABSOLUTE_ERROR);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){} 
+        } catch (InvalidRotationMatrixException ignore) { }
         
         //Force IllegalArgumentException into isValidRotationMatrix because
         //threshold is negative
-        try{
+        try {
             Rotation2D.isValidRotationMatrix(m, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testFromInhomogeneousMatrixAndIsValidRotationMatrix() 
-            throws WrongSizeException, InvalidRotationMatrixException{
+            throws WrongSizeException, InvalidRotationMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
@@ -464,24 +464,24 @@ public class Rotation2DTest {
         assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);        
         
         //Force IllegalArgumentException by using a negative threshold
-        try{
+        try {
             rotation.fromInhomogeneousMatrix(inhomRotMat, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Force InvalidRotationMatrix
         //because of wrong size
         Matrix m = new Matrix(2, 3);
         assertFalse(Rotation2D.isValidRotationMatrix(m));
         assertFalse(Rotation2D.isValidRotationMatrix(m, ABSOLUTE_ERROR));
-        try{
+        try {
             rotation.fromInhomogeneousMatrix(m);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}
-        try{
+        } catch (InvalidRotationMatrixException ignore) { }
+        try {
             rotation.fromInhomogeneousMatrix(m, ABSOLUTE_ERROR);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}
+        } catch (InvalidRotationMatrixException ignore) { }
         
         
         //because determinant is not 1
@@ -490,26 +490,26 @@ public class Rotation2DTest {
         m.multiplyByScalar(2.0);
         assertFalse(Rotation2D.isValidRotationMatrix(m));
         assertFalse(Rotation2D.isValidRotationMatrix(m, ABSOLUTE_ERROR));
-        try{
+        try {
             rotation.fromInhomogeneousMatrix(m);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}
-        try{
+        } catch (InvalidRotationMatrixException ignore) { }
+        try {
             rotation.fromInhomogeneousMatrix(m, ABSOLUTE_ERROR);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}         
+        } catch (InvalidRotationMatrixException ignore) { }
         
         //Force IllegalArgumentException into isValidRotationMatrix because
         //threshold is negative
-        try{
+        try {
             Rotation2D.isValidRotationMatrix(m, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testFromHomogeneousMatrixAndIsValidRotationMatrix() 
-            throws WrongSizeException, InvalidRotationMatrixException{
+            throws WrongSizeException, InvalidRotationMatrixException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
@@ -550,24 +550,24 @@ public class Rotation2DTest {
         assertEquals(rotation.getTheta(), theta, ABSOLUTE_ERROR);        
         
         //Force IllegalArgumentException by using a negative threshold
-        try{
+        try {
             rotation.fromHomogeneousMatrix(homRotMat, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Force InvalidRotationMatrix
         //because of wrong size
         Matrix m = new Matrix(2, 3);
         assertFalse(Rotation2D.isValidRotationMatrix(m));
         assertFalse(Rotation2D.isValidRotationMatrix(m, ABSOLUTE_ERROR));
-        try{
+        try {
             rotation.fromHomogeneousMatrix(m);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}
-        try{
+        } catch (InvalidRotationMatrixException ignore) { }
+        try {
             rotation.fromHomogeneousMatrix(m, ABSOLUTE_ERROR);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}
+        } catch (InvalidRotationMatrixException ignore) { }
         
         
         //because determinant is not 1
@@ -576,25 +576,25 @@ public class Rotation2DTest {
         m.multiplyByScalar(2.0);
         assertFalse(Rotation2D.isValidRotationMatrix(m));
         assertFalse(Rotation2D.isValidRotationMatrix(m, ABSOLUTE_ERROR));
-        try{
+        try {
             rotation.fromHomogeneousMatrix(m);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}
-        try{
+        } catch (InvalidRotationMatrixException ignore) { }
+        try {
             rotation.fromHomogeneousMatrix(m, ABSOLUTE_ERROR);
             fail("InvalidRotationMatrixException expected but not thrown");
-        }catch(InvalidRotationMatrixException e){}         
+        } catch (InvalidRotationMatrixException ignore) { }
         
         //Force IllegalArgumentException into isValidRotationMatrix because
         //threshold is negative
-        try{
+        try {
             Rotation2D.isValidRotationMatrix(m, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
-    public void testRotate() throws WrongSizeException{
+    public void testRotate() throws WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
         
@@ -612,7 +612,7 @@ public class Rotation2DTest {
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
         
         //ensure that points are not coincident
-        while(point1.equals(point2)){
+        while (point1.equals(point2)) {
             point2.setInhomogeneousCoordinates(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));            
@@ -708,7 +708,7 @@ public class Rotation2DTest {
     }
     
     @Test
-    public void testCombine(){
+    public void testCombine() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta1 = randomizer.nextDouble(MIN_THETA, MAX_THETA);
         double theta2 = randomizer.nextDouble(MIN_THETA, MAX_THETA);
@@ -728,7 +728,7 @@ public class Rotation2DTest {
     }
     
     @Test
-    public void testEqualsAndHashCode(){
+    public void testEqualsAndHashCode() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_THETA, MAX_THETA);
         double threshold = randomizer.nextDouble(
@@ -744,13 +744,13 @@ public class Rotation2DTest {
         Rotation2D rotation3 = new Rotation2D(theta2);
         
         //check equalness
-        assertTrue(rotation1.equals(rotation1));
+        assertEquals(rotation1, rotation1);
         assertEquals(rotation1.hashCode(), rotation1.hashCode());
-        
-        assertTrue(rotation1.equals(rotation2));
+
+        assertEquals(rotation1, rotation2);
         assertEquals(rotation1.hashCode(), rotation2.hashCode());
-        
-        assertFalse(rotation1.equals(rotation3));
+
+        assertNotEquals(rotation1, rotation3);
         assertTrue(rotation1.equals(rotation2, 
                 Rotation2D.DEFAULT_COMPARISON_THRESHOLD));
         assertFalse(rotation1.equals(rotation3,

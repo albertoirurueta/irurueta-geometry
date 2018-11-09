@@ -1,85 +1,78 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 13, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.DecomposerException;
-import com.irurueta.algebra.Matrix;
-import com.irurueta.algebra.Utils;
-import com.irurueta.algebra.WrongSizeException;
+import com.irurueta.algebra.*;
 import com.irurueta.geometry.AffineTransformation2D;
 import com.irurueta.geometry.Line2D;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest 
         implements AffineTransformation2DRobustEstimatorListener{
     
-    public static final double MIN_RANDOM_VALUE = -1000.0;
-    public static final double MAX_RANDOM_VALUE = 1000.0;
+    private static final double MIN_RANDOM_VALUE = -1000.0;
+    private static final double MAX_RANDOM_VALUE = 1000.0;
     
-    public static final int INHOM_COORDS = 2;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final int MIN_LINES = 500;
+    private static final int MAX_LINES = 1000;
     
-    public static final int MIN_LINES = 500;
-    public static final int MAX_LINES = 1000;
+    private static final double THRESHOLD = 1e-6;
     
-    public static final double THRESHOLD = 1e-6;
+    private static final double STD_ERROR = 100.0;
     
-    public static final double STD_ERROR = 100.0;
+    private static final double MIN_SCORE_ERROR = -0.3;
+    private static final double MAX_SCORE_ERROR = 0.3;
+
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final double MIN_SCORE_ERROR = -0.3;
-    public static final double MAX_SCORE_ERROR = 0.3;    
-    
-    public static final double MIN_CONFIDENCE = 0.95;
-    public static final double MAX_CONFIDENCE = 0.99;
-    
-    public static final int MIN_MAX_ITERATIONS = 500;
-    public static final int MAX_MAX_ITERATIONS = 5000;
-        
-    public static final int PERCENTAGE_OUTLIER = 20;
-    
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
 
     private int estimateStart;
     private int estimateEnd;
     private int estimateNextIteration;
     private int estimateProgressChange;
     
-    public PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest() {}
+    public PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
      @Test
-    public void testConstructor(){
+    public void testConstructor() {
         //test constructor without arguments
         PROSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
                 new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator();
@@ -114,9 +107,9 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         
         
         //test constructor with points
-        List<Line2D> inputLines = new ArrayList<Line2D>();
-        List<Line2D> outputLines = new ArrayList<Line2D>();
-        for(int i = 0; i < PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE; i++){
+        List<Line2D> inputLines = new ArrayList<>();
+        List<Line2D> outputLines = new ArrayList<>();
+        for (int i = 0; i < PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputLines.add(new Line2D());
             outputLines.add(new Line2D());
         }
@@ -153,20 +146,20 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());        
         
         //Force IllegalArgumentException
-        List<Line2D> linesEmpty = new ArrayList<Line2D>();
+        List<Line2D> linesEmpty = new ArrayList<>();
         estimator = null;
-        try{
+        try {
             //not enough points
             estimator = new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                     linesEmpty, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                     inputLines, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
 
         //test constructor with listener
@@ -236,18 +229,18 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //not enough points
             estimator = new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                     this, linesEmpty, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                     this, inputLines, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);   
         
         //test constructor with quality scores
@@ -288,11 +281,11 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                     shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with lines and quality scores
@@ -329,24 +322,24 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //not enough points
             estimator = new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                     linesEmpty, linesEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                     inputLines, linesEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //not enough scores
             estimator = new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                     inputLines, outputLines, shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
 
         //test constructor with listener and quality scores
@@ -383,11 +376,11 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                     this, shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener and points
@@ -424,29 +417,29 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //not enough points
             estimator = new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                     this, linesEmpty, linesEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                     this, inputLines, linesEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //not enough scores
             estimator = new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
                     this, inputLines, outputLines, shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);           
     }
     
     @Test
-    public void testGetSetThreshold() throws LockedException{
+    public void testGetSetThreshold() throws LockedException {
         PROSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
                 new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator();
         
@@ -462,14 +455,14 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         assertEquals(estimator.getThreshold(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }  
     
     @Test
-    public void testGetSetQualityScores() throws LockedException{
+    public void testGetSetQualityScores() throws LockedException {
         PROSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
                 new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator();
         
@@ -486,14 +479,14 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         
         //Force IllegalArgumentException
         qualityScores = new double[1];
-        try{
+        try {
             estimator.setQualityScores(qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetConfidence() throws LockedException{
+    public void testGetSetConfidence() throws LockedException {
         PROSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
                 new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator();
 
@@ -509,19 +502,19 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         assertEquals(estimator.getConfidence(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
-        try{
+        try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }    
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException{
+    public void testGetSetMaxIterations() throws LockedException {
         PROSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
                 new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator();
 
@@ -537,14 +530,14 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         assertEquals(estimator.getMaxIterations(), 10);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetLinesAndIsReady() throws LockedException{
+    public void testGetSetLinesAndIsReady() throws LockedException {
         PROSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
                 new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator();
         
@@ -554,9 +547,9 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         assertFalse(estimator.isReady());
         
         //set new value
-        List<Line2D> inputLines = new ArrayList<Line2D>();
-        List<Line2D> outputLines = new ArrayList<Line2D>();
-        for(int i = 0; i < PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE; i++){
+        List<Line2D> inputLines = new ArrayList<>();
+        List<Line2D> outputLines = new ArrayList<>();
+        for (int i = 0; i < PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputLines.add(new Line2D());
             outputLines.add(new Line2D());
         }
@@ -576,21 +569,21 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         assertTrue(estimator.isReady());
 
         //Force IllegalArgumentException
-        List<Line2D> pointsEmpty = new ArrayList<Line2D>();
-        try{
+        List<Line2D> pointsEmpty = new ArrayList<>();
+        try {
             //not enough lines
             estimator.setLines(pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator.setLines(pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
-    public void testGetSetListenerAndIsListenerAvailable() throws LockedException{
+    public void testGetSetListenerAndIsListenerAvailable() throws LockedException {
         PROSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
                 new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator();
 
@@ -607,7 +600,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
     }
     
     @Test
-    public void testGetSetProgressDelta() throws LockedException{
+    public void testGetSetProgressDelta() throws LockedException {
         PROSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
                 new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator();
 
@@ -623,14 +616,14 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
         assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
@@ -691,13 +684,12 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
     }    
     
     @Test
-    public void testEstimateWithoutRefinement() throws WrongSizeException, 
-            DecomposerException, LockedException, NotReadyException, 
-            RobustEstimatorException, AlgebraException{
-        for(int t = 0; t < TIMES; t++){
+    public void testEstimateWithoutRefinement() throws LockedException, NotReadyException,
+            RobustEstimatorException, AlgebraException {
+        for (int t = 0; t < TIMES; t++) {
             //create an affine transformation
-            Matrix A = null;
-            do{
+            Matrix A;
+            do {
                 //ensure A matrix is invertible
                 A = Matrix.createWithUniformRandomValues(
                         AffineTransformation2D.INHOM_COORDS, 
@@ -705,7 +697,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
                 double norm = Utils.normF(A);
                 //normalize T to increase accuracy
                 A.multiplyByScalar(1.0 / norm);
-            }while(Utils.rank(A) < AffineTransformation2D.INHOM_COORDS);
+            } while (Utils.rank(A) < AffineTransformation2D.INHOM_COORDS);
             
             double[] translation = new double[
                     AffineTransformation2D.INHOM_COORDS];
@@ -717,13 +709,13 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
             
             //generate random lines
             int nLines = randomizer.nextInt(MIN_LINES, MAX_LINES);
-            List<Line2D> inputLines = new ArrayList<Line2D>();
-            List<Line2D> outputLines = new ArrayList<Line2D>();
-            List<Line2D> outputLinesWithError = new ArrayList<Line2D>();
+            List<Line2D> inputLines = new ArrayList<>();
+            List<Line2D> outputLines = new ArrayList<>();
+            List<Line2D> outputLinesWithError = new ArrayList<>();
             double[] qualityScores = new double[nLines];
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            for(int i = 0; i < nLines; i++){
+            for (int i = 0; i < nLines; i++) {
                 Line2D inputLine = new Line2D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
@@ -733,7 +725,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
                 double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, 
                         MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;                
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //line is outlier
                     double errorA = errorRandomizer.nextDouble();
                     double errorB = errorRandomizer.nextDouble();
@@ -744,7 +736,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
                     double error = Math.sqrt(errorA * errorA + errorB * errorB +
                             errorC * errorC);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
-                }else{
+                } else {
                     //inlier line (without error)
                     outputLineWithError = outputLine;
                 }
@@ -782,7 +774,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
             //that output lines are equal to the original output lines without
             //error
             Line2D l1, l2;
-            for(int i = 0; i < nLines; i++){
+            for (int i = 0; i < nLines; i++) {
                 l1 = outputLines.get(i);
                 l2 = transformation2.transformAndReturnNew(inputLines.get(i));
                 l1.normalize();
@@ -796,13 +788,12 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
     }
 
     @Test
-    public void testEstimateWithRefinement() throws WrongSizeException, 
-            DecomposerException, LockedException, NotReadyException, 
-            RobustEstimatorException, AlgebraException{
-        for(int t = 0; t < TIMES; t++){
+    public void testEstimateWithRefinement() throws LockedException, NotReadyException,
+            RobustEstimatorException, AlgebraException {
+        for (int t = 0; t < TIMES; t++) {
             //create an affine transformation
-            Matrix A = null;
-            do{
+            Matrix A;
+            do {
                 //ensure A matrix is invertible
                 A = Matrix.createWithUniformRandomValues(
                         AffineTransformation2D.INHOM_COORDS, 
@@ -810,7 +801,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
                 double norm = Utils.normF(A);
                 //normalize T to increase accuracy
                 A.multiplyByScalar(1.0 / norm);
-            }while(Utils.rank(A) < AffineTransformation2D.INHOM_COORDS);
+            } while (Utils.rank(A) < AffineTransformation2D.INHOM_COORDS);
             
             double[] translation = new double[
                     AffineTransformation2D.INHOM_COORDS];
@@ -822,13 +813,13 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
             
             //generate random lines
             int nLines = randomizer.nextInt(MIN_LINES, MAX_LINES);
-            List<Line2D> inputLines = new ArrayList<Line2D>();
-            List<Line2D> outputLines = new ArrayList<Line2D>();
-            List<Line2D> outputLinesWithError = new ArrayList<Line2D>();
+            List<Line2D> inputLines = new ArrayList<>();
+            List<Line2D> outputLines = new ArrayList<>();
+            List<Line2D> outputLinesWithError = new ArrayList<>();
             double[] qualityScores = new double[nLines];
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            for(int i = 0; i < nLines; i++){
+            for (int i = 0; i < nLines; i++) {
                 Line2D inputLine = new Line2D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
@@ -838,7 +829,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
                 double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, 
                         MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;                
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //line is outlier
                     double errorA = errorRandomizer.nextDouble();
                     double errorB = errorRandomizer.nextDouble();
@@ -849,7 +840,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
                     double error = Math.sqrt(errorA * errorA + errorB * errorB +
                             errorC * errorC);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
-                }else{
+                } else {
                     //inlier line (without error)
                     outputLineWithError = outputLine;
                 }
@@ -903,7 +894,7 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
             //that output lines are equal to the original output lines without
             //error
             Line2D l1, l2;
-            for(int i = 0; i < nLines; i++){
+            for (int i = 0; i < nLines; i++) {
                 l1 = outputLines.get(i);
                 l2 = transformation2.transformAndReturnNew(inputLines.get(i));
                 l1.normalize();
@@ -915,72 +906,71 @@ public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimatorTest
             }
         }
     }
-    
-    
-    private void reset(){
-        estimateStart = estimateEnd = estimateNextIteration = 
-                estimateProgressChange = 0;
-    }    
-    
+
     @Override
     public void onEstimateStart(AffineTransformation2DRobustEstimator estimator) {
         estimateStart++;
-        testLocked((PROSACLineCorrespondenceAffineTransformation2DRobustEstimator)estimator);
+        checkLocked((PROSACLineCorrespondenceAffineTransformation2DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateEnd(
             AffineTransformation2DRobustEstimator estimator) {
         estimateEnd++;
-        testLocked((PROSACLineCorrespondenceAffineTransformation2DRobustEstimator)estimator);
+        checkLocked((PROSACLineCorrespondenceAffineTransformation2DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateNextIteration(
             AffineTransformation2DRobustEstimator estimator, int iteration) {
         estimateNextIteration++;
-        testLocked((PROSACLineCorrespondenceAffineTransformation2DRobustEstimator)estimator);
+        checkLocked((PROSACLineCorrespondenceAffineTransformation2DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateProgressChange(
             AffineTransformation2DRobustEstimator estimator, float progress) {
         estimateProgressChange++;
-        testLocked((PROSACLineCorrespondenceAffineTransformation2DRobustEstimator)estimator);
+        checkLocked((PROSACLineCorrespondenceAffineTransformation2DRobustEstimator)estimator);
     }
-    
-    private void testLocked(
+
+    private void reset() {
+        estimateStart = estimateEnd = estimateNextIteration =
+                estimateProgressChange = 0;
+    }
+
+    private void checkLocked(
             PROSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator){
-        List<Line2D> lines = new ArrayList<Line2D>();
-        try{
+        List<Line2D> lines = new ArrayList<>();
+        try {
             estimator.setLines(lines, lines);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setProgressDelta(0.01f);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setThreshold(0.5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setConfidence(0.5);            
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setMaxIterations(10);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){
-        }catch(Exception e){
+        } catch (LockedException ignore) {
+        } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         assertTrue(estimator.isLocked());

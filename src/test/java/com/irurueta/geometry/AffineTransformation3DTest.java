@@ -1,26 +1,31 @@
 /*
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.AffineTransformation3D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 28, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.*;
 import com.irurueta.algebra.Utils;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 
 public class AffineTransformation3DTest {
@@ -237,6 +242,7 @@ public class AffineTransformation3DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new AffineTransformation3D((Rotation3D)null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -283,6 +289,7 @@ public class AffineTransformation3DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new AffineTransformation3D(scale, 
                     (Rotation3D)null);
             fail("NullPointerException expected but not thrown");
@@ -342,11 +349,13 @@ public class AffineTransformation3DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new AffineTransformation3D(
                     null, rotation);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new AffineTransformation3D(params, 
                     null);
             fail("NullPointerException expected but not thrown");
@@ -395,6 +404,7 @@ public class AffineTransformation3DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new AffineTransformation3D((double[])null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -431,6 +441,7 @@ public class AffineTransformation3DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new AffineTransformation3D(A, null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -484,6 +495,7 @@ public class AffineTransformation3DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new AffineTransformation3D(scale, (double[])null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -540,6 +552,7 @@ public class AffineTransformation3DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new AffineTransformation3D(rotation, null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -598,6 +611,7 @@ public class AffineTransformation3DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new AffineTransformation3D(scale, rotation,
                     null);
             fail("NullPointerException expected but not thrown");
@@ -662,6 +676,7 @@ public class AffineTransformation3DTest {
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
         try {
+            //noinspection all
             transformation = new AffineTransformation3D(params, rotation,
                     null);
             fail("NullPointerException expected but not thrown");
@@ -2310,9 +2325,9 @@ public class AffineTransformation3DTest {
         Plane plane = new Plane(point1, point2, point3);
 
         //check that points belong to the plane
-        assertTrue(plane.isLocus(point1));
-        assertTrue(plane.isLocus(point2));
-        assertTrue(plane.isLocus(point3));
+        assertTrue(plane.isLocus(point1, ABSOLUTE_ERROR));
+        assertTrue(plane.isLocus(point2, ABSOLUTE_ERROR));
+        assertTrue(plane.isLocus(point3, ABSOLUTE_ERROR));
 
         //create transformation
         UniformRandomizer randomizer = new UniformRandomizer(new Random());

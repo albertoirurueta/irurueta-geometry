@@ -1,39 +1,48 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.Circle
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 13, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
+
 import java.io.Serializable;
 
 /**
  *  This class defines a circle.
  */
-public class Circle implements Serializable{
+@SuppressWarnings("WeakerAccess")
+public class Circle implements Serializable {
     
     /**
-     * Constant defining minimum allowed radius
+     * Constant defining minimum allowed radius.
      */
     public static final double MIN_RADIUS = 0.0;
     
     /**
-     * Constant defining default threshold value used when none is provided
+     * Constant defining default threshold value used when none is provided.
      */
     public static final double DEFAULT_THRESHOLD = 1e-9;
     
     /**
-     * Constant defining minimum allowed threshold
+     * Constant defining minimum allowed threshold.
      */
     public static final double MIN_THRESHOLD = 0.0;
     
     /**
-     * Constant defining machine precision
+     * Constant defining machine precision.
      */
     public static final double EPS = 1e-12;    
     
@@ -90,7 +99,7 @@ public class Circle implements Serializable{
      * @param conic a conic to create a circle from.
      * @throws IllegalArgumentException if provided conic is not a circle.
      */
-    public Circle(Conic conic) throws IllegalArgumentException{
+    public Circle(Conic conic) throws IllegalArgumentException {
         setFromConic(conic);
     }
     
@@ -98,7 +107,7 @@ public class Circle implements Serializable{
      * Returns center of circle.
      * @return Center of circle.
      */
-    public Point2D getCenter(){
+    public Point2D getCenter() {
         return mCenter;
     }
     
@@ -107,7 +116,7 @@ public class Circle implements Serializable{
      * @param center Center of circle.
      * @throws NullPointerException Raised if provided center is null.
      */
-    public void setCenter(Point2D center) throws NullPointerException{
+    public void setCenter(Point2D center) throws NullPointerException {
         if(center == null) throw new NullPointerException();
         mCenter = center;
     }
@@ -116,7 +125,7 @@ public class Circle implements Serializable{
      * Returns radius of circle.
      * @return Radius of circle.
      */
-    public double getRadius(){
+    public double getRadius() {
         return mRadius;
     }
     
@@ -125,8 +134,10 @@ public class Circle implements Serializable{
      * @param radius Radius of circle.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public void setRadius(double radius) throws IllegalArgumentException{
-        if(radius < MIN_RADIUS) throw new IllegalArgumentException();
+    public void setRadius(double radius) throws IllegalArgumentException {
+        if (radius < MIN_RADIUS) {
+            throw new IllegalArgumentException();
+        }
         
         mRadius = radius;
     }
@@ -139,7 +150,7 @@ public class Circle implements Serializable{
      * @throws NullPointerException Raised if provided center is null.
      */
     public final void setCenterAndRadius(Point2D center, double radius)
-            throws IllegalArgumentException, NullPointerException{
+            throws IllegalArgumentException, NullPointerException {
         setRadius(radius);        
         setCenter(center);
     }
@@ -156,14 +167,14 @@ public class Circle implements Serializable{
      * three points in its locus.
      */
     public final void setParametersFromPoints(Point2D point1, Point2D point2, 
-            Point2D point3) throws ColinearPointsException{
+            Point2D point3) throws ColinearPointsException {
         
         //normalize points to increase accuracy
         point1.normalize();
         point2.normalize();
         point3.normalize();
         
-        try{
+        try {
             Matrix m = new Matrix(3, 3);
             double[] b = new double[3];
             
@@ -198,11 +209,12 @@ public class Circle implements Serializable{
             double[] row = new double[3];
             double rowNorm;
             
-            for(int j = 0; j < 3; j++){
+            for (int j = 0; j < 3; j++) {
                 m.getSubmatrixAsArray(j, 0, j, 2, row);
                 rowNorm = com.irurueta.algebra.Utils.normF(row);
-                for(int i = 0; i < 3; i++)
+                for (int i = 0; i < 3; i++) {
                     m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);
+                }
                 b[j] /= rowNorm;
             }
             
@@ -222,7 +234,7 @@ public class Circle implements Serializable{
                     inhomCy * inhomCy - f);
             
             setCenterAndRadius(center, radius);
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             throw new ColinearPointsException(e);
         }
     }
@@ -234,7 +246,9 @@ public class Circle implements Serializable{
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
     public static double area(double radius) throws IllegalArgumentException {
-        if (radius < MIN_RADIUS) throw new IllegalArgumentException();        
+        if (radius < MIN_RADIUS) {
+            throw new IllegalArgumentException();
+        }
         return Math.PI * radius * radius;
     }
     
@@ -254,7 +268,9 @@ public class Circle implements Serializable{
      */
     public static double perimeter(double radius) 
             throws IllegalArgumentException {
-        if(radius < MIN_RADIUS) throw new IllegalArgumentException();        
+        if (radius < MIN_RADIUS) {
+            throw new IllegalArgumentException();
+        }
         return 2.0 * Math.PI * radius;
     }
     
@@ -392,7 +408,9 @@ public class Circle implements Serializable{
         
         //check if point is at center or very close to center, in that case the
         //closest point cannot be found (would be all points of a circle)
-        if(norm < EPS) throw new UndefinedPointException();
+        if (norm < EPS) {
+            throw new UndefinedPointException();
+        }
         
         directionX *= mRadius / norm;
         directionY *= mRadius / norm;
@@ -413,7 +431,9 @@ public class Circle implements Serializable{
      */
     public boolean isLocus(Point2D point, double threshold) 
             throws IllegalArgumentException {
-        if (threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         
         return Math.abs(point.distanceTo(mCenter) - mRadius) <= threshold;        
     }    
@@ -468,12 +488,14 @@ public class Circle implements Serializable{
      * @param threshold threshold to determine if provided point is locus.
      * @throws NotLocusException if provided point is not locus of this circle
      * up to provided threshold.
-     * @throws IllegalArgumentException if provided threshold is negtive.
+     * @throws IllegalArgumentException if provided threshold is negative.
      */
     public void tangentLineAt(Point2D point, Line2D line, double threshold)
             throws NotLocusException, IllegalArgumentException {
         
-        if(!isLocus(point, threshold)) throw new NotLocusException();
+        if (!isLocus(point, threshold)) {
+            throw new NotLocusException();
+        }
         
         point.normalize();
         mCenter.normalize();
@@ -503,7 +525,7 @@ public class Circle implements Serializable{
     /**
      * Converts this circle into a conic.
      * Conics are a more general representation of circles.
-     * @return A conic representing this circle
+     * @return A conic representing this circle.
      */
     public Conic toConic() {
         mCenter.normalize();
@@ -523,12 +545,12 @@ public class Circle implements Serializable{
     
     /**
      * Set parameters of this circle from a valid conic corresponding to a
-     * circle
-     * @param conic conic to set parameters from
-     * @throws IllegalArgumentException if provided conic is not a circle
+     * circle.
+     * @param conic conic to set parameters from.
+     * @throws IllegalArgumentException if provided conic is not a circle.
      */
-    public final void setFromConic(Conic conic) throws IllegalArgumentException{
-        if(conic.getConicType() != ConicType.CIRCLE_CONIC_TYPE) {
+    public final void setFromConic(Conic conic) throws IllegalArgumentException {
+        if (conic.getConicType() != ConicType.CIRCLE_CONIC_TYPE) {
             throw new IllegalArgumentException();
         }
         

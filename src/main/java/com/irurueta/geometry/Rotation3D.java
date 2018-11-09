@@ -1,18 +1,22 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.Rotation3D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 10, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.*;
 import com.irurueta.algebra.Utils;
-import com.irurueta.algebra.WrongSizeException;
 
 /**
  * Abstract class representing a rotation in 3D space.
@@ -55,13 +59,13 @@ public abstract class Rotation3D {
     /**
      * Constant defining minimum allowed comparison threshold.
      */
+    @SuppressWarnings("WeakerAccess")
     public static final double MIN_COMPARISON_THRESHOLD = 0.0;
-    
 
     /**
      * Empty constructor.
      */
-    public Rotation3D(){}
+    public Rotation3D() { }
     
     /**
      * Returns type of this rotation.
@@ -81,9 +85,10 @@ public abstract class Rotation3D {
      * have length 3.
      */
     public final void setAxisAndRotation(double[] axis, double theta) 
-            throws IllegalArgumentException{
-        if(axis.length != INHOM_COORDS)
+            throws IllegalArgumentException {
+        if (axis.length != INHOM_COORDS) {
             throw new IllegalArgumentException();
+        }
         
         setAxisAndRotation(axis[0], axis[1], axis[2], theta);        
     }
@@ -108,7 +113,7 @@ public abstract class Rotation3D {
      * @return Rotation axis coordinates.
      * @throws RotationException Raised if numerical instabilities happen.
      */
-    public double[] getRotationAxis() throws RotationException{
+    public double[] getRotationAxis() throws RotationException {
         double[] axis = new double[INHOM_COORDS];
         rotationAxis(axis);
         return axis;        
@@ -205,16 +210,16 @@ public abstract class Rotation3D {
      * {@link #isValidRotationMatrix(Matrix)}
      */    
     public final void fromMatrix(Matrix m, double threshold)
-            throws InvalidRotationMatrixException, IllegalArgumentException{
-        if(m.getRows() == INHOM_COORDS &&
-                m.getColumns() == INHOM_COORDS){
+            throws InvalidRotationMatrixException, IllegalArgumentException {
+        if (m.getRows() == INHOM_COORDS &&
+                m.getColumns() == INHOM_COORDS) {
             //inhomogeneous matrix
             fromInhomogeneousMatrix(m, threshold);
-        }else if(m.getRows() == HOM_COORDS &&
-                m.getColumns() == HOM_COORDS){
+        } else if (m.getRows() == HOM_COORDS &&
+                m.getColumns() == HOM_COORDS) {
             //homogeneous matrix
             fromHomogeneousMatrix(m, threshold);
-        }else{
+        } else {
             throw new InvalidRotationMatrixException();
         }            
     }
@@ -233,7 +238,7 @@ public abstract class Rotation3D {
      * {@link #isValidRotationMatrix(Matrix)}
      */        
     public final void fromMatrix(Matrix m) 
-            throws InvalidRotationMatrixException{
+            throws InvalidRotationMatrixException {
         fromMatrix(m, DEFAULT_VALID_THRESHOLD);        
     }
     
@@ -266,7 +271,7 @@ public abstract class Rotation3D {
      * {@link #isValidRotationMatrix(Matrix)}
      */    
     public void fromInhomogeneousMatrix(Matrix m) 
-            throws InvalidRotationMatrixException{
+            throws InvalidRotationMatrixException {
         fromInhomogeneousMatrix(m, DEFAULT_VALID_THRESHOLD);        
     }
     
@@ -301,7 +306,7 @@ public abstract class Rotation3D {
      * {@link #isValidRotationMatrix(Matrix)}
      */             
     public void fromHomogeneousMatrix(Matrix m)
-            throws InvalidRotationMatrixException{
+            throws InvalidRotationMatrixException {
         fromHomogeneousMatrix(m, DEFAULT_VALID_THRESHOLD);
     }
     
@@ -324,7 +329,7 @@ public abstract class Rotation3D {
      * @param point Point to be rotated.
      * @return Rotated point.
      */    
-    public Point3D rotate(Point3D point){
+    public Point3D rotate(Point3D point) {
         Point3D result = new HomogeneousPoint3D();
         rotate(point, result);
         return result;        
@@ -337,8 +342,8 @@ public abstract class Rotation3D {
      * @param inputPlane Input plane to be rotated.
      * @param resultPlane plane where result is stored.
      */        
-    public void rotate(Plane inputPlane, Plane resultPlane){
-        try{
+    public void rotate(Plane inputPlane, Plane resultPlane) {
+        try {
             Matrix R = asHomogeneousMatrix();
             //because of the duality theorem:
             //P'*M = 0 --> P*R^-1*R*M = 0 --> P2' = P'*R^-1 and M2 = R*M
@@ -361,7 +366,7 @@ public abstract class Rotation3D {
             resultPlane.setParameters(R.getElementAt(0, 0), 
                     R.getElementAt(1, 0), R.getElementAt(2, 0),
                     R.getElementAt(3, 0));
-        }catch(WrongSizeException ignore){}
+        } catch (WrongSizeException ignore) { }
     }
     
     /**
@@ -373,7 +378,7 @@ public abstract class Rotation3D {
      * @param plane Plane to be rotated.
      * @return Rotated plane.
      */        
-    public Plane rotate(Plane plane){
+    public Plane rotate(Plane plane) {
         Plane result = new Plane();
         rotate(plane, result);
         return result;        
@@ -392,13 +397,15 @@ public abstract class Rotation3D {
      * negative.
      */    
     public static boolean isValidRotationMatrix(Matrix m, double threshold)
-        throws IllegalArgumentException{
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+            throws IllegalArgumentException {
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         
-        try{
+        try {
             return Utils.isOrthogonal(m, threshold) && 
                 (Math.abs(Utils.det(m)) - 1.0) < threshold;
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             return false;
         }        
     }
@@ -414,7 +421,7 @@ public abstract class Rotation3D {
      * @throws IllegalArgumentException Raised if provided threshold is 
      * negative.
      */        
-    public static boolean isValidRotationMatrix(Matrix m){
+    public static boolean isValidRotationMatrix(Matrix m) {
         return isValidRotationMatrix(m, DEFAULT_VALID_THRESHOLD);
     }    
     
@@ -441,7 +448,7 @@ public abstract class Rotation3D {
      * type.
      * @return A 3D rotation.
      */
-    public static Rotation3D create(){
+    public static Rotation3D create() {
         return create(DEFAULT_TYPE);
     }
     
@@ -452,8 +459,8 @@ public abstract class Rotation3D {
      * @param type Rotation type.
      * @return A 3D rotation.
      */
-    public static Rotation3D create(Rotation3DType type){
-        switch(type){
+    public static Rotation3D create(Rotation3DType type) {
+        switch (type) {
             case AXIS_ROTATION3D:
                 return new AxisRotation3D();
             case MATRIX_ROTATION3D:
@@ -473,7 +480,7 @@ public abstract class Rotation3D {
      * have length 3.
      */
     public static Rotation3D create(double[] axis, double theta) 
-           throws IllegalArgumentException{
+           throws IllegalArgumentException {
         return create(axis, theta, DEFAULT_TYPE);
     }
     
@@ -482,7 +489,7 @@ public abstract class Rotation3D {
      * Creates a 3D rotation using provided axis, rotation angle and rotation 
      * type.
      * Note: to increase accuracy axis coordinates should be normalized.
-     * @param axis Array contianing rotation axis coordinates.
+     * @param axis Array containing rotation axis coordinates.
      * @param theta Rotation angle around axis expressed in radians.
      * @param type Rotation type.
      * @return A 3D rotation instance.
@@ -490,8 +497,8 @@ public abstract class Rotation3D {
      * have length 3.
      */
     public static Rotation3D create(double[] axis, double theta,
-            Rotation3DType type) throws IllegalArgumentException{
-        switch(type){
+            Rotation3DType type) throws IllegalArgumentException {
+        switch (type) {
             case AXIS_ROTATION3D:
                 return new AxisRotation3D(axis, theta);
             case MATRIX_ROTATION3D:
@@ -511,7 +518,7 @@ public abstract class Rotation3D {
      * @return A 3D rotation instance.
      */
     public static Rotation3D create(double axisX, double axisY, double axisZ, 
-           double theta){
+           double theta) {
         return create(axisX, axisY, axisZ, theta, DEFAULT_TYPE);
     }
     
@@ -528,8 +535,8 @@ public abstract class Rotation3D {
      * @return A 3D rotation instance.
      */
     public static Rotation3D create(double axisX, double axisY, double axisZ,
-            double theta, Rotation3DType type){
-        switch(type){
+            double theta, Rotation3DType type) {
+        switch (type) {
             case AXIS_ROTATION3D:
                 return new AxisRotation3D(axisX, axisY, axisZ, theta);
             case MATRIX_ROTATION3D:
@@ -548,10 +555,11 @@ public abstract class Rotation3D {
      * @throws RotationException if rotation angle or axis cannot be determined.
      */
     public boolean equals(Rotation3D other, double threshold)
-            throws IllegalArgumentException, RotationException{
+            throws IllegalArgumentException, RotationException {
         
-        if(threshold < MIN_COMPARISON_THRESHOLD)
+        if (threshold < MIN_COMPARISON_THRESHOLD) {
             throw new IllegalArgumentException();
+        }
         
         double[] thisAxis = getRotationAxis();
         double thisAngle = getRotationAngle();
@@ -559,25 +567,29 @@ public abstract class Rotation3D {
         double otherAngle = other.getRotationAngle();
         
         double cosAngle = ArrayUtils.dotProduct(thisAxis, otherAxis);
-        if(cosAngle >= 0.0){
+        if (cosAngle >= 0.0) {
             //axis have same direction
             double diffX = thisAxis[0] - otherAxis[0];
             double diffY = thisAxis[1] - otherAxis[1];
             double diffZ = thisAxis[2] - otherAxis[2];
             double sqrNormDiff = diffX * diffX + diffY * diffY + diffZ * diffZ;
             
-            if(sqrNormDiff > threshold) return false; //axes are not equal
+            if (sqrNormDiff > threshold) {
+                return false; //axes are not equal
+            }
             
             //compare difference of angles
             return Math.abs(thisAngle - otherAngle) <= threshold;
-        }else{
+        } else {
             //axis might be reversed, hence also angle is reversed
             double sumX = thisAxis[0] + otherAxis[0];
             double sumY = thisAxis[1] + otherAxis[1];
             double sumZ = thisAxis[2] + otherAxis[2];
             double sqrNormSum = sumX * sumX + sumY * sumY + sumZ * sumZ;
             
-            if(sqrNormSum > threshold) return false; //axes are not equal
+            if (sqrNormSum > threshold) {
+                return false; //axes are not equal
+            }
             
             //compare sum of angles (because rotation angle is also reversed)
             return Math.abs(thisAngle + otherAngle) <= threshold;
@@ -591,14 +603,18 @@ public abstract class Rotation3D {
      * @return true if they are equal, false otherwise.
      */
     @Override
-    public boolean equals(Object obj){
-        if(obj == this) return true;
-        if(!(obj instanceof Rotation3D)) return false;        
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Rotation3D)) {
+            return false;
+        }
         
         Rotation3D other = (Rotation3D)obj;
-        try{
+        try {
             return equals(other, DEFAULT_COMPARISON_THRESHOLD);
-        }catch(RotationException e){
+        } catch (RotationException e) {
             return false;
         }
     }    
@@ -609,29 +625,26 @@ public abstract class Rotation3D {
      */    
     @Override
     public int hashCode() {
-        int hash = 5;
-        return hash;
+        return 5;
     }
     
     /**
      * Sets values of this rotation from a 3D matrix rotation.
      * @param rot 3D matrix rotation to set values from.
      */
-    public void fromRotation(MatrixRotation3D rot){
-        try{
+    public void fromRotation(MatrixRotation3D rot) {
+        try {
             fromInhomogeneousMatrix(rot.internalMatrix);
-        }catch(InvalidRotationMatrixException ignore){ /* never thrown */ }
+        } catch (InvalidRotationMatrixException ignore) { /* never thrown */ }
     }
     
     /**
      * Sets values of this rotation from a 3D axis rotation.
      * @param rot an axis rotation to set values from.
      */
-    public void fromRotation(AxisRotation3D rot){
-        try{
-            setAxisAndRotation(rot.getAxisX(), rot.getAxisY(), rot.getAxisZ(), 
-                    rot.getRotationAngle());
-        }catch(RotationException ignore){ /* never thrown */}
+    public void fromRotation(AxisRotation3D rot) {
+        setAxisAndRotation(rot.getAxisX(), rot.getAxisY(), rot.getAxisZ(),
+                rot.getRotationAngle());
     }
     
     /**
@@ -644,8 +657,8 @@ public abstract class Rotation3D {
      * Sets vcalues of this rotation from another rotation.
      * @param rot a 3D rotation to set values from.
      */
-    public void fromRotation(Rotation3D rot){
-        switch(rot.getType()){
+    public void fromRotation(Rotation3D rot) {
+        switch (rot.getType()) {
             case AXIS_ROTATION3D:
                 fromRotation((AxisRotation3D)rot);
                 break;
@@ -662,7 +675,7 @@ public abstract class Rotation3D {
      * into provided instance.
      * @param result instance where result wil be stored.
      */
-    public void toMatrixRotation(MatrixRotation3D result){
+    public void toMatrixRotation(MatrixRotation3D result) {
         result.fromRotation(this);
     }
     
@@ -671,7 +684,7 @@ public abstract class Rotation3D {
      * as a new instance.
      * @return a new 3D matrix rotation equivalent to this rotation.
      */
-    public MatrixRotation3D toMatrixRotation(){
+    public MatrixRotation3D toMatrixRotation() {
         MatrixRotation3D r = new MatrixRotation3D();
         toMatrixRotation(r);
         return r;
@@ -682,7 +695,7 @@ public abstract class Rotation3D {
      * provided instance.
      * @param result instance where result will be stored.
      */
-    public void toAxisRotation(AxisRotation3D result){
+    public void toAxisRotation(AxisRotation3D result) {
         result.fromRotation(this);
     }
     
@@ -691,18 +704,18 @@ public abstract class Rotation3D {
      * as a new instance.
      * @return a new axis rotation equivalent to this rotation.
      */
-    public AxisRotation3D toAxisRotation(){
+    public AxisRotation3D toAxisRotation() {
         AxisRotation3D r = new AxisRotation3D();
         toAxisRotation(r);
         return r;
     }
     
     /**
-     * Converts this 3D rotation into a quaterion storing the result into 
+     * Converts this 3D rotation into a quaternion storing the result into
      * provided instance.
      * @param result instance where result will be stored.
      */
-    public void toQuaternion(Quaternion result){
+    public void toQuaternion(Quaternion result) {
         result.fromRotation(this);
     }
     
@@ -711,7 +724,7 @@ public abstract class Rotation3D {
      * new instance.
      * @return a new quaternion equivalent to this rotation.
      */
-    public Quaternion toQuaternion(){
+    public Quaternion toQuaternion() {
         Quaternion q = new Quaternion();
         toQuaternion(q);
         return q;

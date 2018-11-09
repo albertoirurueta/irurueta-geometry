@@ -45,7 +45,7 @@ public class Box2D extends Box<Point2D> {
 
     /**
      * Constructor from rectangle.
-     * @param rectangle a retangle.
+     * @param rectangle a rectangle.
      */
     public Box2D(Rectangle rectangle) {
         fromRectangle(rectangle);

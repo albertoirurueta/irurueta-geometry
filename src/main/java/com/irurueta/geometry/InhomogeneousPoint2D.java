@@ -17,6 +17,7 @@
 package com.irurueta.geometry;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Subclass of Point2D defining an inhomogeneous 2D point.
@@ -32,7 +33,7 @@ import java.io.Serializable;
  * inhomogeneous counterparts are better suited when computing euclidean 
  * distances, etc.
  */
-public class InhomogeneousPoint2D extends Point2D implements Serializable{
+public class InhomogeneousPoint2D extends Point2D implements Serializable {
     
     /**
      * Defines the X coordinate of an inhomogeneous 2D point.
@@ -89,7 +90,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable{
      * Returns the X coordinate of the given homogeneous 2D point instance.
      * @return X coordinate.
      */
-    public double getX(){
+    public double getX() {
         return mX;
     }
     
@@ -97,7 +98,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable{
      * Sets the X coordinate of this homogeneous point.
      * @param x X coordinate.
      */
-    public void setX(double x){
+    public void setX(double x) {
         mX = x;
     }    
     
@@ -105,7 +106,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable{
      * Returns the Y coordinate of the given homogeneous 2D point instance.
      * @return Y coordinate.
      */
-    public double getY(){
+    public double getY() {
         return mY;
     }    
         
@@ -113,7 +114,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable{
      * Sets the Y coordinate of this homogeneous point.
      * @param y Y coordinate.
      */
-    public void setY(double y){
+    public void setY(double y) {
         mY = y;
     }
     
@@ -138,7 +139,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable{
     @Override
     public final void setCoordinates(double[] v) 
             throws IllegalArgumentException {
-        if(v.length != POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH) {
+        if (v.length != POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         } else {
             mX = v[0];
@@ -260,9 +261,9 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable{
     }
     
     /**
-     * Checks if provided object equals current 2D point
-     * @param obj Object to compare
-     * @return True if both objects are considered to be equal, false otherwise
+     * Checks if provided object equals current 2D point.
+     * @param obj Object to compare.
+     * @return True if both objects are considered to be equal, false otherwise.
      */
     @Override
     public boolean equals(Object obj) {
@@ -283,12 +284,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable{
      */    
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 23 * hash + (int) (Double.doubleToLongBits(this.mX) ^ 
-                (Double.doubleToLongBits(this.mX) >>> 32));
-        hash = 23 * hash + (int) (Double.doubleToLongBits(this.mY) ^ 
-                (Double.doubleToLongBits(this.mY) >>> 32));
-        return hash;
+        return Objects.hash(mX, mY);
     }
     
     /**
@@ -347,7 +343,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable{
      * @return True if current point and input point are the same, false 
      * otherwise.
      */    
-    public boolean equals(HomogeneousPoint2D point){
+    public boolean equals(HomogeneousPoint2D point) {
        return equals(point, DEFAULT_COMPARISON_THRESHOLD);
     }
     
@@ -383,7 +379,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable{
      * @return True if current point and input point are the same, false 
      * otherwise.
      */        
-    public boolean equals(InhomogeneousPoint2D point){
+    public boolean equals(InhomogeneousPoint2D point) {
         return equals(point, DEFAULT_COMPARISON_THRESHOLD);
     }
     
@@ -433,7 +429,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable{
      */
     @Override
     public void asArray(double[] array) throws IllegalArgumentException {
-        if(array.length != POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH) {
+        if (array.length != POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         }
         array[0] = mX;

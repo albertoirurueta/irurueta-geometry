@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.EuclideanTransformation3DEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date 22 January, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,11 +19,8 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.SingularValueDecomposer;
 import com.irurueta.algebra.Utils;
-import com.irurueta.geometry.CoincidentPointsException;
-import com.irurueta.geometry.EuclideanTransformation3D;
-import com.irurueta.geometry.InvalidRotationMatrixException;
-import com.irurueta.geometry.MatrixRotation3D;
-import com.irurueta.geometry.Point3D;
+import com.irurueta.geometry.*;
+
 import java.util.List;
 
 /**
@@ -407,7 +411,7 @@ public class EuclideanTransformation3DEstimator {
             v.multiply(u);
             Matrix r = v;
             
-            if(Utils.det(r) < 0.0) {
+            if (Utils.det(r) < 0.0) {
                 //multiply 3rd column of R by -1
                 r.setElementAt(0, 2, -r.getElementAt(0, 2));
                 r.setElementAt(1, 2, -r.getElementAt(1, 2));
@@ -430,9 +434,7 @@ public class EuclideanTransformation3DEstimator {
             
         } catch (CoincidentPointsException e) {
             throw e;
-        } catch (AlgebraException e) {
-            throw new CoincidentPointsException(e);
-        } catch (InvalidRotationMatrixException e) {
+        } catch (AlgebraException | InvalidRotationMatrixException e) {
             throw new CoincidentPointsException(e);
         } finally {
             mLocked = false;

@@ -1,23 +1,23 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 26, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.geometry.CoordinatesType;
-import com.irurueta.geometry.PinholeCamera;
-import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
-import com.irurueta.geometry.Point2D;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.numerical.robust.PROSACRobustEstimator;
-import com.irurueta.numerical.robust.PROSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.geometry.*;
+import com.irurueta.numerical.robust.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -460,7 +460,7 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     
     /**
      * Returns quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      * @return quality scores corresponding to each pair of matched points.
      */
     @Override
@@ -609,7 +609,7 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
         nonRobustEstimator.setSuggestedCenterValue(getSuggestedCenterValue());
                 
         PROSACRobustEstimator<PinholeCamera> innerEstimator = 
-                new PROSACRobustEstimator<PinholeCamera>(
+                new PROSACRobustEstimator<>(
                     new PROSACRobustEstimatorListener<PinholeCamera>() {
                     
             //point to be reused when computing residuals
@@ -617,10 +617,10 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
                     CoordinatesType.HOMOGENEOUS_COORDINATES); 
             
             //3D points for a subset of samples
-            private List<Point3D> mSubset3D = new ArrayList<Point3D>();
+            private List<Point3D> mSubset3D = new ArrayList<>();
             
             //2D points for a subset of samples
-            private List<Point2D> mSubset2D = new ArrayList<Point2D>();
+            private List<Point2D> mSubset2D = new ArrayList<>();
             
             @Override
             public double getThreshold() {

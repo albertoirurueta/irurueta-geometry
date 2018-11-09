@@ -1,59 +1,63 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.Line2D
- * 
- * @author Alberto Irurueta (alberto@irureta.com)
- * @date July 6, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
 import org.junit.*;
+
+import java.util.Random;
+
 import static org.junit.Assert.*;
 
 public class Line2DTest {
     
-    public static final int HOM_COORDS = 3;
-    public static final int INHOM_COORDS = 2;
+    private static final int HOM_COORDS = 3;
+    private static final int INHOM_COORDS = 2;
     
-    public static final double PRECISION_ERROR = 1e-6;
-    public static final double MIN_RANDOM_VALUE = 1.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
-    public static final double MIN_RANDOM_DISTANCE = -100.0;
-    public static final double MAX_RANDOM_DISTANCE = 100.0;
-    public static final double MIN_DEGREES = -90.0;
-    public static final double MAX_DEGREES = 90.0;
+    private static final double PRECISION_ERROR = 1e-6;
+    private static final double MIN_RANDOM_VALUE = 1.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_DISTANCE = -100.0;
+    private static final double MAX_RANDOM_DISTANCE = 100.0;
+    private static final double MIN_DEGREES = -90.0;
+    private static final double MAX_DEGREES = 90.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double ABSOLUTE_ERROR = 1e-8;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
-    public Line2DTest() {
-    }
+    public Line2DTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
 
     @Test
     public void testConstructor() throws WrongSizeException, NotReadyException, 
-        LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException{
+            LockedException, DecomposerException,
+            com.irurueta.algebra.NotAvailableException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -84,10 +88,10 @@ public class Line2DTest {
         
         //Force IllegalArgumentException
         line = null;
-        try{
+        try {
             line = new Line2D(new double[HOM_COORDS + 1]);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(line);
         
         
@@ -108,10 +112,10 @@ public class Line2DTest {
         
         //Force CoincidentPointsException
         line = null;
-        try{
+        try {
             line = new Line2D(point1, point2, false);
             fail("CoincidentPointsException expected but not thrown");
-        }catch(CoincidentPointsException e){}
+        } catch (CoincidentPointsException ignore) { }
         assertNull(line);
         
         //try with 2 non-coincident points
@@ -121,7 +125,7 @@ public class Line2DTest {
         decomposer.decompose();
         
         //ensure we create a matrix with 2 non linear dependent rows
-        while(decomposer.getRank() < 2){
+        while (decomposer.getRank() < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
@@ -186,16 +190,16 @@ public class Line2DTest {
         //Force IllegalArgumentException
         double[] wrongArray = new double[HOM_COORDS];
         line = null;
-        try{
+        try {
             line = new Line2D(point, wrongArray);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(line);
     }
     
     @Test
-    public void testGettersAndSetters() throws WrongSizeException{
-        for(int t = 0; t < TIMES; t++){
+    public void testGettersAndSetters() {
+        for (int t = 0; t < TIMES; t++) {
             double[] array = new double[HOM_COORDS];
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -267,8 +271,8 @@ public class Line2DTest {
     
     @Test
     public void testSetParametersFromPairOfPoints() throws WrongSizeException, 
-        NotReadyException, LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException, CoincidentPointsException{
+            NotReadyException, LockedException, DecomposerException,
+            com.irurueta.algebra.NotAvailableException, CoincidentPointsException {
         
         Matrix m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -276,7 +280,7 @@ public class Line2DTest {
         SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
         
-        while(decomposer.getRank() < 2){
+        while (decomposer.getRank() < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
@@ -325,9 +329,9 @@ public class Line2DTest {
         assertEquals(scaleC, scaleA, PRECISION_ERROR);
         
         //Force CoincidentPointsException
-        try{
+        try {
             line.setParametersFromPairOfPoints(point1, coincidentPoint, false);
-        }catch(CoincidentPointsException e){}
+        } catch (CoincidentPointsException ignore) { }
         
         //if we try coincident points without raising an exception then line is
         //instantiated no matter what, although obtained parameters might be 
@@ -336,7 +340,7 @@ public class Line2DTest {
     }
     
     @Test
-    public void testSetParamsetersFromPointAndDirectorVector(){
+    public void testSetParamsetersFromPointAndDirectorVector() {
         double[] array = new double[HOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -367,16 +371,16 @@ public class Line2DTest {
         
         //Force IllegalArgumentException
         double[] wrongArray = new double[HOM_COORDS];
-        try{
+        try {
             line.setParametersFromPointAndDirectorVector(point, wrongArray);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testIsLocus() throws WrongSizeException, NotReadyException, 
-        LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException{
+            LockedException, DecomposerException,
+            com.irurueta.algebra.NotAvailableException {
         
         //randomly choose 2 points to find their corresponding line
         Matrix m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
@@ -385,7 +389,7 @@ public class Line2DTest {
         SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
         
-        while(decomposer.getRank() < 2){
+        while (decomposer.getRank() < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
@@ -430,8 +434,8 @@ public class Line2DTest {
     
     @Test
     public void testSignedDistance() throws WrongSizeException, 
-        NotReadyException, LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException{
+            NotReadyException, LockedException, DecomposerException,
+            com.irurueta.algebra.NotAvailableException {
         
         //randomly choose 2 points to find their corresponding line
         Matrix m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
@@ -440,7 +444,7 @@ public class Line2DTest {
         SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
         
-        while(decomposer.getRank() < 2){
+        while (decomposer.getRank() < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
@@ -491,7 +495,7 @@ public class Line2DTest {
     }
     
     @Test
-    public void testAsArray(){
+    public void testAsArray() {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -519,14 +523,14 @@ public class Line2DTest {
 
         
         //Force IllegalArgumentException
-        try{
+        try {
             line.asArray(new double[HOM_COORDS + 1]);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testNormalize(){
+    public void testNormalize() {
         
         double[] array = new double[HOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -565,7 +569,7 @@ public class Line2DTest {
     }
     
     @Test
-    public void testDirectorVector(){
+    public void testDirectorVector() {
         double[] array = new double[HOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -591,8 +595,7 @@ public class Line2DTest {
     
     @Test
     public void testIntersection() throws WrongSizeException, 
-        DecomposerException,
-        NoIntersectionException{
+            DecomposerException, NoIntersectionException {
         
         Point2D point1 = new HomogeneousPoint2D();
         Point2D point2 = new HomogeneousPoint2D();
@@ -608,8 +611,8 @@ public class Line2DTest {
                 m1.getSubmatrix(0, 0, 0, HOM_COORDS - 1));
         
         //ensure that both matrices have rank 2 (points are not coincident)
-        while(com.irurueta.algebra.Utils.rank(m1) < 2 || 
-                com.irurueta.algebra.Utils.rank(m2) < 2){
+        while (com.irurueta.algebra.Utils.rank(m1) < 2 ||
+                com.irurueta.algebra.Utils.rank(m2) < 2) {
 
             //create random matrices again
             m1 = Matrix.createWithUniformRandomValues(2, HOM_COORDS,
@@ -653,21 +656,21 @@ public class Line2DTest {
         //Force NoIntersectionException (by attempting to intersect a line with
         //itself
         intersection1 = null;
-        try{
+        try {
             intersection1 = line1.getIntersection(line1);
             fail("NoIntersectionException expected but not thrown");
-        }catch(NoIntersectionException e){}
+        } catch (NoIntersectionException ignore) { }
         assertNull(intersection1);
-        try{
+        try {
             line1.intersection(line1, intersection2);
             fail("NoIntersectionException expected but not thrown");
-        }catch(NoIntersectionException e){}        
+        } catch (NoIntersectionException ignore) { }
     }
     
     @Test
     public void testClosestPoint() throws WrongSizeException, 
         NotReadyException, LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException{
+        com.irurueta.algebra.NotAvailableException {
         
         //randomly choose 2 points to find their corresponding line
         Matrix m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
@@ -676,15 +679,13 @@ public class Line2DTest {
         SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
         
-        while(decomposer.getRank() < 2){
+        while (decomposer.getRank() < 2) {
             m = Matrix.createWithUniformRandomValues(2, HOM_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
             decomposer.decompose();
         }
         
-        Matrix V = decomposer.getV();
-                
         Point2D point1 = new HomogeneousPoint2D(m.getElementAt(0, 0),
                 m.getElementAt(0, 1),
                 m.getElementAt(0, 2));
@@ -762,18 +763,18 @@ public class Line2DTest {
         assertTrue(closestPointC.equals(point1, ABSOLUTE_ERROR));
         assertTrue(closestPointD.equals(point1, ABSOLUTE_ERROR));
         
-        try{
+        try {
             line.getClosestPoint(point3, -PRECISION_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             line.closestPoint(point3, closestPointD, -ABSOLUTE_ERROR);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }    
     
     @Test
-    public void testDotProduct(){
+    public void testDotProduct() {
         double[] array = new double[HOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -799,7 +800,7 @@ public class Line2DTest {
     }
     
     @Test
-    public void testEquals(){
+    public void testEquals() {
         double[] array = new double[HOM_COORDS];
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -808,6 +809,7 @@ public class Line2DTest {
         Line2D line2 = new Line2D(array);
         assertTrue(line1.equals(line2, ABSOLUTE_ERROR));
         assertTrue(line1.equals(line2));
+        //noinspection all
         assertTrue(line1.equals((Object)line2));
         
         array[0] = line1.getA() + randomizer.nextDouble(MIN_RANDOM_VALUE,
@@ -829,14 +831,14 @@ public class Line2DTest {
         assertFalse(line1.equals(line2, 0.0));
         
         //Force IllegalArgumentException
-        try{
-            line1.equals(line1, -ABSOLUTE_ERROR);
+        try {
+            assertFalse(line1.equals(line1, -ABSOLUTE_ERROR));
             fail("IllegalArgumentException but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testCreateCanonicalLineAtInfinity(){
+    public void testCreateCanonicalLineAtInfinity() {
         Line2D line = Line2D.createCanonicalLineAtInfinity();
         
         assertEquals(line.getA(), 0.0, 0.0);
@@ -854,7 +856,7 @@ public class Line2DTest {
     }
     
     @Test
-    public void testSetAsCanonicalLineAtInfinity(){
+    public void testSetAsCanonicalLineAtInfinity() {
         //create a point at infinity
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point2D point = new HomogeneousPoint2D(

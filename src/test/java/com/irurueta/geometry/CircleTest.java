@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.geometry.Circle
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 14, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
@@ -12,24 +19,22 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class CircleTest {
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_RANDOM_DEGREES = -180.0;
-    public static final double MAX_RANDOM_DEGREES = 180.0;
+    private static final double MIN_RANDOM_DEGREES = -180.0;
+    private static final double MAX_RANDOM_DEGREES = 180.0;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
     public CircleTest() { }
     
@@ -46,7 +51,7 @@ public class CircleTest {
     public void tearDown() { }
     
     @Test
-    public void testConstructor() throws ColinearPointsException{
+    public void testConstructor() throws ColinearPointsException {
         //Test empty constructor
         Circle circle = new Circle();
         
@@ -70,10 +75,10 @@ public class CircleTest {
         
         //Force IllegalArgumentException
         circle = null;
-        try{
+        try {
             circle = new Circle(center, -radius);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(circle); 
         
         //test constructor with three points
@@ -81,7 +86,7 @@ public class CircleTest {
         //pick 3 points belonging to the circle locus
         Point2D point1, point2, point3;
         boolean areEqual;
-        do{
+        do {
             double angle = randomizer.nextDouble(MIN_RANDOM_DEGREES, 
                     MAX_RANDOM_DEGREES) * Math.PI / 180.0;
             point1 = new HomogeneousPoint2D(
@@ -102,7 +107,7 @@ public class CircleTest {
             areEqual = point1.equals(point2, ABSOLUTE_ERROR) ||
                     point2.equals(point3, ABSOLUTE_ERROR) ||
                     point3.equals(point1, ABSOLUTE_ERROR);
-        }while(areEqual);
+        } while (areEqual);
         
         
         //compute circle
@@ -116,10 +121,10 @@ public class CircleTest {
         
         //Force ColinearPointsException
         circle = null;
-        try{
+        try {
             circle = new Circle(point1, point2, point2);
             fail("ColinearPointsException expected but not thrown");
-        }catch(ColinearPointsException e){}
+        } catch (ColinearPointsException ignore) { }
         assertNull(circle);
         
         //test from conic
@@ -133,15 +138,15 @@ public class CircleTest {
         //Force IllegalArgumentException
         conic = new Conic();
         circle = null;
-        try{
+        try {
             circle = new Circle(conic);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(circle);
     }
     
     @Test
-    public void testGetSetCenter(){
+    public void testGetSetCenter() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -158,14 +163,14 @@ public class CircleTest {
         assertTrue(circle.getCenter().equals(center, ABSOLUTE_ERROR));
         
         //Force NullPointerException
-        try{
+        try {
             circle.setCenter(null);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
     }
     
     @Test
-    public void testGetSetRadius(){
+    public void testGetSetRadius() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, 
                 MAX_RANDOM_VALUE));
@@ -180,14 +185,14 @@ public class CircleTest {
         assertEquals(circle.getRadius(), radius, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             circle.setRadius(-radius);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testSetCenterAndRadius(){
+    public void testSetCenterAndRadius() {
         //Test constructor with center and radius
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
@@ -210,20 +215,20 @@ public class CircleTest {
         assertEquals(circle.getRadius(), radius, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             circle.setCenterAndRadius(center, -radius);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Force NullPointerException
-        try{
+        try {
             circle.setCenterAndRadius(null, radius);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
     }
     
     @Test
-    public void testSetParametersFromPoints() throws ColinearPointsException{
+    public void testSetParametersFromPoints() throws ColinearPointsException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -236,7 +241,7 @@ public class CircleTest {
         //pick 3 points belonging to the circle locus
         Point2D point1, point2, point3;
         boolean areEqual;
-        do{
+        do {
             double angle = randomizer.nextDouble(MIN_RANDOM_DEGREES, 
                     MAX_RANDOM_DEGREES) * Math.PI / 180.0;
             point1 = new HomogeneousPoint2D(
@@ -257,7 +262,7 @@ public class CircleTest {
             areEqual = point1.equals(point2, ABSOLUTE_ERROR) ||
                     point2.equals(point3, ABSOLUTE_ERROR) ||
                     point3.equals(point1, ABSOLUTE_ERROR);
-        }while(areEqual);
+        } while (areEqual);
         
         //create new circle and set parameters
         Circle circle2 = new Circle();
@@ -270,14 +275,14 @@ public class CircleTest {
         assertEquals(circle1.getRadius(), circle2.getRadius(), ABSOLUTE_ERROR);
         
         //Force ColinearPointsException
-        try{
+        try {
             circle2.setParametersFromPoints(point1, point2, point2);
             fail("ColinearPointsException expected but not thrown");
-        }catch(ColinearPointsException e){}
+        } catch (ColinearPointsException ignore) { }
     }
     
     @Test
-    public void testArea(){
+    public void testArea() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -295,7 +300,7 @@ public class CircleTest {
     }
     
     @Test
-    public void testPerimeter(){
+    public void testPerimeter() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -328,7 +333,7 @@ public class CircleTest {
     }
     
     @Test
-    public void testIsInside(){
+    public void testIsInside() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -365,7 +370,7 @@ public class CircleTest {
     }
     
     @Test
-    public void testSignedDistanceDistanceAndIsLocus(){
+    public void testSignedDistanceDistanceAndIsLocus() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -443,15 +448,15 @@ public class CircleTest {
         assertTrue(circle.isLocus(zero, radius));
         
         //Force IllegalArgumentExcepetion
-        try{
+        try {
             circle.isLocus(zero, -radius);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testClosestPointAndIsLocus() throws UndefinedPointException{
-       UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    public void testClosestPointAndIsLocus() throws UndefinedPointException {
+        UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
@@ -521,25 +526,25 @@ public class CircleTest {
         
         
         //Force UndefinedPointException (by testing at center)
-        try{
+        try {
             circle.getClosestPoint(center);
             fail("UndefinedPointException expected but not thrown");
-        }catch(UndefinedPointException e){}
-        try{
+        } catch (UndefinedPointException ignore) { }
+        try {
             circle.closestPoint(center, result);
             fail("UndefinedPointException expected but not thrown");
-        }catch(UndefinedPointException e){}
+        } catch (UndefinedPointException ignore) { }
         
-        //Force IllegalArgumentExcepetion
-        try{
+        //Force IllegalArgumentException
+        try {
             circle.isLocus(zero, -radius);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetTangentLineAt() throws NotLocusException{
-        for(int t = 0; t < TIMES; t++){
+    public void testGetTangentLineAt() throws NotLocusException {
+        for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             Point2D center = new HomogeneousPoint2D(randomizer.nextDouble(
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -549,11 +554,11 @@ public class CircleTest {
             double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES, 
                     MAX_RANDOM_DEGREES) * Math.PI / 180.0;
             double theta2; //angle corresponding to line slope
-            if(theta > Math.PI / 2.0){
+            if (theta > Math.PI / 2.0) {
                 theta2 = theta - Math.PI;
-            }else if(theta < -Math.PI / 2.0){
+            } else if (theta < -Math.PI / 2.0) {
                 theta2 = theta + Math.PI;
-            }else{
+            } else {
                 theta2 = theta;
             }
 
@@ -575,9 +580,9 @@ public class CircleTest {
             //check that line angle is equal to theta
             double lineAngle = line.getAngle();
             double theta3 = theta2 - Math.PI / 2.0;
-            if(theta3 < -Math.PI / 2.0){
+            if (theta3 < -Math.PI / 2.0) {
                 theta3 += Math.PI;
-            }else if(theta3 > Math.PI / 2.0){
+            } else if (theta3 > Math.PI / 2.0) {
                 theta3 -= Math.PI;
             }
             assertEquals(lineAngle * 180.0 / Math.PI, 
@@ -586,7 +591,7 @@ public class CircleTest {
     }
     
     @Test
-    public void testToConic() throws WrongSizeException{
+    public void testToConic() throws WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point2D center = new HomogeneousPoint2D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -642,7 +647,7 @@ public class CircleTest {
     }
     
     @Test
-    public void testSetFromConic(){
+    public void testSetFromConic() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -664,9 +669,9 @@ public class CircleTest {
         
         //Force IllegalArgumentException
         conic = new Conic();
-        try{
+        try {
             circle2.setFromConic(conic);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
 }

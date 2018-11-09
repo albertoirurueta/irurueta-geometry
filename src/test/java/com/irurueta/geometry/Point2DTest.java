@@ -17,27 +17,29 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
 import org.junit.*;
+
+import java.util.Random;
+
 import static org.junit.Assert.*;
 
 public class Point2DTest {
     
-    public static final int HOM_COORDS = 3;
-    public static final int INHOM_COORDS = 2;
+    private static final int HOM_COORDS = 3;
+    private static final int INHOM_COORDS = 2;
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
     public Point2DTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception { }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception { }
+    public static void tearDownClass() { }
     
     @Before
     public void setUp() { }
@@ -172,7 +174,6 @@ public class Point2DTest {
         //check
         assertEquals(point.getInhomY(), inhomY, ABSOLUTE_ERROR);
         assertEquals(point.getInhomX(), 0.0, 0.0);
-
     }
 
     @Test

@@ -1,76 +1,75 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.PROMedSDualQuadricRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 24, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.geometry.DualQuadric;
-import com.irurueta.geometry.DualQuadricNotAvailableException;
-import com.irurueta.geometry.HomogeneousPoint3D;
-import com.irurueta.geometry.Plane;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Quadric;
-import com.irurueta.geometry.Sphere;
+import com.irurueta.geometry.*;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class PROMedSDualQuadricRobustEstimatorTest implements 
-        DualQuadricRobustEstimatorListener{
+        DualQuadricRobustEstimatorListener {
     
-    public static final int MIN_PLANES = 500;
-    public static final int MAX_PLANES = 1000;
+    private static final int MIN_PLANES = 500;
+    private static final int MAX_PLANES = 1000;
     
-    public static final double MIN_RANDOM_POINT_VALUE = -1.0;
-    public static final double MAX_RANDOM_POINT_VALUE = 1.0;
+    private static final double MIN_RANDOM_POINT_VALUE = -1.0;
+    private static final double MAX_RANDOM_POINT_VALUE = 1.0;
     
-    public static final double STD_ERROR = 1.0;
+    private static final double STD_ERROR = 1.0;
     
-    public static final double MIN_SCORE_ERROR = -0.3;
-    public static final double MAX_SCORE_ERROR = 0.3;
+    private static final double MIN_SCORE_ERROR = -0.3;
+    private static final double MAX_SCORE_ERROR = 0.3;
     
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final double THRESHOLD = 1e-9;
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double THRESHOLD = 1e-9;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
     private int estimateStart;
     private int estimateEnd;
     private int estimateNextIteration;
     private int estimateProgressChange;
     
-    public PROMedSDualQuadricRobustEstimatorTest() {}
+    public PROMedSDualQuadricRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         PROMedSDualQuadricRobustEstimator estimator;
         
         //test constructor without arguments
@@ -94,8 +93,8 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         assertNull(estimator.getQualityScores());
         
         //test constructor with planes
-        List<Plane> planes = new ArrayList<Plane>();
-        for(int i = 0; i < DualQuadricRobustEstimator.MINIMUM_SIZE; i++){
+        List<Plane> planes = new ArrayList<>();
+        for (int i = 0; i < DualQuadricRobustEstimator.MINIMUM_SIZE; i++) {
             planes.add(new Plane());
         }
         
@@ -118,31 +117,31 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         assertNull(estimator.getQualityScores());
         
         //Force IllegalArgumentException
-        List<Plane> emptyPlanes = new ArrayList<Plane>();
+        List<Plane> emptyPlanes = new ArrayList<>();
         estimator = null;
-        try{
+        try {
             estimator = new PROMedSDualQuadricRobustEstimator(emptyPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener
         DualQuadricRobustEstimatorListener listener =
-                new DualQuadricRobustEstimatorListener(){
+                new DualQuadricRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(DualQuadricRobustEstimator estimator) {}
+            public void onEstimateStart(DualQuadricRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(DualQuadricRobustEstimator estimator) {}
+            public void onEstimateEnd(DualQuadricRobustEstimator estimator) { }
 
             @Override
             public void onEstimateNextIteration(
-                    DualQuadricRobustEstimator estimator, int iteration) {}
+                    DualQuadricRobustEstimator estimator, int iteration) { }
 
             @Override
             public void onEstimateProgressChange(
-                    DualQuadricRobustEstimator estimator, float progress) {}
+                    DualQuadricRobustEstimator estimator, float progress) { }
         };
         
         estimator = new PROMedSDualQuadricRobustEstimator(listener);
@@ -186,11 +185,11 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROMedSDualQuadricRobustEstimator(listener, 
                     emptyPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with quality scores
@@ -218,10 +217,10 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         //Force IllegalArgumentException
         double[] emptyScores = new double[0];
         estimator = null;
-        try{
+        try {
             estimator = new PROMedSDualQuadricRobustEstimator(emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with planes and quality scores
@@ -247,16 +246,16 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROMedSDualQuadricRobustEstimator(emptyPlanes, 
                     qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROMedSDualQuadricRobustEstimator(planes, 
                     emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener and quality scores
@@ -282,11 +281,11 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROMedSDualQuadricRobustEstimator(listener, 
                     emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener, points and quality scores
@@ -312,21 +311,21 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROMedSDualQuadricRobustEstimator(listener, 
                     emptyPlanes, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROMedSDualQuadricRobustEstimator(listener, planes, 
                     emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);                          
     }
     
     @Test
-    public void testGetSetStopThreshold() throws LockedException{
+    public void testGetSetStopThreshold() throws LockedException {
         PROMedSDualQuadricRobustEstimator estimator = 
                 new PROMedSDualQuadricRobustEstimator();
         
@@ -341,14 +340,14 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         assertEquals(estimator.getStopThreshold(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setStopThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetListener() throws LockedException{
+    public void testGetSetListener() throws LockedException {
         PROMedSDualQuadricRobustEstimator estimator = 
                 new PROMedSDualQuadricRobustEstimator();
         
@@ -365,7 +364,7 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
     }
     
     @Test
-    public void testGetSetProgressDelta() throws LockedException{
+    public void testGetSetProgressDelta() throws LockedException {
         PROMedSDualQuadricRobustEstimator estimator = 
                 new PROMedSDualQuadricRobustEstimator();
         
@@ -380,18 +379,18 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetConfidence() throws LockedException{
+    public void testGetSetConfidence() throws LockedException {
         PROMedSDualQuadricRobustEstimator estimator = 
                 new PROMedSDualQuadricRobustEstimator();
         
@@ -406,18 +405,18 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         assertEquals(estimator.getConfidence(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetMaxIterations() throws LockedException{
+    public void testGetSetMaxIterations() throws LockedException {
         PROMedSDualQuadricRobustEstimator estimator = 
                 new PROMedSDualQuadricRobustEstimator();
         
@@ -432,14 +431,14 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         assertEquals(estimator.getMaxIterations(), 1);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetPlanes() throws LockedException{
+    public void testGetSetPlanes() throws LockedException {
         PROMedSDualQuadricRobustEstimator estimator = 
                 new PROMedSDualQuadricRobustEstimator();
         
@@ -448,8 +447,8 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //set new value
-        List<Plane> planes = new ArrayList<Plane>();
-        for(int i = 0; i < DualQuadricRobustEstimator.MINIMUM_SIZE; i++){
+        List<Plane> planes = new ArrayList<>();
+        for (int i = 0; i < DualQuadricRobustEstimator.MINIMUM_SIZE; i++) {
             planes.add(new Plane());
         }
         estimator.setPlanes(planes);
@@ -470,15 +469,15 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //Force IllegalArgumentException
-        List<Plane> emptyPlanes = new ArrayList<Plane>();
-        try{
+        List<Plane> emptyPlanes = new ArrayList<>();
+        try {
             estimator.setPlanes(emptyPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetQualityScores() throws LockedException{
+    public void testGetSetQualityScores() throws LockedException {
         PROMedSDualQuadricRobustEstimator estimator = 
                 new PROMedSDualQuadricRobustEstimator();
         
@@ -493,19 +492,19 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         qualityScores = new double[1];
-        try{
+        try {
             estimator.setQualityScores(qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testEstimate() throws LockedException, NotReadyException, 
-            RobustEstimatorException, DualQuadricNotAvailableException{
+            RobustEstimatorException, DualQuadricNotAvailableException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
-        for(int t = 0;  t < TIMES; t++){
+        for (int t = 0;  t < TIMES; t++) {
             //instantiate a random circle
             Point3D center = new HomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
@@ -526,17 +525,17 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
             double[] qualityScores = new double[nPlanes];
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            List<Plane> planes = new ArrayList<Plane>();
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planes = new ArrayList<>();
+            List<Plane> planesWithError = new ArrayList<>();
             Point3D point;
             Plane plane, planeWithError;
             double[] directorVector = new double[
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
-            for(int i = 0; i < nPlanes; i++){
+            for (int i = 0; i < nPlanes; i++) {
                 double angle1 = 0.0, angle2 = 0.0;
-                if(i < halfPoints){
+                if (i < halfPoints) {
                     angle1 = theta * (double)i;
-                }else{
+                } else {
                     angle2 = theta * (double)(i - halfPoints);
                 }
                 point = new HomogeneousPoint3D(
@@ -554,7 +553,7 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
                 double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, 
                         MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //point is outlier
                     double errorA = errorRandomizer.nextDouble();
                     double errorB = errorRandomizer.nextDouble();
@@ -566,7 +565,7 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
                     double error = Math.sqrt(errorA * errorA + errorB * errorB +
                             errorC * errorC);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
-                }else{
+                } else {
                     //inlier plane
                     planeWithError = plane;
                 }
@@ -603,73 +602,73 @@ public class PROMedSDualQuadricRobustEstimatorTest implements
             
             //check correctness of estimation by checking that all planes
             //are within the estimated conic locus
-            for(Plane p : planes){
+            for (Plane p : planes) {
                 assertTrue(dualQuadric2.isLocus(p, ABSOLUTE_ERROR));
             }    
         }
     }
-    
-    private void reset(){
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
-    }
-    
+
     @Override
     public void onEstimateStart(DualQuadricRobustEstimator estimator) {
         estimateStart++;
-        testLocked((PROMedSDualQuadricRobustEstimator)estimator);
+        checkLocked((PROMedSDualQuadricRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateEnd(DualQuadricRobustEstimator estimator) {
         estimateEnd++;
-        testLocked((PROMedSDualQuadricRobustEstimator)estimator);
+        checkLocked((PROMedSDualQuadricRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateNextIteration(DualQuadricRobustEstimator estimator, 
             int iteration) {
         estimateNextIteration++;
-        testLocked((PROMedSDualQuadricRobustEstimator)estimator);
+        checkLocked((PROMedSDualQuadricRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateProgressChange(DualQuadricRobustEstimator estimator, 
             float progress) {
         estimateProgressChange++;
-        testLocked((PROMedSDualQuadricRobustEstimator)estimator);
+        checkLocked((PROMedSDualQuadricRobustEstimator)estimator);
     }
-    
-    private void testLocked(PROMedSDualQuadricRobustEstimator estimator){
-        try{
+
+    private void reset() {
+        estimateStart = estimateEnd = estimateNextIteration =
+                estimateProgressChange = 0;
+    }
+
+    private void checkLocked(PROMedSDualQuadricRobustEstimator estimator) {
+        try {
             estimator.setStopThreshold(0.5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setProgressDelta(0.5f);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setConfidence(0.5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setMaxIterations(5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setPlanes(null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){
-        }catch(Exception e){
+        } catch (LockedException ignore) {
+        } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         assertTrue(estimator.isLocked());

@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.PROSACCircleRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 28, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -15,62 +22,57 @@ import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class PROSACCircleRobustEstimatorTest implements 
-        CircleRobustEstimatorListener{
+        CircleRobustEstimatorListener {
     
-    public static final double MIN_RANDOM_VALUE = -1000.0;
-    public static final double MAX_RANDOM_VALUE = 1000.0;
+    private static final double MIN_RANDOM_VALUE = -1000.0;
+    private static final double MAX_RANDOM_VALUE = 1000.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final int MIN_POINTS = 500;
-    public static final int MAX_POINTS = 1000;
+    private static final int MIN_POINTS = 500;
+    private static final int MAX_POINTS = 1000;
     
-    public static final double THRESHOLD = 1.0;
+    private static final double THRESHOLD = 1.0;
     
-    public static final double MIN_SCORE_ERROR = -0.3;
-    public static final double MAX_SCORE_ERROR = 0.3;    
+    private static final double MIN_SCORE_ERROR = -0.3;
+    private static final double MAX_SCORE_ERROR = 0.3;
     
-    public static final double STD_ERROR = 100.0;
+    private static final double STD_ERROR = 100.0;
     
-    public static final int MIN_MAX_ITERATIONS = 500;
-    public static final int MAX_MAX_ITERATIONS = 5000;
-        
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
 
     private int estimateStart;
     private int estimateEnd;
     private int estimateNextIteration;
     private int estimateProgressChange;
     
-    public PROSACCircleRobustEstimatorTest() {}
+    public PROSACCircleRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
-@Test
-    public void testConstructor(){
+    @Test
+    public void testConstructor() {
         PROSACCircleRobustEstimator estimator;
         
         //test constructor without arguments
@@ -94,8 +96,8 @@ public class PROSACCircleRobustEstimatorTest implements
         assertNull(estimator.getQualityScores());
         
         //test constructor with points
-        List<Point2D> points = new ArrayList<Point2D>();
-        for(int i = 0; i < CircleRobustEstimator.MINIMUM_SIZE; i++){
+        List<Point2D> points = new ArrayList<>();
+        for (int i = 0; i < CircleRobustEstimator.MINIMUM_SIZE; i++) {
             points.add(Point2D.create());
         }
         
@@ -119,31 +121,31 @@ public class PROSACCircleRobustEstimatorTest implements
         assertNull(estimator.getQualityScores());
         
         //Force IllegalArgumentException
-        List<Point2D> emptyPoints = new ArrayList<Point2D>();
+        List<Point2D> emptyPoints = new ArrayList<>();
         estimator = null;
-        try{
+        try {
             estimator = new PROSACCircleRobustEstimator(emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener
         CircleRobustEstimatorListener listener = 
-                new CircleRobustEstimatorListener(){
+                new CircleRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(CircleRobustEstimator estimator) {}
+            public void onEstimateStart(CircleRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(CircleRobustEstimator estimator) {}
+            public void onEstimateEnd(CircleRobustEstimator estimator) { }
 
             @Override
             public void onEstimateNextIteration(CircleRobustEstimator estimator, 
-                    int iteration) {}
+                    int iteration) { }
 
             @Override
             public void onEstimateProgressChange(CircleRobustEstimator estimator, 
-                    float progress) {}
+                    float progress) { }
         };
         
         estimator = new PROSACCircleRobustEstimator(listener);
@@ -187,10 +189,10 @@ public class PROSACCircleRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACCircleRobustEstimator(listener, emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);  
         
         //test constructor with quality scores
@@ -217,10 +219,10 @@ public class PROSACCircleRobustEstimatorTest implements
         //Force IllegalArgumentException
         double[] emptyScores = new double[0];
         estimator = null;
-        try{
+        try {
             estimator = new PROSACCircleRobustEstimator(emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with points and scores
@@ -245,15 +247,15 @@ public class PROSACCircleRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACCircleRobustEstimator(emptyPoints, 
                     qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACCircleRobustEstimator(points, emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener and quality scores
@@ -278,10 +280,10 @@ public class PROSACCircleRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACCircleRobustEstimator(listener, emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
                 
         
@@ -308,21 +310,21 @@ public class PROSACCircleRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROSACCircleRobustEstimator(listener, emptyPoints, 
                     qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = new PROSACCircleRobustEstimator(listener, points, 
                     emptyScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);         
     }
     
     @Test
-    public void testGetSetThreshold() throws LockedException{
+    public void testGetSetThreshold() throws LockedException {
         PROSACCircleRobustEstimator estimator = 
                 new PROSACCircleRobustEstimator();
         
@@ -337,14 +339,14 @@ public class PROSACCircleRobustEstimatorTest implements
         assertEquals(estimator.getThreshold(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetListener() throws LockedException{
+    public void testGetSetListener() throws LockedException {
         PROSACCircleRobustEstimator estimator = 
                 new PROSACCircleRobustEstimator();
         
@@ -361,7 +363,7 @@ public class PROSACCircleRobustEstimatorTest implements
     }
     
     @Test
-    public void testGetSetProgressDelta() throws LockedException{
+    public void testGetSetProgressDelta() throws LockedException {
         PROSACCircleRobustEstimator estimator = 
                 new PROSACCircleRobustEstimator();
         
@@ -376,18 +378,18 @@ public class PROSACCircleRobustEstimatorTest implements
         assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetConfidence() throws LockedException{
+    public void testGetSetConfidence() throws LockedException {
         PROSACCircleRobustEstimator estimator = 
                 new PROSACCircleRobustEstimator();
         
@@ -402,18 +404,18 @@ public class PROSACCircleRobustEstimatorTest implements
         assertEquals(estimator.getConfidence(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetMaxIterations() throws LockedException{
+    public void testGetSetMaxIterations() throws LockedException {
         PROSACCircleRobustEstimator estimator = 
                 new PROSACCircleRobustEstimator();
         
@@ -428,14 +430,14 @@ public class PROSACCircleRobustEstimatorTest implements
         assertEquals(estimator.getMaxIterations(), 1);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetPoints() throws LockedException{
+    public void testGetSetPoints() throws LockedException {
         PROSACCircleRobustEstimator estimator = 
                 new PROSACCircleRobustEstimator();
         
@@ -444,8 +446,8 @@ public class PROSACCircleRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //set new value
-        List<Point2D> points = new ArrayList<Point2D>();
-        for(int i = 0; i < CircleRobustEstimator.MINIMUM_SIZE; i++){
+        List<Point2D> points = new ArrayList<>();
+        for (int i = 0; i < CircleRobustEstimator.MINIMUM_SIZE; i++) {
             points.add(Point2D.create());
         }
         estimator.setPoints(points);
@@ -466,15 +468,15 @@ public class PROSACCircleRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //Force IllegalArgumentException
-        List<Point2D> emptyPoints = new ArrayList<Point2D>();
-        try{
+        List<Point2D> emptyPoints = new ArrayList<>();
+        try {
             estimator.setPoints(emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetQualityScores() throws LockedException{
+    public void testGetSetQualityScores() throws LockedException {
         PROSACCircleRobustEstimator estimator = 
                 new PROSACCircleRobustEstimator();
         
@@ -488,19 +490,19 @@ public class PROSACCircleRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         qualityScores = new double[1];
-        try{
+        try {
             estimator.setQualityScores(qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testEstimate() throws LockedException, NotReadyException, 
-            RobustEstimatorException{
+            RobustEstimatorException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             //instantiate a random circle
             Point2D center = new HomogeneousPoint2D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -518,10 +520,10 @@ public class PROSACCircleRobustEstimatorTest implements
             double[] qualityScores = new double[nPoints];
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);        
-            List<Point2D> points = new ArrayList<Point2D>();
-            List<Point2D> pointsWithError = new ArrayList<Point2D>();
+            List<Point2D> points = new ArrayList<>();
+            List<Point2D> pointsWithError = new ArrayList<>();
             Point2D point, pointWithError;
-            for(int i = 0; i < nPoints; i++){
+            for (int i = 0; i < nPoints; i++) {
                 double angle = theta * (double)i;
                 point = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
@@ -529,7 +531,7 @@ public class PROSACCircleRobustEstimatorTest implements
                 double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, 
                         MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //point is outlier
                     double errorX = errorRandomizer.nextDouble();
                     double errorY = errorRandomizer.nextDouble();
@@ -539,7 +541,7 @@ public class PROSACCircleRobustEstimatorTest implements
                     
                     double error = Math.sqrt(errorX * errorX + errorY * errorY);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
-                }else{
+                } else {
                     //inlier point
                     pointWithError = point;
                 }
@@ -573,8 +575,8 @@ public class PROSACCircleRobustEstimatorTest implements
             reset();
             
             //check correctness of estimation by checking that all points
-            //are within the estimated circlelocus
-            for(Point2D p : points){
+            //are within the estimated circle locus
+            for (Point2D p : points) {
                 assertTrue(circle2.isLocus(p, 2.0*ABSOLUTE_ERROR));
             }
             
@@ -585,68 +587,68 @@ public class PROSACCircleRobustEstimatorTest implements
                     ABSOLUTE_ERROR);            
         }
     }
-    
-    private void reset(){
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
-    }
-    
+
     @Override
     public void onEstimateStart(CircleRobustEstimator estimator) {
         estimateStart++;
-        testLocked((PROSACCircleRobustEstimator)estimator);
+        checkLocked((PROSACCircleRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateEnd(CircleRobustEstimator estimator) {
         estimateEnd++;
-        testLocked((PROSACCircleRobustEstimator)estimator);
+        checkLocked((PROSACCircleRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateNextIteration(CircleRobustEstimator estimator, 
             int iteration) {
         estimateNextIteration++;
-        testLocked((PROSACCircleRobustEstimator)estimator);
+        checkLocked((PROSACCircleRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateProgressChange(CircleRobustEstimator estimator, 
             float progress) {
         estimateProgressChange++;
-        testLocked((PROSACCircleRobustEstimator)estimator);
+        checkLocked((PROSACCircleRobustEstimator)estimator);
+    }
+
+    private void reset() {
+        estimateStart = estimateEnd = estimateNextIteration =
+                estimateProgressChange = 0;
     }
     
-    private void testLocked(PROSACCircleRobustEstimator estimator){
-        try{
+    private void checkLocked(PROSACCircleRobustEstimator estimator) {
+        try {
             estimator.setThreshold(0.5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setProgressDelta(0.5f);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setConfidence(0.5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setMaxIterations(5);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.setPoints(null);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}
-        try{
+        } catch (LockedException ignore) { }
+        try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){
-        }catch(Exception e){
+        } catch (LockedException ignore) {
+        } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         assertTrue(estimator.isLocked());

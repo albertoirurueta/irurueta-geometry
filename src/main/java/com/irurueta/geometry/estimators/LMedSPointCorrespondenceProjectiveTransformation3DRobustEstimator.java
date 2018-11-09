@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 5, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,19 +19,16 @@ import com.irurueta.geometry.CoincidentPointsException;
 import com.irurueta.geometry.CoordinatesType;
 import com.irurueta.geometry.Point3D;
 import com.irurueta.geometry.ProjectiveTransformation3D;
-import com.irurueta.numerical.robust.LMedSRobustEstimator;
-import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best projective 3D transformation for provided collections of
- * matched 3D points using LMedS algorithm
+ * matched 3D points using LMedS algorithm.
  */
 public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator 
-        extends PointCorrespondenceProjectiveTransformation3DRobustEstimator{
+        extends PointCorrespondenceProjectiveTransformation3DRobustEstimator {
     
     /**
      * Default value to be used for stop threshold. Stop threshold can be used 
@@ -40,12 +44,12 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      */
     public static final double DEFAULT_STOP_THRESHOLD = 1.0;
     
     /**
-     * Minimum allowed stop threshold value
+     * Minimum allowed stop threshold value.
      */
     public static final double MIN_STOP_THRESHOLD = 0.0;
 
@@ -63,14 +67,14 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      */
     private double mStopThreshold;
  
     /**
-     * Constructor
+     * Constructor.
      */
-    public LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(){
+    public LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator() {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -80,51 +84,51 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param inputPoints list of input points to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */    
     public LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
             List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(inputPoints, outputPoints);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;        
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
     public LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
-            ProjectiveTransformation3DRobustEstimatorListener listener){
+            ProjectiveTransformation3DRobustEstimatorListener listener) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;        
     }
     
     /**
      * Constructor with listener and lists of points to be used to estimate a
-     * projective 3D transformation
+     * projective 3D transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param listener listener to be notified of events such as when estimation
-     * stars, ends or its progress significantly changes
+     * stars, ends or its progress significantly changes.
      * @param inputPoints list of input points to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 3D transformation
+     * projective 3D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */    
     public LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener, inputPoints, outputPoints);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;        
     }
@@ -143,11 +147,11 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      * @return stop threshold to stop the algorithm prematurely when a certain
-     * accuracy has been reached
+     * accuracy has been reached.
      */
-    public double getStopThreshold(){
+    public double getStopThreshold() {
         return mStopThreshold;
     }
     
@@ -165,18 +169,21 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      * @param stopThreshold stop threshold to stop the algorithm prematurely 
-     * when a certain accuracy has been reached
-     * @throws IllegalArgumentException if provided value is zero or negative
+     * when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException{
-        if(isLocked()) throw new LockedException();
-        if(stopThreshold <= MIN_STOP_THRESHOLD) 
+            throws IllegalArgumentException, LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (stopThreshold <= MIN_STOP_THRESHOLD) {
             throw new IllegalArgumentException();
+        }
         
         mStopThreshold = stopThreshold;
     }
@@ -184,24 +191,28 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
     /**
      * Estimates a projective 3D transformation using a robust estimator and
      * the best set of matched 3D point correspondences found using the robust
-     * estimator
-     * @return a projective 3D transformation
+     * estimator.
+     * @return a projective 3D transformation.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */        
     @Override
     public ProjectiveTransformation3D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         LMedSRobustEstimator<ProjectiveTransformation3D> innerEstimator =
-                new LMedSRobustEstimator<ProjectiveTransformation3D>(
-                    new LMedSRobustEstimatorListener<ProjectiveTransformation3D>(){
+                new LMedSRobustEstimator<>(
+                    new LMedSRobustEstimatorListener<ProjectiveTransformation3D>() {
                         
             //point to be reused when computing residuals
             private Point3D mTestPoint = Point3D.create(
@@ -232,13 +243,13 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
                 Point3D outputPoint4 = mOutputPoints.get(samplesIndices[3]);
                 Point3D outputPoint5 = mOutputPoints.get(samplesIndices[4]);
 
-                try{
+                try {
                     ProjectiveTransformation3D transformation = 
                         new ProjectiveTransformation3D(inputPoint1, inputPoint2, 
                         inputPoint3, inputPoint4, inputPoint5, outputPoint1, 
                         outputPoint2, outputPoint3, outputPoint4, outputPoint5);
                     solutions.add(transformation);
-                }catch(CoincidentPointsException e){
+                } catch (CoincidentPointsException e) {
                     //if points are coincident, no solution is added
                 }
             }
@@ -264,16 +275,18 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
             @Override
             public void onEstimateStart(
                     RobustEstimator<ProjectiveTransformation3D> estimator) {
-                if(mListener != null){
-                    mListener.onEstimateStart(LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this);
+                if (mListener != null) {
+                    mListener.onEstimateStart(
+                            LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this);
                 }
             }
 
             @Override
             public void onEstimateEnd(
                     RobustEstimator<ProjectiveTransformation3D> estimator) {
-                if(mListener != null){
-                    mListener.onEstimateEnd(LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this);
+                if (mListener != null) {
+                    mListener.onEstimateEnd(
+                            LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this);
                 }
             }
 
@@ -281,7 +294,7 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
             public void onEstimateNextIteration(
                     RobustEstimator<ProjectiveTransformation3D> estimator, 
                     int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this, 
                             iteration);
@@ -292,7 +305,7 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
             public void onEstimateProgressChange(
                     RobustEstimator<ProjectiveTransformation3D> estimator, 
                     float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.this, 
                             progress);
@@ -300,7 +313,7 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
             }
         });
         
-        try{
+        try {
             mLocked = true;
             mInliersData = null;
             innerEstimator.setConfidence(mConfidence);
@@ -311,18 +324,18 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
                     innerEstimator.estimate();
             mInliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);            
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */        
     @Override
     public RobustEstimatorMethod getMethod() {

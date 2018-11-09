@@ -17,27 +17,28 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
-import static org.junit.Assert.*;
 import org.junit.*;
+
+import java.util.Random;
+
+import static org.junit.Assert.*;
 
 public class InhomogeneousPoint3DTest {
     
-    public static final int INHOM_COORDS = 3;
-    public static final int HOM_COORDS = 4;
-    
-    public static final double RELATIVE_ERROR = 1.0;
-    public static final double ABSOLUTE_ERROR = 1e-6;
-    public static final double MIN_RANDOM_VALUE = 1.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final int INHOM_COORDS = 3;
+    private static final int HOM_COORDS = 4;
+
+    private static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double MIN_RANDOM_VALUE = 1.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
     public InhomogeneousPoint3DTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception { }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception { }
+    public static void tearDownClass() { }
     
     @Before
     public void setUp() { }

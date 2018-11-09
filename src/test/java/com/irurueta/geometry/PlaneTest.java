@@ -1,17 +1,26 @@
 /*
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.Plane
- * 
- * @author Alberto Irurueta (alberto@irureta.com)
- * @date August 10, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
 import org.junit.*;
+
+import java.util.Random;
+
 import static org.junit.Assert.*;
 
 public class PlaneTest {
@@ -43,9 +52,9 @@ public class PlaneTest {
     
     @Test
     public void testConstructor() throws WrongSizeException, NotReadyException, 
-        LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException, ColinearPointsException, 
-        IllegalArgumentException, ParallelVectorsException {
+            LockedException, DecomposerException,
+            com.irurueta.algebra.NotAvailableException, ColinearPointsException,
+            IllegalArgumentException, ParallelVectorsException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
@@ -124,7 +133,7 @@ public class PlaneTest {
         decomposer.decompose();
         
         //ensure we create a matrix with 3 non linear dependent rows
-        while(decomposer.getRank() < 3){
+        while (decomposer.getRank() < 3) {
             m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
@@ -312,8 +321,8 @@ public class PlaneTest {
     
     @Test
     public void testSetParametersFromThreePoints() throws WrongSizeException, 
-        NotReadyException, LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException, ColinearPointsException {
+            NotReadyException, LockedException, DecomposerException,
+            com.irurueta.algebra.NotAvailableException, ColinearPointsException {
         
         Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -553,8 +562,8 @@ public class PlaneTest {
     
     @Test
     public void testIsLocus() throws WrongSizeException, NotReadyException, 
-        LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException {
+            LockedException, DecomposerException,
+            com.irurueta.algebra.NotAvailableException {
         
         //randomly choose 3 points to find their corresponding plane
         Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
@@ -563,7 +572,7 @@ public class PlaneTest {
         SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
         
-        while(decomposer.getRank() < 3) {
+        while (decomposer.getRank() < 3) {
             m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
@@ -620,8 +629,8 @@ public class PlaneTest {
     
     @Test
     public void testSignedDistance() throws WrongSizeException, 
-        NotReadyException, LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException {
+            NotReadyException, LockedException, DecomposerException,
+            com.irurueta.algebra.NotAvailableException {
         
         //randomly choose 3 points to find their corresponding plane
         Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
@@ -630,7 +639,7 @@ public class PlaneTest {
         SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
         
-        while(decomposer.getRank() < 2) {
+        while (decomposer.getRank() < 2) {
             m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
@@ -795,8 +804,8 @@ public class PlaneTest {
     
     @Test
     public void testIntersection() throws WrongSizeException, NotReadyException, 
-        com.irurueta.algebra.NotAvailableException, LockedException, 
-        DecomposerException, NoIntersectionException, ColinearPointsException {
+            com.irurueta.algebra.NotAvailableException, LockedException,
+            DecomposerException, NoIntersectionException, ColinearPointsException {
         
         //Create random homogeneous coordinates for a point
         Matrix m = Matrix.createWithUniformRandomValues(1, HOM_COORDS, 
@@ -814,9 +823,12 @@ public class PlaneTest {
         
         HomogeneousPoint3D point = new HomogeneousPoint3D(m.toArray());
         
-        Plane plane1 = new Plane(V.getSubmatrixAsArray(0, 1, 3, 1));
-        Plane plane2 = new Plane(V.getSubmatrixAsArray(0, 2, 3, 2));
-        Plane plane3 = new Plane(V.getSubmatrixAsArray(0, 3, 3, 3));
+        Plane plane1 = new Plane(V.getSubmatrixAsArray(0, 1,
+                3, 1));
+        Plane plane2 = new Plane(V.getSubmatrixAsArray(0, 2,
+                3, 2));
+        Plane plane3 = new Plane(V.getSubmatrixAsArray(0, 3,
+                3, 3));
         
         assertTrue(plane1.getIntersection(plane2, plane3).equals(point, 
                 ABSOLUTE_ERROR));
@@ -875,9 +887,9 @@ public class PlaneTest {
                 m1.getSubmatrix(0, 0, 0, HOM_COORDS - 1));
         
         //ensure that all matrices have rank 3 (points are not colinear)
-        while(com.irurueta.algebra.Utils.rank(m1) < 3 || 
+        while (com.irurueta.algebra.Utils.rank(m1) < 3 ||
                 com.irurueta.algebra.Utils.rank(m2) < 3 || 
-                com.irurueta.algebra.Utils.rank(m3) < 3){
+                com.irurueta.algebra.Utils.rank(m3) < 3) {
             //create random matrices again
             m1 = Matrix.createWithUniformRandomValues(3, HOM_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -893,15 +905,22 @@ public class PlaneTest {
                     m1.getSubmatrix(0, 0, 0, HOM_COORDS - 1));            
         }
         
-        point1.setCoordinates(m1.getSubmatrixAsArray(0, 0, 0, HOM_COORDS - 1));
-        point2.setCoordinates(m1.getSubmatrixAsArray(1, 0, 1, HOM_COORDS - 1));
-        point3.setCoordinates(m1.getSubmatrixAsArray(2, 0, 2, HOM_COORDS - 1));
+        point1.setCoordinates(m1.getSubmatrixAsArray(0, 0,
+                0, HOM_COORDS - 1));
+        point2.setCoordinates(m1.getSubmatrixAsArray(1, 0,
+                1, HOM_COORDS - 1));
+        point3.setCoordinates(m1.getSubmatrixAsArray(2, 0,
+                2, HOM_COORDS - 1));
         
-        point4.setCoordinates(m2.getSubmatrixAsArray(1, 0, 1, HOM_COORDS - 1));
-        point5.setCoordinates(m2.getSubmatrixAsArray(2, 0, 2, HOM_COORDS - 1));
+        point4.setCoordinates(m2.getSubmatrixAsArray(1, 0,
+                1, HOM_COORDS - 1));
+        point5.setCoordinates(m2.getSubmatrixAsArray(2, 0,
+                2, HOM_COORDS - 1));
         
-        point6.setCoordinates(m3.getSubmatrixAsArray(1, 0, 1, HOM_COORDS - 1));
-        point7.setCoordinates(m3.getSubmatrixAsArray(2, 0, 2, HOM_COORDS - 1));        
+        point6.setCoordinates(m3.getSubmatrixAsArray(1, 0,
+                1, HOM_COORDS - 1));
+        point7.setCoordinates(m3.getSubmatrixAsArray(2, 0,
+                2, HOM_COORDS - 1));
         
         //Create three planes between point1-point2-point3, 
         //point1-point4-point5 and point1-point6-point7
@@ -941,7 +960,7 @@ public class PlaneTest {
         decomposer.decompose();
         
         //ensure points are not colinear
-        while(decomposer.getRank() < 3) {
+        while (decomposer.getRank() < 3) {
             m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, 
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);

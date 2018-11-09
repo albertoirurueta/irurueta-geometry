@@ -1,10 +1,17 @@
 /*
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.Conic
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date July 2, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
@@ -12,17 +19,17 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.SingularValueDecomposer;
 import com.irurueta.algebra.WrongSizeException;
+
 import java.io.Serializable;
 
 
-
 /**
- * This class contains the implementation of a conic
+ * This class contains the implementation of a conic.
  */
 public class Conic extends BaseConic implements Serializable {
         
     /**
-     * Constructor
+     * Constructor.
      */
     public Conic() {
         super();
@@ -30,7 +37,7 @@ public class Conic extends BaseConic implements Serializable {
     
     /**
      * Constructor of this class. This constructor accepts every parameter
-     * describing a conic (parameters a, b, c, d, e, f)
+     * describing a conic (parameters a, b, c, d, e, f).
      * @param a Parameter A of the conic.
      * @param b Parameter B of the conic.
      * @param c Parameter C of the conic.
@@ -47,9 +54,9 @@ public class Conic extends BaseConic implements Serializable {
      * This matrix must be 3x3 and symmetric.
      * @param m 3x3 Matrix describing the conic.
      * @throws IllegalArgumentException Raised when the size of the matrix is 
-     * not 3x3
+     * not 3x3.
      * @throws NonSymmetricMatrixException Raised when the conic matrix is not 
-     * symmetric
+     * symmetric.
      */
     public Conic(Matrix m) throws IllegalArgumentException, 
             NonSymmetricMatrixException {
@@ -57,14 +64,14 @@ public class Conic extends BaseConic implements Serializable {
     }
     
     /**
-     * Creates conic where provided points are contained (are locus)
-     * @param point1 1st point
-     * @param point2 2nd point
-     * @param point3 3rd point
-     * @param point4 4th point
-     * @param point5 5th point
+     * Creates conic where provided points are contained (are locus).
+     * @param point1 1st point.
+     * @param point2 2nd point.
+     * @param point3 3rd point.
+     * @param point4 4th point.
+     * @param point5 5th point.
      * @throws CoincidentPointsException Raised if points are coincident or 
-     * produce a degenerated configuration
+     * produce a degenerated configuration.
      */
     public Conic(Point2D point1, Point2D point2, Point2D point3, Point2D point4,
             Point2D point5) throws CoincidentPointsException {
@@ -73,18 +80,18 @@ public class Conic extends BaseConic implements Serializable {
     
     /**
      * Checks if the given point is locus (lies within) this conic.
-     * @param point Point to be checked
+     * @param point Point to be checked.
      * @param threshold Threshold of distance to determine whether the
      * point is locus of the conic or not. Threshold might be needed because of
      * machine precision issues. If not provided DEFAULT_LOCUS_THRESHOLD will be
-     * used instead
-     * @return True if the point lies within this conic, false otherwise
-     * @throws IllegalArgumentException Raised if threshold is negative
+     * used instead.
+     * @return True if the point lies within this conic, false otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean isLocus(Point2D point, double threshold) 
             throws IllegalArgumentException {
         
-        if(threshold < MIN_THRESHOLD) {
+        if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
                 
@@ -110,8 +117,8 @@ public class Conic extends BaseConic implements Serializable {
 
     /**
      * Checks if the given point is locus (lies within) this conic.
-     * @param point Point to be checked
-     * @return True if the point lies within this conic, false otherwise
+     * @param point Point to be checked.
+     * @return True if the point lies within this conic, false otherwise.
      * @see #isLocus(Point2D, double)
      */    
     public boolean isLocus(Point2D point) {
@@ -121,9 +128,9 @@ public class Conic extends BaseConic implements Serializable {
     /**
      * Computes the angle between two 2D points using this conic as a geometry
      * base.
-     * @param pointA First point
-     * @param pointB Second point
-     * @return Angle between provided points given in radians.
+     * @param pointA First point.
+     * @param pointB Second point.
+     * @return Angle between provided points given in radians..
      */
     public double angleBetweenPoints(Point2D pointA, Point2D pointB) {
         try {
@@ -173,17 +180,17 @@ public class Conic extends BaseConic implements Serializable {
     
     /**
      * Checks if two points are perpendicular in the geometry base generated by
-     * this conic
-     * @param pointA First point
-     * @param pointB Second point
+     * this conic.
+     * @param pointA First point.
+     * @param pointB Second point.
      * @param threshold Threshold to determine whether the points are 
      * perpendicular or not. If the dot product between provided points and this 
      * conic is greater than provided threshold, then points won't be assumed to
      * be perpendicular. Threshold is provided because of machine precision 
      * limits, if not provided DEFAULT_PERPENDICULAR_THRESHOLD will be used 
-     * instead
+     * instead.
      * @return True if points are perpendicular, false otherwise.
-     * @throws IllegalArgumentException Raised if threshold is negative
+     * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean arePerpendicularPoints(Point2D pointA, Point2D pointB,
             double threshold) throws IllegalArgumentException {
@@ -222,8 +229,8 @@ public class Conic extends BaseConic implements Serializable {
     /**
      * Checks if two points are perpendicular in the geometry base generated by
      * this conic.
-     * @param pointA First point
-     * @param pointB Second point
+     * @param pointA First point.
+     * @param pointB Second point.
      * @return True if points are perpendicular, false otherwise.
      * @see #arePerpendicularPoints(Point2D, Point2D, double)
      */    
@@ -237,10 +244,10 @@ public class Conic extends BaseConic implements Serializable {
      * into provided dualConic instance.
      * The dual conic is equal to the inverse of the conic matrix.
      * @param dualConic Dual conic instance where the values of the dual conic
-     * of this conic instance will be stored
+     * of this conic instance will be stored.
      * @throws DualConicNotAvailableException Raised if the dual conic does not 
      * exist because this conic instance is degenerate (its inverse cannot be 
-     * computed)
+     * computed).
      */
     public void dualConic(DualConic dualConic) 
             throws DualConicNotAvailableException {
@@ -272,7 +279,7 @@ public class Conic extends BaseConic implements Serializable {
      * @return A new DualConic corresponding to the dual conic of this instance.
      * @throws DualConicNotAvailableException Raised if the dual conic does not 
      * exist because this conic instance is degenerate (its inverse cannot be 
-     * computed)
+     * computed).
      */
     public DualConic getDualConic() throws DualConicNotAvailableException {
         DualConic dualConic = new DualConic();
@@ -285,21 +292,26 @@ public class Conic extends BaseConic implements Serializable {
      * @return A ConicType describing the type of this conic. It can be
      * one of the following: ELLIPSE_CONIC_TYPE, CIRCLE_CONIC_TYPE, 
      * PARABOLA_CONIC_TYPE, HYPERBOLA_CONIC_TYPE and 
-     * RECTANGULAR_HYPERBOLA_CONIC_TYPE
+     * RECTANGULAR_HYPERBOLA_CONIC_TYPE.
      */
     public ConicType getConicType() {
         //computes and evaluates the following expression: b^2 - 4ac
         double expression = (mB * mB) - (mA * mC);
         
-        if(expression < 0){
-            if(mA == mC && mB == 0) return ConicType.CIRCLE_CONIC_TYPE;
-            else return ConicType.ELLIPSE_CONIC_TYPE;
-        }else if(expression == 0){
+        if (expression < 0) {
+            if (mA == mC && mB == 0) {
+                return ConicType.CIRCLE_CONIC_TYPE;
+            } else {
+                return ConicType.ELLIPSE_CONIC_TYPE;
+            }
+        } else if (expression == 0) {
             return ConicType.PARABOLA_CONIC_TYPE;
-        }else{ //expression > 0
-            if((mA + mC) == 0) 
+        } else { //expression > 0
+            if ((mA + mC) == 0) {
                 return ConicType.RECTANGULAR_HYPERBOLA_CONIC_TYPE;
-            else return ConicType.HYPERBOLA_CONIC_TYPE;            
+            } else {
+                return ConicType.HYPERBOLA_CONIC_TYPE;
+            }
         }
     }    
     
@@ -313,7 +325,8 @@ public class Conic extends BaseConic implements Serializable {
      * @param point5 5th point.
      * @throws CoincidentPointsException Raised if points are coincident or 
      * produce a degenerated configuration.
-     */    
+     */
+    @SuppressWarnings("WeakerAccess")
     public final void setParametersFromPoints(Point2D point1, Point2D point2, 
             Point2D point3, Point2D point4, Point2D point5) 
             throws CoincidentPointsException {
@@ -414,11 +427,11 @@ public class Conic extends BaseConic implements Serializable {
     
     /**
      * Returns a line tangent to this conic at provided point. Provided point
-     * must be locus of this conic, otherwise a NotLocusException will be thrown
-     * @param point a locus point of this conic
-     * @return A 2D line tangent to this conic at provided point
+     * must be locus of this conic, otherwise a NotLocusException will be thrown.
+     * @param point a locus point of this conic.
+     * @return A 2D line tangent to this conic at provided point.
      * @throws NotLocusException if provided point is not locus of this conic up
-     * to DEFAULT_LOCUS_THRESHOLD
+     * to DEFAULT_LOCUS_THRESHOLD.
      */
     public Line2D getTangentLineAt(Point2D point) throws NotLocusException {
         return getTangentLineAt(point, DEFAULT_LOCUS_THRESHOLD);
@@ -426,14 +439,15 @@ public class Conic extends BaseConic implements Serializable {
     
     /**
      * Returns a line tangent to this conic at provided point. Provided point
-     * must be locus of this conic, otherwise a NotLocusException will be thrown
-     * @param point a locus point of this conic
-     * @param threshold threshold to determine if provided point is locus
-     * @return A 2D line tangent to this conic at provided point
+     * must be locus of this conic, otherwise a NotLocusException will be thrown.
+     * @param point a locus point of this conic.
+     * @param threshold threshold to determine if provided point is locus.
+     * @return A 2D line tangent to this conic at provided point.
      * @throws NotLocusException if provided point is not locus of this conic up
-     * to provided threshold
-     * @throws IllegalArgumentException if provided threshold is negative
+     * to provided threshold.
+     * @throws IllegalArgumentException if provided threshold is negative.
      */
+    @SuppressWarnings("WeakerAccess")
     public Line2D getTangentLineAt(Point2D point, double threshold) 
             throws NotLocusException, IllegalArgumentException {
         
@@ -444,18 +458,18 @@ public class Conic extends BaseConic implements Serializable {
     
     /**
      * Computes a line tangent to this conic at provided point. Provided point
-     * must be locus of this conic, otherwise a NotLocusException will be thrown
-     * @param point a locus point of this conic
-     * @param line instance of a 2D line where result will be stored
-     * @param threshold threshold to determine if provided point is locus
+     * must be locus of this conic, otherwise a NotLocusException will be thrown.
+     * @param point a locus point of this conic.
+     * @param line instance of a 2D line where result will be stored.
+     * @param threshold threshold to determine if provided point is locus.
      * @throws NotLocusException if provided point is not locus of this conic up
-     * to provided threshold
-     * @throws IllegalArgumentException if provided threshold is negative
+     * to provided threshold.
+     * @throws IllegalArgumentException if provided threshold is negative.
      */
     public void tangentLineAt(Point2D point, Line2D line, double threshold)
             throws NotLocusException, IllegalArgumentException {
         
-        if(!isLocus(point, threshold)) {
+        if (!isLocus(point, threshold)) {
             throw new NotLocusException();
         }
         
@@ -484,8 +498,8 @@ public class Conic extends BaseConic implements Serializable {
      * absolute quadric with the plane at the infinity.
      * Both the absolute conic and the dual absolute conic define orthogonality
      * in the metric stratum, and in a purely metric stratum (i.e. when camera 
-     * is correctly calibrated), their canonical value is equal to the identity
-     * @return a canonical instance of the absolute conic
+     * is correctly calibrated), their canonical value is equal to the identity.
+     * @return a canonical instance of the absolute conic.
      */
     public static Conic createCanonicalAbsoluteConic() {
         return new Conic(1.0, 0.0, 1.0, 0.0, 0.0, 1.0);

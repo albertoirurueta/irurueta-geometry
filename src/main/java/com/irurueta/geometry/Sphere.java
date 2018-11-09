@@ -1,57 +1,66 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.Sphere
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 14, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
+
 import java.io.Serializable;
 
 /**
- *  This class defines a sphere
+ *  This class defines a sphere.
  */
-public class Sphere implements Serializable{
-    
+@SuppressWarnings("WeakerAccess")
+public class Sphere implements Serializable {
+
     /**
-     * Center of sphere
+     * Constant defining minimum allowed radius.
+     */
+    public static final double MIN_RADIUS = 0.0;
+
+    /**
+     * Constant defining default threshold value used when none is provided.
+     */
+    public static final double DEFAULT_THRESHOLD = 1e-9;
+
+    /**
+     * Constant defining minimum allowed threshold.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Constant defining machine precision.
+     */
+    public static final double EPS = 1e-12;
+
+    /**
+     * Center of sphere.
      */
     private Point3D mCenter;
     
     /**
-     * Radius of sphere
+     * Radius of sphere.
      */
     private double mRadius;
-    
+
     /**
-     * Constant defining minimum allowed radius
+     * Empty constructor.
+     * Creates sphere located at space origin (0,0) with radius 1.0.
      */
-    public static final double MIN_RADIUS = 0.0;
-    
-    /**
-     * Constant defining default threshold value used when none is provided
-     */
-    public static final double DEFAULT_THRESHOLD = 1e-9;
-    
-    /**
-     * Constant defining minimum allowed threshold
-     */
-    public static final double MIN_THRESHOLD = 0.0;
-    
-    /**
-     * Constant defining machine precision
-     */
-    public static final double EPS = 1e-12;
-    
-    /**
-     * Empty constructor
-     * Creates sphere located at space origin (0,0) with radius 1.0
-     */
-    public Sphere(){
+    public Sphere() {
         mCenter = Point3D.create();
         mRadius = 1.0;
     }
@@ -59,89 +68,93 @@ public class Sphere implements Serializable{
     /**
      * Constructor.
      * Sets center and radius of sphere.
-     * @param center Center of sphere
-     * @param radius Radius of sphere
-     * @throws IllegalArgumentException Raised if provided radius is negative
+     * @param center Center of sphere.
+     * @param radius Radius of sphere.
+     * @throws IllegalArgumentException Raised if provided radius is negative.
      */
     public Sphere(Point3D center, double radius) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         setCenterAndRadius(center, radius);
     }
     
     /**
      * Constructor.
-     * Computes a sphere by using 4 points that must belong to its locus
-     * @param point1 point 1
-     * @param point2 point 2
-     * @param point3 point 3
-     * @param point4 point 4
+     * Computes a sphere by using 4 points that must belong to its locus.
+     * @param point1 point 1.
+     * @param point2 point 2.
+     * @param point3 point 3.
+     * @param point4 point 4.
      * @throws CoplanarPointsException if provided set of points are coincident 
      * or coplanar (form a single plane). In such cases a singularity occurs
      * since a sphere having an infinite radius would be required to contain all
-     * four points in its locus
+     * four points in its locus.
      */
     public Sphere(Point3D point1, Point3D point2, Point3D point3, 
-            Point3D point4) throws CoplanarPointsException{
+            Point3D point4) throws CoplanarPointsException {
         setParametersFromPoints(point1, point2, point3, point4);
     }
     
     /**
      * Constructor.
-     * Computes a sphere from a valir quadric corresponding to asphere
-     * @param quadric a quadric to create a sphere from
-     * @throws IllegalArgumentException if provided quadric is not a sphere
+     * Computes a sphere from a valid quadric corresponding to a sphere
+     * @param quadric a quadric to create a sphere from.
+     * @throws IllegalArgumentException if provided quadric is not a sphere.
      */
-    public Sphere(Quadric quadric) throws IllegalArgumentException{
+    public Sphere(Quadric quadric) throws IllegalArgumentException {
         setFromQuadric(quadric);
     }
     
     /**
-     * Returns center of sphere
-     * @return Center of sphere
+     * Returns center of sphere.
+     * @return Center of sphere.
      */
-    public Point3D getCenter(){
+    public Point3D getCenter() {
         return mCenter;
     }
     
     /**
-     * Sets center of sphere
-     * @param center Center of sphere
-     * @throws NullPointerException Raised if provided center is null
+     * Sets center of sphere.
+     * @param center Center of sphere.
+     * @throws NullPointerException Raised if provided center is null.
      */
-    public void setCenter(Point3D center) throws NullPointerException{
-        if(center == null) throw new NullPointerException();
+    public void setCenter(Point3D center) throws NullPointerException {
+        if (center == null) {
+            throw new NullPointerException();
+        }
         
         mCenter = center;
     }
     
     /**
-     * Returns radius of sphere
-     * @return Radius of sphere
+     * Returns radius of sphere.
+     * @return Radius of sphere.
      */
-    public double getRadius(){
+    public double getRadius() {
         return mRadius;
     }
     
     /**
-     * Sets radius of sphere
-     * @param radius Radius of sphere
-     * @throws IllegalArgumentException Raised if provided radius is negative
+     * Sets radius of sphere.
+     * @param radius Radius of sphere.
+     * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public void setRadius(double radius) throws IllegalArgumentException{
-        if(radius < MIN_RADIUS) throw new IllegalArgumentException();
+    public void setRadius(double radius) throws IllegalArgumentException {
+        if (radius < MIN_RADIUS) {
+            throw new IllegalArgumentException();
+        }
         
         mRadius = radius;
     }
     
     /**
-     * Sets center and radius of this sphere
-     * @param center Center to be set
-     * @param radius Radius to be set
-     * @throws IllegalArgumentException Raised if provided radius is negative
-     * @throws NullPointerException Raised if provided center is null
+     * Sets center and radius of this sphere.
+     * @param center Center to be set.
+     * @param radius Radius to be set.
+     * @throws IllegalArgumentException Raised if provided radius is negative.
+     * @throws NullPointerException Raised if provided center is null.
      */
     public final void setCenterAndRadius(Point3D center, double radius)
-            throws IllegalArgumentException, NullPointerException{
+            throws IllegalArgumentException, NullPointerException {
         setRadius(radius);        
         setCenter(center);
     }
@@ -149,17 +162,17 @@ public class Sphere implements Serializable{
     /**
      * Sets parameters of a sphere by using four points that must belong to its
      * locus.
-     * @param point1 point 1
-     * @param point2 point 2
-     * @param point3 point 3
-     * @param point4 point 4
+     * @param point1 point 1.
+     * @param point2 point 2.
+     * @param point3 point 3.
+     * @param point4 point 4.
      * @throws CoplanarPointsException if provided set of points are coincident
      * or coplanar (form a single plane). In such cases a singularity occurs
      * since a sphere having an infinite radius would be required to contain all
-     * four points in its locus
+     * four points in its locus.
      */
     public final void setParametersFromPoints(Point3D point1, Point3D point2, 
-            Point3D point3, Point3D point4) throws CoplanarPointsException{
+            Point3D point3, Point3D point4) throws CoplanarPointsException {
         
         //normalize points to increase accuracy
         point1.normalize();
@@ -167,7 +180,7 @@ public class Sphere implements Serializable{
         point3.normalize();
         point4.normalize();
         
-        try{
+        try {
             Matrix m = new Matrix(4, 4);
             double[] b = new double[4];
             
@@ -219,11 +232,12 @@ public class Sphere implements Serializable{
             double[] row = new double[4];
             double rowNorm;
             
-            for(int j = 0; j < 4; j++){
+            for (int j = 0; j < 4; j++) {
                 m.getSubmatrixAsArray(j, 0, j, 3, row);
                 rowNorm = com.irurueta.algebra.Utils.normF(row);
-                for(int i = 0; i < 4; i++)
+                for (int i = 0; i < 4; i++ ) {
                     m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);
+                }
                 b[j] /= rowNorm;
             }
             
@@ -246,47 +260,51 @@ public class Sphere implements Serializable{
                     inhomCz * inhomCz - j);
             
             setCenterAndRadius(center, radius);
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             throw new CoplanarPointsException(e);
         }
     }
     
     /**
-     * Returns volume of a sphere having provided radius
-     * @param radius Radius of a sphere
-     * @return Volume of a sphere having provided radius
-     * @throws IllegalArgumentException Raised if provided radius is negative
+     * Returns volume of a sphere having provided radius.
+     * @param radius Radius of a sphere.
+     * @return Volume of a sphere having provided radius.
+     * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public static double volume(double radius) throws IllegalArgumentException{
-        if(radius < MIN_RADIUS) throw new IllegalArgumentException();        
+    public static double volume(double radius) throws IllegalArgumentException {
+        if (radius < MIN_RADIUS) {
+            throw new IllegalArgumentException();
+        }
         return 4.0 / 3.0 * Math.PI * radius * radius * radius;
     }
     
     /**
-     * Returns volume of this sphere
-     * @return Volume of this sphere
+     * Returns volume of this sphere.
+     * @return Volume of this sphere.
      */
-    public double getVolume(){
+    public double getVolume() {
         return volume(mRadius);
     }
     
     /**
-     * Returns surface of a sphere having provided radius
-     * @param radius Radius of a sphere
-     * @return Surface of a sphere having provided radius
-     * @throws IllegalArgumentException Raised if provided radius is negative
+     * Returns surface of a sphere having provided radius.
+     * @param radius Radius of a sphere.
+     * @return Surface of a sphere having provided radius.
+     * @throws IllegalArgumentException Raised if provided radius is negative.
      */
     public static double surface(double radius) 
-            throws IllegalArgumentException{
-        if(radius < MIN_RADIUS) throw new IllegalArgumentException();        
+            throws IllegalArgumentException {
+        if (radius < MIN_RADIUS) {
+            throw new IllegalArgumentException();
+        }
         return 4.0 * Math.PI * radius * radius;
     }
     
     /**
-     * Returns surface of this sphere
-     * @return Surface of this sphere
+     * Returns surface of this sphere.
+     * @return Surface of this sphere.
      */
-    public double getSurface(){
+    public double getSurface() {
         return surface(mRadius);
     }
     
@@ -297,22 +315,22 @@ public class Sphere implements Serializable{
      * larger sphere increased by threshold amount, if provided threshold is
      * negative, the sphere behaves as if it was a smaller sphere decreased by
      * threshold amount in radius.
-     * @param point Point to be checked
+     * @param point Point to be checked.
      * @param threshold Threshold to determine if point is inside or not
      * @return True if point is considered to be inside this sphere, false
-     * otherwise
+     * otherwise.
      */
-    public boolean isInside(Point3D point, double threshold){
+    public boolean isInside(Point3D point, double threshold) {
         return point.distanceTo(mCenter) - threshold <= mRadius;
     }
     
     /**
      * Determines if provided point is inside this sphere or not.
-     * @param point Point to be checked
+     * @param point Point to be checked.
      * @return True if point is considered to be inside this sphere, false
-     * otherwise
+     * otherwise.
      */    
-    public boolean isInside(Point3D point){
+    public boolean isInside(Point3D point) {
         return isInside(point, 0.0);
     }
             
@@ -320,11 +338,11 @@ public class Sphere implements Serializable{
      * Returns distance from provided point to the closest point located in the
      * sphere boundary.
      * Returned distance will be negative when point is inside of sphere, and
-     * positive otherwise
-     * @param point Point to be checked
-     * @return Distance from point to sphere boundary
+     * positive otherwise.
+     * @param point Point to be checked.
+     * @return Distance from point to sphere boundary.
      */
-    public double getSignedDistance(Point3D point){
+    public double getSignedDistance(Point3D point) {
         return signedDistance(this, point);
     }
     
@@ -332,10 +350,10 @@ public class Sphere implements Serializable{
      * Returns distance from provided point to the closest point located in
      * provided sphere boundary.
      * Returned distance will be negative when point is inside of sphere, and
-     * positive otherwise
-     * @param sphere A sphere
-     * @param point Point to be checked
-     * @return Distance from point to provided sphere boundary
+     * positive otherwise.
+     * @param sphere A sphere.
+     * @param point Point to be checked.
+     * @return Distance from point to provided sphere boundary.
      */    
     public static double signedDistance(Sphere sphere, Point3D point) {
         return point.distanceTo(sphere.getCenter()) - sphere.getRadius();
@@ -344,34 +362,34 @@ public class Sphere implements Serializable{
     /**
      * Returns distance from provided point to the closest point located in the
      * sphere boundary.
-     * @param point Point to be checked
-     * @return Distance from point to sphere boundary
+     * @param point Point to be checked.
+     * @return Distance from point to sphere boundary.
      */    
-    public double getDistance(Point3D point){
+    public double getDistance(Point3D point) {
         return Math.abs(getSignedDistance(point));
     }
     
     /**
      * Returns distance from provided point to the closest point located in
      * provided sphere boundary.
-     * @param sphere A sphere
-     * @param point Point to be checked
-     * @return Distance from point to provided sphere boundary
+     * @param sphere A sphere.
+     * @param point Point to be checked.
+     * @return Distance from point to provided sphere boundary.
      */    
-    public static double distance(Sphere sphere, Point3D point){
+    public static double distance(Sphere sphere, Point3D point) {
         return Math.abs(signedDistance(sphere, point));
     }
     
     /**
      * Returns closest point to provided point that is located in this sphere
      * boundary.
-     * @param point A point to be checked
-     * @return Closest point laying in sphere boundary
+     * @param point A point to be checked.
+     * @return Closest point laying in sphere boundary.
      * @throws UndefinedPointException Raised if provided point is at sphere 
      * center or very close to it.
      */    
     public Point3D getClosestPoint(Point3D point) 
-            throws UndefinedPointException{
+            throws UndefinedPointException {
         Point3D result = Point3D.create();
         closestPoint(point, result);
         return result;
@@ -379,14 +397,14 @@ public class Sphere implements Serializable{
     
     /**
      * Computes closest point to provided point that is located in this sphere
-     * boundary and stores the result in provided result instance
-     * @param point A point to be checked
+     * boundary and stores the result in provided result instance.
+     * @param point A point to be checked.
      * @param result Instance where result will be stored.
      * @throws UndefinedPointException Raised if provided point is at sphere
      * center or very close to ti.
      */    
     public void closestPoint(Point3D point, Point3D result) 
-            throws UndefinedPointException{
+            throws UndefinedPointException {
         
         double directionX = point.getInhomX() - mCenter.getInhomX();
         double directionY = point.getInhomY() - mCenter.getInhomY();
@@ -398,7 +416,9 @@ public class Sphere implements Serializable{
         
         //check if point is at center or very close to center, in that case the
         //closest point cannot be found (would be all points of a circle)
-        if(norm < EPS) throw new UndefinedPointException();
+        if (norm < EPS) {
+            throw new UndefinedPointException();
+        }
         
         directionX *= mRadius / norm;
         directionY *= mRadius / norm;
@@ -412,54 +432,56 @@ public class Sphere implements Serializable{
     /**
      * Determines whether provided point lies at sphere boundary or not up to
      * a certain threshold.
-     * @param point Point to be checked
+     * @param point Point to be checked.
      * @param threshold A small threshold to determine whether point lies at
-     * sphere boundary
-     * @return True if point lies at sphere boundary, false otherwise
-     * @throws IllegalArgumentException Raised if provided threshold is negative
+     * sphere boundary.
+     * @return True if point lies at sphere boundary, false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
      */    
     public boolean isLocus(Point3D point, double threshold) 
-            throws IllegalArgumentException{
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+            throws IllegalArgumentException {
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         
         return Math.abs(point.distanceTo(mCenter) - mRadius) <= threshold;        
     }    
     
     /**
      * Determines whether provided point lies at sphere boundary or not.
-     * @param point Point to be checked
-     * @return True if point lies at sphere boundary, false otherwise
+     * @param point Point to be checked.
+     * @return True if point lies at sphere boundary, false otherwise.
      */    
-    public boolean isLocus(Point3D point){
+    public boolean isLocus(Point3D point) {
         return isLocus(point, DEFAULT_THRESHOLD);
     }
     
     /**
      * Returns a plane tangent to this sphere at provided point. Provided point
      * must be locus of this sphere, otherwise a NotLocusException will be 
-     * thrown
-     * @param point a locus point of this sphere
-     * @return a 3D plane tangent to this sphere at provided point
+     * thrown.
+     * @param point a locus point of this sphere.
+     * @return a 3D plane tangent to this sphere at provided point.
      * @throws NotLocusException if provided point is not locus of this sphere 
-     * up to DEFAULT_THRESHOLD
+     * up to DEFAULT_THRESHOLD.
      */
-    public Plane getTangentPlaneAt(Point3D point) throws NotLocusException{
+    public Plane getTangentPlaneAt(Point3D point) throws NotLocusException {
         return getTangentPlaneAt(point, DEFAULT_THRESHOLD);
     }
     
     /**
      * Returns a plane tangent to this sphere at provided point. Provided point
      * must be locus of this sphere, otherwise a NotLocusException will be 
-     * thrown
-     * @param point a locus point of this sphere
-     * @param threshold threshold to determine if provided point is locus
-     * @return a 3D plane tangent to this circle at provided point
+     * thrown.
+     * @param point a locus point of this sphere.
+     * @param threshold threshold to determine if provided point is locus.
+     * @return a 3D plane tangent to this circle at provided point.
      * @throws NotLocusException if provided point is not locus of this sphere
-     * up to provided threshold
-     * @throws IllegalArgumentException if provided threshold is negative
+     * up to provided threshold.
+     * @throws IllegalArgumentException if provided threshold is negative.
      */
     public Plane getTangentPlaneAt(Point3D point, double threshold)
-            throws NotLocusException, IllegalArgumentException{
+            throws NotLocusException, IllegalArgumentException {
         Plane plane = new Plane();
         tangentPlaneAt(point, plane, threshold);
         return plane;
@@ -468,17 +490,19 @@ public class Sphere implements Serializable{
     /**
      * Computes a plane tangent to this sphere at provided point. Provided point
      * must be locus of this sphere, otherwise a NotLocusException will be 
-     * thrown
-     * @param point a locus point of this sphere
-     * @param plane instance of a 3D plane where result will be stored
-     * @param threshold threshold to determine if provided point is locus
-     * @throws NotLocusException if provided point is not locus of this sphere
-     * @throws IllegalArgumentException if provided threshold is negative
+     * thrown.
+     * @param point a locus point of this sphere.
+     * @param plane instance of a 3D plane where result will be stored.
+     * @param threshold threshold to determine if provided point is locus.
+     * @throws NotLocusException if provided point is not locus of this sphere.
+     * @throws IllegalArgumentException if provided threshold is negative.
      */
     public void tangentPlaneAt(Point3D point, Plane plane, double threshold)
-            throws NotLocusException, IllegalArgumentException{
+            throws NotLocusException, IllegalArgumentException {
         
-        if(!isLocus(point, threshold)) throw new NotLocusException();
+        if (!isLocus(point, threshold)) {
+            throw new NotLocusException();
+        }
         
         point.normalize();
         mCenter.normalize();
@@ -524,9 +548,9 @@ public class Sphere implements Serializable{
     /**
      * Converts this sphere into a quadric.
      * Quadrics are a more general representation of spheres.
-     * @return A quadric representing this circle
+     * @return A quadric representing this circle.
      */
-    public Quadric toQuadric(){
+    public Quadric toQuadric() {
         mCenter.normalize();
         //use inhomogeneous center coordinates
         double cx = mCenter.getInhomX();
@@ -549,18 +573,20 @@ public class Sphere implements Serializable{
     
     /**
      * Sets parameters of this sphere from a valid quadric corresponding to a 
-     * sphere
-     * @param quadric quadric to set parameters from
-     * @throws IllegalArgumentException if provided quadric is not a sphere
+     * sphere.
+     * @param quadric quadric to set parameters from.
+     * @throws IllegalArgumentException if provided quadric is not a sphere.
      */
     public final void setFromQuadric(Quadric quadric) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         boolean isSphere = quadric.getA() == quadric.getB() && 
                 quadric.getB() == quadric.getC() && quadric.getA() != 0.0 &&
                 quadric.getD() == 0.0 && quadric.getE() == 0.0 && 
                 quadric.getF() == 0.0;
         
-        if(!isSphere) throw new IllegalArgumentException();
+        if (!isSphere) {
+            throw new IllegalArgumentException();
+        }
         
         quadric.normalize();
         

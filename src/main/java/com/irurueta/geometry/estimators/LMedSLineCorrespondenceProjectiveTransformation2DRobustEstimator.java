@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 4, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,19 +19,16 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.geometry.CoincidentLinesException;
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.ProjectiveTransformation2D;
-import com.irurueta.numerical.robust.LMedSRobustEstimator;
-import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best projective 2D transformation for provided collections of 
- * matched 2D lines using LMedS algorithm
+ * matched 2D lines using LMedS algorithm.
  */
 public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator 
-        extends LineCorrespondenceProjectiveTransformation2DRobustEstimator{
+        extends LineCorrespondenceProjectiveTransformation2DRobustEstimator {
         
     /**
      * Default value to be used for stop threshold. Stop threshold can be used 
@@ -40,12 +44,12 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      */
     public static final double DEFAULT_STOP_THRESHOLD = 1e-6;
     
     /**
-     * Minimum allowed stop threshold value
+     * Minimum allowed stop threshold value.
      */
     public static final double MIN_STOP_THRESHOLD = 0.0;
 
@@ -63,15 +67,15 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      */
     private double mStopThreshold;
     
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(){
+    public LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator() {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -81,28 +85,28 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * transformation.
      * Lines in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE
+     * be greter or equal than MINIMUM_SIZE.
      * @param inputLines list of input lines to be used to estimate a projective
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @throws IllegalArgumentException if provided lists of lines don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(inputLines, outputLines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
     public LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-            ProjectiveTransformation2DRobustEstimatorListener listener){
+            ProjectiveTransformation2DRobustEstimatorListener listener) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -112,20 +116,20 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * projective 2D transformation.
      * Lines in the list located at the same position are considered to be 
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param listener lsitener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputLines list of input lines to be used to estimate a projective
-     * 2D transformation
+     * 2D transformation.
      * @param outputLines list of output lines to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @throws IllegalArgumentException if provided lists of lines don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener, inputLines, outputLines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -144,11 +148,11 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      * @return stop threshold to stop the algorithm prematurely when a certain
-     * accuracy has been reached
+     * accuracy has been reached.
      */
-    public double getStopThreshold(){
+    public double getStopThreshold() {
         return mStopThreshold;
     }
     
@@ -166,18 +170,21 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      * @param stopThreshold stop threshold to stop the algorithm prematurely 
-     * when a certain accuracy has been reached
-     * @throws IllegalArgumentException if provided value is zero or negative
+     * when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException{
-        if(isLocked()) throw new LockedException();
-        if(stopThreshold <= MIN_STOP_THRESHOLD) 
+            throws IllegalArgumentException, LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (stopThreshold <= MIN_STOP_THRESHOLD) {
             throw new IllegalArgumentException();
+        }
         
         mStopThreshold = stopThreshold;
     }
@@ -185,24 +192,28 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
     /**
      * Estimates a projective 2D transformation using a robust estimator and
      * the best set of matched 2D lines correspondences found using the robust
-     * estimator
-     * @return a projective 2D transformation
+     * estimator.
+     * @return a projective 2D transformation.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */        
     @Override
     public ProjectiveTransformation2D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         LMedSRobustEstimator<ProjectiveTransformation2D> innerEstimator =
-                new LMedSRobustEstimator<ProjectiveTransformation2D>(
-                new LMedSRobustEstimatorListener<ProjectiveTransformation2D>(){
+                new LMedSRobustEstimator<>(
+                new LMedSRobustEstimatorListener<ProjectiveTransformation2D>() {
                     
             //line to be reused when computing residuals
             private Line2D mTestLine = new Line2D();
@@ -230,13 +241,13 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
                 Line2D outputLine3 = mOutputLines.get(samplesIndices[2]);
                 Line2D outputLine4 = mOutputLines.get(samplesIndices[3]);
                 
-                try{
+                try {
                     ProjectiveTransformation2D transformation =
                             new ProjectiveTransformation2D(inputLine1, 
                             inputLine2, inputLine3, inputLine4, outputLine1, 
                             outputLine2, outputLine3, outputLine4);
                     solutions.add(transformation);
-                }catch(CoincidentLinesException e){
+                } catch (CoincidentLinesException e) {
                     //if lines are coincident, no solution is added
                 }
             }
@@ -247,11 +258,11 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
                 Line2D outputLine = mOutputLines.get(i);
                 
                 //transform input line and store result in mTestLine
-                try{
+                try {
                     currentEstimation.transform(inputLine, mTestLine);
                     
                     return getResidual(outputLine, mTestLine);
-                }catch(AlgebraException e){
+                } catch (AlgebraException e) {
                     //this happens when internal matrix of affine transformation
                     //cannot be reverse (i.e. transformation is not well defined,
                     //numerical instabilities, etc)
@@ -268,7 +279,7 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
             @Override
             public void onEstimateStart(
                     RobustEstimator<ProjectiveTransformation2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(
                             LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.this);
                 }
@@ -277,7 +288,7 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
             @Override
             public void onEstimateEnd(
                     RobustEstimator<ProjectiveTransformation2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(
                             LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.this);
                 }
@@ -287,7 +298,7 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
             public void onEstimateNextIteration(
                     RobustEstimator<ProjectiveTransformation2D> estimator, 
                     int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.this, 
                             iteration);
@@ -298,7 +309,7 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
             public void onEstimateProgressChange(
                     RobustEstimator<ProjectiveTransformation2D> estimator, 
                     float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.this, 
                             progress);
@@ -306,7 +317,7 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
             }
         });
         
-        try{
+        try {
             mLocked = true;
             mInliersData = null;
             innerEstimator.setConfidence(mConfidence);
@@ -317,11 +328,11 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
                     innerEstimator.estimate();
             mInliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);            
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }        
     }

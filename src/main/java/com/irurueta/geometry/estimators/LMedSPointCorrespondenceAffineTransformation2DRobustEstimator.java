@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 10, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,11 +19,8 @@ import com.irurueta.geometry.AffineTransformation2D;
 import com.irurueta.geometry.CoincidentPointsException;
 import com.irurueta.geometry.CoordinatesType;
 import com.irurueta.geometry.Point2D;
-import com.irurueta.numerical.robust.LMedSRobustEstimator;
-import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
@@ -101,7 +105,7 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
      * starts, ends or its progress significantly changes.
      */
     public LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
-            AffineTransformation2DRobustEstimatorListener listener){
+            AffineTransformation2DRobustEstimatorListener listener) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;        
     }
@@ -165,12 +169,12 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      * @param stopThreshold stop threshold to stop the algorithm prematurely 
-     * when a certain accuracy has been reached
-     * @throws IllegalArgumentException if provided value is zero or negative
+     * when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setStopThreshold(double stopThreshold) 
             throws IllegalArgumentException, LockedException {
@@ -207,8 +211,8 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
         }
         
         LMedSRobustEstimator<AffineTransformation2D> innerEstimator =
-                new LMedSRobustEstimator<AffineTransformation2D>(
-                    new LMedSRobustEstimatorListener<AffineTransformation2D>(){
+                new LMedSRobustEstimator<>(
+                    new LMedSRobustEstimatorListener<AffineTransformation2D>() {
                         
             //point to be reused when computing residuals
             private Point2D mTestPoint = Point2D.create(

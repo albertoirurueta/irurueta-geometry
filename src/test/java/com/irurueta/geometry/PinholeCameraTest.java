@@ -1,35 +1,34 @@
 /*
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.PinholeCamera
- * 
- * @author Alberto Irurueta (airurueta@visual-engin.com)
- * @date November 13, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.DecomposerException;
-import com.irurueta.algebra.LockedException;
-import com.irurueta.algebra.Matrix;
-import com.irurueta.algebra.NotReadyException;
-import com.irurueta.algebra.SingularValueDecomposer;
-import com.irurueta.algebra.WrongSizeException;
+import com.irurueta.algebra.*;
 import com.irurueta.geometry.estimators.DLTLinePlaneCorrespondencePinholeCameraEstimator;
 import com.irurueta.geometry.estimators.DLTPointCorrespondencePinholeCameraEstimator;
 import com.irurueta.geometry.estimators.PinholeCameraEstimatorException;
 import com.irurueta.geometry.estimators.WrongListSizesException;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class PinholeCameraTest {
     
@@ -106,10 +105,10 @@ public class PinholeCameraTest {
     
     @Test
     public void testConstructors() throws WrongSizeException, RotationException,
-        CameraException, NotAvailableException, WrongListSizesException, 
-        com.irurueta.geometry.estimators.LockedException, 
-        com.irurueta.geometry.estimators.NotReadyException, 
-        PinholeCameraEstimatorException {
+            CameraException, NotAvailableException, WrongListSizesException,
+            com.irurueta.geometry.estimators.LockedException,
+            com.irurueta.geometry.estimators.NotReadyException,
+            PinholeCameraEstimatorException {
         
         //test default constructor
         PinholeCamera camera = new PinholeCamera();
@@ -784,8 +783,8 @@ public class PinholeCameraTest {
     
     @Test
     public void testBackProjectLines() throws WrongSizeException, 
-        NotReadyException, LockedException, DecomposerException, 
-        com.irurueta.algebra.NotAvailableException {
+            NotReadyException, LockedException, DecomposerException,
+            com.irurueta.algebra.NotAvailableException {
         
         //create intrinsic parameters
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1326,7 +1325,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testCameraSign() throws WrongSizeException, DecomposerException, 
-        CameraException {
+            CameraException {
         
         Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
                 PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE, 
@@ -1335,7 +1334,8 @@ public class PinholeCameraTest {
         PinholeCamera camera = new PinholeCamera(cameraMatrix);
         
         //obtain camera sign and check correctness
-        Matrix Mp = cameraMatrix.getSubmatrix(0, 0, 2, 2);
+        Matrix Mp = cameraMatrix.getSubmatrix(0, 0,
+                2, 2);
         
         double detMp = com.irurueta.algebra.Utils.det(Mp);
         
@@ -1423,7 +1423,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testGetSetIntrinsicsAndAvailability() throws CameraException, 
-        NotAvailableException {
+            NotAvailableException {
         
         UniformRandomizer randomizer = 
                 new UniformRandomizer(new Random());
@@ -1482,7 +1482,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testRotate() throws WrongSizeException, CameraException, 
-        NotAvailableException, RotationException {
+            NotAvailableException, RotationException {
         
         Matrix axisMatrix = Matrix.createWithUniformRandomValues(
                 INHOM_3D_COORDS, 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1537,7 +1537,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testPointAt() throws WrongSizeException, CameraException, 
-        NotAvailableException {
+            NotAvailableException {
         
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
@@ -1763,7 +1763,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testSetIntrinsicParametersAndRotation() throws CameraException, 
-        NotAvailableException {
+            NotAvailableException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
@@ -2294,7 +2294,7 @@ public class PinholeCameraTest {
     
     @Test
     public void testGetAndFixCameraSign() throws WrongSizeException, 
-        DecomposerException, CameraException {
+            DecomposerException, CameraException {
         
         Matrix internalMatrix = Matrix.createWithUniformRandomValues(
                 PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE, 

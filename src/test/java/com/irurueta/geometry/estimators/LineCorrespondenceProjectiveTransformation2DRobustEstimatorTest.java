@@ -1,42 +1,47 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.LineCorrespondenceProjectiveTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 4, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Line2D;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
     
-    public LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest() {}
+    public LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testCreate(){
+    public void testCreate() {
         LineCorrespondenceProjectiveTransformation2DRobustEstimator estimator;
         
         //create with robust estimator method
@@ -116,9 +121,9 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertNull(estimator.getCovariance());        
         
         //create with lines and method
-        List<Line2D> inputLines = new ArrayList<Line2D>();
-        List<Line2D> outputLines = new ArrayList<Line2D>();
-        for(int i = 0; i < LineCorrespondenceProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE; i++){
+        List<Line2D> inputLines = new ArrayList<>();
+        List<Line2D> outputLines = new ArrayList<>();
+        for (int i = 0; i < LineCorrespondenceProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputLines.add(new Line2D());
             outputLines.add(new Line2D());
         }
@@ -199,37 +204,39 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         assertNull(estimator.getCovariance());        
         
         //Force IllegalArgumentException
-        List<Line2D> emptyLines = new ArrayList<Line2D>();
+        List<Line2D> emptyLines = new ArrayList<>();
         
         estimator = null;
-        try{
+        try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                     create(emptyLines, outputLines, 
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                     create(inputLines, emptyLines, 
                     RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //create with listener and method
-        ProjectiveTransformation2DRobustEstimatorListener listener = new ProjectiveTransformation2DRobustEstimatorListener() {
+        ProjectiveTransformation2DRobustEstimatorListener listener =
+                new ProjectiveTransformation2DRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(ProjectiveTransformation2DRobustEstimator estimator) {}
+            public void onEstimateStart(ProjectiveTransformation2DRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(ProjectiveTransformation2DRobustEstimator estimator) {}
+            public void onEstimateEnd(ProjectiveTransformation2DRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateNextIteration(ProjectiveTransformation2DRobustEstimator estimator, int iteration) {}
+            public void onEstimateNextIteration(ProjectiveTransformation2DRobustEstimator estimator, int iteration) { }
 
             @Override
-            public void onEstimateProgressChange(ProjectiveTransformation2DRobustEstimator estimator, float progress) {}
+            public void onEstimateProgressChange(ProjectiveTransformation2DRobustEstimator estimator,
+                                                 float progress) { }
         };
         
         
@@ -552,24 +559,24 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(emptyLines, outputLines, qualityScores, 
                 RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputLines, emptyLines, qualityScores, 
                 RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputLines, outputLines, wrongQualityScores, 
                 RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, quality scores and method
@@ -731,24 +738,24 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, emptyLines, outputLines, qualityScores,
                 RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputLines, emptyLines, qualityScores,
                 RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputLines, outputLines, wrongQualityScores,
                 RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test no arguments
@@ -785,16 +792,16 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(emptyLines, outputLines);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(inputLines, emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener
@@ -831,16 +838,16 @@ public class LineCorrespondenceProjectiveTransformation2DRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, emptyLines, outputLines);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator = LineCorrespondenceProjectiveTransformation2DRobustEstimator.
                 create(listener, inputLines, emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with quality scores

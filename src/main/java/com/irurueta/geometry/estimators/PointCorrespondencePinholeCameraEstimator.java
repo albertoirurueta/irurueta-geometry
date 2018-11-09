@@ -1,24 +1,26 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.PointCorrespondencePinholeCameraEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 18, 2013
+/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
-import com.irurueta.geometry.HomogeneousPoint2D;
-import com.irurueta.geometry.NotAvailableException;
-import com.irurueta.geometry.PinholeCamera;
-import com.irurueta.geometry.Point2D;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.ProjectiveTransformation2D;
-import com.irurueta.geometry.ProjectiveTransformation3D;
+import com.irurueta.geometry.*;
 import com.irurueta.geometry.refiners.DecomposedPointCorrespondencePinholeCameraRefiner;
+
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
@@ -28,6 +30,7 @@ import java.util.List;
  * This file contains abstract implementation for pinhole camera estimators 
  * based on point correspondences.
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class PointCorrespondencePinholeCameraEstimator extends 
         PinholeCameraEstimator {
     
@@ -74,7 +77,7 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
      * starts, ends or estimation progress changes.
      */
@@ -126,7 +129,7 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * if estimator is locked).
      * @param points3D list of corresponding 3D points.
      * @param points2D list of corresponding 2D points.
-     * @throws IllegalArgumentException if any of the lists are null
+     * @throws IllegalArgumentException if any of the lists are null.
      * @throws WrongListSizesException if provided lists of points don't have
      * the same size and enough points.
      */
@@ -316,7 +319,7 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
         
         
         //transform list of image points
-        List<Point2D> transformedPoints = new ArrayList<Point2D>(list.size());
+        List<Point2D> transformedPoints = new ArrayList<>(list.size());
         HomogeneousPoint2D homPoint;
         double homX, homY, homW;
         for (Point2D point : list) {
@@ -411,7 +414,7 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
         transformation.normalize();
                     
         //transform list of world points
-        List<Point3D> transformedPoints = new ArrayList<Point3D>(list.size());
+        List<Point3D> transformedPoints = new ArrayList<>(list.size());
         for (Point3D point : list) {
             transformedPoints.add(transformation.transformAndReturnNew(point));
         }
@@ -484,7 +487,9 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
             
             PinholeCamera camera = new PinholeCamera(pinholeCameraMatrix);
                         
-            if(mListener != null) mListener.onEstimateEnd(this);
+            if (mListener != null) {
+                mListener.onEstimateEnd(this);
+            }
             
             return attemptRefine(camera);
             

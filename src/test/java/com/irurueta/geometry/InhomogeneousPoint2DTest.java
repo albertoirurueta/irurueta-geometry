@@ -17,29 +17,30 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import java.util.Random;
-import static org.junit.Assert.*;
 import org.junit.*;
+
+import java.util.Random;
+
+import static org.junit.Assert.*;
 
 public class InhomogeneousPoint2DTest {
 
-    public static final int HOM_COORDS = 3;
-    public static final int INHOM_COORDS = 2;
+    private static final int HOM_COORDS = 3;
+    private static final int INHOM_COORDS = 2;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
-    public static final double RELATIVE_ERROR = 1.0;
-    public static final double MIN_RANDOM_VALUE = 1.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double MIN_RANDOM_VALUE = 1.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
     public InhomogeneousPoint2DTest() { }
 
     @BeforeClass
-    public static void setUpClass() throws Exception { }
+    public static void setUpClass() { }
 
     @AfterClass
-    public static void tearDownClass() throws Exception { }
+    public static void tearDownClass() { }
     
     @Before
     public void setUp() { }
@@ -226,7 +227,7 @@ public class InhomogeneousPoint2DTest {
     
     @Test
     public void testEquals() {
-        for(int i = 0; i < TIMES; i++){
+        for (int i = 0; i < TIMES; i++) {
             double[] array = new double[INHOM_COORDS];
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             randomizer.fill(array, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -254,7 +255,7 @@ public class InhomogeneousPoint2DTest {
             assertFalse(iPoint1.equals(iPoint2, 0.5));
             assertFalse(iPoint1.equals(iPoint2, 0.5));
         
-            //Testing equals from one homogenous point
+            //Testing equals from one homogeneous point
             double[] hArray = new double[HOM_COORDS];
             randomizer.fill(hArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             array[0] = hArray[0] / hArray[2];

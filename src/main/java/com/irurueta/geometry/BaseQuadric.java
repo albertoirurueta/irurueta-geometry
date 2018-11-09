@@ -1,16 +1,24 @@
 /*
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.BaseQuadric
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date August 13, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
+
 import java.io.Serializable;
 
 /**
@@ -18,6 +26,7 @@ import java.io.Serializable;
  * Appropriate subclasses should be used for each quadric type: pure quadrics 
  * and dual quadrics.
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class BaseQuadric implements Serializable {
     /**
      * Number of rows of one matrix that contains quadric parameters.
@@ -52,67 +61,67 @@ public abstract class BaseQuadric implements Serializable {
     public static final double DEFAULT_SYMMETRIC_THRESHOLD = 1e-12;
     
     /**
-     * Minimum allowed threshold
+     * Minimum allowed threshold.
      */
     public static final double MIN_THRESHOLD = 0.0;
     
     /**
-     * Machine precision
+     * Machine precision.
      */
     private static final double PRECISION = 1e-12;
     
     /**
-     * A element of the matrix defining a quadric
+     * A element of the matrix defining a quadric.
      */
     private double mA;
     
     /**
-     * B element of the matrix defining a quadric
+     * B element of the matrix defining a quadric.
      */
     private double mB;
     
     /**
-     * C element of the matrix defining a quadric
+     * C element of the matrix defining a quadric.
      */
     private double mC;
     
     /**
-     * D element of the matrix defining a quadric
+     * D element of the matrix defining a quadric.
      */
     private double mD;
     
     /**
-     * E element of the matrix defining a quadric
+     * E element of the matrix defining a quadric.
      */
     private double mE;
     
     /**
-     * F element of the matrix defining a quadric
+     * F element of the matrix defining a quadric.
      */
     private double mF;
     
     /**
-     * G element of the matrix defining a quadric
+     * G element of the matrix defining a quadric.
      */
     private double mG;
     
     /**
-     * H element of the matrix defining a quadric
+     * H element of the matrix defining a quadric.
      */
     private double mH;
     
     /**
-     * I element of the matrix defining a quadric
+     * I element of the matrix defining a quadric.
      */
     private double mI;
     
     /**
-     * J element of the matrix defining a quadric
+     * J element of the matrix defining a quadric.
      */
     private double mJ;
     
     /**
-     * Determines whether this instance is already normalized
+     * Determines whether this instance is already normalized.
      */
     private boolean mNormalized;
     
@@ -126,17 +135,17 @@ public abstract class BaseQuadric implements Serializable {
     
     /**
      * Constructor of this class. This constructor accepts every parameter
-     * describing a base quadric (parameters a, b, c, d, e, f, g, h, i)
-     * @param a Parameter A of the base quadric
-     * @param b Parameter B of the base quadric
-     * @param c Parameter C of the base quadric
-     * @param d Parameter D of the base quadric
-     * @param e Parameter E of the base quadric
-     * @param f Parameter F of the base quadric
-     * @param g Parameter G of the base quadric
-     * @param h Parameter H of the base quadric
-     * @param i Parameter I of the base quadric
-     * @param j Parameter J of the base quadric
+     * describing a base quadric (parameters a, b, c, d, e, f, g, h, i).
+     * @param a Parameter A of the base quadric.
+     * @param b Parameter B of the base quadric.
+     * @param c Parameter C of the base quadric.
+     * @param d Parameter D of the base quadric.
+     * @param e Parameter E of the base quadric.
+     * @param f Parameter F of the base quadric.
+     * @param g Parameter G of the base quadric.
+     * @param h Parameter H of the base quadric.
+     * @param i Parameter I of the base quadric.
+     * @param j Parameter J of the base quadric.
      */
     public BaseQuadric(double a, double b, double c, double d, double e,
             double f, double g, double h, double i, double j) {
@@ -145,11 +154,11 @@ public abstract class BaseQuadric implements Serializable {
     
     /**
      * Constructor. This constructor accepts a Matrix describing a base quadric.
-     * @param m 4x4 matrix describing a base quadric
+     * @param m 4x4 matrix describing a base quadric.
      * @param symmetricThreshold Grade of tolerance to determine whether a 
      * matrix is symmetric or not. It is used because due to the machine 
      * precision, matrix might not be exactly symmetrical. (by default:
-     * DEFAULT_SYMMETRIC_THRESHOLD is used if none is provided)
+     * DEFAULT_SYMMETRIC_THRESHOLD is used if none is provided).
      * @throws NonSymmetricMatrixException Raised when the quadric matrix is not
      * symmetric.
      * @throws IllegalArgumentException Raised when the size of the matrix is 
@@ -162,7 +171,7 @@ public abstract class BaseQuadric implements Serializable {
 
     /**
      * Constructor. This constructor accepts a Matrix describing a base quadric.
-     * @param m 4x4 matrix describing a base quadric
+     * @param m 4x4 matrix describing a base quadric.
      * @throws NonSymmetricMatrixException Raised when the quadric matrix is not
      * symmetric.
      * @throws IllegalArgumentException Raised when the size of the matrix is 
@@ -174,7 +183,7 @@ public abstract class BaseQuadric implements Serializable {
     }
     
     /**
-     * Returns parameter A of the given base quadric
+     * Returns parameter A of the given base quadric.
      * @return Parameter B of a matrix describing a base quadric.
      */
     public double getA() {
@@ -182,7 +191,7 @@ public abstract class BaseQuadric implements Serializable {
     }
     
     /**
-     * Returns parameter B of the given base quadric
+     * Returns parameter B of the given base quadric.
      * @return Parameter B of a matrix describing a base quadric.
      */
     public double getB() {
@@ -190,7 +199,7 @@ public abstract class BaseQuadric implements Serializable {
     }
     
     /**
-     * Returns parameter C of the given base quadric
+     * Returns parameter C of the given base quadric.
      * @return Parameter C of a matrix describing a base quadric.
      */
     public double getC() {
@@ -198,7 +207,7 @@ public abstract class BaseQuadric implements Serializable {
     }
     
     /**
-     * Returns parameter D of the given base quadric
+     * Returns parameter D of the given base quadric.
      * @return Parameter D of a matrix describing a base quadric.
      */
     public double getD() {
@@ -206,7 +215,7 @@ public abstract class BaseQuadric implements Serializable {
     }
     
     /**
-     * Returns parameter E of the given base quadric
+     * Returns parameter E of the given base quadric.
      * @return Parameter E of a matrix describing a base quadric.
      */
     public double getE() {
@@ -214,7 +223,7 @@ public abstract class BaseQuadric implements Serializable {
     }
     
     /**
-     * Returns parameter F of the given base quadric
+     * Returns parameter F of the given base quadric.
      * @return Parameter F of a matrix describing a base quadric.
      */
     public double getF() {
@@ -222,7 +231,7 @@ public abstract class BaseQuadric implements Serializable {
     }
     
     /**
-     * Returns parameter G of the given base quadric
+     * Returns parameter G of the given base quadric.
      * @return Parameter G of a matrix describing a base quadric.
      */
     public double getG() {
@@ -230,7 +239,7 @@ public abstract class BaseQuadric implements Serializable {
     }
     
     /**
-     * Returns parameter H of the given base quadric
+     * Returns parameter H of the given base quadric.
      * @return Parameter H of a matrix describing a base quadric.
      */
     public double getH() {
@@ -238,7 +247,7 @@ public abstract class BaseQuadric implements Serializable {
     }
     
     /**
-     * Returns parameter I of the given base quadric
+     * Returns parameter I of the given base quadric.
      * @return Parameter I of a matrix describing a base quadric.
      */
     public double getI() {
@@ -246,7 +255,7 @@ public abstract class BaseQuadric implements Serializable {
     }
     
     /**
-     * Returns parameter J of the given base quadric
+     * Returns parameter J of the given base quadric.
      * @return Parameter J of a matrix describing a base quadric.
      */
     public double getJ() {
@@ -289,11 +298,11 @@ public abstract class BaseQuadric implements Serializable {
      * @param symmetricThreshold Grade of tolerance to determine whether a
      * matrix is symmetric or not. It is used because due to machine precision
      * a matrix might not be considered exactly symmetric (by default:
-     * DEFAULT_SYMMETRIC_THRESHOLD is used)
+     * DEFAULT_SYMMETRIC_THRESHOLD is used).
      * @throws IllegalArgumentException Raised when the size of the matrix is
-     * not 4x4
+     * not 4x4.
      * @throws NonSymmetricMatrixException Raised when the quadric matrix is not
-     * symmetric
+     * symmetric.
      */
     public final void setParameters(Matrix m, double symmetricThreshold)
             throws IllegalArgumentException, NonSymmetricMatrixException {
@@ -324,7 +333,7 @@ public abstract class BaseQuadric implements Serializable {
      * This matrix must be 4x4 and symmetric.
      * @param m 4x4 matrix describing a base quadric.
      * @throws IllegalArgumentException Raised when the size of the matrix is 
-     * not 4x4
+     * not 4x4.
      * @throws NonSymmetricMatrixException Raised when the quadric matrix is not
      * symmetric.
      */
@@ -335,7 +344,7 @@ public abstract class BaseQuadric implements Serializable {
     
     /**
      * This method sets the A parameter of a base quadric.
-     * @param a Parameter A of the given base quadric
+     * @param a Parameter A of the given base quadric.
      */
     public void setA(double a) {
         mA = a;
@@ -344,7 +353,7 @@ public abstract class BaseQuadric implements Serializable {
     
     /**
      * This method sets the B parameter of a base quadric.
-     * @param b Parameter B of the given base quadric
+     * @param b Parameter B of the given base quadric.
      */
     public void setB(double b) {
         mB = b;
@@ -353,7 +362,7 @@ public abstract class BaseQuadric implements Serializable {
 
     /**
      * This method sets the C parameter of a base quadric.
-     * @param c Parameter C of the given base quadric
+     * @param c Parameter C of the given base quadric.
      */
     public void setC(double c) {
         mC = c;
@@ -362,7 +371,7 @@ public abstract class BaseQuadric implements Serializable {
 
     /**
      * This method sets the D parameter of a base quadric.
-     * @param d Parameter D of the given base quadric
+     * @param d Parameter D of the given base quadric.
      */
     public void setD(double d) {
         mD = d;
@@ -371,7 +380,7 @@ public abstract class BaseQuadric implements Serializable {
 
     /**
      * This method sets the E parameter of a base quadric.
-     * @param e Parameter E of the given base quadric
+     * @param e Parameter E of the given base quadric.
      */
     public void setE(double e) {
         mE = e;
@@ -380,7 +389,7 @@ public abstract class BaseQuadric implements Serializable {
 
     /**
      * This method sets the F parameter of a base quadric.
-     * @param f Parameter F of the given base quadric
+     * @param f Parameter F of the given base quadric.
      */
     public void setF(double f) {
         mF = f;
@@ -389,7 +398,7 @@ public abstract class BaseQuadric implements Serializable {
 
     /**
      * This method sets the G parameter of a base quadric.
-     * @param g Parameter G of the given base quadric
+     * @param g Parameter G of the given base quadric.
      */
     public void setG(double g) {
         mG = g;
@@ -398,7 +407,7 @@ public abstract class BaseQuadric implements Serializable {
 
     /**
      * This method sets the H parameter of a base quadric.
-     * @param h Parameter H of the given base quadric
+     * @param h Parameter H of the given base quadric.
      */
     public void setH(double h) {
         mH = h;
@@ -407,7 +416,7 @@ public abstract class BaseQuadric implements Serializable {
 
     /**
      * This method sets the I parameter of a base quadric.
-     * @param i Parameter I of the given base quadric
+     * @param i Parameter I of the given base quadric.
      */
     public void setI(double i) {
         mI = i;
@@ -416,7 +425,7 @@ public abstract class BaseQuadric implements Serializable {
 
     /**
      * This method sets the J parameter of a base quadric.
-     * @param j Parameter J of the given base quadric
+     * @param j Parameter J of the given base quadric.
      */
     public void setJ(double j) {
         mJ = j;
@@ -440,7 +449,7 @@ public abstract class BaseQuadric implements Serializable {
     /**
      * Sets the values in provided matrix corresponding to this base quadric.
      * @param m Provided matrix where values will be stored.
-     * @throws IllegalArgumentException Raised if provided matrix is not 4x4
+     * @throws IllegalArgumentException Raised if provided matrix is not 4x4.
      */
     public void asMatrix(Matrix m) throws IllegalArgumentException {
         
@@ -468,7 +477,7 @@ public abstract class BaseQuadric implements Serializable {
     }
     
     /**
-     * Normlaizes the Quadric params using its norm
+     * Normalizes the Quadric params using its norm.
      */
     public void normalize() {
         if (!mNormalized) {

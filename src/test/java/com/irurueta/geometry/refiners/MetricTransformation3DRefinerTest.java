@@ -1,19 +1,22 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.refiners.MetricTransformation3DRefiner
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date May 2, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.refiners;
 
 import com.irurueta.algebra.AlgebraException;
-import com.irurueta.geometry.InhomogeneousPoint3D;
-import com.irurueta.geometry.MetricTransformation3D;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Quaternion;
-import com.irurueta.geometry.Utils;
+import com.irurueta.geometry.*;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.geometry.estimators.RANSACMetricTransformation3DRobustEstimator;
@@ -21,15 +24,13 @@ import com.irurueta.numerical.robust.InliersData;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class MetricTransformation3DRefinerTest implements 
@@ -195,7 +196,7 @@ public class MetricTransformation3DRefinerTest implements
         assertNull(refiner.getSamples1());
         
         //set new value
-        List<Point3D> samples1 = new ArrayList<Point3D>();
+        List<Point3D> samples1 = new ArrayList<>();
         refiner.setSamples1(samples1);
         
         //check correctness
@@ -211,7 +212,7 @@ public class MetricTransformation3DRefinerTest implements
         assertNull(refiner.getSamples2());
         
         //set new value
-        List<Point3D> samples2 = new ArrayList<Point3D>();
+        List<Point3D> samples2 = new ArrayList<>();
         refiner.setSamples2(samples2);
         
         //check correctness
@@ -219,7 +220,7 @@ public class MetricTransformation3DRefinerTest implements
     }
     
     @Test
-    public void testGetSetInliers() throws AlgebraException, LockedException, 
+    public void testGetSetInliers() throws LockedException,
             NotReadyException, RobustEstimatorException {
         RANSACMetricTransformation3DRobustEstimator estimator = 
                 createRobustEstimator();
@@ -242,7 +243,7 @@ public class MetricTransformation3DRefinerTest implements
     }
     
     @Test
-    public void testGetSetResiduals() throws AlgebraException, LockedException, 
+    public void testGetSetResiduals() throws LockedException,
             NotReadyException, RobustEstimatorException {
         RANSACMetricTransformation3DRobustEstimator estimator = 
                 createRobustEstimator();
@@ -265,8 +266,8 @@ public class MetricTransformation3DRefinerTest implements
     }
     
     @Test
-    public void testGetSetNumInliers() throws AlgebraException, 
-            LockedException, NotReadyException, RobustEstimatorException {
+    public void testGetSetNumInliers() throws LockedException,
+            NotReadyException, RobustEstimatorException {
         RANSACMetricTransformation3DRobustEstimator estimator = 
                 createRobustEstimator();
         
@@ -290,11 +291,11 @@ public class MetricTransformation3DRefinerTest implements
         try {
             refiner.setNumInliers(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testSetInliersData() throws AlgebraException, LockedException, 
+    public void testSetInliersData() throws LockedException,
             NotReadyException, RobustEstimatorException {
         RANSACMetricTransformation3DRobustEstimator estimator = 
                 createRobustEstimator();
@@ -352,8 +353,8 @@ public class MetricTransformation3DRefinerTest implements
     }
     
     @Test
-    public void testRefine() throws AlgebraException, LockedException, 
-            NotReadyException, RobustEstimatorException, RefinerException {
+    public void testRefine() throws LockedException, NotReadyException,
+            RobustEstimatorException, RefinerException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             RANSACMetricTransformation3DRobustEstimator estimator = 
@@ -398,10 +399,6 @@ public class MetricTransformation3DRefinerTest implements
         assertTrue(numValid > 0);
     }    
 
-    private void reset() {
-        mRefineStart = mRefineEnd = 0;
-    }
-    
     @Override
     public void onRefineStart(Refiner<MetricTransformation3D> refiner, 
             MetricTransformation3D initialEstimation) {
@@ -416,7 +413,12 @@ public class MetricTransformation3DRefinerTest implements
         mRefineEnd++;
         checkLocked((MetricTransformation3DRefiner)refiner);
     }
-    
+
+    private void reset() {
+        mRefineStart = mRefineEnd = 0;
+    }
+
+
     private RANSACMetricTransformation3DRobustEstimator
             createRobustEstimator() throws LockedException {
                 
@@ -426,8 +428,8 @@ public class MetricTransformation3DRefinerTest implements
         
         int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
         
-        List<Point3D> inputPoints = new ArrayList<Point3D>();
-        List<Point3D> outputPointsWithError = new ArrayList<Point3D>();
+        List<Point3D> inputPoints = new ArrayList<>();
+        List<Point3D> outputPointsWithError = new ArrayList<>();
         Point3D inputPoint, outputPoint, outputPointWithError;
         GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                 new Random(), 0.0, STD_ERROR);
@@ -495,52 +497,52 @@ public class MetricTransformation3DRefinerTest implements
         try {
             refiner.setInitialEstimation(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setCovarianceKept(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.refine(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             refiner.refine();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {            
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             refiner.setInliers(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setResiduals(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setNumInliers(0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setInliersData(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSamples1(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             refiner.setSamples2(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }        
+        } catch (LockedException ignore) { }
         try {
             refiner.setRefinementStandardDeviation(0.0);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }                
+        } catch (LockedException ignore) { }
     }
 }

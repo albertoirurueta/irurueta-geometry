@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 14, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,19 +19,16 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.geometry.AffineTransformation3D;
 import com.irurueta.geometry.CoincidentPlanesException;
 import com.irurueta.geometry.Plane;
-import com.irurueta.numerical.robust.LMedSRobustEstimator;
-import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best affine 3D transformation for provided collections of matched
- * planes using LMedS algorithm
+ * planes using LMedS algorithm.
  */
 public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator 
-        extends PlaneCorrespondenceAffineTransformation3DRobustEstimator{
+        extends PlaneCorrespondenceAffineTransformation3DRobustEstimator {
     
     /**
      * Default value to be used for stop threshold. Stop threshold can be used 
@@ -40,12 +44,12 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      */
     public static final double DEFAULT_STOP_THRESHOLD = 1e-6;
     
     /**
-     * Minimum allowed stop threshold value
+     * Minimum allowed stop threshold value.
      */
     public static final double MIN_STOP_THRESHOLD = 0.0;
 
@@ -63,15 +67,15 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      */
     private double mStopThreshold;
     
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(){
+    public LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator() {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -81,28 +85,28 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * transformation.
      * Planes in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greter or equal than MINIMUM_SIZE
+     * be greter or equal than MINIMUM_SIZE.
      * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation
+     * 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate an affine
-     * 3D transformation
+     * 3D transformation.
      * @throws IllegalArgumentException if provided lists of lines don't have 
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(inputPlanes, outputPlanes);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
     public LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            AffineTransformation3DRobustEstimatorListener listener){
+            AffineTransformation3DRobustEstimatorListener listener) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -112,20 +116,20 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * affine 3D transformation.
      * Planes in the list located at the same position are considered to be 
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param listener lsitener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputPlanes list of input planes to be used to estimate an affine
-     * 3D transformation
+     * 3D transformation.
      * @param outputPlanes list of output planes to be used to estimate an affine
-     * 3D transformation
+     * 3D transformation.
      * @throws IllegalArgumentException if provided lists of planes don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener, inputPlanes, outputPlanes);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -144,11 +148,11 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      * @return stop threshold to stop the algorithm prematurely when a certain
-     * accuracy has been reached
+     * accuracy has been reached.
      */
-    public double getStopThreshold(){
+    public double getStopThreshold() {
         return mStopThreshold;
     }
     
@@ -166,18 +170,21 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * reached.
      * Because of this behaviour the stop threshold can be set to a value much
      * lower than the one typically used in RANSAC, and yet the algorithm could
-     * still produce even smaller thresholds in estimated results
+     * still produce even smaller thresholds in estimated results.
      * @param stopThreshold stop threshold to stop the algorithm prematurely 
-     * when a certain accuracy has been reached
-     * @throws IllegalArgumentException if provided value is zero or negative
+     * when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException{
-        if(isLocked()) throw new LockedException();
-        if(stopThreshold <= MIN_STOP_THRESHOLD) 
+            throws IllegalArgumentException, LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (stopThreshold <= MIN_STOP_THRESHOLD) {
             throw new IllegalArgumentException();
+        }
         
         mStopThreshold = stopThreshold;
     }
@@ -185,24 +192,28 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
     /**
      * Estimates an affine 3D transformation using a robust estimator and
      * the best set of matched 3D lines correspondences found using the robust
-     * estimator
-     * @return an affine 3D transformation
+     * estimator.
+     * @return an affine 3D transformation.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */        
     @Override
     public AffineTransformation3D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         LMedSRobustEstimator<AffineTransformation3D> innerEstimator =
-                new LMedSRobustEstimator<AffineTransformation3D>(
-                new LMedSRobustEstimatorListener<AffineTransformation3D>(){
+                new LMedSRobustEstimator<>(
+                new LMedSRobustEstimatorListener<AffineTransformation3D>() {
                     
             //plane to be reused when computing residuals
             private Plane mTestPlane = new Plane();
@@ -230,13 +241,13 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
                 Plane outputLine3 = mOutputPlanes.get(samplesIndices[2]);
                 Plane outputLine4 = mOutputPlanes.get(samplesIndices[3]);
                 
-                try{
+                try {
                     AffineTransformation3D transformation =
                             new AffineTransformation3D(inputLine1, inputLine2, 
                             inputLine3, inputLine4, outputLine1, outputLine2, 
                             outputLine3, outputLine4);
                     solutions.add(transformation);
-                }catch(CoincidentPlanesException e){
+                } catch (CoincidentPlanesException e) {
                     //if lines are coincident, no solution is added
                 }
             }
@@ -248,11 +259,11 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
                 Plane outputLine = mOutputPlanes.get(i);
                 
                 //transform input line and store result in mTestLine
-                try{
+                try {
                     currentEstimation.transform(inputLine, mTestPlane);
                     
                     return getResidual(outputLine, mTestPlane);
-                }catch(AlgebraException e){
+                } catch (AlgebraException e) {
                     //this happens when internal matrix of affine transformation
                     //cannot be reverse (i.e. transformation is not well defined,
                     //numerical instabilities, etc)
@@ -269,7 +280,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
             @Override
             public void onEstimateStart(
                     RobustEstimator<AffineTransformation3D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(
                             LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
                 }
@@ -278,7 +289,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
             @Override
             public void onEstimateEnd(
                     RobustEstimator<AffineTransformation3D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(
                             LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
                 }
@@ -288,7 +299,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
             public void onEstimateNextIteration(
                     RobustEstimator<AffineTransformation3D> estimator, 
                     int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.this, 
                             iteration);
@@ -299,7 +310,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
             public void onEstimateProgressChange(
                     RobustEstimator<AffineTransformation3D> estimator, 
                     float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.this, 
                             progress);
@@ -307,7 +318,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
             }
         });
         
-        try{
+        try {
             mLocked = true;
             mInliersData = null;
             innerEstimator.setConfidence(mConfidence);
@@ -317,18 +328,18 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
             AffineTransformation3D transformation = innerEstimator.estimate();
             mInliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);            
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }        
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */        
     @Override
     public RobustEstimatorMethod getMethod() {

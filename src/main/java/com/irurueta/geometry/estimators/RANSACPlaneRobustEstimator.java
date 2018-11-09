@@ -1,28 +1,32 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.RANSACPlaneRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 1, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.ColinearPointsException;
 import com.irurueta.geometry.Plane;
 import com.irurueta.geometry.Point3D;
-import com.irurueta.numerical.robust.RANSACRobustEstimator;
-import com.irurueta.numerical.robust.RANSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
  * Finds the best 3D plane for provided collection of 3D points using RANSAC
- * algorithm
+ * algorithm.
  */
-public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator{
+public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator {
     /**
      * Constant defining default threshold to determine whether points are 
      * inliers or not.
@@ -33,7 +37,7 @@ public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator{
         
     /**
      * Minimum value that can be set as threshold.
-     * Threshold must be strictly greater than 0.0
+     * Threshold must be strictly greater than 0.0.
      */
     public static final double MIN_THRESHOLD = 0.0;
     
@@ -41,51 +45,51 @@ public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator{
      * Threshold to determine whether points are inliers or not when testing
      * possible estimation solutions.
      * The threshold refers to the amount of error (i.e. distance) a possible 
-     * solution has on a sampled line
+     * solution has on a sampled line.
      */
     private double mThreshold;     
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public RANSACPlaneRobustEstimator(){
+    public RANSACPlaneRobustEstimator() {
         super();
         mThreshold = DEFAULT_THRESHOLD;
     }
 
     /**
-     * Constructor with points
-     * @param points 3D points to estimate a 3D plane
+     * Constructor with points.
+     * @param points 3D points to estimate a 3D plane.
      * @throws IllegalArgumentException if provided list of points doesn't have 
-     * a size greater or equal than MINIMUM_SIZE
+     * a size greater or equal than MINIMUM_SIZE.
      */
     public RANSACPlaneRobustEstimator(List<Point3D> points) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(points);
         mThreshold = DEFAULT_THRESHOLD;
     }
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      */
-    public RANSACPlaneRobustEstimator(PlaneRobustEstimatorListener listener){
+    public RANSACPlaneRobustEstimator(PlaneRobustEstimatorListener listener) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
     }
     
     
     /**
-     * Constructor
+     * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
-     * @param points 3D points to estimate a 3D plane
+     * starts, ends or its progress significantly changes.
+     * @param points 3D points to estimate a 3D plane.
      * @throws IllegalArgumentException if provided list of points doesn't have 
-     * a size greater or equal than MINIMUM_SIZE
+     * a size greater or equal than MINIMUM_SIZE.
      */
     public RANSACPlaneRobustEstimator(PlaneRobustEstimatorListener listener,
-            List<Point3D> points) throws IllegalArgumentException{
+            List<Point3D> points) throws IllegalArgumentException {
         super(listener, points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -94,29 +98,33 @@ public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator{
      * Returns threshold to determine whether points are inliers or not when 
      * testing possible estimation solutions.
      * The threshold refers to the amount of error a possible solution has on a 
-     * given point
+     * given point.
      * @return threshold to determine whether points are inliers or not when 
-     * testing possible estimation solutions
+     * testing possible estimation solutions.
      */
-    public double getThreshold(){
+    public double getThreshold() {
         return mThreshold;
     }
     
     /**
      * Sets threshold to determine whether points are inliers or not when 
      * testing possible estimation solutions.
-     * Thre threshold refers to the amount of error a possible solution has on 
-     * a given point
-     * @param threshold threshold to be set
+     * The threshold refers to the amount of error a possible solution has on
+     * a given point.
+     * @param threshold threshold to be set.
      * @throws IllegalArgumentException if provided value is equal or less than 
-     * zero
+     * zero.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      */
     public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException{
-        if(isLocked()) throw new LockedException();
-        if(threshold <= MIN_THRESHOLD) throw new IllegalArgumentException();
+            LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (threshold <= MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         mThreshold = threshold;
     }
     
@@ -124,24 +132,28 @@ public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator{
     /**
      * Estimates a 3D plane using a robust estimator and the best set of 3D 
      * points that pass through the estimated 3D plane (i.e. belong to its 
-     * locus)
-     * @return a 3D plane
+     * locus).
+     * @return a 3D plane.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws NotReadyException if provided input data is not enough to start
-     * the estimation
+     * the estimation.
      * @throws RobustEstimatorException if estimation fails for any reason
-     * (i.e. numerical instability, no solution available, etc)
+     * (i.e. numerical instability, no solution available, etc).
      */
     @Override
     public Plane estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-        if(isLocked()) throw new LockedException();
-        if(!isReady()) throw new NotReadyException();
+        if (isLocked()) {
+            throw new LockedException();
+        }
+        if (!isReady()) {
+            throw new NotReadyException();
+        }
         
         RANSACRobustEstimator<Plane> innerEstimator =
-                new RANSACRobustEstimator<Plane>(
-                        new RANSACRobustEstimatorListener<Plane>(){
+                new RANSACRobustEstimator<>(
+                        new RANSACRobustEstimatorListener<Plane>() {
 
             @Override
             public double getThreshold() {
@@ -165,10 +177,10 @@ public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator{
                 Point3D point2 = mPoints.get(samplesIndices[1]);
                 Point3D point3 = mPoints.get(samplesIndices[2]);
                 
-                try{
+                try {
                     Plane plane = new Plane(point1, point2, point3);
                     solutions.add(plane);
-                }catch(ColinearPointsException e){
+                } catch (ColinearPointsException e) {
                     //if points are coincident, no solution is added
                 }
             }
@@ -185,14 +197,14 @@ public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator{
 
             @Override
             public void onEstimateStart(RobustEstimator<Plane> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(RANSACPlaneRobustEstimator.this);
                 }
             }
 
             @Override
             public void onEstimateEnd(RobustEstimator<Plane> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(RANSACPlaneRobustEstimator.this);
                 }
             }
@@ -200,7 +212,7 @@ public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator{
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator<Plane> estimator, int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             RANSACPlaneRobustEstimator.this, iteration);
                 }
@@ -209,31 +221,31 @@ public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator{
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator<Plane> estimator, float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             RANSACPlaneRobustEstimator.this, progress);
                 }
             }
         });
         
-        try{
+        try {
             mLocked = true;
             innerEstimator.setConfidence(mConfidence);
             innerEstimator.setMaxIterations(mMaxIterations);
             innerEstimator.setProgressDelta(mProgressDelta);
             return innerEstimator.estimate();
-        }catch(com.irurueta.numerical.LockedException e){
+        } catch (com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
-        }catch(com.irurueta.numerical.NotReadyException e){
+        } catch (com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
-        }finally{
+        } finally {
             mLocked = false;
         }
     }
 
     /**
-     * Returns method being used for robust estimation
-     * @return method being used for robust estimation
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
      */    
     @Override
     public RobustEstimatorMethod getMethod() {

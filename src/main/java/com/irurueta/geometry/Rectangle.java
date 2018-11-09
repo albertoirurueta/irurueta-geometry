@@ -28,7 +28,7 @@ import java.io.Serializable;
 public class Rectangle implements Serializable {
     
     /**
-     * Constant defining default threshold value used when none is provided
+     * Constant defining default threshold value used when none is provided.
      */
     public static final double DEFAULT_THRESHOLD = 1e-9;
     
@@ -46,7 +46,7 @@ public class Rectangle implements Serializable {
      * Empty constructor.
      * Creates a rectangle centered at the origin and having unitary area.
      */
-    public Rectangle(){
+    public Rectangle() {
         mTopLeft = new InhomogeneousPoint2D(-0.5, -0.5);
         mBottomRight = new InhomogeneousPoint2D(0.5, 0.5);
     }
@@ -56,7 +56,7 @@ public class Rectangle implements Serializable {
      * @param topLeft top-left coordinates.
      * @param bottomRight bottom-right coordinates.
      */
-    public Rectangle(Point2D topLeft, Point2D bottomRight){
+    public Rectangle(Point2D topLeft, Point2D bottomRight) {
         setBounds(topLeft, bottomRight);
     }
     
@@ -68,7 +68,7 @@ public class Rectangle implements Serializable {
      * @param bottom bottom coordinate.
      */
     public Rectangle(double left, double top, double right, 
-            double bottom){
+            double bottom) {
         setBounds(left, top, right, bottom);
     }
 
@@ -84,7 +84,7 @@ public class Rectangle implements Serializable {
      * Gets top-left corner.
      * @return top-left corner.
      */
-    public Point2D getTopLeft(){
+    public Point2D getTopLeft() {
         return mTopLeft;
     }
     
@@ -92,7 +92,7 @@ public class Rectangle implements Serializable {
      * Sets top-left corner.
      * @param topLeft top-left corner.
      */
-    public void setTopLeft(Point2D topLeft){
+    public void setTopLeft(Point2D topLeft) {
         mTopLeft = topLeft;
     }
     
@@ -100,7 +100,7 @@ public class Rectangle implements Serializable {
      * Gets bottom-right corner.
      * @return bottom-right corner.
      */
-    public Point2D getBottomRight(){
+    public Point2D getBottomRight() {
         return mBottomRight;
     }
     
@@ -108,7 +108,7 @@ public class Rectangle implements Serializable {
      * Sets bottom-right corner.
      * @param bottomRight bottom-right corner.
      */
-    public void setBottomRight(Point2D bottomRight){
+    public void setBottomRight(Point2D bottomRight) {
         mBottomRight = bottomRight;
     }
     
@@ -117,7 +117,7 @@ public class Rectangle implements Serializable {
      * @param topLeft top-left coordinates.
      * @param bottomRight bottom-right coordinates.
      */
-    public final void setBounds(Point2D topLeft, Point2D bottomRight){
+    public final void setBounds(Point2D topLeft, Point2D bottomRight) {
         mTopLeft = topLeft;
         mBottomRight = bottomRight;
     }
@@ -130,7 +130,7 @@ public class Rectangle implements Serializable {
      * @param bottom bottom coordinate.
      */
     public final void setBounds(double left, double top, double right,
-            double bottom){
+            double bottom) {
         setBounds(new InhomogeneousPoint2D(left, top),
                 new InhomogeneousPoint2D(right, bottom));
     }
@@ -142,7 +142,7 @@ public class Rectangle implements Serializable {
      * @param result instance where center of rectangle will be stored.
      */
     public static void getCenter(Point2D topLeft, Point2D bottomRight,
-            Point2D result){
+            Point2D result) {
         getCenter(topLeft.getInhomX(), topLeft.getInhomY(), 
                 bottomRight.getInhomX(), bottomRight.getInhomY(), result);
     }
@@ -156,7 +156,7 @@ public class Rectangle implements Serializable {
      * @param result instance where center of rectangle will be stored.
      */
     public static void getCenter(double left, double top, double right,
-            double bottom, Point2D result){
+            double bottom, Point2D result) {
         result.setInhomogeneousCoordinates(0.5*(left + right), 
                 0.5*(top + bottom));
     }
@@ -167,7 +167,7 @@ public class Rectangle implements Serializable {
      * @param bottomRight bottom-right coordinates.
      * @return center of rectangle.
      */
-    public static Point2D getCenter(Point2D topLeft, Point2D bottomRight){
+    public static Point2D getCenter(Point2D topLeft, Point2D bottomRight) {
         InhomogeneousPoint2D result = new InhomogeneousPoint2D();
         getCenter(topLeft, bottomRight, result);
         return result;
@@ -182,7 +182,7 @@ public class Rectangle implements Serializable {
      * @return center of rectangle.
      */
     public static Point2D getCenter(double left, double top, double right, 
-            double bottom){
+            double bottom) {
         InhomogeneousPoint2D result = new InhomogeneousPoint2D();
         getCenter(left, top, right, bottom, result);
         return result;
@@ -193,7 +193,7 @@ public class Rectangle implements Serializable {
      * @param result instance where coordinates of center of rectangle will be 
      * stored.
      */
-    public void getCenter(Point2D result){
+    public void getCenter(Point2D result) {
         getCenter(mTopLeft.getInhomX(), mTopLeft.getInhomY(),
                 mBottomRight.getInhomX(), mBottomRight.getInhomY(), result);
     }
@@ -202,7 +202,7 @@ public class Rectangle implements Serializable {
      * Gets center of rectangle.
      * @return a new point containing center of rectangle.
      */
-    public Point2D getCenter(){
+    public Point2D getCenter() {
         InhomogeneousPoint2D result = new InhomogeneousPoint2D();
         getCenter(result);
         return result;
@@ -243,7 +243,7 @@ public class Rectangle implements Serializable {
      * @param bottomRight bottom-right corner.
      * @return signed width.
      */
-    public static double getSignedWidth(Point2D topLeft, Point2D bottomRight){
+    public static double getSignedWidth(Point2D topLeft, Point2D bottomRight) {
         return bottomRight.getInhomX() - topLeft.getInhomX();
     }
     
@@ -254,7 +254,7 @@ public class Rectangle implements Serializable {
      * rightmost position and will be negative otherwise.
      * @return signed width of this rectangle.
      */
-    public double getSignedWidth(){
+    public double getSignedWidth() {
         return getSignedWidth(mTopLeft, mBottomRight);
     }
     
@@ -265,7 +265,7 @@ public class Rectangle implements Serializable {
      * @param bottomRight bottom-right corner.
      * @return width the rectangle.
      */
-    public static double getWidth(Point2D topLeft, Point2D bottomRight){
+    public static double getWidth(Point2D topLeft, Point2D bottomRight) {
         return Math.abs(getSignedWidth(topLeft, bottomRight));
     }
     
@@ -274,7 +274,7 @@ public class Rectangle implements Serializable {
      * bottom-right and top-left horizontal coordinates.
      * @return width of this rectangle.
      */
-    public double getWidth(){
+    public double getWidth() {
         return getWidth(mTopLeft, mBottomRight);
     }
     
@@ -287,7 +287,7 @@ public class Rectangle implements Serializable {
      * @param bottomRight bottom-rigth corner.
      * @return signed height.
      */
-    public static double getSignedHeight(Point2D topLeft, Point2D bottomRight){
+    public static double getSignedHeight(Point2D topLeft, Point2D bottomRight) {
         return bottomRight.getInhomY() - topLeft.getInhomY();
     }
     
@@ -298,7 +298,7 @@ public class Rectangle implements Serializable {
      * lowest position and will be positive otherwise.
      * @return signed height of this rectangle.
      */
-    public double getSignedHeight(){
+    public double getSignedHeight() {
         return getSignedHeight(mTopLeft, mBottomRight);
     }
     
@@ -309,7 +309,7 @@ public class Rectangle implements Serializable {
      * @param bottomRight bottom-right corner.
      * @return height of the rectangle.
      */
-    public static double getHeight(Point2D topLeft, Point2D bottomRight){
+    public static double getHeight(Point2D topLeft, Point2D bottomRight) {
         return Math.abs(getSignedHeight(topLeft, bottomRight));
     } 
     
@@ -318,7 +318,7 @@ public class Rectangle implements Serializable {
      * bottom-right and top-left vertical coordinates.
      * @return height of this rectangle.
      */
-    public double getHeight(){
+    public double getHeight() {
         return getHeight(mTopLeft, mBottomRight);
     }
         
@@ -329,7 +329,7 @@ public class Rectangle implements Serializable {
      * @param bottomRight bottom-right corner
      * @return area of rectangle.
      */
-    public static double getArea(Point2D topLeft, Point2D bottomRight){
+    public static double getArea(Point2D topLeft, Point2D bottomRight) {
         return getWidth(topLeft, bottomRight)*getHeight(topLeft, bottomRight);
     }
     
@@ -342,7 +342,7 @@ public class Rectangle implements Serializable {
      * @return area of rectangle.
      */
     public static double getArea(double left, double top, double right, 
-            double bottom){
+            double bottom) {
         return getArea(left - right, top - bottom);
     }    
     
@@ -352,7 +352,7 @@ public class Rectangle implements Serializable {
      * @param height height of rectangle.
      * @return area of rectangle.
      */
-    public static double getArea(double width, double height){
+    public static double getArea(double width, double height) {
         return Math.abs(width)*Math.abs(height);
     }
     
@@ -360,7 +360,7 @@ public class Rectangle implements Serializable {
      * Gets area of this rectangle.
      * @return area of this rectangle.
      */
-    public double getArea(){
+    public double getArea() {
         return getArea(mTopLeft, mBottomRight);
     }
     
@@ -368,7 +368,7 @@ public class Rectangle implements Serializable {
      * Sets the center of this rectangle preserving its width and height.
      * @param center new center to be set.
      */
-    public void setCenter(Point2D center){
+    public void setCenter(Point2D center) {
         setCenter(center.getInhomX(), center.getInhomY());
     }
     
@@ -377,7 +377,7 @@ public class Rectangle implements Serializable {
      * @param centerX x coordinate of new center to be set.
      * @param centerY y coordinate of new center to be set.
      */
-    public void setCenter(double centerX, double centerY){
+    public void setCenter(double centerX, double centerY) {
         double width = getSignedWidth();
         double height = getSignedHeight();
         setCenterAndSize(centerX, centerY, width, height);
@@ -389,7 +389,7 @@ public class Rectangle implements Serializable {
      * @param width new width to be set. (can be signed).
      * @param height new height to be set. (can be signed).
      */
-    public void setCenterAndSize(Point2D center, double width, double height){
+    public void setCenterAndSize(Point2D center, double width, double height) {
         setCenterAndSize(center.getInhomX(), center.getInhomY(), width, height);
     }
     
@@ -401,7 +401,7 @@ public class Rectangle implements Serializable {
      * @param height new height to be set. (can be signed).
      */
     public void setCenterAndSize(double centerX, double centerY, double width, 
-            double height){
+            double height) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         mTopLeft = new InhomogeneousPoint2D(centerX - halfWidth, 
@@ -417,7 +417,7 @@ public class Rectangle implements Serializable {
      * @return perimeter of a rectangle having provided width and height.
      */
     public static double getPerimeter(double width, 
-            double height){
+            double height) {
         return 2.0*(width + height);
     }
     
@@ -426,9 +426,9 @@ public class Rectangle implements Serializable {
      * corners.
      * @param topLeft top-left corner.
      * @param bottomRight bottom-right corner.
-     * @return perimeter of rectangle
+     * @return perimeter of rectangle.
      */
-    public static double getPerimeter(Point2D topLeft, Point2D bottomRight){
+    public static double getPerimeter(Point2D topLeft, Point2D bottomRight) {
         return getPerimeter(topLeft.getInhomX(), topLeft.getInhomY(),
                 bottomRight.getInhomX(), bottomRight.getInhomY());
     }
@@ -443,7 +443,7 @@ public class Rectangle implements Serializable {
      * @return perimeter of rectangle.
      */
     public static double getPerimeter(double left, double top, double right, 
-            double bottom){
+            double bottom) {
         double width = Math.abs(right - left);
         double height = Math.abs(bottom - top);
         return getPerimeter(width, height);
@@ -453,7 +453,7 @@ public class Rectangle implements Serializable {
      * Gets perimeter of this rectangle.
      * @return perimeter of this rectangle.
      */
-    public double getPerimeter(){
+    public double getPerimeter() {
         return getPerimeter(mTopLeft, mBottomRight);
     }
     
@@ -474,7 +474,7 @@ public class Rectangle implements Serializable {
      * @return true if point is inside, false otherwise.
      */
     public static boolean isInside(double x, double y, double left, double top, 
-            double right, double bottom, double threshold){
+            double right, double bottom, double threshold) {
         
         return !isAtLeftSide(x, y, left, top, right, bottom, threshold) &&
                 !isAtTopLeftCorner(x, y, left, top, right, bottom, threshold) &&
@@ -498,7 +498,7 @@ public class Rectangle implements Serializable {
      * @return true if point is inside, false otherwise.
      */
     public static boolean isInside(double x, double y, double left, double top,
-            double right, double bottom){
+            double right, double bottom) {
         return isInside(x, y, left, top, right, bottom, 0.0);
     }
     
@@ -517,7 +517,7 @@ public class Rectangle implements Serializable {
      * @return true if point is inside, false otherwise.
      */
     public static boolean isInside(Point2D point, double left, double top, 
-            double right, double bottom, double threshold){
+            double right, double bottom, double threshold) {
         return isInside(point.getInhomX(), point.getInhomY(), left, top, right, 
                 bottom, threshold);
     }
@@ -533,7 +533,7 @@ public class Rectangle implements Serializable {
      * @return true if point is inside, false otherwise.
      */
     public static boolean isInside(Point2D point, double left, double top,
-            double right, double bottom){
+            double right, double bottom) {
         return isInside(point, left, top, right, bottom, 0.0);
     }
         
@@ -551,7 +551,7 @@ public class Rectangle implements Serializable {
      * @return true if point is inside, false otherwise.
      */
     public static boolean isInside(Point2D point, Point2D center, double width, 
-            double height, double threshold){
+            double height, double threshold) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         return isInside(point, center.getInhomX() - halfWidth,
@@ -570,7 +570,7 @@ public class Rectangle implements Serializable {
      * @return true if point is inside, false otherwise.
      */
     public static boolean isInside(Point2D point, Point2D center, double width,
-            double height){
+            double height) {
         return isInside(point, center, width, height, 0.0);
     }
     
@@ -588,7 +588,7 @@ public class Rectangle implements Serializable {
      * @return true if point is inside, false otherwise.
      */
     public static boolean isInside(double x, double y, Point2D topLeft,
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isInside(x, y, topLeft.getInhomX(), topLeft.getInhomY(),
                 bottomRight.getInhomX(), bottomRight.getInhomY(), threshold);
     }
@@ -603,7 +603,7 @@ public class Rectangle implements Serializable {
      * @return true if point is inside, false otherwise.
      */
     public static boolean isInside(double x, double y, Point2D topLeft, 
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isInside(x, y, topLeft, bottomRight, 0.0);
     }
     
@@ -620,7 +620,7 @@ public class Rectangle implements Serializable {
      * @return true if point is inside, false otherwise.
      */
     public static boolean isInside(Point2D point, Point2D topLeft, 
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isInside(point, topLeft.getInhomX(), topLeft.getInhomY(),
                 bottomRight.getInhomX(), bottomRight.getInhomY(), threshold);
     }
@@ -634,7 +634,7 @@ public class Rectangle implements Serializable {
      * @return true if point is inside, false otherwise.
      */
     public static boolean isInside(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isInside(point, topLeft, bottomRight, 0.0);
     }
     
@@ -649,7 +649,7 @@ public class Rectangle implements Serializable {
      * lies inside or not.
      * @return true if point is inside, false otherwise.
      */
-    public boolean isInside(double x, double y, double threshold){
+    public boolean isInside(double x, double y, double threshold) {
         return isInside(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -660,7 +660,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to be checked.
      * @return true if point is inside, false otherwise.
      */
-    public boolean isInside(double x, double y){
+    public boolean isInside(double x, double y) {
         return isInside(x, y, mTopLeft, mBottomRight);
     }
     
@@ -674,7 +674,7 @@ public class Rectangle implements Serializable {
      * lies inside or not.
      * @return true if point is inside, false otherwise.
      */
-    public boolean isInside(Point2D point, double threshold){
+    public boolean isInside(Point2D point, double threshold) {
         return isInside(point, mTopLeft, mBottomRight, threshold);
     }
     
@@ -683,7 +683,7 @@ public class Rectangle implements Serializable {
      * @param point point to be checked.
      * @return true if point is inside, false otherwise.
      */
-    public boolean isInside(Point2D point){
+    public boolean isInside(Point2D point) {
         return isInside(point, mTopLeft, mBottomRight);
     }
     
@@ -704,7 +704,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at left side, false otherwise.
      */
     public static boolean isAtLeftSide(double x, double y, double left, 
-            double top, double right, double bottom, double threshold){
+            double top, double right, double bottom, double threshold) {
         //fix values in case that corners are reversed
         double left2 = Math.min(left, right);        
         double top2 = Math.max(top, bottom);
@@ -726,7 +726,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at left side, false otherwise.
      */
     public static boolean isAtLeftSide(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isAtLeftSide(x, y, left, top, right, bottom, 0.0);
     }
     
@@ -745,7 +745,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at left side, false otherwise.
      */
     public static boolean isAtLeftSide(Point2D point, double left, double top,
-            double right, double bottom, double threshold){
+            double right, double bottom, double threshold) {
         return isAtLeftSide(point.getInhomX(), point.getInhomY(), left, top,
                 right, bottom, threshold);
     }
@@ -761,7 +761,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at left side, false otherwise.
      */
     public static boolean isAtLeftSide(Point2D point, double left, double top,
-            double right, double bottom){
+            double right, double bottom) {
         return isAtLeftSide(point, left, top, right, bottom, 0.0);
     }
     
@@ -780,7 +780,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at left side, false otherwise.
      */
     public static boolean isAtLeftSide(double x, double y, Point2D topLeft, 
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isAtLeftSide(x, y, topLeft.getInhomX(), topLeft.getInhomY(),
                 bottomRight.getInhomX(), bottomRight.getInhomY(), threshold);
     }
@@ -795,7 +795,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at left side, false otherwise.
      */
     public static boolean isAtLeftSide(double x, double y, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isAtLeftSide(x, y, topLeft, bottomRight, 0.0);
     }
     
@@ -812,7 +812,7 @@ public class Rectangle implements Serializable {
      * @return true if point lies at left side, false otherwise.
      */
     public static boolean isAtLeftSide(Point2D point, Point2D topLeft, 
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isAtLeftSide(point.getInhomX(), point.getInhomY(), topLeft, 
                 bottomRight, threshold);
     }
@@ -826,7 +826,7 @@ public class Rectangle implements Serializable {
      * @return true if point lies at left side, false otherwise.
      */
     public static boolean isAtLeftSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isAtLeftSide(point, topLeft, bottomRight, 0.0);
     }
     
@@ -845,7 +845,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at left side, false otherwise.
      */
     public static boolean isAtLeftSide(double x, double y, Point2D center, 
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -865,7 +865,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at left side, false otherwise.
      */
     public static boolean isAtLeftSide(double x, double y, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtLeftSide(x, y, center, width, height, 0.0);
     }
     
@@ -883,7 +883,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at left side, false otherwise.
      */
     public static boolean isAtLeftSide(Point2D point, Point2D center, 
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         return isAtLeftSide(point.getInhomX(), point.getInhomY(), center, width,
                 height, threshold);
     }
@@ -898,7 +898,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at left side, false otherwise.
      */
     public static boolean isAtLeftSide(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtLeftSide(point, center, width, height, 0.0);
     }
         
@@ -913,7 +913,7 @@ public class Rectangle implements Serializable {
      * lies at left side or not.
      * @return true if point is at left side, false otherwise.
      */
-    public boolean isAtLeftSide(double x, double y, double threshold){
+    public boolean isAtLeftSide(double x, double y, double threshold) {
         return isAtLeftSide(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -924,7 +924,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to be checked.
      * @return true if point is at left side, false otherwise.
      */
-    public boolean isAtLeftSide(double x, double y){
+    public boolean isAtLeftSide(double x, double y) {
         return isAtLeftSide(x, y, 0.0);
     }
     
@@ -938,7 +938,7 @@ public class Rectangle implements Serializable {
      * lies at left side or not.
      * @return true if point is at left side, false otherwise.
      */
-    public boolean isAtLeftSide(Point2D point, double threshold){
+    public boolean isAtLeftSide(Point2D point, double threshold) {
         return isAtLeftSide(point.getInhomX(), point.getInhomY(), threshold);
     }
     
@@ -947,7 +947,7 @@ public class Rectangle implements Serializable {
      * @param point point to be checked.
      * @return true if point is at left side, false otherwise.
      */
-    public boolean isAtLeftSide(Point2D point){
+    public boolean isAtLeftSide(Point2D point) {
         return isAtLeftSide(point, 0.0);
     }
     
@@ -969,7 +969,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtTopLeftCorner(double x, double y, double left,
-            double top, double right, double bottom, double threshold){
+            double top, double right, double bottom, double threshold) {
         //fix values in case that corners are reversed
         double top2 = Math.max(top, bottom);
         double left2 = Math.min(left, right);
@@ -989,7 +989,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtTopLeftCorner(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isAtTopLeftCorner(x, y, left, top, right, bottom, 0.0);
     }
     
@@ -1010,7 +1010,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtTopLeftCorner(Point2D point, double left, 
-            double top, double right, double bottom, double threshold){
+            double top, double right, double bottom, double threshold) {
         return isAtTopLeftCorner(point.getInhomX(), point.getInhomY(), left, 
                 top, right, bottom, threshold);
     }
@@ -1026,7 +1026,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtTopLeftCorner(Point2D point, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isAtTopLeftCorner(point, left, top, right, bottom, 0.0);
     }
     
@@ -1046,7 +1046,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtTopLeftCorner(double x, double y, Point2D topLeft,
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isAtTopLeftCorner(x, y, topLeft.getInhomX(), topLeft.getInhomY(),
                 bottomRight.getInhomX(), bottomRight.getInhomY(), threshold);
     }
@@ -1061,7 +1061,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtTopLeftCorner(double x, double y, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isAtTopLeftCorner(x, y, topLeft, bottomRight, 0.0);
     }
     
@@ -1080,7 +1080,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtTopLeftCorner(Point2D point, Point2D topLeft, 
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isAtTopLeftCorner(point.getInhomX(), point.getInhomY(), topLeft,
                 bottomRight, threshold);
     }
@@ -1094,7 +1094,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtTopLeftCorner(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isAtTopLeftCorner(point, topLeft, bottomRight, 0.0);
     }
     
@@ -1115,7 +1115,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtTopLeftCorner(double x, double y, Point2D center,
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -1136,7 +1136,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtTopLeftCorner(double x, double y, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtTopLeftCorner(x, y, center, width, height, 0.0);
     }
     
@@ -1155,7 +1155,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtTopLeftCorner(Point2D point, Point2D center, 
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         return isAtTopLeftCorner(point.getInhomX(), point.getInhomY(), center,
                 width, height, threshold);
     }
@@ -1170,7 +1170,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtTopLeftCorner(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtTopLeftCorner(point, center, width, height, 0.0);
     }
     
@@ -1186,7 +1186,7 @@ public class Rectangle implements Serializable {
      * lies at top-left corner or not.
      * @return true if point is at top-left corner, false otherwise.
      */
-    public boolean isAtTopLeftCorner(double x, double y, double threshold){
+    public boolean isAtTopLeftCorner(double x, double y, double threshold) {
         return isAtTopLeftCorner(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -1197,7 +1197,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to be checked.
      * @return true if point is at top-left corner, false otherwise.
      */
-    public boolean isAtTopLeftCorner(double x, double y){
+    public boolean isAtTopLeftCorner(double x, double y) {
         return isAtTopLeftCorner(x, y, 0.0);
     }
     
@@ -1212,7 +1212,7 @@ public class Rectangle implements Serializable {
      * lies at top-left corner or not.
      * @return true if point is at top-left corner, false otherwise.
      */
-    public boolean isAtTopLeftCorner(Point2D point, double threshold){
+    public boolean isAtTopLeftCorner(Point2D point, double threshold) {
         return isAtTopLeftCorner(point.getInhomX(), point.getInhomY(), 
                 threshold);
     }
@@ -1223,7 +1223,7 @@ public class Rectangle implements Serializable {
      * @param point point to be checked.
      * @return true if point is at top-left corner, false otherwise.
      */
-    public boolean isAtTopLeftCorner(Point2D point){
+    public boolean isAtTopLeftCorner(Point2D point) {
         return isAtTopLeftCorner(point, 0.0);
     }
     
@@ -1244,7 +1244,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top side, false otherwise.
      */    
     public static boolean isAtTopSide(double x, double y, double left,
-            double top, double right, double bottom, double threshold){
+            double top, double right, double bottom, double threshold) {
         double top2 = Math.max(top, bottom);
         double left2 = Math.min(left, right);
         double right2 = Math.max(left, right);
@@ -1265,7 +1265,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top side, false otherwise.
      */    
     public static boolean isAtTopSide(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isAtTopSide(x, y, left, top, right, bottom, 0.0);
     }
     
@@ -1284,7 +1284,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top side, false otherwise.
      */    
     public static boolean isAtTopSide(Point2D point, double left, double top,
-            double right, double bottom, double threshold){
+            double right, double bottom, double threshold) {
         return isAtTopSide(point.getInhomX(), point.getInhomY(), left, top,
                 right, bottom, threshold);
     }
@@ -1300,7 +1300,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top side, false otherwise.
      */    
     public static boolean isAtTopSide(Point2D point, double left, double top,
-            double right, double bottom){
+            double right, double bottom) {
         return isAtTopSide(point, left, top, right, bottom, 0.0);
     }
     
@@ -1319,7 +1319,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top side, false otherwise.
      */    
     public static boolean isAtTopSide(double x, double y, Point2D topLeft, 
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isAtTopSide(x, y, topLeft.getInhomX(), topLeft.getInhomY(),
                 bottomRight.getInhomX(), bottomRight.getInhomY(), threshold);
     }
@@ -1334,7 +1334,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top side, false otherwise.
      */    
     public static boolean isAtTopSide(double x, double y, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isAtTopSide(x, y, topLeft, bottomRight, 0.0);
     }
     
@@ -1351,7 +1351,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top side, false otherwise.
      */    
     public static boolean isAtTopSide(Point2D point, Point2D topLeft, 
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isAtTopSide(point.getInhomX(), point.getInhomY(), topLeft,
                 bottomRight, threshold);
     }
@@ -1365,7 +1365,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top side, false otherwise.
      */    
     public static boolean isAtTopSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isAtTopSide(point, topLeft, bottomRight, 0.0);
     }
     
@@ -1385,7 +1385,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top side, false otherwise.
      */    
     public static boolean isAtTopSide(double x, double y, Point2D center,
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -1405,7 +1405,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top side, false otherwise.
      */    
     public static boolean isAtTopSide(double x, double y, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtTopSide(x, y, center, width, height, 0.0);
     }
     
@@ -1423,7 +1423,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top side, false otherwise.
      */
     public static boolean isAtTopSide(Point2D point, Point2D center,
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         return isAtTopSide(point.getInhomX(), point.getInhomY(), center, width,
                 height, threshold);
     }
@@ -1438,7 +1438,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top side, false otherwise.
      */
     public static boolean isAtTopSide(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtTopSide(point, center, width, height, 0.0);
     }
     
@@ -1453,7 +1453,7 @@ public class Rectangle implements Serializable {
      * lies at top side or not.
      * @return true if point is at top side, false otherwise.
      */
-    public boolean isAtTopSide(double x, double y, double threshold){
+    public boolean isAtTopSide(double x, double y, double threshold) {
         return isAtTopSide(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -1464,7 +1464,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to be checked.
      * @return true if point is at top side, false otherwise.
      */
-    public boolean isAtTopSide(double x, double y){
+    public boolean isAtTopSide(double x, double y) {
         return isAtTopSide(x, y, 0.0);
     }
     
@@ -1478,7 +1478,7 @@ public class Rectangle implements Serializable {
      * lies at top side or not.
      * @return true if point is at top side, false otherwise.
      */
-    public boolean isAtTopSide(Point2D point, double threshold){
+    public boolean isAtTopSide(Point2D point, double threshold) {
         return isAtTopSide(point.getInhomX(), point.getInhomY(), threshold);
     }
     
@@ -1487,7 +1487,7 @@ public class Rectangle implements Serializable {
      * @param point point to be checked.
      * @return true if point is at top side, false otherwise.
      */
-    public boolean isAtTopSide(Point2D point){
+    public boolean isAtTopSide(Point2D point) {
         return isAtTopSide(point, 0.0);
     }
     
@@ -1508,7 +1508,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-right corner, false otherwise.
      */
     public static boolean isAtTopRightCorner(double x, double y, double left,
-            double top, double right, double bottom, double threshold){
+            double top, double right, double bottom, double threshold) {
         //fix values in case that corners are reversed
         double top2 = Math.max(top, bottom);
         double right2 = Math.max(left, right);
@@ -1528,7 +1528,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-right corner, false otherwise.
      */
     public static boolean isAtTopRightCorner(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isAtTopRightCorner(x, y, left, top, right, bottom, 0.0);
     }
     
@@ -1548,7 +1548,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-right corner, false otherwise.
      */
     public static boolean isAtTopRightCorner(Point2D point, double left, 
-            double top, double right, double bottom, double threshold){
+            double top, double right, double bottom, double threshold) {
         return isAtTopRightCorner(point.getInhomX(), point.getInhomY(), left,
                 top, right, bottom, threshold);
     }
@@ -1564,7 +1564,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-right corner, false otherwise.
      */
     public static boolean isAtTopRightCorner(Point2D point, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isAtTopRightCorner(point, left, top, right, bottom, 0.0);
     }
     
@@ -1583,7 +1583,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-right corner, false otherwise.
      */
     public static boolean isAtTopRightCorner(double x, double y, 
-            Point2D topLeft, Point2D bottomRight, double threshold){
+            Point2D topLeft, Point2D bottomRight, double threshold) {
         return isAtTopRightCorner(x, y, topLeft.getInhomX(), 
                 topLeft.getInhomY(), bottomRight.getInhomX(), 
                 bottomRight.getInhomY(), threshold);
@@ -1599,7 +1599,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-right corner, false otherwise.
      */
     public static boolean isAtTopRightCorner(double x, double y,
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return isAtTopRightCorner(x, y, topLeft, bottomRight, 0.0);
     }
     
@@ -1617,7 +1617,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-right corner, false otherwise.
      */
     public static boolean isAtTopRightCorner(Point2D point, Point2D topLeft,
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isAtTopRightCorner(point.getInhomX(), point.getInhomY(), topLeft,
                 bottomRight, threshold);
     }
@@ -1631,7 +1631,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtTopRightCorner(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isAtTopRightCorner(point, topLeft, bottomRight, 0.0);
     }
     
@@ -1651,7 +1651,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-right corner, false otherwise.
      */
     public static boolean isAtTopRightCorner(double x, double y, Point2D center,
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -1672,7 +1672,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-right corner, false otherwise.
      */
     public static boolean isAtTopRightCorner(double x, double y, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtTopRightCorner(x, y, center, width, height, 0.0);
     }
     
@@ -1690,7 +1690,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-right corner, false otherwise.
      */
     public static boolean isAtTopRightCorner(Point2D point, Point2D center,
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         return isAtTopRightCorner(point.getInhomX(), point.getInhomY(), center,
                 width, height, threshold);
     }
@@ -1705,7 +1705,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-right corner, false otherwise.
      */
     public static boolean isAtTopRightCorner(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtTopRightCorner(point, center, width, height, 0.0);
     }
     
@@ -1720,7 +1720,7 @@ public class Rectangle implements Serializable {
      * lies at top-right corner or not.
      * @return true if point is at top-right corner, false otherwise.
      */
-    public boolean isAtTopRightCorner(double x, double y, double threshold){
+    public boolean isAtTopRightCorner(double x, double y, double threshold) {
         return isAtTopRightCorner(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -1731,7 +1731,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to be checked.
      * @return true if point is at top-right corner, false otherwise.
      */
-    public boolean isAtTopRightCorner(double x, double y){
+    public boolean isAtTopRightCorner(double x, double y) {
         return isAtTopRightCorner(x, y, 0.0);
     }
     
@@ -1745,7 +1745,7 @@ public class Rectangle implements Serializable {
      * lies at top-right corner or not.
      * @return true if point is at top-right corner, false otherwise.
      */
-    public boolean isAtTopRightCorner(Point2D point, double threshold){
+    public boolean isAtTopRightCorner(Point2D point, double threshold) {
         return isAtTopRightCorner(point.getInhomX(), point.getInhomY(), 
                 threshold);
     }
@@ -1756,7 +1756,7 @@ public class Rectangle implements Serializable {
      * @param point point to be checked.
      * @return true if point is at top-right corner, false otherwise.
      */
-    public boolean isAtTopRightCorner(Point2D point){
+    public boolean isAtTopRightCorner(Point2D point) {
         return isAtTopRightCorner(point, 0.0);
     }
     
@@ -1777,7 +1777,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at right side, false otherwise.
      */
     public static boolean isAtRightSide(double x, double y, double left,
-            double top, double right, double bottom, double threshold){
+            double top, double right, double bottom, double threshold) {
         //fix values in case that corners are reversed
         double right2 = Math.max(left, right);
         double top2 = Math.max(top, bottom);
@@ -1799,13 +1799,13 @@ public class Rectangle implements Serializable {
      * @return true if point is at right side, false otherwise.
      */
     public static boolean isAtRightSide(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isAtRightSide(x, y, left, top, right, bottom, 0.0);
     }
     
     /**
      * Indicates if provided point is located at right side of rectangle defined
-     * by provided top-left and bototm-right corners up to a certain threshold.
+     * by provided top-left and bottom-right corners up to a certain threshold.
      * A positive threshold moves right border to the left, a negative threshold
      * moves right border to the right.
      * @param point point to be checked.
@@ -1818,7 +1818,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at right side, false otherwise.
      */
     public static boolean isAtRightSide(Point2D point, double left, double top,
-            double right, double bottom, double threshold){
+            double right, double bottom, double threshold) {
         return isAtRightSide(point.getInhomX(), point.getInhomY(), left, top,
                 right, bottom, threshold);
     }
@@ -1834,7 +1834,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at right side, false otherwise.
      */
     public static boolean isAtRightSide(Point2D point, double left, double top,
-            double right, double bottom){
+            double right, double bottom) {
         return isAtRightSide(point, left, top, right, bottom, 0.0);
     }
     
@@ -1853,7 +1853,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at right side, false otherwise.
      */
     public static boolean isAtRightSide(double x, double y, Point2D topLeft,
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isAtRightSide(x, y, topLeft.getInhomX(), topLeft.getInhomY(),
                 bottomRight.getInhomX(), bottomRight.getInhomY(), threshold);
     }
@@ -1868,7 +1868,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at right side, false otherwise.
      */
     public static boolean isAtRightSide(double x, double y, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isAtRightSide(x, y, topLeft, bottomRight, 0.0);
     }
     
@@ -1885,7 +1885,7 @@ public class Rectangle implements Serializable {
      * @return true if point lies at right side, false otherwise.
      */
     public static boolean isAtRightSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isAtRightSide(point.getInhomX(), point.getInhomY(), topLeft,
                 bottomRight, threshold);
     }
@@ -1899,7 +1899,7 @@ public class Rectangle implements Serializable {
      * @return true if point lies at right side, false otherwise.
      */
     public static boolean isAtRightSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isAtRightSide(point, topLeft, bottomRight, 0.0);
     }
     
@@ -1918,7 +1918,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at right side, false otherwise.
      */
     public static boolean isAtRightSide(double x, double y, Point2D center,
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -1938,7 +1938,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at right side, false otherwise.
      */
     public static boolean isAtRightSide(double x, double y, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtRightSide(x, y, center, width, height, 0.0);
     }
     
@@ -1956,7 +1956,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at left side, false otherwise.
      */
     public static boolean isAtRightSide(Point2D point, Point2D center, 
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         return isAtRightSide(point.getInhomX(), point.getInhomY(), center,
                 width, height, threshold);
     }
@@ -1971,7 +1971,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at right side, false otherwise.
      */
     public static boolean isAtRightSide(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtRightSide(point, center, width, height, 0.0);
     }
     
@@ -1986,7 +1986,7 @@ public class Rectangle implements Serializable {
      * lies at right side or not.
      * @return true if point is at right side, false otherwise.
      */
-    public boolean isAtRightSide(double x, double y, double threshold){
+    public boolean isAtRightSide(double x, double y, double threshold) {
         return isAtRightSide(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -1997,7 +1997,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to be checked.
      * @return true if point is at right side, false otherwise.
      */
-    public boolean isAtRightSide(double x, double y){
+    public boolean isAtRightSide(double x, double y) {
         return isAtRightSide(x, y, 0.0);
     }
     
@@ -2011,7 +2011,7 @@ public class Rectangle implements Serializable {
      * lies at right side or not.
      * @return true if point is at right side, false otherwise.
      */
-    public boolean isAtRightSide(Point2D point, double threshold){
+    public boolean isAtRightSide(Point2D point, double threshold) {
         return isAtRightSide(point.getInhomX(), point.getInhomY(), threshold);
     }
     
@@ -2020,7 +2020,7 @@ public class Rectangle implements Serializable {
      * @param point point to be checked.
      * @return true if point is at right side, false otherwise.
      */
-    public boolean isAtRightSide(Point2D point){
+    public boolean isAtRightSide(Point2D point) {
         return isAtRightSide(point, 0.0);
     }
     
@@ -2042,7 +2042,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bototm-right corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(double x, double y, double left,
-            double top, double right, double bottom, double threshold){
+            double top, double right, double bottom, double threshold) {
         //fix values in case that corners are reversed
         double bottom2 = Math.min(top, bottom);
         double right2 = Math.max(left, right);
@@ -2063,7 +2063,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-right corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isAtBottomRightCorner(x, y, left, top, right, bottom, 0.0);
     }
     
@@ -2084,7 +2084,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(Point2D point, double left, 
-            double top, double right, double bottom, double threshold){
+            double top, double right, double bottom, double threshold) {
         return isAtBottomRightCorner(point.getInhomX(), point.getInhomY(), left,
                 top, right, bottom, threshold);
     }
@@ -2100,7 +2100,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(Point2D point, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isAtBottomRightCorner(point, left, top, right, bottom, 0.0);
     }
     
@@ -2120,7 +2120,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top-left corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(double x, double y, 
-            Point2D topLeft, Point2D bottomRight, double threshold){
+            Point2D topLeft, Point2D bottomRight, double threshold) {
         return isAtBottomRightCorner(x, y, topLeft.getInhomX(), 
                 topLeft.getInhomY(), bottomRight.getInhomX(), 
                 bottomRight.getInhomY(), threshold);
@@ -2137,7 +2137,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-right corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(double x, double y,
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return isAtBottomRightCorner(x, y, topLeft, bottomRight, 0.0);
     }
     
@@ -2156,7 +2156,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-right corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(Point2D point, Point2D topLeft,
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isAtBottomRightCorner(point.getInhomX(), point.getInhomY(), 
                 topLeft, bottomRight, threshold);
     }
@@ -2170,7 +2170,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-right corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isAtBottomRightCorner(point, topLeft, bottomRight, 0.0);
     }
     
@@ -2190,7 +2190,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-right corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(double x, double y, 
-            Point2D center, double width, double height, double threshold){
+            Point2D center, double width, double height, double threshold) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -2211,7 +2211,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bototm-right corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(double x, double y,
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         return isAtBottomRightCorner(x, y, center, width, height, 0.0);
     }
     
@@ -2231,7 +2231,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-right corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(Point2D point, Point2D center,
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         return isAtBottomRightCorner(point.getInhomX(), point.getInhomY(), 
                 center, width, height, threshold);
     }
@@ -2246,7 +2246,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-right corner, false otherwise.
      */
     public static boolean isAtBottomRightCorner(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtBottomRightCorner(point, center, width, height, 0.0);
     }
     
@@ -2262,7 +2262,7 @@ public class Rectangle implements Serializable {
      * lies at bottom-right corner or not.
      * @return true if point is at bototm-right corner, false otherwise.
      */
-    public boolean isAtBottomRightCorner(double x, double y, double threshold){
+    public boolean isAtBottomRightCorner(double x, double y, double threshold) {
         return isAtBottomRightCorner(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -2273,7 +2273,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to be checked.
      * @return true if point is at bototm-right corner, false otherwise.
      */
-    public boolean isAtBottomRightCorner(double x, double y){
+    public boolean isAtBottomRightCorner(double x, double y) {
         return isAtBottomRightCorner(x, y, 0.0);
     }
     
@@ -2288,7 +2288,7 @@ public class Rectangle implements Serializable {
      * lies at bottom-right corner or not.
      * @return true if point is at bottom-right corner, false otherwise.
      */
-    public boolean isAtBottomRightCorner(Point2D point, double threshold){
+    public boolean isAtBottomRightCorner(Point2D point, double threshold) {
         return isAtBottomRightCorner(point.getInhomX(), point.getInhomY(), 
                 threshold);
     }
@@ -2299,7 +2299,7 @@ public class Rectangle implements Serializable {
      * @param point point to be checked.
      * @return true if point is at bottom-right corner, false otherwise.
      */
-    public boolean isAtBottomRightCorner(Point2D point){
+    public boolean isAtBottomRightCorner(Point2D point) {
         return isAtBottomRightCorner(point, 0.0);
     }
     
@@ -2320,7 +2320,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom side, false otherwise.
      */
     public static boolean isAtBottomSide(double x, double y, double left,
-            double top, double right, double bottom, double threshold){
+            double top, double right, double bottom, double threshold) {
         double bottom2 = Math.min(top, bottom);
         double left2 = Math.min(left, right);
         double right2 = Math.max(left, right);
@@ -2341,7 +2341,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bototm side, false otherwise.
      */
     public static boolean isAtBottomSide(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isAtBottomSide(x, y, left, top, right, bottom, 0.0);
     }
     
@@ -2361,7 +2361,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom side, false otherwise.
      */
     public static boolean isAtBottomSide(Point2D point, double left, double top,
-            double right, double bottom, double threshold){
+            double right, double bottom, double threshold) {
         return isAtBottomSide(point.getInhomX(), point.getInhomY(), left, top,
                 right, bottom, threshold);
     }
@@ -2377,13 +2377,13 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom side, false otherwise.
      */
     public static boolean isAtBottomSide(Point2D point, double left, double top,
-            double right, double bottom){
+            double right, double bottom) {
         return isAtBottomSide(point, left, top, right, bottom, 0.0);
     }
     
     /**
      * Indicates if provided point coordinates are located at bottom side of
-     * rectangle defined by provided top-left and bototm-right corners up to a
+     * rectangle defined by provided top-left and bottom-right corners up to a
      * certain threshold.
      * A positive threshold moves bottom border upwards, a negative threshold
      * moves bottom border downwards
@@ -2396,7 +2396,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom side, false otherwise.
      */
     public static boolean isAtBottomSide(double x, double y, Point2D topLeft,
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isAtBottomSide(x, y, topLeft.getInhomX(), topLeft.getInhomY(),
                 bottomRight.getInhomX(), bottomRight.getInhomY(), threshold);
     }
@@ -2411,7 +2411,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom side, false otherwise.
      */
     public static boolean isAtBottomSide(double x, double y, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isAtBottomSide(x, y, topLeft, bottomRight, 0.0);
     }
     
@@ -2428,7 +2428,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom side, false otherwise.
      */
     public static boolean isAtBottomSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isAtBottomSide(point.getInhomX(), point.getInhomY(), topLeft,
                 bottomRight, threshold);
     }
@@ -2439,10 +2439,10 @@ public class Rectangle implements Serializable {
      * @param point point to be checked.
      * @param topLeft top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return true if point is at borrom side, false otherwise.
+     * @return true if point is at bottom side, false otherwise.
      */
     public static boolean isAtBottomSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isAtBottomSide(point, topLeft, bottomRight, 0.0);
     }
     
@@ -2462,7 +2462,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom side, false otherwise.
      */
     public static boolean isAtBottomSide(double x, double y, Point2D center,
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -2482,7 +2482,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at top side, false otherwise.
      */
     public static boolean isAtBottomSide(double x, double y, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtBottomSide(x, y, center, width, height, 0.0);
     }
     
@@ -2500,7 +2500,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom side, false otherwise.
      */
     public static boolean isAtBottomSide(Point2D point, Point2D center,
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         return isAtBottomSide(point.getInhomX(), point.getInhomY(), center, 
                 width, height, threshold);
     }
@@ -2515,7 +2515,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom side, false otherwise.
      */
     public static boolean isAtBottomSide(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtBottomSide(point, center, width, height, 0.0);
     }
     
@@ -2530,7 +2530,7 @@ public class Rectangle implements Serializable {
      * lies at bottom side or not.
      * @return true if point is at bottom side, false otherwise.
      */
-    public boolean isAtBottomSide(double x, double y, double threshold){
+    public boolean isAtBottomSide(double x, double y, double threshold) {
         return isAtBottomSide(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -2541,7 +2541,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to be checked.
      * @return true if point is at bottom side, false otherwise.
      */
-    public boolean isAtBottomSide(double x, double y){
+    public boolean isAtBottomSide(double x, double y) {
         return isAtBottomSide(x, y, 0.0);
     }
     
@@ -2554,7 +2554,7 @@ public class Rectangle implements Serializable {
      * lies at bottom side or not.
      * @return true if point is at bottom side, false otherwise.
      */
-    public boolean isAtBottomSide(Point2D point, double threshold){
+    public boolean isAtBottomSide(Point2D point, double threshold) {
         return isAtBottomSide(point.getInhomX(), point.getInhomY(), threshold);
     }
     
@@ -2563,13 +2563,13 @@ public class Rectangle implements Serializable {
      * @param point point to be checked.
      * @return true if point is at bottom side, false otherwise.
      */
-    public boolean isAtBottomSide(Point2D point){
+    public boolean isAtBottomSide(Point2D point) {
         return isAtBottomSide(point, 0.0);
     }
     
     /**
      * Indicates if provided point coordinates are located at bottom-left corner
-     * of rectangle defined by provided top-left and bototm-right corners up to
+     * of rectangle defined by provided top-left and bottom-right corners up to
      * a certain threshold.
      * A positive threshold moves bottom-right corner towards rectangle 
      * interior, a negative threshold moves top-right corner towards rectangle
@@ -2585,7 +2585,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-left corner, false otherwise.
      */
     public static boolean isAtBottomLeftCorner(double x, double y, double left,
-            double top, double right, double bottom, double threshold){
+            double top, double right, double bottom, double threshold) {
         //fix values in case that corners are reversed
         double bottom2 = Math.min(top, bottom);
         double left2 = Math.min(left, right);
@@ -2606,7 +2606,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-left corner, false otherwise.
      */
     public static boolean isAtBottomLeftCorner(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isAtBottomLeftCorner(x, y, left, top, right, bottom, 0.0);
     }
     
@@ -2627,7 +2627,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-left corner, false otherwise.
      */
     public static boolean isAtBottomLeftCorner(Point2D point, double left,
-            double top, double right, double bottom, double threshold){
+            double top, double right, double bottom, double threshold) {
         return isAtBottomLeftCorner(point.getInhomX(), point.getInhomY(), left,
                 top, right, bottom, threshold);
     }
@@ -2640,10 +2640,10 @@ public class Rectangle implements Serializable {
      * @param top top coordinate of rectangle.
      * @param right right coordinate of rectangle.
      * @param bottom bottom coordinate of rectangle.
-     * @return true if point is at bototm-left corner, false otherwise.
+     * @return true if point is at bottom-left corner, false otherwise.
      */
     public static boolean isAtBottomLeftCorner(Point2D point, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isAtBottomLeftCorner(point, left, top, right, bottom, 0.0);
     }
     
@@ -2663,7 +2663,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-left corner, false otherwise.
      */
     public static boolean isAtBottomLeftCorner(double x, double y, 
-            Point2D topLeft, Point2D bottomRight, double threshold){
+            Point2D topLeft, Point2D bottomRight, double threshold) {
         return isAtBottomLeftCorner(x, y, topLeft.getInhomX(), 
                 topLeft.getInhomY(), bottomRight.getInhomX(), 
                 bottomRight.getInhomY(), threshold);
@@ -2679,7 +2679,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-left corner, false otherwise.
      */
     public static boolean isAtBottomLeftCorner(double x, double y,
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return isAtBottomLeftCorner(x, y, topLeft, bottomRight, 0.0);
     }
     
@@ -2697,7 +2697,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-left corner, false otherwise.
      */
     public static boolean isAtBottomLeftCorner(Point2D point, Point2D topLeft,
-            Point2D bottomRight, double threshold){
+            Point2D bottomRight, double threshold) {
         return isAtBottomLeftCorner(point.getInhomX(), point.getInhomY(), 
                 topLeft, bottomRight, threshold);
     }
@@ -2708,10 +2708,10 @@ public class Rectangle implements Serializable {
      * @param point point to be checked.
      * @param topLeft top-left corner of rectangle.
      * @param bottomRight bottom-right corner of rectangle.
-     * @return true if point is at bototm-left corner, false otherwise.
+     * @return true if point is at bottom-left corner, false otherwise.
      */
     public static boolean isAtBottomLeftCorner(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isAtBottomLeftCorner(point, topLeft, bottomRight, 0.0);
     }
     
@@ -2732,7 +2732,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-left corner, false otherwise.
      */
     public static boolean isAtBottomLeftCorner(double x, double y, 
-            Point2D center, double width, double height, double threshold){
+            Point2D center, double width, double height, double threshold) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -2754,12 +2754,12 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-left corner, false otherwise.
      */
     public static boolean isAtBottomLeftCorner(double x, double y,
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         return isAtBottomLeftCorner(x, y, center, width, height, 0.0);
     }
     
     /**
-     * Indicates if provided point is located at bototm-left corner of rectangle
+     * Indicates if provided point is located at bottom-left corner of rectangle
      * defined by provided center and size values up to a certain threshold.
      * A positive threshold moves bottom-right corner towards rectangle 
      * interior, a negative threshold moves top-right corner towards rectangle
@@ -2773,7 +2773,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-left corner, false otherwise.
      */
     public static boolean isAtBottomLeftCorner(Point2D point, Point2D center,
-            double width, double height, double threshold){
+            double width, double height, double threshold) {
         return isAtBottomLeftCorner(point.getInhomX(), point.getInhomY(), 
                 center, width, height, threshold);
     }
@@ -2788,7 +2788,7 @@ public class Rectangle implements Serializable {
      * @return true if point is at bottom-left corner, false otherwise.
      */
     public static boolean isAtBottomLeftCorner(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isAtBottomLeftCorner(point, center, width, height, 0.0);
     }
     
@@ -2801,10 +2801,10 @@ public class Rectangle implements Serializable {
      * @param x x coordinate of point to be checked.
      * @param y y coordinate of point to be checked.
      * @param threshold threshold to use as a margin to determine whether point
-     * lies at bototm-left corner or not.
-     * @return true if point is at bototm-left corner, false otherwise.
+     * lies at bottom-left corner or not.
+     * @return true if point is at bottom-left corner, false otherwise.
      */
-    public boolean isAtBottomLeftCorner(double x, double y, double threshold){
+    public boolean isAtBottomLeftCorner(double x, double y, double threshold) {
         return isAtBottomLeftCorner(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -2815,12 +2815,12 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to be checked.
      * @return true if point is at bottom-left corner, false otherwise.
      */
-    public boolean isAtBottomLeftCorner(double x, double y){
+    public boolean isAtBottomLeftCorner(double x, double y) {
         return isAtBottomLeftCorner(x, y, 0.0);
     }
     
     /**
-     * Indicates if provided point is locted at bottom-left corner of this
+     * Indicates if provided point is located at bottom-left corner of this
      * rectangle up to a certain threshold.
      * A positive threshold moves bottom-right corner towards rectangle 
      * interior, a negative threshold moves top-right corner towards rectangle
@@ -2830,7 +2830,7 @@ public class Rectangle implements Serializable {
      * lies at bottom-left corner or not.
      * @return true if point is at bottom-left corner, false otherwise.
      */
-    public boolean isAtBottomLeftCorner(Point2D point, double threshold){
+    public boolean isAtBottomLeftCorner(Point2D point, double threshold) {
         return isAtBottomLeftCorner(point.getInhomX(), point.getInhomY(), 
                 threshold);
     }
@@ -2841,7 +2841,7 @@ public class Rectangle implements Serializable {
      * @param point point to be checked.
      * @return true if point is at bottom-left corner, false otherwise.
      */
-    public boolean isAtBottomLeftCorner(Point2D point){
+    public boolean isAtBottomLeftCorner(Point2D point) {
         return isAtBottomLeftCorner(point, 0.0);
     }
     
@@ -2859,28 +2859,28 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle left border.
      */
     public static double getSignedDistanceToLeftSide(double x, double y, 
-            double left, double top, double right, double bottom){
+            double left, double top, double right, double bottom) {
         //fix values in case that corners are reversed
         double left2 = Math.min(left, right);
         double right2 = Math.max(left, right);
         double bottom2 = Math.min(top, bottom);
         double top2 = Math.max(top, bottom);
         
-        if(isAtLeftSide(x, y, left2, top2, right2, bottom2) || 
-                isInside(x, y, left2, top2, right2, bottom2)){
+        if (isAtLeftSide(x, y, left2, top2, right2, bottom2) ||
+                isInside(x, y, left2, top2, right2, bottom2)) {
             //at left, inside
             return left2 - x;
-        }else if(isAtRightSide(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtRightSide(x, y, left2, top2, right2, bottom2)) {
             //at right
             return x - left2;
-        }else if(isAtTopLeftCorner(x, y, left2, top2, right2, bottom2) ||
+        } else if (isAtTopLeftCorner(x, y, left2, top2, right2, bottom2) ||
                 isAtTopSide(x, y, left2, top2, right2, bottom2) ||
-                isAtTopRightCorner(x, y, left2, top2, right2, bottom2)){
+                isAtTopRightCorner(x, y, left2, top2, right2, bottom2)) {
             //at top or top corners
             double diffX = x - left2;
             double diffY = y - top2;
             return Math.sqrt(diffX*diffX + diffY*diffY);
-        }else{
+        } else {
             //at bottom or bottom corners
             double diffX = x - left2;
             double diffY = y - bottom2;
@@ -2901,7 +2901,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle left border.
      */
     public static double getSignedDistanceToLeftSide(Point2D point,
-            double left, double top, double right, double bottom){
+            double left, double top, double right, double bottom) {
         return getSignedDistanceToLeftSide(point.getInhomX(), point.getInhomY(),
                 left, top, right, bottom);
     }
@@ -2918,7 +2918,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle left border.
      */
     public static double getSignedDistanceToLeftSide(double x, double y, 
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return getSignedDistanceToLeftSide(x, y, topLeft.getInhomX(), 
                 topLeft.getInhomY(), bottomRight.getInhomX(), 
                 bottomRight.getInhomY());
@@ -2935,7 +2935,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle left border.
      */
     public static double getSignedDistanceToLeftSide(Point2D point, 
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return getSignedDistanceToLeftSide(point.getInhomX(), point.getInhomY(),
                 topLeft, bottomRight);
     }
@@ -2953,7 +2953,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle left border.
      */
     public static double getSignedDistanceToLeftSide(double x, double y, 
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -2975,7 +2975,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle left border.
      */
     public static double getSignedDistanceToLeftSide(Point2D point, 
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         return getSignedDistanceToLeftSide(point.getInhomX(), point.getInhomY(),
                 center, width, height);
     }
@@ -2989,7 +2989,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to obtain signed distance for.
      * @return signed distance to closest point in the rectangle left border.
      */
-    public double getSignedDistanceToLeftSide(double x, double y){
+    public double getSignedDistanceToLeftSide(double x, double y) {
         return getSignedDistanceToLeftSide(x, y, mTopLeft, mBottomRight);
     }
     
@@ -3001,7 +3001,7 @@ public class Rectangle implements Serializable {
      * @param point point to obtain signed distance for.
      * @return signed distance to closest point in the rectangle left border.
      */
-    public double getSignedDistanceToLeftSide(Point2D point){
+    public double getSignedDistanceToLeftSide(Point2D point) {
         return getSignedDistanceToLeftSide(point.getInhomX(), 
                 point.getInhomY());
     }
@@ -3019,27 +3019,27 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle top border.
      */
     public static double getSignedDistanceToTopSide(double x, double y,
-            double left, double top, double right, double bottom){
+            double left, double top, double right, double bottom) {
         //fix values in case that corners are reversed
         double left2 = Math.min(left, right);
         double right2 = Math.max(left, right);
         double bottom2 = Math.min(top, bottom);
         double top2 = Math.max(top, bottom);
         
-        if(isAtTopSide(x, y, left2, top2, right2, bottom2) ||
-                isInside(x, y, left2, top2, right2, bottom2)){
+        if (isAtTopSide(x, y, left2, top2, right2, bottom2) ||
+                isInside(x, y, left2, top2, right2, bottom2)) {
             //at top, inside or bottom
             return y - top2;
-        }else if(isAtBottomSide(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtBottomSide(x, y, left2, top2, right2, bottom2)) {
             return top2 - y;
-        }else if(isAtTopLeftCorner(x, y, left2, top2, right2, bottom2) ||
+        } else if (isAtTopLeftCorner(x, y, left2, top2, right2, bottom2) ||
                 isAtLeftSide(x, y, left2, top2, right2, bottom2) ||
-                isAtBottomLeftCorner(x, y, left2, top2, right2, bottom2)){
+                isAtBottomLeftCorner(x, y, left2, top2, right2, bottom2)) {
             //at left or left corners
             double diffX = x - left2;
             double diffY = y - top2;
             return Math.sqrt(diffX*diffX + diffY*diffY);
-        }else{
+        } else {
             //at right or right corners
             double diffX = x - right2;
             double diffY = y - top2;
@@ -3060,7 +3060,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle top border.
      */
     public static double getSignedDistanceToTopSide(Point2D point,
-            double left, double top, double right, double bottom){
+            double left, double top, double right, double bottom) {
         return getSignedDistanceToTopSide(point.getInhomX(), point.getInhomY(),
                 left, top, right, bottom);
     }
@@ -3077,7 +3077,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle top border.
      */    
     public static double getSignedDistanceToTopSide(double x, double y,
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return getSignedDistanceToTopSide(x, y, topLeft.getInhomX(),
                 topLeft.getInhomY(), bottomRight.getInhomX(),
                 bottomRight.getInhomY());
@@ -3094,7 +3094,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle top border.
      */    
     public static double getSignedDistanceToTopSide(Point2D point,
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return getSignedDistanceToTopSide(point.getInhomX(), point.getInhomY(),
                 topLeft, bottomRight);
     }
@@ -3112,7 +3112,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle top border.
      */    
     public static double getSignedDistanceToTopSide(double x, double y,
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -3134,7 +3134,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle top border.
      */    
     public static double getSignedDistanceToTopSide(Point2D point,
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         return getSignedDistanceToTopSide(point.getInhomX(), point.getInhomY(),
                 center, width, height);
     }
@@ -3148,7 +3148,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to obtain signed distance for.
      * @return signed distance to closest point in the rectangle top border.
      */    
-    public double getSignedDistanceToTopSide(double x, double y){
+    public double getSignedDistanceToTopSide(double x, double y) {
         return getSignedDistanceToTopSide(x, y, mTopLeft, mBottomRight);
     }
     
@@ -3160,7 +3160,7 @@ public class Rectangle implements Serializable {
      * @param point point to obtain signed distance for.
      * @return signed distance to closest point in the rectangle top border.
      */    
-    public double getSignedDistanceToTopSide(Point2D point){
+    public double getSignedDistanceToTopSide(Point2D point) {
         return getSignedDistanceToTopSide(point.getInhomX(), point.getInhomY());
     }
     
@@ -3178,28 +3178,28 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle right border.
      */
     public static double getSignedDistanceToRightSide(double x, double y,
-            double left, double top, double right, double bottom){
+            double left, double top, double right, double bottom) {
         //fix values inc ase that corners are reversed
         double left2 = Math.min(left, right);
         double right2 = Math.max(left, right);
         double bottom2 = Math.min(top, bottom);
         double top2 = Math.max(top, bottom);
         
-        if(isAtRightSide(x, y, left2, top2, right2, bottom2) ||
-                isInside(x, y, left2, top2, right2, bottom2)){
+        if (isAtRightSide(x, y, left2, top2, right2, bottom2) ||
+                isInside(x, y, left2, top2, right2, bottom2)) {
             //at right, inside
             return x - right2;
-        }else if(isAtLeftSide(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtLeftSide(x, y, left2, top2, right2, bottom2)) {
             //at left
             return right2 - x;
-        }else if(isAtTopLeftCorner(x, y, left2, top2, right2, bottom2) ||                
+        } else if (isAtTopLeftCorner(x, y, left2, top2, right2, bottom2) ||
                 isAtTopSide(x, y, left2, top2, right2, bottom2) ||
-                isAtTopRightCorner(x, y, left2, top2, right2, bottom2)){
+                isAtTopRightCorner(x, y, left2, top2, right2, bottom2)) {
             //at top or top corners
             double diffX = x - right2;
             double diffY = y - top2;
             return Math.sqrt(diffX*diffX + diffY*diffY);
-        }else{
+        } else {
             //at bottom or bottom corners
             double diffX = x - right2;
             double diffY = y - bottom2;
@@ -3220,7 +3220,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle right border.
      */    
     public static double getSignedDistanceToRightSide(Point2D point,
-            double left, double top, double right, double bottom){
+            double left, double top, double right, double bottom) {
         return getSignedDistanceToRightSide(point.getInhomX(), 
                 point.getInhomY(), left, top, right, bottom);
     }
@@ -3237,7 +3237,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle right border.
      */        
     public static double getSignedDistanceToRightSide(double x, double y,
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return getSignedDistanceToRightSide(x, y, topLeft.getInhomX(),
                 topLeft.getInhomY(), bottomRight.getInhomX(), 
                 bottomRight.getInhomY());
@@ -3254,7 +3254,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle right border.
      */        
     public static double getSignedDistanceToRightSide(Point2D point,
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return getSignedDistanceToRightSide(point.getInhomX(), 
                 point.getInhomY(), topLeft, bottomRight);
     }
@@ -3272,7 +3272,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle right border.
      */        
     public static double getSignedDistanceToRightSide(double x, double y,
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -3294,7 +3294,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle right border.
      */        
     public static double getSignedDistanceToRightSide(Point2D point,
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         return getSignedDistanceToRightSide(point.getInhomX(), 
                 point.getInhomY(), center, width, height);
     }
@@ -3308,7 +3308,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to obtain signed distance for.
      * @return signed distance to closest point in the rectangle right border.
      */        
-    public double getSignedDistanceToRightSide(double x, double y){
+    public double getSignedDistanceToRightSide(double x, double y) {
         return getSignedDistanceToRightSide(x, y, mTopLeft, mBottomRight);
     }
     
@@ -3320,7 +3320,7 @@ public class Rectangle implements Serializable {
      * @param point point to obtain signed distance for.
      * @return signed distance to closest point in the rectangle right border.
      */        
-    public double getSignedDistanceToRightSide(Point2D point){
+    public double getSignedDistanceToRightSide(Point2D point) {
         return getSignedDistanceToRightSide(point.getInhomX(), 
                 point.getInhomY());
     }
@@ -3339,28 +3339,28 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle bottom border.
      */
     public static double getSignedDistanceToBottomSide(double x, double y,
-            double left, double top, double right, double bottom){
+            double left, double top, double right, double bottom) {
         //fix values in case that corners are reversed
         double left2 = Math.min(left, right);
         double right2 = Math.max(left, right);
         double bottom2 = Math.min(top, bottom);
         double top2 = Math.max(top, bottom);
         
-        if(isAtBottomSide(x, y, left2, top2, right2, bottom2) ||
-                isInside(x, y, left2, top2, right2, bottom2)){
+        if (isAtBottomSide(x, y, left2, top2, right2, bottom2) ||
+                isInside(x, y, left2, top2, right2, bottom2)) {
             //at bottom, inside or top
             return bottom2 - y;
-        }else if(isAtTopSide(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtTopSide(x, y, left2, top2, right2, bottom2)) {
             //at top
             return y - bottom2;
-        }else if(isAtBottomLeftCorner(x, y, left2, top2, right2, bottom2) ||
+        } else if (isAtBottomLeftCorner(x, y, left2, top2, right2, bottom2) ||
                 isAtLeftSide(x, y, left2, top2, right2, bottom2) ||
-                isAtTopLeftCorner(x, y, left2, top2, right2, bottom2)){
+                isAtTopLeftCorner(x, y, left2, top2, right2, bottom2)) {
             //at left or left corners
             double diffX = x - left2;
             double diffY = y - bottom2;
             return Math.sqrt(diffX*diffX + diffY*diffY);
-        }else{
+        } else {
             //at right or right corners
             double diffX = x - right2;
             double diffY = y - bottom2;
@@ -3381,7 +3381,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle bottom border.
      */        
     public static double getSignedDistanceToBottomSide(Point2D point,
-            double left, double top, double right, double bottom){
+            double left, double top, double right, double bottom) {
         return getSignedDistanceToBottomSide(point.getInhomX(), 
                 point.getInhomY(), left, top, right, bottom);
     }
@@ -3398,7 +3398,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle bottom border.
      */            
     public static double getSignedDistanceToBottomSide(double x, double y,
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return getSignedDistanceToBottomSide(x, y, topLeft.getInhomX(),
                 topLeft.getInhomY(), bottomRight.getInhomX(), 
                 bottomRight.getInhomY());
@@ -3415,7 +3415,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle bottom border.
      */            
     public static double getSignedDistanceToBottomSide(Point2D point,
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return getSignedDistanceToBottomSide(point.getInhomX(), 
                 point.getInhomY(), topLeft, bottomRight);
     }
@@ -3433,7 +3433,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle bottom border.
      */            
     public static double getSignedDistanceToBottomSide(double x, double y,
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -3455,7 +3455,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle bottom border.
      */            
     public static double getSignedDistanceToBottomSide(Point2D point,
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         return getSignedDistanceToBottomSide(point.getInhomX(), 
                 point.getInhomY(), center, width, height);
     }
@@ -3469,7 +3469,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to obtain signed distance for.
      * @return signed distance to closest point in the rectangle bottom border.
      */            
-    public double getSignedDistanceToBottomSide(double x, double y){
+    public double getSignedDistanceToBottomSide(double x, double y) {
         return getSignedDistanceToBottomSide(x, y, mTopLeft, mBottomRight);
     }
     
@@ -3481,7 +3481,7 @@ public class Rectangle implements Serializable {
      * @param point point to obtain signed distance for.
      * @return signed distance to closest point in the rectangle bottom border.
      */            
-    public double getSignedDistanceToBottomSide(Point2D point){
+    public double getSignedDistanceToBottomSide(Point2D point) {
         return getSignedDistanceToBottomSide(point.getInhomX(), 
                 point.getInhomY());
     }
@@ -3499,52 +3499,52 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle locus.
      */    
     public static double getSignedDistance(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         //fix values in case that corners are reversed
         double left2 = Math.min(left, right);
         double right2 = Math.max(left, right);
         double bottom2 = Math.min(top, bottom);
         double top2 = Math.max(top, bottom);
         
-        if(isAtLeftSide(x, y, left2, top2, right2, bottom2)){
+        if (isAtLeftSide(x, y, left2, top2, right2, bottom2)) {
             //left side
             return getSignedDistanceToLeftSide(x, y, left2, top2, right2, 
                     bottom2);
             
-        }else if(isAtTopSide(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtTopSide(x, y, left2, top2, right2, bottom2)) {
             //top side
             return getSignedDistanceToTopSide(x, y, left2, top2, right2, 
                     bottom2);
             
-        }else if(isAtRightSide(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtRightSide(x, y, left2, top2, right2, bottom2)) {
             //right side
             return getSignedDistanceToRightSide(x, y, left2, top2, right2, 
                     bottom2);
             
-        }else if(isAtBottomSide(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtBottomSide(x, y, left2, top2, right2, bottom2)) {
             //bottom side
             return getSignedDistanceToBottomSide(x, y, left2, top2, right2, 
                     bottom2);
-        }else if(isAtTopLeftCorner(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtTopLeftCorner(x, y, left2, top2, right2, bottom2)) {
             //top-left corner
             return getSignedDistanceToLeftSide(x, y, left2, top2, right2, 
                     bottom2);
             
-        }else if(isAtTopRightCorner(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtTopRightCorner(x, y, left2, top2, right2, bottom2)) {
             //top-right corner
             return getSignedDistanceToTopSide(x, y, left2, top2, right2, 
                     bottom2);
             
-        }else if(isAtBottomRightCorner(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtBottomRightCorner(x, y, left2, top2, right2, bottom2)) {
             //bottom-right corner
             return getSignedDistanceToRightSide(x, y, left2, top2, right2, 
                     bottom2);
             
-        }else if(isAtBottomLeftCorner(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtBottomLeftCorner(x, y, left2, top2, right2, bottom2)) {
             //bottom-left corner
             return getSignedDistanceToBottomSide(x, y, left2, top2, right2, 
                     bottom2);
-        }else{
+        } else {
             //inside. When inside, distance is negative            
             //return closest distance to one of the sides (the largest value)
             double leftDist = getSignedDistanceToLeftSide(x, y, left2, top2, 
@@ -3578,7 +3578,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle locus.
      */    
     public static double getSignedDistance(Point2D point, double left, 
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return getSignedDistance(point.getInhomX(), point.getInhomY(), left, 
                 top, right, bottom);
     }
@@ -3594,7 +3594,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle locus.
      */    
     public static double getSignedDistance(double x, double y, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return getSignedDistance(x, y, topLeft.getInhomX(), topLeft.getInhomY(),
                 bottomRight.getInhomX(), bottomRight.getInhomY());
     }
@@ -3609,7 +3609,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle locus.
      */
     public static double getSignedDistance(Point2D point, Point2D topLeft, 
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return getSignedDistance(point.getInhomX(), point.getInhomY(), topLeft,
                 bottomRight);
     }
@@ -3626,9 +3626,9 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle locus.
      */
     public static double getSignedDistance(double x, double y, Point2D center,
-            double width, double height){
-        double halfWidth = width/2.0;
-        double halfHeight = height/2.0;
+            double width, double height) {
+        double halfWidth = width / 2.0;
+        double halfHeight = height / 2.0;
         double centerX = center.getInhomX();
         double centerY = center.getInhomY();
         return getSignedDistance(x, y, centerX - halfWidth, 
@@ -3647,7 +3647,7 @@ public class Rectangle implements Serializable {
      * @return signed distance to closest point in the rectangle locus.
      */
     public static double getSignedDistance(Point2D point, Point2D center, 
-            double width, double height){
+            double width, double height) {
         return getSignedDistance(point.getInhomX(), point.getInhomY(), center,
                 width, height);
     }
@@ -3660,7 +3660,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to obtain signed distance for.
      * @return signed distance to closest point in the rectangle locus.
      */
-    public double getSignedDistance(double x, double y){
+    public double getSignedDistance(double x, double y) {
         return getSignedDistance(x, y, mTopLeft, mBottomRight);
     }
     
@@ -3671,7 +3671,7 @@ public class Rectangle implements Serializable {
      * @param point point to obtain signed distance for.
      * @return signed distance to closest point in the rectangle locus.
      */
-    public double getSignedDistance(Point2D point){
+    public double getSignedDistance(Point2D point) {
         return getSignedDistance(point.getInhomX(), point.getInhomY());
     }
     
@@ -3686,7 +3686,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle left border.
      */
     public static double getDistanceToLeftSide(double x, double y,
-            double left, double top, double right, double bottom){
+            double left, double top, double right, double bottom) {
         return Math.abs(getSignedDistanceToLeftSide(x, y, left, top, right, 
                 bottom));
     }
@@ -3701,7 +3701,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle left border.
      */
     public static double getDistanceToLeftSide(Point2D point,
-            double left, double top, double right, double bottom){
+            double left, double top, double right, double bottom) {
         return Math.abs(getSignedDistanceToLeftSide(point, left, top, right, 
                 bottom));
     }
@@ -3715,7 +3715,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle left border.
      */
     public static double getDistanceToLeftSide(double x, double y, 
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return Math.abs(getSignedDistanceToLeftSide(x, y, topLeft, 
                 bottomRight));
     }
@@ -3728,7 +3728,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle left border.
      */
     public static double getDistanceToLeftSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return Math.abs(getSignedDistanceToLeftSide(point, topLeft, 
                 bottomRight));
     }
@@ -3743,7 +3743,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle left border.
      */
     public static double getDistanceToLeftSide(double x, double y, 
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         return Math.abs(getSignedDistanceToLeftSide(x, y, center, width, 
                 height));
     }
@@ -3757,7 +3757,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle left border.
      */
     public static double getDistanceToLeftSide(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return Math.abs(getSignedDistanceToLeftSide(point, center, width, 
                 height));
     }
@@ -3768,7 +3768,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to obtain distance for.
      * @return distance to closest point in the rectangle left border.
      */
-    public double getDistanceToLeftSide(double x, double y){
+    public double getDistanceToLeftSide(double x, double y) {
         return Math.abs(getSignedDistanceToLeftSide(x, y));
     }
     
@@ -3777,7 +3777,7 @@ public class Rectangle implements Serializable {
      * @param point point to obtain distance for.
      * @return distance to closest point in the rectangle left border.
      */
-    public double getDistanceToLeftSide(Point2D point){
+    public double getDistanceToLeftSide(Point2D point) {
         return Math.abs(getSignedDistanceToLeftSide(point));
     }
     
@@ -3792,7 +3792,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle top border.
      */
     public static double getDistanceToTopSide(double x, double y, double left, 
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return Math.abs(getSignedDistanceToTopSide(x, y, left, top, right, 
                 bottom));
     }
@@ -3807,7 +3807,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle top border.
      */
     public static double getDistanceToTopSide(Point2D point, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return Math.abs(getSignedDistanceToTopSide(point, left, top, right, 
                 bottom));
     }
@@ -3821,7 +3821,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle top border.
      */
     public static double getDistanceToTopSide(double x, double y, 
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return Math.abs(getSignedDistanceToTopSide(x, y, topLeft, bottomRight));
     }
     
@@ -3833,7 +3833,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle top border.
      */
     public static double getDistanceToTopSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return Math.abs(getSignedDistanceToTopSide(point, topLeft, 
                 bottomRight));
     }
@@ -3848,7 +3848,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle top border.
      */
     public static double getDistanceToTopSide(double x, double y, 
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         return Math.abs(getSignedDistanceToTopSide(x, y, center, width, 
                 height));
     }
@@ -3862,7 +3862,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle top border.
      */
     public static double getDistanceToTopSide(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return Math.abs(getSignedDistanceToTopSide(point, center, width, 
                 height));
     }
@@ -3873,7 +3873,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to obtain distance for.
      * @return distance to closest point in the rectangle top border.
      */
-    public double getDistanceToTopSide(double x, double y){
+    public double getDistanceToTopSide(double x, double y) {
         return Math.abs(getSignedDistanceToTopSide(x, y));
     }
     
@@ -3882,7 +3882,7 @@ public class Rectangle implements Serializable {
      * @param point point to obtain distance for.
      * @return distance to closest point in the rectangle top border.
      */
-    public double getDistanceToTopSide(Point2D point){
+    public double getDistanceToTopSide(Point2D point) {
         return Math.abs(getSignedDistanceToTopSide(point));
     }
     
@@ -3897,7 +3897,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle right border.
      */
     public static double getDistanceToRightSide(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return Math.abs(getSignedDistanceToRightSide(x, y, left, top, right,
                 bottom));
     }
@@ -3912,7 +3912,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle right border.
      */
     public static double getDistanceToRightSide(Point2D point, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return Math.abs(getSignedDistanceToRightSide(point, left, top, right, 
                 bottom));
     }
@@ -3926,7 +3926,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle right border
      */
     public static double getDistanceToRightSide(double x, double y, 
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return Math.abs(getSignedDistanceToRightSide(x, y, topLeft, 
                 bottomRight));
     }
@@ -3939,7 +3939,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle right border.
      */
     public static double getDistanceToRightSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return Math.abs(getSignedDistanceToRightSide(point, topLeft, 
                 bottomRight));
     }
@@ -3954,7 +3954,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle right border.
      */
     public static double getDistanceToRightSide(double x, double y, 
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         return Math.abs(getSignedDistanceToRightSide(x, y, center, width, 
                 height));
     }
@@ -3968,7 +3968,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle right border.
      */
     public static double getDistanceToRightSide(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return Math.abs(getSignedDistanceToRightSide(point, center, width, 
                 height));
     }
@@ -3979,7 +3979,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to obtain distance for.
      * @return distance to closest point in the rectangle right border.
      */
-    public double getDistanceToRightSide(double x, double y){
+    public double getDistanceToRightSide(double x, double y) {
         return Math.abs(getSignedDistanceToRightSide(x, y));
     }
     
@@ -3988,7 +3988,7 @@ public class Rectangle implements Serializable {
      * @param point point to obtain distance for.
      * @return distance to closest point in the rectangle right border.
      */
-    public double getDistanceToRightSide(Point2D point){
+    public double getDistanceToRightSide(Point2D point) {
         return Math.abs(getSignedDistanceToRightSide(point));
     }
     
@@ -4003,7 +4003,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle bottom border.
      */
     public static double getDistanceToBottomSide(double x, double y, 
-            double left, double top, double right, double bottom){
+            double left, double top, double right, double bottom) {
         return Math.abs(getSignedDistanceToBottomSide(x, y, left, top, right, 
                 bottom));
     }
@@ -4018,7 +4018,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle bottom border.
      */
     public static double getDistanceToBottomSide(Point2D point, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return Math.abs(getSignedDistanceToBottomSide(point, left, top, right, 
                 bottom));
     }
@@ -4032,7 +4032,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle bottom border.
      */
     public static double getDistanceToBottomSide(double x, double y, 
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return Math.abs(getSignedDistanceToBottomSide(x, y, topLeft, 
                 bottomRight));
     }
@@ -4045,7 +4045,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle bottom border.
      */
     public static double getDistanceToBottomSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return Math.abs(getSignedDistanceToBottomSide(point, topLeft, 
                 bottomRight));
     }
@@ -4060,7 +4060,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle bottom border.
      */
     public static double getDistanceToBottomSide(double x, double y, 
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         return Math.abs(getSignedDistanceToBottomSide(x, y, center, width, 
                 height));
     }
@@ -4074,7 +4074,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle bottom border.
      */
     public static double getDistanceToBottomSide(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return Math.abs(getSignedDistanceToBottomSide(point, center, width, 
                 height));
     }
@@ -4085,7 +4085,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to obtain distance for.
      * @return distance to closest point in the rectangle bottom border.
      */
-    public double getDistanceToBottomSide(double x, double y){
+    public double getDistanceToBottomSide(double x, double y) {
         return Math.abs(getSignedDistanceToBottomSide(x, y));
     }
     
@@ -4094,7 +4094,7 @@ public class Rectangle implements Serializable {
      * @param point point to obtain distance for.
      * @return distance to closest point in the rectangle bottom.
      */
-    public double getDistanceToBottomSide(Point2D point){
+    public double getDistanceToBottomSide(Point2D point) {
         return Math.abs(getSignedDistanceToBottomSide(point));
     }
     
@@ -4109,7 +4109,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle locus.
      */
     public static double getDistance(double x, double y, double left, 
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return Math.abs(getSignedDistance(x, y, left, top, right, bottom));
     }
     
@@ -4123,7 +4123,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle locus.
      */
     public static double getDistance(Point2D point, double left, double top,
-            double right, double bottom){
+            double right, double bottom) {
         return Math.abs(getSignedDistance(point, left, top, right, bottom));
     }
     
@@ -4136,7 +4136,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle locus.
      */
     public static double getDistance(double x, double y, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return Math.abs(getSignedDistance(x, y, topLeft, bottomRight));
     }
     
@@ -4148,7 +4148,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle lcous.
      */
     public static double getDistance(Point2D point, Point2D topLeft, 
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return Math.abs(getSignedDistance(point, topLeft, bottomRight));
     }
     
@@ -4162,7 +4162,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle locus.
      */
     public static double getDistance(double x, double y, Point2D center, 
-            double width, double height){
+            double width, double height) {
         return Math.abs(getSignedDistance(x, y, center, width, height));
     }
     
@@ -4175,7 +4175,7 @@ public class Rectangle implements Serializable {
      * @return distance to closest point in the rectangle locus.
      */
     public static double getDistance(Point2D point, Point2D center, 
-            double width, double height){
+            double width, double height) {
         return Math.abs(getSignedDistance(point, center, width, height));
     }
     
@@ -4185,7 +4185,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to obtain distance for.
      * @return distance to closest point in the rectangle locus.
      */
-    public double getDistance(double x, double y){
+    public double getDistance(double x, double y) {
         return Math.abs(getSignedDistance(x, y));
     }
     
@@ -4194,7 +4194,7 @@ public class Rectangle implements Serializable {
      * @param point point to obtain distance for.
      * @return distance to closest point in the rectangle locus.
      */
-    public double getDistance(Point2D point){
+    public double getDistance(Point2D point) {
         return Math.abs(getSignedDistance(point));
     }
     
@@ -4211,46 +4211,46 @@ public class Rectangle implements Serializable {
      * be stored.
      */
     public static void closestPoint(double x, double y, double left, double top,
-            double right, double bottom, Point2D result){
+            double right, double bottom, Point2D result) {
         //fix values in case that corners are reversed
         double left2 = Math.min(left, right);
         double right2 = Math.max(left, right);
         double bottom2 = Math.min(top, bottom);
         double top2 = Math.max(top, bottom);
         
-        if(isAtLeftSide(x, y, left2, top2, right2, bottom2)){
+        if (isAtLeftSide(x, y, left2, top2, right2, bottom2)) {
             //left side
             result.setInhomogeneousCoordinates(left2, y);
             
-        }else if(isAtTopSide(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtTopSide(x, y, left2, top2, right2, bottom2)) {
             //top side
             result.setInhomogeneousCoordinates(x, top2);
             
-        }else if(isAtRightSide(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtRightSide(x, y, left2, top2, right2, bottom2)) {
             //right side
             result.setInhomogeneousCoordinates(right2, y);
             
-        }else if(isAtBottomSide(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtBottomSide(x, y, left2, top2, right2, bottom2)) {
             //bottom side
             result.setInhomogeneousCoordinates(x, bottom2);
             
-        }else if(isAtTopLeftCorner(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtTopLeftCorner(x, y, left2, top2, right2, bottom2)) {
             //top-left corner. Return top-left corner
             result.setInhomogeneousCoordinates(left2, top2);
             
-        }else if(isAtTopRightCorner(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtTopRightCorner(x, y, left2, top2, right2, bottom2)) {
             //top-right corner. Return top-right corner
             result.setInhomogeneousCoordinates(right2, top2);
             
-        }else if(isAtBottomRightCorner(x, y, left2, top2, right2, bottom2)){
+        } else if (isAtBottomRightCorner(x, y, left2, top2, right2, bottom2)) {
             //bottom-right corner. Return bottom-right corner
             result.setInhomogeneousCoordinates(right2, bottom2);
             
-        }else if(isAtBottomLeftCorner(x, y, left, top2, right2, bottom2)){
+        } else if (isAtBottomLeftCorner(x, y, left, top2, right2, bottom2)) {
             //bottom-left corner. Return bottom-left corner
             result.setInhomogeneousCoordinates(left2, bottom2);
             
-        }else{
+        } else {
             //inside.
             //Pick the side with the shortest distance to a border
             double leftDist = getDistanceToLeftSide(x, y, left2, top2, right2, 
@@ -4262,22 +4262,22 @@ public class Rectangle implements Serializable {
             double bottomDist = getDistanceToBottomSide(x, y, left2, top2, 
                     right2, bottom2);
             
-            if(leftDist < topDist && leftDist < rightDist && 
-                    leftDist < bottomDist){
+            if (leftDist < topDist && leftDist < rightDist &&
+                    leftDist < bottomDist) {
                 //pick left side
                 result.setInhomogeneousCoordinates(left2, y);
                 
-            }else if(topDist < leftDist && topDist < rightDist && 
-                    topDist < bottomDist){
+            } else if (topDist < leftDist && topDist < rightDist &&
+                    topDist < bottomDist) {
                 //pick top side
                 result.setInhomogeneousCoordinates(x, top2);
                 
-            }else if(rightDist < leftDist && rightDist < topDist &&
-                    rightDist < bottomDist){
+            } else if (rightDist < leftDist && rightDist < topDist &&
+                    rightDist < bottomDist) {
                 //pick right side
                 result.setInhomogeneousCoordinates(right2, y);
                 
-            }else{
+            } else {
                 //pick bottom side
                 result.setInhomogeneousCoordinates(x, bottom2);
             }
@@ -4296,7 +4296,7 @@ public class Rectangle implements Serializable {
      * be stored.
      */
     public static void closestPoint(Point2D point, double left, double top,
-            double right, double bottom, Point2D result){
+            double right, double bottom, Point2D result) {
         closestPoint(point.getInhomX(), point.getInhomY(), left, top, right,
                 bottom, result);
     }
@@ -4312,7 +4312,7 @@ public class Rectangle implements Serializable {
      * be stored.
      */
     public static void closestPoint(double x, double y, Point2D topLeft,
-            Point2D bottomRight, Point2D result){
+            Point2D bottomRight, Point2D result) {
         closestPoint(x, y, topLeft.getInhomX(), topLeft.getInhomY(),
                 bottomRight.getInhomX(), bottomRight.getInhomY(), result);
     }
@@ -4327,7 +4327,7 @@ public class Rectangle implements Serializable {
      * be stored.
      */
     public static void closestPoint(Point2D point, Point2D topLeft, 
-            Point2D bottomRight, Point2D result){
+            Point2D bottomRight, Point2D result) {
         closestPoint(point.getInhomX(), point.getInhomY(), topLeft, bottomRight,
                 result);
     }
@@ -4344,7 +4344,7 @@ public class Rectangle implements Serializable {
      * be stored.
      */
     public static void closestPoint(double x, double y, Point2D center, 
-            double width, double height, Point2D result){
+            double width, double height, Point2D result) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -4364,7 +4364,7 @@ public class Rectangle implements Serializable {
      * be stored.
      */
     public static void closestPoint(Point2D point, Point2D center, double width,
-            double height, Point2D result){
+            double height, Point2D result) {
         closestPoint(point.getInhomX(), point.getInhomY(), center, width, 
                 height, result);
     }
@@ -4376,7 +4376,7 @@ public class Rectangle implements Serializable {
      * @param result instance where coordinates of resulting closest point will
      * be stored.
      */
-    public void closestPoint(double x, double y, Point2D result){
+    public void closestPoint(double x, double y, Point2D result) {
         closestPoint(x, y, mTopLeft, mBottomRight, result);
     }
     
@@ -4386,7 +4386,7 @@ public class Rectangle implements Serializable {
      * @param result instance where coordinates of resulting closest point will
      * be stored.
      */
-    public void closestPoint(Point2D point, Point2D result){
+    public void closestPoint(Point2D point, Point2D result) {
         closestPoint(point, mTopLeft, mBottomRight, result);
     }
     
@@ -4402,7 +4402,7 @@ public class Rectangle implements Serializable {
      * @return closest point in the retangle locus.
      */
     public static Point2D getClosestPoint(double x, double y, double left, 
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         Point2D result = Point2D.create();
         closestPoint(x, y, left, top, right, bottom, result);
         return result;
@@ -4419,7 +4419,7 @@ public class Rectangle implements Serializable {
      * @return closest point in the rectangle locus.
      */
     public static Point2D getClosestPoint(Point2D point, double left, 
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         Point2D result = Point2D.create();
         closestPoint(point, left, top, right, bottom, result);
         return result;
@@ -4435,7 +4435,7 @@ public class Rectangle implements Serializable {
      * @return closest point in the rectangle locus.
      */
     public static Point2D getClosestPoint(double x, double y, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         Point2D result = Point2D.create();
         closestPoint(x, y, topLeft, bottomRight, result);
         return result;
@@ -4450,7 +4450,7 @@ public class Rectangle implements Serializable {
      * @return closest point in the rectangle locus.
      */
     public static Point2D getClosestPoint(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         Point2D result = Point2D.create();
         closestPoint(point, topLeft, bottomRight, result);
         return result;
@@ -4467,7 +4467,7 @@ public class Rectangle implements Serializable {
      * @return closest point in the rectangle locus.
      */
     public static Point2D getClosestPoint(double x, double y, Point2D center,
-            double width, double height){
+            double width, double height) {
         Point2D result = Point2D.create();
         closestPoint(x, y, center, width, height, result);
         return result;
@@ -4483,7 +4483,7 @@ public class Rectangle implements Serializable {
      * @return closest point in the rectangle locus.
      */
     public static Point2D getClosestPoint(Point2D point, Point2D center, 
-            double width, double height){
+            double width, double height) {
         Point2D result = Point2D.create();
         closestPoint(point, center, width, height, result);
         return result;
@@ -4495,7 +4495,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate to find closest point to.
      * @return closest point in the rectangle locus.
      */
-    public Point2D getClosestPoint(double x, double y){
+    public Point2D getClosestPoint(double x, double y) {
         Point2D result = Point2D.create();
         closestPoint(x, y, result);
         return result;
@@ -4506,7 +4506,7 @@ public class Rectangle implements Serializable {
      * @param point point to find closest point to.
      * @return closest point in the rectangle locus.
      */
-    public Point2D getClosestPoint(Point2D point){
+    public Point2D getClosestPoint(Point2D point) {
         Point2D result = Point2D.create();
         closestPoint(point, result);
         return result;
@@ -4530,8 +4530,8 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocusToLeftSide(double x, double y, double left, 
             double top, double right, double bottom, double threshold)
-            throws IllegalArgumentException{
-        if(threshold < 0.0){
+            throws IllegalArgumentException {
+        if (threshold < 0.0) {
             throw new IllegalArgumentException("threshold must be positive");
         }
         
@@ -4556,7 +4556,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocusToLeftSide(Point2D point, double left, 
             double top, double right, double bottom, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToLeftSide(point.getInhomX(), point.getInhomY(), left,
                 top, right, bottom, threshold);
     }
@@ -4577,7 +4577,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocusToLeftSide(double x, double y, Point2D topLeft,
             Point2D bottomRight, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToLeftSide(x, y, topLeft.getInhomX(), topLeft.getInhomY(),
                 bottomRight.getInhomX(), bottomRight.getInhomY(), threshold);
     }
@@ -4597,7 +4597,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocusToLeftSide(Point2D point, Point2D topLeft,
             Point2D bottomRight, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToLeftSide(point.getInhomX(), point.getInhomY(), topLeft,
                 bottomRight, threshold);
     }
@@ -4619,7 +4619,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocusToLeftSide(double x, double y, Point2D center,
             double width, double height, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -4645,7 +4645,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocusToLeftSide(Point2D point, Point2D center, 
             double width, double height, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToLeftSide(point.getInhomX(), point.getInhomY(), center,
                 width, height, threshold);
     }
@@ -4656,13 +4656,13 @@ public class Rectangle implements Serializable {
      * @param x x coordinate of point to be checked.
      * @param y y coordinate of point to be checked.
      * @param threshold threshold to use as a margin to determine whether point
-     * is locus to left side of retangle.
+     * is locus to left side of rectangle.
      * @return true if point is locus to left side of rectangle, false 
      * otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public boolean isLocusToLeftSide(double x, double y, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToLeftSide(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -4677,7 +4677,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public boolean isLocusToLeftSide(Point2D point, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToLeftSide(point, mTopLeft, mBottomRight, threshold);
     }
     
@@ -4695,7 +4695,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */
     public static boolean isLocusToLeftSide(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isLocusToLeftSide(x, y, left, top, right, bottom, 
                 DEFAULT_THRESHOLD);
     }
@@ -4711,8 +4711,8 @@ public class Rectangle implements Serializable {
      * @return true if point is locus to left side of rectangle, false 
      * otherwise.
      */
-    public static boolean isLocusToLeftSide(Point2D point, double left, 
-            double top, double right, double bottom){
+    public static boolean isLocusToLeftSide(Point2D point, double left,
+            double top, double right, double bottom) {
         return isLocusToLeftSide(point, left, top, right, bottom, 
                 DEFAULT_THRESHOLD);
     }
@@ -4729,7 +4729,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */
     public static boolean isLocusToLeftSide(double x, double y, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isLocusToLeftSide(x, y, topLeft, bottomRight, DEFAULT_THRESHOLD);
     }
     
@@ -4743,7 +4743,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */
     public static boolean isLocusToLeftSide(Point2D point, Point2D topLeft, 
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isLocusToLeftSide(point, topLeft, bottomRight,
                 DEFAULT_THRESHOLD);
     }
@@ -4760,7 +4760,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */
     public static boolean isLocusToLeftSide(double x, double y, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isLocusToLeftSide(x, y, center, width, height, 
                 DEFAULT_THRESHOLD);
     }
@@ -4776,7 +4776,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */
     public static boolean isLocusToLeftSide(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isLocusToLeftSide(point, center, width, height, 
                 DEFAULT_THRESHOLD);
     }
@@ -4789,7 +4789,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus to left side of rectangle, false 
      * otherwise.
      */
-    public boolean isLocusToLeftSide(double x, double y){
+    public boolean isLocusToLeftSide(double x, double y) {
         return isLocusToLeftSide(x, y, DEFAULT_THRESHOLD);
     }
     
@@ -4800,7 +4800,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus to left side of rectangle, false 
      * otherwise.
      */
-    public boolean isLocusToLeftSide(Point2D point){
+    public boolean isLocusToLeftSide(Point2D point) {
         return isLocusToLeftSide(point, DEFAULT_THRESHOLD);
     }
     
@@ -4822,8 +4822,8 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocusToTopSide(double x, double y, double left,
             double top, double right, double bottom, double threshold)
-            throws IllegalArgumentException{
-        if(threshold < 0.0){
+            throws IllegalArgumentException {
+        if (threshold < 0.0) {
             throw new IllegalArgumentException("threshold must be positive");
         }
         
@@ -4848,7 +4848,7 @@ public class Rectangle implements Serializable {
      */    
     public static boolean isLocusToTopSide(Point2D point, double left,
             double top, double right, double bottom, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToTopSide(point.getInhomX(), point.getInhomY(), left,
                 top, right, bottom, threshold);
     }
@@ -4869,7 +4869,7 @@ public class Rectangle implements Serializable {
      */    
     public static boolean isLocusToTopSide(double x, double y, Point2D topLeft,
             Point2D bottomRight, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToTopSide(x, y, topLeft.getInhomX(), topLeft.getInhomY(),
                 bottomRight.getInhomX(), bottomRight.getInhomY(), threshold);
     }
@@ -4889,7 +4889,7 @@ public class Rectangle implements Serializable {
      */    
     public static boolean isLocusToTopSide(Point2D point, Point2D topLeft,
             Point2D bottomRight, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToTopSide(point.getInhomX(), point.getInhomY(), topLeft,
                 bottomRight, threshold);
     }
@@ -4911,7 +4911,7 @@ public class Rectangle implements Serializable {
      */    
     public static boolean isLocusToTopSide(double x, double y, Point2D center,
             double width, double height, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -4937,7 +4937,7 @@ public class Rectangle implements Serializable {
      */    
     public static boolean isLocusToTopSide(Point2D point, Point2D center, 
             double width, double height, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToTopSide(point.getInhomX(), point.getInhomY(), center,
                 width, height, threshold);
     }
@@ -4954,7 +4954,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */    
     public boolean isLocusToTopSide(double x, double y, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToTopSide(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -4969,7 +4969,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */    
     public boolean isLocusToTopSide(Point2D point, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToTopSide(point, mTopLeft, mBottomRight, threshold);
     }
     
@@ -4987,7 +4987,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */    
     public static boolean isLocusToTopSide(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isLocusToTopSide(x, y, left, top, right, bottom, 
                 DEFAULT_THRESHOLD);
     }
@@ -5004,7 +5004,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */    
     public static boolean isLocusToTopSide(Point2D point, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isLocusToTopSide(point, left, top, right, bottom, 
                 DEFAULT_THRESHOLD);
     }
@@ -5021,7 +5021,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */    
     public static boolean isLocusToTopSide(double x, double y, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isLocusToTopSide(x, y, topLeft, bottomRight, DEFAULT_THRESHOLD);
     }
     
@@ -5035,7 +5035,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */    
     public static boolean isLocusToTopSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isLocusToTopSide(point, topLeft, bottomRight, DEFAULT_THRESHOLD);
     }
     
@@ -5051,7 +5051,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */    
     public static boolean isLocusToTopSide(double x, double y, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isLocusToTopSide(x, y, center, width, height, DEFAULT_THRESHOLD);
     }
     
@@ -5066,7 +5066,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */    
     public static boolean isLocusToTopSide(Point2D point, Point2D center, 
-            double width, double height){
+            double width, double height) {
         return isLocusToTopSide(point, center, width, height, 
                 DEFAULT_THRESHOLD);
     }
@@ -5079,7 +5079,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus to top side of rectangle, false 
      * otherwise.
      */    
-    public boolean isLocusToTopSide(double x, double y){
+    public boolean isLocusToTopSide(double x, double y) {
         return isLocusToTopSide(x, y, DEFAULT_THRESHOLD);
     }
     
@@ -5090,7 +5090,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus to top side of rectangle, false 
      * otherwise.
      */    
-    public boolean isLocusToTopSide(Point2D point){
+    public boolean isLocusToTopSide(Point2D point) {
         return isLocusToTopSide(point, DEFAULT_THRESHOLD);
     }
     
@@ -5112,8 +5112,8 @@ public class Rectangle implements Serializable {
      */    
     public static boolean isLocusToRightSide(double x, double y, double left,
             double top, double right, double bottom, double threshold)
-            throws IllegalArgumentException{
-        if(threshold < 0.0){
+            throws IllegalArgumentException {
+        if (threshold < 0.0) {
             throw new IllegalArgumentException("threshold must be positive");
         }
         
@@ -5138,7 +5138,7 @@ public class Rectangle implements Serializable {
      */        
     public static boolean isLocusToRightSide(Point2D point, double left,
             double top, double right, double bottom, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToRightSide(point.getInhomX(), point.getInhomY(), left, 
                 top, right, bottom, threshold);
     }
@@ -5159,7 +5159,7 @@ public class Rectangle implements Serializable {
      */        
     public static boolean isLocusToRightSide(double x, double y, 
             Point2D topLeft, Point2D bottomRight, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToRightSide(x, y, topLeft.getInhomX(), 
                 topLeft.getInhomY(), bottomRight.getInhomX(), 
                 bottomRight.getInhomY(), threshold);
@@ -5180,7 +5180,7 @@ public class Rectangle implements Serializable {
      */        
     public static boolean isLocusToRightSide(Point2D point, Point2D topLeft,
             Point2D bottomRight, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToRightSide(point.getInhomX(), point.getInhomY(), topLeft,
                 bottomRight, threshold);
     }
@@ -5202,7 +5202,7 @@ public class Rectangle implements Serializable {
      */        
     public static boolean isLocusToRightSide(double x, double y, Point2D center,
             double width, double height, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -5228,7 +5228,7 @@ public class Rectangle implements Serializable {
      */        
     public static boolean isLocusToRightSide(Point2D point, Point2D center,
             double width, double height, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToRightSide(point.getInhomX(), point.getInhomY(), center,
                 width, height, threshold);
     }
@@ -5245,7 +5245,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */        
     public boolean isLocusToRightSide(double x, double y, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToRightSide(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -5260,7 +5260,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */        
     public boolean isLocusToRightSide(Point2D point, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToRightSide(point, mTopLeft, mBottomRight, threshold);
     }
     
@@ -5278,7 +5278,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */        
     public static boolean isLocusToRightSide(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isLocusToRightSide(x, y, left, top, right, bottom, 
                 DEFAULT_THRESHOLD);
     }
@@ -5295,7 +5295,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */        
     public static boolean isLocusToRightSide(Point2D point, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isLocusToRightSide(point, left, top, right, bottom, 
                 DEFAULT_THRESHOLD);
     }
@@ -5312,7 +5312,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */        
     public static boolean isLocusToRightSide(double x, double y, 
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return isLocusToRightSide(x, y, topLeft, bottomRight, 
                 DEFAULT_THRESHOLD);
     }
@@ -5327,7 +5327,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */        
     public static boolean isLocusToRightSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isLocusToRightSide(point, topLeft, bottomRight, 
                 DEFAULT_THRESHOLD);
     }
@@ -5345,7 +5345,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */        
     public static boolean isLocusToRightSide(double x, double y, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isLocusToRightSide(x, y, center, width, height, 
                 DEFAULT_THRESHOLD);
     }
@@ -5361,7 +5361,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */        
     public static boolean isLocusToRightSide(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isLocusToRightSide(point, center, width, height, 
                 DEFAULT_THRESHOLD);
     }
@@ -5374,7 +5374,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus to right side of rectangle, false 
      * otherwise.
      */        
-    public boolean isLocusToRightSide(double x, double y){
+    public boolean isLocusToRightSide(double x, double y) {
         return isLocusToRightSide(x, y, DEFAULT_THRESHOLD);
     }
     
@@ -5385,7 +5385,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus to right side of rectangle, false 
      * otherwise.
      */        
-    public boolean isLocusToRightSide(Point2D point){
+    public boolean isLocusToRightSide(Point2D point) {
         return isLocusToRightSide(point, DEFAULT_THRESHOLD);
     }
     
@@ -5407,8 +5407,8 @@ public class Rectangle implements Serializable {
      */        
     public static boolean isLocusToBottomSide(double x, double y, double left,
             double top, double right, double bottom, double threshold)
-            throws IllegalArgumentException{
-        if(threshold < 0.0){
+            throws IllegalArgumentException {
+        if (threshold < 0.0) {
             throw new IllegalArgumentException("threshold must be positive");
         }
         
@@ -5433,7 +5433,7 @@ public class Rectangle implements Serializable {
      */            
     public static boolean isLocusToBottomSide(Point2D point, double left,
             double top, double right, double bottom, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToBottomSide(point.getInhomX(), point.getInhomY(), left,
                 top, right, bottom, threshold);
     }
@@ -5455,7 +5455,7 @@ public class Rectangle implements Serializable {
      */            
     public static boolean isLocusToBottomSide(double x, double y,
             Point2D topLeft, Point2D bottomRight, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToBottomSide(x, y, topLeft.getInhomX(), 
                 topLeft.getInhomY(), bottomRight.getInhomX(), 
                 bottomRight.getInhomY(), threshold);
@@ -5476,7 +5476,7 @@ public class Rectangle implements Serializable {
      */            
     public static boolean isLocusToBottomSide(Point2D point, Point2D topLeft,
             Point2D bottomRight, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToBottomSide(point.getInhomX(), point.getInhomY(), 
                 topLeft, bottomRight, threshold);
     }
@@ -5498,7 +5498,7 @@ public class Rectangle implements Serializable {
      */            
     public static boolean isLocusToBottomSide(double x, double y, 
             Point2D center, double width, double height, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -5524,7 +5524,7 @@ public class Rectangle implements Serializable {
      */            
     public static boolean isLocusToBottomSide(Point2D point, Point2D center,
             double width, double height, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToBottomSide(point.getInhomX(), point.getInhomY(), center,
                 width, height, threshold);
     }
@@ -5535,13 +5535,13 @@ public class Rectangle implements Serializable {
      * @param x x coordinate of point to be checked.
      * @param y y coordinate of point to be checked.
      * @param threshold threshold to use as a margin to determine whether point
-     * is locus to bottom side of retangle.
+     * is locus to bottom side of rectangle.
      * @return true if point is locus to bottom side of rectangle, false 
      * otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
     public boolean isLocusToBottomSide(double x, double y, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToBottomSide(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -5556,7 +5556,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
     public boolean isLocusToBottomSide(Point2D point, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToBottomSide(point, mTopLeft, mBottomRight, threshold);
     }
     
@@ -5574,7 +5574,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */            
     public static boolean isLocusToBottomSide(double x, double y, double left,
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isLocusToBottomSide(x, y, left, top, right, bottom, 
                 DEFAULT_THRESHOLD);
     }
@@ -5591,7 +5591,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */            
     public static boolean isLocusToBottomSide(Point2D point, double left, 
-            double top, double right, double bottom){
+            double top, double right, double bottom) {
         return isLocusToBottomSide(point, left, top, right, bottom, 
                 DEFAULT_THRESHOLD);
     }
@@ -5608,7 +5608,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */            
     public static boolean isLocusToBottomSide(double x, double y, 
-            Point2D topLeft, Point2D bottomRight){
+            Point2D topLeft, Point2D bottomRight) {
         return isLocusToBottomSide(x, y, topLeft, bottomRight, 
                 DEFAULT_THRESHOLD);
     }
@@ -5623,7 +5623,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */            
     public static boolean isLocusToBottomSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isLocusToBottomSide(point, topLeft, bottomRight, 
                 DEFAULT_THRESHOLD);
     }
@@ -5641,7 +5641,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */            
     public static boolean isLocusToBottomSide(double x, double y, 
-            Point2D center, double width, double height){
+            Point2D center, double width, double height) {
         return isLocusToBottomSide(x, y, center, width, height, 
                 DEFAULT_THRESHOLD);
     }
@@ -5657,7 +5657,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */            
     public static boolean isLocusToBottomSide(Point2D point, Point2D center,
-            double width, double height){
+            double width, double height) {
         return isLocusToBottomSide(point, center, width, height, 
                 DEFAULT_THRESHOLD);
     }
@@ -5670,7 +5670,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus to bottom side of rectangle, false 
      * otherwise.
      */            
-    public boolean isLocusToBottomSide(double x, double y){
+    public boolean isLocusToBottomSide(double x, double y) {
         return isLocusToBottomSide(x, y, DEFAULT_THRESHOLD);
     }
     
@@ -5681,7 +5681,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus to bottom side of rectangle, false 
      * otherwise.
      */            
-    public boolean isLocusToBottomSide(Point2D point){
+    public boolean isLocusToBottomSide(Point2D point) {
         return isLocusToBottomSide(point, DEFAULT_THRESHOLD);
     }
     
@@ -5702,8 +5702,8 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocus(double x, double y, double left, double top,
             double right, double bottom, double threshold)
-            throws IllegalArgumentException{
-        if(threshold < 0.0){
+            throws IllegalArgumentException {
+        if (threshold < 0.0) {
             throw new IllegalArgumentException("threshold must be positive");
         }
         
@@ -5729,7 +5729,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocus(Point2D point, double left, double top, 
             double right, double bottom, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToLeftSide(point, left, top, right, bottom, threshold) ||
                 isLocusToTopSide(point, left, top, right, bottom, threshold) ||
                 isLocusToRightSide(point, left, top, right, bottom, threshold) ||
@@ -5751,7 +5751,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocus(double x, double y, Point2D topLeft, 
             Point2D bottomRight, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToLeftSide(x, y, topLeft, bottomRight, threshold) ||
                 isLocusToTopSide(x, y, topLeft, bottomRight, threshold) ||
                 isLocusToRightSide(x, y, topLeft, bottomRight, threshold) ||
@@ -5772,7 +5772,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocus(Point2D point, Point2D topLeft, 
             Point2D bottomRight, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToLeftSide(point, topLeft, bottomRight, threshold) ||
                 isLocusToTopSide(point, topLeft, bottomRight, threshold) ||
                 isLocusToRightSide(point, topLeft, bottomRight, threshold) ||
@@ -5794,7 +5794,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocus(double x, double y, Point2D center, 
             double width, double height, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToLeftSide(x, y, center, width, height, threshold) ||
                 isLocusToTopSide(x, y, center, width, height, threshold) ||
                 isLocusToRightSide(x, y, center, width, height, threshold) ||
@@ -5815,7 +5815,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocus(Point2D point, Point2D center, double width,
             double height, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocusToLeftSide(point, center, width, height, threshold) ||
                 isLocusToTopSide(point, center, width, height, threshold) ||
                 isLocusToRightSide(point, center, width, height, threshold) ||
@@ -5833,7 +5833,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public boolean isLocus(double x, double y, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocus(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -5847,7 +5847,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public boolean isLocus(Point2D point, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return isLocus(point, mTopLeft, mBottomRight, threshold);
     }
 
@@ -5864,7 +5864,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus of rectangle, false otherwise.
      */
     public static boolean isLocus(double x, double y, double left, double top,
-            double right, double bottom){
+            double right, double bottom) {
         return isLocus(x, y, left, top, right, bottom, DEFAULT_THRESHOLD);
     }
     
@@ -5879,7 +5879,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus of rectangle, false otherwise.
      */
     public static boolean isLocus(Point2D point, double left, double top,
-            double right, double bottom){
+            double right, double bottom) {
         return isLocus(point, left, top, right, bottom, DEFAULT_THRESHOLD);
     }
     
@@ -5893,7 +5893,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus of rectangle, false otherwise.
      */
     public static boolean isLocus(double x, double y, Point2D topLeft, 
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isLocus(x, y, topLeft, bottomRight, DEFAULT_THRESHOLD);
     }
     
@@ -5906,7 +5906,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus of rectangle, false otherwise.
      */
     public static boolean isLocus(Point2D point, Point2D topLeft, 
-            Point2D bottomRight){
+            Point2D bottomRight) {
         return isLocus(point, topLeft, bottomRight, DEFAULT_THRESHOLD);
     }
     
@@ -5921,7 +5921,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus of rectangle, false otherwise.
      */
     public static boolean isLocus(double x, double y, Point2D center, 
-            double width, double height){
+            double width, double height) {
         return isLocus(x, y, center, width, height, DEFAULT_THRESHOLD);
     }
     
@@ -5935,7 +5935,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus of rectangle, false otherwise.
      */
     public static boolean isLocus(Point2D point, Point2D center, double width,
-            double height){
+            double height) {
         return isLocus(point, center, width, height, DEFAULT_THRESHOLD);
     }
     
@@ -5946,7 +5946,7 @@ public class Rectangle implements Serializable {
      * @param y y coordinate of point to be checked.
      * @return true if point is locus of rectangle, false otherwise.
      */
-    public boolean isLocus(double x, double y){
+    public boolean isLocus(double x, double y) {
         return isLocus(x, y, DEFAULT_THRESHOLD);
     }
     
@@ -5956,7 +5956,7 @@ public class Rectangle implements Serializable {
      * @param point point to be checked.
      * @return true if point is locus of rectangle, false otherwise.
      */
-    public boolean isLocus(Point2D point){
+    public boolean isLocus(Point2D point) {
         return isLocus(point, DEFAULT_THRESHOLD);
     }
 }

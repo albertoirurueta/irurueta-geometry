@@ -1,16 +1,24 @@
 /*
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.BaseConic
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date July 1, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
+
 import java.io.Serializable;
 
 /**
@@ -19,6 +27,7 @@ import java.io.Serializable;
  * Appropriate subclasses should be used for each conic type: pure conics and
  * dual conics.
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class BaseConic implements Serializable {
     /**
      * Number of rows of one matrix that contains conic parameters.
@@ -53,48 +62,48 @@ public abstract class BaseConic implements Serializable {
     public static final double DEFAULT_SYMMETRIC_THRESHOLD = 1e-12;
     
     /**
-     * Minimum allowed threshold
+     * Minimum allowed threshold.
      */
     public static final double MIN_THRESHOLD = 0.0;
     
     /**
-     * Machine precision
+     * Machine precision.
      */
     private static final double PRECISION = 1e-12;    
 
     
     /**
-     * A element of the matrix defining a conic
+     * A element of the matrix defining a conic.
      */
     protected double mA;
     
     /**
-     * B element of the matrix defining a conic
+     * B element of the matrix defining a conic.
      */    
     protected double mB;
     
     /**
-     * C element of the matrix defining a conic
+     * C element of the matrix defining a conic.
      */    
     protected double mC;
     
     /**
-     * D element of the matrix defining a conic
+     * D element of the matrix defining a conic.
      */    
     protected double mD;
     
     /**
-     * E element of the matrix defining a conic
+     * E element of the matrix defining a conic.
      */    
     protected double mE;
     
     /**
-     * F element of the matrix defining a conic
+     * F element of the matrix defining a conic.
      */    
     protected double mF;
     
     /**
-     * Determines whether this instance is already mNormalized
+     * Determines whether this instance is already mNormalized.
      */
     private boolean mNormalized;
     
@@ -108,7 +117,7 @@ public abstract class BaseConic implements Serializable {
     
     /**
      * Constructor of this class. This constructor accepts every parameter
-     * describing a base conic (parameters a, b, c, d, e, f)
+     * describing a base conic (parameters a, b, c, d, e, f).
      * @param a Parameter A of the base conic
      * @param b Parameter B of the base conic.
      * @param c Parameter C of the base conic.
@@ -123,11 +132,11 @@ public abstract class BaseConic implements Serializable {
     
     /**
      * Constructor. This constructor accepts a Matrix describing a base conic.
-     * @param m 3x3 matrix describing a base conic
+     * @param m 3x3 matrix describing a base conic.
      * @param symmetricThreshold Grade of tolerance to determine whether a 
      * matrix is symmetric or not. It is used because due to the precision of 
      * the CPU, the values may not be exactly equal. (by default: 
-     * DEFAULT_SYMMETRIC_THRESHOLD is used if none is provided)
+     * DEFAULT_SYMMETRIC_THRESHOLD is used if none is provided).
      * @throws NonSymmetricMatrixException Raised when the conic matrix is not
      * symmetric.
      * @throws IllegalArgumentException Raised when the size of the matrix is 
@@ -140,7 +149,7 @@ public abstract class BaseConic implements Serializable {
     
     /**
      * Constructor. This constructor accepts a Matrix describing a base conic.
-     * @param m 3x3 matrix describing a base conic
+     * @param m 3x3 matrix describing a base conic.
      * @throws NonSymmetricMatrixException Raised when the conic matrix is not
      * symmetric.
      * @throws IllegalArgumentException Raised when the size of the matrix is 
@@ -172,7 +181,7 @@ public abstract class BaseConic implements Serializable {
      * Returns parameter C of the given base conic.
      * @return Parameter C of a matrix describing a base conic.
      */
-    public double getC(){
+    public double getC() {
         return mC;
     }
 
@@ -180,7 +189,7 @@ public abstract class BaseConic implements Serializable {
      * Returns parameter D of the given base conic.
      * @return Parameter D of a matrix describing a base conic.
      */
-    public double getD(){
+    public double getD() {
         return mD;
     }
 
@@ -188,7 +197,7 @@ public abstract class BaseConic implements Serializable {
      * Returns parameter E of the given base conic.
      * @return Parameter E of a matrix describing a base conic.
      */
-    public double getE(){
+    public double getE() {
         return mE;
     }
 
@@ -196,13 +205,13 @@ public abstract class BaseConic implements Serializable {
      * Returns parameter F of the given base conic.
      * @return Parameter F of a matrix describing a base conic.
      */
-    public double getF(){
+    public double getF() {
         return mF;
     }
     
     /**
      * This method accepts every parameter describing a base conic (parameters
-     * a, b, c, d, e, f)
+     * a, b, c, d, e, f).
      * @param a Parameter A of the base conic.
      * @param b Parameter B of the base conic.
      * @param c Parameter C of the base conic.
@@ -228,9 +237,9 @@ public abstract class BaseConic implements Serializable {
      * @param symmetricThreshold Grade of tolerance to determine whether a 
      * matrix is symmetric or not. It is used because due the precision of the 
      * CPU, the values may not be exactly equal. (by default: 
-     * DEFAULT_SYMMETRIC_THRESHOLD is used)
+     * DEFAULT_SYMMETRIC_THRESHOLD is used).
      * @throws IllegalArgumentException Raised when the size of the matrix is 
-     * not 3x3
+     * not 3x3.
      * @throws NonSymmetricMatrixException Raised when the conic matrix is not 
      * symmetric.
      */
@@ -259,7 +268,7 @@ public abstract class BaseConic implements Serializable {
      * This matrix must be 3x3 and symmetric.
      * @param m 3x3 Matrix describing a base conic.
      * @throws IllegalArgumentException Raised when the size of the matrix is 
-     * not 3x3
+     * not 3x3.
      * @throws NonSymmetricMatrixException Raised when the conic matrix is not 
      * symmetric.
      */    
@@ -343,7 +352,7 @@ public abstract class BaseConic implements Serializable {
      */
     public void asMatrix(Matrix m) throws IllegalArgumentException {
         
-        if(m.getRows() != BASECONIC_MATRIX_ROW_SIZE ||
+        if (m.getRows() != BASECONIC_MATRIX_ROW_SIZE ||
                 m.getColumns() != BASECONIC_MATRIX_ROW_SIZE) {
             throw new IllegalArgumentException();
         }
@@ -381,8 +390,8 @@ public abstract class BaseConic implements Serializable {
     
     /**
      * Returns boolean indicating whether this base quadric has already been 
-     * normalized
-     * @return True if normalized, false otherwise
+     * normalized.
+     * @return True if normalized, false otherwise.
      */
     public boolean isNormalized() {
         return mNormalized;

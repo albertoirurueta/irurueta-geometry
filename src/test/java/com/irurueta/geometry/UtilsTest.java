@@ -1,55 +1,59 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class UtilsTest {
     
-    public static final double MIN_RADIANS = -Math.PI / 2.0;
-    public static final double MAX_RADIANS = Math.PI / 2.0;
+    private static final double MIN_RADIANS = -Math.PI / 2.0;
+    private static final double MAX_RADIANS = Math.PI / 2.0;
     
-    public static final double MIN_DEGREES = -180.0;
-    public static final double MAX_DEGREES = 180.0;
+    private static final double MIN_DEGREES = -180.0;
+    private static final double MAX_DEGREES = 180.0;
     
-    public static final int MIN_TURNS = 500;
-    public static final int MAX_TURNS = 10000;
+    private static final int MIN_TURNS = 500;
+    private static final int MAX_TURNS = 10000;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-8;
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-6;
     
-    public static final int TIMES = 50;
+    private static final int TIMES = 50;
     
-    public UtilsTest() {
-    }
+    public UtilsTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
     
     @Test
-    public void testConvertToDegrees(){
+    public void testConvertToDegrees() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double radians = randomizer.nextDouble(MIN_RADIANS, MAX_RADIANS);
         double degrees = radians * 180.0 / Math.PI;
@@ -58,7 +62,7 @@ public class UtilsTest {
     }
     
     @Test
-    public void testConvertToRadians(){
+    public void testConvertToRadians() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double degrees = randomizer.nextDouble(MIN_DEGREES, MAX_DEGREES);
         double radians = degrees * Math.PI / 180.0;
@@ -67,8 +71,8 @@ public class UtilsTest {
     }
     
     @Test
-    public void testNormalizeAngleDegrees(){
-        for(int t = 0; t < TIMES; t++){
+    public void testNormalizeAngleDegrees() {
+        for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double degrees = randomizer.nextDouble(MIN_DEGREES, MAX_DEGREES);
             int turns = (randomizer.nextBoolean() ? 1 : -1) * 
@@ -84,10 +88,10 @@ public class UtilsTest {
             assertEquals(degrees, degrees4, ABSOLUTE_ERROR);   
 
             double degrees5 = degrees2;
-            while(degrees5 <= -180.0){
+            while (degrees5 <= -180.0) {
                 degrees5 += 2.0*180.0;
             }
-            while(degrees5 > 180.0){
+            while (degrees5 > 180.0) {
                 degrees5 -= 2.0*180.0;
             }
 
@@ -96,8 +100,8 @@ public class UtilsTest {
     }
     
     @Test
-    public void testNormalizeAngleRadians(){
-        for(int t = 0; t < TIMES; t++){
+    public void testNormalizeAngleRadians() {
+        for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double radians = randomizer.nextDouble(MIN_RADIANS, MAX_RADIANS);
             int turns = (randomizer.nextBoolean() ? 1 : -1) * 
@@ -114,10 +118,10 @@ public class UtilsTest {
             assertEquals(radians, radians4, ABSOLUTE_ERROR);   
             
             double radians5 = radians2;
-            while(radians5 <= -Math.PI){
+            while (radians5 <= -Math.PI) {
                 radians5 += 2.0*Math.PI;
             }
-            while(radians5 > Math.PI){
+            while (radians5 > Math.PI) {
                 radians5 -= 2.0*Math.PI;
             }
 

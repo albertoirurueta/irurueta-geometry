@@ -1,23 +1,28 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.AffineTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 13, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.Point2D;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class AffineTransformation2DRobustEstimatorTest {
@@ -41,8 +46,8 @@ public class AffineTransformation2DRobustEstimatorTest {
         AffineTransformation2DRobustEstimator estimator;
                 
         //create with points and method
-        List<Point2D> inputPoints = new ArrayList<Point2D>();
-        List<Point2D> outputPoints = new ArrayList<Point2D>();
+        List<Point2D> inputPoints = new ArrayList<>();
+        List<Point2D> outputPoints = new ArrayList<>();
         for (int i = 0; i < AffineTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point2D.create());
             outputPoints.add(Point2D.create());
@@ -109,19 +114,19 @@ public class AffineTransformation2DRobustEstimatorTest {
         assertNull(estimator.getCovariance());        
         
         //Force IllegalArgumentException
-        List<Point2D> emptyPoints = new ArrayList<Point2D>();
+        List<Point2D> emptyPoints = new ArrayList<>();
         
         estimator = null;
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromPoints(
                     emptyPoints, outputPoints, RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromPoints(
                     inputPoints, emptyPoints, RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
                                 
         //test with listener and points
@@ -289,19 +294,19 @@ public class AffineTransformation2DRobustEstimatorTest {
                     emptyPoints, outputPoints, qualityScores, 
                     RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromPoints(
                     inputPoints, emptyPoints, qualityScores, 
                     RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromPoints(
                     inputPoints, outputPoints, wrongQualityScores, 
                     RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, points, quality scores and method
@@ -377,19 +382,19 @@ public class AffineTransformation2DRobustEstimatorTest {
                     listener, emptyPoints, outputPoints, qualityScores,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromPoints(
                     listener, inputPoints, emptyPoints, qualityScores,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromPoints(
                     listener, inputPoints, outputPoints, wrongQualityScores,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with points
@@ -411,12 +416,12 @@ public class AffineTransformation2DRobustEstimatorTest {
             estimator = AffineTransformation2DRobustEstimator.createFromPoints(
                     emptyPoints, outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromPoints(
                     inputPoints, emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener and points
@@ -438,12 +443,12 @@ public class AffineTransformation2DRobustEstimatorTest {
             estimator = AffineTransformation2DRobustEstimator.createFromPoints(
                     listener, emptyPoints, outputPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromPoints(
                     listener, inputPoints, emptyPoints);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with points and quality scores
@@ -478,8 +483,8 @@ public class AffineTransformation2DRobustEstimatorTest {
         AffineTransformation2DRobustEstimator estimator;
         
         //create with lines and method
-        List<Line2D> inputLines = new ArrayList<Line2D>();
-        List<Line2D> outputLines = new ArrayList<Line2D>();
+        List<Line2D> inputLines = new ArrayList<>();
+        List<Line2D> outputLines = new ArrayList<>();
         for (int i = 0; i < AffineTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputLines.add(new Line2D());
             outputLines.add(new Line2D());
@@ -546,19 +551,19 @@ public class AffineTransformation2DRobustEstimatorTest {
         assertNull(estimator.getCovariance());        
         
         //Force IllegalArgumentException
-        List<Line2D> emptyLines = new ArrayList<Line2D>();
+        List<Line2D> emptyLines = new ArrayList<>();
         
         estimator = null;
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromLines(
                     emptyLines, outputLines, RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromLines(
                     inputLines, emptyLines, RobustEstimatorMethod.LMedS);
             fail("IllegalArugmentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
                         
         //test with listener and points
@@ -726,19 +731,19 @@ public class AffineTransformation2DRobustEstimatorTest {
                     emptyLines, outputLines, qualityScores, 
                     RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromLines(
                     inputLines, emptyLines, qualityScores, 
                     RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromLines(
                     inputLines, outputLines, wrongQualityScores, 
                     RobustEstimatorMethod.PROMedS);            
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, points, quality scores and method
@@ -814,19 +819,19 @@ public class AffineTransformation2DRobustEstimatorTest {
                     listener, emptyLines, outputLines, qualityScores,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromLines(
                     listener, inputLines, emptyLines, qualityScores,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromLines(
                     listener, inputLines, outputLines, wrongQualityScores,
                     RobustEstimatorMethod.PROMedS);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with points
@@ -848,12 +853,12 @@ public class AffineTransformation2DRobustEstimatorTest {
             estimator = AffineTransformation2DRobustEstimator.createFromLines(
                     emptyLines, outputLines);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromLines(
                     inputLines, emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener and points
@@ -875,12 +880,12 @@ public class AffineTransformation2DRobustEstimatorTest {
             estimator = AffineTransformation2DRobustEstimator.createFromLines(
                     listener, emptyLines, outputLines);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator = AffineTransformation2DRobustEstimator.createFromLines(
                     listener, inputLines, emptyLines);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with points and quality scores

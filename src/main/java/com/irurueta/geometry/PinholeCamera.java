@@ -1,22 +1,25 @@
 /*
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.PinholeCamera
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date November 5, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.Matrix;
-import com.irurueta.algebra.RQDecomposer;
-import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.*;
 import com.irurueta.algebra.Utils;
-import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.geometry.estimators.DLTLinePlaneCorrespondencePinholeCameraEstimator;
 import com.irurueta.geometry.estimators.DLTPointCorrespondencePinholeCameraEstimator;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,41 +34,42 @@ import java.util.List;
  * in other words, the farther an object is, the smaller is represented or
  * parallel lines converge into vanishing points.
  * Pinhole cameras cannot be used for orthographic projections (where 
- * parallelism between lines is preserved and there are no vanishing points)
+ * parallelism between lines is preserved and there are no vanishing points).
  */
+@SuppressWarnings("WeakerAccess")
 public class PinholeCamera extends Camera implements Serializable {
     
     /**
-     * Defines the number of rows of a pinhole camera
+     * Defines the number of rows of a pinhole camera.
      */
     public static final int PINHOLE_CAMERA_MATRIX_ROWS = 3;
     
     /**
-     * Defines the number of columns of a pinhole camera
+     * Defines the number of columns of a pinhole camera.
      */
     public static final int PINHOLE_CAMERA_MATRIX_COLS = 4;
     
     /**
      * Indicates if camera should be decomposed into intrinsic parameters and
-     * rotation by default after creation or setting new parameters
+     * rotation by default after creation or setting new parameters.
      */
     public static final boolean DEFAULT_DECOMPOSE_INTRINSICS_AND_ROTATION = 
             true;
     
     /**
      * Indicates if camera should be decomposed to obtain its center after
-     * creation or setting new parameters
+     * creation or setting new parameters.
      */
     public static final boolean DEFAULT_DECOMPOSE_CAMERA_CENTER = true;
     
     /**
-     * Threshold to determine whether a point is in front or behind the camera
+     * Threshold to determine whether a point is in front or behind the camera.
      */
     public static final double FRONT_THRESHOLD = 0.0;
     
     /**
      * Threshold to determine camera sign. If camera sign is negative, its sign
-     * must be fixed (multiplying its matrix by -1) so that point cheilarity
+     * must be fixed (multiplying its matrix by -1) so that point cheirality
      * to determine whether points are in front or behind the camera can be
      * correctly determined. When sign is reversed, cheirality gets reversed 
      * too. Notice that camera matrix is expressed in homogeneous coordinates,
@@ -74,24 +78,24 @@ public class PinholeCamera extends Camera implements Serializable {
     public static final double SIGN_THRESHOLD = 0.0;
     
     /**
-     * Constant defining the number of inhomogeneous coordinates
+     * Constant defining the number of inhomogeneous coordinates.
      */
     public static final int INHOM_COORDS = 3;
     
     /**
-     * Constant defining a tiny value close to machine precision
+     * Constant defining a tiny value close to machine precision.
      */
     public static final double EPS = 1e-12;
     
     /**
-     * Internal matrix defining this camera
+     * Internal matrix defining this camera.
      */
     private Matrix mInternalMatrix;    
     
     /**
      * Boolean indicating whether this camera has already been normalized.
      * Normalization can help to increase numerical accuracy on camera 
-     * computations
+     * computations.
      */
     private boolean mNormalized;
     
@@ -104,17 +108,17 @@ public class PinholeCamera extends Camera implements Serializable {
     private boolean mCameraSignFixed;
     
     /**
-     * Intrinsic parameters of the camera after decomposition
+     * Intrinsic parameters of the camera after decomposition.
      */
     private PinholeCameraIntrinsicParameters mIntrinsicParameters;    
     
     /**
-     * 3D rotation of the camera after decomposition
+     * 3D rotation of the camera after decomposition.
      */
     private Rotation3D mCameraRotation;
     
     /**
-     * Camera center after decomposition
+     * Camera center after decomposition.
      */
     private Point3D mCameraCenter;        
     
@@ -140,8 +144,8 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Constructor.
      * Creates a camera using provided matrix.
-     * @param internalMatrix matrix to create the camera from
-     * @throws WrongSizeException If provided matrix is not 3x4
+     * @param internalMatrix matrix to create the camera from.
+     * @throws WrongSizeException If provided matrix is not 3x4.
      */
     public PinholeCamera(Matrix internalMatrix) throws WrongSizeException {
         super();
@@ -158,10 +162,10 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Constructor.
      * Creates a camera using provided intrinsic parameters, 3D rotation and
-     * 2D coordinates of the world origin
-     * @param intrinsicParameters Intrinsic parameters of the camera
-     * @param rotation 3D rotation of the camera
-     * @param originImageCoordinates 2D coordinates of the world origin
+     * 2D coordinates of the world origin.
+     * @param intrinsicParameters Intrinsic parameters of the camera.
+     * @param rotation 3D rotation of the camera.
+     * @param originImageCoordinates 2D coordinates of the world origin.
      */
     public PinholeCamera(PinholeCameraIntrinsicParameters intrinsicParameters,
             Rotation3D rotation, Point2D originImageCoordinates) {
@@ -184,10 +188,10 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Constructor.
      * Creates a camera using provided intrinsic parameters, 3D rotation and
-     * 3D coordinates of the camera center
-     * @param intrinsicParameters Intrinsic parameters of the camera
-     * @param rotation 3D rotation of the camera
-     * @param cameraCenter 3D coordinates of the camera center
+     * 3D coordinates of the camera center.
+     * @param intrinsicParameters Intrinsic parameters of the camera.
+     * @param rotation 3D rotation of the camera.
+     * @param cameraCenter 3D coordinates of the camera center.
      */
     public PinholeCamera(PinholeCameraIntrinsicParameters intrinsicParameters,
             Rotation3D rotation, Point3D cameraCenter) {
@@ -209,27 +213,27 @@ public class PinholeCamera extends Camera implements Serializable {
     
     /**
      * Creates an instance of a pinhole camera by estimating its parameters from
-     * 2D-3D point correspondences
-     * @param point3D1 1st 3D point
-     * @param point3D2 2nd 3D point
-     * @param point3D3 3rd 3D point
-     * @param point3D4 4th 3D point
-     * @param point3D5 5th 3D point
-     * @param point3D6 6th 3D point
+     * 2D-3D point correspondences.
+     * @param point3D1 1st 3D point.
+     * @param point3D2 2nd 3D point.
+     * @param point3D3 3rd 3D point.
+     * @param point3D4 4th 3D point.
+     * @param point3D5 5th 3D point.
+     * @param point3D6 6th 3D point.
      * @param point2D1 1st 2D point corresponding to the projection of 1st 3D 
-     * point
+     * point.
      * @param point2D2 2nd 2D point corresponding to the projection of 2nd 3D 
-     * point
+     * point.
      * @param point2D3 3rd 2D point corresponding to the projection of 3rd 3D
-     * point
+     * point.
      * @param point2D4 4th 2D point corresponding to the projection of 4th 3D
-     * point
+     * point.
      * @param point2D5 5th 2D point corresponding to the projection of 5th 3D
-     * point
+     * point.
      * @param point2D6 6th 2D point corresponding to the projection of 6th 3D
-     * point
+     * point.
      * @throws CameraException if camera cannot be estimated using provided
-     * points because of a degeneracy   
+     * points because of a degeneracy.
      */
     public PinholeCamera(Point3D point3D1, 
             Point3D point3D2, Point3D point3D3, Point3D point3D4, 
@@ -257,16 +261,16 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Creates an instance of a pinhole camera by estimating its parameters from
      * line/plane correspondences.
-     * @param plane1 1st 3D plane
-     * @param plane2 2nd 3D plane
-     * @param plane3 3rd 3D plane
-     * @param plane4 4th 3D plane
-     * @param line1 1st 2D line corresponding to 1st 3D plane
-     * @param line2 2nd 2D line corresponding to 2nd 3D plane
-     * @param line3 3rd 2D line corresponding to 3rd 3D plane
-     * @param line4 4th 2D line corresponding to 4th 3D plane
+     * @param plane1 1st 3D plane.
+     * @param plane2 2nd 3D plane.
+     * @param plane3 3rd 3D plane.
+     * @param plane4 4th 3D plane.
+     * @param line1 1st 2D line corresponding to 1st 3D plane.
+     * @param line2 2nd 2D line corresponding to 2nd 3D plane.
+     * @param line3 3rd 2D line corresponding to 3rd 3D plane.
+     * @param line4 4th 2D line corresponding to 4th 3D plane.
      * @throws CameraException if camera cannot be estimated using provided
-     * lines and planes because of a degeneracy
+     * lines and planes because of a degeneracy.
      */
     public PinholeCamera(Plane plane1, Plane plane2, Plane plane3, Plane plane4, 
             Line2D line1, Line2D line2, Line2D line3, Line2D line4) 
@@ -291,8 +295,8 @@ public class PinholeCamera extends Camera implements Serializable {
         
     /**
      * Projects a 3D point into a 2D point in a retinal plane.
-     * @param inputPoint 3D point to be projected
-     * @param result 2D projected point
+     * @param inputPoint 3D point to be projected.
+     * @param result 2D projected point.
      */    
     @Override
     public void project(Point3D inputPoint, Point2D result) {
@@ -324,9 +328,9 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Backprojects a line into a plane and stores the result into provided
      * instance.
-     * @param line 2D line to be backprojected
+     * @param line 2D line to be backprojected.
      * @param result Instance where computed backprojected 3D plane data is 
-     * stored
+     * stored.
      */
     @Override
     public void backProject(Line2D line, Plane result) {
@@ -363,9 +367,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * be computed as a linear combination between the camera center and the
      * estimated backprojeted point.
      * @param point 2D point to be backprojected.
-     * @param result Instance where backprojected 3D point data will be stored
+     * @param result Instance where backprojected 3D point data will be stored.
      * @throws CameraException thrown if 2D point cannot be backprojected 
-     * because camera is degenerate
+     * because camera is degenerate.
      */
     @Override
     public void backProject(Point2D point, Point3D result) 
@@ -407,10 +411,10 @@ public class PinholeCamera extends Camera implements Serializable {
 
     /**
      * Backprojects a 2D conic into a 3D quadric and stores the result into
-     * provided instance
-     * @param conic 2D conic to be backprojected
+     * provided instance.
+     * @param conic 2D conic to be backprojected.
      * @param result Instance where data of backprojected 3D quadric will be
-     * stored
+     * stored.
      */
     @Override
     public void backProject(Conic conic, Quadric result) {
@@ -435,10 +439,10 @@ public class PinholeCamera extends Camera implements Serializable {
 
     /**
      * Projects a 3D dual quadric into a 2D dual conic and stores the result
-     * into provided instance
-     * @param dualQuadric 3D dual quadric to be projected
+     * into provided instance.
+     * @param dualQuadric 3D dual quadric to be projected.
      * @param result Instance where data of projected 2D dual conic will be
-     * stored
+     * stored.
      */
     @Override
     public void project(DualQuadric dualQuadric, DualConic result) {
@@ -478,7 +482,7 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Decomposes current camera matrix to determine its camera center. 
      * Intrinsic parameters and rotation will be decomposed as well depending on
-     * provided value
+     * provided value.
      * @param decomposeIntrinsicsAndRotation if true, intrinsic parameters and
      * rotation are computed as well.
      * @throws CameraException thrown if camera matrix is degenerate.
@@ -500,7 +504,7 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public void decompose(boolean decomposeIntrinsicsAndRotation,
             boolean decomposeCameraCenter) throws CameraException {
-        //clean up previous itnrinsics, rotation and camera center
+        //clean up previous intrinsics, rotation and camera center
         mIntrinsicParameters = null;
         mCameraRotation = null;
         mCameraCenter = null;
@@ -581,8 +585,8 @@ public class PinholeCamera extends Camera implements Serializable {
      * When camera sign has been fixed cheirality can be correctly determined.
      * Cheirality indicates if points are located in front or behind the camera.
      * Notice that when camera parameters are modified, this parameter is set to
-     * false again
-     * @return true if camera sign has been fixed, false otherwise
+     * false again.
+     * @return true if camera sign has been fixed, false otherwise.
      */
     public boolean isCameraSignFixed() {
         return mCameraSignFixed;
@@ -606,14 +610,14 @@ public class PinholeCamera extends Camera implements Serializable {
      * Returns camera intrinsic parameters if camera has already been decomposed
      * and intrinsic parameters are available.
      * Intrinsic parameters contain information related to internal parameters
-     * of a camera, usually related to the camera lens and sensor
-     * @return camera intrinsic parameters
+     * of a camera, usually related to the camera lens and sensor.
+     * @return camera intrinsic parameters.
      * @throws NotAvailableException if camera intrinsic parameters are not 
      * available yet.
      */
     public PinholeCameraIntrinsicParameters getIntrinsicParameters()
             throws NotAvailableException {
-        if(!areIntrinsicParametersAvailable()) {
+        if (!areIntrinsicParametersAvailable()) {
             throw new NotAvailableException();
         }
 
@@ -621,7 +625,7 @@ public class PinholeCamera extends Camera implements Serializable {
     }
     
     /**
-     * Returns a copy of internal matrix to avoid malitious modifications.
+     * Returns a copy of internal matrix to avoid malicious modifications.
      * @return a copy of the internal camera matrix.
      */
     public Matrix getInternalMatrix() {
@@ -655,7 +659,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * intrinsic parameters are requested). And become unavailable when any
      * camera parameters are modified.
      * @return true if camera intrinsic parameters are available, false 
-     * otherwise
+     * otherwise.
      */
     public boolean areIntrinsicParametersAvailable() {
         return mIntrinsicParameters != null;
@@ -675,9 +679,9 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Sets camera rotation of this camera.
      * When setting rotation the camera sign becomes unknown and the camera
-     * becomes non-normalized
-     * @param cameraRotation Camera 3D rotation to be set
-     * @throws CameraException if there are numerical instabilities
+     * becomes non-normalized.
+     * @param cameraRotation Camera 3D rotation to be set.
+     * @throws CameraException if there are numerical instabilities.
      */
     public void setCameraRotation(Rotation3D cameraRotation) 
             throws CameraException {
@@ -710,8 +714,8 @@ public class PinholeCamera extends Camera implements Serializable {
     
     /**
      * Combines current camera rotation with provided rotation.
-     * @param cameraRotation Camera 3D rotation to be added to current rotation
-     * @throws CameraException if there are numerical instabilities
+     * @param cameraRotation Camera 3D rotation to be added to current rotation.
+     * @throws CameraException if there are numerical instabilities.
      */
     public void rotate(Rotation3D cameraRotation) throws CameraException {
         if (!isCameraRotationAvailable()) {
@@ -727,11 +731,11 @@ public class PinholeCamera extends Camera implements Serializable {
     
     /**
      * Modifies camera so that it points to provided point while keeping the
-     * camera center
-     * @param point Point to look at
+     * camera center.
+     * @param point Point to look at.
      * @throws CameraException thrown if operation cannot be done. This happens
      * usually when point is located very close to the camera center. In those
-     * situations orientation cannot be reliably computed
+     * situations orientation cannot be reliably computed.
      */
     public void pointAt(Point3D point) throws CameraException {
         try {
@@ -858,10 +862,10 @@ public class PinholeCamera extends Camera implements Serializable {
      * Returns a 3D point indicating camera center (i.e. location) if center
      * has already been computed and is available for retrieval.
      * If camera center is not available, camera must be decomposed before 
-     * calling this method
-     * @return camera center
+     * calling this method.
+     * @return camera center.
      * @throws NotAvailableException if camera center is not yet available for
-     * retrieval
+     * retrieval.
      */
     public Point3D getCameraCenter() throws NotAvailableException {
         if (!isCameraCenterAvailable()) {
@@ -873,8 +877,8 @@ public class PinholeCamera extends Camera implements Serializable {
     
     /**
      * Indicates if camera center has been decomposed and is available for 
-     * retrieval
-     * @return true if camera center is available, false otherwise
+     * retrieval.
+     * @return true if camera center is available, false otherwise.
      */
     public boolean isCameraCenterAvailable() {
         return mCameraCenter != null;
@@ -882,7 +886,7 @@ public class PinholeCamera extends Camera implements Serializable {
     
     /**
      * Sets 3D coordinates of camera center.
-     * When setting camera center camera becomes not normalized
+     * When setting camera center camera becomes not normalized.
      * @param cameraCenter camera center to be set.
      */
     public void setCameraCenter(Point3D cameraCenter) {
@@ -915,8 +919,8 @@ public class PinholeCamera extends Camera implements Serializable {
      * Sets camera intrinsic parameters and camera 3D rotation.
      * Intrinsic parameters indicate internal camera parameters related to
      * camera lens and camera sensor and rotation indicates camera orientation.
-     * @param intrinsicParameters intrinsic camera parameters to be set
-     * @param rotation 3D camera rotation to be set
+     * @param intrinsicParameters intrinsic camera parameters to be set.
+     * @param rotation 3D camera rotation to be set.
      */
     public void setIntrinsicParametersAndRotation(
             PinholeCameraIntrinsicParameters intrinsicParameters,
@@ -951,10 +955,10 @@ public class PinholeCamera extends Camera implements Serializable {
      * camera lens and sensor, and extrinsic parameters are parameters that
      * indicate camera location and orientation by providing the projected 
      * coordinates of world origin and the camera 3D rotation.
-     * @param intrinsicParameters intrinsic parameters to be set
-     * @param rotation camera rotation to be set
+     * @param intrinsicParameters intrinsic parameters to be set.
+     * @param rotation camera rotation to be set.
      * @param originImagecoordinates projected coordinates of world origin to be 
-     * set
+     * set.
      */
     public final void setIntrinsicAndExtrinsicParameters(
             PinholeCameraIntrinsicParameters intrinsicParameters,
@@ -969,9 +973,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * camera lens and sensor, and extrinsic parameters are parameters that
      * indicate camera location and orientation by providing camera center
      * and the camera 3D rotation.
-     * @param intrinsicParameters intrinsic parameters to be set
-     * @param rotation camera rotation to be set
-     * @param cameraCenter location of camera center to be set
+     * @param intrinsicParameters intrinsic parameters to be set.
+     * @param rotation camera rotation to be set.
+     * @param cameraCenter location of camera center to be set.
      */
     public final void setIntrinsicAndExtrinsicParameters(
             PinholeCameraIntrinsicParameters intrinsicParameters,
@@ -983,7 +987,7 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Returns the projected 2D coordinates of the x axis, which corresponds to
      * its vanishing point.
-     * @return vanishing point of x axis
+     * @return vanishing point of x axis.
      */
     public Point2D getXAxisVanishingPoint() {
         Point2D result = Point2D.create();
@@ -994,7 +998,7 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Computes the projected 2D coordinates of the x axis, which corresponds to
      * its vanishing point.
-     * @param result 2D point where vanishing point of x axis will be stored
+     * @param result 2D point where vanishing point of x axis will be stored.
      */
     public void xAxisVanishingPoint(Point2D result) {
         
@@ -1007,7 +1011,7 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Returns the projected 2D coordinates of the y axis, which corresponds to
      * its vanishing point.
-     * @return vanishing point of y axis
+     * @return vanishing point of y axis.
      */
     public Point2D getYAxisVanishingPoint() {
         Point2D result = Point2D.create();
@@ -1018,7 +1022,7 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Computes the projected 2D coordinates of the y axis, which corresponds to
      * its vanishing point.
-     * @param result 2D point where vanishing point of y axis will be stored
+     * @param result 2D point where vanishing point of y axis will be stored.
      */
     public void yAxisVanishingPoint(Point2D result) {
         
@@ -1031,7 +1035,7 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Returns the projected 2D coordinates of the z axis, which corresponds to
      * its vanishing point.
-     * @return vanishing point of z axis
+     * @return vanishing point of z axis.
      */
     public Point2D getZAxisVanishingPoint() {
         Point2D result = Point2D.create();
@@ -1042,7 +1046,7 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Computes the projected 2D coordinates of the z axis, which corresponds to
      * its vanishing point.
-     * @param result 2D point where vanishing point of z axis will be stored
+     * @param result 2D point where vanishing point of z axis will be stored.
      */
     public void zAxisVanishingPoint(Point2D result) {
         
@@ -1054,7 +1058,7 @@ public class PinholeCamera extends Camera implements Serializable {
     
     /**
      * Returns the projected 2D coordinates of the world origin (0, 0, 0).
-     * @return projected point of world origin
+     * @return projected point of world origin.
      */
     public Point2D getImageOfWorldOrigin() {
         Point2D result = Point2D.create();
@@ -1065,7 +1069,7 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Computes the projected 2D coordinates of the world origin (0, 0, 0).
      * @param result 2D point where projected point of world origin will be 
-     * stored
+     * stored.
      */
     public void imageOfWorldOrigin(Point2D result) {
         
@@ -1078,7 +1082,7 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Sets the projected 2D coordinates of the x axis, which corresponds to its
      * vanishing point.
-     * @param xAxisVanishingPoint vanishing point of x axis to be set
+     * @param xAxisVanishingPoint vanishing point of x axis to be set.
      */
     public void setXAxisVanishingPoint(Point2D xAxisVanishingPoint) {
         xAxisVanishingPoint.normalize(); //to increase accuracy
@@ -1099,7 +1103,7 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Sets the projected 2D coordinates of the y axis, which corresponds to its
      * vanishing point.
-     * @param yAxisVanishingPoint vanishing point of y axis to be set
+     * @param yAxisVanishingPoint vanishing point of y axis to be set.
      */
     public void setYAxisVanishingPoint(Point2D yAxisVanishingPoint) {
         yAxisVanishingPoint.normalize(); //to increase accuracy
@@ -1120,7 +1124,7 @@ public class PinholeCamera extends Camera implements Serializable {
     /**
      * Sets the projected 2D coordinates of the z axis, which corresponds to its
      * vanishing point.
-     * @param zAxisVanishingPoint vanishing point of z axis to be set
+     * @param zAxisVanishingPoint vanishing point of z axis to be set.
      */
     public void setZAxisVanishingPoint(Point2D zAxisVanishingPoint) {
         zAxisVanishingPoint.normalize(); //to increase accuracy
@@ -1161,7 +1165,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * Returns plane formed by x and z retinal axes. x axis is taken respect the 
      * projected camera coordinates (i.e. retinal plane), and z axis just points
      * in the direction that the camera is looking at.
-     * @return horizontal plane respect camera retinal plane
+     * @return horizontal plane respect camera retinal plane.
      */
     public Plane getHorizontalAxisPlane() {
         Plane result = new Plane();
@@ -1173,7 +1177,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * Computes the plane formed by x and z retinal axes. x axis is taken 
      * respect the projected camera coordinates (i.e. retinal plane), and z axis 
      * just points in the direction that the camera is looking at.
-     * @param result plane where results will be stored
+     * @param result plane where results will be stored.
      */
     public void horizontalAxisPlane(Plane result) {
         
@@ -1188,7 +1192,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * Returns plane formed by y and z retinal axes. y axis is taken respect the 
      * projected camera coordinates (i.e. retinal plane), and z axis just points
      * in the direction that the camera is looking at.
-     * @return vertical plane respect camera retinal plane
+     * @return vertical plane respect camera retinal plane.
      */
     public Plane getVerticalAxisPlane() {
         Plane result = new Plane();
@@ -1200,7 +1204,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * Computes the plane formed by y and z retinal axes. y axis is taken 
      * respect the projected camera coordinates (i.e. retinal plane), and z axis
      * just point in the direction that the camera is looking at.
-     * @param result plane where results will be stored
+     * @param result plane where results will be stored.
      */
     public void verticalAxisPlane(Plane result) {
         //use first row of camera matrix to set plane
@@ -1228,7 +1232,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * points get projected). The principal plane director vector always points
      * in the direction that the camera is looking at, and the camera center is
      * locus of the principal plane.
-     * @param result plane where results will be stored
+     * @param result plane where results will be stored.
      */
     public void principalPlane(Plane result) {
         //use third row of camera matrix to set plane
@@ -1243,7 +1247,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * projected camera coordinates (i.e. retinal plane), and z axis just points
      * in the direction that the camera is looking at.
      * @param horizontalAxisPlane horizontal plane respect camera retinal plane
-     * to be set
+     * to be set.
      */
     public void setHorizontalAxisPlane(Plane horizontalAxisPlane) {
         horizontalAxisPlane.normalize(); //to increase accuracy
@@ -1268,7 +1272,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * projected camera coordinates (i.e. retinal plane), and z axis just points
      * in the direction that the camera is looking at.
      * @param verticalAxisPlane vertical plane respect camera retinal plane to
-     * be set
+     * be set.
      */
     public void setVerticalAxisPlane(Plane verticalAxisPlane) {
         verticalAxisPlane.normalize(); //to increase accuracy
@@ -1357,9 +1361,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * Returns the principal axis as an array consisting of the x,y,z 
      * coordinates of the director vector of the principal plane. Hence, the
      * principal axis contains the direction that the camera is looking at.
-     * @return principal axis as an array
+     * @return principal axis as an array.
      * @throws CameraException if there is numerical instability in camera
-     * parameters
+     * parameters.
      */
     public double[] getPrincipalAxisArray() throws CameraException {
         double[] result = new double[PINHOLE_CAMERA_MATRIX_ROWS];
@@ -1371,10 +1375,10 @@ public class PinholeCamera extends Camera implements Serializable {
      * Computes the principal axis as an array consisting of the x,y,z 
      * coordinates of the director vector of the principal plane. Hence, the
      * principal axis contains the direction that the camera is looking at.
-     * @param result array where principal axis coordinates will be stored
-     * @throws IllegalArgumentException if provided array does not have length 3
+     * @param result array where principal axis coordinates will be stored.
+     * @throws IllegalArgumentException if provided array does not have length 3.
      * @throws CameraException if there is numerical instability in camera 
-     * parameters
+     * parameters.
      */
     public void principalAxisArray(double[] result) 
             throws IllegalArgumentException, CameraException {
@@ -1414,8 +1418,8 @@ public class PinholeCamera extends Camera implements Serializable {
      * cheirality), when sign is negative, point cheirality is reversed and 
      * needs to be fixed.
      * @return 1.0 if camera sign is correct, or -1.0 if camera sign needs to be
-     * reversed
-     * @throws CameraException if there is numerical instability
+     * reversed.
+     * @throws CameraException if there is numerical instability.
      */
     public double getCameraSign() throws CameraException {
         return getCameraSign(SIGN_THRESHOLD);
@@ -1436,7 +1440,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * or negative. Usually threshold is a very small value close to zero
      * @return 1.0 if camera sign is correct, or -1.0 if camera sign needs to be
      * reversed.
-     * @throws CameraException if there is numerical instability
+     * @throws CameraException if there is numerical instability.
      */
     public double getCameraSign(double threshold) throws CameraException {
         try {
@@ -1459,9 +1463,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * Returns the depth of provided point respect to camera center.
      * A positive value indicates that point is in front of the camera, a 
      * negative value indicates that point is behind the camera.
-     * @param point point to be checked
-     * @return depth of provided point respect to camera center
-     * @throws CameraException if there is numerical instability
+     * @param point point to be checked.
+     * @return depth of provided point respect to camera center.
+     * @throws CameraException if there is numerical instability.
      */
     public double getDepth(Point3D point) throws CameraException {
         if (!isCameraCenterAvailable()) {
@@ -1486,9 +1490,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * Returns the depth of provided points respect to camera center.
      * A positive value indicates that point is in front of the camera, a
      * negative value indicates that point is behind the camera.
-     * @param points points to be checked
-     * @return depth of provided points respect to camera center
-     * @throws CameraException if there is numerical instability
+     * @param points points to be checked.
+     * @return depth of provided points respect to camera center.
+     * @throws CameraException if there is numerical instability.
      */
     public List<Double> getDepths(List<Point3D> points) throws CameraException {
         List<Double> depths = new ArrayList<>(points.size());
@@ -1501,14 +1505,14 @@ public class PinholeCamera extends Camera implements Serializable {
      * the result in provided result list.
      * A positive value indicates that point is in front of the camera, a
      * negative value indicates that point is behind the camera.
-     * @param points points to be checked
-     * @param result list where depths of provided points will be stored
-     * @throws CameraException if there is numerical instability
+     * @param points points to be checked.
+     * @param result list where depths of provided points will be stored.
+     * @throws CameraException if there is numerical instability.
      */
     public void depths(List<Point3D> points, List<Double> result) 
             throws CameraException {
         result.clear();
-        for(Point3D point : points){
+        for (Point3D point : points) {
             result.add(getDepth(point));
         }
     }
@@ -1520,10 +1524,10 @@ public class PinholeCamera extends Camera implements Serializable {
      * Cheirality is less expensive to compute than point depth, for that reason
      * when trying to determine if a point is in front or behind the camera is
      * preferable to check cheirality sign rather than depth sign.
-     * @param point point to be checked
+     * @param point point to be checked.
      * @return a positive value if point is in front of the camera, a negative
-     * value otherwise
-     * @throws CameraException if there is numerical instability
+     * value otherwise.
+     * @throws CameraException if there is numerical instability.
      */
     public double getCheirality(Point3D point) throws CameraException {
         
@@ -1559,9 +1563,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * Cheirality is less expensive to compute than point depth, for that reason
      * when trying to determine if a poitn is in front or behind the camera it
      * is preferable to check cheirality sign rather than depth sign.
-     * @param points list of points to be checked
+     * @param points list of points to be checked.
      * @return a list of cheirality values corresponding to provided points.
-     * @throws CameraException if there is numerical instability
+     * @throws CameraException if there is numerical instability.
      */
     public List<Double> getCheiralities(List<Point3D> points) 
             throws CameraException {
@@ -1578,9 +1582,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * Cheirality is less expensive to compute than point depth, for that reason
      * when trying to determine if a poitn is in front or behind the camera it
      * is preferable to check cheirality sign rather than depth sign.
-     * @param points list of points to be checked
-     * @param result list where cheiralities will be stored
-     * @throws CameraException if there is numerical instability
+     * @param points list of points to be checked.
+     * @param result list where cheiralities will be stored.
+     * @throws CameraException if there is numerical instability.
      */
     public void cheiralities(List<Point3D> points, List<Double> result) 
             throws CameraException {
@@ -1591,10 +1595,10 @@ public class PinholeCamera extends Camera implements Serializable {
     }
     
     /**
-     * Determines if a given point is located in front of the camera
-     * @param point point to be checked
-     * @return true if point is in front of the camera, false otherwise
-     * @throws CameraException if there is numerical instability
+     * Determines if a given point is located in front of the camera.
+     * @param point point to be checked.
+     * @return true if point is in front of the camera, false otherwise.
+     * @throws CameraException if there is numerical instability.
      */
     public boolean isPointInFrontOfCamera(Point3D point) throws CameraException {
         return isPointInFrontOfCamera(point, FRONT_THRESHOLD);
@@ -1602,12 +1606,12 @@ public class PinholeCamera extends Camera implements Serializable {
     
     /**
      * Determines if a given point is located in front of the camera up to given
-     * threshold
-     * @param point point to be checked
+     * threshold.
+     * @param point point to be checked.
      * @param threshold a threshold which typically is a small value close to 
-     * zero
-     * @return true if point is in front of the camera, false otherwise
-     * @throws CameraException if there is numerical instability
+     * zero.
+     * @return true if point is in front of the camera, false otherwise.
+     * @throws CameraException if there is numerical instability.
      */
     public boolean isPointInFrontOfCamera(Point3D point, double threshold) 
             throws CameraException {
@@ -1616,13 +1620,13 @@ public class PinholeCamera extends Camera implements Serializable {
     
     /**
      * Returns list indicating if corresponding provided points are located in
-     * front of the camera
-     * @param points points to be checked
+     * front of the camera.
+     * @param points points to be checked.
      * @param threshold a threshold which typically is a small value close to
-     * zero
+     * zero.
      * @return a list of booleans indicating if the corresponding provided point
      * is located in front of the camera or not.
-     * @throws CameraException if there is numerical instability
+     * @throws CameraException if there is numerical instability.
      */
     public List<Boolean> arePointsInFrontOfCamera(List<Point3D> points, 
             double threshold) throws CameraException {
@@ -1633,11 +1637,11 @@ public class PinholeCamera extends Camera implements Serializable {
     
     /**
      * Returns list indicating if corresponding provided points are located in
-     * front of the camera
-     * @param points points to be checked
+     * front of the camera.
+     * @param points points to be checked.
      * @return a list of booleans indicating if the corresponding provided point
      * is located in front of the camera or not.
-     * @throws CameraException if there is numerical instability
+     * @throws CameraException if there is numerical instability.
      */
     public List<Boolean> arePointsInFrontOfCamera(List<Point3D> points)
             throws CameraException {
@@ -1646,12 +1650,12 @@ public class PinholeCamera extends Camera implements Serializable {
     
     /**
      * Computes list indicating if corresponding provided points are located in
-     * front of the camera or not
-     * @param points points to be checked
-     * @param result list where results will be stored
+     * front of the camera or not.
+     * @param points points to be checked.
+     * @param result list where results will be stored.
      * @param threshold a threshold which typically is a small value close to
-     * zero
-     * @throws CameraException if there is numerical instability
+     * zero.
+     * @throws CameraException if there is numerical instability.
      */
     public void arePointsInFrontOfCamera(List<Point3D> points, 
             List<Boolean> result, double threshold) throws CameraException {
@@ -1664,10 +1668,10 @@ public class PinholeCamera extends Camera implements Serializable {
     
     /**
      * COmputes list indicating if corresponding provided points are located in
-     * front of the camera or not
-     * @param points points to be checked
-     * @param result list where results will be stored
-     * @throws CameraException if there is numerical instability
+     * front of the camera or not.
+     * @param points points to be checked.
+     * @param result list where results will be stored.
+     * @throws CameraException if there is numerical instability.
      */
     public void arePointsInFrontOfCamera(List<Point3D> points, 
             List<Boolean> result) throws CameraException {
@@ -1678,7 +1682,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * Creates an instance of PinholeCamera. Created instance is a canonical
      * camera equal to the 3x4 identity, which means that camera is located at
      * the origin with no translation or rotation.
-     * @return a canonical pinhole camera
+     * @return a canonical pinhole camera.
      */
     public static PinholeCamera createCanonicalCamera() {
         return new PinholeCamera();
@@ -1686,8 +1690,8 @@ public class PinholeCamera extends Camera implements Serializable {
     
     /**
      * Decompose camera matrix 3x3 left minor and computes camera intrinsic 
-     * parameters and rotation
-     * @throws CameraException if there is numerical instability
+     * parameters and rotation.
+     * @throws CameraException if there is numerical instability.
      */
     private void computeIntrinsicsAndRotation() throws CameraException {
         try {
@@ -1742,20 +1746,18 @@ public class PinholeCamera extends Camera implements Serializable {
         
             Matrix mDiag = Matrix.diagonal(vDiag);
             Matrix mDiag2 = Matrix.diagonal(vDiag2);
-        
-            Matrix mIntrinsics = R;
-            mIntrinsics.multiply(mDiag);
-        
-            Matrix mRotation = mDiag2;
-            mRotation.multiply(Q);
+
+            R.multiply(mDiag);
+
+            mDiag2.multiply(Q);
         
             //thresholds should not be a problem and so we disable the change of
             //throwing any exception by setting infinity threshold (and ignoring
             //GeometryException)
             mIntrinsicParameters = new PinholeCameraIntrinsicParameters(
-                    mIntrinsics, Double.POSITIVE_INFINITY);
+                    R, Double.POSITIVE_INFINITY);
         
-            mCameraRotation = new MatrixRotation3D(mRotation, 
+            mCameraRotation = new MatrixRotation3D(mDiag2,
                     Double.POSITIVE_INFINITY);
         } catch (AlgebraException e) {
             throw new CameraException(e);
@@ -1766,9 +1768,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * Computes camera center using singular value decomposition. This method
      * is valid even when center is located at infinity (w = 0), although it is 
      * computationally more complex than other methods. This is the default 
-     * method used when decomposing a camera and computing its center
-     * @return camera center
-     * @throws CameraException if there is numerical instability
+     * method used when decomposing a camera and computing its center.
+     * @return camera center.
+     * @throws CameraException if there is numerical instability.
      */
     public Point3D computeCameraCenterSVD() throws CameraException {
         Point3D result = Point3D.create();
@@ -1780,9 +1782,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * Computes camera center using singular value decomposition. This method
      * is valid even when center is located at infinity, although it is 
      * computationally more complex than other methods. This is the default 
-     * method used when decomposing a camera and computing its center
-     * @param result point where camera center will be stored
-     * @throws CameraException if there is numerical instability
+     * method used when decomposing a camera and computing its center.
+     * @param result point where camera center will be stored.
+     * @throws CameraException if there is numerical instability.
      */
     public void computeCameraCenterSVD(Point3D result) throws CameraException {
         try {
@@ -1812,9 +1814,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * Computes camera center using determinants of camera matrix minors. This
      * method also works when center is located at infinity (w = 0) and is less
      * computationally expensive than SVD, however it might also be less 
-     * accurate
-     * @return camera center
-     * @throws CameraException if there is numerical instabilities
+     * accurate.
+     * @return camera center.
+     * @throws CameraException if there is numerical instabilities.
      */
     public Point3D computeCameraCenterDet() throws CameraException {
         Point3D result = Point3D.create();
@@ -1826,9 +1828,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * Computes camera center using determinants of camera matrix minors. This
      * method also works when center is located at infinity (w = 0) and is less
      * computationally expensive than SVD, however it might also be less 
-     * accurate
-     * @param result point where camera center will be stored
-     * @throws CameraException if there is numerical instability
+     * accurate.
+     * @param result point where camera center will be stored.
+     * @throws CameraException if there is numerical instability.
      */
     public void computeCameraCenterDet(Point3D result) throws CameraException {
         
@@ -1911,10 +1913,10 @@ public class PinholeCamera extends Camera implements Serializable {
      * finite (its center is not located at the infinity or close to it). 
      * Otherwise, because of numerical precision inaccurate results might be 
      * obtained, or even a CameraException might be thrown. This is the less
-     * computationally expensive method
-     * @return camera center
+     * computationally expensive method.
+     * @return camera center.
      * @throws CameraException if there is numerical instabilities or center is
-     * located at the infinity or close to it
+     * located at the infinity or close to it.
      */
     public Point3D computeCameraCenterFiniteCamera() 
             throws CameraException {
@@ -1928,9 +1930,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * finite (its center is not located at the infinity or close to it). 
      * Otherwise, because of numerical precision inaccurate results might be 
      * obtained, or even a CameraException might be thrown. This is the less
-     * computationally expensive method
-     * @param result point where camera center will be stored
-     * @throws CameraException if there is numerical instability
+     * computationally expensive method.
+     * @param result point where camera center will be stored.
+     * @throws CameraException if there is numerical instability.
      */
     public void computeCameraCenterFiniteCamera(Point3D result) 
             throws CameraException {
@@ -1953,11 +1955,10 @@ public class PinholeCamera extends Camera implements Serializable {
                     PINHOLE_CAMERA_MATRIX_COLS - 1);
         
             //get inhomogeneous coordinates of camera center
-            Matrix mC = mInvMp;
-            mC.multiply(mP4);
+            mInvMp.multiply(mP4);
         
-            result.setInhomogeneousCoordinates(-mC.getElementAtIndex(0), 
-                    -mC.getElementAtIndex(1), -mC.getElementAtIndex(2));
+            result.setInhomogeneousCoordinates(-mInvMp.getElementAtIndex(0),
+                    -mInvMp.getElementAtIndex(1), -mInvMp.getElementAtIndex(2));
             result.normalize();
         } catch (AlgebraException e) {
             throw new CameraException(e);
@@ -1965,27 +1966,27 @@ public class PinholeCamera extends Camera implements Serializable {
     }
     
     /**
-     * Estimates this camera parameters from 2D-3D point correspondences
-     * @param point3D1 1st 3D point
-     * @param point3D2 2nd 3D point
-     * @param point3D3 3rd 3D point
-     * @param point3D4 4th 3D point
-     * @param point3D5 5th 3D point
-     * @param point3D6 6th 3D point
+     * Estimates this camera parameters from 2D-3D point correspondences.
+     * @param point3D1 1st 3D point.
+     * @param point3D2 2nd 3D point.
+     * @param point3D3 3rd 3D point.
+     * @param point3D4 4th 3D point.
+     * @param point3D5 5th 3D point.
+     * @param point3D6 6th 3D point.
      * @param point2D1 1st 2D point corresponding to the projection of 1st 3D 
-     * point
+     * point.
      * @param point2D2 2nd 2D point corresponding to the projection of 2nd 3D 
-     * point
+     * point.
      * @param point2D3 3rd 2D point corresponding to the projection of 3rd 3D
-     * point
+     * point.
      * @param point2D4 4th 2D point corresponding to the projection of 4th 3D
-     * point
+     * point.
      * @param point2D5 5th 2D point corresponding to the projection of 5th 3D
-     * point
+     * point.
      * @param point2D6 6th 2D point corresponding to the projection of 6th 3D
-     * point
+     * point.
      * @throws CameraException if camera cannot be estimated using provided
-     * points because of a degeneracy
+     * points because of a degeneracy.
      */
     public final void setFromPointCorrespondences(Point3D point3D1, 
             Point3D point3D2, Point3D point3D3, Point3D point3D4, 
@@ -2028,17 +2029,17 @@ public class PinholeCamera extends Camera implements Serializable {
     }
     
     /**
-     * Estimates this camera parameters from line/plane correspondences
-     * @param plane1 1st 3D plane
-     * @param plane2 2nd 3D plane
-     * @param plane3 3rd 3D plane
-     * @param plane4 4th 3D plane
-     * @param line1 1st 2D line corresponding to 1st 3D plane
-     * @param line2 2nd 2D line corresponding to 2nd 3D plane
-     * @param line3 3rd 2D line corresponding to 3rd 3D plane
-     * @param line4 4th 2D line corresponding to 4th 3D plane
+     * Estimates this camera parameters from line/plane correspondences.
+     * @param plane1 1st 3D plane.
+     * @param plane2 2nd 3D plane.
+     * @param plane3 3rd 3D plane.
+     * @param plane4 4th 3D plane.
+     * @param line1 1st 2D line corresponding to 1st 3D plane.
+     * @param line2 2nd 2D line corresponding to 2nd 3D plane.
+     * @param line3 3rd 2D line corresponding to 3rd 3D plane.
+     * @param line4 4th 2D line corresponding to 4th 3D plane.
      * @throws CameraException if camera cannot be estimated using provided
-     * lines and planes because of a degeneracy
+     * lines and planes because of a degeneracy.
      */
     public final void setFromLineAndPlaneCorrespondences(Plane plane1, 
             Plane plane2, Plane plane3, Plane plane4, Line2D line1, 

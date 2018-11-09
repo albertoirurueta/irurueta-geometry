@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.PROSACPointCorrespondenceAffineTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 11, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -19,43 +26,33 @@ import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest 
         implements AffineTransformation2DRobustEstimatorListener {
     
-    public static final double MIN_RANDOM_VALUE = -1000.0;
-    public static final double MAX_RANDOM_VALUE = 1000.0;
+    private static final double MIN_RANDOM_VALUE = -1000.0;
+    private static final double MAX_RANDOM_VALUE = 1000.0;
     
-    public static final int INHOM_COORDS = 2;
+    private static final double ABSOLUTE_ERROR = 5e-6;
     
-    public static final double ABSOLUTE_ERROR = 5e-6;
+    private static final int MIN_POINTS = 500;
+    private static final int MAX_POINTS = 1000;
     
-    public static final int MIN_POINTS = 500;
-    public static final int MAX_POINTS = 1000;
+    private static final double THRESHOLD = 1.0;
     
-    public static final double THRESHOLD = 1.0;
+    private static final double STD_ERROR = 100.0;
     
-    public static final double STD_ERROR = 100.0;
+    private static final double MIN_SCORE_ERROR = -0.3;
+    private static final double MAX_SCORE_ERROR = 0.3;
     
-    public static final double MIN_SCORE_ERROR = -0.3;
-    public static final double MAX_SCORE_ERROR = 0.3;
-    
-    public static final double MIN_CONFIDENCE = 0.95;
-    public static final double MAX_CONFIDENCE = 0.99;
-    
-    public static final int MIN_MAX_ITERATIONS = 500;
-    public static final int MAX_MAX_ITERATIONS = 5000;
-        
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
     public static final int TIMES = 10;
 
@@ -114,8 +111,8 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
 
         
         //test constructor with points
-        List<Point2D> inputPoints = new ArrayList<Point2D>();
-        List<Point2D> outputPoints = new ArrayList<Point2D>();
+        List<Point2D> inputPoints = new ArrayList<>();
+        List<Point2D> outputPoints = new ArrayList<>();
         for (int i = 0; i < PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point2D.create());
             outputPoints.add(Point2D.create());
@@ -153,20 +150,20 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());        
         
         //Force IllegalArgumentException
-        List<Point2D> pointsEmpty = new ArrayList<Point2D>();
+        List<Point2D> pointsEmpty = new ArrayList<>();
         estimator = null;
         try {
             //not enough points
             estimator = new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                     pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                     inputPoints, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
 
         //test constructor with listener
@@ -241,13 +238,13 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
             estimator = new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                     this, pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                     this, inputPoints, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);  
         
         //test constructor with quality scores
@@ -292,7 +289,7 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
             estimator = new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                 shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with points and quality scores
@@ -334,19 +331,19 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
             estimator = new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                     pointsEmpty, pointsEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                     inputPoints, pointsEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //not enough scores
             estimator = new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                     inputPoints, outputPoints, shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener and quality scores
@@ -387,7 +384,7 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
             estimator = new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                 this, shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);  
         
         //test constructor with listener, points and quality scores
@@ -429,19 +426,19 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
             estimator = new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                     this, pointsEmpty, pointsEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                     this, inputPoints, pointsEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //not enough scores
             estimator = new PROSACPointCorrespondenceAffineTransformation2DRobustEstimator(
                     this, inputPoints, outputPoints, shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);          
     }
     
@@ -465,7 +462,7 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
         try {
             estimator.setThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -489,7 +486,7 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
         try {
             estimator.setQualityScores(qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -512,12 +509,12 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
         try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         
         try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -540,7 +537,7 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
         try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -554,9 +551,9 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
         assertFalse(estimator.isReady());
         
         //set new value
-        List<Point2D> inputPoints = new ArrayList<Point2D>();
-        List<Point2D> outputPoints = new ArrayList<Point2D>();
-        for(int i = 0; i < PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
+        List<Point2D> inputPoints = new ArrayList<>();
+        List<Point2D> outputPoints = new ArrayList<>();
+        for (int i = 0; i < PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point2D.create());
             outputPoints.add(Point2D.create());
         }
@@ -576,17 +573,17 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
         assertTrue(estimator.isReady());
 
         //Force IllegalArgumentException
-        List<Point2D> pointsEmpty = new ArrayList<Point2D>();
+        List<Point2D> pointsEmpty = new ArrayList<>();
         try {
             //not enough points
             estimator.setPoints(pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator.setPoints(pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -627,11 +624,11 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
         try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -697,7 +694,7 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
             RobustEstimatorException {
         for (int t = 0; t < TIMES; t++) {
             //create an affine transformation
-            Matrix A = null;
+            Matrix A;
             do {
                 //ensure A matrix is invertible
                 A = Matrix.createWithUniformRandomValues(
@@ -718,9 +715,9 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
             
             //generate random points
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point2D> inputPoints = new ArrayList<Point2D>();
-            List<Point2D> outputPoints = new ArrayList<Point2D>();
-            List<Point2D> outputPointsWithError = new ArrayList<Point2D>();
+            List<Point2D> inputPoints = new ArrayList<>();
+            List<Point2D> outputPoints = new ArrayList<>();
+            List<Point2D> outputPointsWithError = new ArrayList<>();
             double[] qualityScores = new double[nPoints];
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
@@ -796,7 +793,7 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
             RobustEstimatorException {
         for (int t = 0; t < TIMES; t++) {
             //create an affine transformation
-            Matrix A = null;
+            Matrix A;
             do {
                 //ensure A matrix is invertible
                 A = Matrix.createWithUniformRandomValues(
@@ -817,9 +814,9 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
             
             //generate random points
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point2D> inputPoints = new ArrayList<Point2D>();
-            List<Point2D> outputPoints = new ArrayList<Point2D>();
-            List<Point2D> outputPointsWithError = new ArrayList<Point2D>();
+            List<Point2D> inputPoints = new ArrayList<>();
+            List<Point2D> outputPoints = new ArrayList<>();
+            List<Point2D> outputPointsWithError = new ArrayList<>();
             double[] qualityScores = new double[nPoints];
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
@@ -904,77 +901,77 @@ public class PROSACPointCorrespondenceAffineTransformation2DRobustEstimatorTest
             }
         }
     }
-    
-    private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration = 
-                estimateProgressChange = 0;
-    }
-    
+
     @Override
     public void onEstimateStart(
             AffineTransformation2DRobustEstimator estimator) {
         estimateStart++;
-        testLocked((PROSACPointCorrespondenceAffineTransformation2DRobustEstimator)estimator);
+        checkLocked((PROSACPointCorrespondenceAffineTransformation2DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateEnd(
             AffineTransformation2DRobustEstimator estimator) {
         estimateEnd++;
-        testLocked((PROSACPointCorrespondenceAffineTransformation2DRobustEstimator)estimator);
+        checkLocked((PROSACPointCorrespondenceAffineTransformation2DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateNextIteration(
             AffineTransformation2DRobustEstimator estimator, int iteration) {
         estimateNextIteration++;
-        testLocked((PROSACPointCorrespondenceAffineTransformation2DRobustEstimator)estimator);
+        checkLocked((PROSACPointCorrespondenceAffineTransformation2DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateProgressChange(
             AffineTransformation2DRobustEstimator estimator, float progress) {
         estimateProgressChange++;
-        testLocked((PROSACPointCorrespondenceAffineTransformation2DRobustEstimator)estimator);
+        checkLocked((PROSACPointCorrespondenceAffineTransformation2DRobustEstimator)estimator);
     }
-    
-    private void testLocked(
+
+    private void reset() {
+        estimateStart = estimateEnd = estimateNextIteration =
+                estimateProgressChange = 0;
+    }
+
+    private void checkLocked(
             PROSACPointCorrespondenceAffineTransformation2DRobustEstimator estimator) {
-        List<Point2D> points = new ArrayList<Point2D>();
+        List<Point2D> points = new ArrayList<>();
         try {
             estimator.setPoints(points, points);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setProgressDelta(0.01f);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setThreshold(0.5);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             double[] qualityScores = new double[
                     PointCorrespondenceAffineTransformation2DRobustEstimator.MINIMUM_SIZE];
             estimator.setQualityScores(qualityScores);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setConfidence(0.5);            
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMaxIterations(10);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }

@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.Ellipsoid
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 25, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
@@ -37,7 +44,7 @@ public class Ellipsoid implements Serializable {
     /**
      * Lengths of all three semi-axes.
      */
-    double[] mSemiAxesLenghts;
+    private double[] mSemiAxesLengths;
     
     /**
      * Rotation.
@@ -51,8 +58,8 @@ public class Ellipsoid implements Serializable {
      */
     public Ellipsoid() {
         mCenter = Point3D.create();
-        mSemiAxesLenghts = new double[DIMENSIONS];
-        Arrays.fill(mSemiAxesLenghts, 1.0);
+        mSemiAxesLengths = new double[DIMENSIONS];
+        Arrays.fill(mSemiAxesLengths, 1.0);
         mRotation = Rotation3D.create();
     }
     
@@ -94,7 +101,7 @@ public class Ellipsoid implements Serializable {
      * @return lengths of all three semi-axes.
      */
     public double[] getSemiAxesLengths() {
-        return mSemiAxesLenghts;
+        return mSemiAxesLengths;
     }
     
     /**
@@ -108,7 +115,7 @@ public class Ellipsoid implements Serializable {
         if (semiAxesLengths.length != DIMENSIONS) {
             throw new IllegalArgumentException();
         }
-        mSemiAxesLenghts = semiAxesLengths;
+        mSemiAxesLengths = semiAxesLengths;
     }
     
     /**
@@ -135,13 +142,14 @@ public class Ellipsoid implements Serializable {
      * @throws IllegalArgumentException if length of provided array is not 
      * three.
      */
+    @SuppressWarnings("WeakerAccess")
     public final void setCenterAxesAndRotation(Point3D center, 
             double[] semiAxesLengths, Rotation3D rotation) {
         if (semiAxesLengths.length != DIMENSIONS) {
             throw new IllegalArgumentException();
         }        
         mCenter = center;
-        mSemiAxesLenghts = semiAxesLengths;
+        mSemiAxesLengths = semiAxesLengths;
         mRotation = rotation;
     }
     
@@ -150,9 +158,9 @@ public class Ellipsoid implements Serializable {
      * @return volume of htis ellipsoid.
      */
     public double getVolume() {
-        double a = mSemiAxesLenghts[0];
-        double b = mSemiAxesLenghts[1];
-        double c = mSemiAxesLenghts[2];
+        double a = mSemiAxesLengths[0];
+        double b = mSemiAxesLengths[1];
+        double c = mSemiAxesLengths[2];
         return 4.0 / 3.0 * Math.PI * a * b * c;
     }
     
@@ -161,9 +169,9 @@ public class Ellipsoid implements Serializable {
      * @return surface of this ellipsoid.
      */
     public double getSurface() {
-        double a = mSemiAxesLenghts[0];
-        double b = mSemiAxesLenghts[1];
-        double c = mSemiAxesLenghts[2];
+        double a = mSemiAxesLengths[0];
+        double b = mSemiAxesLengths[1];
+        double c = mSemiAxesLengths[2];
         
         return 4.0 * Math.PI * Math.pow(
                 (Math.pow(a*b, P) + Math.pow(a*c, P) + Math.pow(b*c, P)) / 3.0, 
@@ -198,9 +206,9 @@ public class Ellipsoid implements Serializable {
         //when centered at origin and having no rotation
         
         //if we take an arbitrary center position:
-        double a = 1.0 / Math.pow(mSemiAxesLenghts[0], 2.0);
-        double b = 1.0 / Math.pow(mSemiAxesLenghts[1], 2.0);
-        double c = 1.0 / Math.pow(mSemiAxesLenghts[2], 2.0);
+        double a = 1.0 / Math.pow(mSemiAxesLengths[0], 2.0);
+        double b = 1.0 / Math.pow(mSemiAxesLengths[1], 2.0);
+        double c = 1.0 / Math.pow(mSemiAxesLengths[2], 2.0);
         double d = 0.0;
         double e = 0.0;
         double f = 0.0;
@@ -230,7 +238,7 @@ public class Ellipsoid implements Serializable {
      */
     public final void setFromSphere(Sphere sphere) {
         mCenter = sphere.getCenter();
-        Arrays.fill(mSemiAxesLenghts, sphere.getRadius());
+        Arrays.fill(mSemiAxesLengths, sphere.getRadius());
         mRotation = Rotation3D.create();
     }
 }

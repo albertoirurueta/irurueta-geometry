@@ -118,7 +118,7 @@ public abstract class KDTree<P extends Point> {
         taskmom[1] = 0;
         taskdim[1] = 0;
         nowtask = 1;
-        while(nowtask != 0) {
+        while (nowtask != 0) {
             tmom = taskmom[nowtask];
             tdim = taskdim[nowtask--];
             ptlo = mBoxes[tmom].mPtLo;
@@ -688,7 +688,7 @@ public abstract class KDTree<P extends Point> {
 
         /**
          * Gets position of 1st daughter node in the list of nodes of a tree.
-         * @return position of 1st daugther node in the list of nodes of a tree.
+         * @return position of 1st daughter node in the list of nodes of a tree.
          */
         public int getDau1() {
             return mDau1;
@@ -704,7 +704,7 @@ public abstract class KDTree<P extends Point> {
 
         /**
          * Gets low index of list of points inside this box.
-         * {@link #getPtLo()} and {@link #getPtHi()} define the range of indices of points
+         * getPtLo() and {@link #getPtHi()} define the range of indices of points
          * contained in this box.
          * @return low index of list of points inside this box.
          */
@@ -714,7 +714,7 @@ public abstract class KDTree<P extends Point> {
 
         /**
          * Gets high index of list of points inside this box.
-         * {@link #getPtLo()} and {@link #getPtHi()} define the range of indices of points
+         * {@link #getPtLo()} and getPtHi() define the range of indices of points
          * contained in this box.
          * @return high index of list of points inside this box.
          */
@@ -728,7 +728,7 @@ public abstract class KDTree<P extends Point> {
          * @throws IllegalArgumentException always thrown.
          */
         @Override
-        public void setLo(P lo) throws IllegalArgumentException{
+        public void setLo(P lo) throws IllegalArgumentException {
             throw new IllegalArgumentException("changes are not allowed");
         }
 
@@ -737,7 +737,7 @@ public abstract class KDTree<P extends Point> {
          * @param hi high coordinate values.
          * @throws IllegalArgumentException always thrown.
          */
-        public void setHi(P hi) throws IllegalArgumentException{
+        public void setHi(P hi) throws IllegalArgumentException {
             throw new IllegalArgumentException("changes are not allowed");
         }
 

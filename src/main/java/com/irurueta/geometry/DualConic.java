@@ -1,31 +1,42 @@
 /*
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.DualConic
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date July 3, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.*;
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.WrongSizeException;
+
 import java.io.Serializable;
 
 /**
- * This class contains implementation of a dual conic
+ * This class contains implementation of a dual conic.
  */
 public class DualConic extends BaseConic implements Serializable {
     
     /**
-     * Constructor
+     * Constructor.
      */
-    public DualConic(){
+    public DualConic() {
         super();
     }
     
     /**
      * Constructor of this class. This constructor accepts every parameter
-     * describing a dual conic (parameters a, b, c, d, e, f)
+     * describing a dual conic (parameters a, b, c, d, e, f).
      * @param a Parameter A of the conic.
      * @param b Parameter B of the conic.
      * @param c Parameter C of the conic.
@@ -34,7 +45,7 @@ public class DualConic extends BaseConic implements Serializable {
      * @param f Parameter F of the conic.
      */
     public DualConic(double a, double b, double c, double d, double e, 
-            double f){
+            double f) {
         super(a, b, c, d, e, f);
     }
     
@@ -43,9 +54,9 @@ public class DualConic extends BaseConic implements Serializable {
      * This matrix must be 3x3 and symmetric.
      * @param m 3x3 Matrix describing the conic.
      * @throws IllegalArgumentException Raised when the size of the matrix is 
-     * not 3x3
+     * not 3x3.
      * @throws NonSymmetricMatrixException Raised when the conic matrix is not 
-     * symmetric
+     * symmetric.
      */
     public DualConic(Matrix m) throws IllegalArgumentException, 
             NonSymmetricMatrixException {
@@ -53,17 +64,17 @@ public class DualConic extends BaseConic implements Serializable {
     }
     
     /**
-     * Instantiates a dual conic where provided lines belong to its locus
-     * @param line1 1st line
-     * @param line2 2nd line
-     * @param line3 3rd line
-     * @param line4 4th line
-     * @param line5 5th line
+     * Instantiates a dual conic where provided lines belong to its locus.
+     * @param line1 1st line.
+     * @param line2 2nd line.
+     * @param line3 3rd line.
+     * @param line4 4th line.
+     * @param line5 5th line.
      * @throws CoincidentLinesException Raised if provided lines are coincident
      * (more than one line is equal) or produce a degenerate configuration.
      */
     public DualConic(Line2D line1, Line2D line2, Line2D line3, Line2D line4, Line2D line5)
-            throws CoincidentLinesException{
+            throws CoincidentLinesException {
         setParametersFromLines(line1, line2, line3, line4, line5);
     }
     
@@ -71,18 +82,18 @@ public class DualConic extends BaseConic implements Serializable {
      * Checks if provided line is locus of this dual conic, or in other words,
      * checks whether provided line lies within this conic, or whether provided
      * line is tangent to the conic corresponding to this dual conic.
-     * @param line Line2D to be tested
+     * @param line Line2D to be tested.
      * @param threshold Threshold of tolerance to determine whether the line is
      * locus or not. This is needed because of limited machine precision. If 
      * threshold is not provided, then DEFAULT_LOCUS_THRESHOLD is used instead.
      * @return True if provided line is locus of this dual conic, false 
-     * otherwise
-     * @throws IllegalArgumentException Raised if provided threshold is negative
+     * otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean isLocus(Line2D line, double threshold) 
             throws IllegalArgumentException {
         
-        if(threshold < MIN_THRESHOLD) {
+        if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
                 
@@ -109,9 +120,9 @@ public class DualConic extends BaseConic implements Serializable {
      * Checks if provided line is locus of this dual conic, or in other words,
      * checks whether provided line lies within this conic, or whether provided
      * line is tangent to the conic corresponding to this dual conic.
-     * @param line Line2D to be tested
+     * @param line Line2D to be tested.
      * @return True if provided line is locus of this dual conic, false 
-     * otherwise
+     * otherwise.
      * @see #isLocus(Line2D, double)
      */    
     public boolean isLocus(Line2D line) {
@@ -119,9 +130,9 @@ public class DualConic extends BaseConic implements Serializable {
     }
     
     /**
-     * Computes the angle between two lines in radians
-     * @param lineA First line to be tested
-     * @param lineB Second line to be tested
+     * Computes the angle between two lines in radians.
+     * @param lineA First line to be tested.
+     * @param lineB Second line to be tested.
      * @return Angle between the two provided lines in radians.
      */
     public double angleBetweenLines(Line2D lineA, Line2D lineB) {
@@ -169,15 +180,15 @@ public class DualConic extends BaseConic implements Serializable {
     
     /**
      * Checks if two lines are perpendicular attending to the geometry defined 
-     * by this dual conic, or in other words, if lA' * dualC* * lB is zero
-     * @param lineA First line to be checked
-     * @param lineB Second line to be checked
+     * by this dual conic, or in other words, if lA' * dualC* * lB is zero.
+     * @param lineA First line to be checked.
+     * @param lineB Second line to be checked.
      * @param threshold Threshold of tolerance to determine whether the lines
      * are perpendicular or not. This is needed because of limited machine 
      * precision. If threshold is not provided, then 
      * DEFAULT_PERPENDICULAR_THRESHOLD is used instead.
-     * @return True if provided lines are perpendicular, false otherwise
-     * @throws IllegalArgumentException Raised if provided threshold is negative
+     * @return True if provided lines are perpendicular, false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean arePerpendicularLines(Line2D lineA, Line2D lineB, 
             double threshold) throws IllegalArgumentException {
@@ -213,10 +224,10 @@ public class DualConic extends BaseConic implements Serializable {
 
     /**
      * Checks if two lines are perpendicular attending to the geometry defined 
-     * by this dual conic, or in other words, if lA' * dualC* * lB is zero
-     * @param lineA First line to be checked
-     * @param lineB Second line to be checked
-     * @return True if provided lines are perpendicular, false otherwise
+     * by this dual conic, or in other words, if lA' * dualC* * lB is zero.
+     * @param lineA First line to be checked.
+     * @param lineB Second line to be checked.
+     * @return True if provided lines are perpendicular, false otherwise.
      */    
     public boolean arePerpendicularLines(Line2D lineA, Line2D lineB) {
         return arePerpendicularLines(lineA, lineB, 
@@ -237,7 +248,7 @@ public class DualConic extends BaseConic implements Serializable {
     
     /**
      * Computes the conic corresponding to this dual conic and stores the result
-     * in provided instance
+     * in provided instance.
      * @param conic Conic where result is stored.
      * @throws ConicNotAvailableException Raised if the rank of the dual conic
      * matrix is not complete due to wrong parameters or numerical instability.
@@ -268,15 +279,16 @@ public class DualConic extends BaseConic implements Serializable {
     
     /**
      * Sets parameters of this dual conic so that provided lines lie within it 
-     * (are locus)
-     * @param line1 1st line
-     * @param line2 2nd line
-     * @param line3 3rd line
-     * @param line4 4th line
-     * @param line5 5th line
+     * (are locus).
+     * @param line1 1st line.
+     * @param line2 2nd line.
+     * @param line3 3rd line.
+     * @param line4 4th line.
+     * @param line5 5th line.
      * @throws CoincidentLinesException Raised if lines are coincident or 
-     * produce a degenerated configuration
+     * produce a degenerated configuration.
      */
+    @SuppressWarnings("WeakerAccess")
     public final void setParametersFromLines(Line2D line1, Line2D line2, Line2D line3,
             Line2D line4, Line2D line5) throws CoincidentLinesException {
         
@@ -345,10 +357,10 @@ public class DualConic extends BaseConic implements Serializable {
             double[] row = new double[6];
             double rowNorm;
             
-            for(int j = 0; j < 5; j++) {
+            for (int j = 0; j < 5; j++) {
                 m.getSubmatrixAsArray(j, 0, j, 5, row);
                 rowNorm = com.irurueta.algebra.Utils.normF(row);
-                for(int i = 0; i < 6; i++) {
+                for (int i = 0; i < 6; i++) {
                     m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);
                 }
             }            
@@ -356,7 +368,7 @@ public class DualConic extends BaseConic implements Serializable {
             SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
             
-            if(decomposer.getRank() < 5) {
+            if (decomposer.getRank() < 5) {
                 throw new CoincidentLinesException();
             }
             
@@ -373,7 +385,7 @@ public class DualConic extends BaseConic implements Serializable {
             double f = V.getElementAt(5, 5);
                             
             setParameters(a, b, c, d, e, f);
-        }catch(AlgebraException ex) {
+        } catch (AlgebraException ex) {
             throw new CoincidentLinesException(ex);
         }
     }
@@ -388,8 +400,8 @@ public class DualConic extends BaseConic implements Serializable {
      * infinity.
      * Both the absolute conic and the dual absolute conic define orthogonality
      * in the metric stratum, and in a purely metric stratum (i.e. when camera 
-     * is correctly calibrated), their canonical value is equal to the identity
-     * @return a canonical instance of the dual absolute conic
+     * is correctly calibrated), their canonical value is equal to the identity.
+     * @return a canonical instance of the dual absolute conic.
      */
     public static DualConic createCanonicalDualAbsoluteConic() {
         return new DualConic(1.0, 0.0, 1.0, 0.0, 0.0, 1.0);

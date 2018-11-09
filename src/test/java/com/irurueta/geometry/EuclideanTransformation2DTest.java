@@ -1,26 +1,31 @@
 /*
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.EuclideanTransformation2D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 26, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.*;
 import com.irurueta.algebra.Utils;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class EuclideanTransformation2DTest {
 
@@ -119,6 +124,7 @@ public class EuclideanTransformation2DTest {
         //Force NullPointerException
         transformation = null;
         try {
+            //noinspection all
             transformation = new EuclideanTransformation2D((double[])null);
             fail("NullPointerException expected but not thrown");
         } catch (NullPointerException ignore) { }
@@ -616,7 +622,8 @@ public class EuclideanTransformation2DTest {
                 new EuclideanTransformation2D(rotation, translation);
         
         Matrix m = Matrix.identity(3, 3);
-        m.setSubmatrix(0, 0, 1, 1, rotation.asInhomogeneousMatrix());
+        m.setSubmatrix(0, 0, 1, 1,
+                rotation.asInhomogeneousMatrix());
         m.setSubmatrix(0, 2, 1, 2, translation);
         
         Matrix transMatrix1 = transformation.asMatrix();

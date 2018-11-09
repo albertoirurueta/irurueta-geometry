@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains Unit Tests for
- * com.irurueta.geometry.Sphere
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 14, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
@@ -13,24 +20,22 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class SphereTest {
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_RANDOM_DEGREES = -180.0;
-    public static final double MAX_RANDOM_DEGREES = 180.0;
+    private static final double MIN_RANDOM_DEGREES = -180.0;
+    private static final double MAX_RANDOM_DEGREES = 180.0;
     
-    public static final int TIMES = 100;
+    private static final int TIMES = 100;
     
     public SphereTest() { }
     
@@ -47,7 +52,7 @@ public class SphereTest {
     public void tearDown() { }
     
     @Test
-    public void testConstructor() throws CoplanarPointsException{
+    public void testConstructor() throws CoplanarPointsException {
         //Test empty constructor
         Sphere sphere = new Sphere();
         
@@ -72,10 +77,10 @@ public class SphereTest {
         
         //Force IllegalArgumentException
         sphere = null;
-        try{
+        try {
             sphere = new Sphere(center, -radius);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(sphere);
         
         //test constructor with four points
@@ -83,7 +88,7 @@ public class SphereTest {
         //pick 4 points belonging to the sphere locus
         Point3D point1, point2, point3, point4;
         boolean areEqual;
-        do{
+        do {
             double angle1 = randomizer.nextDouble(MIN_RANDOM_DEGREES, 
                     MAX_RANDOM_DEGREES) * Math.PI / 180.0;
             double angle2 = randomizer.nextDouble(MIN_RANDOM_DEGREES, 
@@ -134,7 +139,7 @@ public class SphereTest {
                     point2.equals(point3, ABSOLUTE_ERROR) ||
                     point3.equals(point4, ABSOLUTE_ERROR) ||
                     point4.equals(point1, ABSOLUTE_ERROR);
-        }while(areEqual);
+        } while (areEqual);
         
         //compute sphere
         Sphere sphere2 = new Sphere(point1, point2, point3, point4);
@@ -147,10 +152,10 @@ public class SphereTest {
         
         //Force CoplanarPointsException
         sphere = null;
-        try{
+        try {
             sphere = new Sphere(point1, point2, point2, point4);
             fail("CoplanarPointsException expected but not thrown");
-        }catch(CoplanarPointsException e){}
+        } catch (CoplanarPointsException ignore) { }
         assertNull(sphere);
         
         //test from quadric
@@ -164,15 +169,15 @@ public class SphereTest {
         //Force IllegalArgumentException
         quadric = new Quadric();
         sphere = null;
-        try{
+        try {
             sphere = new Sphere(quadric);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(sphere);
     }
     
     @Test
-    public void testGetSetCenter(){
+    public void testGetSetCenter() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -190,14 +195,14 @@ public class SphereTest {
         assertTrue(sphere.getCenter().equals(center, ABSOLUTE_ERROR));
         
         //Force NullPointerException
-        try{
+        try {
             sphere.setCenter(null);
             fail("NullPointerException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
     }
     
     @Test
-    public void testGetSetRadius(){
+    public void testGetSetRadius() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
                 MAX_RANDOM_VALUE));
@@ -212,14 +217,14 @@ public class SphereTest {
         assertEquals(sphere.getRadius(), radius, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             sphere.setRadius(-radius);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testSetCenterAndRadius(){
+    public void testSetCenterAndRadius() {
         //Test constructor with center and radius
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
@@ -243,20 +248,20 @@ public class SphereTest {
         assertEquals(sphere.getRadius(), radius, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             sphere.setCenterAndRadius(center, -radius);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //Force NullPointerException
-        try{
+        try {
             sphere.setCenterAndRadius(null, radius);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(NullPointerException e){}
+        } catch (NullPointerException ignore) { }
     }
     
     @Test
-    public void testSetParametersFromPoints() throws CoplanarPointsException{
+    public void testSetParametersFromPoints() throws CoplanarPointsException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point3D center = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
@@ -270,7 +275,7 @@ public class SphereTest {
         //pick 4 points belonging to the sphere locus
         Point3D point1, point2, point3, point4;
         boolean areEqual;
-        do{
+        do {
             double angle1 = randomizer.nextDouble(MIN_RANDOM_DEGREES, 
                     MAX_RANDOM_DEGREES) * Math.PI / 180.0;
             double angle2 = randomizer.nextDouble(MIN_RANDOM_DEGREES, 
@@ -321,7 +326,7 @@ public class SphereTest {
                     point2.equals(point3, ABSOLUTE_ERROR) ||
                     point3.equals(point4, ABSOLUTE_ERROR) ||
                     point4.equals(point1, ABSOLUTE_ERROR);
-        }while(areEqual);
+        } while (areEqual);
         
         //create new sphere and set parameters
         Sphere sphere2 = new Sphere();
@@ -334,14 +339,14 @@ public class SphereTest {
         assertEquals(sphere1.getRadius(), sphere2.getRadius(), ABSOLUTE_ERROR);
         
         //Force CoplanarPointsException
-        try{
+        try {
             sphere2.setParametersFromPoints(point1, point2, point2, point4);
             fail("CoplanarPointsException expected but not thrown");
-        }catch(CoplanarPointsException e){}
+        } catch (CoplanarPointsException ignore) { }
     }
     
     @Test
-    public void testVolume(){
+    public void testVolume() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -360,7 +365,7 @@ public class SphereTest {
     }
     
    @Test
-    public void testSurface(){
+    public void testSurface() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -379,7 +384,7 @@ public class SphereTest {
     }
     
     @Test
-    public void testIsInside(){
+    public void testIsInside() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -426,7 +431,7 @@ public class SphereTest {
     }
 
     @Test
-    public void testSignedDistanceDistanceAndIsLocus(){
+    public void testSignedDistanceDistanceAndIsLocus() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -515,14 +520,14 @@ public class SphereTest {
         assertTrue(sphere.isLocus(zero, radius));
         
         //Force IllegalArgumentExcepetion
-        try{
+        try {
             sphere.isLocus(zero, -radius);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testClosestPointAndIsLocus() throws UndefinedPointException{
+    public void testClosestPointAndIsLocus() throws UndefinedPointException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -604,25 +609,25 @@ public class SphereTest {
         
         
         //Force UndefinedPointException (by testing at center)
-        try{
+        try {
             sphere.getClosestPoint(center);
             fail("UndefinedPointException expected but not thrown");
-        }catch(UndefinedPointException e){}
-        try{
+        } catch (UndefinedPointException ignore) { }
+        try {
             sphere.closestPoint(center, result);
             fail("UndefinedPointException expected but not thrown");
-        }catch(UndefinedPointException e){}
+        } catch (UndefinedPointException ignore) { }
         
-        //Force IllegalArgumentExcepetion
-        try{
+        //Force IllegalArgumentException
+        try {
             sphere.isLocus(zero, -radius);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }  
     
     @Test
-    public void testGetTangentPlaneAt() throws NotLocusException{
-        for(int t = 0; t < TIMES; t++){
+    public void testGetTangentPlaneAt() throws NotLocusException {
+        for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -656,7 +661,7 @@ public class SphereTest {
             
             double[] directorVector = plane.getDirectorVector();
         
-            double[] pointVector = new double[]{
+            double[] pointVector = new double[] {
                 point.getInhomX() - center.getInhomX(),
                 point.getInhomY() - center.getInhomY(),
                 point.getInhomZ() - center.getInhomZ()
@@ -676,7 +681,7 @@ public class SphereTest {
     }
     
     @Test
-    public void testToQuadric() throws WrongSizeException{
+    public void testToQuadric() throws WrongSizeException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point3D center = new HomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -746,7 +751,7 @@ public class SphereTest {
     }   
     
     @Test
-    public void testSetFromQuadric(){
+    public void testSetFromQuadric() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         Point3D center = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -769,9 +774,9 @@ public class SphereTest {
         
         //Force IllegalArgumentException
         quadric = new Quadric();
-        try{
+        try {
             sphere2.setFromQuadric(quadric);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
 }

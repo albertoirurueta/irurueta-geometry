@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.refiners.HomogeneousPoint3DRefiner
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date April 7, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.refiners;
 
@@ -18,6 +25,7 @@ import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
 import com.irurueta.numerical.robust.InliersData;
+
 import java.util.BitSet;
 import java.util.List;
 
@@ -160,7 +168,7 @@ public class HomogeneousPoint3DRefiner extends
                         new GradientEstimator(
                                 new MultiDimensionFunctionEvaluatorListener() {
                     @Override
-                    public double evaluate(double[] point) throws Throwable {
+                    public double evaluate(double[] point) {
                         
                         mPoint.setCoordinates(point);
                         return residual(mPoint, mPlane);

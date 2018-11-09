@@ -1,75 +1,73 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.MSACPoint3DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 2, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.geometry.ColinearPointsException;
-import com.irurueta.geometry.CoordinatesType;
-import com.irurueta.geometry.HomogeneousPoint3D;
-import com.irurueta.geometry.Plane;
-import com.irurueta.geometry.Point3D;
+import com.irurueta.geometry.*;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class MSACPoint3DRobustEstimatorTest implements 
-        Point3DRobustEstimatorListener{
+        Point3DRobustEstimatorListener {
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-5;
+    private static final double ABSOLUTE_ERROR = 1e-5;
     
-    public static final int MIN_LINES = 500;
-    public static final int MAX_LINES = 1000;
+    private static final int MIN_LINES = 500;
+    private static final int MAX_LINES = 1000;
     
-    public static final double THRESHOLD = 1e-5;
+    private static final double THRESHOLD = 1e-5;
     
-    public static final double STD_ERROR = 100.0;
+    private static final double STD_ERROR = 100.0;
     
-    public static final int MIN_MAX_ITERATIONS = 500;
-    public static final int MAX_MAX_ITERATIONS = 5000;
-        
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
 
     private int estimateStart;
     private int estimateEnd;
     private int estimateNextIteration;
     private int estimateProgressChange;
     
-    public MSACPoint3DRobustEstimatorTest() {}
+    public MSACPoint3DRobustEstimatorTest() { }
     
     @BeforeClass
-    public static void setUpClass() {}
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {}
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {}
+    public void setUp() { }
     
     @After
-    public void tearDown() {}
+    public void tearDown() { }
 
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         MSACPoint3DRobustEstimator estimator;
         
         //test constructor without arguments
@@ -100,8 +98,8 @@ public class MSACPoint3DRobustEstimatorTest implements
         assertNull(estimator.getCovariance());
                 
         //test constructor with planes
-        List<Plane> planes = new ArrayList<Plane>();
-        for(int i = 0; i < Point3DRobustEstimator.MINIMUM_SIZE; i++){
+        List<Plane> planes = new ArrayList<>();
+        for (int i = 0; i < Point3DRobustEstimator.MINIMUM_SIZE; i++) {
             planes.add(new Plane());
         }
         
@@ -132,31 +130,31 @@ public class MSACPoint3DRobustEstimatorTest implements
         assertNull(estimator.getCovariance());        
         
         //Force IllegalArgumentException
-        List<Plane> emptyPlanes = new ArrayList<Plane>();
+        List<Plane> emptyPlanes = new ArrayList<>();
         estimator = null;
-        try{
+        try {
             estimator = new MSACPoint3DRobustEstimator(emptyPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener
         Point3DRobustEstimatorListener listener =
-                new Point3DRobustEstimatorListener(){
+                new Point3DRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(Point3DRobustEstimator estimator) {}
+            public void onEstimateStart(Point3DRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(Point3DRobustEstimator estimator) {}
+            public void onEstimateEnd(Point3DRobustEstimator estimator) { }
 
             @Override
             public void onEstimateNextIteration(
-                    Point3DRobustEstimator estimator, int iteration) {}
+                    Point3DRobustEstimator estimator, int iteration) { }
 
             @Override
             public void onEstimateProgressChange(
-                    Point3DRobustEstimator estimator, float progress) {}
+                    Point3DRobustEstimator estimator, float progress) { }
         };
         
         estimator = new MSACPoint3DRobustEstimator(listener);
@@ -214,15 +212,15 @@ public class MSACPoint3DRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new MSACPoint3DRobustEstimator(listener, emptyPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
     }
     
     @Test
-    public void testGetSetThreshold() throws LockedException{
+    public void testGetSetThreshold() throws LockedException {
         MSACPoint3DRobustEstimator estimator =
                 new MSACPoint3DRobustEstimator();
         
@@ -236,14 +234,14 @@ public class MSACPoint3DRobustEstimatorTest implements
         assertEquals(estimator.getThreshold(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetListener() throws LockedException{
+    public void testGetSetListener() throws LockedException {
         MSACPoint3DRobustEstimator estimator =
                 new MSACPoint3DRobustEstimator();
         
@@ -260,7 +258,7 @@ public class MSACPoint3DRobustEstimatorTest implements
     }
     
     @Test
-    public void testGetSetProgressDelta() throws LockedException{
+    public void testGetSetProgressDelta() throws LockedException {
         MSACPoint3DRobustEstimator estimator =
                 new MSACPoint3DRobustEstimator();
         
@@ -275,18 +273,18 @@ public class MSACPoint3DRobustEstimatorTest implements
         assertEquals(estimator.getProgressDelta(), 0.5f, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetConfidence() throws LockedException{
+    public void testGetSetConfidence() throws LockedException {
         MSACPoint3DRobustEstimator estimator =
                 new MSACPoint3DRobustEstimator();
         
@@ -301,18 +299,18 @@ public class MSACPoint3DRobustEstimatorTest implements
         assertEquals(estimator.getConfidence(), 0.5, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetMaxIterations() throws LockedException{
+    public void testGetSetMaxIterations() throws LockedException {
         MSACPoint3DRobustEstimator estimator =
                 new MSACPoint3DRobustEstimator();
         
@@ -327,14 +325,14 @@ public class MSACPoint3DRobustEstimatorTest implements
         assertEquals(estimator.getMaxIterations(), 1);
         
         //Fail IllegalArgumentException
-        try{
+        try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetPlanes() throws LockedException{
+    public void testGetSetPlanes() throws LockedException {
         MSACPoint3DRobustEstimator estimator =
                 new MSACPoint3DRobustEstimator();
         
@@ -343,8 +341,8 @@ public class MSACPoint3DRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //set new value
-        List<Plane> planes = new ArrayList<Plane>();
-        for(int i = 0; i < Point3DRobustEstimator.MINIMUM_SIZE; i++){
+        List<Plane> planes = new ArrayList<>();
+        for (int i = 0; i < Point3DRobustEstimator.MINIMUM_SIZE; i++) {
             planes.add(new Plane());
         }
         estimator.setPlanes(planes);
@@ -359,15 +357,15 @@ public class MSACPoint3DRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //Force IllegalArgumentException
-        List<Plane> emptyPlanes = new ArrayList<Plane>();
-        try{
+        List<Plane> emptyPlanes = new ArrayList<>();
+        try {
             estimator.setPlanes(emptyPlanes);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testGetSetQualityScores() throws LockedException{
+    public void testGetSetQualityScores() throws LockedException {
         MSACPoint3DRobustEstimator estimator =
                 new MSACPoint3DRobustEstimator();
         
@@ -433,7 +431,7 @@ public class MSACPoint3DRobustEstimatorTest implements
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             Point3D point = new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -444,13 +442,13 @@ public class MSACPoint3DRobustEstimatorTest implements
             int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            List<Plane> planes = new ArrayList<Plane>();
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planes = new ArrayList<>();
+            List<Plane> planesWithError = new ArrayList<>();
             Plane plane, planeWithError;
-            for(int i = 0; i < nPlanes; i++){
+            for (int i = 0; i < nPlanes; i++) {
                 //get two more points(far enough to compute a plane)
                 Point3D point2, point3;
-                do{
+                do {
                     point2 = new HomogeneousPoint3D(
                             randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE),
@@ -458,8 +456,8 @@ public class MSACPoint3DRobustEstimatorTest implements
                             MAX_RANDOM_VALUE),                            
                             randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE), 1.0);
-                }while(point2.distanceTo(point) < STD_ERROR);
-                do{
+                } while (point2.distanceTo(point) < STD_ERROR);
+                do {
                     point3 = new HomogeneousPoint3D(
                             randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE),
@@ -467,12 +465,12 @@ public class MSACPoint3DRobustEstimatorTest implements
                             MAX_RANDOM_VALUE),                            
                             randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE), 1.0);
-                }while(point3.distanceTo(point) < STD_ERROR ||
+                } while (point3.distanceTo(point) < STD_ERROR ||
                         point3.distanceTo(point2) < STD_ERROR);
                 
                 plane = new Plane(point, point2, point3);
                 
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //line is outlier
                     double errorA = errorRandomizer.nextDouble();
                     double errorB = errorRandomizer.nextDouble();
@@ -481,7 +479,7 @@ public class MSACPoint3DRobustEstimatorTest implements
                     planeWithError = new Plane(plane.getA() + errorA,
                             plane.getB() + errorB, plane.getC() + errorC,
                             plane.getD() + errorD);
-                }else{
+                } else {
                     //inlier line
                     planeWithError = plane;
                 }
@@ -517,7 +515,7 @@ public class MSACPoint3DRobustEstimatorTest implements
             
             //check correctness of estimation by checking that all lines without
             //error have estimated point as locus
-            for(Plane p : planes){
+            for (Plane p : planes) {
                 assertTrue(p.isLocus(point2, ABSOLUTE_ERROR));
             }
             
@@ -533,7 +531,7 @@ public class MSACPoint3DRobustEstimatorTest implements
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             Point3D point = new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -544,13 +542,13 @@ public class MSACPoint3DRobustEstimatorTest implements
             int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            List<Plane> planes = new ArrayList<Plane>();
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planes = new ArrayList<>();
+            List<Plane> planesWithError = new ArrayList<>();
             Plane plane, planeWithError;
-            for(int i = 0; i < nPlanes; i++){
+            for (int i = 0; i < nPlanes; i++) {
                 //get two more points(far enough to compute a plane)
                 Point3D point2, point3;
-                do{
+                do {
                     point2 = new HomogeneousPoint3D(
                             randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE),
@@ -558,8 +556,8 @@ public class MSACPoint3DRobustEstimatorTest implements
                             MAX_RANDOM_VALUE),                            
                             randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE), 1.0);
-                }while(point2.distanceTo(point) < STD_ERROR);
-                do{
+                } while (point2.distanceTo(point) < STD_ERROR);
+                do {
                     point3 = new HomogeneousPoint3D(
                             randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE),
@@ -567,12 +565,12 @@ public class MSACPoint3DRobustEstimatorTest implements
                             MAX_RANDOM_VALUE),                            
                             randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE), 1.0);
-                }while(point3.distanceTo(point) < STD_ERROR ||
+                } while (point3.distanceTo(point) < STD_ERROR ||
                         point3.distanceTo(point2) < STD_ERROR);
                 
                 plane = new Plane(point, point2, point3);
                 
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //line is outlier
                     double errorA = errorRandomizer.nextDouble();
                     double errorB = errorRandomizer.nextDouble();
@@ -581,7 +579,7 @@ public class MSACPoint3DRobustEstimatorTest implements
                     planeWithError = new Plane(plane.getA() + errorA,
                             plane.getB() + errorB, plane.getC() + errorC,
                             plane.getD() + errorD);
-                }else{
+                } else {
                     //inlier line
                     planeWithError = plane;
                 }
@@ -629,7 +627,7 @@ public class MSACPoint3DRobustEstimatorTest implements
             
             //check correctness of estimation by checking that all lines without
             //error have estimated point as locus
-            for(Plane p : planes){
+            for (Plane p : planes) {
                 assertTrue(p.isLocus(point2, ABSOLUTE_ERROR));
             }
             
@@ -645,7 +643,7 @@ public class MSACPoint3DRobustEstimatorTest implements
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             Point3D point = new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -656,13 +654,13 @@ public class MSACPoint3DRobustEstimatorTest implements
             int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
-            List<Plane> planes = new ArrayList<Plane>();
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planes = new ArrayList<>();
+            List<Plane> planesWithError = new ArrayList<>();
             Plane plane, planeWithError;
-            for(int i = 0; i < nPlanes; i++){
+            for (int i = 0; i < nPlanes; i++) {
                 //get two more points(far enough to compute a plane)
                 Point3D point2, point3;
-                do{
+                do {
                     point2 = new HomogeneousPoint3D(
                             randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE),
@@ -670,8 +668,8 @@ public class MSACPoint3DRobustEstimatorTest implements
                             MAX_RANDOM_VALUE),                            
                             randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE), 1.0);
-                }while(point2.distanceTo(point) < STD_ERROR);
-                do{
+                } while (point2.distanceTo(point) < STD_ERROR);
+                do {
                     point3 = new HomogeneousPoint3D(
                             randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE),
@@ -679,12 +677,12 @@ public class MSACPoint3DRobustEstimatorTest implements
                             MAX_RANDOM_VALUE),                            
                             randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE), 1.0);
-                }while(point3.distanceTo(point) < STD_ERROR ||
+                } while (point3.distanceTo(point) < STD_ERROR ||
                         point3.distanceTo(point2) < STD_ERROR);
                 
                 plane = new Plane(point, point2, point3);
                 
-                if(randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER){
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     //line is outlier
                     double errorA = errorRandomizer.nextDouble();
                     double errorB = errorRandomizer.nextDouble();
@@ -693,7 +691,7 @@ public class MSACPoint3DRobustEstimatorTest implements
                     planeWithError = new Plane(plane.getA() + errorA,
                             plane.getB() + errorB, plane.getC() + errorC,
                             plane.getD() + errorD);
-                }else{
+                } else {
                     //inlier line
                     planeWithError = plane;
                 }
@@ -741,7 +739,7 @@ public class MSACPoint3DRobustEstimatorTest implements
             
             //check correctness of estimation by checking that all lines without
             //error have estimated point as locus
-            for(Plane p : planes){
+            for (Plane p : planes) {
                 assertTrue(p.isLocus(point2, ABSOLUTE_ERROR));
             }
             
@@ -749,67 +747,67 @@ public class MSACPoint3DRobustEstimatorTest implements
             assertEquals(point.distanceTo(point2), 0.0, ABSOLUTE_ERROR);
         }
     }
-    
-    private void reset(){
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
-    }
 
     @Override
     public void onEstimateStart(Point3DRobustEstimator estimator) {
         estimateStart++;
-        testLocked((MSACPoint3DRobustEstimator)estimator);
+        checkLocked((MSACPoint3DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateEnd(Point3DRobustEstimator estimator) {
         estimateEnd++;
-        testLocked((MSACPoint3DRobustEstimator)estimator);
+        checkLocked((MSACPoint3DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateNextIteration(Point3DRobustEstimator estimator, 
             int iteration) {
         estimateNextIteration++;
-        testLocked((MSACPoint3DRobustEstimator)estimator);
+        checkLocked((MSACPoint3DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateProgressChange(Point3DRobustEstimator estimator, 
             float progress) {
         estimateProgressChange++;
-        testLocked((MSACPoint3DRobustEstimator)estimator);
+        checkLocked((MSACPoint3DRobustEstimator)estimator);
     }
-    
-    private void testLocked(MSACPoint3DRobustEstimator estimator){
+
+    private void reset() {
+        estimateStart = estimateEnd = estimateNextIteration =
+                estimateProgressChange = 0;
+    }
+
+    private void checkLocked(MSACPoint3DRobustEstimator estimator) {
         try {
             estimator.setThreshold(0.5);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setProgressDelta(0.5f);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setConfidence(0.5);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMaxIterations(5);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setPlanes(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }    
+        } catch (LockedException ignore) { }
         try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
@@ -817,11 +815,11 @@ public class MSACPoint3DRobustEstimatorTest implements
             estimator.setRefinementCoordinatesType(
                     CoordinatesType.HOMOGENEOUS_COORDINATES);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setCovarianceKept(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }        
+        } catch (LockedException ignore) { }
         assertTrue(estimator.isLocked());
     }
 }

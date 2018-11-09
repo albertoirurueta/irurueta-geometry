@@ -1,34 +1,39 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.Ellipse
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 19, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.algebra.ArrayUtils;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class EllipseTest {        
     
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-3;
-    public static final double ABSOLUTE_ERROR = 1e-6;
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
+    private static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_RANDOM_DEGREES = -90.0;
-    public static final double MAX_RANDOM_DEGREES = 90.0;
+    private static final double MIN_RANDOM_DEGREES = -90.0;
+    private static final double MAX_RANDOM_DEGREES = 90.0;
     
-    public static final int TIMES = 500;
+    private static final int TIMES = 500;
     
     public EllipseTest() { }
     
@@ -107,7 +112,7 @@ public class EllipseTest {
 
                 //ensure that all three points are different
                 areEqual = point1.equals(point2, ABSOLUTE_ERROR);
-            }while(areEqual);
+            } while (areEqual);
 
             ellipse = new Ellipse(point1, point2, center, rotationAngle);
 
@@ -168,7 +173,7 @@ public class EllipseTest {
                         point3.equals(point1, ABSOLUTE_ERROR) ||
                         point4.equals(point1, ABSOLUTE_ERROR) ||
                         point5.equals(point1, ABSOLUTE_ERROR);
-            }while(areEqual);
+            } while (areEqual);
 
             try {
                 ellipse = new Ellipse(point1, point2, point3, point4, point5);
@@ -313,7 +318,7 @@ public class EllipseTest {
             ellipse2 = new Ellipse(conic);
             
             //check correctness
-            if(ellipse.getCenter().distanceTo(ellipse2.getCenter()) > 
+            if (ellipse.getCenter().distanceTo(ellipse2.getCenter()) >
                     ABSOLUTE_ERROR) {
                 continue;
             }
@@ -344,7 +349,7 @@ public class EllipseTest {
             try {
                 ellipse2 = new Ellipse(conic);
                 fail("IllegalArgumentException expected but not thrown");
-            } catch (IllegalArgumentException ex) { }
+            } catch (IllegalArgumentException ignore) { }
             
             assertNull(ellipse2);
             
@@ -1143,10 +1148,9 @@ public class EllipseTest {
         Ellipse ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis, 
                 rotationAngle);
 
-        double a = semiMajorAxis;
-        double b = semiMinorAxis;
-        assertEquals(ellipse.getPerimeter(), 
-                Math.PI * (3.0 * (a + b) - Math.sqrt((3.0*a + b) * (a + 3.0*b))),
+        assertEquals(ellipse.getPerimeter(),
+                Math.PI * (3.0 * (semiMajorAxis + semiMinorAxis) -
+                        Math.sqrt((3.0* semiMajorAxis + semiMinorAxis) * (semiMajorAxis + 3.0* semiMinorAxis))),
                 ABSOLUTE_ERROR);
         
         double radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, 
@@ -1247,7 +1251,7 @@ public class EllipseTest {
             ellipse2.setFromConic(conic);
         
             //check correctness
-            if(ellipse.getCenter().distanceTo(ellipse2.getCenter()) > 
+            if (ellipse.getCenter().distanceTo(ellipse2.getCenter()) >
                     ABSOLUTE_ERROR) {
                 continue;
             }
@@ -1274,10 +1278,10 @@ public class EllipseTest {
                         
             //Force IllegalArgumentException
             conic = new Conic();
-            try{
+            try {
                 ellipse2.setFromConic(conic);
                 fail("IllegalArgumentException expected but not thrown");
-            }catch(IllegalArgumentException e){ }
+            } catch (IllegalArgumentException ignore) { }
             
             numValid++;
         }     
@@ -1391,16 +1395,16 @@ public class EllipseTest {
         assertTrue(ellipse.isLocus(zero, ABSOLUTE_ERROR));
         assertTrue(ellipse.isLocus(zero, radius));
         
-        //Force IllegalArgumentExcepetion
-        try{
+        //Force IllegalArgumentException
+        try {
             ellipse.isLocus(zero, -radius);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testGetTangentLineAt() throws NotLocusException{
-        for(int t = 0; t < TIMES; t++){
+        for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             Point2D center = new HomogeneousPoint2D(randomizer.nextDouble(
                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
@@ -1410,11 +1414,11 @@ public class EllipseTest {
             double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES, 
                     MAX_RANDOM_DEGREES) * Math.PI / 180.0;
             double theta2; //angle corresponding to line slope
-            if(theta > Math.PI / 2.0){
+            if (theta > Math.PI / 2.0) {
                 theta2 = theta - Math.PI;
-            }else if(theta < -Math.PI / 2.0){
+            } else if (theta < -Math.PI / 2.0) {
                 theta2 = theta + Math.PI;
-            }else{
+            } else {
                 theta2 = theta;
             }
 
@@ -1436,9 +1440,9 @@ public class EllipseTest {
             //check that line angle is equal to theta
             double lineAngle = line.getAngle();
             double theta3 = theta2 - Math.PI / 2.0;
-            if(theta3 < -Math.PI / 2.0){
+            if (theta3 < -Math.PI / 2.0) {
                 theta3 += Math.PI;
-            }else if(theta3 > Math.PI / 2.0){
+            } else if (theta3 > Math.PI / 2.0) {
                 theta3 -= Math.PI;
             }
             assertEquals(lineAngle * 180.0 / Math.PI, 

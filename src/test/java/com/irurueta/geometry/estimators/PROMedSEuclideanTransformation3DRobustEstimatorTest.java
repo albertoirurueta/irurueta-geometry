@@ -1,61 +1,60 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.PROMedSEuclideanTransformation3DRobustEstimatorTest
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date January 27, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.geometry.EuclideanTransformation3D;
-import com.irurueta.geometry.HomogeneousPoint3D;
-import com.irurueta.geometry.InhomogeneousPoint3D;
-import com.irurueta.geometry.Plane;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Quaternion;
-import com.irurueta.geometry.Utils;
+import com.irurueta.geometry.*;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements 
         EuclideanTransformation3DRobustEstimatorListener {
     
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_ANGLE_DEGREES = -90.0;
-    public static final double MAX_ANGLE_DEGREES = 90.0;
+    private static final double MIN_ANGLE_DEGREES = -90.0;
+    private static final double MAX_ANGLE_DEGREES = 90.0;
     
-    public static final double MIN_TRANSLATION = -100.0;
-    public static final double MAX_TRANSLATION = 100.0;
+    private static final double MIN_TRANSLATION = -100.0;
+    private static final double MAX_TRANSLATION = 100.0;
     
-    public static final double THRESHOLD = 1.0;
+    private static final double THRESHOLD = 1.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final double STD_ERROR = 100.0;
+    private static final double STD_ERROR = 100.0;
     
-    public static final double MIN_SCORE_ERROR = -0.3;
-    public static final double MAX_SCORE_ERROR = 0.3;
+    private static final double MIN_SCORE_ERROR = -0.3;
+    private static final double MAX_SCORE_ERROR = 0.3;
     
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
     
-    public static final int MIN_POINTS = 500;
-    public static final int MAX_POINTS = 1000;
+    private static final int MIN_POINTS = 500;
+    private static final int MAX_POINTS = 1000;
     
-    public static final int PERCENTAGE_OUTLIER = 20;
+    private static final int PERCENTAGE_OUTLIER = 20;
     
     private int estimateStart;
     private int estimateEnd;
@@ -113,8 +112,8 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         
         
         //test constructor with points
-        List<Point3D> inputPoints = new ArrayList<Point3D>();
-        List<Point3D> outputPoints = new ArrayList<Point3D>();
+        List<Point3D> inputPoints = new ArrayList<>();
+        List<Point3D> outputPoints = new ArrayList<>();
         for (int i = 0; i < EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point3D.create());
             outputPoints.add(Point3D.create());
@@ -153,20 +152,20 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         assertNull(estimator.getCovariance());        
         
         //Force IllegalArgumentException
-        List<Point3D> pointsEmpty = new ArrayList<Point3D>();
+        List<Point3D> pointsEmpty = new ArrayList<>();
         estimator = null;
         try {
             //not enough points
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     inputPoints, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
 
         //test constructor with listener
@@ -242,13 +241,13 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     this, pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     this, inputPoints, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);    
         
         //test constructor with quality scores
@@ -290,11 +289,11 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                 shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with points and quality scores
@@ -332,24 +331,24 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //not enough points
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     pointsEmpty, pointsEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     inputPoints, pointsEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //not enough scores
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     inputPoints, outputPoints, shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener and quality scores
@@ -387,11 +386,11 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                 this, shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);  
         
         //test constructor with listener, points and quality scores
@@ -429,24 +428,24 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //not enough points
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     this, pointsEmpty, pointsEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     this, inputPoints, pointsEmpty, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //not enough scores
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     this, inputPoints, outputPoints, shortQualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);         
         
         
@@ -484,8 +483,8 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         
         
         //test constructor with points
-        inputPoints = new ArrayList<Point3D>();
-        outputPoints = new ArrayList<Point3D>();
+        inputPoints = new ArrayList<>();
+        outputPoints = new ArrayList<>();
         for (int i = 0; i < EuclideanTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE; i++) {
             inputPoints.add(Point3D.create());
             outputPoints.add(Point3D.create());
@@ -530,13 +529,13 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     pointsEmpty, pointsEmpty, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     inputPoints, pointsEmpty, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
 
         //test constructor with listener
@@ -613,13 +612,13 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     this, pointsEmpty, pointsEmpty, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     this, inputPoints, pointsEmpty, true);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);    
         
         //test constructor with quality scores
@@ -660,11 +659,11 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                 shortQualityScores, true);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with points and quality scores
@@ -702,24 +701,24 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //not enough points
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     pointsEmpty, pointsEmpty, qualityScores, true);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     inputPoints, pointsEmpty, qualityScores, true);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //not enough scores
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     inputPoints, outputPoints, shortQualityScores, true);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener and quality scores
@@ -757,11 +756,11 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                 this, shortQualityScores, true);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);  
         
         //test constructor with listener, points and quality scores
@@ -799,24 +798,24 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //not enough points
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     this, pointsEmpty, pointsEmpty, qualityScores, true);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     this, inputPoints, pointsEmpty, qualityScores, true);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //not enough scores
             estimator = new PROMedSEuclideanTransformation3DRobustEstimator(
                     this, inputPoints, outputPoints, shortQualityScores, true);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);            
     }
     
@@ -840,7 +839,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         try {
             estimator.setStopThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }                
+        } catch (IllegalArgumentException ignore) { }
     }   
     
     @Test
@@ -863,12 +862,12 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         
         try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }   
     
     @Test
@@ -891,7 +890,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }    
 
     @Test
@@ -905,8 +904,8 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         assertFalse(estimator.isReady());
         
         //set new value
-        List<Point3D> inputPoints = new ArrayList<Point3D>();
-        List<Point3D> outputPoints = new ArrayList<Point3D>();
+        List<Point3D> inputPoints = new ArrayList<>();
+        List<Point3D> outputPoints = new ArrayList<>();
         for (int i = 0; i < LMedSEuclideanTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point3D.create());
             outputPoints.add(Point3D.create());
@@ -927,17 +926,17 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         assertTrue(estimator.isReady());
         
         //Force IllegalArgumentException
-        List<Point3D> pointsEmpty = new ArrayList<Point3D>();
+        List<Point3D> pointsEmpty = new ArrayList<>();
         try {
             //not enough points
             estimator.setPoints(pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator.setPoints(pointsEmpty, pointsEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }     
     
     @Test
@@ -997,11 +996,11 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }  
     
     @Test
@@ -1036,7 +1035,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
     public void testEstimateWithoutRefinement() throws LockedException, 
             NotReadyException, RobustEstimatorException { 
         for (int t = 0; t < TIMES; t++) {
-            //create an euclideantransformation
+            //create an euclidean transformation
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
             double roll = Utils.convertToRadians(randomizer.nextDouble(
@@ -1058,9 +1057,9 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
                         
             //generate random points
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> inputPoints = new ArrayList<Point3D>();
-            List<Point3D> outputPoints = new ArrayList<Point3D>();
-            List<Point3D> outputPointsWithError = new ArrayList<Point3D>();
+            List<Point3D> inputPoints = new ArrayList<>();
+            List<Point3D> outputPoints = new ArrayList<>();
+            List<Point3D> outputPointsWithError = new ArrayList<>();
             double[] qualityScores = new double[nPoints];
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
@@ -1152,7 +1151,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
             NotReadyException, RobustEstimatorException { 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            //create an euclideantransformation
+            //create an euclidean transformation
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
             double roll = Utils.convertToRadians(randomizer.nextDouble(
@@ -1171,9 +1170,6 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
             EuclideanTransformation3D transformation1 = 
                     new EuclideanTransformation3D(q, translation);
             
-                        
-            //generate random points
-            
             //generate random plane
             double a = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -1186,9 +1182,9 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
             Plane plane = new Plane(a, b, c, d);
             
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> inputPoints = new ArrayList<Point3D>();
-            List<Point3D> outputPoints = new ArrayList<Point3D>();
-            List<Point3D> outputPointsWithError = new ArrayList<Point3D>();
+            List<Point3D> inputPoints = new ArrayList<>();
+            List<Point3D> outputPoints = new ArrayList<>();
+            List<Point3D> outputPointsWithError = new ArrayList<>();
             double[] qualityScores = new double[nPoints];
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
@@ -1199,11 +1195,11 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
                         MAX_RANDOM_VALUE);
                 double homZ = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);                
-                if(Math.abs(b) > ABSOLUTE_ERROR){
+                if (Math.abs(b) > ABSOLUTE_ERROR) {
                     homX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);
                     homY = -(a * homX + c * homZ + d * homW) / b;
-                }else{
+                } else {
                     homY = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);
                     homX = -(b * homY + c * homZ + d * homW) / a;
@@ -1280,7 +1276,9 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
                         ABSOLUTE_ERROR);
             }
             
-            if (!isValid) continue;
+            if (!isValid) {
+                continue;
+            }
             
             //check paramaters of estimated transformation
             Quaternion q2 = transformation2.getRotation().toQuaternion();
@@ -1303,7 +1301,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
     public void testEstimateWithRefinement() throws LockedException, 
             NotReadyException, RobustEstimatorException { 
         for (int t = 0; t < TIMES; t++) {
-            //create an euclideantransformation
+            //create an euclidean transformation
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
             double roll = Utils.convertToRadians(randomizer.nextDouble(
@@ -1325,9 +1323,9 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
                         
             //generate random points
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> inputPoints = new ArrayList<Point3D>();
-            List<Point3D> outputPoints = new ArrayList<Point3D>();
-            List<Point3D> outputPointsWithError = new ArrayList<Point3D>();
+            List<Point3D> inputPoints = new ArrayList<>();
+            List<Point3D> outputPoints = new ArrayList<>();
+            List<Point3D> outputPointsWithError = new ArrayList<>();
             double[] qualityScores = new double[nPoints];
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
@@ -1387,7 +1385,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
             assertNotNull(estimator.getInliersData().getInliers());
             assertNotNull(estimator.getInliersData().getResiduals());
             assertTrue(estimator.getInliersData().getNumInliers() > 0);
-            if(estimator.getCovariance() != null) {
+            if (estimator.getCovariance() != null) {
                 assertEquals(estimator.getCovariance().getRows(),
                         Quaternion.N_PARAMS + 
                         EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
@@ -1432,7 +1430,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
             NotReadyException, RobustEstimatorException { 
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
-            //create an euclideantransformation
+            //create an euclidean transformation
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
         
             double roll = Utils.convertToRadians(randomizer.nextDouble(
@@ -1451,9 +1449,6 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
             EuclideanTransformation3D transformation1 = 
                     new EuclideanTransformation3D(q, translation);
             
-                        
-            //generate random points
-            
             //generate random plane
             double a = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                     MAX_RANDOM_VALUE);
@@ -1466,9 +1461,9 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
             Plane plane = new Plane(a, b, c, d);
             
             int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            List<Point3D> inputPoints = new ArrayList<Point3D>();
-            List<Point3D> outputPoints = new ArrayList<Point3D>();
-            List<Point3D> outputPointsWithError = new ArrayList<Point3D>();
+            List<Point3D> inputPoints = new ArrayList<>();
+            List<Point3D> outputPoints = new ArrayList<>();
+            List<Point3D> outputPointsWithError = new ArrayList<>();
             double[] qualityScores = new double[nPoints];
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR);
@@ -1479,11 +1474,11 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
                         MAX_RANDOM_VALUE);
                 double homZ = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);                
-                if(Math.abs(b) > ABSOLUTE_ERROR){
+                if (Math.abs(b) > ABSOLUTE_ERROR) {
                     homX = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);
                     homY = -(a * homX + c * homZ + d * homW) / b;
-                }else{
+                } else {
                     homY = randomizer.nextDouble(MIN_RANDOM_VALUE, 
                             MAX_RANDOM_VALUE);
                     homX = -(b * homY + c * homZ + d * homW) / a;
@@ -1541,7 +1536,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
             assertNotNull(estimator.getInliersData().getInliers());
             assertNotNull(estimator.getInliersData().getResiduals());
             assertTrue(estimator.getInliersData().getNumInliers() > 0);
-            if(estimator.getCovariance() != null) {
+            if (estimator.getCovariance() != null) {
                 assertEquals(estimator.getCovariance().getRows(),
                         Quaternion.N_PARAMS + 
                         EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
@@ -1573,9 +1568,11 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
                         ABSOLUTE_ERROR);
             }
             
-            if (!isValid) continue;
+            if (!isValid) {
+                continue;
+            }
             
-            //check paramaters of estimated transformation
+            //check parameters of estimated transformation
             Quaternion q2 = transformation2.getRotation().toQuaternion();
             q2.normalize();        
             double[] translation2 = transformation2.getTranslation();
@@ -1591,82 +1588,82 @@ public class PROMedSEuclideanTransformation3DRobustEstimatorTest implements
         
         assertTrue(numValid > 0);
     }    
-    
-    private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration = 
-                estimateProgressChange = 0;
-    }
-    
+
     @Override
     public void onEstimateStart(EuclideanTransformation3DRobustEstimator estimator) {
         estimateStart++;
-        testLocked((PROMedSEuclideanTransformation3DRobustEstimator)estimator);
+        checkLocked((PROMedSEuclideanTransformation3DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateEnd(EuclideanTransformation3DRobustEstimator estimator) {
         estimateEnd++;
-        testLocked((PROMedSEuclideanTransformation3DRobustEstimator)estimator);
+        checkLocked((PROMedSEuclideanTransformation3DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateNextIteration(
             EuclideanTransformation3DRobustEstimator estimator, int iteration) {
         estimateNextIteration++;
-        testLocked((PROMedSEuclideanTransformation3DRobustEstimator)estimator);
+        checkLocked((PROMedSEuclideanTransformation3DRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateProgressChange(
             EuclideanTransformation3DRobustEstimator estimator, float progress) {
         estimateProgressChange++;
-        testLocked((PROMedSEuclideanTransformation3DRobustEstimator)estimator);
+        checkLocked((PROMedSEuclideanTransformation3DRobustEstimator)estimator);
     }
-    
-    private void testLocked(
+
+    private void reset() {
+        estimateStart = estimateEnd = estimateNextIteration =
+                estimateProgressChange = 0;
+    }
+
+    private void checkLocked(
             PROMedSEuclideanTransformation3DRobustEstimator estimator) {
-        List<Point3D> points = new ArrayList<Point3D>();
+        List<Point3D> points = new ArrayList<>();
         try {
             estimator.setPoints(points, points);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setProgressDelta(0.01f);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setStopThreshold(0.5);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try{
             double[] qualityScores = new double[
                     EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE];
             estimator.setQualityScores(qualityScores);
             fail("LockedException expected but not thrown");
-        }catch(LockedException e){}        
+        } catch (LockedException ignore) { }
         try {
             estimator.setConfidence(0.5);            
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMaxIterations(10);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }
         try {
             estimator.setWeakMinimumSizeAllowed(true);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }        
+        } catch (LockedException ignore) { }
         assertTrue(estimator.isLocked());
     }     
 }

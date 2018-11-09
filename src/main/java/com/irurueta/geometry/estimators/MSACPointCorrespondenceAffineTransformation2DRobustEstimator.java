@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.MSACPointCorrespondenceAffineTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 10, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,11 +19,8 @@ import com.irurueta.geometry.AffineTransformation2D;
 import com.irurueta.geometry.CoincidentPointsException;
 import com.irurueta.geometry.CoordinatesType;
 import com.irurueta.geometry.Point2D;
-import com.irurueta.numerical.robust.MSACRobustEstimator;
-import com.irurueta.numerical.robust.MSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.List;
 
 /**
@@ -168,7 +172,7 @@ public class MSACPointCorrespondenceAffineTransformation2DRobustEstimator
         }
         
         MSACRobustEstimator<AffineTransformation2D> innerEstimator = 
-                new MSACRobustEstimator<AffineTransformation2D>(
+                new MSACRobustEstimator<>(
                     new MSACRobustEstimatorListener<AffineTransformation2D>() {
                     
             //point to be reused when computing residuals
@@ -201,12 +205,12 @@ public class MSACPointCorrespondenceAffineTransformation2DRobustEstimator
                 Point2D outputPoint2 = mOutputPoints.get(samplesIndices[1]);
                 Point2D outputPoint3 = mOutputPoints.get(samplesIndices[2]);
 
-                try{
+                try {
                     AffineTransformation2D transformation = 
                         new AffineTransformation2D(inputPoint1, inputPoint2, 
                         inputPoint3, outputPoint1, outputPoint2, outputPoint3);
                     solutions.add(transformation);
-                }catch(CoincidentPointsException e){
+                } catch (CoincidentPointsException e) {
                     //if points are coincident, no solution is added
                 }
             }
@@ -232,7 +236,7 @@ public class MSACPointCorrespondenceAffineTransformation2DRobustEstimator
             @Override
             public void onEstimateStart(
                     RobustEstimator<AffineTransformation2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateStart(
                             MSACPointCorrespondenceAffineTransformation2DRobustEstimator.this);
                 }
@@ -241,7 +245,7 @@ public class MSACPointCorrespondenceAffineTransformation2DRobustEstimator
             @Override
             public void onEstimateEnd(
                     RobustEstimator<AffineTransformation2D> estimator) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateEnd(
                             MSACPointCorrespondenceAffineTransformation2DRobustEstimator.this);
                 }
@@ -251,7 +255,7 @@ public class MSACPointCorrespondenceAffineTransformation2DRobustEstimator
             public void onEstimateNextIteration(
                     RobustEstimator<AffineTransformation2D> estimator, 
                     int iteration) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateNextIteration(
                             MSACPointCorrespondenceAffineTransformation2DRobustEstimator.this, 
                             iteration);
@@ -262,7 +266,7 @@ public class MSACPointCorrespondenceAffineTransformation2DRobustEstimator
             public void onEstimateProgressChange(
                     RobustEstimator<AffineTransformation2D> estimator, 
                     float progress) {
-                if(mListener != null){
+                if (mListener != null) {
                     mListener.onEstimateProgressChange(
                             MSACPointCorrespondenceAffineTransformation2DRobustEstimator.this, 
                             progress);

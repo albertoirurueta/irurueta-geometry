@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.Quaternion
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date December 20, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
@@ -13,49 +20,42 @@ import com.irurueta.algebra.ArrayUtils;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.SingularValueDecomposer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class QuaternionTest {
-    public static final int ROTATION_COLS = 3;    
-    public static final int INHOM_COORDS = 3;
+    private static final int ROTATION_COLS = 3;
+    private static final int INHOM_COORDS = 3;
 
-    public static final double MIN_RANDOM_VALUE = -100.0;
-    public static final double MAX_RANDOM_VALUE = 100.0;
+    private static final double MIN_RANDOM_VALUE = -100.0;
+    private static final double MAX_RANDOM_VALUE = 100.0;
     
-    public static final double MIN_ANGLE_DEGREES = 0.0;
-    public static final double MAX_ANGLE_DEGREES = 90.0;
+    private static final double MIN_ANGLE_DEGREES = 0.0;
+    private static final double MAX_ANGLE_DEGREES = 90.0;
 
-    public static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 1e-6;
     
-    public static final double JACOBIAN_ERROR = 1e-6;
+    private static final double JACOBIAN_ERROR = 1e-6;
     
-    public QuaternionTest() {
-    }
+    public QuaternionTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
+    public void tearDown() { }
 
     @Test
-    public void testConstructors() throws AlgebraException, RotationException{
+    public void testConstructors() throws AlgebraException, RotationException {
         //empty constructor
         Quaternion q = new Quaternion();
         
@@ -108,10 +108,10 @@ public class QuaternionTest {
         //Force IllegalArgumentException
         q = null;
         values = new double[]{1, a, b, c, d };
-        try{
+        try {
             q = new Quaternion(values);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ignore){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(q);
         
         
@@ -134,7 +134,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         AxisRotation3D axisRotation = new AxisRotation3D(axis, theta);
         
@@ -148,10 +149,10 @@ public class QuaternionTest {
         
         //Force IllegalArgumentException
         q = null;
-        try{
+        try {
             q = new Quaternion(new double[]{}, theta);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ignore){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(q);
         
         
@@ -159,6 +160,7 @@ public class QuaternionTest {
         q = new Quaternion(axisRotation);
         
         //check correctness
+        //noinspection all
         assertEquals(q, axisRotation);
         
         
@@ -182,6 +184,7 @@ public class QuaternionTest {
         q.toEulerAngles(angles);
         
         //check correctness
+        //noinspection all
         assertEquals(q, matrixRotation);
         assertEquals(roll, angles[0], ABSOLUTE_ERROR);
         assertEquals(pitch, angles[1], ABSOLUTE_ERROR);
@@ -192,11 +195,12 @@ public class QuaternionTest {
         matrixRotation = new MatrixRotation3D(axis, theta);
         
         //check correctness
+        //noinspection all
         assertEquals(q, matrixRotation);
     }
     
     @Test
-    public void testGetSetA(){
+    public void testGetSetA() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         
@@ -213,7 +217,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testGetSetB(){
+    public void testGetSetB() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         
@@ -230,7 +234,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testGetSetC(){
+    public void testGetSetC() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         
@@ -247,7 +251,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testGetSetD(){
+    public void testGetSetD() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         
@@ -264,7 +268,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testGetSetValues(){
+    public void testGetSetValues() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] values = new double[Quaternion.N_PARAMS];
         randomizer.fill(values, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -284,14 +288,14 @@ public class QuaternionTest {
         
         //Force IllegalArgumentException
         double[] invalid = new double[Quaternion.N_PARAMS + 1];
-        try{
+        try {
             q.setValues(invalid);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ignore){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testFromQuaternion(){
+    public void testFromQuaternion() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] values = new double[Quaternion.N_PARAMS];
         randomizer.fill(values, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -309,7 +313,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testClone(){
+    public void testClone() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] values = new double[Quaternion.N_PARAMS];
         randomizer.fill(values, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -326,7 +330,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testCopyTo(){
+    public void testCopyTo() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double[] values = new double[Quaternion.N_PARAMS];
         randomizer.fill(values, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -345,7 +349,7 @@ public class QuaternionTest {
     
     @Test
     public void testGetSetFromAxisAndRotation() throws AlgebraException, 
-            RotationException{
+            RotationException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -365,7 +369,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         AxisRotation3D axisRotation = new AxisRotation3D(axis, theta);
         
@@ -418,17 +423,17 @@ public class QuaternionTest {
         
         //Force IllegalArgumentException
         Matrix invalid = new Matrix(1, 1);
-        try{
+        try {
             q.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta, 
                     invalid, jacobianOfAxis);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ignore){}
+        } catch (IllegalArgumentException ignore) { }
         
-        try{
+        try {
             q.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta, 
                     jacobianOfTheta, invalid);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ignore){}
+        } catch (IllegalArgumentException ignore) { }
 
         
         //set values
@@ -440,10 +445,10 @@ public class QuaternionTest {
         assertEquals(theta, q.getRotationAngle(), ABSOLUTE_ERROR);        
         
         //Force IllegalArgumentException
-        try{
+        try {
             q.setFromAxisAndRotation(new double[1], theta);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ignore){}
+        } catch (IllegalArgumentException ignore) { }
         
         //set values with jacobians
         jacobianOfTheta = new Matrix(Quaternion.N_PARAMS, 1);
@@ -477,20 +482,20 @@ public class QuaternionTest {
         assertEquals(jacobianOfAxis.getElementAt(3, 2), s, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             q.setFromAxisAndRotation(new double[1], theta, jacobianOfTheta, 
                     jacobianOfAxis);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ignore){}        
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             q.setFromAxisAndRotation(axis, theta, invalid, jacobianOfAxis);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ignore){}
+        } catch (IllegalArgumentException ignore) { }
         
-        try{
+        try {
             q.setFromAxisAndRotation(axis, theta, jacobianOfTheta, invalid);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ignore){}
+        } catch (IllegalArgumentException ignore) { }
 
         //set values
         q = new Quaternion();
@@ -536,19 +541,19 @@ public class QuaternionTest {
         assertEquals(jacobianOfAxis.getElementAt(3, 2), s, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             q.setFromAxisAndRotation(axisRotation, invalid, jacobianOfAxis);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ignore){}
+        } catch (IllegalArgumentException ignore) { }
         
-        try{
+        try {
             q.setFromAxisAndRotation(axisRotation, jacobianOfTheta, invalid);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException ignore){}        
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
-    public void testMultiplyAndProduct() throws AlgebraException{
+    public void testMultiplyAndProduct() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double a1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double a2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -658,14 +663,14 @@ public class QuaternionTest {
         
         //Force IllegalArgumentException
         Matrix invalid = new Matrix(1, 1);
-        try{
+        try {
             Quaternion.product(q1, q2, q, invalid, jacobianQ2);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             Quaternion.product(q1, q2, q, jacobianQ1, invalid);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         
         //check correctness of jacobians
@@ -684,7 +689,7 @@ public class QuaternionTest {
         Quaternion qb = new Quaternion();
         Quaternion.product(q1b, q2, qb);
         
-        double[] diffResult = new double[]{
+        double[] diffResult = new double[] {
             qb.getA() - q.getA(),
             qb.getB() - q.getB(),
             qb.getC() - q.getC(),
@@ -702,7 +707,7 @@ public class QuaternionTest {
         qb = new Quaternion();
         Quaternion.product(q1, q2b, qb);
         
-        diffResult = new double[]{
+        diffResult = new double[] {
             qb.getA() - q.getA(),
             qb.getB() - q.getB(),
             qb.getC() - q.getC(),
@@ -715,7 +720,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testSetFromEulerAngles() throws AlgebraException{
+    public void testSetFromEulerAngles() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
                 2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -776,10 +781,10 @@ public class QuaternionTest {
         
         //Force IllegalArgumentException
         Matrix invalid = new Matrix(1, 1);
-        try{
+        try {
             q.setFromEulerAngles(roll, pitch, yaw, invalid);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //set values
         q = new Quaternion();
@@ -830,14 +835,14 @@ public class QuaternionTest {
                 ABSOLUTE_ERROR);
         
         //Force IllegalArgumentException
-        try{
+        try {
             q.setFromEulerAngles(new double[1], jacobian);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             q.setFromEulerAngles(new double[]{roll, pitch, yaw}, invalid);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         
         //set values
         q = new Quaternion();
@@ -851,8 +856,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testEulerToMatrixRotation() throws AlgebraException, 
-            InvalidRotationMatrixException{
+    public void testEulerToMatrixRotation() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
                 2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -940,10 +944,10 @@ public class QuaternionTest {
         
         //Force IllegalArgumentException
         Matrix invalid = new Matrix(1, 1);
-        try{
+        try {
             Quaternion.eulerToMatrixRotation(roll, pitch, yaw, rot2, invalid);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //set new values
         rot2 = new MatrixRotation3D();
@@ -1022,15 +1026,15 @@ public class QuaternionTest {
         assertEquals(jacobian.getElementAt(8, 2), 0.0, 0.0);
         
         //Force IllegalArgumentException
-        try{
+        try {
             Quaternion.eulerToMatrixRotation(new double[1], rot2, jacobian);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             Quaternion.eulerToMatrixRotation(new double[]{roll, pitch, yaw}, 
                     rot2, invalid);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //set new values
         rot2 = new MatrixRotation3D();
@@ -1040,15 +1044,15 @@ public class QuaternionTest {
         assertEquals(rot, rot2);      
         
         //Force IllegalArgumentException
-        try{
+        try {
             Quaternion.eulerToMatrixRotation(new double[1], rot2);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
     public void testToAxisAndRotationAngle() throws AlgebraException, 
-            RotationException{
+            RotationException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -1068,7 +1072,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         Quaternion q = new Quaternion(axis, theta);
         
@@ -1105,9 +1110,11 @@ public class QuaternionTest {
                 multiplyAndReturnNew(Matrix.newFromArray(axis2, false)));
         uV.multiplyByScalar(1.0 / (n * n));
         
-        assertEquals(jacobianAxis.getSubmatrix(0, 1, 2, 3), uV);
-        assertArrayEquals(jacobianAxis.getSubmatrix(0, 0, 2, 0).toArray(),
-                new double[]{0.0, 0.0, 0.0}, 0.0);
+        assertEquals(jacobianAxis.getSubmatrix(0, 1,
+                2, 3), uV);
+        assertArrayEquals(jacobianAxis.getSubmatrix(0, 0,
+                2, 0).toArray(),
+                new double[] {0.0, 0.0, 0.0}, 0.0);
         
         
         theta2 = q.toAxisAndRotationAngle(axis2);
@@ -1132,7 +1139,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testToRotationVector() throws AlgebraException{
+    public void testToRotationVector() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -1152,7 +1159,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         Quaternion q = new Quaternion(axis, theta);
         
@@ -1180,14 +1188,14 @@ public class QuaternionTest {
         assertTrue(jacobian.equals(vQ, ABSOLUTE_ERROR));
         
         //throw IllegalArgumentException
-        try{
+        try {
             q.toRotationVector(new double[1], jacobian);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             q.toRotationVector(rotationVector, new Matrix(1,1));
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
 
         rotationVector = new double[axis.length];
         q.toRotationVector(rotationVector);
@@ -1199,7 +1207,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testToEulerAngles() throws AlgebraException{
+    public void testToEulerAngles() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
                 2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -1212,7 +1220,8 @@ public class QuaternionTest {
         rot.setRollPitchYaw(roll, pitch, yaw);
         
         Quaternion q = new Quaternion(roll, pitch, yaw);
-        
+
+        //noinspection all
         assertEquals(rot, q);
         
         double[] angles = new double[Quaternion.N_ANGLES];
@@ -1288,7 +1297,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testQuaternionMatrix() throws AlgebraException{
+    public void testQuaternionMatrix() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double roll1 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
                 2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -1325,7 +1334,7 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testConjugate() throws AlgebraException{
+    public void testConjugate() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -1388,14 +1397,14 @@ public class QuaternionTest {
         qc.conjugate(qc);
         assertEquals(qc, q);
         
-        try{
+        try {
             q.conjugate(qc, new Matrix(1, 1));
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
 
     @Test
-    public void testQuaternionMatrixN() throws AlgebraException{
+    public void testQuaternionMatrixN() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double roll1 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
                 2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -1432,7 +1441,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testToMatrixRotation() throws AlgebraException{
+    public void testToMatrixRotation() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
                 2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -1499,14 +1508,14 @@ public class QuaternionTest {
         assertEquals(jacobian.getElementAt(8, 3), 2*d, ABSOLUTE_ERROR);
         
         //Force IllegalArgumentException
-        try{
+        try {
             q.toMatrixRotation(m, new Matrix(1, 1));
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             q.toMatrixRotation(new Matrix(1,1), jacobian);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         m = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
                 MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS);
@@ -1515,10 +1524,10 @@ public class QuaternionTest {
         assertTrue(m.equals(matrixRot.internalMatrix, ABSOLUTE_ERROR));
         
         //Force IllegalArgumentException
-        try{
+        try {
             q.toMatrixRotation(new Matrix(1,1));
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
 
         
         MatrixRotation3D matrixRot2 = new MatrixRotation3D();
@@ -1532,7 +1541,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testRotate() throws ColinearPointsException, AlgebraException{
+    public void testRotate() throws ColinearPointsException, AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
                 2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -1567,7 +1576,7 @@ public class QuaternionTest {
         
         //ensure that points are not colinear
         
-        while(Plane.areColinearPoints(point1, point2, point3)){
+        while (Plane.areColinearPoints(point1, point2, point3)) {
             point2.setInhomogeneousCoordinates(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -1754,7 +1763,7 @@ public class QuaternionTest {
     
     @Test
     public void testMatrixRotationToQuaternionAndSetfromMatrixRotation() 
-            throws AlgebraException{
+            throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
                 2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -1772,19 +1781,21 @@ public class QuaternionTest {
         Quaternion.matrixRotationToQuaternion(matrixRot.internalMatrix, q);
         
         //check correctness
+        //noinspection all
         assertEquals(matrixRot, q);
         
         //Force IllegalArgumentException
-        try{
+        try {
             Quaternion.matrixRotationToQuaternion(new Matrix(1,1), q);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //test
         q = new Quaternion();
         Quaternion.matrixRotationToQuaternion(matrixRot, q);
         
         //check correctness
+        //noinspection all
         assertEquals(matrixRot, q);
         
         //test
@@ -1792,25 +1803,27 @@ public class QuaternionTest {
         q.setFromMatrixRotation(matrixRot.internalMatrix);
         
         //check correctness
+        //noinspection all
         assertEquals(matrixRot, q);
         
         //Force IllegalArgumentException
-        try{
+        try {
             q.setFromMatrixRotation(new Matrix(1, 1));
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         //test
         q = new Quaternion();
         q.setFromMatrixRotation(matrixRot);
         
         //check correctness
+        //noinspection all
         assertEquals(matrixRot, q);
     }
     
     @Test
     public void testRotationVectorToRotationAxisAndAngle() 
-            throws AlgebraException{
+            throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -1869,26 +1882,26 @@ public class QuaternionTest {
                 1/theta - axis[2]*axis[2]/theta, ABSOLUTE_ERROR);
         
         //Force IllegalArgumentException
-        try{
+        try {
             Quaternion.rotationVectorToRotationAxisAndAngle(new double[1], 
                     axis2, jacobianAlpha, jacobianRotationVector);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             Quaternion.rotationVectorToRotationAxisAndAngle(rotationVector, 
                     new double[1], jacobianAlpha, jacobianRotationVector);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             Quaternion.rotationVectorToRotationAxisAndAngle(rotationVector, 
                     axis2, new Matrix(1, 1), jacobianRotationVector);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         try{
             Quaternion.rotationVectorToRotationAxisAndAngle(rotationVector, 
                     axis2, jacobianAlpha, new Matrix(1, 1));
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
 
         
         double[] axis3 = new double[axis.length];
@@ -1900,7 +1913,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testRotationVectorToQuaternion() throws AlgebraException{
+    public void testRotationVectorToQuaternion() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -1920,7 +1933,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         double[] rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis, 
                 theta);
@@ -1935,7 +1949,7 @@ public class QuaternionTest {
         q.toRotationVector(rotationVector2);
         assertArrayEquals(rotationVector, rotationVector2, ABSOLUTE_ERROR);
         
-        if(theta < Quaternion.LARGE_AXIS_NORM_THRESHOLD){
+        if (theta < Quaternion.LARGE_AXIS_NORM_THRESHOLD) {
             assertEquals(jacobian.getElementAt(0, 0), -0.25*rotationVector[0], 
                     ABSOLUTE_ERROR);
             assertEquals(jacobian.getElementAt(1, 0), -0.25*rotationVector[1],
@@ -1954,7 +1968,7 @@ public class QuaternionTest {
             assertEquals(jacobian.getElementAt(0, 3), 0.0, 0.0);
             assertEquals(jacobian.getElementAt(1, 3), 0.0, 0.0);
             assertEquals(jacobian.getElementAt(2, 3), 0.5, 0.0);
-        }else{
+        } else {
             Matrix jacobianAlpha = new Matrix(1, Quaternion.N_ANGLES);
             Matrix jacobianRotationVector = new Matrix(Quaternion.N_ANGLES,
                     Quaternion.N_ANGLES);
@@ -1977,15 +1991,15 @@ public class QuaternionTest {
         }
         
         //Force IllegalArgumentException
-        try{
+        try {
             Quaternion.rotationVectorToQuaternion(new double[1], q, jacobian);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             Quaternion.rotationVectorToQuaternion(rotationVector, q, 
                     new Matrix(1, 1));
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         
         q = new Quaternion();
         Quaternion.rotationVectorToQuaternion(rotationVector, q);
@@ -2010,7 +2024,7 @@ public class QuaternionTest {
         Quaternion q2 = new Quaternion();
         Quaternion.rotationVectorToQuaternion(rotationVector2, q2);
         
-        double[] diffResult = new double[]{
+        double[] diffResult = new double[] {
             q2.getA() - q.getA(),
             q2.getB() - q.getB(),
             q2.getC() - q.getC(),
@@ -2022,7 +2036,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testSetFromRotationVector() throws AlgebraException{
+    public void testSetFromRotationVector() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -2042,7 +2056,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         double[] rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis, 
                 theta);
@@ -2060,7 +2075,7 @@ public class QuaternionTest {
     
     @Test
     public void testRotationVectorToMatrixRotation() throws AlgebraException, 
-            RotationException{
+            RotationException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -2099,21 +2114,21 @@ public class QuaternionTest {
         double[] axis2 = matrixRot.getRotationAxis();
         double theta2 = matrixRot.getRotationAngle();
         
-        for(int i = 0; i < axis.length; i++){
+        for (int i = 0; i < axis.length; i++) {
             assertEquals(Math.abs(axis[i]), Math.abs(axis2[i]), ABSOLUTE_ERROR);
         }
         assertEquals(Math.abs(theta), Math.abs(theta2), ABSOLUTE_ERROR);
     }
     
     @Test
-    public void testGetType(){
+    public void testGetType() {
         Quaternion q = new Quaternion();
         assertEquals(q.getType(), Rotation3DType.QUATERNION);
     }
     
     @Test
     public void testSetAxisAndRotationRotationAxisAndGetRotationAngle() 
-            throws AlgebraException, RotationException{
+            throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -2133,7 +2148,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         Quaternion q = new Quaternion();
         q.setAxisAndRotation(axis[0], axis[1], axis[2], theta);
@@ -2147,7 +2163,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testAsInhomogeneousMatrix() throws AlgebraException{
+    public void testAsInhomogeneousMatrix() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -2167,7 +2183,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         Quaternion q = new Quaternion(axis, theta);
         MatrixRotation3D rot = new MatrixRotation3D(axis, theta);
@@ -2188,7 +2205,7 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testAsHomogeneousMatrix() throws AlgebraException{
+    public void testAsHomogeneousMatrix() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -2208,7 +2225,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         Quaternion q = new Quaternion(axis, theta);
         MatrixRotation3D rot = new MatrixRotation3D(axis, theta);
@@ -2229,7 +2247,8 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testFromInhomogeneousMatrix() throws AlgebraException, InvalidRotationMatrixException{
+    public void testFromInhomogeneousMatrix() throws AlgebraException,
+            InvalidRotationMatrixException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -2249,7 +2268,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         Quaternion q1 = new Quaternion(axis, theta);
         Matrix m1 = q1.asInhomogeneousMatrix();
@@ -2264,7 +2284,7 @@ public class QuaternionTest {
     
     @Test
     public void testFromHomogeneousMatrix() throws AlgebraException, 
-            InvalidRotationMatrixException{
+            InvalidRotationMatrixException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -2284,7 +2304,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         Quaternion q1 = new Quaternion(axis, theta);
         Matrix m1 = q1.asHomogeneousMatrix();
@@ -2298,7 +2319,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testInverse() throws AlgebraException{
+    public void testInverse() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -2318,7 +2339,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         Quaternion q = new Quaternion(axis, theta);
         Quaternion invQ1 = new Quaternion();
@@ -2370,7 +2392,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testInverseRotation() throws AlgebraException{
+    public void testInverseRotation() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -2390,7 +2412,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         Quaternion q = new Quaternion(axis, theta);        
         
@@ -2403,6 +2426,7 @@ public class QuaternionTest {
         
         //check correctness
         assertEquals(invQ1, invQ2);
+        //noinspection all
         assertEquals(invQ2, invRot);
         assertEquals(invRot, invQ1);
         
@@ -2439,7 +2463,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testCombine() throws AlgebraException{
+    public void testCombine() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double roll1 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 
                 2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -2483,7 +2507,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testFromRotation() throws AlgebraException, RotationException{
+    public void testFromRotation() throws AlgebraException, RotationException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -2503,7 +2527,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         MatrixRotation3D matrixRot = new MatrixRotation3D(axis, theta);
         AxisRotation3D axisRot = new AxisRotation3D(axis, theta);
@@ -2515,6 +2540,7 @@ public class QuaternionTest {
         q.fromRotation(matrixRot);
         
         //check correctness
+        //noinspection all
         assertEquals(q, matrixRot);
         assertArrayEquals(q.getRotationAxis(), axis, ABSOLUTE_ERROR);
         assertEquals(q.getRotationAngle(), theta, ABSOLUTE_ERROR);
@@ -2524,6 +2550,7 @@ public class QuaternionTest {
         q.fromRotation(axisRot);
         
         //check correctness
+        //noinspection all
         assertEquals(q, axisRot);
         assertArrayEquals(q.getRotationAxis(), axis, ABSOLUTE_ERROR);
         assertEquals(q.getRotationAngle(), theta, ABSOLUTE_ERROR);
@@ -2539,7 +2566,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testToQuaternion() throws AlgebraException{
+    public void testToQuaternion() throws AlgebraException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -2559,7 +2586,8 @@ public class QuaternionTest {
         Matrix vMatrix = decomposer.getV();
             
         //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
+        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                2, 0);
         
         Quaternion q1 = new Quaternion(axis, theta);
         Quaternion q2 = new Quaternion();
@@ -2569,7 +2597,7 @@ public class QuaternionTest {
     }
     
     @Test
-    public void testNormalize() throws AlgebraException, RotationException{
+    public void testNormalize() throws AlgebraException, RotationException {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
@@ -2661,9 +2689,9 @@ public class QuaternionTest {
         assertEquals(jacobian, jacobian2);
         
         //Force IllegalArgumentException
-        try{
+        try {
             q1.normalize(new Matrix(1,1));
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
     }
 }

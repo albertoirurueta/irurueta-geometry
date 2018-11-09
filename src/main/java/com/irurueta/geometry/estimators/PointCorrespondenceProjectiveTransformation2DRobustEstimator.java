@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.PointCorrespondenceProjectiveTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 3, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
@@ -12,19 +19,20 @@ import com.irurueta.geometry.Point2D;
 import com.irurueta.geometry.ProjectiveTransformation2D;
 import com.irurueta.geometry.refiners.PointCorrespondenceProjectiveTransformation2DRefiner;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
 import java.util.List;
 
 /**
  * This is an abstract class for algorithms to robustly find the best projective
  * 2D transformation for collections of matching 2D points.
  * Implementations of this class should be able to detect and discard outliers
- * in order to find the best solution
+ * in order to find the best solution.
  */
 public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimator 
-        extends ProjectiveTransformation2DRobustEstimator{
+        extends ProjectiveTransformation2DRobustEstimator {
     
     /**
-     * Default robust estimator method when none is provided
+     * Default robust estimator method when none is provided.
      */
     public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = 
             RobustEstimatorMethod.PROMedS; 
@@ -34,7 +42,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * Each point in the list of input points must be matched with the 
      * corresponding point in the list of output points located at the same 
      * position. Hence, both input points and output points must have the same 
-     * size, and their size must be greater or equal than MINIMUM_SIZE
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
      */
     protected List<Point2D> mInputPoints;
     
@@ -43,14 +51,14 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * Each point in the list of output points must be matched with the 
      * corresponding point in the list of input points located at the same 
      * position. Hence, both input points and output points must have the same 
-     * size, and their size must be greater or equal than MINIMUM_SIZE
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
      */
     protected List<Point2D> mOutputPoints;
         
     /**
-     * Constructor
+     * Constructor.
      */
-    public PointCorrespondenceProjectiveTransformation2DRobustEstimator(){
+    public PointCorrespondenceProjectiveTransformation2DRobustEstimator() {
         super();
     }
     
@@ -59,17 +67,17 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param inputPoints list of input points to be used to estimate a
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PointCorrespondenceProjectiveTransformation2DRobustEstimator(
             List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super();
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -77,32 +85,32 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
     /**
      * Constructor.
      * @param listener listener to be notified of events such as when estimation
-     * stars, ends or its progress significantly changes
+     * stars, ends or its progress significantly changes.
      */
     public PointCorrespondenceProjectiveTransformation2DRobustEstimator(
-            ProjectiveTransformation2DRobustEstimatorListener listener){
+            ProjectiveTransformation2DRobustEstimatorListener listener) {
         super(listener);
     }
     
     /**
      * Constructor with listener and lists of points to be used to estimate a
-     * projection 2D transformation
+     * projection 2D transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputPoints list of input points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PointCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener,
             List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         super(listener);
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -113,11 +121,11 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * Each point in the list of input points must be matched with the 
      * corresponding point in the list of output points located at the same 
      * position. Hence, both input points and output points must have the same 
-     * size, and their size must be greater or equal than MINIMUM_SIZE
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
      * @return list of input points to be used to estimate a projective 2D 
-     * transformation
+     * transformation.
      */
-    public List<Point2D> getInputPoints(){
+    public List<Point2D> getInputPoints() {
         return mInputPoints;
     }    
     
@@ -127,11 +135,11 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * Each point in the list of output points must be matched with the 
      * corresponding point in the list of input points located at the same 
      * position. Hence, both input points and output points must have the same 
-     * size, and their size must be greater or equal than MINIMUM_SIZE
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
      * @return list of output points to be used to estimate a projective 2D 
-     * transformation
+     * transformation.
      */
-    public List<Point2D> getOutputPoints(){
+    public List<Point2D> getOutputPoints() {
         return mOutputPoints;
     }
     
@@ -140,20 +148,22 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * transformation.
      * Points in the list located at the same position are considered to be
      * matched. Hence, both lists must have the same size, and their size must
-     * be greater or equal than MINIMUM_SIZE
+     * be greater or equal than MINIMUM_SIZE.
      * @param inputPoints list of input points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      * @throws LockedException if estimator is locked because a computation is
-     * already in progress
+     * already in progress.
      */
     public final void setPoints(List<Point2D> inputPoints, 
-            List<Point2D> outputPoints) throws IllegalArgumentException, 
-            LockedException{
-        if(isLocked()) throw new LockedException();
+            List<Point2D> outputPoints) throws IllegalArgumentException,
+            LockedException {
+        if (isLocked()) {
+            throw new LockedException();
+        }
         internalSetPoints(inputPoints, outputPoints);
     }
         
@@ -161,10 +171,10 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * Indicates if estimator is ready to start the projective 2D transformation
      * estimation.
      * This is true when input data (i.e. lists of matched points) are provided
-     * and a minimum of MINIMUM_SIZE points are available
-     * @return true if estimator is ready, false otherwise
+     * and a minimum of MINIMUM_SIZE points are available.
+     * @return true if estimator is ready, false otherwise.
      */
-    public boolean isReady(){
+    public boolean isReady() {
         return mInputPoints != null && mOutputPoints != null && 
                 mInputPoints.size() == mOutputPoints.size() &&
                 mInputPoints.size() >= MINIMUM_SIZE;
@@ -172,12 +182,12 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
     
     /**
      * Returns quality scores corresponding to each pair of matched points.
-     * The larger the score value the betther the quality of the matching.
+     * The larger the score value the better the quality of the matching.
      * This implementation always returns null.
      * Subclasses using quality scores must implement proper behaviour.
-     * @return quality scores corresponding to each pair of matched points
+     * @return quality scores corresponding to each pair of matched points.
      */
-    public double[] getQualityScores(){
+    public double[] getQualityScores() {
         return null;
     }    
     
@@ -187,25 +197,25 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * This implementation makes no action.
      * Subclasses using quality scores must implement proper behaviour.
      * @param qualityScores quality scores corresponding to each pair of matched
-     * points
+     * points.
      * @throws LockedException if robust estimator is locked because an 
-     * estimation is already in progress
+     * estimation is already in progress.
      * @throws IllegalArgumentException if provided quality scores length is 
-     * smaller than MINIMUM_SIZE (i.e. 3 samples)
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException{}    
+            IllegalArgumentException { }
     
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param method method of a robust estimator algorithm to estimate
-     * best projective 2D transformation
-     * @return an instance of projective 2D transformation estimator
+     * best projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
-            create(RobustEstimatorMethod method){
-        switch(method){            
+            create(RobustEstimatorMethod method) {
+        switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();
             case MSAC:
@@ -222,21 +232,21 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
             
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param inputPoints list of input points to be used to estimate a
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param method method of a robust estimator algorithm to estimate
-     * best projective 2D transformation
-     * @return an instance of projective 2D transformation estimator
+     * best projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException{
-        switch(method){
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+        switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
                         inputPoints, outputPoints);
@@ -258,17 +268,17 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
             
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param method method of a robust estimator algorithm to estimate
-     * best projective 2D transformation
-     * @return an instance of projective 2D transformation estimator
+     * best projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
             create(ProjectiveTransformation2DRobustEstimatorListener listener,
-            RobustEstimatorMethod method){
-        switch(method){       
+            RobustEstimatorMethod method) {
+        switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener);
@@ -290,24 +300,24 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
             
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputPoints list of input points to be used to estimate a
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param method method of a robust estimator algorithm to estimate
-     * best projective 2D transformation
-     * @return an instance of projective 2D transformation estimator
+     * best projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(ProjectiveTransformation2DRobustEstimatorListener listener, 
             List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException{
-        switch(method){
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+        switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints);
@@ -329,19 +339,19 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
 
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * points.
      * @param method method of a robust estimator algorithm to estimate
-     * best affine 2D transformation
-     * @return an instance of projective 2D transformation estimator
+     * best affine 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
      * @throws IllegalArgumentException if provided quality scores length is
-     * smaller than MINIMUM_SIZE (i.e. 3 matched points)
+     * smaller than MINIMUM_SIZE (i.e. 3 matched points).
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
             create(double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException{
-        switch(method){            
+            throws IllegalArgumentException {
+        switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();
             case MSAC:
@@ -360,25 +370,25 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
             
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param inputPoints list of input points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * points.
      * @param method method of a robust estimator algorithm to estimate
-     * best projective 2D transformation
-     * @return an instance of projective 2D transformation estimator
+     * best projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points or quality 
      * scores don't have the same size or their size is smaller than 
-     * MINIMUM_SIZE
+     * MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(List<Point2D> inputPoints, List<Point2D> outputPoints, 
             double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException{
-        switch(method){
+            throws IllegalArgumentException {
+        switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
                         inputPoints, outputPoints);
@@ -400,19 +410,19 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
             
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * points.
      * @param method method of a robust estimator algorithm to estimate
-     * best projective 2D transformation
-     * @return an instance of projective 2D transformation estimator
+     * best projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
             create(ProjectiveTransformation2DRobustEstimatorListener listener,
-            double[] qualityScores, RobustEstimatorMethod method){
-        switch(method){       
+            double[] qualityScores, RobustEstimatorMethod method) {
+        switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener);
@@ -434,27 +444,27 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
             
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using provided robust estimator method
+     * correspondences and using provided robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputPoints list of input points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * points.
      * @param method method of a robust estimator algorithm to estimate
-     * best projective 2D transformation
-     * @return an instance of projective 2D transformation estimator
+     * best projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(ProjectiveTransformation2DRobustEstimatorListener listener, 
             List<Point2D> inputPoints, List<Point2D> outputPoints, 
             double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException{
-        switch(method){
+            throws IllegalArgumentException {
+        switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
                         listener, inputPoints, outputPoints);
@@ -476,130 +486,130 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
             
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using default robust estimator method
-     * @return an instance of projective 2D transformation estimator
+     * correspondences and using default robust estimator method.
+     * @return an instance of projective 2D transformation estimator.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
-            create(){
+            create() {
         return create(DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param inputPoints list of input points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 2D transformation
-     * @return an instance of projective 2D transformation estimator
+     * projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);
     }            
             
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
-     * @return an instance of projective 2D transformation estimator
+     * starts, ends or its progress significantly changes.
+     * @return an instance of projective 2D transformation estimator.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
-            create(ProjectiveTransformation2DRobustEstimatorListener listener){
+            create(ProjectiveTransformation2DRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates an projective 2D transformation estimator based on 2D point 
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputPoints list of input points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 2D transformation
-     * @return an instance of projective 2D transformation estimator
+     * projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(ProjectiveTransformation2DRobustEstimatorListener listener, 
             List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return create(listener, inputPoints, outputPoints, 
                 DEFAULT_ROBUST_METHOD);
     }            
 
     /**
      * Creates an projective 2D transformation estimator based on 2D point 
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * points.
-     * @return an instance of projective 2D transformation estimator
+     * @return an instance of projective 2D transformation estimator.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
-            create(double[] qualityScores){
+            create(double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param inputPoints list of input points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * points.
-     * @return an instance of affine 2D transformation estimator
+     * @return an instance of affine 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         return create(inputPoints, outputPoints, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }            
             
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * points.
-     * @return an instance of affine 2D transformation estimator
+     * @return an instance of affine 2D transformation estimator.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
             create(ProjectiveTransformation2DRobustEstimatorListener listener,
-            double[] qualityScores){
+            double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
             
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
-     * correspondences and using default robust estimator method
+     * correspondences and using default robust estimator method.
      * @param listener listener to be notified of events such as when estimation
-     * starts, ends or its progress significantly changes
+     * starts, ends or its progress significantly changes.
      * @param inputPoints list of input points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param outputPoints list of output points to be used to estimate a 
-     * projective 2D transformation
+     * projective 2D transformation.
      * @param qualityScores quality scores corresponding to each pair of matched 
      * points.
-     * @return an instance of projective 2D transformation estimator
+     * @return an instance of projective 2D transformation estimator.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(ProjectiveTransformation2DRobustEstimatorListener listener, 
             List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) throws IllegalArgumentException {
         return create(listener, inputPoints, outputPoints, qualityScores,
                 DEFAULT_ROBUST_METHOD);
     }            
@@ -647,19 +657,22 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
     /**
      * Internal method to set lists of points to be used to estimate a 
      * projective 2D transformation.
-     * This method does not check whether estimator is locked or not
+     * This method does not check whether estimator is locked or not.
      * @param inputPoints list of input points to be used to estimate an 
-     * affine 2D transformation
+     * affine 2D transformation.
      * @param outputPoints list of output points to be used to estimate an 
-     * affine 2D transformation
+     * affine 2D transformation.
      * @throws IllegalArgumentException if provided lists of points don't have
-     * the same size or their size is smaller than MINIMUM_SIZE
+     * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetPoints(List<Point2D> inputPoints, 
-            List<Point2D> outputPoints) throws IllegalArgumentException{
-        if(inputPoints.size() < MINIMUM_SIZE) throw new IllegalArgumentException();
-        if(inputPoints.size() != outputPoints.size()) 
+            List<Point2D> outputPoints) throws IllegalArgumentException {
+        if (inputPoints.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
+        }
+        if (inputPoints.size() != outputPoints.size()) {
+            throw new IllegalArgumentException();
+        }
         mInputPoints = inputPoints;
         mOutputPoints = outputPoints;        
     }                

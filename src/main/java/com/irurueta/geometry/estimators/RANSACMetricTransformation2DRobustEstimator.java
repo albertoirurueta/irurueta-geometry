@@ -1,21 +1,25 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.RANSACMetricTransformation2DRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date January 25, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.CoordinatesType;
 import com.irurueta.geometry.MetricTransformation2D;
 import com.irurueta.geometry.Point2D;
-import com.irurueta.numerical.robust.RANSACRobustEstimator;
-import com.irurueta.numerical.robust.RANSACRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -317,7 +321,7 @@ public class RANSACMetricTransformation2DRobustEstimator extends
         }
         
         RANSACRobustEstimator<MetricTransformation2D> innerEstimator = 
-                new RANSACRobustEstimator<MetricTransformation2D>(
+                new RANSACRobustEstimator<>(
                     new RANSACRobustEstimatorListener<MetricTransformation2D>() {
                     
             //point to be reused when computing residuals
@@ -329,9 +333,9 @@ public class RANSACMetricTransformation2DRobustEstimator extends
                             isWeakMinimumSizeAllowed());
             
             private List<Point2D> mSubsetInputPoints = 
-                    new ArrayList<Point2D>();
+                    new ArrayList<>();
             private List<Point2D> mSubsetOutputPoints = 
-                    new ArrayList<Point2D>();
+                    new ArrayList<>();
             
             @Override
             public double getThreshold() {
@@ -353,17 +357,17 @@ public class RANSACMetricTransformation2DRobustEstimator extends
                     List<MetricTransformation2D> solutions) {
                 mSubsetInputPoints.clear();
                 mSubsetOutputPoints.clear();
-                for(int i = 0; i < samplesIndices.length; i++) {
-                    mSubsetInputPoints.add(mInputPoints.get(samplesIndices[i]));
+                for (int samplesIndex : samplesIndices) {
+                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));
                     mSubsetOutputPoints.add(mOutputPoints.get(
-                            samplesIndices[i]));
+                            samplesIndex));
                 }
 
-                try{
+                try {
                     mNonRobustEstimator.setPoints(mSubsetInputPoints, 
                             mSubsetOutputPoints);
                     solutions.add(mNonRobustEstimator.estimate());
-                }catch(Exception e){
+                } catch (Exception e) {
                     //if points are coincident, no solution is added
                 }
             }

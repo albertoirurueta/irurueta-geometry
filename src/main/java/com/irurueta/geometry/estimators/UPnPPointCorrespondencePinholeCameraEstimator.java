@@ -1,27 +1,24 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimator.UPnPPointCorrespondencePinholeCameraEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 3, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.Matrix;
-import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.*;
 import com.irurueta.algebra.Utils;
-import com.irurueta.geometry.CoincidentPointsException;
-import com.irurueta.geometry.ColinearPointsException;
-import com.irurueta.geometry.InhomogeneousPoint3D;
-import com.irurueta.geometry.MetricTransformation3D;
-import com.irurueta.geometry.PinholeCamera;
-import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
-import com.irurueta.geometry.Point2D;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Rotation3D;
+import com.irurueta.geometry.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -490,7 +487,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             buildM();
             solveNullspace();
             
-            mSolutions = new ArrayList<Solution>();
+            mSolutions = new ArrayList<>();
             
             //general case
             try {
@@ -509,15 +506,13 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
                 mListener.onEstimateEnd(this);
             }
             
-            if(bestSolution == null) {
+            if (bestSolution == null) {
                 throw new PinholeCameraEstimatorException();
             }
             
             return attemptRefine(bestSolution.camera);            
         } catch (AlgebraException e) {
             throw new PinholeCameraEstimatorException(e);
-        } catch (PinholeCameraEstimatorException e) {
-            throw e;
         } finally {
             mLocked = false;
         }
@@ -542,12 +537,10 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * @param points2D list of 2D points. Points might or might not be 
      * normalized.
      * @return matrix of estimated pinhole camera.
-     * @throws PinholeCameraEstimatorException if estimation fails for some
-     * reason (i.e. numerical instability or geometric degeneracy).
-     */    
+     */
     @Override
     protected Matrix internalEstimate(List<Point3D> points3D, 
-            List<Point2D> points2D) throws PinholeCameraEstimatorException {
+            List<Point2D> points2D) {
         return null;
     }    
     
@@ -556,7 +549,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * if estimator is locked).
      * @param points3D list of corresponding 3D points.
      * @param points2D list of corresponding 2D points.
-     * @throws IllegalArgumentException if any of the lists are null
+     * @throws IllegalArgumentException if any of the lists are null.
      * @throws WrongListSizesException if provided lists of points don't have
      * the same size and enough points.
      */
@@ -583,7 +576,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
     private Solution pickBestSolution() {
         Solution bestSolution = null;
         double bestError = Double.MAX_VALUE;
-        for(Solution s : mSolutions) {
+        for (Solution s : mSolutions) {
             if(s.reprojectionError < bestError) {
                 bestError = s.reprojectionError;
                 bestSolution = s;
@@ -944,7 +937,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             Point3D vai = controlCameraPointsA.get(i);
             Point3D vbi = controlCameraPointsB.get(i);
             
-            for(int j = i + 1; j < numControl; j++) {
+            for (int j = i + 1; j < numControl; j++) {
                 Point3D vaj = controlCameraPointsA.get(j);
                 Point3D vbj = controlCameraPointsB.get(j);
                 
@@ -1131,7 +1124,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * @param focalLength focal length to use for denormalization.
      */
     private static void denormalizeV(double[] v, double focalLength) {
-        for(int i = 0, j = 1; i < v.length; i++, j++) {
+        for (int i = 0, j = 1; i < v.length; i++, j++) {
             if (j % Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH == 0) {
                 v[i] *= focalLength;
             }
@@ -1159,7 +1152,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
         for (int i = 0; i < numControl; i++) {
             Point3D vi = controlCameraPoints.get(i);
             
-            for(int j = i + 1; j < numControl; j++) {
+            for (int j = i + 1; j < numControl; j++) {
                 Point3D vj = controlCameraPoints.get(j);
                 
                 fillRowConstraintMatrixSolution1(row, c, vi, vj);
@@ -1225,14 +1218,11 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws LockedException never happens.
      * @throws NotReadyException never happens.
      * @throws CoincidentPointsException if a point degeneracy has occurred.
-     * @throws ColinearPointsException if a point degeneracy has occurred.
-     * @throws AlgebraException if numerical instabilities occur.
      */
     private Solution computePossibleSolutionWithPoseAndReprojectionError(
             List<Point3D> controlCameraPoints, double focalLength) 
             throws LockedException, NotReadyException, 
-            CoincidentPointsException, ColinearPointsException, 
-            AlgebraException {
+            CoincidentPointsException {
                 
         MetricTransformation3D worldToCameraTransformation = 
                     worldToCameraTransformationMetric(controlCameraPoints);
@@ -1290,7 +1280,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      */
     private static int numEquations(int numControl) {
         int numEquations = 0;
-        for(int i = 1; i < numControl; i++) {
+        for (int i = 1; i < numControl; i++) {
             numEquations += i;
         }
         return numEquations;        
@@ -1311,7 +1301,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
         for (int i = 0; i < numControl; i++) {
             Point3D ci = controlWorldPoints.get(i);
             
-            for(int j = i + 1; j < numControl; j++) {
+            for (int j = i + 1; j < numControl; j++) {
                 Point3D cj = controlWorldPoints.get(j);
                 
                 dcijSqr = Math.pow(ci.distanceTo(cj), 2.0);
@@ -1352,7 +1342,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      */
     private List<Point3D> controlPointsFromV(double[] v) {
         int numControl = mControlWorldPoints.size();
-        List<Point3D> points = new ArrayList<Point3D>();
+        List<Point3D> points = new ArrayList<>();
         
         InhomogeneousPoint3D p;
         for (int j = 0; j < numControl; j++) {
@@ -1399,10 +1389,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
         //for planar configuration we pick the last 3.
      
         //extract null points from the null space
-        mNullspace = new ArrayList<double[]>();
+        mNullspace = new ArrayList<>();
         int colsMinusOne = cols - 1;
         double[] vCol;
-        InhomogeneousPoint3D p;
         for (int i = 0; i < numControl; i++) {
             int column = colsMinusOne - i;
 
@@ -1684,7 +1673,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             mIsPlanar = true;
         }
         
-        mControlWorldPoints = new ArrayList<Point3D>();
+        mControlWorldPoints = new ArrayList<>();
                 
         double centroidX = centroid.getInhomX();
         double centroidY = centroid.getInhomY();

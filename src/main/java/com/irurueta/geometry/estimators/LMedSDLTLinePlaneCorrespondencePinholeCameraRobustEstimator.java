@@ -1,21 +1,25 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.estimators.LMedSLinePlaneCorrespondencePinholeCameraRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 11, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.PinholeCamera;
 import com.irurueta.geometry.Plane;
-import com.irurueta.numerical.robust.LMedSRobustEstimator;
-import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
-import com.irurueta.numerical.robust.RobustEstimator;
-import com.irurueta.numerical.robust.RobustEstimatorException;
-import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import com.irurueta.numerical.robust.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -243,14 +247,14 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
                 getSuggestedCenterValue());
         
         LMedSRobustEstimator<PinholeCamera> innerEstimator =
-                new LMedSRobustEstimator<PinholeCamera>(
+                new LMedSRobustEstimator<>(
                 new LMedSRobustEstimatorListener<PinholeCamera>() {
             
             //3D planes for a subset of samples
-            private List<Plane> mSubsetPlanes = new ArrayList<Plane>();
+            private List<Plane> mSubsetPlanes = new ArrayList<>();
             
             //2D lines for a subset of samples
-            private List<Line2D> mSubsetLines = new ArrayList<Line2D>();
+            private List<Line2D> mSubsetLines = new ArrayList<>();
                     
             @Override
             public int getTotalSamples() {
@@ -309,7 +313,8 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
             public void onEstimateStart(
                     RobustEstimator<PinholeCamera> estimator) {
                 if (mListener != null) {
-                    mListener.onEstimateStart(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);
+                    mListener.onEstimateStart(
+                            LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);
                 }
             }
 
@@ -317,7 +322,8 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
             public void onEstimateEnd(
                     RobustEstimator<PinholeCamera> estimator) {
                 if (mListener != null) {
-                    mListener.onEstimateEnd(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);
+                    mListener.onEstimateEnd(
+                            LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);
                 }
             }
 
@@ -325,7 +331,8 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
             public void onEstimateNextIteration(
                     RobustEstimator<PinholeCamera> estimator, int iteration) {
                 if (mListener != null) {
-                    mListener.onEstimateNextIteration(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this, 
+                    mListener.onEstimateNextIteration(
+                            LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this,
                             iteration);
                 }
             }
@@ -334,7 +341,8 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
             public void onEstimateProgressChange(
                     RobustEstimator<PinholeCamera> estimator, float progress) {
                 if (mListener != null) {
-                    mListener.onEstimateProgressChange(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this, 
+                    mListener.onEstimateProgressChange(
+                            LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this,
                             progress);
                 }
             }

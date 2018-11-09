@@ -1,20 +1,23 @@
 /*
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.AffineTransformation3D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date October 28, 2012
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.Matrix;
-import com.irurueta.algebra.RQDecomposer;
-import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.*;
 import com.irurueta.algebra.Utils;
-import com.irurueta.algebra.WrongSizeException;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -150,7 +153,7 @@ public class AffineTransformation3D extends Transformation3D
      */
     public AffineTransformation3D(double[] translation) 
             throws NullPointerException, IllegalArgumentException {
-        if(translation.length != NUM_TRANSLATION_COORDS) {
+        if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -173,7 +176,7 @@ public class AffineTransformation3D extends Transformation3D
      */
     public AffineTransformation3D(Matrix A, double[] translation) 
             throws NullPointerException, IllegalArgumentException {
-        if(translation.length != NUM_TRANSLATION_COORDS) {
+        if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         this.translation = translation;
@@ -194,7 +197,7 @@ public class AffineTransformation3D extends Transformation3D
      */
     public AffineTransformation3D(double scale, double[] translation)
             throws NullPointerException, IllegalArgumentException {
-        if(translation.length != NUM_TRANSLATION_COORDS) {
+        if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -217,7 +220,7 @@ public class AffineTransformation3D extends Transformation3D
      */
     public AffineTransformation3D(Rotation3D rotation, double[] translation)
             throws NullPointerException, IllegalArgumentException {
-        if(translation.length != NUM_TRANSLATION_COORDS) {
+        if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -241,7 +244,7 @@ public class AffineTransformation3D extends Transformation3D
     public AffineTransformation3D(double scale, Rotation3D rotation, 
             double[] translation) throws NullPointerException, 
             IllegalArgumentException {
-        if(translation.length != NUM_TRANSLATION_COORDS) {
+        if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -271,7 +274,7 @@ public class AffineTransformation3D extends Transformation3D
     public AffineTransformation3D(AffineParameters3D params, 
             Rotation3D rotation, double[] translation) 
             throws NullPointerException, IllegalArgumentException {
-        if(translation.length != NUM_TRANSLATION_COORDS) {
+        if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
 
@@ -379,10 +382,10 @@ public class AffineTransformation3D extends Transformation3D
      */
     public final void setA(Matrix A) throws NullPointerException, 
             IllegalArgumentException {
-        if(A == null) {
+        if (A == null) {
             throw new NullPointerException();
         }
-        if(A.getRows() != INHOM_COORDS || A.getColumns() != INHOM_COORDS) {
+        if (A.getRows() != INHOM_COORDS || A.getColumns() != INHOM_COORDS) {
             throw new IllegalArgumentException();
         }
 
@@ -450,7 +453,7 @@ public class AffineTransformation3D extends Transformation3D
      * will be reversed.
      * @throws AlgebraException raised if for numerical reasons scale cannot
      * be set (usually because of numerical instability in parameters of this
-     * transformation)
+     * transformation).
      */
     public void setScale(double scale) throws AlgebraException {
         
@@ -534,7 +537,7 @@ public class AffineTransformation3D extends Transformation3D
      */
     public void setTranslation(double[] translation) 
             throws IllegalArgumentException {
-        if(translation.length != NUM_TRANSLATION_COORDS) {
+        if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -724,7 +727,7 @@ public class AffineTransformation3D extends Transformation3D
      */
     @Override
     public void asMatrix(Matrix m) throws IllegalArgumentException {
-        if(m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
+        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
@@ -766,7 +769,7 @@ public class AffineTransformation3D extends Transformation3D
                     p.getElementAtIndex(1) + translation[1],
                     p.getElementAtIndex(2) + translation[2]);
         } catch (WrongSizeException ignore) { } //this exception will never be 
-                                            //raised
+                                                //raised
     }
 
     /**
@@ -937,7 +940,7 @@ public class AffineTransformation3D extends Transformation3D
      * @throws AlgebraException if inverse transform cannot be computed because
      * of numerical instabilities.
      */
-    protected void inverse(AffineTransformation3D result) 
+    public void inverse(AffineTransformation3D result)
             throws AlgebraException {
         
         //x' = A * x + t -->

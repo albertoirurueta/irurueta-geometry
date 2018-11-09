@@ -1,81 +1,67 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.MSACLinePlaneCorrespondencePinholeCameraRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date March 12, 2015
+/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.geometry.CameraException;
-import com.irurueta.geometry.InhomogeneousPoint2D;
-import com.irurueta.geometry.InhomogeneousPoint3D;
-import com.irurueta.geometry.Line2D;
-import com.irurueta.geometry.MatrixRotation3D;
-import com.irurueta.geometry.NotAvailableException;
-import com.irurueta.geometry.PinholeCamera;
-import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
-import com.irurueta.geometry.Plane;
-import com.irurueta.geometry.Point3D;
-import com.irurueta.geometry.Quaternion;
-import com.irurueta.geometry.Rotation3D;
+import com.irurueta.geometry.*;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest 
         implements PinholeCameraRobustEstimatorListener {
     
-    public static final double ABSOLUTE_ERROR = 1e-5;
-    public static final double LARGE_ABSOLUTE_ERROR = 1e-3;
-    public static final double VERY_LARGE_ABSOLUTE_ERROR = 1.0;
+    private static final double ABSOLUTE_ERROR = 1e-5;
+    private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
+    private static final double VERY_LARGE_ABSOLUTE_ERROR = 1.0;
     
-    public static final double MIN_RANDOM_VALUE = 0.0;
-    public static final double MAX_RANDOM_VALUE = 1.0;
+    private static final double MIN_RANDOM_VALUE = 0.0;
+    private static final double MAX_RANDOM_VALUE = 1.0;
     
-    public static final double MIN_FOCAL_LENGTH = 110.0;
-    public static final double MAX_FOCAL_LENGTH = 130.0;
+    private static final double MIN_FOCAL_LENGTH = 110.0;
+    private static final double MAX_FOCAL_LENGTH = 130.0;
     
-    public static final double MIN_SKEWNESS = -0.001;
-    public static final double MAX_SKEWNESS = 0.001;
+    private static final double MIN_SKEWNESS = -0.001;
+    private static final double MAX_SKEWNESS = 0.001;
     
-    public static final double MIN_PRINCIPAL_POINT = 90.0;
-    public static final double MAX_PRINCIPAL_POINT = 100.0;
+    private static final double MIN_PRINCIPAL_POINT = 90.0;
+    private static final double MAX_PRINCIPAL_POINT = 100.0;
     
-    public static final double MIN_ANGLE_DEGREES = 10.0;
-    public static final double MAX_ANGLE_DEGREES = 15.0;
+    private static final double MIN_ANGLE_DEGREES = 10.0;
+    private static final double MAX_ANGLE_DEGREES = 15.0;
 
-    public static final int INHOM_3D_COORDS = 3;
-    public static final int LINE_PARAMS = 3;
-    public static final int PLANE_PARAMS = 4;
+    private static final int INHOM_3D_COORDS = 3;
 
-    public static final int MIN_SAMPLES = 500;
-    public static final int MAX_SAMPLES = 1000;
+    private static final int MIN_SAMPLES = 500;
+    private static final int MAX_SAMPLES = 1000;
     
-    public static final double THRESHOLD = 1e-5;
+    private static final double THRESHOLD = 1e-5;
     
-    public static final double STD_ERROR = 100.0;
+    private static final double STD_ERROR = 100.0;
+
+    private static final int PERCENTAGE_OUTLIER = 20;
     
-    public static final double MIN_CONFIDENCE = 0.95;
-    public static final double MAX_CONFIDENCE = 0.99;
-    
-    public static final int MIN_MAX_ITERATIONS = 500;
-    public static final int MAX_MAX_ITERATIONS = 5000;
-    
-    public static final int PERCENTAGE_OUTLIER = 20;
-    
-    public static final int TIMES = 10;
+    private static final int TIMES = 10;
     
     private int estimateStart;
     private int estimateEnd;
@@ -159,9 +145,10 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
         
         
         //test constructor with lines and planes
-        List<Line2D> lines = new ArrayList<Line2D>();
-        List<Plane> planes = new ArrayList<Plane>();
-        for (int i = 0; i < LinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES; i++) {
+        List<Line2D> lines = new ArrayList<>();
+        List<Plane> planes = new ArrayList<>();
+        for (int i = 0;
+             i < LinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES; i++) {
             lines.add(new Line2D());
             planes.add(new Plane());
         }
@@ -226,21 +213,21 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
         
         
         //force IllegalArgumentException
-        List<Plane> planesEmpty = new ArrayList<Plane>();
-        List<Line2D> linesEmpty = new ArrayList<Line2D>();
+        List<Plane> planesEmpty = new ArrayList<>();
+        List<Line2D> linesEmpty = new ArrayList<>();
         estimator = null;
         try {
             //not enough points
             estimator = new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                     planesEmpty, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                     planes, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test constructor with listener
@@ -369,13 +356,13 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             estimator = new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                     this, planesEmpty, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator = new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
                     this, planes, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
     }
     
@@ -399,7 +386,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
         try {
             estimator.setThreshold(0.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -422,12 +409,12 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
         try {
             estimator.setConfidence(-1.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         
         try {
             estimator.setConfidence(2.0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -450,7 +437,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
         try {
             estimator.setMaxIterations(0);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -518,9 +505,10 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
         assertFalse(estimator.isReady());
         
         //set new value
-        List<Plane> planes = new ArrayList<Plane>();
-        List<Line2D> lines = new ArrayList<Line2D>();
-        for (int i = 0; i < LinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES; i++) {
+        List<Plane> planes = new ArrayList<>();
+        List<Line2D> lines = new ArrayList<>();
+        for (int i = 0;
+             i < LinePlaneCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES; i++) {
             planes.add(new Plane());
             lines.add(new Line2D());
         }
@@ -533,18 +521,18 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
         assertTrue(estimator.isReady());
         
         //Force IllegalArgumentException
-        List<Plane> planesEmpty = new ArrayList<Plane>();
-        List<Line2D> linesEmpty = new ArrayList<Line2D>();
+        List<Plane> planesEmpty = new ArrayList<>();
+        List<Line2D> linesEmpty = new ArrayList<>();
         try {
             //not enough samples
             estimator.setLinesAndPlanes(planesEmpty, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             //different sizes
             estimator.setLinesAndPlanes(planes, linesEmpty);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -845,11 +833,11 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
         try {
             estimator.setProgressDelta(-1.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
         try {
             estimator.setProgressDelta(2.0f);
             fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException e) { }
+        } catch (IllegalArgumentException ignore) { }
     }
     
     @Test
@@ -900,7 +888,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -917,7 +905,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -1020,31 +1008,25 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             if (Math.abs(alphaEuler - estimatedAlphaEuler) <= 
                     LARGE_ABSOLUTE_ERROR) {
                 validAlphaEuler = true;
-            } else if((Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) - 
-                    Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                validAlphaEuler = true;
             } else {
-                validAlphaEuler = false;
+                validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
+                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
             }
 
             if (Math.abs(betaEuler - estimatedBetaEuler) <= 
                     LARGE_ABSOLUTE_ERROR) {
                 validBetaEuler = true;
-            } else if ((Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) - 
-                    Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                validBetaEuler = true;
             } else {
-                validBetaEuler = false;
+                validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
+                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
             }
 
             if (Math.abs(gammaEuler - estimatedGammaEuler) <= 
                     LARGE_ABSOLUTE_ERROR) {
                 validGammaEuler = true;
-            } else if ((Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) - 
-                    Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                validGammaEuler = true;
             } else {
-                validGammaEuler = false;
+                validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
+                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
             }
             
             
@@ -1117,7 +1099,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -1134,7 +1116,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -1257,31 +1239,25 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             if (Math.abs(alphaEuler - estimatedAlphaEuler) <= 
                     LARGE_ABSOLUTE_ERROR) {
                 validAlphaEuler = true;
-            } else if((Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) - 
-                    Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                validAlphaEuler = true;
             } else {
-                validAlphaEuler = false;
+                validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
+                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
             }
 
             if (Math.abs(betaEuler - estimatedBetaEuler) <= 
                     LARGE_ABSOLUTE_ERROR) {
                 validBetaEuler = true;
-            } else if ((Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) - 
-                    Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                validBetaEuler = true;
             } else {
-                validBetaEuler = false;
+                validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
+                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
             }
 
             if (Math.abs(gammaEuler - estimatedGammaEuler) <= 
                     LARGE_ABSOLUTE_ERROR) {
                 validGammaEuler = true;
-            } else if ((Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) - 
-                    Math.PI) <= LARGE_ABSOLUTE_ERROR) {
-                validGammaEuler = true;
             } else {
-                validGammaEuler = false;
+                validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
+                        Math.PI) <= LARGE_ABSOLUTE_ERROR;
             }
             
             
@@ -1355,7 +1331,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -1372,7 +1348,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -1497,31 +1473,25 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             if (Math.abs(alphaEuler - estimatedAlphaEuler) <= 
                     10.0*LARGE_ABSOLUTE_ERROR) {
                 validAlphaEuler = true;
-            } else if((Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) - 
-                    Math.PI) <= 10.0*LARGE_ABSOLUTE_ERROR) {
-                validAlphaEuler = true;
             } else {
-                validAlphaEuler = false;
+                validAlphaEuler = (Math.abs(alphaEuler) + Math.abs(estimatedAlphaEuler) -
+                        Math.PI) <= 10.0 * LARGE_ABSOLUTE_ERROR;
             }
 
             if (Math.abs(betaEuler - estimatedBetaEuler) <= 
                     10.0*LARGE_ABSOLUTE_ERROR) {
                 validBetaEuler = true;
-            } else if ((Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) - 
-                    Math.PI) <= 10.0*LARGE_ABSOLUTE_ERROR) {
-                validBetaEuler = true;
             } else {
-                validBetaEuler = false;
+                validBetaEuler = (Math.abs(betaEuler) + Math.abs(estimatedBetaEuler) -
+                        Math.PI) <= 10.0 * LARGE_ABSOLUTE_ERROR;
             }
 
             if (Math.abs(gammaEuler - estimatedGammaEuler) <= 
                     10.0*LARGE_ABSOLUTE_ERROR) {
                 validGammaEuler = true;
-            } else if ((Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) - 
-                    Math.PI) <= 10.0*LARGE_ABSOLUTE_ERROR) {
-                validGammaEuler = true;
             } else {
-                validGammaEuler = false;
+                validGammaEuler = (Math.abs(gammaEuler) + Math.abs(estimatedGammaEuler) -
+                        Math.PI) <= 10.0 * LARGE_ABSOLUTE_ERROR;
             }
             
             
@@ -1548,8 +1518,8 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
     @Test
     public void testEstimateSuggestedSkewness() throws IllegalArgumentException,
-            LockedException, NotReadyException, RobustEstimatorException, 
-            CameraException, NotAvailableException {
+            LockedException, NotReadyException, CameraException,
+            NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -1594,7 +1564,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -1611,7 +1581,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -1711,7 +1681,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedSkewnessWithRefinement() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
         for (int t = 0; t < TIMES; t++) {
@@ -1757,7 +1727,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -1774,7 +1744,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -1876,8 +1846,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
     @Test
     public void testEstimateSuggestedSkewnessWithFastRefinement() 
-            throws IllegalArgumentException,
-            LockedException, NotReadyException, RobustEstimatorException, 
+            throws IllegalArgumentException, LockedException, NotReadyException,
             CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
@@ -1924,7 +1893,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -1941,7 +1910,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -2046,7 +2015,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedHorizontalFocalLengthEnabled() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -2091,7 +2060,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -2108,7 +2077,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -2211,7 +2180,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedHorizontalFocalLengthWithRefinement() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
         for (int t = 0; t < TIMES; t++) {
@@ -2257,7 +2226,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -2274,7 +2243,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -2379,8 +2348,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
     @Test
     public void testEstimateSuggestedHorizontalFocalLengthWithFastRefinement() 
-            throws IllegalArgumentException,
-            LockedException, NotReadyException, RobustEstimatorException, 
+            throws IllegalArgumentException, LockedException, NotReadyException,
             CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
@@ -2427,7 +2395,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -2444,7 +2412,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -2553,7 +2521,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedVerticalFocalLengthEnabled() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -2598,7 +2566,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -2615,7 +2583,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -2718,7 +2686,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedVerticalFocalLengthWithRefinement() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
         for (int t = 0; t < TIMES; t++) {
@@ -2764,7 +2732,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -2781,7 +2749,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -2886,8 +2854,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
 
     @Test
     public void testEstimateSuggestedVerticalFocalLengthWithFastRefinement() 
-            throws IllegalArgumentException,
-            LockedException, NotReadyException, RobustEstimatorException, 
+            throws IllegalArgumentException, LockedException, NotReadyException,
             CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
@@ -2934,7 +2901,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -2951,7 +2918,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -3062,7 +3029,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedAspectRatioEnabled() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -3109,7 +3076,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -3126,7 +3093,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -3227,7 +3194,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedAspectRatioWithRefinement() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
         for (int t = 0; t < TIMES; t++) {
@@ -3275,7 +3242,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -3292,7 +3259,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -3396,7 +3363,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedAspectRatioWithFastRefinement() 
             throws IllegalArgumentException, LockedException, NotReadyException, 
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
         for (int t = 0; t < TIMES; t++) {
@@ -3444,7 +3411,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -3461,7 +3428,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -3566,7 +3533,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedPrincipalPointEnabled() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -3614,7 +3581,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -3631,7 +3598,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -3737,7 +3704,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedPrincipalPointWithRefinement() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
         for (int t = 0; t < TIMES; t++) {
@@ -3786,7 +3753,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -3803,7 +3770,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -3912,7 +3879,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedPrincipalPointWithFastRefinement() 
             throws IllegalArgumentException, LockedException, NotReadyException, 
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
         for (int t = 0; t < TIMES; t++) {
@@ -3961,7 +3928,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -3978,7 +3945,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -4093,7 +4060,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedRotationEnabled() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -4141,7 +4108,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -4158,7 +4125,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -4266,7 +4233,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedRotationWithRefinement() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
         for (int t = 0; t < TIMES; t++) {
@@ -4315,7 +4282,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -4332,7 +4299,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -4443,7 +4410,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedRotationWithFastRefinement() 
             throws IllegalArgumentException, LockedException, NotReadyException, 
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
         for (int t = 0; t < TIMES; t++) {
@@ -4492,7 +4459,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -4509,7 +4476,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -4621,7 +4588,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedCenterEnabled() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
@@ -4667,7 +4634,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -4684,7 +4651,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -4780,7 +4747,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedCenterWithRefinement() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
         for (int t = 0; t < TIMES; t++) {
@@ -4827,7 +4794,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -4844,7 +4811,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -4943,7 +4910,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateSuggestedCenterWithFastRefinement() 
             throws IllegalArgumentException, LockedException, NotReadyException, 
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
         for (int t = 0; t < TIMES; t++) {
@@ -4990,7 +4957,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -5007,7 +4974,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -5107,22 +5074,21 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateZeroSkewnessZeroPrincipalPointAndEqualFocalLength() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            double horizontalFocalLength = randomizer.nextDouble(
+            double focalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            double verticalFocalLength = horizontalFocalLength;
-            
+
             double skewness = 0.0;
             double horizontalPrincipalPoint = 0.0;
             double verticalPrincipalPoint = 0.0;
             InhomogeneousPoint2D principalPoint = new InhomogeneousPoint2D();
 
             PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                    verticalFocalLength, horizontalPrincipalPoint, 
+                    new PinholeCameraIntrinsicParameters(focalLength,
+                            focalLength, horizontalPrincipalPoint,
                     verticalPrincipalPoint, skewness);
             
             double aspectRatio = intrinsic.getAspectRatio();            
@@ -5153,7 +5119,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -5170,7 +5136,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -5288,23 +5254,22 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateZeroSkewnessZeroPrincipalPointAndEqualFocalLengthWithRefinement() 
             throws IllegalArgumentException, LockedException, NotReadyException,
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            double horizontalFocalLength = randomizer.nextDouble(
+            double focalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            double verticalFocalLength = horizontalFocalLength;
-            
+
             double skewness = 0.0;
             double horizontalPrincipalPoint = 0.0;
             double verticalPrincipalPoint = 0.0;
             InhomogeneousPoint2D principalPoint = new InhomogeneousPoint2D();
 
             PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                    verticalFocalLength, horizontalPrincipalPoint, 
+                    new PinholeCameraIntrinsicParameters(focalLength,
+                            focalLength, horizontalPrincipalPoint,
                     verticalPrincipalPoint, skewness);
             
             double aspectRatio = intrinsic.getAspectRatio();
@@ -5335,7 +5300,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -5352,7 +5317,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -5473,23 +5438,22 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     @Test
     public void testEstimateZeroSkewnessZeroPrincipalPointAndEqualFocalLengthWithFastRefinement() 
             throws IllegalArgumentException, LockedException, NotReadyException, 
-            RobustEstimatorException, CameraException, NotAvailableException {
+            CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
         for (int t = 0; t < TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            double horizontalFocalLength = randomizer.nextDouble(
+            double focalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            double verticalFocalLength = horizontalFocalLength;
-            
+
             double skewness = 0.0;
             double horizontalPrincipalPoint = 0.0;
             double verticalPrincipalPoint = 0.0;
             InhomogeneousPoint2D principalPoint = new InhomogeneousPoint2D();
 
             PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                    verticalFocalLength, horizontalPrincipalPoint, 
+                    new PinholeCameraIntrinsicParameters(focalLength,
+                            focalLength, horizontalPrincipalPoint,
                     verticalPrincipalPoint, skewness);
             
             double aspectRatio = intrinsic.getAspectRatio();
@@ -5520,7 +5484,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             camera.normalize();            
             
             int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-            List<Line2D> lines = new ArrayList<Line2D>(nSamples);
+            List<Line2D> lines = new ArrayList<>(nSamples);
             Line2D line;
             for (int i = 0; i < nSamples; i++) {
                 line = new Line2D(
@@ -5537,7 +5501,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
             
             //create outliers
             Plane planeWithError;
-            List<Plane> planesWithError = new ArrayList<Plane>();
+            List<Plane> planesWithError = new ArrayList<>();
             GaussianRandomizer errorRandomizer = new GaussianRandomizer(
                     new Random(), 0.0, STD_ERROR); 
             for (Plane plane : planes) {
@@ -5655,70 +5619,70 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
         assertTrue(numCovariances > 0);
         assertTrue(numValid > 0);        
     }
-    
-    private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration = 
-                estimateProgressChange = 0;
-    }    
 
     @Override
     public void onEstimateStart(PinholeCameraRobustEstimator estimator) {
         estimateStart++;
-        testLocked((MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator)estimator);
+        checkLocked((MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateEnd(PinholeCameraRobustEstimator estimator) {
         estimateEnd++;
-        testLocked((MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator)estimator);
+        checkLocked((MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, 
             int iteration) {
         estimateNextIteration++;
-        testLocked((MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator)estimator);
+        checkLocked((MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator)estimator);
     }
 
     @Override
     public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator,
             float progress) {
         estimateProgressChange++;
-        testLocked((MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator)estimator);
+        checkLocked((MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator)estimator);
     }
-    
-    private void testLocked(
+
+    private void reset() {
+        estimateStart = estimateEnd = estimateNextIteration =
+                estimateProgressChange = 0;
+    }
+
+    private void checkLocked(
             MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator) {
-        List<Plane> planes = new ArrayList<Plane>();
-        List<Line2D> lines = new ArrayList<Line2D>();
+        List<Plane> planes = new ArrayList<>();
+        List<Line2D> lines = new ArrayList<>();
         try {
             estimator.setLinesAndPlanes(planes, lines);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setListener(null);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setProgressDelta(0.01f);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setThreshold(0.5);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setConfidence(0.5);            
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.setMaxIterations(10);
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) { }
+        } catch (LockedException ignore) { }
         try {
             estimator.estimate();
             fail("LockedException expected but not thrown");
-        } catch (LockedException e) {
+        } catch (LockedException ignore) {
         } catch (Exception e) {
             fail("LockedException expected but not thrown");
         }

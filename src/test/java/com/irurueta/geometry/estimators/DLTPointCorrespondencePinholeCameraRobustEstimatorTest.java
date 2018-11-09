@@ -1,23 +1,28 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.estimators.DLTPointCorrespondencePinholeCameraRobustEstimator
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date February 20, 2017.
+/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry.estimators;
 
 import com.irurueta.geometry.Point2D;
 import com.irurueta.geometry.Point3D;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
@@ -37,7 +42,7 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
     public void tearDown() { }
     
     @Test
-    public void testCreate(){
+    public void testCreate() {
         DLTPointCorrespondencePinholeCameraRobustEstimator estimator;
         
         //create with robust estimator method
@@ -152,9 +157,9 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);        
         
         //create with robust estimator method and points
-        List<Point3D> points3D = new ArrayList<Point3D>();
-        List<Point2D> points2D = new ArrayList<Point2D>();
-        for(int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++){
+        List<Point3D> points3D = new ArrayList<>();
+        List<Point2D> points2D = new ArrayList<>();
+        for (int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
             points3D.add(Point3D.create());
             points2D.add(Point2D.create());
         }
@@ -270,38 +275,38 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         assertEquals(estimator.getMethod(), RobustEstimatorMethod.PROMedS);
         
         //Force IllegalArgumentException
-        List<Point3D> empty3D = new ArrayList<Point3D>();
-        List<Point2D> empty2D = new ArrayList<Point2D>();
+        List<Point3D> empty3D = new ArrayList<>();
+        List<Point2D> empty2D = new ArrayList<>();
         estimator = null;
-        try{
+        try {
             //empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(empty3D, empty2D, RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, empty2D, RobustEstimatorMethod.RANSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}        
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //create with listener and robust estimator method
         PinholeCameraRobustEstimatorListener listener =
-                new PinholeCameraRobustEstimatorListener(){
+                new PinholeCameraRobustEstimatorListener() {
 
             @Override
-            public void onEstimateStart(PinholeCameraRobustEstimator estimator) {}
+            public void onEstimateStart(PinholeCameraRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateEnd(PinholeCameraRobustEstimator estimator) {}
+            public void onEstimateEnd(PinholeCameraRobustEstimator estimator) { }
 
             @Override
-            public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, int iteration) {}
+            public void onEstimateNextIteration(PinholeCameraRobustEstimator estimator, int iteration) { }
 
             @Override
-            public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator, float progress) {}
+            public void onEstimateProgressChange(PinholeCameraRobustEstimator estimator, float progress) { }
         };
         
         estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.create(
@@ -643,11 +648,11 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(shortScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with points, quality scores and robust estimator method
@@ -768,27 +773,27 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(empty3D, empty2D, qualityScores, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, empty2D, qualityScores, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //short scores
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, points2D, shortScores, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, quality scores and method
@@ -904,11 +909,11 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(listener, shortScores, RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, points, quality scores and method
@@ -1029,27 +1034,27 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(listener, empty3D, empty2D, qualityScores, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(listener, points3D, empty2D, qualityScores, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //short scores
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(listener, points3D, points2D, shortScores, 
                     RobustEstimatorMethod.PROSAC);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with no arguments
@@ -1099,18 +1104,18 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(empty3D, empty2D);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, empty2D);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);     
         
         //test with listener
@@ -1161,18 +1166,18 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(listener, empty3D, empty2D);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(listener, points3D, empty2D);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);     
         
         //test with quality scores
@@ -1200,11 +1205,11 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(shortScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with points and quality scores
@@ -1232,24 +1237,24 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(empty3D, empty2D, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, empty2D, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //short scores
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, points2D, shortScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);     
         
         //test with listener and scores
@@ -1277,11 +1282,11 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         
         //force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(listener, shortScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);
         
         //test with listener, points and quality scores
@@ -1309,24 +1314,24 @@ public class DLTPointCorrespondencePinholeCameraRobustEstimatorTest {
         
         //Force IllegalArgumentException
         estimator = null;
-        try{
+        try {
             //empty points
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(empty3D, empty2D, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //different sizes
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, empty2D, qualityScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
-        try{
+        } catch (IllegalArgumentException ignore) { }
+        try {
             //short scores
             estimator = DLTPointCorrespondencePinholeCameraRobustEstimator.
                     create(points3D, points2D, shortScores);
             fail("IllegalArgumentException expected but not thrown");
-        }catch(IllegalArgumentException e){}
+        } catch (IllegalArgumentException ignore) { }
         assertNull(estimator);     
         
     }

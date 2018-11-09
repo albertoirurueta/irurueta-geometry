@@ -118,7 +118,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * Returns the X coordinate of the given homogeneous 3D point instance.
      * @return X coordinate.
      */
-    public double getX(){
+    public double getX() {
         return mX;
     }
     
@@ -175,7 +175,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
     
     /**
      * Sets the W coordinate of this homogeneous point.
-     * @param w W coordinate
+     * @param w W coordinate.
      */
     public void setW(double w) {
         mW = w;
@@ -208,7 +208,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
     @Override
     public final void setCoordinates(double[] v) 
             throws IllegalArgumentException {
-        if(v.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {
+        if (v.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         } else {
             mX = v[0];
@@ -227,7 +227,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
     @Override
     public final void setCoordinates(Point3D point) {
         switch (point.getType()) {
-            case INHOMOGENEOUS_COORDINATES: {
+            case INHOMOGENEOUS_COORDINATES:
                 InhomogeneousPoint3D inhomPoint = (InhomogeneousPoint3D)point;
                 mX = inhomPoint.getX();
                 mY = inhomPoint.getY();
@@ -235,9 +235,9 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
                 mW = 1.0;
                 mNormalized = false;
                 break;
-            }
+
             case HOMOGENEOUS_COORDINATES:
-            default: {
+            default:
                 HomogeneousPoint3D homPoint = (HomogeneousPoint3D)point;
                 mX = homPoint.getX();
                 mY = homPoint.getY();
@@ -245,7 +245,6 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
                 mW = homPoint.getW();                
                 mNormalized = false;
                 break;
-            }
         }
     }
 
@@ -579,7 +578,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
     } 
     
     /**
-     * Returns boolean indicating whether this point has already been normalized
+     * Returns boolean indicating whether this point has already been normalized.
      * @return True if normalized, false otherwise.
      */
     @Override

@@ -1,74 +1,59 @@
-/**
- * @file
- * This file contains unit tests for
- * com.irurueta.geometry.Triangulator3D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 21, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class Triangulator3DTest {
     
-    public static final int MIN_SIDES = 3;
-    public static final int MAX_SIDES = 12;
+    private static final int MIN_SIDES = 3;
+    private static final int MAX_SIDES = 12;
     
-    public static final double MIN_RADIUS = 1.0;
-    public static final double MAX_RADIUS = 10.0;
+    private static final double MIN_RADIUS = 1.0;
+    private static final double MAX_RADIUS = 10.0;
     
-    public static final double MIN_ANGLE_DEGREES = -180.0;
-    public static final double MAX_ANGLE_DEGREES = 180.0;    
+    private static final double MIN_ANGLE_DEGREES = -180.0;
+    private static final double MAX_ANGLE_DEGREES = 180.0;
     
-    public static final double ABSOLUTE_ERROR = 1e-8;    
+    private static final double ABSOLUTE_ERROR = 1e-8;
     
     
-    public Triangulator3DTest() {
-    }
+    public Triangulator3DTest() { }
     
     @BeforeClass
-    public static void setUpClass() {
-    }
+    public static void setUpClass() { }
     
     @AfterClass
-    public static void tearDownClass() {
-    }
+    public static void tearDownClass() { }
     
     @Before
-    public void setUp() {
-    }
+    public void setUp() { }
     
     @After
-    public void tearDown() {
-    }
-    
-    private List<Point3D> buildPolygonVertices(int sides, double radius,
-            double theta){
-        List<Point3D> vertices = new ArrayList<Point3D>(sides);
-        Point3D vertex;        
-        for(int i = 0; i < sides; i++){
-            double angle = (double)i / (double)sides * 2.0 * Math.PI;
-            vertex = new InhomogeneousPoint3D(
-                radius * Math.cos(angle) * Math.cos(theta),
-                radius * Math.sin(angle) * Math.cos(theta), 
-                radius * Math.sin(theta));
-            vertices.add(vertex);
-        }
-        return vertices;
-    }
-                
+    public void tearDown() { }
+
     @Test
-    public void testCreateAndGetMethod(){
+    public void testCreateAndGetMethod() {
         Triangulator2D triangulator = Triangulator2D.create();
         assertNotNull(triangulator);
         
@@ -87,7 +72,7 @@ public class Triangulator3DTest {
     
     @Test
     public void testTriangulate() throws NotEnoughVerticesException, 
-        TriangulatorException{
+            TriangulatorException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
         int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
@@ -118,16 +103,20 @@ public class Triangulator3DTest {
         Triangulator3D triangulator = Triangulator3D.create();
         List<Triangle3D> triangles1 = triangulator.triangulate(polygon);
         List<Triangle3D> triangles2 = triangulator.triangulate(vertices);
-        List<int[]> indices = new ArrayList<int[]>();
+        List<int[]> indices = new ArrayList<>();
         List<Triangle3D> triangles3 = triangulator.triangulate(vertices, 
                 indices);
         
         double area1 = 0.0;
         boolean inside1 = false, inside2 = false;
-        for(Triangle3D triangle : triangles1){
+        for (Triangle3D triangle : triangles1) {
             area1 += triangle.getArea();
-            if(triangle.isInside(point1)) inside1 = true;
-            if(triangle.isInside(point2)) inside2 = false;
+            if (triangle.isInside(point1)) {
+                inside1 = true;
+            }
+            if (triangle.isInside(point2)) {
+                inside2 = true;
+            }
         }
         
         assertEquals(area1, polygon.getArea(), ABSOLUTE_ERROR);
@@ -141,10 +130,14 @@ public class Triangulator3DTest {
         
         double area2 = 0.0;
         inside1 = inside2 = false;
-        for(Triangle3D triangle : triangles2){
+        for (Triangle3D triangle : triangles2) {
             area2 += triangle.getArea();
-            if(triangle.isInside(point1)) inside1 = true;
-            if(triangle.isInside(point2)) inside2 = false;            
+            if (triangle.isInside(point1)) {
+                inside1 = true;
+            }
+            if (triangle.isInside(point2)) {
+                inside2 = true;
+            }
         }
         
         assertEquals(area2, polygon.getArea(), ABSOLUTE_ERROR);
@@ -158,10 +151,14 @@ public class Triangulator3DTest {
         
         double area3 = 0.0;
         inside1 = inside2 = false;
-        for(Triangle3D triangle : triangles3){
+        for (Triangle3D triangle : triangles3) {
             area3 += triangle.getArea();
-            if(triangle.isInside(point1)) inside1 = true;
-            if(triangle.isInside(point2)) inside2 = false;            
+            if (triangle.isInside(point1)) {
+                inside1 = true;
+            }
+            if (triangle.isInside(point2)) {
+                inside2 = true;
+            }
         }
         
         assertEquals(area3, polygon.getArea(), ABSOLUTE_ERROR);
@@ -174,5 +171,20 @@ public class Triangulator3DTest {
         assertFalse(inside2);                
         
         assertTrue(indices.size() > 0);
-    }        
+    }
+
+    private List<Point3D> buildPolygonVertices(int sides, double radius,
+                                               double theta) {
+        List<Point3D> vertices = new ArrayList<>(sides);
+        Point3D vertex;
+        for(int i = 0; i < sides; i++){
+            double angle = (double)i / (double)sides * 2.0 * Math.PI;
+            vertex = new InhomogeneousPoint3D(
+                    radius * Math.cos(angle) * Math.cos(theta),
+                    radius * Math.sin(angle) * Math.cos(theta),
+                    radius * Math.sin(theta));
+            vertices.add(vertex);
+        }
+        return vertices;
+    }
 }

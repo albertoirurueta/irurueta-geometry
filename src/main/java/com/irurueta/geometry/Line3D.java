@@ -1,10 +1,17 @@
-/**
- * @file
- * This file contains implementation of
- * com.irurueta.geometry.Line3D
- * 
- * @author Alberto Irurueta (alberto@irurueta.com)
- * @date September 15, 2012
+/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.irurueta.geometry;
 
@@ -12,79 +19,81 @@ import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.SingularValueDecomposer;
 import com.irurueta.algebra.Utils;
+
 import java.io.Serializable;
 
 /**
  * This class defines a lines in 3D space.
- * A line in 3D space is defined as the intersection of two non-parallel planes
+ * A line in 3D space is defined as the intersection of two non-parallel planes.
  */
-public class Line3D implements Serializable{
+@SuppressWarnings("WeakerAccess")
+public class Line3D implements Serializable {
     
     /**
      * Positive threshold determine whether points lay inside (is locus) of a 
-     * given line or not
+     * given line or not.
      */
     public static final double DEFAULT_LOCUS_THRESHOLD = 1e-12;
-    
-    /**
-     * Constant defining the size of vector that define the direction of a line
-     */
-    private static final int INHOM_VECTOR_SIZE = 3;
-    
+
     /**
      * Minimum allowed threshold
      */
     public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Constant defining the size of vector that define the direction of a line
+     */
+    private static final int INHOM_VECTOR_SIZE = 3;
+
+    /**
+     * 1st plane forming this 3D line.
+     */
+    private Plane mPlane1;
     
     /**
-     * 1st plane forming this 3D line
+     * 2nd plane forming this 3D line.
      */
-    Plane mPlane1;
-    
-    /**
-     * 2nd plane forming this 3D line
-     */
-    Plane mPlane2;
+    private Plane mPlane2;
     
     /**
      * Constructor.
      * Sets planes intersecting into this 3D line.
-     * @param plane1 1st plane
-     * @param plane2 2nd plane
+     * @param plane1 1st plane.
+     * @param plane2 2nd plane.
      * @throws CoincidentPlanesException Raised if provided planes are 
      * coincident and hence never intersect. Notice that parallel planes are
-     * not coincident and they intersect at infinity
+     * not coincident and they intersect at infinity.
      */
-    public Line3D(Plane plane1, Plane plane2) throws CoincidentPlanesException{
+    public Line3D(Plane plane1, Plane plane2) throws CoincidentPlanesException {
         setPlanes(plane1, plane2);
     }
     
     /**
      * Constructor.
-     * Builds a 3D line passing through provided 2 points
-     * @param point1 1st point
-     * @param point2 2nd point
+     * Builds a 3D line passing through provided 2 points.
+     * @param point1 1st point.
+     * @param point2 2nd point.
      * @throws CoincidentPointsException Raised if provided points are 
-     * considered to be equal
+     * considered to be equal.
      */
     public Line3D(Point3D point1, Point3D point2) 
-            throws CoincidentPointsException{
+            throws CoincidentPointsException {
         setPlanesFromPoints(point1, point2);
     }
     
     /**
      * Determines whether provided planes are coincident.
      * Two planes are considered coincident if they are equal up to scale.
-     * @param plane1 1st plane
-     * @param plane2 2nd plane
-     * @return True if planes are coincident, false otherwise
+     * @param plane1 1st plane.
+     * @param plane2 2nd plane.
+     * @return True if planes are coincident, false otherwise.
      */
-    public static boolean areCoincidentPlanes(Plane plane1, Plane plane2){
+    public static boolean areCoincidentPlanes(Plane plane1, Plane plane2) {
         //normalize planes to increase accuracy
         plane1.normalize();
         plane2.normalize();
         
-        try{
+        try {
             Matrix m = new Matrix(2, Plane.PLANE_NUMBER_PARAMS);
             m.setElementAt(0, 0, plane1.getA());
             m.setElementAt(0, 1, plane1.getB());
@@ -105,9 +114,9 @@ public class Line3D implements Serializable{
             //null-space has at least dimension 3, which is a perpendicular 
             //plane or the whole space (Depending if nullity is 3 or 4)
             return Utils.rank(m) < 2;
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             //if for numerical reasons it cannot be determined whether planes
-            //are paralle, it will be assumed the worst case, which is that
+            //are parallel, it will be assumed the worst case, which is that
             //planes are parallel, which is something common for very large
             //values or planes close at infinity
             return true; 
@@ -117,32 +126,33 @@ public class Line3D implements Serializable{
     /**
      * Sets intersecting planes for this 3D line.
      * The intersection of provided planes will determine this 3D line.
-     * @param plane1 1st plane
-     * @param plane2 2nd plane
+     * @param plane1 1st plane.
+     * @param plane2 2nd plane.
      * @throws CoincidentPlanesException Raised if provided planes are 
      * coincident. Notice that parallel planes are not coincident and they
-     * intersect at infinity
+     * intersect at infinity.
      */
     public final void setPlanes(Plane plane1, Plane plane2) 
-            throws CoincidentPlanesException{
-        if(areCoincidentPlanes(plane1, plane2)) 
+            throws CoincidentPlanesException {
+        if (areCoincidentPlanes(plane1, plane2)) {
             throw new CoincidentPlanesException();
+        }
         
         mPlane1 = plane1;
         mPlane2 = plane2;
     }
     
     /**
-     * Sets planes of this 3D line so that it passes through provided points
-     * @param point1 1st point
-     * @param point2 2nd point
+     * Sets planes of this 3D line so that it passes through provided points.
+     * @param point1 1st point.
+     * @param point2 2nd point.
      * @throws CoincidentPointsException Raised if provided points are equal
-     * and hence a line cannot be determined
+     * and hence a line cannot be determined.
      */
     public final void setPlanesFromPoints(Point3D point1, Point3D point2) 
-            throws CoincidentPointsException{        
+            throws CoincidentPointsException {
         //build matrix containing director vector on a row
-        try{
+        try {
             Matrix m = new Matrix(1, INHOM_VECTOR_SIZE);
             m.setElementAt(0, 0, point2.getInhomX() - point1.getInhomX());
             m.setElementAt(0, 1, point2.getInhomY() - point1.getInhomY());
@@ -155,7 +165,9 @@ public class Line3D implements Serializable{
         
             //check that points are not coincident, and hence all the values of 
             //matrix m are not zero
-            if(decomposer.getRank() < 1) throw new CoincidentPointsException();
+            if (decomposer.getRank() < 1) {
+                throw new CoincidentPointsException();
+            }
         
             //last two columns of V contains director vectors of plane1 and 
             //plane2
@@ -166,7 +178,7 @@ public class Line3D implements Serializable{
         
             mPlane1 = new Plane(point1, directorVector1);
             mPlane2 = new Plane(point1, directorVector2);
-        }catch(AlgebraException e){
+        } catch (AlgebraException e) {
             throw new CoincidentPointsException(e);
         }
     }
@@ -174,42 +186,42 @@ public class Line3D implements Serializable{
     /**
      * Returns 1st plane determining this 3D line.
      * The intersection of plane1 and plane2 determines this 3D line.
-     * @return 1st plane
+     * @return 1st plane.
      */
-    public Plane getPlane1(){
+    public Plane getPlane1() {
         return mPlane1;
     }
     
     /**
      * Returns 2nd plane determining this 3D line.
      * The intersection of plane1 and plane2 determines this 3D line.
-     * @return 2nd plane
+     * @return 2nd plane.
      */
-    public Plane getPlane2(){
+    public Plane getPlane2() {
         return mPlane2;
     }
     
     /**
      * Determines if provided point is locus of this 3D line up to provided
-     * threshold
-     * @param point Point to be checked
+     * threshold.
+     * @param point Point to be checked.
      * @param threshold Threshold to determine if provided point is locus or 
      * not. This should usually be a small value.
-     * @return True if provided point belongs to this 3D line, false otherwise
-     * @throws IllegalArgumentException Raised if provided threshold is negative
+     * @return True if provided point belongs to this 3D line, false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean isLocus(Point3D point, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         return mPlane1.isLocus(point, threshold) && 
                 mPlane2.isLocus(point, threshold);
     }
     
     /**
      * Raised if provided point is locus of this 3D line.
-     * @param point Point to be checked
-     * @return True if provided point belongs to this 3D line, false otherwise
+     * @param point Point to be checked.
+     * @return True if provided point belongs to this 3D line, false otherwise.
      */
-    public boolean isLocus(Point3D point){
+    public boolean isLocus(Point3D point) {
         return isLocus(point, DEFAULT_LOCUS_THRESHOLD);
     }   
     
@@ -218,32 +230,32 @@ public class Line3D implements Serializable{
      * The shortest distance is obtained in perpendicular direction of this
      * line.
      * @param point Point to be checked.
-     * @return Shortest distance of provided point to this 3D line
+     * @return Shortest distance of provided point to this 3D line.
      */
-    public double getDistance(Point3D point){
+    public double getDistance(Point3D point) {
         Point3D closestPoint = getClosestPoint(point);
         return point.distanceTo(closestPoint);
     }
     
     /**
-     * Returns closest point belonging to this 3D line respect provided point
-     * @param point Point to be checked
-     * @return Closest point belonging to this 3D line respect provided point
+     * Returns closest point belonging to this 3D line respect provided point.
+     * @param point Point to be checked.
+     * @return Closest point belonging to this 3D line respect provided point.
      */
-    public Point3D getClosestPoint(Point3D point){
+    public Point3D getClosestPoint(Point3D point) {
         return getClosestPoint(point, DEFAULT_LOCUS_THRESHOLD);
     }
     
     /**
      * Returns closest point belonging to this 3D line respect provided point
      * up to provided threshold.
-     * @param point Point to be checked
+     * @param point Point to be checked.
      * @param threshold Threshold to determine closest point.
-     * @return Closest point belonging to this 3D line respect provided point
-     * @throws IllegalArgumentException Raised if provided threshold is negative
+     * @return Closest point belonging to this 3D line respect provided point.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public Point3D getClosestPoint(Point3D point, double threshold)
-            throws IllegalArgumentException{
+            throws IllegalArgumentException {
         Point3D result = Point3D.create();
         closestPoint(point, result, threshold);
         return result;
@@ -255,21 +267,23 @@ public class Line3D implements Serializable{
      * @param point Point to be checked.
      * @param result Instance where computed point will be stored.
      */
-    public void closestPoint(Point3D point, Point3D result){
+    public void closestPoint(Point3D point, Point3D result) {
         closestPoint(point, result, DEFAULT_LOCUS_THRESHOLD);
     }
     
     /**
      * Computes closest point belonging to this 3D line respect provided point
      * up to provided threshold and stores the result in provided instance.
-     * @param point Point to be checked
+     * @param point Point to be checked.
      * @param result Instance where computed point will be stored.
      * @param threshold Threshold to determine closest point.
-     * @throws IllegalArgumentException Raised if provided threshold is negative
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public void closestPoint(Point3D point, Point3D result, double threshold)
-            throws IllegalArgumentException{
-        if(threshold < MIN_THRESHOLD) throw new IllegalArgumentException();
+            throws IllegalArgumentException {
+        if (threshold < MIN_THRESHOLD) {
+            throw new IllegalArgumentException();
+        }
         
         //normalize to increase accuracy
         point.normalize();
@@ -283,50 +297,50 @@ public class Line3D implements Serializable{
         //This is a plane having as director vector this line 3D and passing 
         //through provided point
         Plane p = new Plane(point, getDirection());
-        try{
+        try {
             intersection(p, result);
-        }catch(NoIntersectionException ignore){}
+        } catch (NoIntersectionException ignore) { }
     }
     
     /**
-     * Normalize the planes forming this 3D line
+     * Normalize the planes forming this 3D line.
      */
-    public void normalize(){
+    public void normalize() {
         mPlane1.normalize();
         mPlane2.normalize();
     }
     
     /**
-     * Determines whether the planes forming this 3D line are normalized or not
+     * Determines whether the planes forming this 3D line are normalized or not.
      * @return True if planes forming this 3D line are normalized, false 
-     * otherwise
+     * otherwise.
      */
-    public boolean isNormalized(){
+    public boolean isNormalized() {
         return mPlane1.isNormalized() && mPlane2.isNormalized();
     }
     
     /**
      * Returns array containing vector that indicates the direction of this 3D 
-     * line
+     * line.
      * @return Returns vector indicating the direction of this 3D line.
      */
-    public double[] getDirection(){
-        try{
+    public double[] getDirection() {
+        try {
             return Utils.crossProduct(mPlane1.getDirectorVector(), 
                     mPlane2.getDirectorVector());
-        }catch(AlgebraException ignore){
+        } catch (AlgebraException ignore) {
             return null;
         }
     }
     
     /**
      * Returns point where provided point intersects this 3D line.
-     * @param plane Plane to intersect this 3D line
+     * @param plane Plane to intersect this 3D line.
      * @return Point where provided point intersects this 3D line.
      * @throws NoIntersectionException Raised if provided plane does not 
      * intersect this 3D line.
      */
-    public Point3D getIntersection(Plane plane) throws NoIntersectionException{
+    public Point3D getIntersection(Plane plane) throws NoIntersectionException {
         Point3D result = Point3D.create();
         intersection(plane, result);
         return result;
@@ -341,7 +355,7 @@ public class Line3D implements Serializable{
      * intersect this 3D line.
      */
     public void intersection(Plane plane, Point3D result) 
-            throws NoIntersectionException{
+            throws NoIntersectionException {
         //use plane1, plane2 and provided plane to find an intersection
         plane.intersection(mPlane1, mPlane2, result);
     }
