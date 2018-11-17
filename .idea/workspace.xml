@@ -2,476 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c6d6a1cb-41d7-401f-885d-de1ac92dc71e" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LICENSE.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cd/before-deploy.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cd/codesigning.asc.enc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cd/deploy.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cd/mvnsettings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sonar-project.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_algebra_1_0_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_algebra_1_0_SNAPSHOT.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_numerical_1_0_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_numerical_1_0_SNAPSHOT.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_sorting_1_0_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_sorting_1_0_SNAPSHOT.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_statistics_1_0_SNAPSHOT.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_irurueta_irurueta_statistics_1_0_SNAPSHOT.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/s3-settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/AlternatingCameraCalibrator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/CalibrationException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/CameraCalibrator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/CameraCalibratorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/CameraCalibratorMethod.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/CameraCalibratorSample.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/CirclesPattern2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/Distortion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/DistortionException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/DistortionKind.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/DualAbsoluteQuadric.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/DualImageOfAbsoluteConic.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/ErrorOptimizationCameraCalibrator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/ImageOfAbsoluteConic.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/InvalidPlaneAtInfinityException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/InvalidTransformationException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/Pattern2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/Pattern2DType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/QRPattern2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/RadialDistortion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/RadialDistortionException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/CameraPoseEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/DualAbsoluteQuadricEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/DualAbsoluteQuadricEstimatorException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/DualAbsoluteQuadricEstimatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/DualAbsoluteQuadricEstimatorType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/DualAbsoluteQuadricRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/DualAbsoluteQuadricRobustEstimatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/ImageOfAbsoluteConicEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/ImageOfAbsoluteConicEstimatorException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/ImageOfAbsoluteConicEstimatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/ImageOfAbsoluteConicEstimatorType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/ImageOfAbsoluteConicRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/ImageOfAbsoluteConicRobustEstimatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/KruppaDualImageOfAbsoluteConicEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/KruppaDualImageOfAbsoluteConicEstimatorException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/KruppaDualImageOfAbsoluteConicEstimatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/LMSEDualAbsoluteQuadricEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/LMSEImageOfAbsoluteConicEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/LMSERadialDistortionEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/LMedSDualAbsoluteQuadricRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/LMedSImageOfAbsoluteConicRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/LMedSRadialDistortionRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/MSACDualAbsoluteQuadricRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/MSACImageOfAbsoluteConicRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/MSACRadialDistortionRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/PROMedSDualAbsoluteQuadricRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/PROMedSImageOfAbsoluteConicRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/PROMedSRadialDistortionRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/PROSACDualAbsoluteQuadricRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/PROSACImageOfAbsoluteConicRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/PROSACRadialDistortionRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/RANSACDualAbsoluteQuadricRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/RANSACImageOfAbsoluteConicRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/RANSACRadialDistortionRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/RadialDistortionEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/RadialDistortionEstimatorException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/RadialDistortionEstimatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/RadialDistortionEstimatorType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/RadialDistortionRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/RadialDistortionRobustEstimatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/SingleHomographyPinholeCameraEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/SingleHomographyPinholeCameraEstimatorException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/SingleHomographyPinholeCameraEstimatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/WeightedDualAbsoluteQuadricEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/WeightedImageOfAbsoluteConicEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/WeightedRadialDistortionEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/estimators/package-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/calibration/package-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/AlgebraicFundamentalMatrixComparator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/CorrectionException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/Corrector.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/CorrectorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/CorrectorType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/EpipolarDistanceFundamentalMatrixComparator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/EpipolarException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/EssentialMatrix.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/FundamentalMatrix.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/FundamentalMatrixComparator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/FundamentalMatrixComparatorException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/FundamentalMatrixComparatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/FundamentalMatrixComparatorType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/GoldStandardCorrector.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/GoldStandardSingleCorrector.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/InvalidEssentialMatrixException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/InvalidFundamentalMatrixException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/InvalidPairOfCamerasException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/InvalidPairOfIntrinsicParametersException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/InvalidRotationAndTranslationException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/SampsonCorrector.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/SampsonSingleCorrector.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/SingleCorrector.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/AffineFundamentalMatrixEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/EightPointsFundamentalMatrixEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/FundamentalMatrixEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/FundamentalMatrixEstimatorException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/FundamentalMatrixEstimatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/FundamentalMatrixEstimatorMethod.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/FundamentalMatrixRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/FundamentalMatrixRobustEstimatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/HomographyDecomposer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/HomographyDecomposerException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/HomographyDecomposerListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/HomographyDecomposition.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/LMedSFundamentalMatrixRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/MSACFundamentalMatrixRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/PROMedSFundamentalMatrixRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/PROSACFundamentalMatrixRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/PlanarFundamentalMatrixEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/PlanarFundamentalMatrixEstimatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/RANSACFundamentalMatrixRobustEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/SevenPointsFundamentalMatrixEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/estimators/package-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/package-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/refiners/FundamentalMatrixRefiner.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/refiners/HomogeneousRightEpipoleRefiner.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/refiners/InhomogeneousRightEpipoleRefiner.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/epipolar/refiners/RightEpipoleRefiner.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamPairedViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamPairedViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamPairedViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamPairedViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamPairedViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamPairedViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamTwoViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamTwoViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamTwoViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseAbsoluteOrientationSlamPairedViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseAbsoluteOrientationSlamSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseAbsoluteOrientationSlamTwoViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BasePairedViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BasePairedViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BasePairedViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseSlamPairedViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseSlamPairedViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseSlamPairedViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseSlamSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseSlamSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseSlamSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseSlamTwoViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseSlamTwoViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseSlamTwoViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseTwoViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseTwoViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/BaseTwoViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/CancelledReconstructionException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamPairedViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamPairedViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamPairedViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamTwoViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamTwoViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamTwoViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/DualAbsoluteQuadricInitialCamerasEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/DualImageOfAbsoluteConicInitialCamerasEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/EssentialMatrixInitialCamerasEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/EstimatedCamera.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/EstimatedFundamentalMatrix.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/FailedReconstructionException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/InitialCamerasEstimationFailedException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/InitialCamerasEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/InitialCamerasEstimatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/InitialCamerasEstimatorMethod.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/KnownBaselineSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/KnownBaselineSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/KnownBaselineSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/KnownBaselineTwoViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/KnownBaselineTwoViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/KnownBaselineTwoViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/LMSEHomogeneousSinglePoint3DTriangulator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/LMSEInhomogeneousSinglePoint3DTriangulator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/LMedSRobustSinglePoint3DTriangulator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/MSACRobustSinglePoint3DTriangulator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/MatchedSamples.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/PROMedSRobustSinglePoint3DTriangulator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/PROSACRobustSinglePoint3DTriangulator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/PairedViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/PairedViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/PairedViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/PlanarBestFundamentalMatrixEstimatorAndReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/PlanarBestFundamentalMatrixEstimatorAndReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/Point3DTriangulationException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/Point3DTriangulatorType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/PointColorData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/RANSACRobustSinglePoint3DTriangulator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/ReconstructedPoint3D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/ReconstructionException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/RobustSinglePoint3DTriangulator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/RobustSinglePoint3DTriangulatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/Sample2D.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SinglePoint3DTriangulator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SinglePoint3DTriangulatorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SlamPairedViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SlamPairedViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SlamPairedViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SlamSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SlamSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SlamSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SlamTwoViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SlamTwoViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SlamTwoViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/SparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/StructureFromMotionException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/TwoViewsSparseReconstructor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/TwoViewsSparseReconstructorConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/TwoViewsSparseReconstructorListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/WeightedHomogeneousSinglePoint3DTriangulator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/WeightedInhomogeneousSinglePoint3DTriangulator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/sfm/package-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/AbsoluteOrientationBaseSlamCalibrator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/AbsoluteOrientationBaseSlamEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/AbsoluteOrientationConstantVelocityModelSlamCalibrationData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/AbsoluteOrientationConstantVelocityModelSlamCalibrator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/AbsoluteOrientationConstantVelocityModelSlamEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/AbsoluteOrientationSlamCalibrationData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/AbsoluteOrientationSlamCalibrator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/AbsoluteOrientationSlamEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/BaseCalibrationData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/BaseSlamCalibrator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/BaseSlamEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/ConstantVelocityModelSlamCalibrationData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/ConstantVelocityModelSlamCalibrator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/ConstantVelocityModelSlamEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/ConstantVelocityModelStatePredictor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/PositionPredictor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/QuaternionPredictor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/SlamCalibrationData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/SlamCalibrator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/SlamEstimator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/SlamException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/StatePredictor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/VelocityPredictor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/ar/slam/package-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/PinholeCameraIntrinsicParameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/PinholeCameraIntrinsicParameters.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSDLTPointCorrespondencePinholeCameraRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSDLTPointCorrespondencePinholeCameraRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSLineCorrespondenceAffineTransformation2DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSPointCorrespondenceAffineTransformation3DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSPointCorrespondenceAffineTransformation3DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSUPnPPointCorrespondencePinholeCameraRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSPointCorrespondenceAffineTransformation2DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PointCorrespondencePinholeCameraRobustEstimator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/PointCorrespondencePinholeCameraRobustEstimator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/irurueta/geometry/build-info.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/irurueta/geometry/build-info.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/AlternatingCameraCalibratorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/CalibrationExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/CameraCalibratorSampleTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/CameraCalibratorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/CirclesPattern2DTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/DistortionExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/DualAbsoluteQuadricTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/DualImageOfAbsoluteConicTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/ErrorOptimizationCameraCalibratorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/ImageOfAbsoluteConicTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/InvalidPlaneAtInfinityExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/InvalidTransformationExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/Pattern2DTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/QRPattern2DTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/RadialDistortionExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/RadialDistortionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/CameraPoseEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/DualAbsoluteQuadricEstimatorExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/DualAbsoluteQuadricEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/DualAbsoluteQuadricRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/ImageOfAbsoluteConicEstimatorExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/ImageOfAbsoluteConicEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/ImageOfAbsoluteConicRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/KruppaDualImageOfAbsoluteConicEstimatorExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/KruppaDualImageOfAbsoluteConicEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/LMSEDualAbsoluteQuadricEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/LMSEImageOfAbsoluteConicEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/LMSERadialDistortionEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/LMedSDualAbsoluteQuadricRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/LMedSImageOfAbsoluteConicRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/LMedSRadialDistortionRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/MSACDualAbsoluteQuadricRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/MSACImageOfAbsoluteConicRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/MSACRadialDistortionRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/PROMedSDualAbsoluteQuadricRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/PROMedSImageOfAbsoluteConicRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/PROMedSRadialDistortionRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/PROSACDualAbsoluteQuadricRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/PROSACImageOfAbsoluteConicRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/PROSACRadialDistortionRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/RANSACDualAbsoluteQuadricRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/RANSACImageOfAbsoluteConicRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/RANSACRadialDistortionRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/RadialDistortionEstimatorExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/RadialDistortionEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/RadialDistortionRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/SingleHomographyPinholeCameraEstimatorExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/SingleHomographyPinholeCameraEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/WeightedDualAbsoluteQuadricEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/WeightedImageOfAbsoluteConicEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/calibration/estimators/WeightedRadialDistortionEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/AlgebraicFundamentalMatrixComparatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/CorrectionExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/CorrectorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/EpipolarDistanceFundamentalMatrixComparatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/EpipolarExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/EssentialMatrixTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/FundamentalMatrixComparatorExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/FundamentalMatrixTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/GoldStandardCorrectorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/GoldStandardSingleCorrectorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/InvalidEssentialMatrixExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/InvalidFundamentalMatrixExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/InvalidPairOfCamerasExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/InvalidPairOfIntrinsicParametersExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/InvalidRotationAndTranslationExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/SampsonCorrectorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/SampsonSingleCorrectorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/SingleCorrectorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/AffineFundamentalMatrixEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/EightPointsFundamentalMatrixEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/FundamentalMatrixEstimatorExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/FundamentalMatrixEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/FundamentalMatrixRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/HomographyDecomposerExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/HomographyDecomposerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/HomographyDecompositionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/LMedSFundamentalMatrixRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/MSACFundamentalMatrixRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/PROMedSFundamentalMatrixRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/PROSACFundamentalMatrixRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/PlanarFundamentalMatrixEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/RANSACFundamentalMatrixRobustEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/estimators/SevenPointsFundamentalMatrixEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/refiners/FundamentalMatrixRefinerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/refiners/HomogeneousRightEpipoleRefinerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/epipolar/refiners/InhomogeneousRightEpipoleRefinerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamPairedViewsSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamPairedViewsSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/AbsoluteOrientationConstantVelocityModelSlamTwoViewsSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamPairedViewsSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamPairedViewsSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamTwoViewsSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/AbsoluteOrientationSlamTwoViewsSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/CancelledReconstructionExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamPairedViewsSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamPairedViewsSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamTwoViewsSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/ConstantVelocityModelSlamTwoViewsSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/DualAbsoluteQuadricInitialCamerasEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/DualImageOfAbsoluteConicInitialCamerasEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/EssentialMatrixInitialCamerasEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/EstimatedCameraTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/EstimatedFundamentalMatrixTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/FailedReconstructionExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/InitialCamerasEstimationFailedExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/KnownBaselineSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/KnownBaselineSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/KnownBaselineTwoViewsSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/KnownBaselineTwoViewsSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/LMSEHomogeneousSinglePoint3DTriangulatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/LMSEInhomogeneousSinglePoint3DTriangulatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/LMedSRobustSinglePoint3DTriangulatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/MSACRobustSinglePoint3DTriangulatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/MatchedSamplesTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/PROMedSRobustSinglePoint3DTriangulatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/PROSACRobustSinglePoint3DTriangulatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/PairedViewsSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/PairedViewsSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/PlanarBestFundamentalMatrixEstimatorAndReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/Point3DTriangulationExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/PointColorDataTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/RANSACRobustSinglePoint3DTriangulatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/ReconstructedPoint3DTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/ReconstructionExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/RobustSinglePoint3DTriangulatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/Sample2DTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/SinglePoint3DTriangulatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/SlamPairedViewsSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/SlamPairedViewsSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/SlamSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/SlamSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/SlamTwoViewsSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/SlamTwoViewsSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/SparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/SparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/StructureFromMotionExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/TwoViewsSparseReconstructorConfigurationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/TwoViewsSparseReconstructorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/WeightedHomogeneousSinglePoint3DTriangulatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/sfm/WeightedInhomogeneousSinglePoint3DTriangulatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/AbsoluteOrientationConstantVelocityModelSlamCalibrationDataTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/AbsoluteOrientationConstantVelocityModelSlamCalibratorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/AbsoluteOrientationConstantVelocityModelSlamEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/AbsoluteOrientationSlamCalibrationDataTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/AbsoluteOrientationSlamCalibratorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/AbsoluteOrientationSlamEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/ConstantVelocityModelSlamCalibrationDataTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/ConstantVelocityModelSlamCalibratorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/ConstantVelocityModelSlamEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/ConstantVelocityModelStatePredictorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/PositionPredictorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/QuaternionPredictorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/SlamCalibrationDataTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/SlamCalibratorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/SlamEstimatorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/SlamExceptionTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/StatePredictorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/ar/slam/VelocityPredictorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/PinholeCameraIntrinsicParametersTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/PinholeCameraIntrinsicParametersTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/DLTLinePlaneCorrespondencePinholeCameraEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/DLTLinePlaneCorrespondencePinholeCameraEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/EPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/EPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/LMedSUPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/LMedSUPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MSACPointCorrespondenceAffineTransformation3DRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MSACPointCorrespondenceAffineTransformation3DRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/PROSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/PROSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/PROSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/PROSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/refiners/DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/refiners/DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefinerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefinerTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -522,7 +55,7 @@
           <entry key="properties" value="2" />
           <entry key="sh" value="2" />
           <entry key="txt" value="1" />
-          <entry key="xml" value="5" />
+          <entry key="xml" value="7" />
           <entry key="yml" value="1" />
         </counts>
       </usages-collector>
@@ -534,7 +67,7 @@
           <entry key="Markdown" value="2" />
           <entry key="PLAIN_TEXT" value="3" />
           <entry key="Properties" value="2" />
-          <entry key="XML" value="5" />
+          <entry key="XML" value="7" />
           <entry key="YAML" value="1" />
         </counts>
       </usages-collector>
@@ -545,7 +78,7 @@
           <entry key="md" value="228" />
           <entry key="properties" value="8" />
           <entry key="sh" value="8" />
-          <entry key="xml" value="102" />
+          <entry key="xml" value="168" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -555,7 +88,7 @@
           <entry key="Markdown" value="228" />
           <entry key="PLAIN_TEXT" value="8" />
           <entry key="Properties" value="8" />
-          <entry key="XML" value="102" />
+          <entry key="XML" value="168" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
@@ -566,48 +99,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor />
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sonar-project.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="22" lean-forward="true" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.travis.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="23" column="700" selection-start-line="23" selection-start-column="700" selection-end-line="23" selection-end-column="700" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/cd/before-deploy.sh">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="139" selection-start-line="2" selection-start-column="139" selection-end-line="2" selection-end-column="139" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cd/deploy.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="30" lean-forward="true" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+            <state relative-caret-position="207">
+              <caret line="179" column="54" lean-forward="true" selection-start-line="179" selection-start-column="54" selection-end-line="179" selection-end-column="54" />
             </state>
           </provider>
         </entry>
@@ -624,7 +120,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest</find>
       <find>EuclideanTransformation3DTest</find>
       <find>WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest</find>
       <find>AbsoluteOrientationSlamSparseReconstructorTest</find>
@@ -654,6 +149,7 @@
       <find>mSuggestedR</find>
       <find>estimate()</find>
       <find>LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest</find>
+      <find>maven-surefire</find>
     </findStrings>
     <replaceStrings>
       <replace>KnownBaselineSparseReconstructorConfiguration</replace>
@@ -691,7 +187,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/Conic.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/refiners/InhomogeneousPoint3DRefinerTest.java" />
         <option value="$PROJECT_DIR$/checkstyle.xml" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/sonar-project.properties" />
@@ -737,6 +232,7 @@
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MSACPointCorrespondenceAffineTransformation3DRobustEstimatorTest.java" />
         <option value="$PROJECT_DIR$/.travis.yml" />
         <option value="$PROJECT_DIR$/cd/before-deploy.sh" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -779,7 +275,8 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="37" />
+    <option name="x" value="13" />
+    <option name="y" value="23" />
     <option name="width" value="1377" />
     <option name="height" value="877" />
   </component>
@@ -794,11 +291,6 @@
             <path>
               <item name="irurueta-geometry" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="irurueta-geometry" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-            </path>
-            <path>
-              <item name="irurueta-geometry" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="irurueta-geometry" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="cd" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
@@ -860,7 +352,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542417812324" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542475357690" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.0" />
@@ -1199,7 +691,7 @@
       <workItem from="1541666421848" duration="12570000" />
       <workItem from="1541859466569" duration="755000" />
       <workItem from="1542230699419" duration="11635000" />
-      <workItem from="1542392209000" duration="20166000" />
+      <workItem from="1542392209000" duration="22489000" />
     </task>
     <servers />
   </component>
@@ -1236,13 +728,12 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="653847000" />
+    <option name="totallyTimeSpent" value="656170000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="37" width="1377" height="877" extended-state="0" />
-    <editor active="true" />
+    <frame x="13" y="23" width="1377" height="877" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48306596" visible="true" weight="0.28089887" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48306596" weight="0.28089887" />
       <window_info id="Nl-Palette" order="1" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Capture Tool" order="3" />
@@ -1266,7 +757,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Maven Projects" order="4" weight="0.32883894" />
+      <window_info active="true" anchor="right" id="Maven Projects" order="4" visible="true" weight="0.32883894" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
       <window_info anchor="right" id="Properties" order="6" />
       <window_info anchor="right" id="Theme Preview" order="7" />
@@ -1307,117 +798,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/PROSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="83" column="30" lean-forward="true" selection-start-line="83" selection-start-column="30" selection-end-line="83" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#286164#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#2635#2687#0" />
-            <element signature="e#2697#2751#0" />
-            <element signature="e#2761#2796#0" />
-            <element signature="e#2806#2843#0" />
-            <element signature="e#2849#77590#0" />
-            <element signature="e#77600#78537#0" />
-            <element signature="e#78547#79511#0" />
-            <element signature="e#79525#80354#0" />
-            <element signature="e#80364#81316#0" />
-            <element signature="e#81326#82351#0" />
-            <element signature="e#82361#83201#0" />
-            <element signature="e#83211#83901#0" />
-            <element signature="e#83911#84612#0" />
-            <element signature="e#84622#85358#0" />
-            <element signature="e#85376#87016#0" />
-            <element signature="e#87026#87642#0" />
-            <element signature="e#87648#88453#0" />
-            <element signature="e#88463#89103#0" />
-            <element signature="e#89117#89986#0" />
-            <element signature="e#89998#90648#0" />
-            <element signature="e#90660#91598#0" />
-            <element signature="e#91616#92233#0" />
-            <element signature="e#92247#93113#0" />
-            <element signature="e#93128#93792#0" />
-            <element signature="e#93809#94698#0" />
-            <element signature="e#94711#95364#0" />
-            <element signature="e#95378#96212#0" />
-            <element signature="e#96226#96783#0" />
-            <element signature="e#96797#97617#0" />
-            <element signature="e#97630#98222#0" />
-            <element signature="e#98240#99236#0" />
-            <element signature="e#99246#99823#0" />
-            <element signature="e#99833#100515#0" />
-            <element signature="e#100521#102698#0" />
-            <element signature="e#102708#103622#0" />
-            <element signature="e#103632#104546#0" />
-            <element signature="e#104556#105470#0" />
-            <element signature="e#105480#106107#0" />
-            <element signature="e#112485#112518#0" />
-            <element signature="e#114896#114957#0" />
-            <element signature="e#122345#122378#0" />
-            <element signature="e#124786#124847#0" />
-            <element signature="e#132463#132496#0" />
-            <element signature="e#134874#134935#0" />
-            <element signature="e#187623#187684#0" />
-            <element signature="e#188766#188809#0" />
-            <element signature="e#193320#193353#0" />
-            <element signature="e#195731#195792#0" />
-            <element signature="e#199216#199277#0" />
-            <element signature="e#200359#200402#0" />
-            <element signature="e#204945#204978#0" />
-            <element signature="e#207386#207447#0" />
-            <element signature="e#210970#211031#0" />
-            <element signature="e#212113#212156#0" />
-            <element signature="e#216763#216796#0" />
-            <element signature="e#219219#219280#0" />
-            <element signature="e#222724#222785#0" />
-            <element signature="e#223867#223910#0" />
-            <element signature="e#232709#232770#0" />
-            <element signature="e#233852#233895#0" />
-            <element signature="e#243253#243314#0" />
-            <element signature="e#244396#244439#0" />
-            <element signature="e#253804#253865#0" />
-            <element signature="e#254947#254990#0" />
-            <element signature="e#262806#262867#0" />
-            <element signature="e#263949#263992#0" />
-            <element signature="e#272348#272409#0" />
-            <element signature="e#273491#273534#0" />
-            <element signature="e#279558#279788#0" />
-            <element signature="e#279794#280020#0" />
-            <element signature="e#280026#280300#0" />
-            <element signature="e#280306#280575#0" />
-            <element signature="e#280581#280715#0" />
-            <element signature="e#280721#286156#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/AffineTransformation2DRobustEstimatorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="43" column="9" lean-forward="true" selection-start-line="43" selection-start-column="9" selection-end-line="43" selection-end-column="9" />
-          <folding>
-            <element signature="method#AffineTransformation2DRobustEstimatorTest#0;class#AffineTransformation2DRobustEstimatorTest#0" />
-            <element signature="method#setUpClass#0;class#AffineTransformation2DRobustEstimatorTest#0" />
-            <element signature="method#tearDownClass#0;class#AffineTransformation2DRobustEstimatorTest#0" />
-            <element signature="method#setUp#0;class#AffineTransformation2DRobustEstimatorTest#0" />
-            <element signature="method#tearDown#0;class#AffineTransformation2DRobustEstimatorTest#0" />
-            <element signature="method#testCreateFromPoints#0;class#AffineTransformation2DRobustEstimatorTest#0" />
-            <element signature="class#5948:6643" />
-            <element signature="method#onEstimateStart#0;class#5948:6643" />
-            <element signature="method#onEstimateEnd#0;class#5948:6643" />
-            <element signature="method#onEstimateNextIteration#0;class#5948:6643" />
-            <element signature="method#onEstimateProgressChange#0;class#5948:6643" />
-            <element signature="method#testFromLines#0;class#AffineTransformation2DRobustEstimatorTest#0" />
-            <element signature="class#28454:29149" />
-            <element signature="method#onEstimateStart#0;class#28454:29149" />
-            <element signature="method#onEstimateEnd#0;class#28454:29149" />
-            <element signature="method#onEstimateNextIteration#0;class#28454:29149" />
-            <element signature="method#onEstimateProgressChange#0;class#28454:29149" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/AffineTransformation3DRobustEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -2783,6 +2163,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/site/apt/index.apt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cd/before-deploy.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cd/deploy.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="30" lean-forward="true" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cd/mvnsettings.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -2798,27 +2198,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/site/apt/index.apt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cd/deploy.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="30" lean-forward="true" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="23" column="700" selection-start-line="23" selection-start-column="700" selection-end-line="23" selection-end-column="700" />
+        <state relative-caret-position="124">
+          <caret line="29" column="7" lean-forward="true" selection-start-line="29" selection-start-column="7" selection-end-line="29" selection-end-column="7" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cd/before-deploy.sh">
+    <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="139" selection-start-line="2" selection-start-column="139" selection-end-line="2" selection-end-column="139" />
+        <state relative-caret-position="207">
+          <caret line="179" column="54" lean-forward="true" selection-start-line="179" selection-start-column="54" selection-end-line="179" selection-end-column="54" />
         </state>
       </provider>
     </entry>
