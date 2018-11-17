@@ -15,10 +15,9 @@
  */
 package com.irurueta.geometry;
 
-import com.irurueta.ar.calibration.ImageOfAbsoluteConic;
-import com.irurueta.ar.calibration.DualImageOfAbsoluteConic;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
+
 import java.io.Serializable;
 
 /**
@@ -558,33 +557,6 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
     @SuppressWarnings("all")
     public PinholeCameraIntrinsicParameters clone() {
         return new PinholeCameraIntrinsicParameters(this);
-    }
-    
-    /**
-     * Converts the intrinsic pinhole camera parameters into a representation
-     * of the dual image of the absolute conic (DIAC).
-     * The DIAC is typically used for camera calibration purposes.
-     * @return an instance of the DIAC based on pinhole camera intrinsic
-     * parameters.
-     */
-    public DualImageOfAbsoluteConic getDualImageOfAbsoluteConic() {
-        return new DualImageOfAbsoluteConic(this);
-    }
-    
-    /**
-     * Converts the intrinsic pinhole camera parameters into a representation of
-     * the image of the absolute conic (IAC).
-     * The IAC is typically used for camera calibration purposes.
-     * @return an instance of the IAC based on pinhole camera intrinsic 
-     * parameters.
-     * @throws InvalidPinholeCameraIntrinsicParametersException if intrinsic
-     * parameters cannot be inverted (i.e. this might happen when values are
-     * incorrectly set such as when focal length is zero, etc). Typically this
-     * will never be thrown.
-     */
-    public ImageOfAbsoluteConic getImageOfAbsoluteConic() 
-            throws InvalidPinholeCameraIntrinsicParametersException {
-        return new ImageOfAbsoluteConic(this);
     }
     
     /**

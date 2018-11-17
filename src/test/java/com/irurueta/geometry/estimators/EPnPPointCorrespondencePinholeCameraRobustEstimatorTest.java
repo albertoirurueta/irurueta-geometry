@@ -44,7 +44,7 @@ public class EPnPPointCorrespondencePinholeCameraRobustEstimatorTest {
 
     @Test
     @SuppressWarnings("all")
-    public void testCreate(){
+    public void testCreate() {
         EPnPPointCorrespondencePinholeCameraRobustEstimator estimator;
         
         //create with robust estimator method

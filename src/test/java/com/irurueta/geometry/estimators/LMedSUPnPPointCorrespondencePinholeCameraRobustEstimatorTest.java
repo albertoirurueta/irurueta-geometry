@@ -1251,7 +1251,7 @@ public class LMedSUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 assertEquals(originalPoint2D.distanceTo(estimatedPoint2D), 
                         0.0, VERY_LARGE_ABSOLUTE_ERROR);
                 numValidProjections++;  
-            }                                           
+            }
         }
         
         assertEquals(numValidCameras, TIMES);
@@ -1913,7 +1913,11 @@ public class LMedSUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             if (diffEstimatedNoSuggestion >= diffEstimated) {
                 numValid++;
-            }            
+            }
+
+            if (numValid > 0) {
+                break;
+            }
         }
         
         assertTrue(numValid > 0);

@@ -392,6 +392,9 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
     protected double getRefinementStandardDeviation() {
         LMedSRobustEstimator.LMedSInliersData inliersData = 
                 (LMedSRobustEstimator.LMedSInliersData)getInliersData();
-        return inliersData.getEstimatedThreshold();
+
+        //avoid setting a threshold too strict
+        double threshold = inliersData.getEstimatedThreshold();
+        return threshold > mStopThreshold ? threshold : mStopThreshold;
     }    
 }

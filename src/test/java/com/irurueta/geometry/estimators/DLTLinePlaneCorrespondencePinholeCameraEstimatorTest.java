@@ -1203,7 +1203,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimatorTest implements
             assertNull(estimatedCamera);
             
             passedAtLeastOnce = true;
-           break;
+            break;
         }
         assertTrue(passedAtLeastOnce);
     }

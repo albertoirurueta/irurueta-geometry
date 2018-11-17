@@ -1386,7 +1386,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     protected PinholeCamera attemptRefine(PinholeCamera pinholeCamera, 
             double weight) {
-        if (mUseFastRefinement) {
+        if (hasSuggestions() && mUseFastRefinement) {
             return attemptFastRefine(pinholeCamera, weight);
         } else {
             return attemptSlowRefine(pinholeCamera, weight);

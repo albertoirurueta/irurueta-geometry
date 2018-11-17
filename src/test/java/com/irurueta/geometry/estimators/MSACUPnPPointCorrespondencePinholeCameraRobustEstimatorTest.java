@@ -54,7 +54,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     private static final int MIN_POINTS = 500;
     private static final int MAX_POINTS = 1000;
     
-    private static final int PERCENTAGE_OUTLIER = 20;
+    private static final int PERCENTAGE_OUTLIER = 10;
     
     private static final int TIMES = 10;
     

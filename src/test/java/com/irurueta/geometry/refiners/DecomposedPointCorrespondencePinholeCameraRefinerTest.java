@@ -1163,8 +1163,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
     }
 
     @Test
-    public void 
-        testRefineSuggestedSkewnessZeroPrincipalPointAndEqualFocalLength() 
+    public void testRefineSuggestedSkewnessZeroPrincipalPointAndEqualFocalLength()
             throws LockedException, NotReadyException, RobustEstimatorException, 
             RefinerException {
         int numValid = 0;
@@ -1210,12 +1209,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefinerTest implements
             
             assertEquals(result1.getInternalMatrix(),
                     result2.getInternalMatrix());
-            
-            if(refiner.getCovariance() == null) {
-                continue;
-            }
-            assertNotNull(refiner.getCovariance());
-            
+
             numValid++;
             
             if (numValid > 0) {

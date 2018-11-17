@@ -58,7 +58,7 @@ public class MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest
     
     private static final double STD_ERROR = 100.0;
 
-    private static final int PERCENTAGE_OUTLIER = 20;
+    private static final int PERCENTAGE_OUTLIER = 10;
     
     private static final int TIMES = 10;
 
@@ -4877,7 +4877,7 @@ public class MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest
             CameraException, NotAvailableException {
         int numCovariances = 0;
         int numValid = 0;        
-        for (int t = 0; t < TIMES; t++) {
+        for (int t = 0; t < 2*TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double horizontalFocalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);

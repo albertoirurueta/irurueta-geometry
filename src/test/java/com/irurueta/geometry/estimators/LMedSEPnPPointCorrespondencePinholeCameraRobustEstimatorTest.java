@@ -1781,6 +1781,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             if(isValid) {
                 numValidProjections++;  
             }
+
+            if (numValidCameras > 0 && numValidProjections > 0 && numCovariances > 0) {
+                break;
+            }
         }
         
         assertTrue(numValidCameras > 0);
@@ -1988,6 +1992,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             if (isValid) {
                 numValidProjections++;  
             }
+
+            if (numValidCameras > 0 && numValidProjections > 0 && numCovariances > 0) {
+                break;
+            }
         }
         
         assertTrue(numValidCameras > 0);
@@ -2154,7 +2162,11 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             if (diffEstimatedNoSuggestion >= diffEstimated) {
                 numValid++;
-            }            
+            }
+
+            if (numValid > 0) {
+                break;
+            }
         }
         
         assertTrue(numValid > 0);
@@ -2508,7 +2520,11 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             if (diffEstimatedNoSuggestion >= diffEstimated) {
                 numValid++;
-            }            
+            }
+
+            if (numCovariances > 0 && numValid > 0) {
+                break;
+            }
         }
         
         assertTrue(numCovariances > 0);
@@ -2657,6 +2673,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             if (cameraCenter.distanceTo(estimatedCenterNoSuggestion) >=
                     cameraCenter.distanceTo(estimatedCenter)) {
                 numValid++;
+            }
+
+            if (numValid > 0) {
+                break;
             }
         }
         
@@ -2815,6 +2835,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             if (cameraCenter.distanceTo(estimatedCenterNoSuggestion) >=
                     cameraCenter.distanceTo(estimatedCenter)) {
                 numValid++;
+            }
+
+            if (numCovariances > 0 && numValid > 0) {
+                break;
             }
         }
         
@@ -2975,6 +2999,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             if (cameraCenter.distanceTo(estimatedCenterNoSuggestion) >=
                     cameraCenter.distanceTo(estimatedCenter)) {
                 numValid++;
+            }
+
+            if (numCovariances > 0 && numValid > 0) {
+                break;
             }
         }
         
@@ -3214,6 +3242,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             if (isValid) {
                 numValidProjections++;  
+            }
+
+            if (numValidCameras > 0 && numValidProjections > 0) {
+                break;
             }
         }
         
@@ -3456,6 +3488,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             if (isValid) {
                 numValidProjections++;  
+            }
+
+            if (numValidCameras > 0 && numValidProjections > 0 && numCovariances > 0) {
+                break;
             }
         }
         
@@ -3701,6 +3737,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             if (isValid) {
                 numValidProjections++;  
             }
+
+            if (numValidCameras > 0 && numValidProjections > 0 && numCovariances > 0) {
+                break;
+            }
         }
         
         assertTrue(numValidCameras > 0);
@@ -3903,7 +3943,11 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             if (diffEstimatedNoSuggestion >= diffEstimated) {
                 numValid++;
-            }            
+            }
+
+            if (numValid > 0) {
+                break;
+            }
         }
         
         assertTrue(numValid > 0);
@@ -4115,7 +4159,11 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             if (diffEstimatedNoSuggestion >= diffEstimated) {
                 numValid++;
-            }            
+            }
+
+            if (numCovariances > 0 && numValid > 0) {
+                break;
+            }
         }
         
         assertTrue(numCovariances > 0);
@@ -4329,7 +4377,11 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             if (diffEstimatedNoSuggestion >= diffEstimated) {
                 numValid++;
-            }            
+            }
+
+            if (numCovariances > 0 && numValid > 0) {
+                break;
+            }
         }
         
         assertTrue(numCovariances > 0);
@@ -4514,6 +4566,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             if (cameraCenter.distanceTo(estimatedCenterNoSuggestion) >=
                     cameraCenter.distanceTo(estimatedCenter)) {
                 numValid++;
+            }
+
+            if (numValid > 0) {
+                break;
             }
         }
         
@@ -4708,6 +4764,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             if (cameraCenter.distanceTo(estimatedCenterNoSuggestion) >=
                     cameraCenter.distanceTo(estimatedCenter)) {
                 numValid++;
+            }
+
+            if (numValid > 0 && numCovariances > 0) {
+                break;
             }
         }
         
@@ -4904,6 +4964,10 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             if (cameraCenter.distanceTo(estimatedCenterNoSuggestion) >=
                     cameraCenter.distanceTo(estimatedCenter)) {
                 numValid++;
+            }
+
+            if (numCovariances > 0 && numValid > 0) {
+                break;
             }
         }
         

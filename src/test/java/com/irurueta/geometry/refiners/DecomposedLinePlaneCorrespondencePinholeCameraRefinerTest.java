@@ -816,12 +816,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
             
             assertTrue(result1.getInternalMatrix().equals(
                     result2.getInternalMatrix(), ABSOLUTE_ERROR));
-            
-            if (refiner.getCovariance() == null) {
-                continue;
-            }            
-            assertNotNull(refiner.getCovariance());
-            
+
             numValid++;
             
             if (numValid > 0) {
@@ -876,12 +871,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
             
             assertEquals(result1.getInternalMatrix(),
                     result2.getInternalMatrix());
-            
-            if (refiner.getCovariance() == null) {
-                continue;
-            }                        
-            assertNotNull(refiner.getCovariance());
-            
+
             numValid++;
             
             if (numValid > 0) {
@@ -1054,12 +1044,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
             
             assertEquals(result1.getInternalMatrix(),
                     result2.getInternalMatrix());
-            
-            if (refiner.getCovariance() == null) {
-                continue;
-            }                                    
-            assertNotNull(refiner.getCovariance());
-            
+
             numValid++;
             
             if (numValid > 0) {
@@ -1116,12 +1101,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
             }
             assertEquals(result1.getInternalMatrix(),
                     result2.getInternalMatrix());
-            
-            if (refiner.getCovariance() == null) {
-                continue;
-            }                                    
-            assertNotNull(refiner.getCovariance());
-            
+
             numValid++;
             
             if (numValid > 0) {
@@ -1192,8 +1172,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
     
     @Test
-    public void 
-        testRefineSuggestedSkewnessZeroPrincipalPointAndEqualFocalLength() 
+    public void testRefineSuggestedSkewnessZeroPrincipalPointAndEqualFocalLength()
             throws LockedException, NotReadyException, RobustEstimatorException, 
             RefinerException {
         int numValid = 0;
@@ -1239,12 +1218,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
             
             assertEquals(result1.getInternalMatrix(),
                     result2.getInternalMatrix());
-            
-            if (refiner.getCovariance() == null) {
-                continue;
-            }                                    
-            assertNotNull(refiner.getCovariance());
-            
+
             numValid++;
             
             if (numValid > 0) {

@@ -1,59 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-NOTE: to deploy we can use the following command:
-mvn -s ./s3-settings.xml clean test site deploy
-to also deploy site use command:
-mvn -s s3-settings.xml clean test site deploy site-deploy
-
-NOTE: to skip tests
-mvn -s s3-settings.xml clean deploy -DskipTests
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-geometry</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>Geometry structures and utilities for camera calibration, slam and 3D reconstruction</description>
+    <description>Geometry structures and utilities</description>
     <url>https://bitbucket.org/alberto_irurueta/irurueta-geometry</url>
-    <inceptionYear>2017</inceptionYear>    
+    <inceptionYear>2017</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
     <developers>
         <developer>
             <name>Alberto Irurueta Carro</name>
             <email>alberto@irurueta.com</email>
-            <organizationUrl>https://bitbucket.org/alberto_irurueta</organizationUrl>
+            <organizationUrl>https://github.com/albertoirurueta</organizationUrl>
         </developer>
     </developers>
-    
+    <scm>
+        <connection>scm:git@github.com:albertoirurueta/irurueta-geometry.git</connection>
+        <developerConnection>scm:git@github.com:albertoirurueta/irurueta-geometry.git</developerConnection>
+        <url>git@github.com:albertoirurueta/irurueta-geometry.git</url>
+    </scm>
+
     <distributionManagement>
+        <!-- maven central snapshot repository -->
         <snapshotRepository>
-            <id>irurueta-geometry</id>
-            <url>s3://artifacts.irurueta.com/snapshot</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
-        <repository>
-            <id>irurueta-geometry</id>
-            <url>s3://artifacts.irurueta.com/release</url>
-        </repository>
-        <site>
-            <id>irurueta-geometry</id>
-            <url>s3://artifacts.irurueta.com/site/com/irurueta/irurueta-geometry</url>
-        </site>
     </distributionManagement>
-    
-    <repositories>
-        <repository>
-            <id>com.irurueta</id>
-            <url>http://s3.amazonaws.com/artifacts.irurueta.com/snapshot</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    
+
     <dependencies>
         <!-- dependencies for unit tests -->
         <dependency>
@@ -61,7 +48,6 @@ mvn -s s3-settings.xml clean deploy -DskipTests
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -98,9 +84,31 @@ mvn -s s3-settings.xml clean deploy -DskipTests
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
+        <github.global.server>github</github.global.server>
+        <github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
     </properties>
-    
+
     <profiles>
+        <profile>
+            <!-- profile to be run on CI server -->
+            <id>continuousIntegration</id>
+            <activation>
+                <property>
+                    <name>environment</name>
+                    <value>test</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- publishes coverage info to coveralls -->
+                    <plugin>
+                        <groupId>org.eluder.coveralls</groupId>
+                        <artifactId>coveralls-maven-plugin</artifactId>
+                        <version>4.3.0</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>sign</id>
             <build>
@@ -289,15 +297,20 @@ mvn -s s3-settings.xml clean deploy -DskipTests
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>            
+            </plugin>
+            <!-- deploys artifact to snapshots repository -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
         </plugins>
-        <extensions>
-            <extension>
-                <groupId>org.kuali.maven.wagons</groupId>
-                <artifactId>maven-s3-wagon</artifactId>
-                <version>1.2.1</version>
-            </extension>
-        </extensions>
     </build>
     
     <reporting>

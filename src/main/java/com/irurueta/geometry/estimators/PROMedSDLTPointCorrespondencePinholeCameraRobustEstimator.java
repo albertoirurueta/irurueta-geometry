@@ -555,7 +555,10 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
     protected double getRefinementStandardDeviation() {
         PROMedSRobustEstimator.PROMedSInliersData inliersData =
                 (PROMedSRobustEstimator.PROMedSInliersData)getInliersData();
-        return inliersData.getEstimatedThreshold();
+
+        //avoid setting a threshold too strict
+        double threshold = inliersData.getEstimatedThreshold();
+        return threshold > mStopThreshold ? threshold : mStopThreshold;
     }    
     
     /**

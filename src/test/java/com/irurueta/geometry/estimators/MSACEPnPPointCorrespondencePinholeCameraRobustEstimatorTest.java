@@ -1579,7 +1579,11 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             
             if (isValid) {
                 numValidProjections++;  
-            }            
+            }
+
+            if (numValidCameras > 0 && numValidProjections > 0) {
+                break;
+            }
         }
 
         assertTrue(numValidCameras > 0);

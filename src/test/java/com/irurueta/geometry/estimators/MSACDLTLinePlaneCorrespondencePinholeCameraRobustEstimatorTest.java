@@ -59,7 +59,7 @@ public class MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest
     
     private static final double STD_ERROR = 100.0;
 
-    private static final int PERCENTAGE_OUTLIER = 20;
+    private static final int PERCENTAGE_OUTLIER = 10;
     
     private static final int TIMES = 10;
     

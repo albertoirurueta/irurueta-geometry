@@ -18,8 +18,6 @@ package com.irurueta.geometry;
 import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.WrongSizeException;
-import com.irurueta.ar.calibration.DualImageOfAbsoluteConic;
-import com.irurueta.ar.calibration.ImageOfAbsoluteConic;
 import com.irurueta.statistics.UniformRandomizer;
 import org.junit.*;
 
@@ -522,85 +520,7 @@ public class PinholeCameraIntrinsicParametersTest {
         assertTrue(PinholeCameraIntrinsicParameters.isValidMatrix(KMatrix,
                 ABSOLUTE_ERROR));
     }
-    
-    @Test
-    public void testGetDualImageOfAbsoluteConic() 
-            throws InvalidPinholeCameraIntrinsicParametersException {
-        //create intrinsic parameters
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, 
-                MAX_FOCAL_LENGTH);
-        double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, 
-                MAX_FOCAL_LENGTH);
-        
-        double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-        
-        double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        
-        PinholeCameraIntrinsicParameters intrinsic = 
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                verticalFocalLength, horizontalPrincipalPoint, 
-                verticalPrincipalPoint, skewness);
 
-        DualImageOfAbsoluteConic diac = intrinsic.getDualImageOfAbsoluteConic();
-        
-        PinholeCameraIntrinsicParameters intrinsic2 = 
-                diac.getIntrinsicParameters();
-        
-        assertEquals(intrinsic.getHorizontalFocalLength(), 
-                intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalFocalLength(),
-                intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getHorizontalPrincipalPoint(),
-                intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalPrincipalPoint(),
-                intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(),
-                ABSOLUTE_ERROR);        
-    }
-    
-    @Test
-    public void testGetImageOfAbsoluteConic() 
-            throws InvalidPinholeCameraIntrinsicParametersException {
-        //create intrinsic parameters
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, 
-                MAX_FOCAL_LENGTH);
-        double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, 
-                MAX_FOCAL_LENGTH);
-        
-        double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-        
-        double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        
-        PinholeCameraIntrinsicParameters intrinsic = 
-                new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                verticalFocalLength, horizontalPrincipalPoint, 
-                verticalPrincipalPoint, skewness);
-
-        ImageOfAbsoluteConic iac = intrinsic.getImageOfAbsoluteConic();
-        
-        PinholeCameraIntrinsicParameters intrinsic2 = 
-                iac.getIntrinsicParameters();
-        
-        assertEquals(intrinsic.getHorizontalFocalLength(), 
-                intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalFocalLength(),
-                intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getHorizontalPrincipalPoint(),
-                intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalPrincipalPoint(),
-                intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(),
-                ABSOLUTE_ERROR);        
-    }    
-    
     @Test
     public void testCreate() {
         //For nexus 5
