@@ -77,8 +77,8 @@
           <entry key="md" value="228" />
           <entry key="properties" value="8" />
           <entry key="sh" value="21" />
-          <entry key="xml" value="222" />
-          <entry key="yml" value="28" />
+          <entry key="xml" value="223" />
+          <entry key="yml" value="29" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -88,8 +88,8 @@
           <entry key="Markdown" value="228" />
           <entry key="PLAIN_TEXT" value="8" />
           <entry key="Properties" value="8" />
-          <entry key="XML" value="222" />
-          <entry key="YAML" value="28" />
+          <entry key="XML" value="223" />
+          <entry key="YAML" value="29" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
@@ -100,11 +100,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1017">
-              <caret line="89" column="57" selection-start-line="89" selection-start-column="57" selection-end-line="89" selection-end-column="57" />
+            <state relative-caret-position="320">
+              <caret line="89" column="79" selection-start-line="89" selection-start-column="79" selection-end-line="89" selection-end-column="79" />
             </state>
           </provider>
         </entry>
@@ -127,11 +127,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.travis.yml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="124">
-              <caret line="31" column="124" selection-start-line="31" selection-start-column="124" selection-end-line="31" selection-end-column="124" />
+              <caret line="31" column="122" selection-start-line="31" selection-start-column="122" selection-end-line="31" selection-end-column="122" />
             </state>
           </provider>
         </entry>
@@ -358,8 +358,8 @@
         <option value="$PROJECT_DIR$/cd/deploy.sh" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/.travis.yml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -489,7 +489,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542574029446" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542574652952" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.0" />
@@ -824,7 +824,7 @@
       <workItem from="1541666421848" duration="12570000" />
       <workItem from="1541859466569" duration="755000" />
       <workItem from="1542230699419" duration="11635000" />
-      <workItem from="1542392209000" duration="34029000" />
+      <workItem from="1542392209000" duration="34222000" />
     </task>
     <servers />
   </component>
@@ -861,7 +861,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="667710000" />
+    <option name="totallyTimeSpent" value="667903000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="23" width="1377" height="877" extended-state="0" />
@@ -2308,17 +2308,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1017">
-          <caret line="89" column="57" selection-start-line="89" selection-start-column="57" selection-end-line="89" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="124">
-          <caret line="31" column="124" selection-start-line="31" selection-start-column="124" selection-end-line="31" selection-end-column="124" />
+          <caret line="31" column="122" selection-start-line="31" selection-start-column="122" selection-end-line="31" selection-end-column="122" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="89" column="79" selection-start-line="89" selection-start-column="79" selection-end-line="89" selection-end-column="79" />
         </state>
       </provider>
     </entry>
