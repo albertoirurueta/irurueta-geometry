@@ -77,7 +77,7 @@
           <entry key="md" value="228" />
           <entry key="properties" value="8" />
           <entry key="sh" value="21" />
-          <entry key="xml" value="200" />
+          <entry key="xml" value="201" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -87,7 +87,7 @@
           <entry key="Markdown" value="228" />
           <entry key="PLAIN_TEXT" value="8" />
           <entry key="Properties" value="8" />
-          <entry key="XML" value="200" />
+          <entry key="XML" value="201" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts" />
@@ -101,8 +101,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="349">
-              <caret line="88" column="27" selection-start-line="88" selection-start-column="27" selection-end-line="88" selection-end-column="27" />
+            <state relative-caret-position="248">
+              <caret line="89" column="36" selection-start-line="89" selection-start-column="36" selection-end-line="89" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -110,8 +110,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cd/deploy.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
+            <state relative-caret-position="30">
+              <caret line="2" column="77" selection-start-line="2" selection-start-column="66" selection-end-line="2" selection-end-column="77" />
             </state>
           </provider>
         </entry>
@@ -137,7 +137,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>EuclideanTransformation3DTest</find>
       <find>WeightedLinePlaneCorrespondencePinholeCameraEstimatorTest</find>
       <find>AbsoluteOrientationSlamSparseReconstructorTest</find>
       <find>QuadricTest</find>
@@ -167,6 +166,7 @@
       <find>estimate()</find>
       <find>LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest</find>
       <find>maven-surefire</find>
+      <find>surefire</find>
     </findStrings>
     <replaceStrings>
       <replace>KnownBaselineSparseReconstructorConfiguration</replace>
@@ -292,7 +292,7 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="50" />
+    <option name="x" value="185" />
     <option name="y" value="23" />
     <option name="width" value="1377" />
     <option name="height" value="877" />
@@ -379,7 +379,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542501486477" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542537652899" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.0" />
@@ -718,7 +718,7 @@
       <workItem from="1541666421848" duration="12570000" />
       <workItem from="1541859466569" duration="755000" />
       <workItem from="1542230699419" duration="11635000" />
-      <workItem from="1542392209000" duration="29294000" />
+      <workItem from="1542392209000" duration="29836000" />
     </task>
     <servers />
   </component>
@@ -755,13 +755,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="662975000" />
+    <option name="totallyTimeSpent" value="663517000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="50" y="23" width="1377" height="877" extended-state="0" />
+    <frame x="141" y="23" width="1377" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48306596" visible="true" weight="0.28089887" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48306596" visible="true" weight="0.28089887" />
       <window_info id="Nl-Palette" order="1" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Capture Tool" order="3" />
@@ -771,7 +771,7 @@
       <window_info id="Structure" order="7" sideWeight="0.51693404" side_tool="true" weight="0.15955056" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32611465" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28535032" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.28535032" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.31082803" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -2205,15 +2205,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cd/deploy.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        <state relative-caret-position="30">
+          <caret line="2" column="77" selection-start-line="2" selection-start-column="66" selection-end-line="2" selection-end-column="77" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="88" column="27" selection-start-line="88" selection-start-column="27" selection-end-line="88" selection-end-column="27" />
+        <state relative-caret-position="248">
+          <caret line="89" column="36" selection-start-line="89" selection-start-column="36" selection-end-line="89" selection-end-column="36" />
         </state>
       </provider>
     </entry>
