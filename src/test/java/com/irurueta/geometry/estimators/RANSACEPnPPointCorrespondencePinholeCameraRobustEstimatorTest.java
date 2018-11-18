@@ -2626,7 +2626,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
         int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+        for (int t = 0; t < 2 * TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             
             //intrinsic parameters
