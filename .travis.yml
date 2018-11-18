@@ -1,4 +1,7 @@
 language: java
+jdk:
+- oraclejdk8
+
 sudo: false
 env:
     global:
@@ -29,7 +32,7 @@ addons:
 #add: -Denvironment=test to activate CI profile to publish into gh-pages
 script:
 - travis_wait 50 mvn clean jacoco:prepare-agent install jacoco:report coveralls:report -Denvironment=test -P !build-extras
-- mvn site -Denvironment=test -DskipTests -P !build-extras
+- mvn site -Denvironment=test -Djacoco.skip -DskipTests -P !build-extras
 - sonar-scanner
 
 cache:
