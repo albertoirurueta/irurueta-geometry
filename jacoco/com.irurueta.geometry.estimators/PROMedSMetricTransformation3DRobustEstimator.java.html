@@ -1,0 +1,698 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROMedSMetricTransformation3DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PROMedSMetricTransformation3DRobustEstimator.java</span></div><h1>PROMedSMetricTransformation3DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.MetricTransformation3D;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.numerical.robust.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best metric 3D transformation for provided collections of 
+ * matched 3D point using PROMedS algorithm.
+ */
+public class PROMedSMetricTransformation3DRobustEstimator extends 
+        MetricTransformation3DRobustEstimator {
+    
+    /**
+     * Default value to be used for stop threshold. Stop threshold can be used 
+     * to keep the algorithm iterating in case that best estimated threshold 
+     * using median of residuals is not small enough. Once a solution is found 
+     * that generates a threshold below this value, the algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close 
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
+     * iterate for a long time trying to find the best solution when indeed 
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    public static final double DEFAULT_STOP_THRESHOLD = 1.0;
+    
+    /**
+     * Minimum allowed stop threshold value.
+     */
+    public static final double MIN_STOP_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to be used to keep the algorithm iterating in case that best 
+     * estimated threshold using median of residuals is not small enough. Once 
+     * a solution is found that generates a threshold below this value, the 
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close 
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
+     * iterate for a long time trying to find the best solution when indeed 
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    private double mStopThreshold;
+        
+    /**
+     * Quality scores corresponding to each pair of matched points.
+     * The larger the score value the betther the quality of the matching.
+     */
+    private double[] mQualityScores;
+    
+   /**
+     * Constructor.
+     */
+    public PROMedSMetricTransformation3DRobustEstimator() {
+<span class="fc" id="L84">        super();</span>
+<span class="fc" id="L85">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L86">    }</span>
+    
+    /**
+     * Constructor with lists of points to be used to estimate a metric 3D 
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param inputPoints list of input points to be used to estimate an 
+     * metric 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an 
+     * metric 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
+            throws IllegalArgumentException {
+<span class="fc" id="L104">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L105">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L106">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            MetricTransformation3DRobustEstimatorListener listener) {
+<span class="fc" id="L115">        super(listener);</span>
+<span class="fc" id="L116">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L117">    }</span>
+    
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param listener listener to be notified of events such as when estimation
+     * stars, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a 
+     * metric 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            MetricTransformation3DRobustEstimatorListener listener,
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
+            throws IllegalArgumentException {
+<span class="fc" id="L138">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L139">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L140">    }</span>
+
+    /**
+     * Constructor.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @throws IllegalArgumentException if provided quality scores length is 
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L151">        super();</span>
+<span class="fc" id="L152">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L153">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L154">    }</span>
+    
+    /**
+     * Constructor with lists of points to be used to estimate a metric 3D 
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a 
+     * metric 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @throws IllegalArgumentException if provided lists of points and array
+     * of quality scores don't have the same size or their size is smaller than 
+     * MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L175">        super(inputPoints, outputPoints);</span>
+
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L178">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L181">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L182">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L183">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @throws IllegalArgumentException if provided quality scores length is 
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            MetricTransformation3DRobustEstimatorListener listener,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L197">        super(listener);</span>
+<span class="fc" id="L198">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L199">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L200">    }</span>
+    
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param listener listener to be notified of events such as when estimation
+     * stars, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a 
+     * metric 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            MetricTransformation3DRobustEstimatorListener listener,
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L223">        super(listener, inputPoints, outputPoints);</span>
+        
+<span class="fc bfc" id="L225" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L226">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L229">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L230">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L231">    }</span>
+
+   /**
+     * Constructor.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L239">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L240">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L241">    }</span>
+    
+    /**
+     * Constructor with lists of points to be used to estimate a metric 3D 
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param inputPoints list of input points to be used to estimate an 
+     * metric 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an 
+     * metric 3D transformation.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
+            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+<span class="fc" id="L260">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L261">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L262">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            MetricTransformation3DRobustEstimatorListener listener,
+            boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L273">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L274">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L275">    }</span>
+    
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param listener listener to be notified of events such as when estimation
+     * stars, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a 
+     * metric 3D transformation.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            MetricTransformation3DRobustEstimatorListener listener,
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
+            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+<span class="fc" id="L297">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L298">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L299">    }</span>
+
+    /**
+     * Constructor.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided quality scores length is 
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            double[] qualityScores, boolean weakMinimumSizeAllowed) 
+            throws IllegalArgumentException {
+<span class="fc" id="L312">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L313">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L314">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L315">    }</span>
+    
+    /**
+     * Constructor with lists of points to be used to estimate a metric 3D 
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a 
+     * metric 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points and array
+     * of quality scores don't have the same size or their size is smaller than 
+     * MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
+            double[] qualityScores, boolean weakMinimumSizeAllowed) 
+            throws IllegalArgumentException {
+<span class="fc" id="L338">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+
+<span class="fc bfc" id="L340" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L341">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L344">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L345">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L346">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided quality scores length is 
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            MetricTransformation3DRobustEstimatorListener listener,
+            double[] qualityScores, boolean weakMinimumSizeAllowed) 
+            throws IllegalArgumentException {
+<span class="fc" id="L362">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L363">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L364">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L365">    }</span>
+    
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param listener listener to be notified of events such as when estimation
+     * stars, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a 
+     * metric 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation3DRobustEstimator(
+            MetricTransformation3DRobustEstimatorListener listener,
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
+            double[] qualityScores, boolean weakMinimumSizeAllowed) 
+            throws IllegalArgumentException {
+<span class="fc" id="L390">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+        
+<span class="fc bfc" id="L392" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L393">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L396">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L397">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L398">    }</span>
+    
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that 
+     * best estimated threshold using median of residuals is not small enough. 
+     * Once a solution is found that generates a threshold below this value, the 
+     * algorithm will stop.
+     * As in LMedS, the stop threshold can be used to prevent the PROMedS 
+     * algorithm iterating too many times in cases where samples have a very 
+     * similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close 
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
+     * iterate for a long time trying to find the best solution when indeed 
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     * @return stop threshold to stop the algorithm prematurely when a certain
+     * accuracy has been reached.
+     */
+    public double getStopThreshold() {
+<span class="fc" id="L420">        return mStopThreshold;</span>
+    }
+    
+    /**
+     * Sets threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough. 
+     * Once a solution is found that generates a threshold below this value, the 
+     * algorithm will stop.
+     * As in LMedS, the stop threshold can be used to prevent the PROMedS 
+     * algorithm iterating too many times in cases where samples have a very 
+     * similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close 
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
+     * iterate for a long time trying to find the best solution when indeed 
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     * @param stopThreshold stop threshold to stop the algorithm prematurely 
+     * when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     */
+    public void setStopThreshold(double stopThreshold) 
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L447" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L448">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L450" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L451">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L454">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L455">    }</span>
+    
+    /**
+     * Returns quality scores corresponding to each pair of matched points.
+     * The larger the score value the betther the quality of the matching.
+     * @return quality scores corresponding to each pair of matched points.
+     */
+    @Override
+    public double[] getQualityScores() {
+<span class="fc" id="L464">        return mQualityScores;</span>
+    }
+    
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is 
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    @Override
+    public void setQualityScores(double[] qualityScores) throws LockedException,
+            IllegalArgumentException {
+<span class="fc bfc" id="L480" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L481">            throw new LockedException();</span>
+        }
+<span class="fc" id="L483">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L484">    }</span>
+        
+    /**
+     * Indicates if eatimator is ready to start the metric 3D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched points and quality
+     * scores) are provided and a minimum of MINIMUM_SIZE points are available.
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L495" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
+<span class="pc bpc" id="L496" title="1 of 2 branches missed.">                mQualityScores.length == mInputPoints.size();</span>
+    }
+    
+    /**
+     * Estimates a metric 3D transformation using a robust estimator and
+     * the best set of matched 3D point correspondences found using the robust
+     * estimator.
+     * @return a metric 3D transformation.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     * @throws NotReadyException if provided input data is not enough to start
+     * the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     * (i.e. numerical instability, no solution available, etc).
+     */    
+    @Override
+    public MetricTransformation3D estimate() throws LockedException, 
+            NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L514" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L515">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L517" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L518">            throw new NotReadyException();</span>
+        }
+        
+<span class="fc" id="L521">        PROMedSRobustEstimator&lt;MetricTransformation3D&gt; innerEstimator = </span>
+                new PROMedSRobustEstimator&lt;&gt;(
+<span class="fc" id="L523">                    new PROMedSRobustEstimatorListener&lt;MetricTransformation3D&gt;() {</span>
+                    
+            //point to be reused when computing residuals
+<span class="fc" id="L526">            private Point3D mTestPoint = Point3D.create(</span>
+                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+            
+<span class="fc" id="L529">            private MetricTransformation3DEstimator mNonRobustEstimator = </span>
+                    new MetricTransformation3DEstimator(
+<span class="fc" id="L531">                            isWeakMinimumSizeAllowed());</span>
+            
+<span class="fc" id="L533">            private List&lt;Point3D&gt; mSubsetInputPoints = </span>
+                    new ArrayList&lt;&gt;();
+<span class="fc" id="L535">            private List&lt;Point3D&gt; mSubsetOutputPoints = </span>
+                    new ArrayList&lt;&gt;();
+            
+            @Override
+            public double getThreshold() {
+<span class="fc" id="L540">                return mStopThreshold;</span>
+            }
+
+            @Override
+            public int getTotalSamples() {
+<span class="fc" id="L545">                return mInputPoints.size();</span>
+            }
+
+            @Override
+            public int getSubsetSize() {
+<span class="fc" id="L550">                return mNonRobustEstimator.getMinimumPoints();</span>
+            }
+
+            @Override
+            public void estimatePreliminarSolutions(int[] samplesIndices, 
+                    List&lt;MetricTransformation3D&gt; solutions) {
+<span class="fc" id="L556">                mSubsetInputPoints.clear();</span>
+<span class="fc" id="L557">                mSubsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L558" title="All 2 branches covered.">                for (int samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L559">                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
+<span class="fc" id="L560">                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
+                            samplesIndex));
+                }
+
+                try {
+<span class="fc" id="L565">                    mNonRobustEstimator.setPoints(mSubsetInputPoints, </span>
+                            mSubsetOutputPoints);
+<span class="fc" id="L567">                    solutions.add(mNonRobustEstimator.estimate());</span>
+<span class="nc" id="L568">                } catch (Exception e) {</span>
+                    //if points are coincident, no solution is added
+<span class="fc" id="L570">                }</span>
+<span class="fc" id="L571">            }</span>
+
+            @Override
+            public double computeResidual(
+                    MetricTransformation3D currentEstimation, int i) {
+<span class="fc" id="L576">                Point3D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L577">                Point3D outputPoint = mOutputPoints.get(i);</span>
+                
+                //transform input point and store result in mTestPoint
+<span class="fc" id="L580">                currentEstimation.transform(inputPoint, mTestPoint);</span>
+                
+<span class="fc" id="L582">                return outputPoint.distanceTo(mTestPoint);</span>
+            }
+
+            @Override
+            public boolean isReady() {
+<span class="fc" id="L587">                return PROMedSMetricTransformation3DRobustEstimator.this.</span>
+<span class="fc" id="L588">                        isReady();</span>
+            }
+
+            @Override
+            public void onEstimateStart(
+                    RobustEstimator&lt;MetricTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L594" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L595">                    mListener.onEstimateStart(</span>
+                            PROMedSMetricTransformation3DRobustEstimator.this);
+                }
+<span class="fc" id="L598">            }</span>
+
+            @Override
+            public void onEstimateEnd(
+                    RobustEstimator&lt;MetricTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L603" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L604">                    mListener.onEstimateEnd(</span>
+                            PROMedSMetricTransformation3DRobustEstimator.this);
+                }
+<span class="fc" id="L607">            }</span>
+
+            @Override
+            public void onEstimateNextIteration(
+                    RobustEstimator&lt;MetricTransformation3D&gt; estimator, 
+                    int iteration) {
+<span class="pc bpc" id="L613" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L614">                    mListener.onEstimateNextIteration(</span>
+                            PROMedSMetricTransformation3DRobustEstimator.this, 
+                            iteration);
+                }
+<span class="fc" id="L618">            }</span>
+
+            @Override
+            public void onEstimateProgressChange(
+                    RobustEstimator&lt;MetricTransformation3D&gt; estimator, 
+                    float progress) {
+<span class="nc bnc" id="L624" title="All 2 branches missed.">                if (mListener != null) {</span>
+<span class="nc" id="L625">                    mListener.onEstimateProgressChange(</span>
+                            PROMedSMetricTransformation3DRobustEstimator.this, 
+                            progress);
+                }
+<span class="nc" id="L629">            }</span>
+
+            @Override
+            public double[] getQualityScores() {
+<span class="fc" id="L633">                return mQualityScores;</span>
+            }
+        });
+        
+        try {
+<span class="fc" id="L638">            mLocked = true;</span>
+<span class="fc" id="L639">            mInliersData = null;</span>
+<span class="fc" id="L640">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L641">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L642">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L643">            MetricTransformation3D transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L644">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L645">            return attemptRefine(transformation);                        </span>
+<span class="nc" id="L646">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L647">            throw new LockedException(e);</span>
+<span class="nc" id="L648">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L649">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L651">            mLocked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
+     */    
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L661">        return RobustEstimatorMethod.PROMedS;</span>
+    }    
+    
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual 
+     * has.
+     * Typically this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of such
+     * threshold.
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L676">        PROMedSRobustEstimator.PROMedSInliersData inliersData =</span>
+<span class="fc" id="L677">                (PROMedSRobustEstimator.PROMedSInliersData)getInliersData();</span>
+<span class="fc" id="L678">        return inliersData.getEstimatedThreshold();</span>
+    }
+    
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * This method is used internally and does not check whether instance is
+     * locked or not.
+     * @param qualityScores quality scores to be set.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE.
+     */
+    private void internalSetQualityScores(double[] qualityScores) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L691" title="All 2 branches covered.">        if (qualityScores.length &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L692">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L695">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L696">    }            </span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

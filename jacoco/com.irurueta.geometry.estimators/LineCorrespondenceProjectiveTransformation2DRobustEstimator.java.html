@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LineCorrespondenceProjectiveTransformation2DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">LineCorrespondenceProjectiveTransformation2DRobustEstimator.java</span></div><h1>LineCorrespondenceProjectiveTransformation2DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.Line2D;
+import com.irurueta.geometry.ProjectiveTransformation2D;
+import com.irurueta.geometry.refiners.LineCorrespondenceProjectiveTransformation2DRefiner;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * This is an abstract class for algorithms to robustly find the best projective
+ * 2D transformation for collections of matching 2D lines.
+ * Implementations of this class should be able to detect and discard outliers
+ * in order to find the best solution.
+ */
+public abstract class LineCorrespondenceProjectiveTransformation2DRobustEstimator extends
+        ProjectiveTransformation2DRobustEstimator {
+    
+    /**
+     * Default robust estimator method when none is provided.
+     */
+<span class="fc" id="L37">    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =</span>
+            RobustEstimatorMethod.PROMedS;
+    
+    /**
+     * List of lines to be used to estimate a projective 2D transformation.
+     * Each line in the list of input lines must be matched with the
+     * corresponding line in the list of output lines located at the same
+     * position. Hence, both input lines and output lines must have the
+     * same size, and their size must be greater or equal than MINIMUM_SIZE.
+     */
+    protected List&lt;Line2D&gt; mInputLines;
+    
+    /**
+     * List of lines to be used to estimate a projective 2D transformation.
+     * Each point in the list of output lines must be matched with the
+     * corresponding line in the list of input lines located at the same
+     * position. Hence, both input lines and output lines must have the
+     * same size, and their size must be greater or equal than MINIMUM_SIZE.
+     */
+    protected List&lt;Line2D&gt; mOutputLines;
+    
+    /**
+     * Constructor.
+     */
+    public LineCorrespondenceProjectiveTransformation2DRobustEstimator() {
+<span class="fc" id="L62">        super();</span>
+<span class="fc" id="L63">    }</span>
+    
+    /**
+     * Constructor with lists of lines to be used to estimate a projective 2D
+     * transformation.
+     * Lines in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param inputLines list of input lines to be used to estimate a projective
+     * 2D transformation.
+     * @param outputLines list of output lines ot be used to estimate a 
+     * projective 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public LineCorrespondenceProjectiveTransformation2DRobustEstimator(
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) 
+            throws IllegalArgumentException {
+<span class="fc" id="L81">        super();</span>
+<span class="fc" id="L82">        internalSetLines(inputLines, outputLines);</span>
+<span class="fc" id="L83">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     */
+    public LineCorrespondenceProjectiveTransformation2DRobustEstimator(
+            ProjectiveTransformation2DRobustEstimatorListener listener) {
+<span class="fc" id="L92">        super(listener);</span>
+<span class="fc" id="L93">    }</span>
+    
+    /**
+     * Constructor with listener and lists of lines to be used to estimate
+     * projective 2D tranformation.
+     * Lines in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param listener listener to be notified of events such as when estimation 
+     * starts, ends or its progress significantly changes.
+     * @param inputLines list of input lines to be used to estimate a projective
+     * 2D transformation.
+     * @param outputLines list of output lines to be used to estimate a 
+     * projective 2D transformation.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public LineCorrespondenceProjectiveTransformation2DRobustEstimator(
+            ProjectiveTransformation2DRobustEstimatorListener listener,
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines)
+            throws IllegalArgumentException {
+<span class="fc" id="L114">        super(listener);</span>
+<span class="fc" id="L115">        internalSetLines(inputLines, outputLines);</span>
+<span class="fc" id="L116">    }</span>
+    
+    /**
+     * Returns list of input lines to be used to estimate a projective 2D
+     * transformation.
+     * Each line in the list of input lines must be matched with the
+     * corresponding line in the list of output lines located at the same
+     * position. Hence, both input lines and output lines must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     * @return list of input lines to be used to estimate a projective 2D
+     * transformation.
+     */
+    public List&lt;Line2D&gt; getInputLines() {
+<span class="fc" id="L129">        return mInputLines;</span>
+    }
+    
+    /**
+     * Returns list of output lines to be used to estimate a projective 2D
+     * transformation.
+     * Each line in the list of output lines must be matched with the
+     * corresponding line in the list of input lines located at the same
+     * position. Hence, both input lines and output lines must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     * @return list of output lines to be used to estimate a projective 2D
+     * transformation.
+     */
+    public List&lt;Line2D&gt; getOutputLines() {
+<span class="fc" id="L143">        return mOutputLines;</span>
+    }
+    
+    /**
+     * Sets lists of lines to be used to estimate a projective 2D 
+     * transformation.
+     * Lines in the list located at the same position are considered to be 
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param inputLines list of input lines to be used to estimate a projective
+     * 2D transformation.
+     * @param outputLines list of output lines to be used to estimate a 
+     * projective 2D transformation.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     * @throws LockedException if estimator is locked because a computation is
+     * already in progress.
+     */
+    public final void setLines(List&lt;Line2D&gt; inputLines, 
+            List&lt;Line2D&gt; outputLines) throws IllegalArgumentException,
+            LockedException {
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L165">            throw new LockedException();</span>
+        }
+<span class="fc" id="L167">        internalSetLines(inputLines, outputLines);</span>
+<span class="fc" id="L168">    }</span>
+    
+    /**
+     * Indicates if estimator is ready to start the affine 2D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched lines) are provided
+     * and a minimum of MINIMUM_SIZE lines are available.
+     * @return true if estimator is ready, false otherwise.
+     */
+    public boolean isReady() {
+<span class="pc bpc" id="L178" title="1 of 4 branches missed.">        return mInputLines != null &amp;&amp; mOutputLines != null &amp;&amp;</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">                mInputLines.size() == mOutputLines.size() &amp;&amp;</span>
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">                mInputLines.size() &gt;= MINIMUM_SIZE;</span>
+    }
+    
+    /**
+     * Returns quality scores corresponding to each pair of matched lines.
+     * The larger the score value the betther the quality of the matching.
+     * This implementation always returns null.
+     * Subclasses using quality scores must implement proper behaviour.
+     * @return quality scores corresponding to each pair of matched points.
+     */
+    public double[] getQualityScores() {
+<span class="nc" id="L191">        return null;</span>
+    }    
+    
+    /**
+     * Sets quality scores corresponding to each pair of matched lines.
+     * The larger the score value the better the quality of the matching.
+     * This implementation makes no action.
+     * Subclasses using quality scores must implement proper behaviour.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is 
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public void setQualityScores(double[] qualityScores) throws LockedException,
+<span class="nc" id="L207">            IllegalArgumentException { }</span>
+    
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences an using provided robust estimator method.
+     * @param method method of a robust estimator algorithm to estimate
+     * best projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(RobustEstimatorMethod method) {
+<span class="fc bfc" id="L218" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L220">                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+            case MSAC:
+<span class="fc" id="L222">                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+            case PROSAC:
+<span class="fc" id="L224">                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+            case PROMedS:
+<span class="fc" id="L226">                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L229">                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+        }
+    }
+            
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences and using provided robust estimator method.
+     * @param inputLines list of input lines to be used to estimate a
+     * projective 2D transformation.
+     * @param outputLines list of output lines to be used to estimate a
+     * projective 2D transformation.
+     * @param method method of a robust estimator algorithm to estimate
+     * best projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L249" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L251">                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        inputLines, outputLines);
+            case MSAC:
+<span class="fc" id="L254">                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        inputLines, outputLines);
+            case PROSAC:
+<span class="fc" id="L257">                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        inputLines, outputLines);
+            case PROMedS:
+<span class="fc" id="L260">                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        inputLines, outputLines);
+            case RANSAC:
+            default:
+<span class="fc" id="L264">                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        inputLines, outputLines);
+        }
+    }
+            
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences and using provided robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param method method of a robust estimator algorithm to estimate best
+     * projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(ProjectiveTransformation2DRobustEstimatorListener listener,
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L281" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L283">                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener);
+            case MSAC:
+<span class="fc" id="L286">                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener);
+            case PROSAC:
+<span class="fc" id="L289">                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener);
+            case PROMedS:
+<span class="fc" id="L292">                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener);
+            case RANSAC:
+            default:
+<span class="fc" id="L296">                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener);
+        }
+    }
+            
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences and using provided robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputLines list of input lines to be used to estimate a projective
+     * 2D transformation.
+     * @param outputLines list of output lines to be used to estimate a 
+     * projective 2D transformation.
+     * @param method method of a robust estimator algorithm to estimate best
+     * projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(ProjectiveTransformation2DRobustEstimatorListener listener,
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L320" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L322">                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener, inputLines, outputLines);
+            case MSAC:
+<span class="fc" id="L325">                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener, inputLines, outputLines);
+            case PROSAC:
+<span class="fc" id="L328">                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener, inputLines, outputLines);
+            case PROMedS:
+<span class="fc" id="L331">                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener, inputLines, outputLines);
+            case RANSAC:
+            default:
+<span class="fc" id="L335">                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener, inputLines, outputLines);
+        }
+    }
+            
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences and using provided robust estimator method.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @param method method of a robust estimator algorithm to estimate best
+     * projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L351" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L353">                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+            case MSAC:
+<span class="fc" id="L355">                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+            case PROSAC:
+<span class="fc" id="L357">                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        qualityScores);
+            case PROMedS:
+<span class="fc" id="L360">                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L364">                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+        }
+    }
+            
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences and using provided robust estimator method.
+     * @param inputLines list of input lines to be used to estimate a
+     * projective 2D transformation.
+     * @param outputLines list of output lines to be used to estimate a
+     * projective 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * lines.
+     * @param method method of a robust estimator algorithm to estimate best
+     * projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L387" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L389">                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        inputLines, outputLines);
+            case MSAC:
+<span class="fc" id="L392">                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        inputLines, outputLines);
+            case PROSAC:
+<span class="fc" id="L395">                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        inputLines, outputLines, qualityScores);
+            case PROMedS:
+<span class="fc" id="L398">                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        inputLines, outputLines, qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L402">                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        inputLines, outputLines);
+        }
+    }
+            
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences and using provided robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * lines.
+     * @param method method of a robust estimator algorithm to estimate best
+     * projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(ProjectiveTransformation2DRobustEstimatorListener listener,
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L421" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L423">                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener);
+            case MSAC:
+<span class="fc" id="L426">                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener);
+            case PROSAC:
+<span class="fc" id="L429">                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener, qualityScores);
+            case PROMedS:
+<span class="fc" id="L432">                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener, qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L436">                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener);
+        }
+    }
+            
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences and using provided robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputLines list of input lines to be used to estimate a projective
+     * 2D transformation.
+     * @param outputLines list of output lines to be used to estimate a 
+     * projective 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * lines.
+     * @param method method of a robust estimator algorithm to estimate best
+     * projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(ProjectiveTransformation2DRobustEstimatorListener listener,
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L463" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L465">                return new LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener, inputLines, outputLines);
+            case MSAC:
+<span class="fc" id="L468">                return new MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener, inputLines, outputLines);
+            case PROSAC:
+<span class="fc" id="L471">                return new PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener, inputLines, outputLines, qualityScores);
+            case PROMedS:
+<span class="fc" id="L474">                return new PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener, inputLines, outputLines, qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L478">                return new RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+                        listener, inputLines, outputLines);
+        }
+    }
+    
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences and using default robust estimator method.
+     * @return an instance of projective 2D transformation estimator.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create() {
+<span class="fc" id="L490">        return create(DEFAULT_ROBUST_METHOD);</span>
+    }
+            
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences and using default robust estimator method.
+     * @param inputLines list of input lines to be used to estimate a
+     * projective 2D transformation.
+     * @param outputLines list of output lines to be used to estimate a
+     * projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines)
+            throws IllegalArgumentException {
+<span class="fc" id="L507">        return create(inputLines, outputLines, DEFAULT_ROBUST_METHOD);</span>
+    }
+            
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line 
+     * correspondences and using default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @return an instance of projective 2D transformation estimator.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(ProjectiveTransformation2DRobustEstimatorListener listener) {
+<span class="fc" id="L519">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+    }
+            
+    /**
+     * Creates an projective 2D transformation estimator based on 2D line
+     * correspondences and using default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputLines list of input lines to be used to estimate an 
+     * projective 2D transformation.
+     * @param outputLines list of output lines to be used to estimate a 
+     * projective 2D transformation.
+     * @return an instance of projective 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(ProjectiveTransformation2DRobustEstimatorListener listener,
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines)
+            throws IllegalArgumentException {
+<span class="fc" id="L539">        return create(listener, inputLines, outputLines, </span>
+                DEFAULT_ROBUST_METHOD);
+    }
+            
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences and using default robust estimator method.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @return an instance of affine 2D transformation estimator.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(double[] qualityScores) {
+<span class="fc" id="L552">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+            
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences and using default robust estimator method.
+     * @param inputLines list of input lines to be used to estimate a projective
+     * 2D transformation.
+     * @param outputLines list of output lines to be used to estimate a 
+     * projective 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @return an instance of projective 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of lines don't have 
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L571">        return create(inputLines, outputLines, qualityScores, </span>
+                DEFAULT_ROBUST_METHOD);
+    }
+            
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences and using default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @return an instance of projective 2D transformation estimator.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(ProjectiveTransformation2DRobustEstimatorListener listener,
+            double[] qualityScores) {
+<span class="fc" id="L587">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+            
+    /**
+     * Creates a projective 2D transformation estimator based on 2D line
+     * correspondences and using default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputLines list of input lines to be used to estimate a projective
+     * 2D transformation.
+     * @param outputLines list of output lines to be used to estimate a 
+     * projective 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * lines.
+     * @return an instance of projective 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static LineCorrespondenceProjectiveTransformation2DRobustEstimator
+            create(ProjectiveTransformation2DRobustEstimatorListener listener,
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L609">        return create(listener, inputLines, outputLines, qualityScores,</span>
+                DEFAULT_ROBUST_METHOD);
+    }
+            
+    /**
+     * Internal method to set lists of lines to be used to estimate a projective
+     * 2D transformation.
+     * This method does not check whether estimator is locked or not.
+     * @param inputLines list of input lines to be used to estimate a projective
+     * 2D transformation.
+     * @param outputLines list of output lines to be used to estimate a 
+     * projective 2D transformation.
+     * @throws IllegalArgumentException if provided lists of lines don't have 
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    private void internalSetLines(List&lt;Line2D&gt; inputLines, 
+            List&lt;Line2D&gt; outputLines) throws IllegalArgumentException {
+<span class="fc bfc" id="L626" title="All 2 branches covered.">        if (inputLines.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L627">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L629" title="All 2 branches covered.">        if (inputLines.size() != outputLines.size()) {</span>
+<span class="fc" id="L630">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L632">        mInputLines = inputLines;</span>
+<span class="fc" id="L633">        mOutputLines = outputLines;</span>
+<span class="fc" id="L634">    }</span>
+    
+    /**
+     * Computes residual by comparing two lines algebraically by doing the
+     * dot product of their parameters.
+     * A residual of 0 indicates that dot product was 1 or -1 and lines were 
+     * equal.
+     * A residual of 1 indicates that dot product was 0 and lines were 
+     * orthogonal.
+     * If dot product was -1, then although their director vectors are opposed,
+     * lines are considered equal, since sign changes are not taken into account.
+     * @param line originally sampled output line line.
+     * @param transformedLine estimated output line obtained after using 
+     * estimated transformation.
+     * @return computed residual.
+     */
+    protected static double getResidual(Line2D line, Line2D transformedLine) {
+<span class="fc" id="L651">        line.normalize();</span>
+<span class="fc" id="L652">        transformedLine.normalize();</span>
+        
+<span class="fc" id="L654">        double dotProduct = Math.abs(line.getA() * transformedLine.getA() +</span>
+<span class="fc" id="L655">                line.getB() * transformedLine.getB() +</span>
+<span class="fc" id="L656">                line.getC() * transformedLine.getC());</span>
+<span class="fc" id="L657">        return 1.0 - dotProduct;</span>
+    }  
+    
+    /**
+     * Attempts to refine provided solution if refinement is requested.
+     * This method returns a refined solution of the same provided solution
+     * if refinement is not requested or has failed.
+     * If refinement is enabled and it is requested to keep covariance, this
+     * method will also keep covariance of refined transformation.
+     * @param transformation transformation estimated by a robust estimator
+     * without refinement.
+     * @return solution after refinement (if requested) or the provided
+     * non-refined solution if not requested or refinement failed.
+     */
+    protected ProjectiveTransformation2D attemptRefine(
+            ProjectiveTransformation2D transformation) {
+<span class="fc bfc" id="L673" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L674">            LineCorrespondenceProjectiveTransformation2DRefiner refiner =</span>
+                    new LineCorrespondenceProjectiveTransformation2DRefiner(
+<span class="fc" id="L676">                    transformation, mKeepCovariance, getInliersData(),</span>
+                    mInputLines, mOutputLines, 
+<span class="fc" id="L678">                    getRefinementStandardDeviation());</span>
+            
+            try {
+<span class="fc" id="L681">                ProjectiveTransformation2D result = </span>
+                        new ProjectiveTransformation2D();
+<span class="fc" id="L683">                boolean improved = refiner.refine(result);</span>
+                
+<span class="pc bpc" id="L685" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+                    //keep covariance
+<span class="fc" id="L687">                    mCovariance = refiner.getCovariance();</span>
+                }
+                
+<span class="pc bpc" id="L690" title="1 of 2 branches missed.">                return improved ? result : transformation;</span>
+<span class="fc" id="L691">            } catch (Exception e) {</span>
+                //refinement failed, so we return input value
+<span class="fc" id="L693">                return transformation;</span>
+            }
+        } else {
+<span class="fc" id="L696">            return transformation;</span>
+        }
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

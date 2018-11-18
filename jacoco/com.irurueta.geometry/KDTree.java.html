@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KDTree.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">KDTree.java</span></div><h1>KDTree.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.irurueta.geometry;
+
+import java.lang.reflect.Array;
+import java.util.Collection;
+
+/**
+ * Implementation of a k-D tree in an arbitrary dimension.
+ * Once a K-D tree is built for a collection of points, it can later be used to efficiently do certain operations
+ * such as point location, nearest points searches, etc.
+ */
+public abstract class KDTree&lt;P extends Point&gt; {
+
+    /**
+     * Minimum number of allowed points to be stored in the tree.
+     */
+    public static final int MIN_PTS = 3;
+
+    /**
+     * A very large value to consider as the maximum allowed coordinate value.
+     */
+    protected static final double BIG = Double.MAX_VALUE;
+
+    /**
+     * Number of tasks that can be queued.
+     */
+    private static final int N_TASKS = 50;
+
+    /**
+     * Array of boxes stored in this tree as its nodes.
+     */
+    protected BoxNode&lt;P&gt;[] mBoxes;
+
+    /**
+     * Indices of points pointing from boxes in the tree to the input collection of points.
+     * Indices are sorted as the tree is built.
+     */
+    private int[] mPtIndx;
+
+    /**
+     * Indices of points pointing from input collection of points to boxes in the tree.
+     * This is the reverse of mPtIndx.
+     */
+    private int[] mRPtIndx;
+
+    /**
+     * Number of points stored by the tree.
+     */
+    private int mNpts;
+
+    /**
+     * Array of points containing input collection of points.
+     */
+    private P[] mPts;
+
+    /**
+     * Constructor.
+     * @param pts collection of points to store in the tree.
+     * @param clazz class of point implementation to use.
+     */
+<span class="fc" id="L76">    public KDTree(Collection&lt;P&gt; pts, Class&lt;P&gt; clazz) throws IllegalArgumentException {</span>
+<span class="fc" id="L77">        mNpts = pts.size();</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (mNpts &lt; MIN_PTS) {</span>
+<span class="fc" id="L79">            throw new IllegalArgumentException(&quot;number of points must be at least 3&quot;);</span>
+        }
+
+        //noinspection unchecked
+<span class="fc" id="L83">        mPts = (P[])Array.newInstance(clazz, pts.size());</span>
+<span class="fc" id="L84">        mPts = pts.toArray(mPts);</span>
+<span class="fc" id="L85">        mPtIndx = new int[mNpts];</span>
+<span class="fc" id="L86">        mRPtIndx = new int[mNpts];</span>
+<span class="fc" id="L87">        int dim = getDimensions();</span>
+
+        //build tree
+        int ntmp, m, k, kk, j, nowtask, jbox, np, tmom, tdim, ptlo, pthi;
+        int hpOffset, cpOffset;
+<span class="fc" id="L92">        int[] taskmom = new int[N_TASKS];</span>
+<span class="fc" id="L93">        int[] taskdim = new int[N_TASKS];</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        for (k = 0; k &lt; mNpts; k++) {</span>
+<span class="fc" id="L95">            mPtIndx[k] = k;</span>
+        }
+<span class="fc" id="L97">        m = 1;</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        for (ntmp = mNpts; ntmp != 0; ntmp &gt;&gt;= 1) {</span>
+<span class="fc" id="L99">            m &lt;&lt;= 1;</span>
+        }
+<span class="fc" id="L101">        int nboxes = 2 * mNpts - (m &gt;&gt; 1); //number of boxes to store points</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (m &lt; nboxes) {</span>
+<span class="fc" id="L103">            nboxes = m;</span>
+        }
+<span class="fc" id="L105">        nboxes--;</span>
+        //noinspection unchecked
+<span class="fc" id="L107">        mBoxes = (BoxNode[])Array.newInstance(BoxNode.class, nboxes);</span>
+<span class="fc" id="L108">        double[] coords = new double[dim * mNpts];</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        for (j = 0, kk = 0; j &lt; dim; j++, kk += mNpts) {</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">            for (k = 0; k &lt; mNpts; k++) {</span>
+<span class="fc" id="L111">                coords[kk + k] = mPts[k].getInhomogeneousCoordinate(j);</span>
+            }
+        }
+<span class="fc" id="L114">        P lo = createPoint(-BIG);</span>
+<span class="fc" id="L115">        P hi = createPoint(BIG);</span>
+<span class="fc" id="L116">        mBoxes[0] = new BoxNode&lt;&gt;(lo, hi, 0, 0, 0, 0, mNpts - 1);</span>
+<span class="fc" id="L117">        jbox = 0;</span>
+<span class="fc" id="L118">        taskmom[1] = 0;</span>
+<span class="fc" id="L119">        taskdim[1] = 0;</span>
+<span class="fc" id="L120">        nowtask = 1;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        while (nowtask != 0) {</span>
+<span class="fc" id="L122">            tmom = taskmom[nowtask];</span>
+<span class="fc" id="L123">            tdim = taskdim[nowtask--];</span>
+<span class="fc" id="L124">            ptlo = mBoxes[tmom].mPtLo;</span>
+<span class="fc" id="L125">            pthi = mBoxes[tmom].mPtHi;</span>
+<span class="fc" id="L126">            hpOffset = ptlo;</span>
+<span class="fc" id="L127">            cpOffset = tdim * mNpts;</span>
+<span class="fc" id="L128">            np = pthi - ptlo + 1;</span>
+<span class="fc" id="L129">            kk = (np - 1) / 2;</span>
+<span class="fc" id="L130">            selecti(kk, hpOffset, mPtIndx, np, cpOffset, coords);</span>
+
+<span class="fc" id="L132">            hi = copyPoint(mBoxes[tmom].getHi());</span>
+<span class="fc" id="L133">            lo = copyPoint(mBoxes[tmom].getLo());</span>
+
+<span class="fc" id="L135">            double value = coords[tdim * mNpts + mPtIndx[hpOffset + kk]];</span>
+<span class="fc" id="L136">            hi.setInhomogeneousCoordinate(tdim, value);</span>
+<span class="fc" id="L137">            lo.setInhomogeneousCoordinate(tdim, value);</span>
+
+<span class="fc" id="L139">            mBoxes[++jbox] = new BoxNode&lt;&gt;(copyPoint(mBoxes[tmom].getLo()), hi, tmom, 0, 0, ptlo,</span>
+                    ptlo + kk);
+<span class="fc" id="L141">            mBoxes[++jbox] = new BoxNode&lt;&gt;(lo, copyPoint(mBoxes[tmom].getHi()), tmom, 0, 0,</span>
+                    ptlo + kk + 1, pthi);
+<span class="fc" id="L143">            mBoxes[tmom].mDau1 = jbox - 1;</span>
+<span class="fc" id="L144">            mBoxes[tmom].mDau2 = jbox;</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">            if (kk &gt; 1) {</span>
+<span class="fc" id="L146">                taskmom[++nowtask] = jbox - 1;</span>
+<span class="fc" id="L147">                taskdim[nowtask] = (tdim + 1) % dim;</span>
+            }
+<span class="fc bfc" id="L149" title="All 2 branches covered.">            if (np - kk &gt; 3) {</span>
+<span class="fc" id="L150">                taskmom[++nowtask] = jbox;</span>
+<span class="fc" id="L151">                taskdim[nowtask] = (tdim + 1) % dim;</span>
+            }
+<span class="fc" id="L153">        }</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        for (j = 0; j &lt; mNpts; j++) {</span>
+<span class="fc" id="L155">            mRPtIndx[mPtIndx[j]] = j;</span>
+        }
+<span class="fc" id="L157">    }</span>
+
+    /**
+     * Gets distance between points located at provided positions on input collection.
+     * @param jpt index of 1st point.
+     * @param kpt index of 2nd point.
+     * @return distance between points or BIG if indices are equal.
+     */
+    public double distance(int jpt, int kpt) {
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (jpt == kpt) {</span>
+<span class="fc" id="L167">            return BIG;</span>
+        } else {
+            //noinspection unchecked
+<span class="fc" id="L170">            return mPts[jpt].distanceTo(mPts[kpt]);</span>
+        }
+    }
+
+    /**
+     * Gets position of smallest box containing provided point in the input list of points.
+     * @param pt point to locate its containing box. Does not need to be contained in input collection.
+     * @return position of smallest box containing the point.
+     */
+    public int locateBoxIndex(P pt) {
+<span class="fc" id="L180">        int dim = getDimensions();</span>
+
+        int nb, d1, jdim;
+<span class="fc" id="L183">        nb = jdim = 0;</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        while (mBoxes[nb].mDau1 != 0) {</span>
+<span class="fc" id="L185">            d1 = mBoxes[nb].mDau1;</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">            if (pt.getInhomogeneousCoordinate(jdim) &lt;= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {</span>
+<span class="fc" id="L187">                nb = d1;</span>
+            } else {
+<span class="fc" id="L189">                nb = mBoxes[nb].mDau2;</span>
+            }
+<span class="fc" id="L191">            jdim = ++jdim % dim;</span>
+        }
+<span class="fc" id="L193">        return nb;</span>
+    }
+
+    /**
+     * Gets smallest box containing provided point in the input list of points.
+     * @param pt point to locate its containing box. Does not need to be contained in input collection.
+     * @return smallest box containing the point.
+     */
+    public BoxNode&lt;P&gt; locateBox(P pt) {
+<span class="fc" id="L202">        return mBoxes[locateBoxIndex(pt)];</span>
+    }
+
+    /**
+     * Index in provided input list of points of closest point to provided one.
+     * @param pt point to check against. Does not need to be contained in input collection.
+     * @return position of closest point.
+     */
+    public int nearestIndex(P pt) {
+<span class="fc" id="L211">        int i, k, nrst = 0, ntask, pi;</span>
+<span class="fc" id="L212">        int[] task = new int[N_TASKS];</span>
+<span class="fc" id="L213">        double dnrst = BIG, d;</span>
+
+        //find smallest box index containing point
+<span class="fc" id="L216">        k = locateBoxIndex(pt);</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        for (i = mBoxes[k].mPtLo; i &lt;= mBoxes[k].mPtHi; i++) {</span>
+<span class="fc" id="L218">            pi = mPtIndx[i];</span>
+            //noinspection unchecked
+<span class="fc" id="L220">            d = mPts[pi].distanceTo(pt);</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">            if (d &lt; dnrst) {</span>
+<span class="fc" id="L222">                nrst = pi; //index of nearest point</span>
+<span class="fc" id="L223">                dnrst = d; //distance to nearest point</span>
+            }
+        }
+
+        //check other boxes in case they contain any nearer point
+<span class="fc" id="L228">        task[1] = 0;</span>
+<span class="fc" id="L229">        ntask = 1;</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">        while (ntask != 0) {</span>
+<span class="fc" id="L231">            k = task[ntask--];</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">            if (mBoxes[k].getDistance(pt) &lt; dnrst) {</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">                if (mBoxes[k].mDau1 != 0) {</span>
+<span class="fc" id="L234">                    task[++ntask] = mBoxes[k].mDau1;</span>
+<span class="fc" id="L235">                    task[++ntask] = mBoxes[k].mDau2;</span>
+                } else {
+<span class="fc bfc" id="L237" title="All 2 branches covered.">                    for (i = mBoxes[k].mPtLo; i &lt;= mBoxes[k].mPtHi; i++) {</span>
+                        //noinspection unchecked
+<span class="fc" id="L239">                        d = mPts[mPtIndx[i]].distanceTo(pt);</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">                        if (d &lt; dnrst) {</span>
+<span class="fc" id="L241">                            nrst = mPtIndx[i];</span>
+<span class="fc" id="L242">                            dnrst = d;</span>
+                        }
+                    }
+                }
+            }
+        }
+<span class="fc" id="L248">        return nrst;</span>
+    }
+
+    /**
+     * Closest point to provided one.
+     * @param pt point to be checked. Does not need to be contained in input collection.
+     * @return closest point.
+     */
+    public P nearestPoint(P pt) {
+<span class="fc" id="L257">        return mPts[nearestIndex(pt)];</span>
+    }
+
+    /**
+     * Gets n nearest point indices to a given one in the input collection.
+     * @param jpt index of point to search nearest ones for.
+     * @param nn array containing resulting indices of nearest points up to the number of found points.
+     * @param dn array containing resulting distances to nearest points up to the number of found points.
+     * @param n number of nearest points to find.
+     * @throws IllegalArgumentException if number of nearest points is invalid or if length of arrays
+     * containing results are not valid either.
+     */
+    public void nNearest(int jpt, int[] nn, double[] dn, int n) throws IllegalArgumentException {
+<span class="fc bfc" id="L270" title="All 2 branches covered.">        if (n &lt; 0) {</span>
+<span class="fc" id="L271">            throw new IllegalArgumentException(&quot;no neighbours requested&quot;);</span>
+        }
+<span class="fc bfc" id="L273" title="All 2 branches covered.">        if (n &gt; mNpts - 1) {</span>
+<span class="fc" id="L274">            throw new IllegalArgumentException(&quot;too many neighbours requested&quot;);</span>
+        }
+<span class="fc bfc" id="L276" title="All 4 branches covered.">        if (nn.length != n || dn.length != n) {</span>
+<span class="fc" id="L277">            throw new IllegalArgumentException(&quot;invalid result array lengths&quot;);</span>
+        }
+
+        int i, k, ntask, kp;
+<span class="fc" id="L281">        int[] task = new int[N_TASKS];</span>
+        double d;
+<span class="fc bfc" id="L283" title="All 2 branches covered.">        for (i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L284">            dn[i] = BIG;</span>
+        }
+<span class="fc" id="L286">        kp = mBoxes[locate(jpt)].mMom;</span>
+<span class="fc bfc" id="L287" title="All 2 branches covered.">        while (mBoxes[kp].mPtHi - mBoxes[kp].mPtLo &lt; n) {</span>
+<span class="fc" id="L288">            kp = mBoxes[kp].mMom;</span>
+        }
+<span class="fc bfc" id="L290" title="All 2 branches covered.">        for (i = mBoxes[kp].mPtLo; i &lt;= mBoxes[kp].mPtHi; i++) {</span>
+<span class="fc bfc" id="L291" title="All 2 branches covered.">            if (jpt == mPtIndx[i]) {</span>
+<span class="fc" id="L292">                continue;</span>
+            }
+<span class="fc" id="L294">            d = distance(mPtIndx[i], jpt);</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">            if (d &lt; dn[0]) {</span>
+<span class="fc" id="L296">                dn[0] = d;</span>
+<span class="fc" id="L297">                nn[0] = mPtIndx[i];</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">                if (n &gt; 1) {</span>
+<span class="fc" id="L299">                    siftDown(dn, nn, n);</span>
+                }
+            }
+        }
+<span class="fc" id="L303">        task[1] = 0;</span>
+<span class="fc" id="L304">        ntask = 1;</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">        while (ntask != 0) {</span>
+<span class="fc" id="L306">            k = task[ntask--];</span>
+<span class="fc bfc" id="L307" title="All 2 branches covered.">            if (k == kp) {</span>
+<span class="fc" id="L308">                continue;</span>
+            }
+<span class="fc bfc" id="L310" title="All 2 branches covered.">            if (mBoxes[k].getDistance(mPts[jpt]) &lt; dn[0]) {</span>
+<span class="fc bfc" id="L311" title="All 2 branches covered.">                if (mBoxes[k].mDau1 != 0) {</span>
+<span class="fc" id="L312">                    task[++ntask] = mBoxes[k].mDau1;</span>
+<span class="fc" id="L313">                    task[++ntask] = mBoxes[k].mDau2;</span>
+                } else {
+<span class="fc bfc" id="L315" title="All 2 branches covered.">                    for (i = mBoxes[k].mPtLo; i &lt;= mBoxes[k].mPtHi; i++) {</span>
+<span class="fc" id="L316">                        d = distance(mPtIndx[i], jpt);</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">                        if (d &lt; dn[0]) {</span>
+<span class="fc" id="L318">                            dn[0] = d;</span>
+<span class="fc" id="L319">                            nn[0] = mPtIndx[i];</span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">                            if (n &gt; 1) {</span>
+<span class="fc" id="L321">                                siftDown(dn, nn, n);</span>
+                            }
+                        }
+                    }
+                }
+            }
+        }
+<span class="fc" id="L328">    }</span>
+
+    /**
+     * Gets n nearest point indices to a given point in the input collection.
+     * @param pt point to search nearest ones for.
+     * @param nn array containing resulting indices of nearest points up to the number of found points.
+     * @param dn array containing resulting distances to nearest points up to the number of found points.
+     * @param n number of nearest points to find.
+     * @throws IllegalArgumentException if number of nearest points is invalid or if length of arrays
+     * containing results are not valid either.
+     */
+    public void nNearest(P pt, int[] nn, double[] dn, int n) throws IllegalArgumentException {
+<span class="fc" id="L340">        nNearest(nearestIndex(pt), nn, dn, n);</span>
+<span class="fc" id="L341">    }</span>
+
+    /**
+     * Gets n nearest points to a given point index in the input collection.
+     * @param jpt index of point to search nearest ones for.
+     * @param pn array containing nearest points up to the number of found points.
+     * @param dn array containing resulting distances to nearest points up to the number of found points.
+     * @param n number of nearest points to find.
+     * @throws IllegalArgumentException if number of nearest points is invalid or if length of arrays
+     * containing results are not valid either.
+     */
+    public void nNearest(int jpt, P[] pn, double[] dn, int n) throws IllegalArgumentException {
+<span class="fc bfc" id="L353" title="All 2 branches covered.">        if (n &lt; 0) {</span>
+<span class="fc" id="L354">            throw new IllegalArgumentException(&quot;no neighbours requested&quot;);</span>
+        }
+
+<span class="fc" id="L357">        int[] nn = new int[n];</span>
+
+<span class="fc" id="L359">        nNearest(jpt, nn, dn, n);</span>
+
+<span class="fc bfc" id="L361" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L362">            pn[i] = mPts[nn[i]];</span>
+        }
+<span class="fc" id="L364">    }</span>
+
+    /**
+     * Gets n nearest points to a given point in the input collection.
+     * @param pt point to search nearest ones for.
+     * @param pn array containing nearest points up to the number of found points.
+     * @param dn array containing resulting distances to nearest points up to the number of found points.
+     * @param n number of nearest points to find.
+     * @throws IllegalArgumentException if number of nearest points is invalid or if length of arrays
+     * containing results are not valid either.
+     */
+    public void nNearest(P pt, P[] pn, double[] dn, int n) throws IllegalArgumentException {
+<span class="fc" id="L376">        nNearest(nearestIndex(pt), pn, dn, n);</span>
+<span class="fc" id="L377">    }</span>
+
+    /**
+     * Locates some near points to provided one up to a certain radius of search.
+     * This method only returns up to nmax results, which means that not all points within required
+     * radius are returned if more points than provided nmax value are within such radius.
+     * @param pt point to search nearby.
+     * @param r radius of search.
+     * @param list list where indices of found points are stored up to the number of found points.
+     * @param nmax maximum number of points to search.
+     * @return number of found points.
+     * @throws IllegalArgumentException if radius is negative or maximum number of points to search is zero or negative,
+     * or list where indices are stored is not large enough.
+     */
+    public int locateNear(P pt, double r, int[] list, int nmax) throws IllegalArgumentException {
+<span class="fc bfc" id="L392" title="All 2 branches covered.">        if (r &lt; 0.0) {</span>
+<span class="fc" id="L393">            throw new IllegalArgumentException(&quot;radius must be nonnegative&quot;);</span>
+        }
+<span class="fc bfc" id="L395" title="All 2 branches covered.">        if (nmax &lt;= 0) {</span>
+<span class="fc" id="L396">            throw new IllegalArgumentException(&quot;number of points to search must be at least 1&quot;);</span>
+        }
+<span class="fc bfc" id="L398" title="All 2 branches covered.">        if (list.length &lt; nmax) {</span>
+<span class="fc" id="L399">            throw new IllegalArgumentException(&quot;result might not fit into provided list&quot;);</span>
+        }
+
+<span class="fc" id="L402">        int dim = getDimensions();</span>
+
+        int k, i, nb, nbold, nret, ntask, jdim, d1, d2;
+<span class="fc" id="L405">        int[] task = new int[N_TASKS];</span>
+<span class="fc" id="L406">        nb = jdim = nret = 0;</span>
+
+<span class="pc bpc" id="L408" title="1 of 2 branches missed.">        while (mBoxes[nb].mDau1 != 0) {</span>
+<span class="fc" id="L409">            nbold = nb;</span>
+<span class="fc" id="L410">            d1 = mBoxes[nb].mDau1;</span>
+<span class="fc" id="L411">            d2 = mBoxes[nb].mDau2;</span>
+<span class="fc" id="L412">            double coord = pt.getInhomogeneousCoordinate(jdim);</span>
+<span class="pc bpc" id="L413" title="1 of 2 branches missed.">            if (coord + r &lt;= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {</span>
+<span class="nc" id="L414">                nb = d1;</span>
+<span class="fc bfc" id="L415" title="All 2 branches covered.">            } else if (coord - r &gt;= mBoxes[d2].getLo().getInhomogeneousCoordinate(jdim)) {</span>
+<span class="fc" id="L416">                nb = d2;</span>
+            }
+<span class="fc" id="L418">            jdim = ++jdim % dim;</span>
+<span class="fc bfc" id="L419" title="All 2 branches covered.">            if (nb == nbold) {</span>
+<span class="fc" id="L420">                break;</span>
+            }
+<span class="fc" id="L422">        }</span>
+<span class="fc" id="L423">        task[1] = nb;</span>
+<span class="fc" id="L424">        ntask = 1;</span>
+<span class="pc bpc" id="L425" title="1 of 2 branches missed.">        while (ntask != 0) {</span>
+<span class="fc" id="L426">            k = task[ntask--];</span>
+<span class="fc bfc" id="L427" title="All 2 branches covered.">            if (mBoxes[k].getDistance(pt) &gt; r) {</span>
+<span class="fc" id="L428">                continue;</span>
+            }
+<span class="fc bfc" id="L430" title="All 2 branches covered.">            if (mBoxes[k].mDau1 != 0) {</span>
+<span class="fc" id="L431">                task[++ntask] = mBoxes[k].mDau1;</span>
+<span class="fc" id="L432">                task[++ntask] = mBoxes[k].mDau2;</span>
+            } else {
+<span class="fc bfc" id="L434" title="All 2 branches covered.">                for (i = mBoxes[k].mPtLo; i &lt;= mBoxes[k].mPtHi; i++) {</span>
+                    //noinspection unchecked
+<span class="pc bpc" id="L436" title="1 of 4 branches missed.">                    if (mPts[mPtIndx[i]].distanceTo(pt) &lt;= r &amp;&amp; nret &lt; nmax) {</span>
+<span class="fc" id="L437">                        list[nret++] = mPtIndx[i];</span>
+                    }
+<span class="fc bfc" id="L439" title="All 2 branches covered.">                    if (nret == nmax) {</span>
+<span class="fc" id="L440">                        return nmax;</span>
+                    }
+                }
+            }
+        }
+<span class="nc" id="L445">        return nret;</span>
+    }
+
+    /**
+     * Locates near points to provided one up to a certain radius of search defined in a bounding box.
+     * @param pt point to search nearby.
+     * @param r radius of search defining a bounding box.
+     * @param plist list where found points are stored up to the number of found points.
+     * @param nmax maximum number of points to search.
+     * @return number of found points.
+     * @throws IllegalArgumentException if radius is negative or maximum number of points to search is zero or negative,
+     * or list where points are stored is not large enough.
+     */
+    public int locateNear(P pt, double r, P[] plist, int nmax) throws IllegalArgumentException {
+<span class="fc bfc" id="L459" title="All 2 branches covered.">        if (r &lt; 0.0) {</span>
+<span class="fc" id="L460">            throw new IllegalArgumentException(&quot;radius must be nonnegative&quot;);</span>
+        }
+<span class="fc bfc" id="L462" title="All 2 branches covered.">        if (nmax &lt;= 0) {</span>
+<span class="fc" id="L463">            throw new IllegalArgumentException(&quot;number of points to search must be at least 1&quot;);</span>
+        }
+<span class="fc bfc" id="L465" title="All 2 branches covered.">        if (plist.length &lt; nmax) {</span>
+<span class="fc" id="L466">            throw new IllegalArgumentException(&quot;result might not fit into provided list&quot;);</span>
+        }
+
+<span class="fc" id="L469">        int[] list = new int[nmax];</span>
+<span class="fc" id="L470">        int result = locateNear(pt, r, list, nmax);</span>
+
+<span class="fc bfc" id="L472" title="All 2 branches covered.">        for (int i = 0; i &lt; result; i++) {</span>
+<span class="fc" id="L473">            plist[i] = mPts[list[i]];</span>
+        }
+
+<span class="fc" id="L476">        return result;</span>
+    }
+
+    /**
+     * Gets number of dimensions supported by this k-D tree implementation on provided list of points.
+     * @return number of dimensions.
+     */
+    public abstract int getDimensions();
+
+    /**
+     * Creates a point.
+     * @param value value to be set on point coordinates.
+     * @return created point.
+     */
+    protected abstract P createPoint(double value);
+
+    /**
+     * Copies a point.
+     * @param point point to be copied.
+     * @return copied point.
+     */
+    protected abstract P copyPoint(P point);
+
+    /**
+     * Gets position of point on input collection for provided internal boxes position.
+     * @param jpt internal position in the boxes.
+     * @return position in the input collection of points.
+     */
+    private int locate(int jpt) {
+        int nb, d1, jh;
+<span class="fc" id="L506">        jh = mRPtIndx[jpt];</span>
+<span class="fc" id="L507">        nb = 0;</span>
+<span class="fc bfc" id="L508" title="All 2 branches covered.">        while (mBoxes[nb].mDau1 != 0) {</span>
+<span class="fc" id="L509">            d1 = mBoxes[nb].mDau1;</span>
+<span class="fc bfc" id="L510" title="All 2 branches covered.">            if (jh &lt;= mBoxes[d1].mPtHi) {</span>
+<span class="fc" id="L511">                nb = d1;</span>
+            } else {
+<span class="fc" id="L513">                nb = mBoxes[nb].mDau2;</span>
+            }
+        }
+<span class="fc" id="L516">        return nb;</span>
+    }
+
+    /**
+     * Makes a selection so that we obtain ordered index at provided k position so that
+     * distances are ordered in such a way that resulting array arr containg distances
+     * as follows: arr[indx[0 .. k-1]] &amp;lt;= arr[indx[k]] &amp;lt;= arr[indx[k+1 .. n]].
+     * So that positions between 0 and k-1 are not in any particular order but is less than
+     * k position, and positions between k+1 and n neither have any particular order but is
+     * more than k position.
+     * @param k sorted position to retrieve.
+     * @param indxOffset offset where indx search starts.
+     * @param indx array to be sorted (i.e. selected).
+     * @param n length of arrays.
+     * @param arrOffset offset of distances array. This is usually equal to indxOffset.
+     * @param arr resulting array containing distances to each selected point.
+     * @return index of selected point.
+     */
+    @SuppressWarnings(&quot;all&quot;)
+    private static int selecti(int k, int indxOffset, int[] indx, int n, int arrOffset, double[] arr) {
+        int i, ia, ir, j, l, mid;
+        double a;
+
+<span class="fc" id="L539">        l = 0;</span>
+<span class="fc" id="L540">        ir = n - 1;</span>
+        for (;;) {
+<span class="fc bfc" id="L542" title="All 2 branches covered.">            if (ir &lt;= l + 1) {</span>
+<span class="fc bfc" id="L543" title="All 4 branches covered.">                if (ir == l + 1 &amp;&amp; arr[arrOffset + indx[indxOffset + ir]] &lt; arr[arrOffset + indx[indxOffset + l]]) {</span>
+<span class="fc" id="L544">                    swap(indx, indxOffset + l, indx, indxOffset + ir);</span>
+                }
+<span class="fc" id="L546">                return  indx[indxOffset + k];</span>
+            } else {
+<span class="fc" id="L548">                mid = (l + ir) &gt;&gt; 1;</span>
+<span class="fc" id="L549">                swap(indx, indxOffset + mid, indx, indxOffset + l + 1);</span>
+<span class="fc bfc" id="L550" title="All 2 branches covered.">                if (arr[arrOffset + indx[indxOffset + l]] &gt; arr[arrOffset + indx[indxOffset + ir]]) {</span>
+<span class="fc" id="L551">                    swap(indx, indxOffset + l, indx, indxOffset + ir);</span>
+                }
+<span class="fc bfc" id="L553" title="All 2 branches covered.">                if (arr[arrOffset + indx[indxOffset + l + 1]] &gt; arr[arrOffset + indx[indxOffset + ir]]) {</span>
+<span class="fc" id="L554">                    swap(indx, indxOffset + l + 1, indx, indxOffset + ir);</span>
+                }
+<span class="fc bfc" id="L556" title="All 2 branches covered.">                if (arr[arrOffset + indx[indxOffset + l]] &gt; arr[arrOffset + indx[indxOffset + l + 1]]) {</span>
+<span class="fc" id="L557">                    swap(indx, indxOffset + l, indx,indxOffset + l + 1);</span>
+                }
+<span class="fc" id="L559">                i = l + 1;</span>
+<span class="fc" id="L560">                j = ir;</span>
+<span class="fc" id="L561">                ia = indx[indxOffset + l + 1];</span>
+<span class="fc" id="L562">                a = arr[arrOffset + ia];</span>
+                for (;;) {
+                    do {
+<span class="fc" id="L565">                        i++;</span>
+<span class="fc bfc" id="L566" title="All 2 branches covered.">                    } while (arr[arrOffset + indx[indxOffset + i]] &lt; a);</span>
+                    do {
+<span class="fc" id="L568">                        j--;</span>
+<span class="fc bfc" id="L569" title="All 2 branches covered.">                    } while (arr[arrOffset + indx[indxOffset + j]] &gt; a);</span>
+<span class="fc bfc" id="L570" title="All 2 branches covered.">                    if (j &lt; i) {</span>
+<span class="fc" id="L571">                        break;</span>
+                    }
+<span class="fc" id="L573">                    swap(indx, indxOffset + i, indx, indxOffset + j);</span>
+                }
+<span class="fc" id="L575">                indx[indxOffset + l + 1] = indx[indxOffset + j];</span>
+<span class="fc" id="L576">                indx[indxOffset + j] = ia;</span>
+<span class="fc bfc" id="L577" title="All 2 branches covered.">                if (j &gt;= k) {</span>
+<span class="fc" id="L578">                    ir = j - 1;</span>
+                }
+<span class="fc bfc" id="L580" title="All 2 branches covered.">                if (j &lt;= k) {</span>
+<span class="fc" id="L581">                    l = i;</span>
+                }
+            }
+        }
+    }
+
+    /**
+     * Moves things around.
+     * @param heap array of distances.
+     * @param ndx array of indices.
+     * @param nn number of indices to move.
+     */
+    private static void siftDown(double[] heap, int[] ndx, int nn) {
+<span class="fc" id="L594">        int n = nn - 1;</span>
+        int j, jold, ia;
+<span class="fc" id="L596">        double a = heap[0];</span>
+<span class="fc" id="L597">        ia = ndx[0];</span>
+<span class="fc" id="L598">        jold = 0;</span>
+<span class="fc" id="L599">        j = 1;</span>
+<span class="fc bfc" id="L600" title="All 2 branches covered.">        while (j &lt;= n) {</span>
+<span class="fc bfc" id="L601" title="All 4 branches covered.">            if (j &lt; n &amp;&amp; heap[j] &lt; heap[j + 1]) {</span>
+<span class="fc" id="L602">                j++;</span>
+            }
+<span class="fc bfc" id="L604" title="All 2 branches covered.">            if (a &gt;= heap[j]) {</span>
+<span class="fc" id="L605">                break;</span>
+            }
+<span class="fc" id="L607">            heap[jold] = heap[j];</span>
+<span class="fc" id="L608">            ndx[jold] = ndx[j];</span>
+<span class="fc" id="L609">            jold = j;</span>
+<span class="fc" id="L610">            j = 2 * j + 1;</span>
+        }
+<span class="fc" id="L612">        heap[jold] = a;</span>
+<span class="fc" id="L613">        ndx[jold] = ia;</span>
+<span class="fc" id="L614">    }</span>
+
+    /**
+     * Swaps values.
+     * @param a 1st array containing values to swap.
+     * @param posA position to be swapped on 1st array.
+     * @param b 2nd array containing values to swap.
+     * @param posB position to be swapped on 2nd array.
+     */
+    private static void swap(int[] a, int posA, int[] b, int posB) {
+<span class="fc" id="L624">        int tmp = a[posA];</span>
+
+<span class="fc" id="L626">        a[posA] = b[posB];</span>
+<span class="fc" id="L627">        b[posB] = tmp;</span>
+<span class="fc" id="L628">    }</span>
+
+    /**
+     * Contains a node of a KD Tree.
+     */
+    public static class BoxNode&lt;P extends Point&gt; extends Box&lt;P&gt; {
+
+        /**
+         * Position of mother node in the list of nodes of a tree.
+         */
+        private int mMom;
+
+        /**
+         * Position of 1st daughter node in the list of nodes of a tree.
+         */
+        private int mDau1;
+
+        /**
+         * Position of 2nd daughter node of a tree.
+         */
+        private int mDau2;
+
+        /**
+         * Low index of list of points inside this box.
+         * mPtLo and mPtHi define the range of points inside the box.
+         */
+        private int mPtLo;
+
+        /**
+         * High index of list of points inside this box.
+         * mPtLo and mPtHi define the range of points inside the box.
+         */
+        private int mPtHi;
+
+        /**
+         * Constructor.
+         * @param lo low coordinate values.
+         * @param hi high coordinate values.
+         * @param mom index of mother node.
+         * @param d1 index of 1st daughter.
+         * @param d2 index of 2nd daughter.
+         * @param ptLo low index of list of points inside this box.
+         * @param ptHi high index of list of points inside this box.
+         */
+        public BoxNode(P lo, P hi, int mom, int d1, int d2, int ptLo, int ptHi) {
+<span class="fc" id="L673">            super(lo, hi);</span>
+<span class="fc" id="L674">            mMom = mom;</span>
+<span class="fc" id="L675">            mDau1 = d1;</span>
+<span class="fc" id="L676">            mDau2 = d2;</span>
+<span class="fc" id="L677">            mPtLo = ptLo;</span>
+<span class="fc" id="L678">            mPtHi = ptHi;</span>
+<span class="fc" id="L679">        }</span>
+
+        /**
+         * Gets position of mother node in the list of nodes of a tree.
+         * @return position of mother node in the list of nodes of a tree.
+         */
+        public int getMom() {
+<span class="fc" id="L686">            return mMom;</span>
+        }
+
+        /**
+         * Gets position of 1st daughter node in the list of nodes of a tree.
+         * @return position of 1st daughter node in the list of nodes of a tree.
+         */
+        public int getDau1() {
+<span class="fc" id="L694">            return mDau1;</span>
+        }
+
+        /**
+         * Gets position of 2nd daughter node of a tree.
+         * @return position of 2nd daughter node of a tree.
+         */
+        public int getDau2() {
+<span class="fc" id="L702">            return mDau2;</span>
+        }
+
+        /**
+         * Gets low index of list of points inside this box.
+         * getPtLo() and {@link #getPtHi()} define the range of indices of points
+         * contained in this box.
+         * @return low index of list of points inside this box.
+         */
+        public int getPtLo() {
+<span class="fc" id="L712">            return mPtLo;</span>
+        }
+
+        /**
+         * Gets high index of list of points inside this box.
+         * {@link #getPtLo()} and getPtHi() define the range of indices of points
+         * contained in this box.
+         * @return high index of list of points inside this box.
+         */
+        public int getPtHi() {
+<span class="fc" id="L722">            return mPtHi;</span>
+        }
+
+        /**
+         * Sets low coordinate values.
+         * @param lo low coordinate values.
+         * @throws IllegalArgumentException always thrown.
+         */
+        @Override
+        public void setLo(P lo) throws IllegalArgumentException {
+<span class="fc" id="L732">            throw new IllegalArgumentException(&quot;changes are not allowed&quot;);</span>
+        }
+
+        /**
+         * Sets high coordinate values.
+         * @param hi high coordinate values.
+         * @throws IllegalArgumentException always thrown.
+         */
+        public void setHi(P hi) throws IllegalArgumentException {
+<span class="fc" id="L741">            throw new IllegalArgumentException(&quot;changes are not allowed&quot;);</span>
+        }
+
+        /**
+         * Sets boundaries.
+         * @param lo low coordinate values.
+         * @param hi high coordinate values.
+         * @throws IllegalArgumentException always thrown.
+         */
+        @Override
+        public void setBounds(P lo, P hi) throws IllegalArgumentException {
+<span class="fc" id="L752">            throw new IllegalArgumentException(&quot;changes are not allowed&quot;);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

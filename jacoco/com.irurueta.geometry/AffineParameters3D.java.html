@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AffineParameters3D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">AffineParameters3D.java</span></div><h1>AffineParameters3D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.WrongSizeException;
+
+import java.io.Serializable;
+
+/**
+ * This class defines additional parameters that can be defined on affine
+ * 3D transformations.
+ */
+@SuppressWarnings(&quot;WeakerAccess&quot;)
+public class AffineParameters3D implements Serializable {
+
+    /**
+     * Default scale value having no effect on transformations.
+     */
+    public static final double DEFAULT_SCALE = 1.0;
+
+    /**
+     * Default skewness value having no effect on transformations.
+     */
+    public static final double DEFAULT_SKEWNESS = 0.0;
+
+    /**
+     * Number of inhomogeneous coordinates in 3D space.
+     */
+    public static final int INHOM_COORDS = 3;
+
+    /**
+     * Default threshold to determine whether a matrix is a valid 3x3 upper
+     * triangular one.
+     */
+    public static final double DEFAULT_VALID_THRESHOLD = 1e-8;
+
+    /**
+     * Scale on x coordinates.
+     */
+    private double scaleX;
+    
+    /**
+     * Scale on y coordinates.
+     */
+    private double scaleY;
+    
+    /**
+     * Scale on z coordinates.
+     */
+    private double scaleZ;
+    
+    /**
+     * Skewness factor between axes x-y. If 0.0, x and y axes remain orthogonal,
+     * otherwise they get slanted.
+     */
+    private double skewnessXY;
+    
+    /**
+     * Skewness factor between axes x-z. If 0.0, x and z axes remain orthogonal,
+     * otherwise they get slanted.
+     */
+    private double skewnessXZ;
+    
+    /**
+     * Skewness factor between axes y-z. If 0.0, y and z axes remain orthogonal,
+     * otherwise they get slanted.
+     */
+    private double skewnessYZ;
+
+    /**
+     * Constructor.
+     * Sets default scale and skewness.
+     */
+<span class="fc" id="L88">    public AffineParameters3D() {</span>
+<span class="fc" id="L89">        scaleX = scaleY = scaleZ = DEFAULT_SCALE;</span>
+<span class="fc" id="L90">        skewnessXY = skewnessXZ = skewnessYZ = DEFAULT_SKEWNESS;</span>
+<span class="fc" id="L91">    }</span>
+    
+    /**
+     * Constructor with scale.
+     * Sets default skewness and provided scale.
+     * @param scale Scale to be set (in x, y and z axes). A value between 0.0 
+     * and 1.0 will reduce objects size, a value larger than 1.0 will enlarge 
+     * objects size, and negative values will reverse objects.
+     */
+<span class="fc" id="L100">    public AffineParameters3D(double scale) {</span>
+<span class="fc" id="L101">        scaleX = scaleY = scaleZ = scale;</span>
+<span class="fc" id="L102">        skewnessXY = skewnessXZ = skewnessYZ = DEFAULT_SKEWNESS;</span>
+<span class="fc" id="L103">    }</span>
+    
+    /**
+     * Constructor with scale and skewness.
+     * @param scale Scale to be set (in x, y and z axes). A value between 0.0 
+     * and 1.0 will reduce objects size, a value larger than 1.0 will enlarge 
+     * objects size, and negative values will reverse objects.
+     * @param skewness Skewness to be set for all axes.
+     */
+<span class="fc" id="L112">    public AffineParameters3D(double scale, double skewness) {</span>
+<span class="fc" id="L113">        scaleX = scaleY = scaleZ = scale;</span>
+<span class="fc" id="L114">        skewnessXY = skewnessXZ = skewnessYZ = skewness;</span>
+<span class="fc" id="L115">    }</span>
+    
+    /**
+     * Constructor with scale and skewness on each axis.
+     * @param scaleX Scale to be set on x axis. A value between 0.0 and 1.0 
+     * will reduce objects size, a value larger than 1.0 will enlarge objects
+     * size, and negative values will reverse objects.
+     * @param scaleY Scale to be set on y axis. A value between 0.0 and 1.0
+     * will reduce objects size, a value larger than 1.0 will enlarge objects.
+     * @param scaleZ Scale to be set on z axis. A value between 0.0 and 1.0
+     * will reduce objects size, a value larger than 1.0 will enlarge objects.
+     * @param skewnessXY Skewness to be set for axes x-y.
+     * @param skewnessXZ Skewness to be set for axes x-z.
+     * @param skewnessYZ Skewness to be set for axes y-z.
+     */
+    public AffineParameters3D(double scaleX, double scaleY, double scaleZ,
+<span class="fc" id="L131">            double skewnessXY, double skewnessXZ, double skewnessYZ) {</span>
+<span class="fc" id="L132">        this.scaleX = scaleX;</span>
+<span class="fc" id="L133">        this.scaleY = scaleY;</span>
+<span class="fc" id="L134">        this.scaleZ = scaleZ;</span>
+<span class="fc" id="L135">        this.skewnessXY = skewnessXY;</span>
+<span class="fc" id="L136">        this.skewnessXZ = skewnessXZ;</span>
+<span class="fc" id="L137">        this.skewnessYZ = skewnessYZ;</span>
+<span class="fc" id="L138">    }</span>
+    
+    /**
+     * Constructor with matrix and threshold.
+     * @param m Upper triangular matrix to extract affine parameters from..
+     * @param threshold Threshold to determine whether provided matrix is a
+     * valid upper triangular one.
+     * @throws IllegalArgumentException Raised if provided matrix is not 3x3 or
+     * if it is not upper triangular, or if threshold is negative.
+     */
+    public AffineParameters3D(Matrix m, double threshold)
+<span class="fc" id="L149">            throws IllegalArgumentException {</span>
+<span class="fc" id="L150">        fromMatrix(m, threshold);</span>
+<span class="fc" id="L151">    }</span>
+    
+    /**
+     * Constructor with matrix.
+     * @param m Upper triangular matrix to extract affine parameters from..
+     * @throws IllegalArgumentException Raised if provided matrix is not 3x3 or
+     * if it is not upper triangular, or if threshold is negative.
+     */
+<span class="fc" id="L159">    public AffineParameters3D(Matrix m) throws IllegalArgumentException {</span>
+<span class="fc" id="L160">        fromMatrix(m);</span>
+<span class="fc" id="L161">    }</span>
+    
+    /**
+     * Returns scale for x axis.
+     * A value between 0.0 and 1.0 will reduce objects size, a value larger than
+     * 1.0 will enlarge objects size, and negative values will reverse objects.
+     * @return Scale for x axis.
+     */
+    public double getScaleX() {
+<span class="fc" id="L170">        return scaleX;</span>
+    }
+    
+    /**
+     * Sets scale for x axis.
+     * A value between 0.0 and 1.0 will reduce objects size, a value larger than
+     * 1.0 will enlarge objects size, and negative values will reverse objects.
+     * @param scaleX scale to be set on x axis.
+     */
+    public void setScaleX(double scaleX) {
+<span class="fc" id="L180">        this.scaleX = scaleX;</span>
+<span class="fc" id="L181">    }</span>
+    
+    /**
+     * Returns scale for y axis.
+     * A value between 0.0 and 1.0 will reduce objects size, a value larger than
+     * 1.0 will enlarge objects size, and negative values will reverse objects.
+     * @return Scale for y axis.
+     */
+    public double getScaleY() {
+<span class="fc" id="L190">        return scaleY;</span>
+    }
+    
+    /**
+     * Sets scale for y axis.
+     * A value between 0.0 and 1.0 will reduce objects size, a value larger than
+     * 1.0 will enlarge objects size, and negative values will reverse objects.
+     * @param scaleY scale to be set on y axis.
+     */
+    public void setScaleY(double scaleY) {
+<span class="fc" id="L200">        this.scaleY = scaleY;</span>
+<span class="fc" id="L201">    }</span>
+
+    /**
+     * Returns scale for z axis.
+     * A value between 0.0 and 1.0 will reduce objects size, a value larger than
+     * 1.0 will enlarge objects size, and negative values will reverse objects.
+     * @return Scale for z axis.
+     */
+    public double getScaleZ() {
+<span class="fc" id="L210">        return scaleZ;</span>
+    }
+    
+    /**
+     * Sets scale for z axis.
+     * A value between 0.0 and 1.0 will reduce objects size, a value larger than
+     * 1.0 will enlarge objects size, and negative values will reverse objects.
+     * @param scaleZ scale to be set on z axis.
+     */
+    public void setScaleZ(double scaleZ) {
+<span class="nc" id="L220">        this.scaleZ = scaleZ;</span>
+<span class="nc" id="L221">    }</span>
+    
+    /**
+     * Sets overall scale (for x, y and z axes).
+     * A value between 0.0 and 1.0 will reduce objects size, a value larger than
+     * 1.0 will enlarge objects size, and negative values will reverse objects.
+     * @param scale Scale to be set for x, y and z axes.
+     */
+    public void setScale(double scale) {
+<span class="fc" id="L230">        scaleX = scaleY = scaleZ = scale;</span>
+<span class="fc" id="L231">    }</span>
+    
+    /**
+     * Returns skewness value for x-y axes.
+     * A value of 0.0 indicates that horizontal and vertical axis are 
+     * orthogonal, otherwise they are slanted to each other.
+     * @return Skewness value for x-y axes.
+     */
+    public double getSkewnessXY() {
+<span class="fc" id="L240">        return skewnessXY;</span>
+    }
+    
+    /**
+     * Sets skewness value for x-y axes.
+     * A value of 0.0 indicates that horizontal and vertical axis are 
+     * orthogonal, otherwise they are slanted to each other.
+     * @param skewnessXY Skewness to be set for x-y axes.
+     */
+    public void setSkewnessXY(double skewnessXY) {
+<span class="fc" id="L250">        this.skewnessXY = skewnessXY;</span>
+<span class="fc" id="L251">    }</span>
+
+    /**
+     * Returns skewness value for x-z axes.
+     * A value of 0.0 indicates that horizontal and vertical axis are 
+     * orthogonal, otherwise they are slanted to each other.
+     * @return Skewness value for x-z axes.
+     */    
+    public double getSkewnessXZ() {
+<span class="fc" id="L260">        return skewnessXZ;</span>
+    }
+
+    /**
+     * Sets skewness value for x-z axes.
+     * A value of 0.0 indicates that horizontal and vertical axis are 
+     * orthogonal, otherwise they are slanted to each other.
+     * @param skewnessXZ Skewness to be set for x-z axes.
+     */    
+    public void setSkewnessXZ(double skewnessXZ) {
+<span class="fc" id="L270">        this.skewnessXZ = skewnessXZ;</span>
+<span class="fc" id="L271">    }</span>
+    
+    /**
+     * Returns skewness value for y-z axes.
+     * A value of 0.0 indicates that horizontal and vertical axis are 
+     * orthogonal, otherwise they are slanted to each other.
+     * @return Skewness value for y-z axes.
+     */    
+    public double getSkewnessYZ() {
+<span class="fc" id="L280">        return skewnessYZ;</span>
+    }
+    
+    /**
+     * Sets skewness value for y-z axes.
+     * A value of 0.0 indicates that horizontal and vertical axis are 
+     * orthogonal, otherwise they are slanted to each other.
+     * @param skewnessYZ Skewness to be set for y-z axes.
+     */    
+    public void setSkewnessYZ(double skewnessYZ) {
+<span class="fc" id="L290">        this.skewnessYZ = skewnessYZ;</span>
+<span class="fc" id="L291">    }</span>
+    
+    /**
+     * Converts this affine parameters instance into matrix representation
+     * @return A matrix representation of this instance.
+     */
+    public Matrix asMatrix() {
+<span class="fc" id="L298">        Matrix m = null;</span>
+        try {
+<span class="fc" id="L300">            m = new Matrix(INHOM_COORDS, INHOM_COORDS);</span>
+<span class="fc" id="L301">            asMatrix(m);</span>
+<span class="pc" id="L302">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L303">        return m;</span>
+    }
+    
+    /**
+     * Converts this affine parameters instance into matrix representation and
+     * stores the result into provided matrix.
+     * @param m Matrix where representation of this instance will be stored.
+     * @throws IllegalArgumentException Raised if provided matrix is not 3x3.
+     */
+    public void asMatrix(Matrix m) throws IllegalArgumentException {
+<span class="pc bpc" id="L313" title="2 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
+<span class="nc" id="L314">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L317">        m.setElementAt(0, 0, scaleX);</span>
+<span class="fc" id="L318">        m.setElementAt(1, 0, 0.0);</span>
+<span class="fc" id="L319">        m.setElementAt(2, 0, 0.0);</span>
+        
+<span class="fc" id="L321">        m.setElementAt(0, 1, skewnessXY);</span>
+<span class="fc" id="L322">        m.setElementAt(1, 1, scaleY);</span>
+<span class="fc" id="L323">        m.setElementAt(2, 1, 0.0);</span>
+        
+<span class="fc" id="L325">        m.setElementAt(0, 2, skewnessXZ);</span>
+<span class="fc" id="L326">        m.setElementAt(1, 2, skewnessYZ);</span>
+<span class="fc" id="L327">        m.setElementAt(2, 2, scaleZ);</span>
+<span class="fc" id="L328">    }</span>
+    
+    /**
+     * Sets parameters of this instance from provided matrix.
+     * @param m Matrix to set parameters from. Provided matrix must be 3x3 and
+     * upper triangular.
+     * @throws IllegalArgumentException Raised if provided matrix is not 3x3 or
+     * if it is not upper triangular.
+     */
+    public final void fromMatrix(Matrix m) throws IllegalArgumentException {
+<span class="fc" id="L338">        fromMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
+<span class="fc" id="L339">    }</span>
+    
+    /**
+     * Sets parameters of this instance from provided matrix.
+     * @param m Matrix to set parameters from. Provided matrix must be 3x3 and
+     * upper triangular up to provided threshold.
+     * @param threshold Threshold to determine whether provided matrix is upper
+     * triangular. Matrix will be considered upper triangular if its lower 
+     * triangular elements are smaller or equal than provided threshold.
+     * @throws IllegalArgumentException Raised if provided matrix is not 3x3 or
+     * it it is not upper triangular or if threshold is negative.
+     */
+    public final void fromMatrix(Matrix m, double threshold) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L353" title="All 2 branches covered.">        if (!isValidMatrix(m, threshold)) {</span>
+<span class="fc" id="L354">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L357">        scaleX = m.getElementAt(0, 0);</span>
+<span class="fc" id="L358">        skewnessXY = m.getElementAt(0, 1);</span>
+<span class="fc" id="L359">        scaleY = m.getElementAt(1, 1);</span>
+<span class="fc" id="L360">        skewnessXZ = m.getElementAt(0, 2);</span>
+<span class="fc" id="L361">        skewnessYZ = m.getElementAt(1, 2);</span>
+<span class="fc" id="L362">        scaleZ = m.getElementAt(2, 2);</span>
+<span class="fc" id="L363">    }</span>
+    
+    /**
+     * Returns boolean indicating whether provided matrix is a valid matrix
+     * to set affine parameters from.
+     * Valid matrices need to be 3x3 and upper triangular.
+     * @param m A matrix to determine whether it is valid to set affine 
+     * parameters from.
+     * @return True if matrix is valid, false otherwise.
+     */
+    public static boolean isValidMatrix(Matrix m) {
+<span class="fc" id="L374">        return isValidMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
+    }
+    
+    /**
+     * Returns boolean indicating whether provided matrix is a valid matrix to
+     * set affine parameters form.
+     * Valid matrices need to be 3x3 and upper triangular up to provided 
+     * threshold. In Layman terms, a valid matrix lower triangular elements need
+     * to be smaller or equal than provided threshold.
+     * @param m A matrix to determine whether it is valid to set affine 
+     * parameters from.
+     * @param threshold A threshold to determine whether provided matrix is 
+     * upper triangular. Matrix will be considered upper triangular if its lower
+     * triangular elements are smaller or equal than provided threshold (without
+     * taking into account the sign of the elements).
+     * @return True if matrix is valid, false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     */
+    public static boolean isValidMatrix(Matrix m, double threshold) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L394" title="All 2 branches covered.">        if (threshold &lt; 0.0) {</span>
+<span class="fc" id="L395">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="pc bpc" id="L398" title="1 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
+<span class="fc" id="L399">            return false;</span>
+        }
+        
+        //check is upper triangular
+<span class="fc" id="L403">        int rows = m.getRows();</span>
+<span class="fc" id="L404">        int cols = m.getColumns();</span>
+        
+<span class="fc bfc" id="L406" title="All 2 branches covered.">        for (int v = 0; v &lt; cols; v++) {</span>
+<span class="fc bfc" id="L407" title="All 2 branches covered.">            for (int u = 0; u &lt; rows; u++) {</span>
+<span class="fc bfc" id="L408" title="All 2 branches covered.">                if (u &gt; v) {</span>
+<span class="fc bfc" id="L409" title="All 2 branches covered.">                    if (Math.abs(m.getElementAt(u, v)) &gt; threshold) {</span>
+<span class="fc" id="L410">                        return false;</span>
+                    }
+                }
+            }
+        }
+        
+<span class="fc" id="L416">        return true;</span>
+    }    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

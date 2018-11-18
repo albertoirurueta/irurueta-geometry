@@ -1,0 +1,920 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Triangle2D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Triangle2D.java</span></div><h1>Triangle2D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * This class defines a triangle in the 2D space.
+ */
+public class Triangle2D implements Serializable {
+
+    /**
+     * Default threshold value. Thresholds are used to determine whether a point
+     * lies inside the triangle or not, or if it's locus or not, etc.
+     */
+    public static final double DEFAULT_THRESHOLD = 1e-9;
+
+    /**
+     * Minimum allowed threshold value.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Constant defining number of vertices on a triangle.
+     */
+    public static final int NUM_VERTICES = 3;
+
+    /**
+     * 1st vertex of this triangle.
+     */
+    private Point2D mVertex1;
+    
+    /**
+     * 2nd vertex of this triangle.
+     */
+    private Point2D mVertex2;
+    
+    /**
+     * 3rd vertex of this triangle.
+     */
+    private Point2D mVertex3;
+
+    /**
+     * Constructor.
+     * @param vertex1 1st vertex.
+     * @param vertex2 2nd vertex.
+     * @param vertex3 3rd vertex.
+     * @throws NullPointerException Raised if any of the vertices is null.
+     */
+    public Triangle2D(Point2D vertex1, Point2D vertex2, Point2D vertex3)
+<span class="fc" id="L66">            throws NullPointerException {</span>
+<span class="fc" id="L67">        setVertices(vertex1, vertex2, vertex3);</span>
+<span class="fc" id="L68">    }</span>
+    
+    /**
+     * Returns 1st vertex of this triangle.
+     * @return 1st vertex.
+     */
+    public Point2D getVertex1() {
+<span class="fc" id="L75">        return mVertex1;</span>
+    }
+    
+    /**
+     * Sets 1st vertex of this triangle.
+     * @param vertex1 1st vertex.
+     * @throws NullPointerException Raised if provided vertex is null.
+     */
+    public void setVertex1(Point2D vertex1) throws NullPointerException {
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        if (vertex1 == null) {</span>
+<span class="fc" id="L85">            throw new NullPointerException();</span>
+        }
+<span class="fc" id="L87">        this.mVertex1 = vertex1;</span>
+<span class="fc" id="L88">    }</span>
+    
+    /**
+     * Returns 2nd vertex of this triangle.
+     * @return 2nd vertex.
+     */
+    public Point2D getVertex2() {
+<span class="fc" id="L95">        return mVertex2;</span>
+    }
+    
+    /**
+     * Sets 2nd vertex of this triangle.
+     * @param vertex2 2nd vertex.
+     * @throws NullPointerException Raised if provided vertex is null.
+     */
+    public void setVertex2(Point2D vertex2) throws NullPointerException {
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (vertex2 == null) {</span>
+<span class="fc" id="L105">            throw new NullPointerException();</span>
+        }
+<span class="fc" id="L107">        this.mVertex2 = vertex2;</span>
+<span class="fc" id="L108">    }</span>
+    
+    /**
+     * Returns 3rd vertex of this triangle.
+     * @return 3rd vertex.
+     */
+    public Point2D getVertex3() {
+<span class="fc" id="L115">        return mVertex3;</span>
+    }
+        
+    /**
+     * Sets 3rd vertex of this triangle.
+     * @param vertex3 3rd vertex.
+     * @throws NullPointerException Raised if provided vertex is null.
+     */
+    public void setVertex3(Point2D vertex3) throws NullPointerException {
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        if (vertex3 == null) {</span>
+<span class="fc" id="L125">            throw new NullPointerException();</span>
+        }
+<span class="fc" id="L127">        this.mVertex3 = vertex3;</span>
+<span class="fc" id="L128">    }</span>
+    
+    /**
+     * Returns vertices of this triangle as a list of points.
+     * @return Vertices of this triangle.
+     */
+    public List&lt;Point2D&gt; getVertices() {
+<span class="fc" id="L135">        List&lt;Point2D&gt; vertices = new ArrayList&lt;&gt;(NUM_VERTICES);</span>
+<span class="fc" id="L136">        vertices(vertices);</span>
+<span class="fc" id="L137">        return vertices;</span>
+    }
+    
+    /**
+     * Stores vertices of this triangle in provided list. Note that content of
+     * list will be cleared before storing this triangle's vertices.
+     * @param result list where vertices will be stored.
+     */
+    public void vertices(List&lt;Point2D&gt; result) {
+<span class="fc" id="L146">        result.clear();</span>
+<span class="fc" id="L147">        result.add(mVertex1);</span>
+<span class="fc" id="L148">        result.add(mVertex2);</span>
+<span class="fc" id="L149">        result.add(mVertex3);</span>
+<span class="fc" id="L150">    }</span>
+    
+    /**
+     * Sets all vertices of this triangle.
+     * @param vertex1 1st vertex.
+     * @param vertex2 2nd vertex.
+     * @param vertex3 3rd vertex.
+     * @throws NullPointerException Raised if any of the vertices is null.
+     */
+    public final void setVertices(Point2D vertex1, Point2D vertex2, 
+            Point2D vertex3) throws NullPointerException {
+<span class="fc bfc" id="L161" title="All 6 branches covered.">        if (vertex1 == null || vertex2 == null || vertex3 == null) {</span>
+<span class="fc" id="L162">            throw new NullPointerException();</span>
+        }
+        
+<span class="fc" id="L165">        mVertex1 = vertex1;</span>
+<span class="fc" id="L166">        mVertex2 = vertex2;</span>
+<span class="fc" id="L167">        mVertex3 = vertex3;</span>
+<span class="fc" id="L168">    }</span>
+    
+    /**
+     * Returns area of provided triangle with sign. If vertices are defined 
+     * clockwise area is positive, otherwise returned area is negative.
+     * @param triangle Triangle to be evaluated.
+     * @return Area of triangle with sign. Positive sign indicates that vertices
+     * are clockwise, negative sign indicates that vertices are counterclockwise.
+     */
+    public static double signedArea(Triangle2D triangle) {
+<span class="fc" id="L178">        return signedArea(triangle.getVertex1(), triangle.getVertex2(), </span>
+<span class="fc" id="L179">                triangle.getVertex3());</span>
+    }
+    
+    /**
+     * Returns area with sign of the triangle formed by provided vertices. If 
+     * vertices are defined clockwise area is negative, otherwise returned area
+     * is positive.
+     * @param vertex1 1st vertex of a triangle.
+     * @param vertex2 2nd vertex of a triangle.
+     * @param vertex3 3rd vertex of a triangle.
+     * @return Area of a triangle with sign. Negative sign indicates that 
+     * vertices are clockwise, positive sign indicates that vertices are 
+     * counterclockwise.
+     */
+    public static double signedArea(Point2D vertex1, Point2D vertex2, 
+            Point2D vertex3) {
+        //The signed area of a triangle is half the determinant of its vectors,
+        //or half the modulus of the cross product of its vectors
+        
+        //Hence, having the vectors of the triangle defined as:
+        //v1 = vertex2 - vertex1, and v2 = vertex3 - vertex1, then:
+<span class="fc" id="L200">        double p1x = vertex1.getInhomX();</span>
+<span class="fc" id="L201">        double p1y = vertex1.getInhomY();</span>
+        
+<span class="fc" id="L203">        double x1 = vertex2.getInhomX() - p1x;</span>
+<span class="fc" id="L204">        double y1 = vertex2.getInhomY() - p1y;</span>
+        
+<span class="fc" id="L206">        double x2 = vertex3.getInhomX() - p1x;</span>
+<span class="fc" id="L207">        double y2 = vertex3.getInhomY() - p1y;</span>
+        
+        //Considering the matrix:
+        //[x1   x2]
+        //[y1   y2]
+        //Then half its determinant or half the cross product of its column 
+        //vectors is:        
+<span class="fc" id="L214">        return 0.5 * (x1 * y2 - x2 * y1);        </span>
+    }
+    
+    /**
+     * Returns area of this triangle with sign. If vertices are defined 
+     * clockwise area is positive, otherwise returned area is negative.
+     * @return Area of this triangle with sign. Positive sign indicates that
+     * vertices are clockwise, negative sign indicates that vertices are
+     * counterclockwise.
+     */
+    public double getSignedArea() {
+<span class="fc" id="L225">        return signedArea(mVertex1, mVertex2, mVertex3);</span>
+    }
+    
+    /**
+     * Returns area of provided triangle.
+     * @param triangle Triangle to be checked.
+     * @return Area of triangle.
+     */
+    public static double area(Triangle2D triangle) {
+<span class="fc" id="L234">        return area(triangle.getVertex1(), triangle.getVertex2(), </span>
+<span class="fc" id="L235">                triangle.getVertex3());</span>
+    }
+
+    /**
+     * Returns area of a triangle formed by provided vertices.
+     * @param vertex1 1st vertex of a triangle.
+     * @param vertex2 2nd vertex of a triangle.
+     * @param vertex3 3rd vertex of a triangle.
+     * @return Area of a triangle.
+     */
+    public static double area(Point2D vertex1, Point2D vertex2, 
+            Point2D vertex3) {
+<span class="fc" id="L247">        return Math.abs(signedArea(vertex1, vertex2, vertex3));</span>
+    }
+    
+    /**
+     * Returns area of this triangle.
+     * @return Area of this triangle.
+     */
+    public double getArea() {
+<span class="fc" id="L255">        return area(mVertex1, mVertex2, mVertex3);</span>
+    }
+
+    /**
+     * Determines whether vertices of this triangle are considered to be 
+     * colinear. Points are considered to be colinear when area of triangle is
+     * very small.
+     * @return True if vertices are colinear, false otherwise.
+     */
+    public boolean areVerticesColinear() {
+<span class="fc" id="L265">        return areVerticesColinear(DEFAULT_THRESHOLD);</span>
+    }
+    
+    /**
+     * Determines whether vertices of this triangle are considered to be
+     * colinear up to certain threshold. Points are considered to be colinear
+     * when are of triangle is very small.
+     * @param threshold Threshold to determine whether vertices are colinear.
+     * Vertices will be colinear when area of triangle is smaller than provided
+     * threshold.
+     * @return True if vertices are colinear, false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     */
+    public boolean areVerticesColinear(double threshold) 
+            throws IllegalArgumentException {
+        
+<span class="fc bfc" id="L281" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L282">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L284" title="All 2 branches covered.">        return getArea() &lt;= threshold;</span>
+    }
+        
+    /**
+     * Returns perimeter of provided triangle.
+     * @param triangle Perimeter of provided triangle.
+     * @return Perimeter of provided triangle.
+     */
+    public static double perimeter(Triangle2D triangle) {
+<span class="fc" id="L293">        return perimeter(triangle.getVertex1(), triangle.getVertex2(),</span>
+<span class="fc" id="L294">                triangle.getVertex3());</span>
+    }
+    
+    /**
+     * Returns perimeter of triangle formed by provided vertices.
+     * @param vertex1 1st vertex of a triangle.
+     * @param vertex2 2nd vertex of a triangle.
+     * @param vertex3 3rd vertex of a triangle.
+     * @return Perimeter of a triangle.
+     */
+    public static double perimeter(Point2D vertex1, Point2D vertex2, 
+            Point2D vertex3) {
+<span class="fc" id="L306">        return vertex1.distanceTo(vertex2) + vertex2.distanceTo(vertex3) +</span>
+<span class="fc" id="L307">                vertex3.distanceTo(vertex1);</span>
+    }
+    
+    /**
+     * Returns perimeter of this triangle.
+     * @return Perimeter of this triangle.
+     */
+    public double getPerimeter() {
+<span class="fc" id="L315">        return perimeter(this);</span>
+    }
+    
+    /**
+     * Indicates whether provided point lies inside this triangle or not.
+     * @param point Point to be checked.
+     * @return True if point lies inside this triangle, false otherwise.
+     */
+    public boolean isInside(Point2D point) {
+<span class="fc" id="L324">        return isInside(point, DEFAULT_THRESHOLD);</span>
+    }
+    
+    /**
+     * Indicates whether provided point lies inside this triangle or not up to
+     * a certain threshold.
+     * @param point Point to be checked.
+     * @param threshold Threshold to determine whether point is inside this 
+     * triangle, or not. This should usually be a small value.
+     * @return True if point lies inside this triangle, false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     */
+    public boolean isInside(Point2D point, double threshold)
+            throws IllegalArgumentException {
+<span class="fc" id="L338">        return isInside(mVertex1, mVertex2, mVertex3, point, threshold);</span>
+    }
+    
+    /**
+     * Indicates whether provided point lies inside provided triangle or not.
+     * @param triangle A triangle.
+     * @param point Point to be checked.
+     * @return True if point lies inside provided triangle, false otherwise.
+     */
+    public static boolean isInside(Triangle2D triangle, Point2D point) {
+<span class="fc" id="L348">        return isInside(triangle, point, DEFAULT_THRESHOLD);</span>
+    }
+    
+    /**
+     * Indicates whether provided point lies inside provided triangle or not up
+     * to a certain threshold.
+     * @param triangle A triangle.
+     * @param point Point to be checked.
+     * @param threshold Threshold to determine whether point is inside this
+     * triangle, or not. This should usually be a small value.
+     * @return True if point lies inside this triangle, false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     */
+    public static boolean isInside(Triangle2D triangle, Point2D point,
+            double threshold) throws IllegalArgumentException {
+<span class="fc" id="L363">        return isInside(triangle.getVertex1(), triangle.getVertex2(), </span>
+<span class="fc" id="L364">                triangle.getVertex3(), point, threshold);</span>
+    }
+    
+    /**
+     * Indicates whether provided point lies inside a triangle formed by 
+     * provided vertices or not.
+     * @param vertex1 1st vertex of a triangle.
+     * @param vertex2 2nd vertex of a triangle.
+     * @param vertex3 3rd vertex of a triangle.
+     * @param point Point to be checked.
+     * @return True if point lies inside triangle formed by provided vertices,
+     * false otherwise.
+     */
+    public static boolean isInside(Point2D vertex1, Point2D vertex2,
+            Point2D vertex3, Point2D point) {
+<span class="fc" id="L379">        return isInside(vertex1, vertex2, vertex3, point, DEFAULT_THRESHOLD);</span>
+    }
+    
+    /**
+     * Indicates whether provided point lies inside a triangle formed by 
+     * provided vertices or not up to a certain threshold.
+     * @param vertex1 1st vertex of a triangle.
+     * @param vertex2 2nd vertex of a triangle.
+     * @param vertex3 3rd vertex of a triangle.
+     * @param point Point to be checked.
+     * @param threshold Threshold to determine whether point is inside the
+     * triangle formed by provided vertices or not. This should usually be a
+     * small value.
+     * @return True if point lies inside triangle formed by provided vertices,
+     * false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     */
+    public static boolean isInside(Point2D vertex1, Point2D vertex2, 
+            Point2D vertex3, Point2D point, double threshold) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L399" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L400">            throw new IllegalArgumentException();</span>
+        }
+        //given triangle ABC made by vectors:
+        //ab = p2 - p1, and ac = p3 - p1
+        
+        //If point (x, y) lies within triangle ABC, then we have 3 subtriangles
+        //ApB, BpC and ApC made of points:
+        //ApB: mVertex1, point, mVertex2
+        //BpC: mVertex2, point, mVertex3
+        //ApC: mVertex3, point, mVertex1
+        
+        //The point will lie inside triangle ABC if the sum of the areas of the
+        //3 subtriangles ApB, BpC and ApC equals the area of triangle ABC (up to
+        //certain accuracy to account for numerical precision)
+        
+        //Then the areas of triangles are:
+<span class="fc" id="L416">        double areaABC = area(vertex1, vertex2, vertex3);</span>
+        
+<span class="fc" id="L418">        double areaApB = area(vertex1, point, vertex2);</span>
+<span class="fc" id="L419">        double areaBpC = area(vertex2, point, vertex3);</span>
+<span class="fc" id="L420">        double areaApC = area(vertex3, point, vertex1);</span>
+        
+<span class="fc bfc" id="L422" title="All 2 branches covered.">        return Math.abs(areaApB + areaBpC + areaApC - areaABC) &lt;= threshold;        </span>
+    }
+    
+    /**
+     * Returns center of this triangle, which is the result of averaging its
+     * vertices.
+     * @return Center of this triangle.
+     */
+    public Point2D getCenter() {
+<span class="fc" id="L431">        Point2D result = Point2D.create();</span>
+<span class="fc" id="L432">        center(result);</span>
+<span class="fc" id="L433">        return result;</span>
+    }
+    
+    /**
+     * Computes the center of this triangle and stores the result in provided 
+     * point. The center of this triangle is computed as the average of its
+     * vertices.
+     * @param result Point instance where center will be stored.
+     */
+    public void center(Point2D result) {
+<span class="fc" id="L443">        center(mVertex1, mVertex2, mVertex3, result);</span>
+<span class="fc" id="L444">    }</span>
+    
+    /**
+     * Computes the center of a triangle formed by provided vertices.
+     * The center is computed as the average of the three vertices.
+     * @param vertex1 1st vertex of a triangle.
+     * @param vertex2 2nd vertex of a triangle.
+     * @param vertex3 3rd vertex of a triangle.
+     * @return Center of a triangle formed by provided vertices.
+     */
+    public static Point2D center(Point2D vertex1, Point2D vertex2, 
+            Point2D vertex3) {
+<span class="fc" id="L456">        Point2D result = Point2D.create();</span>
+<span class="fc" id="L457">        center(vertex1, vertex2, vertex3, result);</span>
+<span class="fc" id="L458">        return result;</span>
+    }
+    
+    /**
+     * Computes the center of provided triangle.
+     * The center is computed as the average of the vertices of provided 
+     * triangle.
+     * @param t A triangle.
+     * @return Center of provided triangle.
+     */
+    public static Point2D center(Triangle2D t) {
+<span class="fc" id="L469">        return center(t.getVertex1(), t.getVertex2(), t.getVertex3());</span>
+    }
+    
+    /**
+     * Computes the center of a triangle formed by provided vertices and stores
+     * the result in provided result point.
+     * The center is computed as the average of provided vertices.
+     * @param vertex1 1st vertex of a triangle.
+     * @param vertex2 2nd vertex of a triangle.
+     * @param vertex3 3rd vertex of a triangle.
+     * @param result Point instance where center will be stored.
+     */
+    public static void center(Point2D vertex1, Point2D vertex2, Point2D vertex3,
+            Point2D result) {
+        
+        double x, y;
+        
+<span class="fc" id="L486">        x = (vertex1.getInhomX() + vertex2.getInhomX() + vertex3.getInhomX()) / </span>
+                3.0;
+<span class="fc" id="L488">        y = (vertex1.getInhomY() + vertex2.getInhomY() + vertex3.getInhomY()) / </span>
+                3.0;
+        
+<span class="fc" id="L491">        result.setInhomogeneousCoordinates(x, y);        </span>
+<span class="fc" id="L492">    }</span>
+    
+    /**
+     * Computes the center of provided triangle and stores the result in 
+     * provided result point.
+     * The center is computed as the average of the vertices of provided 
+     * triangle.
+     * @param t A triangle.
+     * @param result Point instance where center will be stored.
+     */
+    public static void center(Triangle2D t, Point2D result) {
+<span class="fc" id="L503">        center(t.getVertex1(), t.getVertex2(), t.getVertex3(), result);</span>
+<span class="fc" id="L504">    }</span>
+        
+    /**
+     * Computes the shortest distance from a given point to the boundaries of
+     * this triangle, considering its boundaries as lines with a finite length
+     * Distance is computed up to triangle boundary, no matter if point lies 
+     * inside the triangle or not.
+     * @param point Point to be checked.
+     * @return Shortest distance to this triangle.
+     */
+    public double getShortestDistance(Point2D point) {
+<span class="fc" id="L515">        return shortestDistance(this, point);</span>
+    }
+    
+    /**
+     * Computes the shortest distance from a given point to the boundaries of
+     * provided triangle, considering its boundaries as lines with a finite
+     * length.
+     * Distance is computed up to triangle boundary, no matter if point lies 
+     * inside the triangle or not.
+     * @param triangle A triangle.
+     * @param point Point to be checked.
+     * @return Shortest distance to this triangle.
+     */
+    public static double shortestDistance(Triangle2D triangle, Point2D point) {
+<span class="fc" id="L529">        return shortestDistance(triangle.getVertex1(), triangle.getVertex2(),</span>
+<span class="fc" id="L530">                triangle.getVertex3(), point);</span>
+    }
+    
+    //shortest distance to the sides of the triangle, no matter if the point 
+    //lies inside the triangle or not
+    /**
+     * Computes the shortest distance from a given point to the boundaries of
+     * a triangle formed by provided vertices, where those boundaries are
+     * considered to be lines with a finite length.
+     * Distance is computed up to triangle boundary, no matter if point lies 
+     * inside the triangle or not.
+     * @param vertex1 1st vertex of a triangle.
+     * @param vertex2 2nd vertex of a triangle.
+     * @param vertex3 3rd vertex of a triangle.
+     * @param point Point to be checked.
+     * @return Shortest distance to the triangle formed by provided vertices.
+     */
+    public static double shortestDistance(Point2D vertex1, Point2D vertex2, 
+            Point2D vertex3, Point2D point) {
+        
+        //normalize points to increase accuracy
+<span class="fc" id="L551">        vertex1.normalize();</span>
+<span class="fc" id="L552">        vertex2.normalize();</span>
+<span class="fc" id="L553">        vertex3.normalize();</span>
+<span class="fc" id="L554">        point.normalize();</span>
+        
+        double bestDist, dist;
+        
+<span class="fc" id="L558">        Line2D line = new Line2D();</span>
+<span class="fc" id="L559">        line.setParametersFromPairOfPoints(vertex1, vertex2);</span>
+<span class="fc" id="L560">        line.normalize(); //to increase accuracy</span>
+<span class="fc bfc" id="L561" title="All 2 branches covered.">        if (line.isLocus(point)) {</span>
+<span class="fc bfc" id="L562" title="All 2 branches covered.">            if (point.isBetween(vertex1, vertex2)) {</span>
+<span class="fc" id="L563">                return 0.0;</span>
+            } else {
+                //point is outside the triangle and
+                //point belongs to the line forming this side of the triangle, 
+                //hence the closest vertex of this line will be the shortest 
+                //distance
+<span class="fc" id="L569">                bestDist = vertex1.distanceTo(point);</span>
+<span class="fc" id="L570">                dist = vertex2.distanceTo(point);</span>
+<span class="pc bpc" id="L571" title="1 of 2 branches missed.">                if (dist &lt; bestDist) {</span>
+<span class="nc" id="L572">                    bestDist = dist;</span>
+                }
+            
+<span class="fc" id="L575">                return bestDist;</span>
+            }
+        }
+        
+        //point does not belong to the first line
+<span class="fc" id="L580">        bestDist = Math.abs(line.signedDistance(point));</span>
+        
+        //try on second side of the triangle
+<span class="fc" id="L583">        line.setParametersFromPairOfPoints(vertex1, vertex3);</span>
+<span class="fc" id="L584">        line.normalize(); //to increase accuracy</span>
+<span class="fc bfc" id="L585" title="All 2 branches covered.">        if (line.isLocus(point)) {</span>
+<span class="pc bpc" id="L586" title="1 of 2 branches missed.">            if (point.isBetween(vertex1, vertex3)) {</span>
+<span class="fc" id="L587">                return 0.0;</span>
+            } else {
+                //point belongs to the line forming this side of the triangle, 
+                //hence the closest vertex of this line will be the shortest 
+                //distance
+<span class="nc" id="L592">                bestDist = vertex1.distanceTo(point);</span>
+<span class="nc" id="L593">                dist = vertex3.distanceTo(point);</span>
+<span class="nc bnc" id="L594" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
+<span class="nc" id="L595">                    bestDist = dist;</span>
+                }
+            
+<span class="nc" id="L598">                return bestDist;</span>
+            }
+        }
+        
+        //point does not belong to the first or second line
+<span class="fc" id="L603">        dist = Math.abs(line.signedDistance(point));</span>
+        
+        //check if second line is closest to first line
+<span class="fc bfc" id="L606" title="All 2 branches covered.">        if (dist &lt; bestDist) {</span>
+<span class="fc" id="L607">            bestDist = dist;</span>
+        }
+        
+        //try on third side of the triangle
+<span class="fc" id="L611">        line.setParametersFromPairOfPoints(vertex2, vertex3);</span>
+<span class="fc" id="L612">        line.normalize(); //to increase accuracy</span>
+<span class="fc bfc" id="L613" title="All 2 branches covered.">        if (line.isLocus(point)) {</span>
+<span class="pc bpc" id="L614" title="1 of 2 branches missed.">            if (point.isBetween(vertex2, vertex3)) {</span>
+<span class="fc" id="L615">                return 0.0;</span>
+            } else {
+                //point belongs to the line forming this side of the triangle, 
+                //hence the closest vertex of this line will be the shortest
+                //distance
+<span class="nc" id="L620">                bestDist = vertex2.distanceTo(point);</span>
+<span class="nc" id="L621">                dist = vertex3.distanceTo(point);</span>
+<span class="nc bnc" id="L622" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
+<span class="nc" id="L623">                    bestDist = dist;</span>
+                }
+            
+<span class="nc" id="L626">                return bestDist;</span>
+            }
+        }
+        
+        //point does not belong to any line forming a side of the triangle
+<span class="fc" id="L631">        dist = Math.abs(line.signedDistance(point));</span>
+        
+        //check if distante to third line is the shortest
+<span class="fc bfc" id="L634" title="All 2 branches covered.">        if (dist &lt; bestDist) {</span>
+<span class="fc" id="L635">            bestDist = dist;</span>
+        }
+        
+<span class="fc" id="L638">        return bestDist;</span>
+    }
+    
+    /**
+     * Returns the point which is locus of this triangle closest to provided 
+     * point.
+     * @param point Point to be checked.
+     * @return Closest point laying in this triangle boundaries.
+     */
+    public Point2D getClosestPoint(Point2D point) {
+<span class="fc" id="L648">        return getClosestPoint(point, DEFAULT_THRESHOLD);</span>
+    }
+    
+    /**
+     * Returns the point which is locus of this triangle (up to a certain 
+     * threshold) closest to provided point.
+     * @param point Point to be checked.
+     * @param threshold Threshold to determine when a point is locus of this
+     * triangle or not.
+     * @return Closest point laying in this triangle boundaries.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     */
+    public Point2D getClosestPoint(Point2D point, double threshold)
+            throws IllegalArgumentException {
+<span class="fc" id="L662">        Point2D result = Point2D.create();</span>
+<span class="fc" id="L663">        closestPoint(point, result, threshold);</span>
+<span class="fc" id="L664">        return result;</span>
+    }
+    
+    /**
+     * Computes the point which is locus of this triangle closest to provided
+     * point and stores the result in provided result point.
+     * @param point Point to be checked.
+     * @param result Point where result will be stored.
+     */
+    public void closestPoint(Point2D point, Point2D result) {
+<span class="fc" id="L674">        closestPoint(point, result, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L675">    }</span>
+    
+    /**
+     * Computes the point which is locus of this triangle (up to a certain 
+     * threshold) closest to provided point and stores the result in provided
+     * result point.
+     * @param point Point to be checked.
+     * @param result Point where result will be stored.
+     * @param threshold Threshold to determine when a point is locus of this
+     * triangle or not.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     */
+    public void closestPoint(Point2D point, Point2D result, double threshold)
+            throws IllegalArgumentException {
+<span class="pc bpc" id="L689" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="nc" id="L690">            throw new IllegalArgumentException();</span>
+        }
+        
+        //normalize vertices and point to increase accuracy
+<span class="fc" id="L694">        mVertex1.normalize();</span>
+<span class="fc" id="L695">        mVertex2.normalize();</span>
+<span class="fc" id="L696">        mVertex3.normalize();</span>
+<span class="fc" id="L697">        point.normalize();</span>
+        
+<span class="fc" id="L699">        Line2D line1 = new Line2D(mVertex1, mVertex2);</span>
+<span class="fc" id="L700">        line1.normalize(); //to increase accuracy</span>
+<span class="fc bfc" id="L701" title="All 2 branches covered.">        if (line1.isLocus(point)) {</span>
+<span class="fc bfc" id="L702" title="All 2 branches covered.">            if (point.isBetween(mVertex1, mVertex2)) {</span>
+                //point is on this side of the triangle, so point must be the 
+                //result
+<span class="fc" id="L705">                result.setCoordinates(point);</span>
+            } else {
+                //point belongs to the line forming this side of the triangle, 
+                //hence the closest vertex of this line will be the closest 
+                //point to the triangle
+<span class="fc" id="L710">                double dist1 = mVertex1.distanceTo(point);</span>
+<span class="fc" id="L711">                double dist2 = mVertex2.distanceTo(point);</span>
+<span class="fc bfc" id="L712" title="All 2 branches covered.">                if (dist1 &lt; dist2) {</span>
+<span class="fc" id="L713">                    result.setCoordinates(mVertex1);</span>
+                } else {
+<span class="fc" id="L715">                    result.setCoordinates(mVertex2);</span>
+                }            
+            }
+<span class="fc" id="L718">            return;</span>
+        }
+        
+        //try on second side of the triangle
+<span class="fc" id="L722">        Line2D line2 = new Line2D(mVertex1, mVertex3);</span>
+<span class="fc" id="L723">        line2.normalize(); //to increase accuracy</span>
+<span class="fc bfc" id="L724" title="All 2 branches covered.">        if (line2.isLocus(point)) {</span>
+<span class="pc bpc" id="L725" title="1 of 2 branches missed.">            if (point.isBetween(mVertex1, mVertex3)) {</span>
+                //point is on this side of the triangle, so point must be the 
+                //result
+<span class="fc" id="L728">                result.setCoordinates(point);                </span>
+            } else {
+                //point belongs to the line forming this side of the triangle, 
+                //hence the closest vertex of this line will be the closest
+                //point to the triangle
+<span class="nc" id="L733">                double dist1 = mVertex1.distanceTo(point);</span>
+<span class="nc" id="L734">                double dist3 = mVertex3.distanceTo(point);</span>
+<span class="nc bnc" id="L735" title="All 2 branches missed.">                if (dist1 &lt; dist3) {</span>
+<span class="nc" id="L736">                    result.setCoordinates(mVertex1);</span>
+                } else {
+<span class="nc" id="L738">                    result.setCoordinates(mVertex3);</span>
+                }
+            }
+<span class="fc" id="L741">            return;</span>
+        }
+        
+                
+        //try on third side of the triangle
+<span class="fc" id="L746">        Line2D line3 = new Line2D(mVertex2, mVertex3);</span>
+<span class="fc" id="L747">        line3.normalize(); //to increase accuracy</span>
+<span class="pc bpc" id="L748" title="1 of 2 branches missed.">        if (line3.isLocus(point)) {</span>
+<span class="nc bnc" id="L749" title="All 2 branches missed.">            if (point.isBetween(mVertex2, mVertex3)) {</span>
+                //point is on this side of the triangle, so point must be the 
+                //result
+<span class="nc" id="L752">                result.setCoordinates(point);                                </span>
+            } else {
+                //point belongs to the line forming this side of the triangle, 
+                //hence the closest vertex of this line will be the closest
+                //point to the triangle
+<span class="nc" id="L757">                double dist2 = mVertex2.distanceTo(point);</span>
+<span class="nc" id="L758">                double dist3 = mVertex3.distanceTo(point);</span>
+<span class="nc bnc" id="L759" title="All 2 branches missed.">                if (dist2 &lt; dist3) {</span>
+<span class="nc" id="L760">                    result.setCoordinates(mVertex2);</span>
+                } else {
+<span class="nc" id="L762">                    result.setCoordinates(mVertex3);</span>
+                }                
+            }
+<span class="nc" id="L765">            return;</span>
+        }
+        
+        //point does not belong to any line forming a side of the triangle
+        //so we find the closest point for each side
+<span class="fc" id="L770">        Point2D closest1 = line1.getClosestPoint(point, threshold);</span>
+<span class="fc" id="L771">        closest1.normalize(); //to increase accuracy</span>
+<span class="fc" id="L772">        Point2D closest2 = line2.getClosestPoint(point, threshold);</span>
+<span class="fc" id="L773">        closest2.normalize(); //to increase accuracy</span>
+<span class="fc" id="L774">        Point2D closest3 = line3.getClosestPoint(point, threshold);</span>
+<span class="fc" id="L775">        closest3.normalize(); //to increase accuracy</span>
+        
+        //check if points lie within sides of triangle
+<span class="fc" id="L778">        boolean between1 = closest1.isBetween(mVertex1, mVertex2);</span>
+<span class="fc" id="L779">        boolean between2 = closest2.isBetween(mVertex1, mVertex3);</span>
+<span class="fc" id="L780">        boolean between3 = closest3.isBetween(mVertex2, mVertex3);</span>
+        
+<span class="fc" id="L782">        double distClosest1 = closest1.distanceTo(point);</span>
+<span class="fc" id="L783">        double distClosest2 = closest2.distanceTo(point);</span>
+<span class="fc" id="L784">        double distClosest3 = closest3.distanceTo(point);</span>
+        
+<span class="fc" id="L786">        double distVertex1 = mVertex1.distanceTo(point);</span>
+<span class="fc" id="L787">        double distVertex2 = mVertex2.distanceTo(point);</span>
+<span class="fc" id="L788">        double distVertex3 = mVertex3.distanceTo(point);</span>
+        
+        
+<span class="pc bpc" id="L791" title="2 of 6 branches missed.">        if (between1 &amp;&amp; !between2 &amp;&amp; !between3) {</span>
+            //choose closest1 or opposite vertex (vertex3)
+<span class="fc bfc" id="L793" title="All 2 branches covered.">            if (distClosest1 &lt; distVertex3) {</span>
+<span class="fc" id="L794">                result.setCoordinates(closest1);</span>
+            } else {
+<span class="fc" id="L796">                result.setCoordinates(mVertex3);</span>
+            }
+<span class="pc bpc" id="L798" title="5 of 6 branches missed.">        } else if (!between1 &amp;&amp; between2 &amp;&amp; !between3) {</span>
+            //choose closest2 or opposite vertex (vertex2)
+<span class="nc bnc" id="L800" title="All 2 branches missed.">            if (distClosest2 &lt; distVertex2) {</span>
+<span class="nc" id="L801">                result.setCoordinates(closest2);</span>
+            } else {
+<span class="nc" id="L803">                result.setCoordinates(mVertex2);</span>
+            }
+<span class="pc bpc" id="L805" title="5 of 6 branches missed.">        } else if (!between1 &amp;&amp; !between2 &amp;&amp; between3) {</span>
+            //choose closest3 or opposite vertex (vertex1)
+<span class="nc bnc" id="L807" title="All 2 branches missed.">            if (distClosest3 &lt; distVertex1) {</span>
+<span class="nc" id="L808">                result.setCoordinates(closest3);</span>
+            } else {
+<span class="nc" id="L810">                result.setCoordinates(mVertex1);</span>
+            }
+<span class="pc bpc" id="L812" title="3 of 6 branches missed.">        } else if (between1 &amp;&amp; between2 &amp;&amp; !between3) {</span>
+            //determine if closest1 or closest2
+<span class="nc bnc" id="L814" title="All 2 branches missed.">            if (distClosest1 &lt; distClosest2) {</span>
+<span class="nc" id="L815">                result.setCoordinates(closest1);</span>
+            } else {
+<span class="nc" id="L817">                result.setCoordinates(closest2);</span>
+            }
+<span class="pc bpc" id="L819" title="3 of 4 branches missed.">        } else if (!between1 &amp;&amp; between2) { // &amp;&amp; between3</span>
+            //determine if closest2 or closest3
+<span class="nc bnc" id="L821" title="All 2 branches missed.">            if (distClosest2 &lt; distClosest3) {</span>
+<span class="nc" id="L822">                result.setCoordinates(closest2);</span>
+            } else {
+<span class="nc" id="L824">                result.setCoordinates(closest3);</span>
+            }
+<span class="pc bpc" id="L826" title="2 of 4 branches missed.">        } else if (between1 &amp;&amp; !between2) { // &amp;&amp; between3</span>
+            //determine if closest1 or closest3
+<span class="nc bnc" id="L828" title="All 2 branches missed.">            if (distClosest1 &lt; distClosest3) {</span>
+<span class="nc" id="L829">                result.setCoordinates(closest1);</span>
+            } else {
+<span class="nc" id="L831">                result.setCoordinates(closest3);</span>
+            }
+<span class="pc bpc" id="L833" title="1 of 2 branches missed.">        } else if (between1) { // &amp;&amp; between2 &amp;&amp; between3</span>
+            //determine if closest1, closest2 or closest3
+<span class="pc bpc" id="L835" title="1 of 4 branches missed.">            if (distClosest1 &lt; distClosest2 &amp;&amp; distClosest1 &lt; distClosest3) {</span>
+                //pick closest1
+<span class="fc" id="L837">                result.setCoordinates(closest1);</span>
+<span class="pc bpc" id="L838" title="1 of 4 branches missed.">            } else if (distClosest2 &lt; distClosest1 &amp;&amp;</span>
+                    distClosest2 &lt; distClosest3) {
+                //pick closest2
+<span class="fc" id="L841">                result.setCoordinates(closest2);</span>
+            } else {
+                //pick closest3
+<span class="fc" id="L844">                result.setCoordinates(closest3);</span>
+            }
+        } else {
+            //all clasest points are outside vertex limits, so we pick the
+            //closest vertex
+            
+<span class="nc bnc" id="L850" title="All 4 branches missed.">            if (distVertex1 &lt; distVertex2 &amp;&amp; distVertex1 &lt; distVertex3) {</span>
+                //pick vertex1
+<span class="nc" id="L852">                result.setCoordinates(mVertex1);</span>
+<span class="nc bnc" id="L853" title="All 4 branches missed.">            } else if (distVertex2 &lt; distVertex1 &amp;&amp; distVertex2 &lt; distVertex3) {</span>
+                //pick vertex2
+<span class="nc" id="L855">                result.setCoordinates(mVertex2);</span>
+            } else {
+                //pick vertex3
+<span class="nc" id="L858">                result.setCoordinates(mVertex3);</span>
+            }
+        }
+<span class="fc" id="L861">    }</span>
+
+    /**
+     * Returns boolean indicating if provided point is locus of this triangle
+     * (i.e. lies within this triangle boundaries) up to a certain threshold.
+     * @param point Point to be checked.
+     * @param threshold Threshold to determine if point is locus or not. This
+     * should usually be a small value.
+     * @return True if provided point is locus, false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     */
+    public boolean isLocus(Point2D point, double threshold) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L874" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L875">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc bfc" id="L878" title="All 2 branches covered.">        return point.isBetween(mVertex1, mVertex2, threshold) || </span>
+<span class="pc bpc" id="L879" title="1 of 2 branches missed.">                point.isBetween(mVertex1, mVertex2, threshold) ||</span>
+<span class="fc bfc" id="L880" title="All 2 branches covered.">                point.isBetween(mVertex2, mVertex3, threshold);</span>
+    }    
+    
+    /**
+     * Returns boolean indicating if provided point is locus of this triangle
+     * (i.e. lies within this triangle boundaries).
+     * @param point Point to be checked.
+     * @return True if provided point is locus, false otherwise.
+     */
+    public boolean isLocus(Point2D point) {
+<span class="fc" id="L890">        return isLocus(point, DEFAULT_THRESHOLD);</span>
+    }
+    
+    /**
+     * Indicates whether the vertices of this triangle are provided in clockwise
+     * order or not.
+     * Vertices of a triangle are in clockwise order when the triangle's signed
+     * area is negative.
+     * @param threshold Threshold to determine if vertices are clockwise or not.
+     * This should usually be 0.0 and there is no restriction in sign
+     * @return True if vertices of this triangle are in clockwise order, false
+     * if they are in counterclockwise order.
+     */
+    @SuppressWarnings(&quot;WeakerAccess&quot;)
+    public boolean areVerticesClockwise(double threshold) {
+<span class="fc bfc" id="L905" title="All 2 branches covered.">        return getSignedArea() &lt; threshold;</span>
+    }
+    
+    /**
+     * Indicates whether the vertices of this triangle are provided in clockwise
+     * order or not.
+     * @return True if vertices of this triangle are in clockwise order, false 
+     * if they are in counterclockwise order.
+     */
+    public boolean areVerticesClockwise() {
+<span class="fc" id="L915">        return areVerticesClockwise(0.0); //default threshold to check sign</span>
+    }
+    
+    //TODO: compute surrounding circle and inner circle
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

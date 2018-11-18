@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROMedSDualConicRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PROMedSDualConicRobustEstimator.java</span></div><h1>PROMedSDualConicRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoincidentLinesException;
+import com.irurueta.geometry.DualConic;
+import com.irurueta.geometry.Line2D;
+import com.irurueta.numerical.robust.*;
+
+import java.util.List;
+
+/**
+ * Finds the best conic for provided collection of 2D lines using PROMedS
+ * algorithm.
+ */
+public class PROMedSDualConicRobustEstimator extends DualConicRobustEstimator{
+    /**
+     * Default value to be used for stop threshold. Stop threshold can be used 
+     * to keep the algorithm iterating in case that best estimated threshold 
+     * using median of residuals is not small enough. Once a solution is found 
+     * that generates a threshold below this value, the algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close 
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
+     * iterate for a long time trying to find the best solution when indeed 
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    public static final double DEFAULT_STOP_THRESHOLD = 1e-9;
+        
+    /**
+     * Minimum allowed stop threshold value.
+     */
+    public static final double MIN_STOP_THRESHOLD = 0.0;    
+
+    /**
+     * Threshold to be used to keep the algorithm iterating in case that best 
+     * estimated threshold using median of residuals is not small enough. Once 
+     * a solution is found that generates a threshold below this value, the 
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close 
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
+     * iterate for a long time trying to find the best solution when indeed 
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    private double mStopThreshold;    
+    
+    /**
+     * Quality scores corresponding to each 2D line.
+     * The larger the score value the better the quality of the sample.
+     */
+    private double[] mQualityScores;   
+    
+    /**
+     * Constructor.
+     */
+    public PROMedSDualConicRobustEstimator() {
+<span class="fc" id="L81">        super();</span>
+<span class="fc" id="L82">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L83">    }    </span>
+    
+    /**
+     * Constructor with points.
+     * @param lines 2D lines to estimate a dual conic.
+     * @throws IllegalArgumentException if provided list of lines don't have 
+     * a size greater or equal than MINIMUM_SIZE.
+     */
+    public PROMedSDualConicRobustEstimator(List&lt;Line2D&gt; lines) 
+            throws IllegalArgumentException {
+<span class="fc" id="L93">        super(lines);</span>
+<span class="fc" id="L94">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L95">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     */
+    public PROMedSDualConicRobustEstimator(
+            DualConicRobustEstimatorListener listener) {
+<span class="fc" id="L104">        super(listener);</span>
+<span class="fc" id="L105">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L106">    }</span>
+    
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param lines 2D lines to estimate a dual conic.
+     * @throws IllegalArgumentException if provided list of lines don't have 
+     * a size greater or equal than MINIMUM_SIZE.
+     */
+    public PROMedSDualConicRobustEstimator(
+            DualConicRobustEstimatorListener listener,
+            List&lt;Line2D&gt; lines) throws IllegalArgumentException {
+<span class="fc" id="L120">        super(listener, lines);</span>
+<span class="fc" id="L121">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L122">    }</span>
+    
+    /**
+     * Constructor.
+     * @param qualityScores quality scores corresponding to each provided line.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE (i.e. 5 lines).
+     */
+    public PROMedSDualConicRobustEstimator(double[] qualityScores)
+            throws IllegalArgumentException {
+<span class="fc" id="L132">        super();</span>
+<span class="fc" id="L133">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L134">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L135">    }</span>
+
+    /**
+     * Constructor with points.
+     * @param lines 2D lines to estimate a dual conic.
+     * @param qualityScores quality scores corresponding to each provided line.
+     * @throws IllegalArgumentException if provided list of lines don't have 
+     * the same size as the list of provided quality scores, or it their size 
+     * is not greater or equal than MINIMUM_SIZE.
+     */
+    public PROMedSDualConicRobustEstimator(List&lt;Line2D&gt; lines,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L147">        super(lines);</span>
+        
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (qualityScores.length != lines.size()) {</span>
+<span class="fc" id="L150">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L153">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L154">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L155">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each provided line.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE (i.e. 5 lines).
+     */
+    public PROMedSDualConicRobustEstimator(
+            DualConicRobustEstimatorListener listener, double[] qualityScores)
+            throws IllegalArgumentException {
+<span class="fc" id="L168">        super(listener);</span>
+<span class="fc" id="L169">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L170">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L171">    }</span>
+    
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param lines 2D lines to estimate a dual conic.
+     * @param qualityScores quality scores corresponding to each provided line.
+     * @throws IllegalArgumentException if provided list of points don't have 
+     * the same size as the list of provided quality scores, or it their size 
+     * is not greater or equal than MINIMUM_SIZE.
+     */
+    public PROMedSDualConicRobustEstimator(
+            DualConicRobustEstimatorListener listener,
+            List&lt;Line2D&gt; lines, double[] qualityScores) 
+            throws IllegalArgumentException {
+<span class="fc" id="L188">        super(listener, lines);</span>
+        
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        if (qualityScores.length != lines.size()) {</span>
+<span class="fc" id="L191">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L194">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L195">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L196">    }    </span>
+    
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that 
+     * best estimated threshold using median of residuals is not small enough. 
+     * Once a solution is found that generates a threshold below this value, the 
+     * algorithm will stop.
+     * As in LMedS, the stop threshold can be used to prevent the PROMedS 
+     * algorithm iterating too many times in cases where samples have a very 
+     * similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close 
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
+     * iterate for a long time trying to find the best solution when indeed 
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     * @return stop threshold to stop the algorithm prematurely when a certain
+     * accuracy has been reached.
+     */
+    public double getStopThreshold() {
+<span class="fc" id="L218">        return mStopThreshold;</span>
+    }
+    
+    /**
+     * Sets threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough. 
+     * Once a solution is found that generates a threshold below this value, the 
+     * algorithm will stop.
+     * As in LMedS, the stop threshold can be used to prevent the PROMedS 
+     * algorithm iterating too many times in cases where samples have a very 
+     * similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close 
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would 
+     * iterate for a long time trying to find the best solution when indeed 
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     * @param stopThreshold stop threshold to stop the algorithm prematurely 
+     * when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     */
+    public void setStopThreshold(double stopThreshold) 
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L245" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L246">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L249">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L252">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L253">    }</span>
+    
+    /**
+     * Returns quality scores corresponding to each provided line.
+     * The larger the score value the better the quality of the sampled line.
+     * @return quality scores corresponding to each point.
+     */
+    @Override
+    public double[] getQualityScores() {
+<span class="fc" id="L262">        return mQualityScores;</span>
+    }
+    
+    /**
+     * Sets quality scores corresponding to each provided line.
+     * The larger the score value the better the quality of the sampled line.
+     * @param qualityScores quality scores corresponding to each line.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is 
+     * smaller than MINIMUM_SIZE (i.e. 5 samples).
+     */
+    @Override
+    public void setQualityScores(double[] qualityScores) throws LockedException,
+            IllegalArgumentException {
+<span class="pc bpc" id="L277" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L278">            throw new LockedException();</span>
+        }
+<span class="fc" id="L280">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L281">    }  </span>
+    
+    /**
+     * Indicates if estimator is ready to start the conic estimation.
+     * This is true when input data (i.e. 2D points and quality scores) are 
+     * provided and a minimum of MINIMUM_SIZE lines are available
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L291" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
+<span class="pc bpc" id="L292" title="1 of 2 branches missed.">                mQualityScores.length == mLines.size();</span>
+    }        
+            
+    /**
+     * Estimates a dual conic using a robust estimator and the best set of 2D 
+     * lines that fit into the locus of the estimated dual conic found using the
+     * robust estimator.
+     * @return a dual conic.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     * @throws NotReadyException if provided input data is not enough to start
+     * the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     * (i.e. numerical instability, no solution available, etc).
+     */    
+    @Override
+    public DualConic estimate() throws LockedException, NotReadyException, 
+            RobustEstimatorException {
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L311">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L313" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L314">            throw new NotReadyException();</span>
+        }
+        
+<span class="fc" id="L317">        PROMedSRobustEstimator&lt;DualConic&gt; innerEstimator =</span>
+                new PROMedSRobustEstimator&lt;&gt;(
+<span class="fc" id="L319">                        new PROMedSRobustEstimatorListener&lt;DualConic&gt;() {</span>
+
+            @Override
+            public double getThreshold() {
+<span class="fc" id="L323">                return mStopThreshold;</span>
+            }
+
+            @Override
+            public int getTotalSamples() {
+<span class="fc" id="L328">                return mLines.size();</span>
+            }
+
+            @Override
+            public int getSubsetSize() {
+<span class="fc" id="L333">                return DualConicRobustEstimator.MINIMUM_SIZE;</span>
+            }
+
+            @Override
+            public void estimatePreliminarSolutions(int[] samplesIndices, 
+                    List&lt;DualConic&gt; solutions) {
+<span class="fc" id="L339">                Line2D line1 = mLines.get(samplesIndices[0]);</span>
+<span class="fc" id="L340">                Line2D line2 = mLines.get(samplesIndices[1]);</span>
+<span class="fc" id="L341">                Line2D line3 = mLines.get(samplesIndices[2]);</span>
+<span class="fc" id="L342">                Line2D line4 = mLines.get(samplesIndices[3]);</span>
+<span class="fc" id="L343">                Line2D line5 = mLines.get(samplesIndices[4]);</span>
+                
+                try {
+<span class="fc" id="L346">                    DualConic dualConic = new DualConic(line1, line2, line3, </span>
+                            line4, line5);
+<span class="fc" id="L348">                    solutions.add(dualConic);</span>
+<span class="nc" id="L349">                } catch (CoincidentLinesException e) {</span>
+                    //if points are coincident, no solution is added
+<span class="fc" id="L351">                }</span>
+<span class="fc" id="L352">            }</span>
+
+            @Override
+            public double computeResidual(DualConic currentEstimation, int i) {
+<span class="fc" id="L356">                return residual(currentEstimation, mLines.get(i));</span>
+            }
+
+            @Override
+            public boolean isReady() {
+<span class="fc" id="L361">                return PROMedSDualConicRobustEstimator.this.isReady();</span>
+            }
+
+            @Override
+            public void onEstimateStart(RobustEstimator&lt;DualConic&gt; estimator) {
+<span class="pc bpc" id="L366" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L367">                    mListener.onEstimateStart(</span>
+                            PROMedSDualConicRobustEstimator.this);
+                }
+<span class="fc" id="L370">            }</span>
+
+            @Override
+            public void onEstimateEnd(RobustEstimator&lt;DualConic&gt; estimator) {
+<span class="pc bpc" id="L374" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L375">                    mListener.onEstimateEnd(</span>
+                            PROMedSDualConicRobustEstimator.this);
+                }
+<span class="fc" id="L378">            }</span>
+
+            @Override
+            public void onEstimateNextIteration(
+                    RobustEstimator&lt;DualConic&gt; estimator, int iteration) {
+<span class="pc bpc" id="L383" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L384">                    mListener.onEstimateNextIteration(</span>
+                            PROMedSDualConicRobustEstimator.this, iteration);
+                }
+<span class="fc" id="L387">            }</span>
+
+            @Override
+            public void onEstimateProgressChange(
+                    RobustEstimator&lt;DualConic&gt; estimator, float progress) {
+<span class="nc bnc" id="L392" title="All 2 branches missed.">                if (mListener != null) {</span>
+<span class="nc" id="L393">                    mListener.onEstimateProgressChange(</span>
+                            PROMedSDualConicRobustEstimator.this, progress);
+                }
+<span class="nc" id="L396">            }</span>
+            
+            @Override
+            public double[] getQualityScores() {
+<span class="fc" id="L400">                return mQualityScores;</span>
+            }              
+        });
+        
+        try {
+<span class="fc" id="L405">            mLocked = true;</span>
+<span class="fc" id="L406">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L407">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L408">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L409">            return innerEstimator.estimate();</span>
+<span class="nc" id="L410">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L411">            throw new LockedException(e);</span>
+<span class="nc" id="L412">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L413">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L415">            mLocked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
+     */    
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L425">        return RobustEstimatorMethod.PROMedS;</span>
+    }    
+    
+    /**
+     * Sets quality scores corresponding to each provided line.
+     * This method is used internally and does not check whether instance is
+     * locked or not.
+     * @param qualityScores quality scores to be set.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE.
+     */
+    private void internalSetQualityScores(double[] qualityScores) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L438" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L439">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L442">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L443">    }            </span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

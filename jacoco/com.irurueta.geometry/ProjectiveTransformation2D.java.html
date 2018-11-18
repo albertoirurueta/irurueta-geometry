@@ -1,0 +1,1697 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProjectiveTransformation2D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">ProjectiveTransformation2D.java</span></div><h1>ProjectiveTransformation2D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.*;
+import com.irurueta.algebra.Utils;
+
+import java.io.Serializable;
+import java.util.Arrays;
+
+/**
+ * This class performs projective transformations on 2D space.
+ * Projective transformations include any possible transformation that can be
+ * applied to 2D points.
+ */
+public class ProjectiveTransformation2D extends Transformation2D 
+        implements Serializable {
+
+    /**
+     * Constant indicating number of coordinates required in translation arrays.
+     */
+    public static final int NUM_TRANSLATION_COORDS = 2;
+
+    /**
+     * Constant indicating the number of projective parameters that can be set
+     * in projective parameters array.
+     */
+    @SuppressWarnings(&quot;all&quot;)
+    public static final int NUM_PROJECTIVE_PARAMS = 3;
+
+    /**
+     * Constant defining number of inhomogeneous coordinates in 2D space.
+     */
+    public static final int INHOM_COORDS = 2;
+
+    /**
+     * Constant defining number of homogeneous coordinates in 2D space.
+     */
+    public static final int HOM_COORDS = 3;
+
+    /**
+     * Machine precision.
+     */
+    public static final double EPS = 1e-12;
+
+    /**
+     * Constant defining a large threshold to consider a matrix valid as
+     * rotation.
+     */
+    private static final double LARGE_ROTATION_MATRIX_THRESHOLD = 1.0;
+
+    /**
+     * Internal 3x3 matrix containing transformation.
+     */
+    private Matrix T;
+    
+    /**
+     * Indicates whether internal matrix is normalized.
+     */
+    private boolean normalized;
+
+    /**
+     * Empty constructor.
+     * Creates transformation that has no effect.
+     */
+    public ProjectiveTransformation2D() {
+<span class="fc" id="L80">        super();</span>
+        try {
+<span class="fc" id="L82">            T = Matrix.identity(HOM_COORDS, HOM_COORDS);</span>
+<span class="pc" id="L83">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L84">        normalize();</span>
+<span class="fc" id="L85">    }</span>
+    
+    /**
+     * Creates transformation with provided internal matrix.
+     * Notice that provided matrix should usually be invertible, otherwise the
+     * transformation will be degenerate and its inverse will not be available.
+     * @param T Internal 3x3 matrix.
+     */
+    public ProjectiveTransformation2D(Matrix T)
+<span class="fc" id="L94">            throws NullPointerException, IllegalArgumentException {</span>
+<span class="fc" id="L95">        setT(T);</span>
+<span class="fc" id="L96">        normalize();</span>
+<span class="fc" id="L97">    }</span>
+    
+    /**
+     * Creates transformation with provided scale value.
+     * @param scale scale value. Values between 0.0 and 1.0 reduce objects,
+     * values greater than 1.0 enlarge objects and negative values reverse
+     * objects.
+     */
+<span class="fc" id="L105">    public ProjectiveTransformation2D(double scale) {</span>
+<span class="fc" id="L106">        double[] diag = new double[HOM_COORDS];</span>
+<span class="fc" id="L107">        Arrays.fill(diag, scale);</span>
+<span class="fc" id="L108">        diag[HOM_COORDS - 1] = 1.0; //set las element to 1.0</span>
+<span class="fc" id="L109">        T = Matrix.diagonal(diag);</span>
+<span class="fc" id="L110">        normalize();</span>
+<span class="fc" id="L111">    }</span>
+    
+    /**
+     * Creates transformation with provided rotation.
+     * @param rotation a 2D rotation.
+     * @throws NullPointerException raised if provided rotation is null.
+     */
+    public ProjectiveTransformation2D(Rotation2D rotation)
+<span class="fc" id="L119">            throws NullPointerException {</span>
+<span class="fc" id="L120">        T = rotation.asHomogeneousMatrix();</span>
+<span class="fc" id="L121">        normalize();</span>
+<span class="fc" id="L122">    }</span>
+    
+    /**
+     * Creates transformation with provided scale and rotation.
+     * @param scale Scale value. Values between 0.0 and 1.0 reduce objects,
+     * values greater than 1.0 enlarge objects and negative values reverse
+     * objects.
+     * @param rotation a 2D rotation.
+     * @throws NullPointerException raised if provided rotation is null.
+     */
+    public ProjectiveTransformation2D(double scale, Rotation2D rotation)
+<span class="fc" id="L133">            throws NullPointerException {</span>
+        try {
+<span class="fc" id="L135">            double[] diag = new double[INHOM_COORDS];</span>
+<span class="fc" id="L136">            Arrays.fill(diag, scale);</span>
+<span class="fc" id="L137">            Matrix A = Matrix.diagonal(diag);</span>
+<span class="fc" id="L138">            A.multiply(rotation.asInhomogeneousMatrix());</span>
+<span class="fc" id="L139">            T = Matrix.identity(HOM_COORDS, HOM_COORDS);</span>
+<span class="fc" id="L140">            T.setSubmatrix(0, 0, INHOM_COORDS - 1,</span>
+                    INHOM_COORDS - 1, A);
+<span class="pc" id="L142">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L143">        normalize();</span>
+<span class="fc" id="L144">    }</span>
+    
+    /**
+     * Creates transformation with provided affine parameters and rotation.
+     * @param params affine parameters including horizontal scaling, vertical
+     * scaling and skewness.
+     * @param rotation a 2D rotation.
+     * @throws NullPointerException raised if provided parameters are null or
+     * if provided rotation is null.
+     */
+    public ProjectiveTransformation2D(AffineParameters2D params, 
+<span class="fc" id="L155">            Rotation2D rotation) throws NullPointerException {</span>
+        try {
+<span class="fc" id="L157">            Matrix A = params.asMatrix();</span>
+<span class="fc" id="L158">            A.multiply(rotation.asInhomogeneousMatrix());</span>
+<span class="fc" id="L159">            T = Matrix.identity(HOM_COORDS, HOM_COORDS);</span>
+<span class="fc" id="L160">            T.setSubmatrix(0, 0, INHOM_COORDS - 1,</span>
+                    INHOM_COORDS - 1, A);
+<span class="pc" id="L162">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L163">        normalize();</span>
+<span class="fc" id="L164">    }</span>
+    
+    /**
+     * Creates transformation with provided 2D translation.
+     * @param translation array indicating 2D translation using inhomogeneous
+     * coordinates.
+     * @throws NullPointerException raised if provided array is null.
+     * @throws IllegalArgumentException raised if length of array is not equal
+     * to NUM_TRANSLATION_COORDS.
+     */
+    public ProjectiveTransformation2D(double[] translation)
+<span class="fc" id="L175">            throws NullPointerException, IllegalArgumentException {</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L177">            throw new IllegalArgumentException();</span>
+        }
+        
+        try {
+<span class="fc" id="L181">            T = Matrix.identity(HOM_COORDS, HOM_COORDS);</span>
+<span class="fc" id="L182">            T.setSubmatrix(0, 2, 1, 2, translation);</span>
+<span class="pc" id="L183">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L184">        normalize();</span>
+<span class="fc" id="L185">    }</span>
+    
+    /**
+     * Creates transformation with provided affine linear mapping and 
+     * translation.
+     * @param A affine linear mapping.
+     * @param translation array indicating 2D translation using inhomogeneous
+     * coordinates.
+     * @throws NullPointerException raised if provided array is null or if
+     * affine linear mapping is null.
+     * @throws IllegalArgumentException raised if length of array is not equal 
+     * to NUM_TRANSLATION_COORDS.
+     */
+    public ProjectiveTransformation2D(Matrix A, double[] translation)
+<span class="fc" id="L199">            throws NullPointerException, IllegalArgumentException {</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L201">            throw new IllegalArgumentException();</span>
+        }
+        
+        try {
+<span class="fc" id="L205">            T = Matrix.identity(HOM_COORDS, HOM_COORDS);</span>
+<span class="fc" id="L206">            T.setSubmatrix(0, 0, INHOM_COORDS - 1,</span>
+                    INHOM_COORDS - 1, A);
+<span class="fc" id="L208">            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
+                    HOM_COORDS - 1, translation);
+<span class="pc" id="L210">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L211">        normalize();</span>
+<span class="fc" id="L212">    }</span>
+    
+    /**
+     * Creates transformation with provided scale and translation.
+     * @param scale scale value. Values between 0.0 and 1.0 reduce objects,
+     * values greater than 1.0 enlarge objects and negative values reverse
+     * objects.
+     * @param translation array indicating 2D translation using inhomogeneous
+     * coordinates.
+     * @throws NullPointerException raised if provided translation is null
+     * @throws IllegalArgumentException raised if provided translation does not
+     * have length 2.
+     */
+    public ProjectiveTransformation2D(double scale, double[] translation)
+<span class="fc" id="L226">            throws NullPointerException, IllegalArgumentException {</span>
+<span class="fc bfc" id="L227" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L228">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L231">        double[] diag = new double[HOM_COORDS];</span>
+<span class="fc" id="L232">        Arrays.fill(diag, scale);</span>
+<span class="fc" id="L233">        diag[HOM_COORDS - 1] = 1.0; //set last element to 1.0</span>
+<span class="fc" id="L234">        T = Matrix.diagonal(diag);</span>
+        
+        //set translation
+<span class="fc" id="L237">        T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
+                HOM_COORDS - 1, translation);
+<span class="fc" id="L239">        normalize();</span>
+<span class="fc" id="L240">    }</span>
+    
+    /**
+     * Creates transformation with provided rotation and translation.
+     * @param rotation a 2D rotation.
+     * @param translation array indicating 2D translation using inhomogeneous
+     * coordinates.
+     * @throws NullPointerException raised if provided rotation or translation 
+     * is null.
+     * @throws IllegalArgumentException raised if provided translation does not
+     * have length 2.
+     */
+    public ProjectiveTransformation2D(Rotation2D rotation, double[] translation)
+<span class="fc" id="L253">            throws NullPointerException, IllegalArgumentException {</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L255">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L258">        T = rotation.asHomogeneousMatrix();</span>
+        
+        //set translation
+<span class="fc" id="L261">        T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
+                HOM_COORDS - 1, translation);    
+<span class="fc" id="L263">        normalize();</span>
+<span class="fc" id="L264">    }</span>
+    
+    /**
+     * Creates transformation with provided scale, rotation and translation.
+     * @param scale Scale value. Values between 0.0 and 1.0 reduce objects,
+     * values greater than 1.0 enlarge objects and negative values reverse
+     * objects.
+     * @param rotation a 2D rotation.
+     * @param translation array indicating 2D translation using inhomogeneous
+     * coordinates.
+     * @throws NullPointerException raised if provided rotation or translation
+     * is null.
+     * @throws IllegalArgumentException raised if provided translation does not
+     * have length 2.
+     */
+    public ProjectiveTransformation2D(double scale, Rotation2D rotation,
+            double[] translation) throws NullPointerException,
+<span class="fc" id="L281">            IllegalArgumentException {</span>
+<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L283">            throw new IllegalArgumentException();</span>
+        }
+        
+        try {
+<span class="fc" id="L287">            double[] diag = new double[INHOM_COORDS];</span>
+<span class="fc" id="L288">            Arrays.fill(diag, scale);</span>
+<span class="fc" id="L289">            Matrix A = Matrix.diagonal(diag);</span>
+<span class="fc" id="L290">            A.multiply(rotation.asInhomogeneousMatrix());</span>
+        
+<span class="fc" id="L292">            T = Matrix.identity(HOM_COORDS, HOM_COORDS);</span>
+            //set A
+<span class="fc" id="L294">            T.setSubmatrix(0, 0, INHOM_COORDS - 1,</span>
+                    INHOM_COORDS - 1, A);
+            //set translation
+<span class="fc" id="L297">            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
+                    HOM_COORDS - 1, translation);
+<span class="pc" id="L299">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L300">        normalize();</span>
+<span class="fc" id="L301">    }</span>
+
+    /**
+     * Creates transformation with provided scale, rotation and translation.
+     * @param scale scale value. Values between 0.0 and 1.0 reduce objects,
+     * values greater than 1.0 enlarge objects and negative values reverse
+     * objects.
+     * @param rotation a 2D rotation.
+     * @param translation array indicating 2D translation using inhomogeneous
+     * coordinates.
+     * @param projectiveParameters array of length 3 containing projective
+     * parameters.
+     * @throws NullPointerException raised if provided rotation or translation
+     * is null.
+     * @throws IllegalArgumentException raised if provided translation does not
+     * have length 2 or if projective parameters array doesn't have length 3.
+     */
+    public ProjectiveTransformation2D(double scale, Rotation2D rotation,
+            double[] translation, double[] projectiveParameters) 
+<span class="fc" id="L320">            throws NullPointerException, IllegalArgumentException {</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L322">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L324" title="All 2 branches covered.">        if (projectiveParameters.length != HOM_COORDS) {</span>
+<span class="fc" id="L325">            throw new IllegalArgumentException();</span>
+        }
+        
+        try {
+<span class="fc" id="L329">            double value = projectiveParameters[HOM_COORDS - 1];</span>
+<span class="fc" id="L330">            double[] diag = new double[INHOM_COORDS];</span>
+<span class="fc" id="L331">            Arrays.fill(diag, scale);</span>
+<span class="fc" id="L332">            Matrix A = Matrix.diagonal(diag);</span>
+<span class="fc" id="L333">            A.multiply(rotation.asInhomogeneousMatrix());</span>
+        
+<span class="fc" id="L335">            T = Matrix.identity(HOM_COORDS, HOM_COORDS);</span>
+            //set A
+<span class="fc" id="L337">            T.setSubmatrix(0, 0, INHOM_COORDS - 1,</span>
+                    INHOM_COORDS - 1, A);
+            //set translation
+<span class="fc" id="L340">            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
+                    HOM_COORDS - 1, translation);
+<span class="fc" id="L342">            T.multiplyByScalar(value);</span>
+            
+<span class="fc" id="L344">            T.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1,</span>
+                    HOM_COORDS - 1, projectiveParameters);
+<span class="pc" id="L346">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L347">        normalize();</span>
+<span class="fc" id="L348">    }</span>
+    
+    /**
+     * Creates transformation with provided parameters, rotation and 
+     * translation.
+     * @param params Affine parameters including horizontal scaling, vertical
+     * scaling and skewness.
+     * @param rotation a 2D rotation.
+     * @param translation array indicating 2D translation using inhomogeneous
+     * coordinates.
+     * @throws NullPointerException raised if provided parameters, rotation or
+     * translation is null.
+     * @throws IllegalArgumentException raised if provided translation does not
+     * have length 2.
+     */
+    public ProjectiveTransformation2D(AffineParameters2D params,
+            Rotation2D rotation, double[] translation)
+<span class="fc" id="L365">            throws NullPointerException, IllegalArgumentException {</span>
+<span class="fc bfc" id="L366" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L367">            throw new IllegalArgumentException();</span>
+        }
+        
+        try {
+<span class="fc" id="L371">            Matrix A = params.asMatrix();</span>
+<span class="fc" id="L372">            A.multiply(rotation.asInhomogeneousMatrix());</span>
+<span class="fc" id="L373">            T = Matrix.identity(HOM_COORDS, HOM_COORDS);</span>
+            //set A
+<span class="fc" id="L375">            T.setSubmatrix(0, 0, INHOM_COORDS - 1,</span>
+                    INHOM_COORDS - 1, A);
+            //set translation
+<span class="fc" id="L378">            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
+                    HOM_COORDS - 1, translation);
+<span class="pc" id="L380">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L381">        normalize();</span>
+<span class="fc" id="L382">    }</span>
+
+    /**
+     * Creates transformation with provided parameters, rotation and 
+     * translation.
+     * @param params affine parameters including horizontal scaling, vertical
+     * scaling and skewness.
+     * @param rotation a 2D rotation.
+     * @param translation array indicating 2D translation using inhomogeneous
+     * coordinates.
+     * @param projectiveParameters array of length 3 containing projective
+     * parameters.
+     * @throws NullPointerException raised if provided parameters, rotation or
+     * translation is null.
+     * @throws IllegalArgumentException raised if provided translation does not
+     * have length 2 or if projective parameters array doesn't have length 3.
+     */
+    public ProjectiveTransformation2D(AffineParameters2D params,
+            Rotation2D rotation, double[] translation, 
+            double[] projectiveParameters)
+<span class="fc" id="L402">            throws NullPointerException, IllegalArgumentException {</span>
+<span class="fc bfc" id="L403" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L404">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L406" title="All 2 branches covered.">        if (projectiveParameters.length != HOM_COORDS) {</span>
+<span class="fc" id="L407">            throw new IllegalArgumentException();</span>
+        }
+        
+        try {
+<span class="fc" id="L411">            Matrix A = params.asMatrix();</span>
+<span class="fc" id="L412">            A.multiply(rotation.asInhomogeneousMatrix());</span>
+<span class="fc" id="L413">            T = Matrix.identity(HOM_COORDS, HOM_COORDS);</span>
+            //set A
+<span class="fc" id="L415">            T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, A);</span>
+            //set translation
+<span class="fc" id="L417">            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
+                    HOM_COORDS - 1, translation);
+<span class="fc" id="L419">            double value = projectiveParameters[HOM_COORDS - 1];</span>
+<span class="fc" id="L420">            T.multiplyByScalar(value);</span>
+            
+<span class="fc" id="L422">            T.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1, HOM_COORDS - 1, </span>
+                projectiveParameters);
+<span class="pc" id="L424">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L425">        normalize();</span>
+<span class="fc" id="L426">    }</span>
+    
+    /**
+     * Creates transformation by estimating its internal matrix by providing 4 
+     * corresponding original and transformed points.
+     * @param inputPoint1 1st input point.
+     * @param inputPoint2 2nd input point.
+     * @param inputPoint3 3rd input point.
+     * @param inputPoint4 4th input point.
+     * @param outputPoint1 1st transformed point corresponding to 1st input 
+     * point.
+     * @param outputPoint2 2nd transformed point corresponding to 2nd input
+     * point.
+     * @param outputPoint3 3rd transformed point corresponding to 3rd input
+     * point.
+     * @param outputPoint4 4th transformed point corresponding to 4th input
+     * point.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     * estimated for some reason (point configuration degeneracy, duplicate 
+     * points or numerical instabilities).
+     */    
+    public ProjectiveTransformation2D(Point2D inputPoint1, Point2D inputPoint2,
+            Point2D inputPoint3, Point2D inputPoint4, Point2D outputPoint1,
+            Point2D outputPoint2, Point2D outputPoint3, Point2D outputPoint4)
+<span class="fc" id="L450">            throws CoincidentPointsException {</span>
+        try {
+<span class="fc" id="L452">            T = new Matrix(HOM_COORDS, HOM_COORDS);</span>
+<span class="pc" id="L453">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L454">        setTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, </span>
+                inputPoint4, outputPoint1, outputPoint2, outputPoint3, 
+                outputPoint4);
+<span class="fc" id="L457">    }</span>
+    
+    /**
+     * Creates transformation by estimating its internal matrix by providing 4
+     * corresponding original and transformed lines.
+     * @param inputLine1 1st input line.
+     * @param inputLine2 2nd input line.
+     * @param inputLine3 3rd input line.
+     * @param inputLine4 4th input line.
+     * @param outputLine1 1st transformed line corresponding to 1st input line.
+     * @param outputLine2 2nd transformed line corresponding to 2nd input line.
+     * @param outputLine3 3rd transformed line corresponding to 3rd input line.
+     * @param outputLine4 4th transformed line corresponding to 4th input line.
+     * @throws CoincidentLinesException raised if transformation cannot be
+     * estimated for some reason (line configuration degeneracy, duplicate lines
+     * or numerical instabilities).
+     */
+    public ProjectiveTransformation2D(Line2D inputLine1, Line2D inputLine2,
+            Line2D inputLine3, Line2D inputLine4, Line2D outputLine1, 
+            Line2D outputLine2, Line2D outputLine3, Line2D outputLine4)
+<span class="fc" id="L477">            throws CoincidentLinesException {</span>
+<span class="fc" id="L478">        setTransformationFromLines(inputLine1, inputLine2, inputLine3, </span>
+                inputLine4, outputLine1, outputLine2, outputLine3, outputLine4);
+<span class="fc" id="L480">    }</span>
+    
+    /**
+     * Returns internal matrix containing this transformation data.
+     * Point transformation is computed as T * x, where x is a 2D point 
+     * expressed using homogeneous coordinates.
+     * Usually the internal transformation matrix will be invertible.
+     * When this is not the case, the transformation is considered degenerate
+     * and its inverse will not be available.
+     * @return internal transformation matrix.
+     */
+    public Matrix getT() {
+<span class="fc" id="L492">        return T;</span>
+    }
+    
+    /**
+     * Sets internal matrix containing this transformation data.
+     * Point transformation is computed as T * x, where x is a 2D point
+     * expressed using homogeneous coordinates.
+     * Usually provided matrix will be invertible, when this is not the case
+     * this transformation will become degenerate and its inverse will not be
+     * available.
+     * This method does not check whether provided matrix is invertible or not.
+     * @param T transformation matrix.
+     * @throws NullPointerException raised if provided matrix is null.
+     * @throws IllegalArgumentException raised if provided matrix is not 3x3
+     */
+    public final void setT(Matrix T) throws NullPointerException,
+            IllegalArgumentException {
+<span class="pc bpc" id="L509" title="1 of 4 branches missed.">        if (T.getRows() != HOM_COORDS || T.getColumns() != HOM_COORDS) {</span>
+<span class="fc" id="L510">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L513">        this.T = T;</span>
+<span class="fc" id="L514">        normalized = false;</span>
+<span class="fc" id="L515">    }</span>
+    
+    /**
+     * Returns boolean indicating whether provided matrix will produce a 
+     * degenerate projective transformation or not.
+     * @param T a 3x3 matrix to be used as the internal matrix of a projective
+     * transformation.
+     * @return true if matrix will produce a degenerate transformation, false
+     * otherwise.
+     * @throws IllegalArgumentException raised if provided matrix is not 3x3.
+     */
+    public static boolean isDegenerate(Matrix T) 
+            throws IllegalArgumentException {
+<span class="pc bpc" id="L528" title="1 of 4 branches missed.">        if (T.getRows() != HOM_COORDS || T.getColumns() != HOM_COORDS) {</span>
+<span class="fc" id="L529">            throw new IllegalArgumentException();</span>
+        }
+        
+        try {
+<span class="fc" id="L533">            LUDecomposer decomposer = new LUDecomposer(T);</span>
+<span class="fc" id="L534">            decomposer.decompose();</span>
+<span class="fc" id="L535">            return decomposer.isSingular();</span>
+<span class="nc" id="L536">        } catch (AlgebraException e) {</span>
+            //if decomposition fails, assume that matrix is degenerate because
+            //of numerical instabilities
+<span class="nc" id="L539">            return true;</span>
+        }
+    }   
+    
+    /**
+     * Indicates whether this transformation is degenerate.
+     * When a transformation is degenerate, its inverse cannot be computed.
+     * @return true if transformation is degenerate, false otherwise.
+     */
+    public boolean isDegenerate() {
+<span class="fc" id="L549">        return isDegenerate(T);</span>
+    }
+
+    /**
+     * Returns affine linear mapping matrix.
+     * @see AffineTransformation2D
+     * @return linear mapping matrix.
+     */
+    public Matrix getA() {
+<span class="fc" id="L558">        Matrix A = T.getSubmatrix(0, 0,</span>
+                INHOM_COORDS - 1, INHOM_COORDS - 1);
+<span class="fc" id="L560">        A.multiplyByScalar(1.0 / T.getElementAt(HOM_COORDS - 1, </span>
+                HOM_COORDS - 1));
+<span class="fc" id="L562">        return A;</span>
+    }
+    
+    /**
+     * Sets affine linear mapping matrix.
+     * @see AffineTransformation2D
+     * @param A linear mapping matrix.
+     * @throws NullPointerException raised if provided matrix is null.
+     * @throws IllegalArgumentException raised if provided matrix does not have
+     * size 2x2.
+     */
+    public final void setA(Matrix A) throws NullPointerException, 
+            IllegalArgumentException {
+<span class="fc bfc" id="L575" title="All 2 branches covered.">        if (A == null) {</span>
+<span class="fc" id="L576">            throw new NullPointerException();</span>
+        }
+<span class="pc bpc" id="L578" title="1 of 4 branches missed.">        if (A.getRows() != INHOM_COORDS || A.getColumns() != INHOM_COORDS) {</span>
+<span class="fc" id="L579">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L582">        T.setSubmatrix(0, 0, INHOM_COORDS - 1,</span>
+                INHOM_COORDS - 1,
+<span class="fc" id="L584">                A.multiplyByScalarAndReturnNew(1.0 * T.getElementAt(</span>
+                HOM_COORDS - 1, HOM_COORDS - 1)));
+<span class="fc" id="L586">    }</span>
+    
+    /**
+     * Normalizes current matrix instance.
+     */
+    public final void normalize() {
+<span class="fc bfc" id="L592" title="All 2 branches covered.">        if (!normalized) {</span>
+<span class="fc" id="L593">            double norm = Utils.normF(T);</span>
+<span class="pc bpc" id="L594" title="1 of 2 branches missed.">            if (norm &gt; EPS) {</span>
+<span class="fc" id="L595">                T.multiplyByScalar(1.0 / norm);</span>
+            }
+<span class="fc" id="L597">            normalized = true;</span>
+        }
+<span class="fc" id="L599">    }</span>
+    
+    /**
+     * Returns the 2D rotation component associated to this transformation.
+     * Note: if this rotation instance is modified, its changes won't be 
+     * reflected on this transformation until rotation is set again.
+     * @return 2D rotation.
+     * @throws AlgebraException if for some reason rotation cannot be estimated
+     * (usually because of numerical instability).
+     */
+    public Rotation2D getRotation() throws AlgebraException {
+        //Use QR decomposition to retrieve rotation component of this 
+        //transformation
+<span class="fc" id="L612">        normalize();</span>
+<span class="fc" id="L613">        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, </span>
+                INHOM_COORDS - 1, INHOM_COORDS - 1));
+        try {
+<span class="fc" id="L616">            decomposer.decompose();</span>
+<span class="fc" id="L617">            return new Rotation2D(decomposer.getQ(),                     </span>
+                    LARGE_ROTATION_MATRIX_THRESHOLD); //a large threshold is 
+                    //used because Q matrix is always assumed to be orthonormal
+<span class="nc" id="L620">        } catch (InvalidRotationMatrixException ignore) {</span>
+<span class="nc" id="L621">            return null;</span>
+        }
+    }
+    
+    /**
+     * Sets 2D rotation for this transformation.
+     * @param rotation a 2D rotation.
+     * @throws NullPointerException raised if provided rotation is null.
+     * @throws AlgebraException raised if for numerical reasons rotation cannot
+     * be set (usually because of numerical instability in parameters of this
+     * transformation).
+     */
+    public void setRotation(Rotation2D rotation) throws NullPointerException,
+            AlgebraException {
+<span class="fc" id="L635">        Matrix rotMatrix = rotation.asInhomogeneousMatrix();</span>
+        
+        //Use QR decomposition to retrieve parameters matrix
+<span class="fc" id="L638">        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, </span>
+                INHOM_COORDS - 1, INHOM_COORDS - 1));
+<span class="fc" id="L640">        decomposer.decompose();</span>
+<span class="fc" id="L641">        Matrix localA = decomposer.getR(); //retrieves params matrix</span>
+<span class="fc" id="L642">        localA.multiply(rotMatrix);</span>
+<span class="fc" id="L643">        T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, localA);</span>
+<span class="fc" id="L644">        normalized = false;</span>
+<span class="fc" id="L645">    }</span>
+    
+    /**
+     * Adds provided rotation to current rotation assigned to this 
+     * transformation.
+     * @param rotation 2D rotation to be added.
+     * @throws AlgebraException raised if for numerical reasons rotation cannot
+     * be set (usually because of numerical instability in parameters of this
+     * transformation).
+     */
+    public void addRotation(Rotation2D rotation) throws AlgebraException {
+<span class="fc" id="L656">       Rotation2D localRotation = getRotation();</span>
+<span class="fc" id="L657">       localRotation.combine(rotation);</span>
+<span class="fc" id="L658">       setRotation(localRotation);</span>
+<span class="fc" id="L659">    }</span>
+    
+    /**
+     * Sets scale of this transformation.
+     * @param scale scale value to be set. A value between 0.0 and 1.0 indicates
+     * that objects will be reduced, a value greater than 1.0 indicates that
+     * objects will be enlarged, and a negative value indicates that objects 
+     * will be reversed.
+     * @throws AlgebraException raised if for numerical reasons scale cannot
+     * be set (usually because of numerical instability in parameters of this
+     * transformation).
+     */
+    public void setScale(double scale) throws AlgebraException {
+<span class="fc" id="L672">        normalize();</span>
+<span class="fc" id="L673">        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);</span>
+<span class="fc" id="L674">        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, </span>
+                INHOM_COORDS - 1, INHOM_COORDS - 1));
+<span class="fc" id="L676">        decomposer.decompose();</span>
+<span class="fc" id="L677">        Matrix localA = decomposer.getR(); //params</span>
+<span class="fc" id="L678">        localA.setElementAt(0, 0, scale * value);</span>
+<span class="fc" id="L679">        localA.setElementAt(1, 1, scale * value);</span>
+<span class="fc" id="L680">        localA.multiply(decomposer.getQ());</span>
+<span class="fc" id="L681">        T.setSubmatrix(0, 0, INHOM_COORDS - 1,</span>
+                INHOM_COORDS - 1, localA);
+<span class="fc" id="L683">        normalized = false;</span>
+<span class="fc" id="L684">    }</span>
+    
+    /**
+     * Gets affine parameters of associated to this instance.
+     * Affine parameters contain horizontal scale, vertical scale and skewness
+     * of axes.
+     * @return affine parameters.
+     * @throws AlgebraException raised if for numerical reasons affine
+     * parameters cannot be retrieved (usually because of numerical instability
+     * of the internal matrix of this instance).
+     */
+    public AffineParameters2D getAffineParameters() throws AlgebraException {
+<span class="fc" id="L696">        AffineParameters2D parameters = new AffineParameters2D();</span>
+<span class="fc" id="L697">        getAffineParameters(parameters);</span>
+<span class="fc" id="L698">        return parameters;</span>
+    }
+    
+    /**
+     * Computes affine parameters associated to this instance and stores the 
+     * result in provided instance.
+     * Affine parameters contain horizontal scale, vertical scale and skewness
+     * of axes.
+     * @param result instance where affine parameters will be stored.
+     * @throws AlgebraException raised if for numerical reasons affine 
+     * parameters cannot be retrieved (usually because of numerical instability
+     * of the internal matrix of this instance).
+     */
+    public void getAffineParameters(AffineParameters2D result)
+            throws AlgebraException {
+<span class="fc" id="L713">        normalize();</span>
+<span class="fc" id="L714">        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);</span>
+<span class="fc" id="L715">        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, </span>
+                INHOM_COORDS - 1, INHOM_COORDS - 1));
+<span class="fc" id="L717">        decomposer.decompose();</span>
+<span class="fc" id="L718">        Matrix R = decomposer.getR();</span>
+<span class="fc" id="L719">        R.multiplyByScalar(1.0 / value);</span>
+<span class="fc" id="L720">        result.fromMatrix(R);</span>
+<span class="fc" id="L721">    }</span>
+    
+    /**
+     * Sets affine parameters associated to this instance.
+     * Affine parameters contain horizontal scale, vertical scale and skewness
+     * of axes.
+     * @param parameters affine parameters to be set.
+     * @throws AlgebraException raised if for numerical reasons affine
+     * parameters cannot be set (usually because of numerical instability of
+     * the internal matrix of this instance).
+     */
+    public void setAffineParameters(AffineParameters2D parameters)
+            throws AlgebraException {
+<span class="fc" id="L734">        normalize();</span>
+<span class="fc" id="L735">        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);</span>
+<span class="fc" id="L736">        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, </span>
+                INHOM_COORDS - 1, INHOM_COORDS - 1));
+<span class="fc" id="L738">        decomposer.decompose();</span>
+<span class="fc" id="L739">        Matrix params = parameters.asMatrix();</span>
+<span class="fc" id="L740">        Matrix rotation = decomposer.getQ();</span>
+        
+<span class="fc" id="L742">        params.multiply(rotation);  //params is equivalent to A because it</span>
+                                    //has been multiplied by rotation
+<span class="fc" id="L744">        params.multiplyByScalar(value); //normalize</span>
+<span class="fc" id="L745">        T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, params);</span>
+<span class="fc" id="L746">        normalized = false;</span>
+<span class="fc" id="L747">    }</span>
+    
+    /**
+     * Returns the projective parameters associated to this instance.
+     * These parameters are the located in the last row of the internal 
+     * transformation matrix.
+     * For affine, metric or euclidean transformations this last row is always
+     * [0, 0, 1] (taking into account that transformation matrix is defined
+     * up to scale).
+     * @return Projective parameters returned as the array containing the values
+     * of the last row of the internal transformation matrix.
+     */
+    public double[] getProjectiveParameters() {
+        //return last row of matrix T
+<span class="fc" id="L761">        return T.getSubmatrixAsArray(HOM_COORDS - 1, 0, HOM_COORDS - 1, </span>
+                HOM_COORDS - 1, true);
+    }
+    
+    /**
+     * Sets the projective parameters associated to this instance.
+     * These parameters will be set in the last row of the internal 
+     * transformation matrix.
+     * For affine, matrix or euclidean transformations parameters are always
+     * [0, 0, 1] (taking into account that transformation matrix is defined up
+     * to scale).
+     * @param params projective parameters to be set. It must be an array of
+     * length 3.
+     * @throws IllegalArgumentException raised if provided array does not have
+     * length 3.
+     */
+    public final void setProjectiveParameters(double[] params) 
+            throws IllegalArgumentException {
+<span class="pc bpc" id="L779" title="1 of 2 branches missed.">        if (params.length != HOM_COORDS) {</span>
+<span class="nc" id="L780">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L783">        T.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1,</span>
+                HOM_COORDS - 1, params);
+<span class="fc" id="L785">        normalized = false;</span>
+<span class="fc" id="L786">    }</span>
+    
+    /**
+     * Returns 2D translation assigned to this transformation as an array
+     * expressed in inhomogeneous coordinates.
+     * Note: Updating the values of the returned array will not update the
+     * translation of this instance. To do so, translation needs to be set 
+     * again.
+     * @return 2D translation array.
+     */
+    public double[] getTranslation() {
+<span class="fc" id="L797">        normalize();</span>
+<span class="fc" id="L798">        double[] translation = T.getSubmatrixAsArray(0, HOM_COORDS - 1, </span>
+                INHOM_COORDS - 1, HOM_COORDS - 1);
+<span class="fc" id="L800">        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);</span>
+<span class="fc" id="L801">        ArrayUtils.multiplyByScalar(translation, 1.0 / value, translation);</span>
+<span class="fc" id="L802">        return translation;</span>
+    }
+    
+    /**
+     * Obtains 2D translation assigned to this transformation and stores result
+     * into provided array.
+     * Note: updating the values of the returned array will not update the 
+     * translation of this instance. To do so, translation needs to be set.
+     * @param out array where translation values will be stored.
+     * @throws WrongSizeException if provided array does not have length 2.
+     */
+    public void getTranslation(double[] out) throws WrongSizeException {
+<span class="nc" id="L814">        T.getSubmatrixAsArray(0, HOM_COORDS - 1, </span>
+                INHOM_COORDS - 1, HOM_COORDS - 1, out);
+<span class="nc" id="L816">        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);</span>
+<span class="nc" id="L817">        ArrayUtils.multiplyByScalar(out, 1.0 / value, out);</span>
+<span class="nc" id="L818">    }</span>
+    
+    /**
+     * Sets 2D translation assigned to this transformation as an array expressed
+     * in inhomogeneous coordinates.
+     * @param translation 2D translation array.
+     * @throws IllegalArgumentException raised if provided array does not have
+     * length equal to NUM_TRANSLATION_COORDS.
+     */
+    public void setTranslation(double[] translation)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L829" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L830">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L833">        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);</span>
+<span class="fc" id="L834">        double[] translation2 = ArrayUtils.multiplyByScalarAndReturnNew(</span>
+                translation, value);
+<span class="fc" id="L836">        T.setSubmatrix(0, HOM_COORDS - 1, translation2.length - 1, </span>
+                HOM_COORDS - 1, translation2);
+<span class="fc" id="L838">        normalized = false;</span>
+<span class="fc" id="L839">    }</span>
+    
+    /**
+     * Adds provided translation to current translation on this transformation.
+     * Provided translation must be expressed as an array of inhomogeneous
+     * coordinates.
+     * @param translation 2D translation array.
+     * @throws IllegalArgumentException raised if provided array does not have
+     * length equal to NUM_TRANSLATION_COORDS.
+     */
+    public void addTranslation(double[] translation)
+            throws IllegalArgumentException {
+<span class="fc" id="L851">        double[] currentTranslation = getTranslation();</span>
+<span class="fc" id="L852">        ArrayUtils.sum(currentTranslation, translation, currentTranslation);</span>
+<span class="fc" id="L853">        setTranslation(currentTranslation);</span>
+<span class="fc" id="L854">    }</span>
+    
+    /**
+     * Returns current x coordinate translation assigned to this transformation.
+     * @return X coordinate translation.
+     */
+    public double getTranslationX() {
+<span class="fc" id="L861">        normalize();</span>
+<span class="fc" id="L862">        return T.getElementAt(0, HOM_COORDS - 1) / T.getElementAt(</span>
+                HOM_COORDS - 1, HOM_COORDS - 1);
+    }
+    
+    /**
+     * Sets x coordinate translation to be made by this transformation.
+     * @param translationX X coordinate translation to be set.
+     */
+    public void setTranslationX(double translationX) {
+<span class="fc" id="L871">        T.setElementAt(0, HOM_COORDS - 1, translationX * T.getElementAt(</span>
+                HOM_COORDS - 1, HOM_COORDS - 1));
+<span class="fc" id="L873">        normalized = false;</span>
+<span class="fc" id="L874">    }</span>
+
+    /**
+     * Returns current y coordinate translation assigned to this transformation.
+     * @return Y coordinate translation.
+     */
+    public double getTranslationY() {
+<span class="fc" id="L881">        normalize();</span>
+<span class="fc" id="L882">        return T.getElementAt(1, HOM_COORDS - 1) / T.getElementAt(</span>
+                HOM_COORDS - 1, HOM_COORDS - 1);
+    }
+    
+    /**
+     * Sets y coordinate translation to be made by this transformation.
+     * @param translationY Y coordinate translation to be set.
+     */
+    public void setTranslationY(double translationY) {
+<span class="fc" id="L891">        T.setElementAt(1, HOM_COORDS - 1, translationY * T.getElementAt(</span>
+                HOM_COORDS - 1, HOM_COORDS - 1));
+<span class="fc" id="L893">        normalized = false;</span>
+<span class="fc" id="L894">    }</span>
+    
+    /**
+     * Sets x, y coordinates of translation to be made by this transformation.
+     * @param translationX translation x coordinate to be set.
+     * @param translationY translation y coordinate to be set.
+     */
+    public void setTranslation(double translationX, double translationY) {
+<span class="fc" id="L902">        setTranslationX(translationX);</span>
+<span class="fc" id="L903">        setTranslationY(translationY);</span>
+<span class="fc" id="L904">    }</span>
+    
+    /**
+     * Sets x, y coordinates of translation to be made by this transformation.
+     * @param translation translation to be set.
+     */
+    public void setTranslation(Point2D translation) {
+<span class="fc" id="L911">        setTranslation(translation.getInhomX(), translation.getInhomY());</span>
+<span class="fc" id="L912">    }</span>
+    
+    /**
+     * Gets x, y coordinates of translation to be made by this transformation
+     * as a new point.
+     * @return a new point containing translation coordinates.
+     */
+    public Point2D getTranslationPoint() {
+<span class="fc" id="L920">        Point2D out = Point2D.create();</span>
+<span class="fc" id="L921">        getTranslationPoint(out);</span>
+<span class="fc" id="L922">        return out;</span>
+    }
+    
+    /**
+     * Gets x, y coordinates of translation to be made by this transformation
+     * and stores them into provided point.
+     * @param out point where translation coordinates will be stored.
+     */
+    public void getTranslationPoint(Point2D out) {
+<span class="fc" id="L931">        out.setInhomogeneousCoordinates(getTranslationX(), getTranslationY());</span>
+<span class="fc" id="L932">    }</span>
+    
+    /**
+     * Adds provided x coordinate to current translation assigned to this 
+     * transformation.
+     * @param translationX X coordinate to be added to current translation.
+     */
+    public void addTranslationX(double translationX) {
+<span class="fc" id="L940">        setTranslationX(getTranslationX() + translationX);</span>
+<span class="fc" id="L941">    }</span>
+    
+    /**
+     * Adds provided y coordinate to current translation assigned to this
+     * transformation.
+     * @param translationY Y coordinate to be added to current translation.
+     */
+    public void addTranslationY(double translationY) {
+<span class="fc" id="L949">        setTranslationY(getTranslationY() + translationY);</span>
+<span class="fc" id="L950">    }</span>
+
+    /**
+     * Adds provided coordinates to current translation assigned ot this 
+     * transformation.
+     * @param translationX x coordinate to be added to current translation.
+     * @param translationY y coordinate to be added to current translation.
+     */
+    public void addTranslation(double translationX, double translationY) {
+<span class="nc" id="L959">        addTranslationX(translationX);</span>
+<span class="nc" id="L960">        addTranslationY(translationY);</span>
+<span class="nc" id="L961">    }</span>
+    
+    /**
+     * Adds provided coordinates to current translation assigned to this
+     * transformation.
+     * @param translation x, y coordinates to be added to current translation.
+     */
+    public void addTranslation(Point2D translation) {
+<span class="nc" id="L969">        addTranslation(translation.getInhomX(), translation.getInhomY());</span>
+<span class="nc" id="L970">    }</span>
+    
+    /**
+     * Represents this transformation as a 3x3 matrix.
+     * A point can be transformed as T * p, where T is the transformation matrix
+     * and p is a point expressed as an homogeneous vector.
+     * @return This transformation in matrix form.
+     */
+    @Override
+    public Matrix asMatrix() {
+<span class="fc" id="L980">        return T.clone();</span>
+    }
+    
+    /**
+     * Represents this transformation as a 3x3 matrix and stores the result in
+     * provided instance.
+     * @param m Instance where transformation matrix will be stored.
+     * @throws IllegalArgumentException Raised if provided instance is not a 3x3 
+     * matrix.
+     */
+    @Override
+    public void asMatrix(Matrix m) throws IllegalArgumentException {
+<span class="pc bpc" id="L992" title="1 of 4 branches missed.">        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {</span>
+<span class="fc" id="L993">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L996">        m.copyFrom(T);</span>
+<span class="fc" id="L997">    }</span>
+    
+    /**
+     * Transforms input point using this transformation and stores the result in
+     * provided output points.
+     * @param inputPoint point to be transformed.
+     * @param outputPoint instance where transformed point data will be stored.
+     */
+    @Override
+    public void transform(Point2D inputPoint, Point2D outputPoint) {
+        
+<span class="fc" id="L1008">        inputPoint.normalize();</span>
+<span class="fc" id="L1009">        normalize();</span>
+        try {
+<span class="fc" id="L1011">            Matrix point = new Matrix(</span>
+                    Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
+<span class="fc" id="L1013">            point.setElementAtIndex(0, inputPoint.getHomX());</span>
+<span class="fc" id="L1014">            point.setElementAtIndex(1, inputPoint.getHomY());</span>
+<span class="fc" id="L1015">            point.setElementAtIndex(2, inputPoint.getHomW());</span>
+        
+<span class="fc" id="L1017">            Matrix transformedPoint = T.multiplyAndReturnNew(point);</span>
+        
+<span class="fc" id="L1019">            outputPoint.setHomogeneousCoordinates(</span>
+<span class="fc" id="L1020">                    transformedPoint.getElementAtIndex(0), </span>
+<span class="fc" id="L1021">                    transformedPoint.getElementAtIndex(1), </span>
+<span class="fc" id="L1022">                    transformedPoint.getElementAtIndex(2));</span>
+<span class="pc" id="L1023">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L1024">    }</span>
+    
+    /**
+     * Transforms a conic using this transformation and stores the result into
+     * provided output conic.
+     * @param inputConic conic to be transformed.
+     * @param outputConic instance where data of transformed conic will be 
+     * stored.
+     * @throws NonSymmetricMatrixException raised if due to numerical precision
+     * the resulting output conic matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed becauseof
+     * numerical instabilities.
+     */            
+    @Override
+    public void transform(Conic inputConic, Conic outputConic)
+            throws NonSymmetricMatrixException, AlgebraException {
+        //point' * conic * point = 0
+        //point' * T' * transformedConic * T * point = 0
+        //where:
+        // - transformedPoint = T * point
+
+        //Hence:
+        // transformedConic = T^-' * conic * T^-1
+
+<span class="fc" id="L1048">        inputConic.normalize();</span>
+        
+<span class="fc" id="L1050">        Matrix C = inputConic.asMatrix();</span>
+<span class="fc" id="L1051">        normalize();</span>
+
+<span class="fc" id="L1053">        Matrix invT = inverseAndReturnNew().asMatrix();</span>
+        //normalize transformation matrix invT to increase accuracy
+<span class="fc" id="L1055">        double norm = Utils.normF(invT);</span>
+<span class="fc" id="L1056">        invT.multiplyByScalar(1.0 / norm);</span>
+        
+<span class="fc" id="L1058">        Matrix m = invT.transposeAndReturnNew();</span>
+        try {
+<span class="fc" id="L1060">            m.multiply(C);</span>
+<span class="fc" id="L1061">            m.multiply(invT);</span>
+<span class="pc" id="L1062">        } catch (WrongSizeException ignore) { }</span>
+        
+        //normalize resulting m matrix to increase accuracy so that it can be
+        //considered symmetric
+<span class="fc" id="L1066">        norm = Utils.normF(m);</span>
+<span class="fc" id="L1067">        m.multiplyByScalar(1.0 / norm);</span>
+        
+<span class="fc" id="L1069">        outputConic.setParameters(m);        </span>
+<span class="fc" id="L1070">    }</span>
+    
+    /**
+     * Transforms a dual conic using this transformation and stores the result
+     * into provided output dual conic.
+     * @param inputDualConic Dual conic to be transformed.
+     * @param outputDualConic Instance where data of transformed dual conic will
+     * be stored.
+     * @throws NonSymmetricMatrixException raised if due to numerical precision
+     * the resulting output dual conic matrix is not considered to be symmetric.
+     * @throws AlgebraException Raised if transform cannot be computed because
+     * of numerical instabilities.
+     */        
+    @Override
+    public void transform(DualConic inputDualConic, DualConic outputDualConic) 
+            throws NonSymmetricMatrixException, AlgebraException {
+        //line' * dualConic * line = 0
+        //line' * T^-1 * T * dualConic * T' * T^-1' * line
+
+        //Hence:
+        //transformed line : T^-1'*line
+        //transformed dual conic: T * dualConic * T'
+
+<span class="fc" id="L1093">        inputDualConic.normalize();</span>
+<span class="fc" id="L1094">        normalize();</span>
+        
+<span class="fc" id="L1096">        Matrix dualC = inputDualConic.asMatrix();</span>
+<span class="fc" id="L1097">        Matrix transT = T.transposeAndReturnNew();</span>
+
+<span class="fc" id="L1099">        Matrix m = T.multiplyAndReturnNew(dualC);</span>
+<span class="fc" id="L1100">        m.multiply(transT);</span>
+
+        //normalize resulting m matrix to increase accuracy so that it can be
+        //considered symmetric
+<span class="fc" id="L1104">        double norm = Utils.normF(m);</span>
+<span class="fc" id="L1105">        m.multiplyByScalar(1.0 / norm);</span>
+        
+<span class="fc" id="L1107">        outputDualConic.setParameters(m);</span>
+<span class="fc" id="L1108">    }</span>
+    
+    /**
+     * Transforms provided input line using this transformation and stores the
+     * result into provided output line instance.
+     * @param inputLine line to be transformed.
+     * @param outputLine instance where data of transformed line will be stored
+     * @throws AlgebraException Raised if transform cannot be computed because
+     * of numerical instabilities.
+     */        
+    @Override
+    public void transform(Line2D inputLine, Line2D outputLine) 
+            throws AlgebraException {
+        //line' * point = 0 --&gt; line' * T^-1 * T * point
+        //(line' * T^-1)*(T*point) = (T^-1'*line)'*(T*point)
+        //where:
+        //- transformedLine = T^-1'*line
+        //- transformedPoint = T*point
+
+        
+<span class="fc" id="L1128">        inputLine.normalize();</span>
+<span class="fc" id="L1129">        normalize();</span>
+        
+<span class="fc" id="L1131">        Matrix invT = inverseAndReturnNew().asMatrix();</span>
+<span class="fc" id="L1132">        Matrix l = Matrix.newFromArray(inputLine.asArray());</span>
+
+<span class="fc" id="L1134">        invT.transpose();</span>
+<span class="fc" id="L1135">        invT.multiply(l);</span>
+
+<span class="fc" id="L1137">        outputLine.setParameters(invT.toArray());</span>
+<span class="fc" id="L1138">    }</span>
+    
+    /**
+     * Inverses this transformation.
+     * @throws AlgebraException if inverse transform cannot be computed because
+     * of numerical instabilities.
+     */
+    public void inverse() throws AlgebraException {
+<span class="fc" id="L1146">        inverse(this);</span>
+<span class="fc" id="L1147">    }</span>
+    
+    /**
+     * Computes the inverse of this transformation and returns the result as a
+     * new transformation instance.
+     * @return inverse transformation.
+     * @throws AlgebraException if inverse transform cannot be computed because
+     * of numerical instabilities.
+     */
+    public Transformation2D inverseAndReturnNew() throws AlgebraException {
+<span class="fc" id="L1157">        ProjectiveTransformation2D result = new ProjectiveTransformation2D();</span>
+<span class="fc" id="L1158">        inverse(result);</span>
+<span class="fc" id="L1159">        return result;</span>
+    }
+    
+    /**
+     * Computes the inverse of this transformation and stores the result in
+     * provided instance.
+     * @param result Instance where inverse transformation will be stored.
+     * @throws AlgebraException if inverse transform cannot be computed because
+     * of numerical instabilities.
+     */
+    protected void inverse(ProjectiveTransformation2D result) 
+            throws AlgebraException {
+
+<span class="fc" id="L1172">        result.T = Utils.inverse(T);</span>
+<span class="fc" id="L1173">    }    </span>
+    
+    /**
+     * Combines this transformation with provided transformation.
+     * The combination is equivalent to multiplying the matrix of this 
+     * transformation with the matrix of provided transformation.
+     * @param transformation transformation to be combined with.
+     */
+    public void combine(ProjectiveTransformation2D transformation) {
+<span class="fc" id="L1182">        combine(transformation, this);</span>
+<span class="fc" id="L1183">    }</span>
+    
+    /**
+     * Combines this transformation with provided transformation and returns
+     * the result as a new transformation instance.
+     * The combination is equivalent to multiplying the matrix of this
+     * transformation with the matrix of provided transformation.
+     * @param transformation transformation to be combined with.
+     * @return a new transformation resulting of the combination with this
+     * transformation and provided transformation.
+     */
+    public ProjectiveTransformation2D combineAndReturnNew(
+            ProjectiveTransformation2D transformation) {
+        
+<span class="fc" id="L1197">        ProjectiveTransformation2D result = new ProjectiveTransformation2D();</span>
+<span class="fc" id="L1198">        combine(transformation, result);</span>
+<span class="fc" id="L1199">        return result;</span>
+    }
+
+    /**
+     * Combines this transformation with provided input transformation and 
+     * stores the result into provided output transformation.
+     * The combination is equivalent to multiplying the matrix of this 
+     * transformation with the matrix of provided input transformation.
+     * @param inputTransformation transformation to be combined with.
+     * @param outputTransformation transformation where result will be stored.
+     */
+    private void combine(ProjectiveTransformation2D inputTransformation, 
+            ProjectiveTransformation2D outputTransformation) {
+        //combination in matrix representation is: T1 * T2
+        
+<span class="fc" id="L1214">        normalize();</span>
+<span class="fc" id="L1215">        inputTransformation.normalize();</span>
+        
+        
+        try {
+<span class="fc" id="L1219">            outputTransformation.T = this.T.multiplyAndReturnNew(</span>
+                    inputTransformation.T);
+            
+<span class="pc" id="L1222">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L1223">    }    </span>
+    
+    /**
+     * Estimates this transformation internal matrix by providing 4 
+     * corresponding original and transformed points.
+     * @param inputPoint1 1st input point.
+     * @param inputPoint2 2nd input point.
+     * @param inputPoint3 3rd input point.
+     * @param inputPoint4 4th input point.
+     * @param outputPoint1 1st transformed point corresponding to 1st input 
+     * point.
+     * @param outputPoint2 2nd transformed point corresponding to 2nd input
+     * point.
+     * @param outputPoint3 3rd transformed point corresponding to 3rd input
+     * point.
+     * @param outputPoint4 4th transformed point corresponding to 4th input
+     * point.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     * estimated for some reason (point configuration degeneracy, duplicate 
+     * points or numerical instabilities).
+     */
+    public final void setTransformationFromPoints(Point2D inputPoint1, 
+            Point2D inputPoint2, Point2D inputPoint3, Point2D inputPoint4, 
+            Point2D outputPoint1, Point2D outputPoint2, Point2D outputPoint3, 
+            Point2D outputPoint4) throws CoincidentPointsException {
+        
+        //normalize points to increase accuracy
+<span class="fc" id="L1250">        inputPoint1.normalize();</span>
+<span class="fc" id="L1251">        inputPoint2.normalize();</span>
+<span class="fc" id="L1252">        inputPoint3.normalize();</span>
+<span class="fc" id="L1253">        inputPoint4.normalize();</span>
+        
+<span class="fc" id="L1255">        outputPoint1.normalize();</span>
+<span class="fc" id="L1256">        outputPoint2.normalize();</span>
+<span class="fc" id="L1257">        outputPoint3.normalize();</span>
+<span class="fc" id="L1258">        outputPoint4.normalize();</span>
+        
+        //matrix of homogeneous linear system of equations.
+        //There are 9 unknowns and 8 equations (2 for each pair of corresponding 
+        //points)
+<span class="fc" id="L1263">        Matrix m = null;</span>
+        try {
+<span class="fc" id="L1265">            m = new Matrix(8, 9); //build matrix initialized to zero</span>
+                
+            //1st pair of points
+<span class="fc" id="L1268">            double iX = inputPoint1.getHomX();</span>
+<span class="fc" id="L1269">            double iY = inputPoint1.getHomY();</span>
+<span class="fc" id="L1270">            double iW = inputPoint1.getHomW();</span>
+
+<span class="fc" id="L1272">            double oX = outputPoint1.getHomX();</span>
+<span class="fc" id="L1273">            double oY = outputPoint1.getHomY();</span>
+<span class="fc" id="L1274">            double oW = outputPoint1.getHomW();</span>
+
+<span class="fc" id="L1276">            double oWiX = oW * iX;</span>
+<span class="fc" id="L1277">            double oWiY = oW * iY;</span>
+<span class="fc" id="L1278">            double oWiW = oW * iW;</span>
+
+<span class="fc" id="L1280">            double oXiX = oX * iX;</span>
+<span class="fc" id="L1281">            double oXiY = oX * iY;</span>
+<span class="fc" id="L1282">            double oXiW = oX * iW;</span>
+
+<span class="fc" id="L1284">            double oYiX = oY * iX;</span>
+<span class="fc" id="L1285">            double oYiY = oY * iY;</span>
+<span class="fc" id="L1286">            double oYiW = oY * iW;</span>
+
+<span class="fc" id="L1288">            double tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;</span>
+<span class="fc" id="L1289">            double norm = Math.sqrt(tmp +</span>
+                    oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
+
+<span class="fc" id="L1292">            m.setElementAt(0, 0, oWiX / norm);</span>
+<span class="fc" id="L1293">            m.setElementAt(0, 1, oWiY / norm);</span>
+<span class="fc" id="L1294">            m.setElementAt(0, 2, oWiW / norm);</span>
+<span class="fc" id="L1295">            m.setElementAt(0, 6, -oXiX / norm);</span>
+<span class="fc" id="L1296">            m.setElementAt(0, 7, -oXiY / norm);</span>
+<span class="fc" id="L1297">            m.setElementAt(0, 8, -oXiW / norm);</span>
+
+<span class="fc" id="L1299">            norm = Math.sqrt(tmp +</span>
+                    oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
+
+<span class="fc" id="L1302">            m.setElementAt(1, 3, oWiX / norm);</span>
+<span class="fc" id="L1303">            m.setElementAt(1, 4, oWiY / norm);</span>
+<span class="fc" id="L1304">            m.setElementAt(1, 5, oWiW / norm);</span>
+<span class="fc" id="L1305">            m.setElementAt(1, 6, -oYiX / norm);</span>
+<span class="fc" id="L1306">            m.setElementAt(1, 7, -oYiY / norm);</span>
+<span class="fc" id="L1307">            m.setElementAt(1, 8, -oYiW / norm);</span>
+
+            //2nd pair of points
+<span class="fc" id="L1310">            iX = inputPoint2.getHomX();</span>
+<span class="fc" id="L1311">            iY = inputPoint2.getHomY();</span>
+<span class="fc" id="L1312">            iW = inputPoint2.getHomW();</span>
+
+<span class="fc" id="L1314">            oX = outputPoint2.getHomX();</span>
+<span class="fc" id="L1315">            oY = outputPoint2.getHomY();</span>
+<span class="fc" id="L1316">            oW = outputPoint2.getHomW();</span>
+
+<span class="fc" id="L1318">            oWiX = oW * iX;</span>
+<span class="fc" id="L1319">            oWiY = oW * iY;</span>
+<span class="fc" id="L1320">            oWiW = oW * iW;</span>
+
+<span class="fc" id="L1322">            oXiX = oX * iX;</span>
+<span class="fc" id="L1323">            oXiY = oX * iY;</span>
+<span class="fc" id="L1324">            oXiW = oX * iW;</span>
+
+<span class="fc" id="L1326">            oYiX = oY * iX;</span>
+<span class="fc" id="L1327">            oYiY = oY * iY;</span>
+<span class="fc" id="L1328">            oYiW = oY * iW;</span>
+
+<span class="fc" id="L1330">            tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;</span>
+<span class="fc" id="L1331">            norm = Math.sqrt(tmp +</span>
+                    oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
+
+<span class="fc" id="L1334">            m.setElementAt(2, 0, oWiX / norm);</span>
+<span class="fc" id="L1335">            m.setElementAt(2, 1, oWiY / norm);</span>
+<span class="fc" id="L1336">            m.setElementAt(2, 2, oWiW / norm);</span>
+<span class="fc" id="L1337">            m.setElementAt(2, 6, -oXiX / norm);</span>
+<span class="fc" id="L1338">            m.setElementAt(2, 7, -oXiY / norm);</span>
+<span class="fc" id="L1339">            m.setElementAt(2, 8, -oXiW / norm);</span>
+
+<span class="fc" id="L1341">            norm = Math.sqrt(tmp +</span>
+                    oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
+
+<span class="fc" id="L1344">            m.setElementAt(3, 3, oWiX / norm);</span>
+<span class="fc" id="L1345">            m.setElementAt(3, 4, oWiY / norm);</span>
+<span class="fc" id="L1346">            m.setElementAt(3, 5, oWiW / norm);</span>
+<span class="fc" id="L1347">            m.setElementAt(3, 6, -oYiX / norm);</span>
+<span class="fc" id="L1348">            m.setElementAt(3, 7, -oYiY / norm);</span>
+<span class="fc" id="L1349">            m.setElementAt(3, 8, -oYiW / norm);</span>
+
+            //3rd pair of points
+<span class="fc" id="L1352">            iX = inputPoint3.getHomX();</span>
+<span class="fc" id="L1353">            iY = inputPoint3.getHomY();</span>
+<span class="fc" id="L1354">            iW = inputPoint3.getHomW();</span>
+
+<span class="fc" id="L1356">            oX = outputPoint3.getHomX();</span>
+<span class="fc" id="L1357">            oY = outputPoint3.getHomY();</span>
+<span class="fc" id="L1358">            oW = outputPoint3.getHomW();</span>
+
+<span class="fc" id="L1360">            oWiX = oW * iX;</span>
+<span class="fc" id="L1361">            oWiY = oW * iY;</span>
+<span class="fc" id="L1362">            oWiW = oW * iW;</span>
+
+<span class="fc" id="L1364">            oXiX = oX * iX;</span>
+<span class="fc" id="L1365">            oXiY = oX * iY;</span>
+<span class="fc" id="L1366">            oXiW = oX * iW;</span>
+
+<span class="fc" id="L1368">            oYiX = oY * iX;</span>
+<span class="fc" id="L1369">            oYiY = oY * iY;</span>
+<span class="fc" id="L1370">            oYiW = oY * iW;</span>
+
+<span class="fc" id="L1372">            tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;</span>
+<span class="fc" id="L1373">            norm = Math.sqrt(tmp +</span>
+                    oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
+
+<span class="fc" id="L1376">            m.setElementAt(4, 0, oWiX / norm);</span>
+<span class="fc" id="L1377">            m.setElementAt(4, 1, oWiY / norm);</span>
+<span class="fc" id="L1378">            m.setElementAt(4, 2, oWiW / norm);</span>
+<span class="fc" id="L1379">            m.setElementAt(4, 6, -oXiX / norm);</span>
+<span class="fc" id="L1380">            m.setElementAt(4, 7, -oXiY / norm);</span>
+<span class="fc" id="L1381">            m.setElementAt(4, 8, -oXiW / norm);</span>
+
+<span class="fc" id="L1383">            norm = Math.sqrt(tmp +</span>
+                    oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
+
+<span class="fc" id="L1386">            m.setElementAt(5, 3, oWiX / norm);</span>
+<span class="fc" id="L1387">            m.setElementAt(5, 4, oWiY / norm);</span>
+<span class="fc" id="L1388">            m.setElementAt(5, 5, oWiW / norm);</span>
+<span class="fc" id="L1389">            m.setElementAt(5, 6, -oYiX / norm);</span>
+<span class="fc" id="L1390">            m.setElementAt(5, 7, -oYiY / norm);</span>
+<span class="fc" id="L1391">            m.setElementAt(5, 8, -oYiW / norm);</span>
+
+            //4th pair of points
+<span class="fc" id="L1394">            iX = inputPoint4.getHomX();</span>
+<span class="fc" id="L1395">            iY = inputPoint4.getHomY();</span>
+<span class="fc" id="L1396">            iW = inputPoint4.getHomW();</span>
+
+<span class="fc" id="L1398">            oX = outputPoint4.getHomX();</span>
+<span class="fc" id="L1399">            oY = outputPoint4.getHomY();</span>
+<span class="fc" id="L1400">            oW = outputPoint4.getHomW();</span>
+
+<span class="fc" id="L1402">            oWiX = oW * iX;</span>
+<span class="fc" id="L1403">            oWiY = oW * iY;</span>
+<span class="fc" id="L1404">            oWiW = oW * iW;</span>
+
+<span class="fc" id="L1406">            oXiX = oX * iX;</span>
+<span class="fc" id="L1407">            oXiY = oX * iY;</span>
+<span class="fc" id="L1408">            oXiW = oX * iW;</span>
+
+<span class="fc" id="L1410">            oYiX = oY * iX;</span>
+<span class="fc" id="L1411">            oYiY = oY * iY;</span>
+<span class="fc" id="L1412">            oYiW = oY * iW;</span>
+
+<span class="fc" id="L1414">            tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;</span>
+<span class="fc" id="L1415">            norm = Math.sqrt(tmp +</span>
+                    oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
+
+<span class="fc" id="L1418">            m.setElementAt(6, 0, oWiX / norm);</span>
+<span class="fc" id="L1419">            m.setElementAt(6, 1, oWiY / norm);</span>
+<span class="fc" id="L1420">            m.setElementAt(6, 2, oWiW / norm);</span>
+<span class="fc" id="L1421">            m.setElementAt(6, 6, -oXiX / norm);</span>
+<span class="fc" id="L1422">            m.setElementAt(6, 7, -oXiY / norm);</span>
+<span class="fc" id="L1423">            m.setElementAt(6, 8, -oXiW / norm);</span>
+
+<span class="fc" id="L1425">            norm = Math.sqrt(tmp +</span>
+                    oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
+
+<span class="fc" id="L1428">            m.setElementAt(7, 3, oWiX / norm);</span>
+<span class="fc" id="L1429">            m.setElementAt(7, 4, oWiY / norm);</span>
+<span class="fc" id="L1430">            m.setElementAt(7, 5, oWiW / norm);</span>
+<span class="fc" id="L1431">            m.setElementAt(7, 6, -oYiX / norm);</span>
+<span class="fc" id="L1432">            m.setElementAt(7, 7, -oYiY / norm);</span>
+<span class="fc" id="L1433">            m.setElementAt(7, 8, -oYiW / norm);</span>
+<span class="pc" id="L1434">        } catch (WrongSizeException ignore) { }</span>
+                        
+        //use SVD to decompose matrix m
+        Matrix V;
+        try {
+<span class="fc" id="L1439">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L1440">            decomposer.decompose();</span>
+            
+            //ensure that matrix m has enough rank and there is a unique 
+            //solution (up to scale)
+<span class="fc bfc" id="L1444" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 8) {</span>
+<span class="fc" id="L1445">                throw new CoincidentPointsException();</span>
+            }
+<span class="fc" id="L1447">            V = decomposer.getV(); //V is 9x9</span>
+            
+            //last column of V will contain parameters of transformation
+<span class="fc" id="L1450">            T.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1, </span>
+<span class="fc" id="L1451">                    V.getSubmatrix(0, 8, 8, 8).toArray(), false);</span>
+<span class="fc" id="L1452">            normalized = true; //because columns of V are normalized after SVD</span>
+            
+<span class="nc" id="L1454">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L1455">            throw new CoincidentPointsException(e);</span>
+<span class="fc" id="L1456">        }</span>
+<span class="fc" id="L1457">    }</span>
+    
+    /**
+     * Estimates this transformation internal matrix by providing 4 
+     * corresponding original and transformed lines.
+     * @param inputLine1 1st input line.
+     * @param inputLine2 2nd input line.
+     * @param inputLine3 3rd input line.
+     * @param inputLine4 4th input line.
+     * @param outputLine1 1st transformed line corresponding to 1st input 
+     * line.
+     * @param outputLine2 2nd transformed line corresponding to 2nd input
+     * line.
+     * @param outputLine3 3rd transformed line corresponding to 3rd input
+     * line.
+     * @param outputLine4 4th transformed line corresponding to 4th input
+     * line.
+     * @throws CoincidentLinesException raised if transformation cannot be
+     * estimated for some reason (line configuration degeneracy, duplicate 
+     * line or numerical instabilities).
+     */
+    public final void setTransformationFromLines(Line2D inputLine1, 
+            Line2D inputLine2, Line2D inputLine3, Line2D inputLine4, 
+            Line2D outputLine1, Line2D outputLine2, Line2D outputLine3, 
+            Line2D outputLine4) throws CoincidentLinesException {
+        
+        //normalize lines to increase accuracy
+<span class="fc" id="L1484">        inputLine1.normalize();</span>
+<span class="fc" id="L1485">        inputLine2.normalize();</span>
+<span class="fc" id="L1486">        inputLine3.normalize();</span>
+<span class="fc" id="L1487">        inputLine4.normalize();</span>
+        
+<span class="fc" id="L1489">        outputLine1.normalize();</span>
+<span class="fc" id="L1490">        outputLine2.normalize();</span>
+<span class="fc" id="L1491">        outputLine3.normalize();</span>
+<span class="fc" id="L1492">        outputLine4.normalize();</span>
+        
+        //matrix of homogeneous linear system of equations.
+        //There are 9 unknowns and 8 equations (2 for each pair of corresponding 
+        //points)
+<span class="fc" id="L1497">        Matrix m = null;</span>
+        try {
+<span class="fc" id="L1499">            m = new Matrix(8, 9); //build matrix initialized to zero</span>
+                
+            //1st pair of lines
+<span class="fc" id="L1502">            double iA = inputLine1.getA();</span>
+<span class="fc" id="L1503">            double iB = inputLine1.getB();</span>
+<span class="fc" id="L1504">            double iC = inputLine1.getC();</span>
+
+<span class="fc" id="L1506">            double oA = outputLine1.getA();</span>
+<span class="fc" id="L1507">            double oB = outputLine1.getB();</span>
+<span class="fc" id="L1508">            double oC = outputLine1.getC();</span>
+
+<span class="fc" id="L1510">            double oCiA = oC * iA;</span>
+<span class="fc" id="L1511">            double oCiB = oC * iB;</span>
+<span class="fc" id="L1512">            double oCiC = oC * iC;</span>
+
+<span class="fc" id="L1514">            double oAiA = oA * iA;</span>
+<span class="fc" id="L1515">            double oAiB = oA * iB;</span>
+<span class="fc" id="L1516">            double oAiC = oA * iC;</span>
+
+<span class="fc" id="L1518">            double oBiA = oB * iA;</span>
+<span class="fc" id="L1519">            double oBiB = oB * iB;</span>
+<span class="fc" id="L1520">            double oBiC = oB * iC;</span>
+
+<span class="fc" id="L1522">            double tmp = oCiA * oCiA + oCiB * oCiB + oCiC * oCiC;</span>
+<span class="fc" id="L1523">            double norm = Math.sqrt(tmp +</span>
+                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
+
+<span class="fc" id="L1526">            m.setElementAt(0, 0, oCiA / norm);</span>
+<span class="fc" id="L1527">            m.setElementAt(0, 1, oCiB / norm);</span>
+<span class="fc" id="L1528">            m.setElementAt(0, 2, oCiC / norm);</span>
+<span class="fc" id="L1529">            m.setElementAt(0, 6, -oAiA / norm);</span>
+<span class="fc" id="L1530">            m.setElementAt(0, 7, -oAiB / norm);</span>
+<span class="fc" id="L1531">            m.setElementAt(0, 8, -oAiC / norm);</span>
+
+<span class="fc" id="L1533">            norm = Math.sqrt(tmp +</span>
+                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
+
+<span class="fc" id="L1536">            m.setElementAt(1, 3, oCiA / norm);</span>
+<span class="fc" id="L1537">            m.setElementAt(1, 4, oCiB / norm);</span>
+<span class="fc" id="L1538">            m.setElementAt(1, 5, oCiC / norm);</span>
+<span class="fc" id="L1539">            m.setElementAt(1, 6, -oBiA / norm);</span>
+<span class="fc" id="L1540">            m.setElementAt(1, 7, -oBiB / norm);</span>
+<span class="fc" id="L1541">            m.setElementAt(1, 8, -oBiC / norm);</span>
+
+            //2nd pair of lines
+<span class="fc" id="L1544">            iA = inputLine2.getA();</span>
+<span class="fc" id="L1545">            iB = inputLine2.getB();</span>
+<span class="fc" id="L1546">            iC = inputLine2.getC();</span>
+
+<span class="fc" id="L1548">            oA = outputLine2.getA();</span>
+<span class="fc" id="L1549">            oB = outputLine2.getB();</span>
+<span class="fc" id="L1550">            oC = outputLine2.getC();</span>
+
+<span class="fc" id="L1552">            oCiA = oC * iA;</span>
+<span class="fc" id="L1553">            oCiB = oC * iB;</span>
+<span class="fc" id="L1554">            oCiC = oC * iC;</span>
+
+<span class="fc" id="L1556">            oAiA = oA * iA;</span>
+<span class="fc" id="L1557">            oAiB = oA * iB;</span>
+<span class="fc" id="L1558">            oAiC = oA * iC;</span>
+
+<span class="fc" id="L1560">            oBiA = oB * iA;</span>
+<span class="fc" id="L1561">            oBiB = oB * iB;</span>
+<span class="fc" id="L1562">            oBiC = oB * iC;</span>
+
+<span class="fc" id="L1564">            tmp = oCiA * oCiA + oCiB * oCiB + oCiC * oCiC;</span>
+<span class="fc" id="L1565">            norm = Math.sqrt(tmp +</span>
+                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
+
+<span class="fc" id="L1568">            m.setElementAt(2, 0, oCiA / norm);</span>
+<span class="fc" id="L1569">            m.setElementAt(2, 1, oCiB / norm);</span>
+<span class="fc" id="L1570">            m.setElementAt(2, 2, oCiC / norm);</span>
+<span class="fc" id="L1571">            m.setElementAt(2, 6, -oAiA / norm);</span>
+<span class="fc" id="L1572">            m.setElementAt(2, 7, -oAiB / norm);</span>
+<span class="fc" id="L1573">            m.setElementAt(2, 8, -oAiC / norm);</span>
+
+<span class="fc" id="L1575">            norm = Math.sqrt(tmp +</span>
+                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
+
+<span class="fc" id="L1578">            m.setElementAt(3, 3, oCiA / norm);</span>
+<span class="fc" id="L1579">            m.setElementAt(3, 4, oCiB / norm);</span>
+<span class="fc" id="L1580">            m.setElementAt(3, 5, oCiC / norm);</span>
+<span class="fc" id="L1581">            m.setElementAt(3, 6, -oBiA / norm);</span>
+<span class="fc" id="L1582">            m.setElementAt(3, 7, -oBiB / norm);</span>
+<span class="fc" id="L1583">            m.setElementAt(3, 8, -oBiC / norm);</span>
+
+            //3rd pair of points
+<span class="fc" id="L1586">            iA = inputLine3.getA();</span>
+<span class="fc" id="L1587">            iB = inputLine3.getB();</span>
+<span class="fc" id="L1588">            iC = inputLine3.getC();</span>
+
+<span class="fc" id="L1590">            oA = outputLine3.getA();</span>
+<span class="fc" id="L1591">            oB = outputLine3.getB();</span>
+<span class="fc" id="L1592">            oC = outputLine3.getC();</span>
+
+<span class="fc" id="L1594">            oCiA = oC * iA;</span>
+<span class="fc" id="L1595">            oCiB = oC * iB;</span>
+<span class="fc" id="L1596">            oCiC = oC * iC;</span>
+
+<span class="fc" id="L1598">            oAiA = oA * iA;</span>
+<span class="fc" id="L1599">            oAiB = oA * iB;</span>
+<span class="fc" id="L1600">            oAiC = oA * iC;</span>
+
+<span class="fc" id="L1602">            oBiA = oB * iA;</span>
+<span class="fc" id="L1603">            oBiB = oB * iB;</span>
+<span class="fc" id="L1604">            oBiC = oB * iC;</span>
+
+<span class="fc" id="L1606">            tmp = oCiA * oCiA + oCiB * oCiB + oCiC * oCiC;</span>
+<span class="fc" id="L1607">            norm = Math.sqrt(tmp +</span>
+                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
+
+<span class="fc" id="L1610">            m.setElementAt(4, 0, oCiA / norm);</span>
+<span class="fc" id="L1611">            m.setElementAt(4, 1, oCiB / norm);</span>
+<span class="fc" id="L1612">            m.setElementAt(4, 2, oCiC / norm);</span>
+<span class="fc" id="L1613">            m.setElementAt(4, 6, -oAiA / norm);</span>
+<span class="fc" id="L1614">            m.setElementAt(4, 7, -oAiB / norm);</span>
+<span class="fc" id="L1615">            m.setElementAt(4, 8, -oAiC / norm);</span>
+
+<span class="fc" id="L1617">            norm = Math.sqrt(tmp +</span>
+                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
+
+<span class="fc" id="L1620">            m.setElementAt(5, 3, oCiA / norm);</span>
+<span class="fc" id="L1621">            m.setElementAt(5, 4, oCiB / norm);</span>
+<span class="fc" id="L1622">            m.setElementAt(5, 5, oCiC / norm);</span>
+<span class="fc" id="L1623">            m.setElementAt(5, 6, -oBiA / norm);</span>
+<span class="fc" id="L1624">            m.setElementAt(5, 7, -oBiB / norm);</span>
+<span class="fc" id="L1625">            m.setElementAt(5, 8, -oBiC / norm);</span>
+
+            //4th pair of points
+<span class="fc" id="L1628">            iA = inputLine4.getA();</span>
+<span class="fc" id="L1629">            iB = inputLine4.getB();</span>
+<span class="fc" id="L1630">            iC = inputLine4.getC();</span>
+
+<span class="fc" id="L1632">            oA = outputLine4.getA();</span>
+<span class="fc" id="L1633">            oB = outputLine4.getB();</span>
+<span class="fc" id="L1634">            oC = outputLine4.getC();</span>
+
+<span class="fc" id="L1636">            oCiA = oC * iA;</span>
+<span class="fc" id="L1637">            oCiB = oC * iB;</span>
+<span class="fc" id="L1638">            oCiC = oC * iC;</span>
+
+<span class="fc" id="L1640">            oAiA = oA * iA;</span>
+<span class="fc" id="L1641">            oAiB = oA * iB;</span>
+<span class="fc" id="L1642">            oAiC = oA * iC;</span>
+
+<span class="fc" id="L1644">            oBiA = oB * iA;</span>
+<span class="fc" id="L1645">            oBiB = oB * iB;</span>
+<span class="fc" id="L1646">            oBiC = oB * iC;</span>
+
+<span class="fc" id="L1648">            tmp = oCiA * oCiA + oCiB * oCiB + oCiC * oCiC;</span>
+<span class="fc" id="L1649">            norm = Math.sqrt(tmp +</span>
+                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
+
+<span class="fc" id="L1652">            m.setElementAt(6, 0, oCiA / norm);</span>
+<span class="fc" id="L1653">            m.setElementAt(6, 1, oCiB / norm);</span>
+<span class="fc" id="L1654">            m.setElementAt(6, 2, oCiC / norm);</span>
+<span class="fc" id="L1655">            m.setElementAt(6, 6, -oAiA / norm);</span>
+<span class="fc" id="L1656">            m.setElementAt(6, 7, -oAiB / norm);</span>
+<span class="fc" id="L1657">            m.setElementAt(6, 8, -oAiC / norm);</span>
+
+<span class="fc" id="L1659">            norm = Math.sqrt(tmp +</span>
+                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
+
+<span class="fc" id="L1662">            m.setElementAt(7, 3, oCiA / norm);</span>
+<span class="fc" id="L1663">            m.setElementAt(7, 4, oCiB / norm);</span>
+<span class="fc" id="L1664">            m.setElementAt(7, 5, oCiC / norm);</span>
+<span class="fc" id="L1665">            m.setElementAt(7, 6, -oBiA / norm);</span>
+<span class="fc" id="L1666">            m.setElementAt(7, 7, -oBiB / norm);</span>
+<span class="fc" id="L1667">            m.setElementAt(7, 8, -oBiC / norm);</span>
+<span class="pc" id="L1668">        } catch (WrongSizeException ignore) { }</span>
+                        
+        //use SVD to decompose matrix m
+        Matrix V;
+        try {
+<span class="fc" id="L1673">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L1674">            decomposer.decompose();</span>
+            
+            //ensure that matrix m has enough rank and there is a unique 
+            //solution (up to scale)
+<span class="fc bfc" id="L1678" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 8) {</span>
+<span class="fc" id="L1679">                throw new CoincidentLinesException();</span>
+            }
+<span class="fc" id="L1681">            V = decomposer.getV(); //V is 9x9</span>
+            
+            //last column of V will contain parameters of transformation
+<span class="fc" id="L1684">            Matrix transInvT = new Matrix(HOM_COORDS, HOM_COORDS);</span>
+<span class="fc" id="L1685">            transInvT.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1,</span>
+<span class="fc" id="L1686">                    V.getSubmatrix(0, 8, 8, 8).toArray(),</span>
+                    false);
+<span class="fc" id="L1688">            transInvT.transpose(); //this is now invT</span>
+<span class="fc" id="L1689">            T = Utils.inverse(transInvT);</span>
+<span class="fc" id="L1690">            normalized = false; //invT is normalized, but not T</span>
+            
+<span class="nc" id="L1692">        } catch(AlgebraException e) {</span>
+<span class="nc" id="L1693">            throw new CoincidentLinesException(e);</span>
+<span class="fc" id="L1694">        }</span>
+<span class="fc" id="L1695">    }    </span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

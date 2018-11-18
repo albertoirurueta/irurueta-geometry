@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Conic.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Conic.java</span></div><h1>Conic.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.WrongSizeException;
+
+import java.io.Serializable;
+
+
+/**
+ * This class contains the implementation of a conic.
+ */
+public class Conic extends BaseConic implements Serializable {
+        
+    /**
+     * Constructor.
+     */
+    public Conic() {
+<span class="fc" id="L35">        super();</span>
+<span class="fc" id="L36">    }</span>
+    
+    /**
+     * Constructor of this class. This constructor accepts every parameter
+     * describing a conic (parameters a, b, c, d, e, f).
+     * @param a Parameter A of the conic.
+     * @param b Parameter B of the conic.
+     * @param c Parameter C of the conic.
+     * @param d Parameter D of the conic.
+     * @param e Parameter E of the conic.
+     * @param f Parameter F of the conic.
+     */
+    public Conic(double a, double b, double c, double d, double e, double f) {
+<span class="fc" id="L49">        super(a, b, c, d, e, f);</span>
+<span class="fc" id="L50">    }</span>
+    
+    /**
+     * This method sets the matrix used to describe a conic.
+     * This matrix must be 3x3 and symmetric.
+     * @param m 3x3 Matrix describing the conic.
+     * @throws IllegalArgumentException Raised when the size of the matrix is 
+     * not 3x3.
+     * @throws NonSymmetricMatrixException Raised when the conic matrix is not 
+     * symmetric.
+     */
+    public Conic(Matrix m) throws IllegalArgumentException, 
+            NonSymmetricMatrixException {
+<span class="fc" id="L63">        super(m);</span>
+<span class="fc" id="L64">    }</span>
+    
+    /**
+     * Creates conic where provided points are contained (are locus).
+     * @param point1 1st point.
+     * @param point2 2nd point.
+     * @param point3 3rd point.
+     * @param point4 4th point.
+     * @param point5 5th point.
+     * @throws CoincidentPointsException Raised if points are coincident or 
+     * produce a degenerated configuration.
+     */
+    public Conic(Point2D point1, Point2D point2, Point2D point3, Point2D point4,
+<span class="fc" id="L77">            Point2D point5) throws CoincidentPointsException {</span>
+<span class="fc" id="L78">        setParametersFromPoints(point1, point2, point3, point4, point5);</span>
+<span class="fc" id="L79">    }</span>
+    
+    /**
+     * Checks if the given point is locus (lies within) this conic.
+     * @param point Point to be checked.
+     * @param threshold Threshold of distance to determine whether the
+     * point is locus of the conic or not. Threshold might be needed because of
+     * machine precision issues. If not provided DEFAULT_LOCUS_THRESHOLD will be
+     * used instead.
+     * @return True if the point lies within this conic, false otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */
+    public boolean isLocus(Point2D point, double threshold) 
+            throws IllegalArgumentException {
+        
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="nc" id="L95">            throw new IllegalArgumentException();</span>
+        }
+                
+        try {
+<span class="fc" id="L99">            normalize();</span>
+<span class="fc" id="L100">            Matrix C = asMatrix();</span>
+<span class="fc" id="L101">            Matrix homPoint = </span>
+                    new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 
+                    1);
+<span class="fc" id="L104">            point.normalize();</span>
+<span class="fc" id="L105">            homPoint.setElementAt(0, 0, point.getHomX());</span>
+<span class="fc" id="L106">            homPoint.setElementAt(1, 0, point.getHomY());</span>
+<span class="fc" id="L107">            homPoint.setElementAt(2, 0, point.getHomW());</span>
+<span class="fc" id="L108">            Matrix locusMatrix = homPoint.transposeAndReturnNew();</span>
+<span class="fc" id="L109">            locusMatrix.multiply(C);</span>
+<span class="fc" id="L110">            locusMatrix.multiply(homPoint);                </span>
+        
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            return Math.abs(locusMatrix.getElementAt(0, 0)) &lt; threshold;</span>
+<span class="nc" id="L113">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L114">            return false;</span>
+        }
+    }
+
+    /**
+     * Checks if the given point is locus (lies within) this conic.
+     * @param point Point to be checked.
+     * @return True if the point lies within this conic, false otherwise.
+     * @see #isLocus(Point2D, double)
+     */    
+    public boolean isLocus(Point2D point) {
+<span class="fc" id="L125">        return isLocus(point, DEFAULT_LOCUS_THRESHOLD);                </span>
+    }
+    
+    /**
+     * Computes the angle between two 2D points using this conic as a geometry
+     * base.
+     * @param pointA First point.
+     * @param pointB Second point.
+     * @return Angle between provided points given in radians..
+     */
+    public double angleBetweenPoints(Point2D pointA, Point2D pointB) {
+        try {
+            //retrieve conic as matrix
+<span class="fc" id="L138">            normalize();</span>
+<span class="fc" id="L139">            Matrix C = asMatrix();</span>
+<span class="fc" id="L140">            Matrix transHomPointA = </span>
+                new Matrix(1, Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
+<span class="fc" id="L142">            pointA.normalize();</span>
+<span class="fc" id="L143">            transHomPointA.setElementAt(0, 0, pointA.getHomX());</span>
+<span class="fc" id="L144">            transHomPointA.setElementAt(0, 1, pointA.getHomY());</span>
+<span class="fc" id="L145">            transHomPointA.setElementAt(0, 2, pointA.getHomW());</span>
+        
+        
+<span class="fc" id="L148">            Matrix tmp = transHomPointA.multiplyAndReturnNew(C);</span>
+<span class="fc" id="L149">            tmp.multiply(transHomPointA.transposeAndReturnNew()); //This is </span>
+                                                    //homPointA' * C * homPointA
+        
+<span class="fc" id="L152">            double normA = tmp.getElementAt(0, 0);</span>
+        
+<span class="fc" id="L154">            Matrix homPointB =</span>
+                    new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 
+                    1);
+<span class="fc" id="L157">            pointB.normalize();</span>
+<span class="fc" id="L158">            homPointB.setElementAt(0, 0, pointB.getHomX());</span>
+<span class="fc" id="L159">            homPointB.setElementAt(1, 0, pointB.getHomY());</span>
+<span class="fc" id="L160">            homPointB.setElementAt(2, 0, pointB.getHomW());</span>
+        
+<span class="fc" id="L162">            homPointB.transpose(tmp);</span>
+<span class="fc" id="L163">            tmp.multiply(C);</span>
+<span class="fc" id="L164">            tmp.multiply(homPointB);</span>
+        
+<span class="fc" id="L166">            double normB = tmp.getElementAt(0, 0);</span>
+        
+<span class="fc" id="L168">            transHomPointA.multiply(C);</span>
+<span class="fc" id="L169">            transHomPointA.multiply(homPointB); </span>
+                //This is homPointA' * C * homPointB
+                        
+<span class="fc" id="L172">            double angleNumerator = transHomPointA.getElementAt(0, 0);</span>
+
+<span class="fc" id="L174">            double cosTheta = angleNumerator / Math.sqrt(normA * normB);</span>
+<span class="fc" id="L175">            return Math.acos(cosTheta);</span>
+<span class="nc" id="L176">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L177">            return 0.0; //This will never happen</span>
+        }
+    }
+    
+    /**
+     * Checks if two points are perpendicular in the geometry base generated by
+     * this conic.
+     * @param pointA First point.
+     * @param pointB Second point.
+     * @param threshold Threshold to determine whether the points are 
+     * perpendicular or not. If the dot product between provided points and this 
+     * conic is greater than provided threshold, then points won't be assumed to
+     * be perpendicular. Threshold is provided because of machine precision 
+     * limits, if not provided DEFAULT_PERPENDICULAR_THRESHOLD will be used 
+     * instead.
+     * @return True if points are perpendicular, false otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */
+    public boolean arePerpendicularPoints(Point2D pointA, Point2D pointB,
+            double threshold) throws IllegalArgumentException {
+        
+        try {
+            //retrieve conic as matrix
+<span class="fc" id="L200">            Matrix transHomPointA = </span>
+                new Matrix(1, Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
+<span class="fc" id="L202">            pointA.normalize();</span>
+<span class="fc" id="L203">            transHomPointA.setElementAt(0, 0, pointA.getHomX());</span>
+<span class="fc" id="L204">            transHomPointA.setElementAt(0, 1, pointA.getHomY());</span>
+<span class="fc" id="L205">            transHomPointA.setElementAt(0, 2, pointA.getHomW());</span>
+                        
+<span class="fc" id="L207">            Matrix homPointB =</span>
+                    new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 
+                    1);
+<span class="fc" id="L210">            pointB.normalize();</span>
+<span class="fc" id="L211">            homPointB.setElementAt(0, 0, pointB.getHomX());</span>
+<span class="fc" id="L212">            homPointB.setElementAt(1, 0, pointB.getHomY());</span>
+<span class="fc" id="L213">            homPointB.setElementAt(2, 0, pointB.getHomW());</span>
+            
+<span class="fc" id="L215">            normalize();</span>
+<span class="fc" id="L216">            Matrix C = asMatrix();</span>
+<span class="fc" id="L217">            transHomPointA.multiply(C);</span>
+<span class="fc" id="L218">            transHomPointA.multiply(homPointB); </span>
+                //This is homPointA' * C * homPointB
+            
+<span class="fc" id="L221">            double perpend = transHomPointA.getElementAt(0, 0);</span>
+        
+<span class="fc bfc" id="L223" title="All 2 branches covered.">            return Math.abs(perpend) &lt; threshold;</span>
+<span class="nc" id="L224">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L225">            return false; //This will never happen</span>
+        }
+    }
+
+    /**
+     * Checks if two points are perpendicular in the geometry base generated by
+     * this conic.
+     * @param pointA First point.
+     * @param pointB Second point.
+     * @return True if points are perpendicular, false otherwise.
+     * @see #arePerpendicularPoints(Point2D, Point2D, double)
+     */    
+    public boolean arePerpendicularPoints(Point2D pointA, Point2D pointB) {
+<span class="nc" id="L238">        return arePerpendicularPoints(pointA, pointB, </span>
+                DEFAULT_PERPENDICULAR_THRESHOLD);
+    }
+    
+    /**
+     * Sets the values of the dual conic corresponding to this conic instance
+     * into provided dualConic instance.
+     * The dual conic is equal to the inverse of the conic matrix.
+     * @param dualConic Dual conic instance where the values of the dual conic
+     * of this conic instance will be stored.
+     * @throws DualConicNotAvailableException Raised if the dual conic does not 
+     * exist because this conic instance is degenerate (its inverse cannot be 
+     * computed).
+     */
+    public void dualConic(DualConic dualConic) 
+            throws DualConicNotAvailableException {
+        
+<span class="fc" id="L255">        Matrix conicMatrix = asMatrix();</span>
+        try {
+<span class="fc" id="L257">            Matrix invMatrix = com.irurueta.algebra.Utils.inverse(conicMatrix);</span>
+            
+            //ensure that resulting matrix after inversion is symmetric
+            //by computing the mean of off-diagonal elements
+<span class="fc" id="L261">            double a = invMatrix.getElementAt(0, 0);</span>
+<span class="fc" id="L262">            double b = 0.5 * (invMatrix.getElementAt(0, 1) + </span>
+<span class="fc" id="L263">                    invMatrix.getElementAt(1, 0));</span>
+<span class="fc" id="L264">            double c = invMatrix.getElementAt(1, 1);</span>
+<span class="fc" id="L265">            double d = 0.5 * (invMatrix.getElementAt(0, 2) + </span>
+<span class="fc" id="L266">                    invMatrix.getElementAt(2, 0));</span>
+<span class="fc" id="L267">            double e = 0.5 * (invMatrix.getElementAt(1, 2) + </span>
+<span class="fc" id="L268">                    invMatrix.getElementAt(2, 1));</span>
+<span class="fc" id="L269">            double f = invMatrix.getElementAt(2, 2);</span>
+<span class="fc" id="L270">            dualConic.setParameters(a, b, c, d, e, f);</span>
+<span class="nc" id="L271">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L272">            throw new DualConicNotAvailableException(e);</span>
+<span class="fc" id="L273">        }</span>
+<span class="fc" id="L274">    }</span>
+    
+    /**
+     * Computes the dual conic of this conic.
+     * The dual conic is equal to the inverse of the conic matrix.
+     * @return A new DualConic corresponding to the dual conic of this instance.
+     * @throws DualConicNotAvailableException Raised if the dual conic does not 
+     * exist because this conic instance is degenerate (its inverse cannot be 
+     * computed).
+     */
+    public DualConic getDualConic() throws DualConicNotAvailableException {
+<span class="fc" id="L285">        DualConic dualConic = new DualConic();</span>
+<span class="fc" id="L286">        dualConic(dualConic);</span>
+<span class="fc" id="L287">        return dualConic;</span>
+    }
+    
+    /**
+     * Returns the ConicType of this conic.
+     * @return A ConicType describing the type of this conic. It can be
+     * one of the following: ELLIPSE_CONIC_TYPE, CIRCLE_CONIC_TYPE, 
+     * PARABOLA_CONIC_TYPE, HYPERBOLA_CONIC_TYPE and 
+     * RECTANGULAR_HYPERBOLA_CONIC_TYPE.
+     */
+    public ConicType getConicType() {
+        //computes and evaluates the following expression: b^2 - 4ac
+<span class="fc" id="L299">        double expression = (mB * mB) - (mA * mC);</span>
+        
+<span class="fc bfc" id="L301" title="All 2 branches covered.">        if (expression &lt; 0) {</span>
+<span class="fc bfc" id="L302" title="All 4 branches covered.">            if (mA == mC &amp;&amp; mB == 0) {</span>
+<span class="fc" id="L303">                return ConicType.CIRCLE_CONIC_TYPE;</span>
+            } else {
+<span class="fc" id="L305">                return ConicType.ELLIPSE_CONIC_TYPE;</span>
+            }
+<span class="fc bfc" id="L307" title="All 2 branches covered.">        } else if (expression == 0) {</span>
+<span class="fc" id="L308">            return ConicType.PARABOLA_CONIC_TYPE;</span>
+        } else { //expression &gt; 0
+<span class="fc bfc" id="L310" title="All 2 branches covered.">            if ((mA + mC) == 0) {</span>
+<span class="fc" id="L311">                return ConicType.RECTANGULAR_HYPERBOLA_CONIC_TYPE;</span>
+            } else {
+<span class="fc" id="L313">                return ConicType.HYPERBOLA_CONIC_TYPE;</span>
+            }
+        }
+    }    
+    
+    /**
+     * Sets parameters of this conic so that provided points lie within it (are 
+     * locus).
+     * @param point1 1st point.
+     * @param point2 2nd point.
+     * @param point3 3rd point.
+     * @param point4 4th point.
+     * @param point5 5th point.
+     * @throws CoincidentPointsException Raised if points are coincident or 
+     * produce a degenerated configuration.
+     */
+    @SuppressWarnings(&quot;WeakerAccess&quot;)
+    public final void setParametersFromPoints(Point2D point1, Point2D point2, 
+            Point2D point3, Point2D point4, Point2D point5) 
+            throws CoincidentPointsException {
+        
+        //normalize points to increase accuracy
+<span class="fc" id="L335">        point1.normalize();</span>
+<span class="fc" id="L336">        point2.normalize();</span>
+<span class="fc" id="L337">        point3.normalize();</span>
+<span class="fc" id="L338">        point4.normalize();</span>
+<span class="fc" id="L339">        point5.normalize();</span>
+        
+        try {
+            //each point belonging to a conic follows equation:
+            //p' * C * p = 0 ==&gt;
+            //x^2 + y^2 + w^2 + 2*x*y + 2*x*w + 2*y*w = 0
+<span class="fc" id="L345">            Matrix m = new Matrix(5, 6);</span>
+<span class="fc" id="L346">            double x = point1.getHomX();</span>
+<span class="fc" id="L347">            double y = point1.getHomY();</span>
+<span class="fc" id="L348">            double w = point1.getHomW();</span>
+<span class="fc" id="L349">            m.setElementAt(0, 0, x * x);</span>
+<span class="fc" id="L350">            m.setElementAt(0, 1, 2.0 * x * y);</span>
+<span class="fc" id="L351">            m.setElementAt(0, 2, y * y);</span>
+<span class="fc" id="L352">            m.setElementAt(0, 3, 2.0 * x * w);</span>
+<span class="fc" id="L353">            m.setElementAt(0, 4, 2.0 * y * w);</span>
+<span class="fc" id="L354">            m.setElementAt(0, 5, w * w);</span>
+<span class="fc" id="L355">            x = point2.getHomX();</span>
+<span class="fc" id="L356">            y = point2.getHomY();</span>
+<span class="fc" id="L357">            w = point2.getHomW();</span>
+<span class="fc" id="L358">            m.setElementAt(1, 0, x * x);</span>
+<span class="fc" id="L359">            m.setElementAt(1, 1, 2.0 * x * y);</span>
+<span class="fc" id="L360">            m.setElementAt(1, 2, y * y);</span>
+<span class="fc" id="L361">            m.setElementAt(1, 3, 2.0 * x * w);</span>
+<span class="fc" id="L362">            m.setElementAt(1, 4, 2.0 * y * w);</span>
+<span class="fc" id="L363">            m.setElementAt(1, 5, w * w);</span>
+<span class="fc" id="L364">            x = point3.getHomX();</span>
+<span class="fc" id="L365">            y = point3.getHomY();</span>
+<span class="fc" id="L366">            w = point3.getHomW();</span>
+<span class="fc" id="L367">            m.setElementAt(2, 0, x * x);</span>
+<span class="fc" id="L368">            m.setElementAt(2, 1, 2.0 * x * y);</span>
+<span class="fc" id="L369">            m.setElementAt(2, 2, y * y);</span>
+<span class="fc" id="L370">            m.setElementAt(2, 3, 2.0 * x * w);</span>
+<span class="fc" id="L371">            m.setElementAt(2, 4, 2.0 * y * w);</span>
+<span class="fc" id="L372">            m.setElementAt(2, 5, w * w);</span>
+<span class="fc" id="L373">            x = point4.getHomX();</span>
+<span class="fc" id="L374">            y = point4.getHomY();</span>
+<span class="fc" id="L375">            w = point4.getHomW();</span>
+<span class="fc" id="L376">            m.setElementAt(3, 0, x * x);</span>
+<span class="fc" id="L377">            m.setElementAt(3, 1, 2.0 * x * y);</span>
+<span class="fc" id="L378">            m.setElementAt(3, 2, y * y);</span>
+<span class="fc" id="L379">            m.setElementAt(3, 3, 2.0 * x * w);</span>
+<span class="fc" id="L380">            m.setElementAt(3, 4, 2.0 * y * w);</span>
+<span class="fc" id="L381">            m.setElementAt(3, 5, w * w);</span>
+<span class="fc" id="L382">            x = point5.getHomX();</span>
+<span class="fc" id="L383">            y = point5.getHomY();</span>
+<span class="fc" id="L384">            w = point5.getHomW();</span>
+<span class="fc" id="L385">            m.setElementAt(4, 0, x * x);</span>
+<span class="fc" id="L386">            m.setElementAt(4, 1, 2.0 * x * y);</span>
+<span class="fc" id="L387">            m.setElementAt(4, 2, y * y);</span>
+<span class="fc" id="L388">            m.setElementAt(4, 3, 2.0 * x * w);</span>
+<span class="fc" id="L389">            m.setElementAt(4, 4, 2.0 * y * w);</span>
+<span class="fc" id="L390">            m.setElementAt(4, 5, w * w);</span>
+            
+            //normalize each row to increase accuracy
+<span class="fc" id="L393">            double[] row = new double[6];</span>
+            double rowNorm;
+            
+<span class="fc bfc" id="L396" title="All 2 branches covered.">            for (int j = 0; j &lt; 5; j++) {</span>
+<span class="fc" id="L397">                m.getSubmatrixAsArray(j, 0, j, 5, row);</span>
+<span class="fc" id="L398">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
+<span class="fc bfc" id="L399" title="All 2 branches covered.">                for (int i = 0; i &lt; 6; i++) {</span>
+<span class="fc" id="L400">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
+                }
+            }            
+            
+<span class="fc" id="L404">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L405">            decomposer.decompose();</span>
+            
+<span class="fc bfc" id="L407" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 5) {</span>
+<span class="fc" id="L408">                throw new CoincidentPointsException();</span>
+            }
+            
+            //the right null-space of m contains the parameters a, b, c, d, e ,f
+            //of the conic
+<span class="fc" id="L413">            Matrix V = decomposer.getV();</span>
+            
+<span class="fc" id="L415">            double a = V.getElementAt(0, 5);</span>
+<span class="fc" id="L416">            double b = V.getElementAt(1, 5);</span>
+<span class="fc" id="L417">            double c = V.getElementAt(2, 5);</span>
+<span class="fc" id="L418">            double d = V.getElementAt(3, 5);</span>
+<span class="fc" id="L419">            double e = V.getElementAt(4, 5);</span>
+<span class="fc" id="L420">            double f = V.getElementAt(5, 5);</span>
+            
+<span class="fc" id="L422">            setParameters(a, b, c, d, e, f);</span>
+<span class="nc" id="L423">        } catch (AlgebraException ex) {</span>
+<span class="nc" id="L424">            throw new CoincidentPointsException(ex);</span>
+<span class="fc" id="L425">        }        </span>
+<span class="fc" id="L426">    }</span>
+    
+    /**
+     * Returns a line tangent to this conic at provided point. Provided point
+     * must be locus of this conic, otherwise a NotLocusException will be thrown.
+     * @param point a locus point of this conic.
+     * @return A 2D line tangent to this conic at provided point.
+     * @throws NotLocusException if provided point is not locus of this conic up
+     * to DEFAULT_LOCUS_THRESHOLD.
+     */
+    public Line2D getTangentLineAt(Point2D point) throws NotLocusException {
+<span class="fc" id="L437">        return getTangentLineAt(point, DEFAULT_LOCUS_THRESHOLD);</span>
+    }
+    
+    /**
+     * Returns a line tangent to this conic at provided point. Provided point
+     * must be locus of this conic, otherwise a NotLocusException will be thrown.
+     * @param point a locus point of this conic.
+     * @param threshold threshold to determine if provided point is locus.
+     * @return A 2D line tangent to this conic at provided point.
+     * @throws NotLocusException if provided point is not locus of this conic up
+     * to provided threshold.
+     * @throws IllegalArgumentException if provided threshold is negative.
+     */
+    @SuppressWarnings(&quot;WeakerAccess&quot;)
+    public Line2D getTangentLineAt(Point2D point, double threshold) 
+            throws NotLocusException, IllegalArgumentException {
+        
+<span class="fc" id="L454">        Line2D line = new Line2D();</span>
+<span class="fc" id="L455">        tangentLineAt(point, line, threshold);</span>
+<span class="fc" id="L456">        return line;</span>
+    }
+    
+    /**
+     * Computes a line tangent to this conic at provided point. Provided point
+     * must be locus of this conic, otherwise a NotLocusException will be thrown.
+     * @param point a locus point of this conic.
+     * @param line instance of a 2D line where result will be stored.
+     * @param threshold threshold to determine if provided point is locus.
+     * @throws NotLocusException if provided point is not locus of this conic up
+     * to provided threshold.
+     * @throws IllegalArgumentException if provided threshold is negative.
+     */
+    public void tangentLineAt(Point2D point, Line2D line, double threshold)
+            throws NotLocusException, IllegalArgumentException {
+        
+<span class="pc bpc" id="L472" title="1 of 2 branches missed.">        if (!isLocus(point, threshold)) {</span>
+<span class="nc" id="L473">            throw new NotLocusException();</span>
+        }
+        
+<span class="fc" id="L476">        point.normalize();</span>
+<span class="fc" id="L477">        normalize();</span>
+        
+<span class="fc" id="L479">        Matrix C = asMatrix();</span>
+        
+        try {
+<span class="fc" id="L482">            Matrix p = new Matrix(</span>
+                    Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
+<span class="fc" id="L484">            p.setElementAt(0, 0, point.getHomX());</span>
+<span class="fc" id="L485">            p.setElementAt(1, 0, point.getHomY());</span>
+<span class="fc" id="L486">            p.setElementAt(2, 0, point.getHomW());</span>
+        
+<span class="fc" id="L488">            C.multiply(p);</span>
+<span class="pc" id="L489">        } catch (WrongSizeException ignore) { }</span>
+        
+<span class="fc" id="L491">        line.setParameters(C.getElementAt(0, 0), C.getElementAt(1, 0), </span>
+<span class="fc" id="L492">                C.getElementAt(2, 0));        </span>
+<span class="fc" id="L493">    }</span>
+        
+    /**
+     * Creates a canonical instance of the absolute conic in the metric stratum.
+     * The absolute conic in the metric stratum is the intersection of the
+     * absolute quadric with the plane at the infinity.
+     * Both the absolute conic and the dual absolute conic define orthogonality
+     * in the metric stratum, and in a purely metric stratum (i.e. when camera 
+     * is correctly calibrated), their canonical value is equal to the identity.
+     * @return a canonical instance of the absolute conic.
+     */
+    public static Conic createCanonicalAbsoluteConic() {
+<span class="fc" id="L505">        return new Conic(1.0, 0.0, 1.0, 0.0, 0.0, 1.0);</span>
+    }
+    
+    
+    //TODO: shortest distance of point to conic
+    //TODO: closest point to conic
+    //TODO: intersection of Line2D with Conic results in two points (page 9 PHD report.pdf)
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

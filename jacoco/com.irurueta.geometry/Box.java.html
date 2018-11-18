@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Box.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Box.java</span></div><h1>Box.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.irurueta.geometry;
+
+import java.io.Serializable;
+
+/**
+ * Abstract representation of a box for a point in an n-dimensional representation.
+ * @param &lt;P&gt; a point implementation.
+ */
+public abstract class Box&lt;P extends Point&gt; implements Serializable {
+
+    /**
+     * Low coordinate values.
+     */
+    protected P mLo;
+
+    /**
+     * High coordinate values.
+     */
+    protected P mHi;
+
+    /**
+     * Empty constructor.
+     */
+<span class="fc" id="L40">    protected Box() { }</span>
+
+    /**
+     * Constructor.
+     * @param lo low coordinate values.
+     * @param hi high coordinate values.
+     */
+<span class="fc" id="L47">    public Box(P lo, P hi) {</span>
+<span class="fc" id="L48">        internalSetBounds(lo, hi);</span>
+<span class="fc" id="L49">    }</span>
+
+    /**
+     * Gets low coordinate values.
+     * @return low coordinate values.
+     */
+    public P getLo() {
+<span class="fc" id="L56">        return mLo;</span>
+    }
+
+    /**
+     * Sets low coordinate values.
+     * @param lo low coordinate values.
+     */
+    public void setLo(P lo) {
+<span class="fc" id="L64">        mLo = lo;</span>
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Gets high coordinate values.
+     * @return high coordinate values.
+     */
+    public P getHi() {
+<span class="fc" id="L72">        return mHi;</span>
+    }
+
+    /**
+     * Sets high coordinate values.
+     * @param hi high coordinate values.
+     */
+    public void setHi(P hi) {
+<span class="fc" id="L80">        mHi = hi;</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Sets boundaries.
+     * @param lo low coordinate values.
+     * @param hi high coordinate values.
+     */
+    public void setBounds(P lo, P hi) {
+<span class="fc" id="L89">        internalSetBounds(lo, hi);</span>
+<span class="fc" id="L90">    }</span>
+
+    /**
+     * Gets square distance of provided point to the boundaries of this box or zero if the point is
+     * inside this box.
+     * @param point point to be checked.
+     * @return distance of provided point.
+     */
+    public double getSqrDistance(P point) {
+<span class="fc" id="L99">        int dim = point.getDimensions();</span>
+
+<span class="fc" id="L101">        double dd = 0.0;</span>
+        double pointValue, loValue, hiValue;
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        for (int i = 0; i &lt; dim; i++) {</span>
+<span class="fc" id="L104">            pointValue = point.getInhomogeneousCoordinate(i);</span>
+<span class="fc" id="L105">            loValue = mLo.getInhomogeneousCoordinate(i);</span>
+<span class="fc" id="L106">            hiValue = mHi.getInhomogeneousCoordinate(i);</span>
+
+<span class="fc bfc" id="L108" title="All 2 branches covered.">            if (pointValue &lt; loValue) {</span>
+<span class="fc" id="L109">                dd += sqr(pointValue - loValue);</span>
+            }
+<span class="fc bfc" id="L111" title="All 2 branches covered.">            if (pointValue &gt; hiValue) {</span>
+<span class="fc" id="L112">                dd += sqr(pointValue - hiValue);</span>
+            }
+        }
+<span class="fc" id="L115">        return dd;</span>
+    }
+
+    /**
+     * Gets distance of provided point to the boundaries of this box or zero if the point is
+     * inside this box.
+     * @param point point to be checked.
+     * @return distance of provided point.
+     */
+    public double getDistance(P point) {
+<span class="fc" id="L125">        return Math.sqrt(getSqrDistance(point));</span>
+    }
+
+    /**
+     * Returns the squared value.
+     * @param value value to be squared.
+     * @return squared value.
+     */
+    private double sqr(double value) {
+<span class="fc" id="L134">        return value * value;</span>
+    }
+
+    /**
+     * Internally sets boundaries.
+     * @param lo low coordinate values.
+     * @param hi high coordinate values.
+     */
+    private void internalSetBounds(P lo, P hi) {
+<span class="fc" id="L143">        mLo = lo;</span>
+<span class="fc" id="L144">        mHi = hi;</span>
+<span class="fc" id="L145">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

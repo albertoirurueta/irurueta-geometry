@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROSACLine2DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PROSACLine2DRobustEstimator.java</span></div><h1>PROSACLine2DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoincidentPointsException;
+import com.irurueta.geometry.Line2D;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.numerical.robust.*;
+
+import java.util.List;
+
+/**
+ * Finds the best 2D line for provided collection of 2D points using PROSAC
+ * algorithm.
+ */
+public class PROSACLine2DRobustEstimator extends Line2DRobustEstimator {
+    /**
+     * Constant defining default threshold to determine whether points are 
+     * inliers or not.
+     * Because typical resolution for points is 1 pixel, then default threshold 
+     * is defined as 1.
+     */
+    public static final double DEFAULT_THRESHOLD = 1;
+        
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+    
+    /**
+     * Threshold to determine whether points are inliers or not when testing
+     * possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. distance) a possible 
+     * solution has on a sampled line.
+     */
+    private double mThreshold; 
+    
+    /**
+     * Quality scores corresponding to each provided point.
+     * The larger the score value the better the quality of the sample.
+     */
+    private double[] mQualityScores;     
+    
+    /**
+     * Constructor.
+     */
+    public PROSACLine2DRobustEstimator() {
+<span class="fc" id="L62">        super();</span>
+<span class="fc" id="L63">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L64">    }</span>
+
+    /**
+     * Constructor with points.
+     * @param points 2D points to estimate a 2D line.
+     * @throws IllegalArgumentException if provided list of points doesn't have 
+     * a size greater or equal than MINIMUM_SIZE.
+     */
+    public PROSACLine2DRobustEstimator(List&lt;Point2D&gt; points) 
+            throws IllegalArgumentException {
+<span class="fc" id="L74">        super(points);</span>
+<span class="fc" id="L75">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L76">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     */
+    public PROSACLine2DRobustEstimator(Line2DRobustEstimatorListener listener) {
+<span class="fc" id="L84">        super(listener);</span>
+<span class="fc" id="L85">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L86">    }</span>
+    
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param points 2D points to estimate a 2D line.
+     * @throws IllegalArgumentException if provided list of points doesn't have 
+     * a size greater or equal than MINIMUM_SIZE.
+     */
+    public PROSACLine2DRobustEstimator(Line2DRobustEstimatorListener listener,
+            List&lt;Point2D&gt; points) throws IllegalArgumentException {
+<span class="fc" id="L99">        super(listener, points);</span>
+<span class="fc" id="L100">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L101">    }</span>
+    
+    /**
+     * Constructor.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE (i.e. 2 points).
+     */
+    public PROSACLine2DRobustEstimator(double[] qualityScores)
+            throws IllegalArgumentException {
+<span class="fc" id="L111">        super();</span>
+<span class="fc" id="L112">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L113">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * Constructor with points.
+     * @param points 2D points to estimate a 2D line.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @throws IllegalArgumentException if provided list of points don't have 
+     * the same size as the list of provided quality scores, or it their size 
+     * is not greater or equal than MINIMUM_SIZE.
+     */
+    public PROSACLine2DRobustEstimator(List&lt;Point2D&gt; points, 
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L126">        super(points);</span>
+        
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
+<span class="fc" id="L129">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L132">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L133">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L134">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE (i.e. 2 points).
+     */
+    public PROSACLine2DRobustEstimator(Line2DRobustEstimatorListener listener,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L146">        super(listener);</span>
+<span class="fc" id="L147">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L148">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L149">    }</span>
+    
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param points 2D points to estimate a 2D line.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @throws IllegalArgumentException if provided list of points don't have 
+     * the same size as the list of provided quality scores, or it their size 
+     * is not greater or equal than MINIMUM_SIZE.
+     */
+    public PROSACLine2DRobustEstimator(Line2DRobustEstimatorListener listener,
+            List&lt;Point2D&gt; points, double[] qualityScores) 
+            throws IllegalArgumentException {
+<span class="fc" id="L165">        super(listener, points);</span>
+        
+<span class="fc bfc" id="L167" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
+<span class="fc" id="L168">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L171">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L172">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L173">    }    </span>
+    
+    /**
+     * Returns threshold to determine whether points are inliers or not when 
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error a possible solution has on a 
+     * given point.
+     * @return threshold to determine whether points are inliers or not when 
+     * testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L184">        return mThreshold;</span>
+    }
+    
+    /**
+     * Sets threshold to determine whether points are inliers or not when 
+     * testing possible estimation solutions.
+     * Thre threshold refers to the amount of error a possible solution has on 
+     * a given point.
+     * @param threshold threshold to be set.
+     * @throws IllegalArgumentException if provided value is equal or less than 
+     * zero.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     */
+    public void setThreshold(double threshold) throws IllegalArgumentException, 
+            LockedException {
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L201">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L204">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L206">        mThreshold = threshold;</span>
+<span class="fc" id="L207">    }</span>
+    
+    /**
+     * Returns quality scores corresponding to each provided point.
+     * The larger the score value the better the quality of the sampled point.
+     * @return quality scores corresponding to each point.
+     */
+    @Override
+    public double[] getQualityScores() {
+<span class="fc" id="L216">        return mQualityScores;</span>
+    }
+    
+    /**
+     * Sets quality scores corresponding to each provided point.
+     * The larger the score value the better the quality of the sampled point.
+     * @param qualityScores quality scores corresponding to each point.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is 
+     * smaller than MINIMUM_SIZE (i.e. 2 samples).
+     */
+    @Override
+    public void setQualityScores(double[] qualityScores) throws LockedException,
+            IllegalArgumentException {
+<span class="pc bpc" id="L231" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L232">            throw new LockedException();</span>
+        }
+<span class="fc" id="L234">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L235">    }</span>
+    
+    /**
+     * Indicates if eatimator is ready to start the 2D line estimation.
+     * This is true when input data (i.e. 2D points and quality scores) are 
+     * provided and a minimum of MINIMUM_SIZE points are available.
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L245" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
+<span class="pc bpc" id="L246" title="1 of 2 branches missed.">                mQualityScores.length == mPoints.size();</span>
+    }      
+            
+    /**
+     * Estimates a 2D line using a robust estimator and the best set of 2D 
+     * points that pass through the estimated 2D line (i.e. belong to its locus)
+     * @return a 2D line.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     * @throws NotReadyException if provided input data is not enough to start
+     * the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     * (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public Line2D estimate() throws LockedException, NotReadyException, 
+            RobustEstimatorException {
+<span class="fc bfc" id="L263" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L264">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L266" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L267">            throw new NotReadyException();</span>
+        }
+        
+<span class="fc" id="L270">        PROSACRobustEstimator&lt;Line2D&gt; innerEstimator =</span>
+                new PROSACRobustEstimator&lt;&gt;(
+<span class="fc" id="L272">                        new PROSACRobustEstimatorListener&lt;Line2D&gt;() {</span>
+
+            @Override
+            public double getThreshold() {
+<span class="fc" id="L276">                return mThreshold;</span>
+            }
+
+            @Override
+            public int getTotalSamples() {
+<span class="fc" id="L281">                return mPoints.size();</span>
+            }
+
+            @Override
+            public int getSubsetSize() {
+<span class="fc" id="L286">                return Line2DRobustEstimator.MINIMUM_SIZE;</span>
+            }
+
+            @Override
+            public void estimatePreliminarSolutions(int[] samplesIndices, 
+                    List&lt;Line2D&gt; solutions) {
+<span class="fc" id="L292">                Point2D point1 = mPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L293">                Point2D point2 = mPoints.get(samplesIndices[1]);</span>
+                
+                try {
+<span class="fc" id="L296">                    Line2D line = new Line2D(point1, point2, false);</span>
+<span class="fc" id="L297">                    solutions.add(line);</span>
+<span class="nc" id="L298">                } catch (CoincidentPointsException e) {</span>
+                    //if points are coincident, no solution is added
+<span class="fc" id="L300">                }</span>
+<span class="fc" id="L301">            }</span>
+
+            @Override
+            public double computeResidual(Line2D currentEstimation, int i) {
+<span class="fc" id="L305">                return residual(currentEstimation, mPoints.get(i));</span>
+            }
+
+            @Override
+            public boolean isReady() {
+<span class="fc" id="L310">                return PROSACLine2DRobustEstimator.this.isReady();</span>
+            }
+
+            @Override
+            public void onEstimateStart(RobustEstimator&lt;Line2D&gt; estimator) {
+<span class="pc bpc" id="L315" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L316">                    mListener.onEstimateStart(PROSACLine2DRobustEstimator.this);</span>
+                }
+<span class="fc" id="L318">            }</span>
+
+            @Override
+            public void onEstimateEnd(RobustEstimator&lt;Line2D&gt; estimator) {
+<span class="pc bpc" id="L322" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L323">                    mListener.onEstimateEnd(PROSACLine2DRobustEstimator.this);</span>
+                }
+<span class="fc" id="L325">            }</span>
+
+            @Override
+            public void onEstimateNextIteration(
+                    RobustEstimator&lt;Line2D&gt; estimator, int iteration) {
+<span class="pc bpc" id="L330" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L331">                    mListener.onEstimateNextIteration(</span>
+                            PROSACLine2DRobustEstimator.this, iteration);
+                }
+<span class="fc" id="L334">            }</span>
+
+            @Override
+            public void onEstimateProgressChange(
+                    RobustEstimator&lt;Line2D&gt; estimator, float progress) {
+<span class="nc bnc" id="L339" title="All 2 branches missed.">                if (mListener != null) {</span>
+<span class="nc" id="L340">                    mListener.onEstimateProgressChange(</span>
+                            PROSACLine2DRobustEstimator.this, progress);
+                }
+<span class="nc" id="L343">            }</span>
+            
+            @Override
+            public double[] getQualityScores() {
+<span class="fc" id="L347">                return mQualityScores;</span>
+            }              
+        });
+        
+        try {
+<span class="fc" id="L352">            mLocked = true;</span>
+<span class="fc" id="L353">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L354">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L355">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L356">            return innerEstimator.estimate();</span>
+<span class="nc" id="L357">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L358">            throw new LockedException(e);</span>
+<span class="nc" id="L359">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L360">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L362">            mLocked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
+     */    
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L372">        return RobustEstimatorMethod.PROSAC;</span>
+    }    
+    
+    /**
+     * Sets quality scores corresponding to each provided point.
+     * This method is used internally and does not check whether instance is
+     * locked or not.
+     * @param qualityScores quality scores to be set.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE.
+     */
+    private void internalSetQualityScores(double[] qualityScores) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L385" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L386">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L389">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L390">    }     </span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

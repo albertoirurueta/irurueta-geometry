@@ -1,0 +1,1267 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EPnPPointCorrespondencePinholeCameraRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">EPnPPointCorrespondencePinholeCameraRobustEstimator.java</span></div><h1>EPnPPointCorrespondencePinholeCameraRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * Base abstract class for algorithms to robustly find the best pinhole camera 
+ * for collections of matched 3D/2D points using EPnP (Efficient 
+ * Perspective-n-Point) algorithm.
+ * Implementations of this class should be able to detect and discard outliers 
+ * in order to find the best solution.
+ */
+public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator 
+        extends PointCorrespondencePinholeCameraRobustEstimator {
+    
+    /**
+     * Intrinsic parameters of camera to be estimated.
+     */
+    protected PinholeCameraIntrinsicParameters mIntrinsic;
+    
+    /**
+     * Indicates whether planar configuration is checked to determine whether
+     * point correspondences are in such configuration and find a specific
+     * solution for such case.
+     */
+<span class="fc" id="L45">    protected boolean mPlanarConfigurationAllowed = </span>
+            EPnPPointCorrespondencePinholeCameraEstimator.
+            DEFAULT_PLANAR_CONFIGURATION_ALLOWED;
+    
+    /**
+     * Inicates whether the case where a dimension 2 nullspace is allowed.
+     * When allowed, additional constraints are taken into account to ensure
+     * equality of scales so that less point correspondences are required.
+     * Enabling this parameter is usually ok.
+     */
+<span class="fc" id="L55">    protected boolean mNullspaceDimension2Allowed = </span>
+            EPnPPointCorrespondencePinholeCameraEstimator.
+            DEFAULT_NULLSPACE_DIMENSION2_ALLOWED;
+    
+    /**
+     * Indicates whether the case where a dimension 3 nullspace is allowed.
+     * When allowed, additional constraints are taken into account to ensure
+     * equality of scales so that less point correspondences are required.
+     * Enabling this parameter is usually ok although less precise than
+     * when a nullspace of dimension 2 is used.
+     */
+<span class="fc" id="L66">    protected boolean mNullspaceDimension3Allowed = </span>
+            EPnPPointCorrespondencePinholeCameraEstimator.
+            DEFAULT_NULLSPACE_DIMENSION3_ALLOWED;    
+    
+    /**
+     * Threshold to determine whether 3D matched points are in a planar 
+     * configuration.
+     * Points are considered to be laying in a plane when the smallest singular
+     * value of their covariance matrix has a value much smaller than the 
+     * largest one as many times as this value. 
+     */
+<span class="fc" id="L77">    protected double mPlanarThreshold = </span>
+            EPnPPointCorrespondencePinholeCameraEstimator.
+            DEFAULT_PLANAR_THRESHOLD;
+    
+    /**
+     * Constructor.
+     */
+    public EPnPPointCorrespondencePinholeCameraRobustEstimator() {
+<span class="fc" id="L85">        super();</span>
+<span class="fc" id="L86">    }</span>
+    
+    /**
+     * Constructor with listener.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     */
+    public EPnPPointCorrespondencePinholeCameraRobustEstimator(
+            PinholeCameraRobustEstimatorListener listener) {
+<span class="fc" id="L95">        super(listener);</span>
+<span class="fc" id="L96">    }</span>
+    
+    /**
+     * Constructor with lists of points to be used to estimate a pinhole camera.
+     * Points in the lists located at the same position are cnsidered to be 
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to
+     * estimate a pinhole camera.
+     * @throws IllegalArgumentException if provided lists of points don't have 
+     * the same size or their size is smaller than required minimum size (6 
+     * correspondences).
+     */
+    public EPnPPointCorrespondencePinholeCameraRobustEstimator(
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
+            throws IllegalArgumentException {
+<span class="fc" id="L113">        super(points3D, points2D);</span>
+<span class="fc" id="L114">    }</span>
+        
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * pinhole camera.
+     * Points in the lists located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to
+     * estimate a pinhole camera.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than required minimum size (6
+     * correspondences).
+     */
+    public EPnPPointCorrespondencePinholeCameraRobustEstimator(
+            PinholeCameraRobustEstimatorListener listener, 
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D)
+            throws IllegalArgumentException {
+<span class="fc" id="L135">        super(listener, points3D, points2D);</span>
+<span class="fc" id="L136">    }</span>
+    
+    /**
+     * Constructor with intrinsic parameters.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     */
+    public EPnPPointCorrespondencePinholeCameraRobustEstimator(
+            PinholeCameraIntrinsicParameters intrinsic) {
+<span class="fc" id="L144">        this();</span>
+<span class="fc" id="L145">        mIntrinsic = intrinsic;</span>
+<span class="fc" id="L146">    }</span>
+    
+    /**
+     * Constructor with intrinsic parameters and listener.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     */
+    public EPnPPointCorrespondencePinholeCameraRobustEstimator(
+            PinholeCameraRobustEstimatorListener listener,
+            PinholeCameraIntrinsicParameters intrinsic) {
+<span class="fc" id="L157">        this(listener);</span>
+<span class="fc" id="L158">        mIntrinsic = intrinsic;</span>
+<span class="fc" id="L159">    }</span>
+    
+    /**
+     * Constructor with lists of points to be used to estimate a pinhole camera
+     * and intrinsic parameters.
+     * Points in the lists located at the same position are cnsidered to be 
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to
+     * estimate a pinhole camera.
+     * @throws IllegalArgumentException if provided lists of points don't have 
+     * the same size or their size is smaller than required minimum size (6 
+     * correspondences).
+     */
+    public EPnPPointCorrespondencePinholeCameraRobustEstimator(
+            PinholeCameraIntrinsicParameters intrinsic, List&lt;Point3D&gt; points3D, 
+            List&lt;Point2D&gt; points2D) throws IllegalArgumentException {
+<span class="fc" id="L178">        this(points3D, points2D);</span>
+<span class="fc" id="L179">        mIntrinsic = intrinsic;</span>
+<span class="fc" id="L180">    }</span>
+        
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * pinhole camera and intrinsic parameters.
+     * Points in the lists located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to
+     * estimate a pinhole camera.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than required minimum size (6
+     * correspondences).
+     */
+    public EPnPPointCorrespondencePinholeCameraRobustEstimator(
+            PinholeCameraRobustEstimatorListener listener, 
+            PinholeCameraIntrinsicParameters intrinsic, List&lt;Point3D&gt; points3D, 
+            List&lt;Point2D&gt; points2D) throws IllegalArgumentException {
+<span class="fc" id="L202">        this(listener, points3D, points2D);</span>
+<span class="fc" id="L203">        mIntrinsic = intrinsic;</span>
+<span class="fc" id="L204">    }</span>
+        
+    /**
+     * Indicates whether planar configuration is checked to determine whether
+     * point correspondences are in such configuration and find a specific
+     * solution for such case.
+     * @return true to allow specific solutions for planar configurations,
+     * false to always find a solution assuming the general case.
+     */
+    public boolean isPlanarConfigurationAllowed() {
+<span class="fc" id="L214">        return mPlanarConfigurationAllowed;</span>
+    }
+    
+    /**
+     * Specifies whether planar configuration is checked to determine whether
+     * point correspondences are in such configuration and find a specific
+     * solution for such case.
+     * @param planarConfigurationAllowed true to allow specific solutions for
+     * planar configurations, false to always find a solution assuming the 
+     * general case.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setPlanarConfigurationAllowed(
+            boolean planarConfigurationAllowed) throws LockedException {
+<span class="fc bfc" id="L228" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L229">            throw new LockedException();</span>
+        }
+<span class="fc" id="L231">        mPlanarConfigurationAllowed = planarConfigurationAllowed;</span>
+<span class="fc" id="L232">    }</span>
+    
+    /**
+     * Indicates whether the case where a dimension 2 nullspace is allowed.
+     * When allowed, additional constraints are taken into account to ensure
+     * equality of scales so that less point correspondences are required.
+     * Enabling this parameter is usually ok.
+     * @return true to allow 2 dimensional nullspace, false otherwise.
+     */
+    public boolean isNullspaceDimension2Allowed() {
+<span class="fc" id="L242">        return mNullspaceDimension2Allowed;</span>
+    }
+    
+    /**
+     * Specifies whether the case where a dimension 2 nullspace is allowed.
+     * When allowed, additional constraints are taken into account to ensure
+     * equality of scales so that less point correspondences are required.
+     * Enabling this parameter is usually ok.
+     * @param nullspaceDimension2Allowed true to allow 2 dimensional nullspace,
+     * false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setNullspaceDimension2Allowed(
+            boolean nullspaceDimension2Allowed) throws LockedException {
+<span class="fc bfc" id="L256" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L257">            throw new LockedException();</span>
+        }
+<span class="fc" id="L259">        mNullspaceDimension2Allowed = nullspaceDimension2Allowed;</span>
+<span class="fc" id="L260">    }</span>
+    
+    /**
+     * Indicates whether the case where a dimension 3 nullspace is allowed.
+     * When allowed, additional constraints are taken into account to ensure 
+     * equality of scales so that less point correspondences are required.
+     * Enabling this parameter is usually ok although less precise than
+     * when a nullspace of dimension 2 is used.
+     * @return true to allow 3 dimensional nullspace, false otherwise.
+     */
+    public boolean isNullspaceDimension3Allowed() {
+<span class="fc" id="L271">        return mNullspaceDimension3Allowed;</span>
+    }
+    
+    /**
+     * Specifies whether the case where a dimension 3 nullspace is allowed.
+     * When allowed, additional constraints are taken into account to ensure
+     * equality of scales so that less point correspondences are required.
+     * Enabling this parameter is usually ok although less precise than
+     * when a nullspace of dimension 2 is used.
+     * @param nullspaceDimension3Allowed true to allow 3 dimensional nullspace,
+     * false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setNullspaceDimension3Allowed(
+            boolean nullspaceDimension3Allowed) throws LockedException {
+<span class="fc bfc" id="L286" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L287">            throw new LockedException();</span>
+        }
+<span class="fc" id="L289">        mNullspaceDimension3Allowed = nullspaceDimension3Allowed;</span>
+<span class="fc" id="L290">    } </span>
+    
+    /**
+     * Gets threshold to determine whether 3D matched points are in a planar
+     * configuration.
+     * Points are considered to be laying in a plane when the smallest singular
+     * value of their covariance matrix has a value much smaller than the
+     * largest one as many times as this value.
+     * @return threshold to determine whether 3D matched points are in a planar
+     * configuration.
+     */
+    public double getPlanarThreshold() {
+<span class="fc" id="L302">        return mPlanarThreshold;</span>
+    }
+    
+    /**
+     * Sets threshold to determine whether 3D matched points are in a planar
+     * configuration.
+     * Points are considered to be laying in a plane when the smallest singular
+     * value of their covariance matrix has a value much smaller than the
+     * largest one as many times as this value.
+     * @param planarThreshold threshold to determine whether 3D matched points 
+     * are in a planar configuration.
+     * @throws IllegalArgumentException if provided threshold is negative.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setPlanarThreshold(double planarThreshold) 
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L318" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L319">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L321" title="1 of 2 branches missed.">        if (planarThreshold &lt; 0.0) {</span>
+<span class="nc" id="L322">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L324">        mPlanarThreshold = planarThreshold;</span>
+<span class="fc" id="L325">    }   </span>
+    
+    /**
+     * Gets intrinsic parameters of camera to be estimated.
+     * @return intrinsic parameters of camera to be estimated.
+     */
+    public PinholeCameraIntrinsicParameters getIntrinsic() {
+<span class="fc" id="L332">        return mIntrinsic;</span>
+    }
+    
+    /**
+     * Sets intrinsic parameters of camera to be estimated.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setIntrinsic(PinholeCameraIntrinsicParameters intrinsic)
+            throws LockedException {
+<span class="fc bfc" id="L342" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L343">            throw new LockedException();</span>
+        }
+<span class="fc" id="L345">        mIntrinsic = intrinsic;</span>
+<span class="fc" id="L346">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the pinhole camera estimation.
+     * This is true when input data (i.e. lists of 2D/3D matched points) are
+     * provided and a minimum of MIN_NUMBER_OF_POINT_CORRESPONDENCES are 
+     * available.
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="fc bfc" id="L357" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mIntrinsic != null;</span>
+    }    
+    
+   /**
+     * Returns value indicating if each picked subset point correspondences are
+     * normalized to increase the accuracy of the estimation.
+     * @return true if each picked subset point correspondences are normalized,
+     * false otherwise.
+     */
+    @Override
+    public boolean isNormalizeSubsetPointCorrespondences() {
+<span class="fc" id="L368">        return false;</span>
+    }
+    
+    /**
+     * Sets value indicating if each picked subset point correspondences are
+     * normalized to increase the accuracy of the estimation.
+     * @param normalizeSubsetPointCorrespondences true if each picked subset 
+     * point correspondences are normalized, false otherwise.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     */
+    @Override
+    public void setNormalizeSubsetPointCorrespondences(
+            boolean normalizeSubsetPointCorrespondences) 
+            throws LockedException {
+<span class="fc bfc" id="L383" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L384">            throw new LockedException();</span>
+        }
+<span class="fc" id="L386">    }    </span>
+
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided robust estimator method.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L397" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L399">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();</span>
+            case MSAC:
+<span class="fc" id="L401">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator();</span>
+            case PROSAC:
+<span class="fc" id="L403">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator();</span>
+            case PROMedS:
+<span class="fc" id="L405">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L408">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator();</span>
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided 2D/3D points and robust estimator method.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @param method method of a robust estimator algorithm to estimate best 
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than required minimum size (6
+     * correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L428" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L430">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        points3D, points2D);
+            case MSAC:
+<span class="fc" id="L433">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        points3D, points2D);
+            case PROSAC:
+<span class="fc" id="L436">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        points3D, points2D);
+            case PROMedS:
+<span class="fc" id="L439">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        points3D, points2D);
+            case RANSAC:
+            default:
+<span class="fc" id="L443">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        points3D, points2D);
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided listener.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener, 
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L460" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L462">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener);
+            case MSAC:
+<span class="fc" id="L465">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener);
+            case PROSAC:
+<span class="fc" id="L468">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener);
+            case PROMedS:
+<span class="fc" id="L471">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener);
+            case RANSAC:
+            default:
+<span class="fc" id="L475">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener);
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences 
+     * and using provided listener, 2D/3D points and robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust esitmator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than required minimum size (6
+     * correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener,
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L499" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L501">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, points3D, points2D);
+            case MSAC:
+<span class="fc" id="L504">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, points3D, points2D);
+            case PROSAC:
+<span class="fc" id="L507">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, points3D, points2D);
+            case PROMedS:
+<span class="fc" id="L510">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, points3D, points2D);
+            case RANSAC:
+            default:
+<span class="fc" id="L514">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, points3D, points2D);
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided quality scores and robust estimator method.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is 
+     * smaller than required minimum size (6 samples).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            double[] qualityScores, RobustEstimatorMethod method) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L533" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L535">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();</span>
+            case MSAC:
+<span class="fc" id="L537">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator();</span>
+            case PROSAC:
+<span class="fc" id="L539">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        qualityScores);
+            case PROMedS:
+<span class="fc" id="L542">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L546">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator();</span>
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided 2D/3D points, quality scores and robust estimator 
+     * method.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     * scores don't have the same size or their size is smaller than required
+     * minimum size (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L570" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L572">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        points3D, points2D);
+            case MSAC:
+<span class="fc" id="L575">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        points3D, points2D);
+            case PROSAC:
+<span class="fc" id="L578">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        points3D, points2D, qualityScores);
+            case PROMedS:
+<span class="fc" id="L581">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        points3D, points2D, qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L585">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        points3D, points2D);
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided listener and quality scores.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided quality scores don't have
+     * the required minimum size (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener, 
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L607" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L609">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener);
+            case MSAC:
+<span class="fc" id="L612">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener);
+            case PROSAC:
+<span class="fc" id="L615">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, qualityScores);
+            case PROMedS:
+<span class="fc" id="L618">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L622">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener);
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided listener, 2D/3D points, quality scores and robust
+     * estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality 
+     * scores don't have the same size or their size is smaller than required 
+     * minimum size (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener,
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L650" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L652">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, points3D, points2D);
+            case MSAC:
+<span class="fc" id="L655">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, points3D, points2D);
+            case PROSAC:
+<span class="fc" id="L658">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, points3D, points2D, qualityScores);
+            case PROMedS:
+<span class="fc" id="L661">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, points3D, points2D, qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L665">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, points3D, points2D);
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided robust estimator method.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraIntrinsicParameters intrinsic, 
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L681" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L683">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic);
+            case MSAC:
+<span class="fc" id="L686">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic);
+            case PROSAC:
+<span class="fc" id="L689">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic);
+            case PROMedS:
+<span class="fc" id="L692">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic);
+            case RANSAC:
+            default:
+<span class="fc" id="L696">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic);
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided 2D/3D points and robust estimator method.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @param method method of a robust estimator algorithm to estimate best 
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than required minimum size (6
+     * correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraIntrinsicParameters intrinsic, 
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L719" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L721">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic, points3D, points2D);
+            case MSAC:
+<span class="fc" id="L724">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic, points3D, points2D);
+            case PROSAC:
+<span class="fc" id="L727">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic, points3D, points2D);
+            case PROMedS:
+<span class="fc" id="L730">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic, points3D, points2D);
+            case RANSAC:
+            default:
+<span class="fc" id="L734">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic, points3D, points2D);
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided listener.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener, 
+            PinholeCameraIntrinsicParameters intrinsic,
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L753" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L755">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic);
+            case MSAC:
+<span class="fc" id="L758">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic);
+            case PROSAC:
+<span class="fc" id="L761">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic);
+            case PROMedS:
+<span class="fc" id="L764">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic);
+            case RANSAC:
+            default:
+<span class="fc" id="L768">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic);
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences 
+     * and using provided listener, 2D/3D points and robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust esitmator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than required minimum size (6
+     * correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener,
+            PinholeCameraIntrinsicParameters intrinsic, 
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L794" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L796">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic, points3D, points2D);
+            case MSAC:
+<span class="fc" id="L799">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic, points3D, points2D);
+            case PROSAC:
+<span class="fc" id="L802">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic, points3D, points2D);
+            case PROMedS:
+<span class="fc" id="L805">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic, points3D, points2D);
+            case RANSAC:
+            default:
+<span class="fc" id="L809">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic, points3D, points2D);
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided quality scores and robust estimator method.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is 
+     * smaller than required minimum size (6 samples).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraIntrinsicParameters intrinsic,
+            double[] qualityScores, RobustEstimatorMethod method) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L830" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L832">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic);
+            case MSAC:
+<span class="fc" id="L835">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic);
+            case PROSAC:
+<span class="fc" id="L838">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic, qualityScores);
+            case PROMedS:
+<span class="fc" id="L841">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic, qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L845">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic);
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided 2D/3D points, quality scores and robust estimator 
+     * method.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality
+     * scores don't have the same size or their size is smaller than required
+     * minimum size (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraIntrinsicParameters intrinsic,
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L872" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L874">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic, points3D, points2D);
+            case MSAC:
+<span class="fc" id="L877">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic, points3D, points2D);
+            case PROSAC:
+<span class="fc" id="L880">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic, points3D, points2D, qualityScores);
+            case PROMedS:
+<span class="fc" id="L883">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic, points3D, points2D, qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L887">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        intrinsic, points3D, points2D);
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided listener and quality scores.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided quality scores don't have
+     * the required minimum size (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(            
+            PinholeCameraRobustEstimatorListener listener, 
+            PinholeCameraIntrinsicParameters intrinsic,
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L911" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L913">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic);
+            case MSAC:
+<span class="fc" id="L916">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic);
+            case PROSAC:
+<span class="fc" id="L919">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic, qualityScores);
+            case PROMedS:
+<span class="fc" id="L922">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic, qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L926">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic);
+        }
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided listener, 2D/3D points, quality scores and robust
+     * estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @param method method of a robust estimator algorithm to estimate best
+     * pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality 
+     * scores don't have the same size or their size is smaller than required 
+     * minimum size (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener,
+            PinholeCameraIntrinsicParameters intrinsic,
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L956" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L958">                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic, points3D, points2D);
+            case MSAC:
+<span class="fc" id="L961">                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic, points3D, points2D);
+            case PROSAC:
+<span class="fc" id="L964">                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic, points3D, points2D, qualityScores);
+            case PROMedS:
+<span class="fc" id="L967">                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic, points3D, points2D, qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L971">                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(</span>
+                        listener, intrinsic, points3D, points2D);
+        }
+    }
+        
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using default robust estimator method.
+     * @return an instance of a pinhole camera robust estimator.
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create() {
+<span class="fc" id="L982">        return create(DEFAULT_ROBUST_METHOD);</span>
+    }
+        
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences 
+     * and using provided 2D/3D points and default robust estimator method.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than required minimum size 
+     * (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
+            throws IllegalArgumentException {
+<span class="fc" id="L999">        return create(points3D, points2D, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point 
+     * correspondences and using provided listener and default robust estimator
+     * method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @return an instance of a pinhole camera robust estimator.
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener) {
+<span class="fc" id="L1012">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided listener, 2D/3D points and default robust estimator 
+     * method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than required minimum size 
+     * (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener,
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
+            throws IllegalArgumentException {
+<span class="fc" id="L1033">        return create(listener, points3D, points2D, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided quality scores and default robust estimator method.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smalelr than required minimum size (6 samples).
+     */    
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L1047">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences 
+     * and using provided 2D/3D points, quality scores and default robust 
+     * estimator method.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality 
+     * scores don't have the same size or their size is smaller than required 
+     * minimum size (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L1067">        return create(points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point 
+     * correspondences and using provided listener, quality scores and default
+     * robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided quality scores don't have 
+     * the required minimum size (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener, 
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L1085">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided listener, 2D/3D points, quality scores and default 
+     * robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality 
+     * scores don't have the same size or their size is smaller than required 
+     * minimum size (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener,
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L1108">        return create(listener, points3D, points2D, qualityScores, </span>
+                DEFAULT_ROBUST_METHOD);
+    }            
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using default robust estimator method.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @return an instance of a pinhole camera robust estimator.
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraIntrinsicParameters intrinsic) {
+<span class="fc" id="L1120">        return create(intrinsic, DEFAULT_ROBUST_METHOD);</span>
+    }
+        
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences 
+     * and using provided 2D/3D points and default robust estimator method.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than required minimum size 
+     * (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraIntrinsicParameters intrinsic,
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
+            throws IllegalArgumentException {
+<span class="fc" id="L1139">        return create(intrinsic, points3D, points2D, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point 
+     * correspondences and using provided listener and default robust estimator
+     * method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @return an instance of a pinhole camera robust estimator.
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener,
+            PinholeCameraIntrinsicParameters intrinsic) {
+<span class="fc" id="L1154">        return create(listener, intrinsic, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided listener, 2D/3D points and default robust estimator 
+     * method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than required minimum size 
+     * (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener,
+            PinholeCameraIntrinsicParameters intrinsic,
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
+            throws IllegalArgumentException {
+<span class="fc" id="L1177">        return create(listener, intrinsic, points3D, points2D, </span>
+                DEFAULT_ROBUST_METHOD);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided quality scores and default robust estimator method.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smalelr than required minimum size (6 samples).
+     */    
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraIntrinsicParameters intrinsic,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L1194">        return create(intrinsic, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences 
+     * and using provided 2D/3D points, quality scores and default robust 
+     * estimator method.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality 
+     * scores don't have the same size or their size is smaller than required 
+     * minimum size (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraIntrinsicParameters intrinsic,
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L1216">        return create(intrinsic, points3D, points2D, qualityScores, </span>
+                DEFAULT_ROBUST_METHOD);
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point 
+     * correspondences and using provided listener, quality scores and default
+     * robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided quality scores don't have 
+     * the required minimum size (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener, 
+            PinholeCameraIntrinsicParameters intrinsic,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L1237">        return create(listener, intrinsic, qualityScores, </span>
+                DEFAULT_ROBUST_METHOD);
+    }
+    
+    /**
+     * Creates a pinhole camera robust estimator based on point correspondences
+     * and using provided listener, 2D/3D points, quality scores and default 
+     * robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param intrinsic intrinsic parameters of camera to be estimated.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to 
+     * estimate a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of points and quality 
+     * scores don't have the same size or their size is smaller than required 
+     * minimum size (6 correspondences).
+     */
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
+            PinholeCameraRobustEstimatorListener listener,
+            PinholeCameraIntrinsicParameters intrinsic,
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L1263">        return create(listener, intrinsic, points3D, points2D, qualityScores, </span>
+                DEFAULT_ROBUST_METHOD);
+    }    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

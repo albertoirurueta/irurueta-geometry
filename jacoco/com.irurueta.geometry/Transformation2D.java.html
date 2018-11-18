@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Transformation2D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Transformation2D.java</span></div><h1>Transformation2D.java</h1><pre class="source lang-java linenums">/*
+ * @file
+ * This file contains implementation of
+ * com.irurueta.geometry.Transformation2D
+ * 
+ * @author Alberto Irurueta (alberto@irurueta.com)
+ * @date October 25, 2012
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * This class performs transformations on 2D space.
+ * Transformations can be applied to any 2D geometric figure.
+ */
+public abstract class Transformation2D {
+    
+    /**
+     * Empty constructor.
+     */
+<span class="fc" id="L25">    public Transformation2D() { }</span>
+    
+    /**
+     * Transforms provided point using this transformation.
+     * @param inputPoint point to be transformed.
+     * @return transformed point.
+     */
+    public Point2D transformAndReturnNew(Point2D inputPoint){
+<span class="fc" id="L33">        Point2D outputPoint = Point2D.create();</span>
+<span class="fc" id="L34">        transform(inputPoint, outputPoint);</span>
+<span class="fc" id="L35">        return outputPoint;</span>
+    }
+    
+    /**
+     * Transforms and updates provided point.
+     * @param point point to be transformed and updated.
+     */
+    public void transform(Point2D point) {
+<span class="fc" id="L43">        transform(point, point);</span>
+<span class="fc" id="L44">    }</span>
+    
+    /**
+     * Transforms input point using this transformation and stores the result in
+     * provided output points.
+     * @param inputPoint point to be transformed.
+     * @param outputPoint instance where transformed point data will be stored.
+     */
+    public abstract void transform(Point2D inputPoint, Point2D outputPoint);
+    
+    /**
+     * Transforms provided list of points using this transformation and returns 
+     * a new one.
+     * @param inputPoints points to be transformed.
+     * @return transformed points.
+     */
+    public List&lt;Point2D&gt; transformPointsAndReturnNew(
+            List&lt;Point2D&gt; inputPoints) {
+<span class="fc" id="L62">        List&lt;Point2D&gt; outputPoints = new ArrayList&lt;&gt;(inputPoints.size());</span>
+<span class="fc" id="L63">        transformPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L64">        return outputPoints;</span>
+    }
+    
+    /**
+     * Transforms provided list of points using this transformation and stores
+     * the result in provided output list of points.
+     * Notice that any previous content in output list will be removed when
+     * calling this method.
+     * @param inputPoints points to be transformed.
+     * @param outputPoints transformed points.
+     */
+    public void transformPoints(List&lt;Point2D&gt; inputPoints, 
+            List&lt;Point2D&gt; outputPoints) {
+        
+<span class="fc" id="L78">        outputPoints.clear();</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (Point2D point : inputPoints) {</span>
+<span class="fc" id="L80">            outputPoints.add(Transformation2D.this.transformAndReturnNew(point));</span>
+<span class="fc" id="L81">        }</span>
+<span class="fc" id="L82">    }</span>
+    
+    /**
+     * Transforms provided list of points using this transformation and 
+     * overwriting their previous values.
+     * @param points points to be transformed and overwritten.
+     */
+    public void transformAndOverwritePoints(List&lt;Point2D&gt; points) {
+        
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        for (Point2D point : points) {</span>
+<span class="fc" id="L92">            transform(point, point);            </span>
+<span class="fc" id="L93">        }</span>
+<span class="fc" id="L94">    }</span>
+    
+    /**
+     * Transforms a conic using this transformation and returns a new one.
+     * @param inputConic conic to be transformed.
+     * @return transformed conic.
+     * @throws NonSymmetricMatrixException raised if due to numerical precision
+     * the resulting output conic matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed because of
+     * numerical instabilities.
+     */
+    public Conic transformAndReturnNew(Conic inputConic) 
+            throws NonSymmetricMatrixException, AlgebraException {
+<span class="fc" id="L107">        Conic outputConic = new Conic();</span>
+<span class="fc" id="L108">        transform(inputConic, outputConic);</span>
+<span class="fc" id="L109">        return outputConic;</span>
+    }
+    
+    /**
+     * Transforms and updates provided conic.
+     * @param conic conic to be transformed.
+     * @throws NonSymmetricMatrixException raised if due to numerical precision
+     * the resulting conic matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed because of
+     * numerical instabilities.
+     */
+    public void transform(Conic conic) throws NonSymmetricMatrixException,
+            AlgebraException {
+<span class="fc" id="L122">        transform(conic, conic);</span>
+<span class="fc" id="L123">    }</span>
+    
+    /**
+     * Transforms a conic using this transformation and stores the result into
+     * provided output conic.
+     * @param inputConic conic to be transformed.
+     * @param outputConic instance where data of transformed conic will be 
+     * stored.
+     * @throws NonSymmetricMatrixException raised if due to numerical precision
+     * the resulting output conic matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed because of
+     * numerical instabilities.
+     */
+    public abstract void transform(Conic inputConic, Conic outputConic) 
+            throws NonSymmetricMatrixException, AlgebraException;
+    
+    /**
+     * Transforms a dual conic using this transformation and returns a new one.
+     * @param inputDualConic dual conic to be transformed.
+     * @return transformed dual conic.
+     * @throws NonSymmetricMatrixException raised if due to numerical precision
+     * the resulting output conic matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed because
+     * of numerical instabilities.
+     */
+    public DualConic transformAndReturnNew(DualConic inputDualConic) 
+            throws NonSymmetricMatrixException, AlgebraException {
+<span class="fc" id="L150">        DualConic outputDualConic = new DualConic();</span>
+<span class="fc" id="L151">        transform(inputDualConic, outputDualConic);</span>
+<span class="fc" id="L152">        return outputDualConic;</span>
+    }
+    
+    /**
+     * Transforms and updates a dual conic using this transformation.
+     * @param dualConic dual conic to be transformed.
+     * @throws NonSymmetricMatrixException raised if due to numerical precision
+     * the resulting conic matrix is not considered to be symmetric.
+     * @throws AlgebraException raised if transform cannot be computed because 
+     * of numerical instabilities.
+     */
+    public void transform(DualConic dualConic) 
+            throws NonSymmetricMatrixException, AlgebraException {
+<span class="fc" id="L165">        transform(dualConic, dualConic);</span>
+<span class="fc" id="L166">    }</span>
+    
+    /**
+     * Transforms a dual conic using this transformation and stores the result
+     * into provided output dual conic.
+     * @param inputDualConic dual conic to be transformed.
+     * @param outputDualConic instance where data of transformed dual conic will
+     * be stored.
+     * @throws NonSymmetricMatrixException raised if due to numerical precision
+     * the resulting output dual conic matrix is not considered to be symmetric.
+     * @throws AlgebraException Raised if transform cannot be computed because
+     * of numerical instabilities.
+     */
+    public abstract void transform(DualConic inputDualConic, 
+            DualConic outputDualConic) throws NonSymmetricMatrixException,
+            AlgebraException;
+    
+    /**
+     * Transforms provided line using this transformation and returns a new one.
+     * @param inputLine line to be transformed.
+     * @return transformed line.
+     * @throws AlgebraException raised if transform cannot be computed because
+     * of numerical instabilities.
+     */
+    public Line2D transformAndReturnNew(Line2D inputLine) 
+            throws AlgebraException {
+<span class="fc" id="L192">        Line2D outputLine = new Line2D();</span>
+<span class="fc" id="L193">        transform(inputLine, outputLine);</span>
+<span class="fc" id="L194">        return outputLine;</span>
+    }
+    
+    /**
+     * Transforms and updates provided line using this transformation.
+     * @param line line to be transformed and updated.
+     * @throws AlgebraException if transform cannot be computed because of 
+     * numerical instabilities.
+     */
+    public void transform(Line2D line) throws AlgebraException {
+<span class="fc" id="L204">        transform(line, line);</span>
+<span class="fc" id="L205">    }</span>
+    
+    /**
+     * Transforms provided input line using this transformation and stores the
+     * result into provided output line instance.
+     * @param inputLine line to be transformed.
+     * @param outputLine instance where data of transformed line will be stored.
+     * @throws AlgebraException Raised if transform cannot be computed because
+     * of numerical instabilities.
+     */
+    public abstract void transform(Line2D inputLine, Line2D outputLine) 
+            throws AlgebraException;
+    
+    /**
+     * Transforms provided list of lines using this transformation and returns
+     * a new one.
+     * @param inputLines lines to be transformed.
+     * @return transformed lines.
+     * @throws AlgebraException raised if transform cannot be computed because
+     * of numerical instabilities.
+     */
+    public List&lt;Line2D&gt; transformLinesAndReturnNew(List&lt;Line2D&gt; inputLines) 
+            throws AlgebraException {
+<span class="fc" id="L228">        List&lt;Line2D&gt; outputLines = new ArrayList&lt;&gt;(inputLines.size());</span>
+<span class="fc" id="L229">        transformLines(inputLines, outputLines);</span>
+<span class="fc" id="L230">        return outputLines;</span>
+    }
+    
+    /**
+     * Transforms provided list of lines using this transformation and stores
+     * the result in provided output list of lines.
+     * Notice that any previous content in output list will be removed when
+     * calling this method.
+     * @param inputLines lines to be transformed.
+     * @param outputLines transformed lines.
+     * @throws AlgebraException raised if transform cannot be computed because
+     * of numerical instabilities.
+     */
+    public void transformLines(List&lt;Line2D&gt; inputLines, 
+            List&lt;Line2D&gt; outputLines) throws AlgebraException {
+        
+<span class="fc" id="L246">        outputLines.clear();</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">        for (Line2D line : inputLines) {</span>
+<span class="fc" id="L248">            outputLines.add(Transformation2D.this.transformAndReturnNew(line));</span>
+<span class="fc" id="L249">        }</span>
+<span class="fc" id="L250">    }</span>
+    
+    /**
+     * Transforms provided list of lines using this transformation and 
+     * overwriting their previous values.
+     * @param lines lines to be transformed and overwritten.
+     * @throws AlgebraException raised if transform cannot be computed because
+     * of numerical instabilities.
+     */
+    public void transformAndOverwriteLines(List&lt;Line2D&gt; lines) 
+            throws AlgebraException {
+        
+<span class="fc bfc" id="L262" title="All 2 branches covered.">        for (Line2D line : lines) {</span>
+<span class="fc" id="L263">            transform(line, line);            </span>
+<span class="fc" id="L264">        }</span>
+<span class="fc" id="L265">    }</span>
+    
+    /**
+     * Transforms provided polygon using this transformation and returns a new
+     * one.
+     * @param inputPolygon polygon to be transformed.
+     * @return Transformed polygon.
+     */
+    public Polygon2D transformAndReturnNew(Polygon2D inputPolygon) {
+<span class="fc" id="L274">        List&lt;Point2D&gt; outVertices = transformPointsAndReturnNew(</span>
+<span class="fc" id="L275">                inputPolygon.getVertices());</span>
+        try {
+<span class="fc" id="L277">            return new Polygon2D(outVertices);</span>
+<span class="nc" id="L278">        } catch (NotEnoughVerticesException ignore) {</span>
+            //this will never happen because all existing polygons have enough
+            //vertices
+<span class="nc" id="L281">            return null; </span>
+        }
+    }
+    
+    /**
+     * Transforms and updates provided polygon using this transformation.
+     * @param polygon polygon to be transformed.
+     */
+    public void transform(Polygon2D polygon) {
+<span class="fc" id="L290">        transformAndOverwritePoints(polygon.getVertices());</span>
+<span class="fc" id="L291">    }</span>
+    
+    /**
+     * Transforms provided input polygon using this transformation and stores 
+     * the result into provided output polygon instance.
+     * @param inputPolygon polygon to be transformed.
+     * @param outputPolygon instance where transformed polygon data will be
+     * stored.
+     */
+    public void transform(Polygon2D inputPolygon, Polygon2D outputPolygon) {
+        try {
+<span class="fc" id="L302">            outputPolygon.setVertices(transformPointsAndReturnNew(</span>
+<span class="fc" id="L303">                    inputPolygon.getVertices()));</span>
+<span class="nc" id="L304">        } catch (NotEnoughVerticesException ignore) {</span>
+            //this will never happen because all existing polygons have enough
+            //vertices
+<span class="fc" id="L307">        }</span>
+<span class="fc" id="L308">    }</span>
+    
+    /**
+     * Transforms provided triangle using this transformation and returns a new 
+     * one.
+     * @param inputTriangle triangle to be transformed.
+     * @return transformed triangle.
+     */
+    public Triangle2D transformAndReturnNew(Triangle2D inputTriangle) {
+<span class="fc" id="L317">        Point2D vertex1 = Transformation2D.this.transformAndReturnNew(</span>
+<span class="fc" id="L318">                inputTriangle.getVertex1());</span>
+<span class="fc" id="L319">        Point2D vertex2 = Transformation2D.this.transformAndReturnNew(</span>
+<span class="fc" id="L320">                inputTriangle.getVertex2());</span>
+<span class="fc" id="L321">        Point2D vertex3 = Transformation2D.this.transformAndReturnNew(</span>
+<span class="fc" id="L322">                inputTriangle.getVertex3());</span>
+<span class="fc" id="L323">        return new Triangle2D(vertex1, vertex2, vertex3);</span>
+    }
+    
+    /**
+     * Transforms and updates provided input triangle using this transformation.
+     * @param triangle triangle to be transformed.
+     */
+    public void transform(Triangle2D triangle) {
+<span class="fc" id="L331">        transform(triangle, triangle);</span>
+<span class="fc" id="L332">    }</span>
+    
+    /**
+     * Transforms provided input triangle using this transformation and stores
+     * the result into provided output triangle instance.
+     * @param inputTriangle triangle to be transformed.
+     * @param outputTriangle instance where transformed triangle data will be
+     * stored
+     */
+    public void transform(Triangle2D inputTriangle, Triangle2D outputTriangle) {
+<span class="fc" id="L342">        outputTriangle.setVertex1(transformAndReturnNew(</span>
+<span class="fc" id="L343">                inputTriangle.getVertex1())); </span>
+<span class="fc" id="L344">        outputTriangle.setVertex2(transformAndReturnNew(</span>
+<span class="fc" id="L345">                inputTriangle.getVertex2())); </span>
+<span class="fc" id="L346">        outputTriangle.setVertex3(transformAndReturnNew(</span>
+<span class="fc" id="L347">                inputTriangle.getVertex3())); </span>
+<span class="fc" id="L348">    }</span>
+    
+        /**
+     * Represents this transformation as a 3x3 matrix.
+     * A point can be transformed as T * p, where T is the transformation matrix
+     * and p is a point expressed as an homogeneous vector.
+     * @return This transformation in matrix form.
+     */
+    public abstract Matrix asMatrix();
+    
+    /**
+     * Represents this transformation as a 3x3 matrix and stores the result in
+     * provided instance.
+     * @param m Instance where transformation matrix will be stored.
+     * @throws IllegalArgumentException Raised if provided instance is not a 3x3 
+     * matrix.
+     */
+    public abstract void asMatrix(Matrix m) throws IllegalArgumentException;    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

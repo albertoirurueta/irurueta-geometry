@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DualQuadricRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">DualQuadricRobustEstimator.java</span></div><h1>DualQuadricRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.DualQuadric;
+import com.irurueta.geometry.Plane;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * This is an abstract class for algorithms to robustly find the best dual 
+ * quadric that fits in a collection of 3D planes.
+ * Implementations of this class should be able to detect and discard outliers
+ * in order to find the best solution.
+ */
+public abstract class DualQuadricRobustEstimator {
+    /**
+     * Minimum number of 3D planes required to estimate a Dual Quadric.
+     */
+    public static final int MINIMUM_SIZE = 9;
+    
+    /**
+     * Default amount of progress variation before notifying a change in
+     * estimation progress. By default this is set to 5%.
+     */
+    public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
+    
+    /**
+     * Minimum allowed value for progress delta.
+     */
+    public static final float MIN_PROGRESS_DELTA = 0.0f;
+    
+    /**
+     * Maximum allowed value for progress delta.
+     */
+    public static final float MAX_PROGRESS_DELTA = 1.0f;
+    
+    /**
+     * Constant defining default confidence of the estimated result, which is
+     * 99%. This means that with a probability of 99% estimation will be 
+     * accurate because chosen subsamples will be inliers.
+     */
+    public static final double DEFAULT_CONFIDENCE = 0.99;
+    
+    /**
+     * Default maximum allowed number of iterations.
+     */
+    public static final int DEFAULT_MAX_ITERATIONS = 5000;
+    
+    /**
+     * Minimum allowed confidence value.
+     */
+    public static final double MIN_CONFIDENCE = 0.0;
+    
+    /**
+     * Maximum allowed confidence value.
+     */
+    public static final double MAX_CONFIDENCE = 1.0;
+    
+    /**
+     * Minimum allowed number of iterations.
+     */
+    public static final int MIN_ITERATIONS = 1;
+    
+    /**
+     * Default robust estimator method when none is provided.
+     */
+<span class="fc" id="L85">    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =</span>
+            RobustEstimatorMethod.PROMedS;
+    
+    /**
+     * Listener to be notified of events such as when estimation starts, ends
+     * or its progress significantly changes.
+     */
+    protected DualQuadricRobustEstimatorListener mListener;
+    
+    /**
+     * Indicates if this estimator is locked because an estimation is being
+     * computed.
+     */
+    protected volatile boolean mLocked;
+    
+    /**
+     * Amount of progress variation before notifying a progress change during
+     * estimation.
+     */
+    protected float mProgressDelta;
+    
+    /**
+     * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
+     * equivalent to 100%). The amount of confidence indicates the probability
+     * that the estimated result is correct. Usually this value will be close
+     * to 1.0, but not exactly 1.0.
+     */
+    protected double mConfidence;
+    
+    /**
+     * Maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     */
+    protected int mMaxIterations;
+    
+    /**
+     * List of planes to be used to estimate a dual quadric. Provided list must
+     * have a size greater or equal than MINIMUM_SIZE.
+     */
+    protected List&lt;Plane&gt; mPlanes;
+
+    /**
+     * Matrix representation of a 3D plane to be reused when computing
+     * residuals
+     */
+    protected Matrix mTestPlane;
+
+    /**
+     * Matrix representation of a dual quadric to be reused when computing
+     * residuals.
+     */
+    private Matrix mTestDualQ;
+    
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L142">    public DualQuadricRobustEstimator() {</span>
+<span class="fc" id="L143">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L144">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L145">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L146">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     */
+    public DualQuadricRobustEstimator(
+<span class="fc" id="L154">            DualQuadricRobustEstimatorListener listener) {</span>
+<span class="fc" id="L155">        mListener = listener;</span>
+<span class="fc" id="L156">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L157">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L158">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L159">    }</span>
+    
+    /**
+     * Constructor with lines.
+     * @param planes planes to estimate a dual quadric.
+     * @throws IllegalArgumentException if provided list of planes don't have
+     * a size greater or equal than MINIMUM_SIZE.
+     */
+    public DualQuadricRobustEstimator(List&lt;Plane&gt; planes)
+<span class="fc" id="L168">            throws IllegalArgumentException {</span>
+<span class="fc" id="L169">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L170">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L171">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L172">        internalSetPlanes(planes);</span>
+<span class="fc" id="L173">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param planes planes to estimate a dual quadric.
+     * @throws IllegalArgumentException if provided list of planes don't have a
+     * size greater or equal than MINIMUM_SIZE.
+     */
+    public DualQuadricRobustEstimator(
+            DualQuadricRobustEstimatorListener listener, List&lt;Plane&gt; planes) 
+<span class="fc" id="L185">            throws IllegalArgumentException {</span>
+<span class="fc" id="L186">        mListener = listener;</span>
+<span class="fc" id="L187">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L188">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L189">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L190">        internalSetPlanes(planes);</span>
+<span class="fc" id="L191">    }</span>
+    
+    /**
+     * Returns reference to listener to be notified of events such as when
+     * estimation starts, ends or its progress significantly changes.
+     * @return listener to be notified of events.
+     */
+    public DualQuadricRobustEstimatorListener getListener() {
+<span class="fc" id="L199">        return mListener;</span>
+    }
+    
+    /**
+     * Sets listener to be notified of events such as when estimation starts,
+     * ends or its progress significantly changes.
+     * @param listener listener to be notified of events.
+     * @throws LockedException if robust estimator is locked.
+     */
+    public void setListener(DualQuadricRobustEstimatorListener listener)
+            throws LockedException {
+<span class="fc bfc" id="L210" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L211">            throw new LockedException();</span>
+        }
+<span class="fc" id="L213">        mListener = listener;</span>
+<span class="fc" id="L214">    }</span>
+    
+    /**
+     * Indicates whether listener has been provided and is available for
+     * retrieval.
+     * @return true if available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L222" title="All 2 branches covered.">        return mListener != null;</span>
+    }
+    
+    /**
+     * Indicates if this instance is locked because estimation is being computed.
+     * @return true if locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L230">        return mLocked;</span>
+    }
+    
+    /**
+     * Returns amount of progress variation before notifying a progress change
+     * during estimation.
+     * @return amount of progress variation before notiying a progres change
+     * during estimation.
+     */
+    public float getProgressDelta() {
+<span class="fc" id="L240">        return mProgressDelta;</span>
+    }
+    
+    /**
+     * Sets amount of progress variation before notifying a progress change
+     * during estimation.
+     * @param progressDelta amount of progress variation before notifying a
+     * progress change during estimation.
+     * @throws IllegalArgumentException if progress delta is less than zero or
+     * greater than 1.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setProgressDelta(float progressDelta)
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L255" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L256">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L258" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+                progressDelta &gt; MAX_PROGRESS_DELTA) {
+<span class="fc" id="L260">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L262">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L263">    }</span>
+    
+    /**
+     * Returns amount of confidence expressed as a value between 0.0 and 1.0
+     * (which is equivalent to 100%). The amount of confidence indicates that
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     * @return amount of confidence as a value between 0.0 and 1.0.
+     */
+    public double getConfidence() {
+<span class="fc" id="L273">        return mConfidence;</span>
+    }
+    
+    /**
+     * Sets amount of confidence expressed as a value between 0.0 and 1.0 (which
+     * is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     * @param confidence confidence to be set as a value between 0.0 and 1.0.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     * 1.0.
+     * @throws LockedException if this estimator is locked because an estimator 
+     * is being computed.
+     */
+    public void setConfidence(double confidence)
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L289" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L290">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L292" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L293">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L295">        mConfidence = confidence;</span>
+<span class="fc" id="L296">    }</span>
+    
+    /**
+     * Returns maximum allowed number of iterations. If maximum allowed number
+     * of iterations is achieved without converging to a result when calling
+     * estimate(), a RobustEstimatorException will be raised.
+     * @return maximum allowed number of iterations.
+     */
+    public int getMaxIterations() {
+<span class="fc" id="L305">        return mMaxIterations;</span>
+    }
+    
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setMaxIterations(int maxIterations) 
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L319" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L320">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L322" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L323">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L325">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L326">    }</span>
+    
+    /**
+     * Returns list of planes to be used to estimate a dual quadric.
+     * Provided list have a size greater or equal than MINIMUM_SIZE.
+     * @return list of planes to be used to estimate a dual quadric.
+     */
+    public List&lt;Plane&gt; getPlanes() {
+<span class="fc" id="L334">        return mPlanes;</span>
+    }
+    
+    /**
+     * Sets list of planes to be used to estimate a dual quadric.
+     * Provided list must have a size greater or equal than MINIMUM_SIZE.
+     * @param planes list of planes to be used to estimate a dual quadric.
+     * @throws IllegalArgumentException if provided list of planes doesn't have
+     * a size greater or equal than MINIMUM_SIZE.
+     * @throws LockedException if estimator is locked because a computation is
+     * already in progress.
+     */
+    public void setPlanes(List&lt;Plane&gt; planes) throws IllegalArgumentException,
+            LockedException {
+<span class="fc bfc" id="L348" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L349">            throw new LockedException();</span>
+        }
+<span class="fc" id="L351">        internalSetPlanes(planes);</span>
+<span class="fc" id="L352">    }</span>
+    
+    /**
+     * Indicates if estimator is ready to start the dual quadric estimation.
+     * This is true when MINIMUM_SIZE lines are available.
+     * @return true if estimator is ready, false otherwise.
+     */
+    public boolean isReady() {
+<span class="fc bfc" id="L360" title="All 4 branches covered.">        return mPlanes != null &amp;&amp; mPlanes.size() &gt;= MINIMUM_SIZE;</span>
+    }
+    
+    /**
+     * Returns quality scores corresponding to each plane.
+     * The larger the score value the better the quality of the plane measure.
+     * This implementation always return null.
+     * Subclasses using quality scores must implement proper behaviour.
+     * @return quality scores coresponding to each plane.
+     */
+    public double[] getQualityScores() {
+<span class="fc" id="L371">        return null;</span>
+    }
+    
+    /**
+     * Sets quality scores corresponding to each plane.
+     * The larger the score value the better the quality of the matching.
+     * This implementation makes no action.
+     * Subclasses using quality scores must implement proper behaviour.
+     * @param qualityScores quality scores corresponding to each plane.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE (i.e. 9 samples).
+     */
+    public void setQualityScores(double[] qualityScores) throws LockedException,
+<span class="fc" id="L386">            IllegalArgumentException { }</span>
+    
+    /**
+     * Creates a dual quadric robust estimator based on plane samples and using
+     * provided robust estimator method.
+     * @param method method of a robust estimator algorithm to estimate bes dual
+     * quadric.
+     * @return an instance of a dual quadric robust estimator.
+     */
+    public static DualQuadricRobustEstimator create(RobustEstimatorMethod method) {
+<span class="fc bfc" id="L396" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L398">                return new LMedSDualQuadricRobustEstimator();</span>
+            case MSAC:
+<span class="fc" id="L400">                return new MSACDualQuadricRobustEstimator();</span>
+            case PROSAC:
+<span class="fc" id="L402">                return new PROSACDualQuadricRobustEstimator();</span>
+            case PROMedS:
+<span class="fc" id="L404">                return new PROMedSDualQuadricRobustEstimator();</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L407">                return new RANSACDualQuadricRobustEstimator();</span>
+        }
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator based on plane samples and using
+     * provided planes and robust estimator method.
+     * @param planes 3D planes to estimate a dual quadric.
+     * @param method method of a robust estimator algorithm to estimate best 
+     * dual quadric.
+     * @return an instance of a dual quadric robust estimator.
+     * @throws IllegalArgumentException if provided list of planes don't have a
+     * size greater or equal than MINIMUM_SIZE.
+     */
+    public static DualQuadricRobustEstimator create(List&lt;Plane&gt; planes, 
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L423" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L425">                return new LMedSDualQuadricRobustEstimator(planes);</span>
+            case MSAC:
+<span class="fc" id="L427">                return new MSACDualQuadricRobustEstimator(planes);</span>
+            case PROSAC:
+<span class="fc" id="L429">                return new PROSACDualQuadricRobustEstimator(planes);</span>
+            case PROMedS:
+<span class="fc" id="L431">                return new PROMedSDualQuadricRobustEstimator(planes);</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L434">                return new RANSACDualQuadricRobustEstimator(planes);</span>
+        }
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator based on plane samples and using
+     * provided listener.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param method method of a robust estimator algorithm to estimate best
+     * dual quadric.
+     * @return an instance of a dual quadric robust estimator.
+     */
+    public static DualQuadricRobustEstimator create(
+            DualQuadricRobustEstimatorListener listener, 
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L450" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L452">                return new LMedSDualQuadricRobustEstimator(listener);</span>
+            case MSAC:
+<span class="fc" id="L454">                return new MSACDualQuadricRobustEstimator(listener);</span>
+            case PROSAC:
+<span class="fc" id="L456">                return new PROSACDualQuadricRobustEstimator(listener);</span>
+            case PROMedS:
+<span class="fc" id="L458">                return new PROMedSDualQuadricRobustEstimator(listener);</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L461">                return new RANSACDualQuadricRobustEstimator(listener);</span>
+        }
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator based on plane samples and using
+     * provided listener and planes.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param planes 3D planes to estimate a dual quadric.
+     * @param method method of a robust estimator algorithm to estimate best 
+     * dual quadric.
+     * @return an instance of a dual quadric robust estimator.
+     * @throws IllegalArgumentException if provided list of planes don't have a
+     * size greater or equal than MINIMUM_SIZE.
+     */
+    public static DualQuadricRobustEstimator create(
+            DualQuadricRobustEstimatorListener listener, List&lt;Plane&gt; planes,
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L480" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L482">                return new LMedSDualQuadricRobustEstimator(listener, planes);</span>
+            case MSAC:
+<span class="fc" id="L484">                return new MSACDualQuadricRobustEstimator(listener, planes);</span>
+            case PROSAC:
+<span class="fc" id="L486">                return new PROSACDualQuadricRobustEstimator(listener, planes);</span>
+            case PROMedS:
+<span class="fc" id="L488">                return new PROMedSDualQuadricRobustEstimator(listener, planes);</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L491">                return new RANSACDualQuadricRobustEstimator(listener, planes);</span>
+        }
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator based on plane samples and using
+     * provided robust estimator method.
+     * @param qualityScores quality scores corresponding to each provided plane.
+     * @param method method of a robust estimator algorithm to estimate bes dual
+     * quadric.
+     * @return an instance of a dual quadric robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE (i.e. 9 planes).
+     */
+    public static DualQuadricRobustEstimator create(double[] qualityScores,
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L507" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L509">                return new LMedSDualQuadricRobustEstimator();</span>
+            case MSAC:
+<span class="fc" id="L511">                return new MSACDualQuadricRobustEstimator();</span>
+            case PROSAC:
+<span class="fc" id="L513">                return new PROSACDualQuadricRobustEstimator(qualityScores);</span>
+            case PROMedS:
+<span class="fc" id="L515">                return new PROMedSDualQuadricRobustEstimator(qualityScores);</span>
+            case RANSAC:
+            default:
+<span class="fc" id="L518">                return new RANSACDualQuadricRobustEstimator();</span>
+        }
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator method based on plane samples and
+     * using provided planes and robust estimator method.
+     * @param planes 3D planes to estimate a dual quadric.
+     * @param qualityScores quality scores correspondign to each provided plane.
+     * @param method method of a robust estimator algorithm to estimate best
+     * dual quadric.
+     * @return an instance of a dual quadric robust estimator.
+     * @throws IllegalArgumentException if provided list of planes don't have
+     * the same size as the list of provided quality scores, or if their size
+     * is not greater or equal than MINIMUM_SIZE.
+     */
+    public static DualQuadricRobustEstimator create(List&lt;Plane&gt; planes, 
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L537" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L539">                return new LMedSDualQuadricRobustEstimator(planes);</span>
+            case MSAC:
+<span class="fc" id="L541">                return new MSACDualQuadricRobustEstimator(planes);</span>
+            case PROSAC:
+<span class="fc" id="L543">                return new PROSACDualQuadricRobustEstimator(planes, </span>
+                        qualityScores);
+            case PROMedS:
+<span class="fc" id="L546">                return new PROMedSDualQuadricRobustEstimator(planes, </span>
+                        qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L550">                return new RANSACDualQuadricRobustEstimator(planes);</span>
+        }
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator based on plane samples and using
+     * provided listener.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each provided plane.
+     * @param method method of a robust estimator algorithm to estimate best 
+     * dual quadric.
+     * @return an instance of a dual quadric robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE (i.e. 9 planes).
+     */
+    public static DualQuadricRobustEstimator create(
+            DualQuadricRobustEstimatorListener listener, double[] qualityScores, 
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L569" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L571">                return new LMedSDualQuadricRobustEstimator(listener);</span>
+            case MSAC:
+<span class="fc" id="L573">                return new MSACDualQuadricRobustEstimator(listener);</span>
+            case PROSAC:
+<span class="fc" id="L575">                return new PROSACDualQuadricRobustEstimator(listener, </span>
+                        qualityScores);
+            case PROMedS:
+<span class="fc" id="L578">                return new PROMedSDualQuadricRobustEstimator(listener, </span>
+                        qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L582">                return new RANSACDualQuadricRobustEstimator(listener);</span>
+        }
+    }
+    
+    /**
+     * Creates a dual conic robust estimator based on 3D plane samples and using
+     * provied listener and planes.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param planes 3D planes to estimate a dual quadric.
+     * @param qualityScores quality scores corresponding to each provided plane.
+     * @param method method of a robust estimator algorithm to estimate best
+     * dual quadric.
+     * @return an instance of a dual quadric robust estimator.
+     * @throws IllegalArgumentException if provided list of planes don't have
+     * the same size as the list of provided qualitys cores, or it their size is
+     * not greater or equal than MINIMUM_SIZE.
+     */
+    public static DualQuadricRobustEstimator create(
+            DualQuadricRobustEstimatorListener listener, List&lt;Plane&gt; planes,
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L604" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L606">                return new LMedSDualQuadricRobustEstimator(listener, planes);</span>
+            case MSAC:
+<span class="fc" id="L608">                return new MSACDualQuadricRobustEstimator(listener, planes);</span>
+            case PROSAC:
+<span class="fc" id="L610">                return new PROSACDualQuadricRobustEstimator(listener, planes, </span>
+                        qualityScores);
+            case PROMedS:
+<span class="fc" id="L613">                return new PROMedSDualQuadricRobustEstimator(listener, planes, </span>
+                        qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L617">                return new RANSACDualQuadricRobustEstimator(listener, planes);</span>
+        }
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator based on plane samples and using
+     * default robust estimator method.
+     * @return an instance of a dual quadric robust estimator.
+     */
+    public static DualQuadricRobustEstimator create() {
+<span class="fc" id="L627">        return create(DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator based on plane samples and using
+     * provided planes and default robust estimator method.
+     * @param planes 3D planes to estimate a dual quadric.
+     * @return an instance of a dual quadric robust estimator.
+     * @throws IllegalArgumentException if provided list of planes doesn't have 
+     * a size greater or equal than MINIMUM_SIZE.
+     */
+    public static DualQuadricRobustEstimator create(List&lt;Plane&gt; planes)
+            throws IllegalArgumentException {
+<span class="fc" id="L640">        return create(planes, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator based on plane samples and using
+     * provided listener and default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @return an instance of a dual quadric robust estimator.
+     */
+    public static DualQuadricRobustEstimator create(
+            DualQuadricRobustEstimatorListener listener) {
+<span class="fc" id="L652">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator based on plane samples and using
+     * provided listener and lines and default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param planes 3D planes to estimate a dual quadric.
+     * @return an instance of a dual conic robust estimator.
+     * @throws IllegalArgumentException if provided list of planes doesn't have
+     * a size greater or equal than MINIMUM_SIZE.
+     */
+    public static DualQuadricRobustEstimator create(
+            DualQuadricRobustEstimatorListener listener, List&lt;Plane&gt; planes)
+            throws IllegalArgumentException {
+<span class="fc" id="L668">        return create(listener, planes, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator based on 3D plane samples and 
+     * using default robust estimator method.
+     * @param qualityScores quality scores corresponding to each provided plane.
+     * @return an instance of a dual quadric robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE (i.e. 9 planes).
+     */
+    public static DualQuadricRobustEstimator create(double[] qualityScores)
+            throws IllegalArgumentException {
+<span class="fc" id="L681">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator based on plane samples and using
+     * provided planes and default estimator method.
+     * @param planes 3D planes to estimate a dual quadric.
+     * @param qualityScores quality scores corresponding to each provided plane.
+     * @return an instance of adual conic robust estimator.
+     * @throws IllegalArgumentException if provided list of planes don't have the
+     * same size as the list of provided quality scores, or if their size is not
+     * greater or equal than MINIMUM_SIZE.
+     */
+    public static DualQuadricRobustEstimator create(List&lt;Plane&gt; planes,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L696">        return create(planes, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator based on plane samples and using 
+     * provided listener and default estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each provided plane
+     * @return an instance of a dual quadric robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE (i.e. 9 planes).
+     */
+    public static DualQuadricRobustEstimator create(
+            DualQuadricRobustEstimatorListener listener, double[] qualityScores)
+            throws IllegalArgumentException {
+<span class="fc" id="L712">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a dual quadric robust estimator based on plane samples and using
+     * provided listener and planes and default estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param planes 3D planes to estimate a dual quadric.
+     * @param qualityScores quality scores corresponding to each provided plane
+     * @return an instance of a dual quadric robust estimator.
+     * @throws IllegalArgumentException if provided list of planes don't have 
+     * the same size as the list of provided quality scores, or if their size is 
+     * not greater or equal than MINIMUM_SIZE.
+     */
+    public static DualQuadricRobustEstimator create(
+            DualQuadricRobustEstimatorListener listener, List&lt;Plane&gt; planes,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L730">        return create(listener, planes, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Estimates a dual conic using a robust estimator and the best set of 3D
+     * planes that fit into the locus of the estimated dual quadric found using 
+     * the robust estimator.
+     * @return a dual quadric.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     * @throws NotReadyException if provided input data is not enouth to start
+     * the estimation.
+     * @throws RobustEstimatorException if estimation fails for any readon (i.e.
+     * numerical instability, no solution available, etc).
+     */
+    public abstract DualQuadric estimate() throws LockedException,
+            NotReadyException, RobustEstimatorException;
+    
+    /**
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
+     */
+    public abstract RobustEstimatorMethod getMethod();
+    
+    /**
+     * Internal method to set list of planes to be used to estimate a dual 
+     * quadric.
+     * This method does not check whether estimator is locked or not.
+     * @param planes list of planes to be used to estimate a dual quadric.
+     * @throws IllegalArgumentException if provided list of planes doesn't have
+     * a size greater or equal than MINIMUM_SIZE.
+     */
+    private void internalSetPlanes(List&lt;Plane&gt; planes)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L764" title="All 2 branches covered.">        if (planes.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L765">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L767">        mPlanes = planes;</span>
+<span class="fc" id="L768">    }</span>
+    
+    /**
+     * Computes the residual between a dual quadric and a 3D plane.
+     * @param dq a dual quadric.
+     * @param plane a 3D plane.
+     * @return residual.
+     */
+    protected double residual(DualQuadric dq, Plane plane) {
+<span class="fc" id="L777">        dq.normalize();</span>
+        try {
+<span class="fc bfc" id="L779" title="All 2 branches covered.">            if (mTestDualQ == null) {</span>
+<span class="fc" id="L780">                mTestDualQ = dq.asMatrix();</span>
+            } else {
+<span class="fc" id="L782">                dq.asMatrix(mTestDualQ);</span>
+            }
+            
+<span class="fc bfc" id="L785" title="All 2 branches covered.">            if (mTestPlane == null) {</span>
+<span class="fc" id="L786">                mTestPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);</span>
+            }
+<span class="fc" id="L788">            plane.normalize();</span>
+<span class="fc" id="L789">            mTestPlane.setElementAt(0, 0, plane.getA());</span>
+<span class="fc" id="L790">            mTestPlane.setElementAt(1, 0, plane.getB());</span>
+<span class="fc" id="L791">            mTestPlane.setElementAt(2, 0, plane.getC());</span>
+<span class="fc" id="L792">            mTestPlane.setElementAt(3, 0, plane.getD());</span>
+<span class="fc" id="L793">            Matrix locusMatrix = mTestPlane.transposeAndReturnNew();</span>
+<span class="fc" id="L794">            locusMatrix.multiply(mTestDualQ);</span>
+<span class="fc" id="L795">            locusMatrix.multiply(mTestPlane);</span>
+<span class="fc" id="L796">            return Math.abs(locusMatrix.getElementAt(0, 0));</span>
+<span class="nc" id="L797">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L798">            return Double.MAX_VALUE;</span>
+        }
+    }    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

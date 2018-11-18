@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HomogeneousPoint2D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">HomogeneousPoint2D.java</span></div><h1>HomogeneousPoint2D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.irurueta.geometry;
+
+import java.io.Serializable;
+
+/**
+ * Subclass of Point2D defining an homogeneous 2D point.
+ * An homogeneous 2d point is defined by three coordinates: (x,y,w), where
+ * x and y are the horizontal and vertical coordinates, respectively, and w
+ * is a normalization (homogenization) factor. Homogeneous 2d points at 
+ * infinity are expressed using w=0 (x,y,0) where (x,y) describe the direction
+ * of the 2d point towards infinity.
+ * Inhomogeneous 2d points can be transformed into homogeneous 2d points by
+ * setting the w coordinate to one (w=1, not at infinity) as follows:
+ * Inhomogeneous 2d point (x,y) -&amp;lt; Homogeneous 2d point (x,y,1).
+ */
+public class HomogeneousPoint2D extends Point2D implements Serializable {
+
+    /**
+     * Default threshold to consider a point is located at infinity.
+     */
+    private static final double DEFAULT_INFINITY_THRESHOLD = 1e-10;
+
+    /**
+     * Machine precision.
+     */
+    private static final double PRECISION = 1e-12;
+
+    /**
+     * Defines the X coordinate of an homogeneous 2D point.
+     */
+    private double mX;
+    
+    /**
+     * Defines the Y coordinate of an homogeneous 2D point.
+     */
+    private double mY;
+    
+    /**
+     * Defines the W coordinate of an homogeneous 2D point.
+     */
+    private double mW;
+    
+    /**
+     * Determines whether this point is already normalized.
+     */
+    private boolean mNormalized;
+
+    /**
+     * Empty constructor.
+     */
+    public HomogeneousPoint2D() {
+<span class="fc" id="L68">        super();</span>
+<span class="fc" id="L69">        mX = mY = 0.0;</span>
+<span class="fc" id="L70">        mW = 1.0;</span>
+<span class="fc" id="L71">        mNormalized = false;</span>
+<span class="fc" id="L72">    }</span>
+    
+    /**
+     * Constructor of this class. This constructor sets a new homogeneous
+     * v array containing the coordinates X, Y and W of the given point.
+     * @param v Array of length 3 containing the 2D coordinates of an 
+     * homogeneous point.
+     * @throws IllegalArgumentException Raised when the size of the array is
+     * different of 3.
+     */
+    public HomogeneousPoint2D(double[] v) throws IllegalArgumentException {
+<span class="fc" id="L83">        super();</span>
+<span class="fc" id="L84">        setCoordinates(v);</span>
+<span class="fc" id="L85">    }</span>
+    
+    /**
+     * Constructor of this class. This constructor sets a new homogeneous 2D
+     * point using the coordinates X, Y and W of the given point.
+     * @param x X coordinate of the given 2D point.
+     * @param y Y coordinate of the given 2D point.
+     * @param w W coordinate of the given 2D point.
+     */
+<span class="fc" id="L94">    public HomogeneousPoint2D(double x, double y, double w) {</span>
+<span class="fc" id="L95">        mX = x;</span>
+<span class="fc" id="L96">        mY = y;</span>
+<span class="fc" id="L97">        mW = w;</span>
+<span class="fc" id="L98">        mNormalized = false;</span>
+<span class="fc" id="L99">    }</span>
+    
+    /**
+     * This constructor sets a new homogeneous 2D point using as initialization
+     * provided Point2D instance.
+     * @param point Point to initialize new instance to.
+     */
+<span class="fc" id="L106">    public HomogeneousPoint2D(Point2D point) {</span>
+<span class="fc" id="L107">        setCoordinates(point);</span>
+<span class="fc" id="L108">    }</span>
+    
+    /**
+     * Returns the X coordinate of the given homogeneous 2D point instance.
+     * @return X coordinate.
+     */
+    public double getX() {
+<span class="fc" id="L115">        return mX;</span>
+    }
+    
+    /**
+     * Sets the X coordinate of this homogeneous point.
+     * @param x X coordinate.
+     */
+    public void setX(double x) {
+<span class="fc" id="L123">        mX = x;</span>
+<span class="fc" id="L124">        mNormalized = false;</span>
+<span class="fc" id="L125">    }    </span>
+    
+    /**
+     * Returns the Y coordinate of the given homogeneous 2D point instance.
+     * @return Y coordinate.
+     */
+    public double getY() {
+<span class="fc" id="L132">        return mY;</span>
+    }
+    
+    /**
+     * Sets the Y coordinate of this homogeneous point.
+     * @param y Y coordinate.
+     */
+    public void setY(double y) {
+<span class="fc" id="L140">        mY = y;</span>
+<span class="fc" id="L141">        mNormalized = false;</span>
+<span class="fc" id="L142">    }</span>
+    
+    /**
+     * Returns the W coordinate of the given homogeneous 2D point instance.
+     * @return W coordinate.
+     */
+    public double getW() {
+<span class="fc" id="L149">        return mW;</span>
+    }
+    
+    /**
+     * Sets the W coordinate of this homogeneous point.
+     * @param w W coordinate.
+     */
+    public void setW(double w) {
+<span class="fc" id="L157">        mW = w;</span>
+<span class="fc" id="L158">        mNormalized = false;</span>
+<span class="fc" id="L159">    }    </span>
+    
+    /**
+     * Sets the coordinates of this homogeneous 2D point by using provided X,
+     * Y and W coordinates.
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param w W coordinate.
+     */
+    public void setCoordinates(double x, double y, double w) {
+<span class="fc" id="L169">        mX = x;</span>
+<span class="fc" id="L170">        mY = y;</span>
+<span class="fc" id="L171">        mW = w;</span>
+<span class="fc" id="L172">        mNormalized = false;</span>
+<span class="fc" id="L173">    }</span>
+        
+    /**
+     * Sets the coordinates of a 2d point using an array containing its
+     * coordinates.
+     * @param v Array containing the coordinates of the point.
+     * @throws IllegalArgumentException Raised if provided array does not have
+     * a valid size.
+     */
+    @Override
+    public final void setCoordinates(double[] v) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L185" title="All 2 branches covered.">        if (v.length != POINT2D_HOMOGENEOUS_COORDINATES_LENGTH) {</span>
+<span class="fc" id="L186">            throw new IllegalArgumentException();</span>
+        } else {
+<span class="fc" id="L188">            mX = v[0];</span>
+<span class="fc" id="L189">            mY = v[1];</span>
+<span class="fc" id="L190">            mW = v[2];</span>
+<span class="fc" id="L191">            mNormalized = false;</span>
+        }
+<span class="fc" id="L193">    }</span>
+    
+    /**
+     * Sets coordinates of this instance using the coordinates of provided 2D 
+     * point.
+     * @param point Input point.
+     */    
+    @Override
+    public final void setCoordinates(Point2D point) {
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        switch (point.getType()) {</span>
+            case INHOMOGENEOUS_COORDINATES:
+<span class="fc" id="L204">                InhomogeneousPoint2D inhomPoint = (InhomogeneousPoint2D)point;</span>
+<span class="fc" id="L205">                mX = inhomPoint.getX();</span>
+<span class="fc" id="L206">                mY = inhomPoint.getY();</span>
+<span class="fc" id="L207">                mW = 1.0;</span>
+<span class="fc" id="L208">                mNormalized = false;</span>
+<span class="fc" id="L209">                break;</span>
+
+            case HOMOGENEOUS_COORDINATES:
+            default:
+<span class="fc" id="L213">                HomogeneousPoint2D homPoint = (HomogeneousPoint2D)point;</span>
+<span class="fc" id="L214">                mX = homPoint.getX();</span>
+<span class="fc" id="L215">                mY = homPoint.getY();</span>
+<span class="fc" id="L216">                mW = homPoint.getW();</span>
+<span class="fc" id="L217">                mNormalized = false;</span>
+                break;
+        }
+<span class="fc" id="L220">    }</span>
+
+    /**
+     * Returns X homogeneous coordinate of this 2d point.
+     * @return X homogeneous coordinate.
+     */    
+    @Override
+    public double getHomX() {
+<span class="fc" id="L228">        return mX;</span>
+    }
+
+    /**
+     * Returns Y homogeneous coordinate of this 2d point.
+     * @return Y homogeneous coordinate.
+     */    
+    @Override
+    public double getHomY() {
+<span class="fc" id="L237">        return mY;</span>
+    }
+
+    /**
+     * Returns W homogeneous coordinate of this 2d point.
+     * @return W homogeneous coordinate.
+     */    
+    @Override
+    public double getHomW() {
+<span class="fc" id="L246">        return mW;</span>
+    }
+
+    /**
+     * Sets coordinates of this 2d point instance using provided homogeneous
+     * coordinates.
+     * @param homX x homogeneous coordinate.
+     * @param homY y homogeneous coordinate.
+     * @param homW w homogeneous coordinate.
+     */    
+    @Override
+    public void setHomogeneousCoordinates(double homX, double homY, 
+            double homW) {
+<span class="fc" id="L259">        setCoordinates(homX, homY, homW);</span>
+<span class="fc" id="L260">    }</span>
+
+    /**
+     * Returns X inhomogeneous coordinate of this 2d point.
+     * @return X inhomogeneous coordinate.
+     */    
+    @Override
+    public double getInhomX() {
+<span class="fc" id="L268">        return (mX / mW);</span>
+    }
+
+    /**
+     * Sets X inhomogeneous coordinate of this 2d point.
+     * @param inhomX inhomogeneous coordinate.
+     */
+    @Override
+    public void setInhomX(double inhomX) {
+<span class="fc" id="L277">        mX = inhomX * mW;</span>
+<span class="fc" id="L278">        mNormalized = false;</span>
+<span class="fc" id="L279">    }</span>
+
+    /**
+     * Returns Y inhomogeneous coordinate of this 2d point.
+     * @return Y inhomogeneous coordinate.
+     */    
+    @Override
+    public double getInhomY() {
+<span class="fc" id="L287">        return (mY / mW);</span>
+    }
+
+    /**
+     * Sets Y inhomogeneous coordinate of this 2d point.
+     * @param inhomY Y inhomogeneous coordinate.
+     */
+    @Override
+    public void setInhomY(double inhomY) {
+<span class="fc" id="L296">        mY = inhomY * mW;</span>
+<span class="fc" id="L297">        mNormalized = false;</span>
+<span class="fc" id="L298">    }</span>
+
+    /**
+     * Sets coordinates of this 2d point instance using provided inhomogeneous
+     * coordinates.
+     * @param inhomX x inhomogeneous coordinate.
+     * @param inhomY y inhomogeneous coordinate.
+     */    
+    @Override
+    public void setInhomogeneousCoordinates(double inhomX, double inhomY) {
+<span class="fc" id="L308">        mX = inhomX;</span>
+<span class="fc" id="L309">        mY = inhomY;</span>
+<span class="fc" id="L310">        mW = 1.0;</span>
+<span class="fc" id="L311">        mNormalized = false;</span>
+<span class="fc" id="L312">    }</span>
+    
+    /**
+     * Checks if provided object equals current 2D point.
+     * @param obj Object to compare.
+     * @return True if both objects are considered to be equal, false otherwise.
+     */
+    @Override
+    public boolean equals(Object obj) {
+<span class="pc bpc" id="L321" title="1 of 2 branches missed.">        if (!(obj instanceof Point2D)) {</span>
+<span class="nc" id="L322">            return false;</span>
+        }
+<span class="pc bpc" id="L324" title="1 of 2 branches missed.">        if (obj == this) {</span>
+<span class="nc" id="L325">            return true;</span>
+        }
+        
+<span class="fc" id="L328">        Point2D point = (Point2D)obj;</span>
+<span class="fc" id="L329">        return equals(point);</span>
+    }    
+
+    /**
+     * Returns hash code value.
+     * @return Hash code value.
+     */
+    @Override
+    public int hashCode() {
+<span class="nc" id="L338">        int hash = 3;</span>
+<span class="nc" id="L339">        hash = 59 * hash + (int) (Double.doubleToLongBits(this.mX) ^ </span>
+<span class="nc" id="L340">                (Double.doubleToLongBits(this.mX) &gt;&gt;&gt; 32));</span>
+<span class="nc" id="L341">        hash = 59 * hash + (int) (Double.doubleToLongBits(this.mY) ^ </span>
+<span class="nc" id="L342">                (Double.doubleToLongBits(this.mY) &gt;&gt;&gt; 32));</span>
+<span class="nc" id="L343">        hash = 59 * hash + (int) (Double.doubleToLongBits(this.mW) ^ </span>
+<span class="nc" id="L344">                (Double.doubleToLongBits(this.mW) &gt;&gt;&gt; 32));</span>
+<span class="nc" id="L345">        return hash;</span>
+    }
+    
+    /**
+     * Checks if the homogeneous 2d point described by this instance equals the 
+     * input Point2d (using a comparison threshold).
+     * @param point Point that will be compared to.
+     * @param threshold threshold grade of tolerance to determine whether the
+     * points are equal or not. It is used because due to machine precision, the
+     * values might not be exactly equal (if not provided 
+     * DEFAULT_COMPARISON_THRESHOLD is used).
+     * @return True if current point and input point are the same, false 
+     * otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */    
+    @Override
+    public boolean equals(Point2D point, double threshold) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L363" title="All 2 branches covered.">        switch (point.getType()) {</span>
+            case INHOMOGENEOUS_COORDINATES:
+<span class="fc" id="L365">                return equals((InhomogeneousPoint2D)point, threshold);</span>
+            case HOMOGENEOUS_COORDINATES:
+            default:
+<span class="fc" id="L368">                return equals((HomogeneousPoint2D)point, threshold);</span>
+        }
+    }
+    
+    /**
+     * Checks if the homogeneous 2d point described by this instance equals the 
+     * input HomogeneousPoint2d (using a comparison threshold).
+     * @param point Point that will be compared to.
+     * @param threshold threshold grade of tolerance to determine whether the
+     * points are equal or not. It is used because due to machine precision, the
+     * values might not be exactly equal (if not provided 
+     * DEFAULT_COMPARISON_THRESHOLD is used).
+     * @return True if current point and input point are the same, false 
+     * otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */
+    public boolean equals(HomogeneousPoint2D point, double threshold)
+            throws IllegalArgumentException {
+        
+<span class="fc bfc" id="L387" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L388">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc" id="L391">        normalize();</span>
+<span class="fc" id="L392">        point.normalize();</span>
+        
+        //compute sign for the case when points have different sign
+<span class="fc bfc" id="L395" title="All 2 branches covered.">        double signThis = (mW &gt; 0.0) ? 1.0 : -1.0;</span>
+<span class="fc bfc" id="L396" title="All 2 branches covered.">        double signPoint = (point.mW &gt; 0.0) ? 1.0 : -1.0;        </span>
+        
+<span class="fc" id="L398">        double normThis = Math.sqrt(mX * mX + mY * mY + mW * mW) * signThis;</span>
+<span class="fc" id="L399">        double normPoint = Math.sqrt(point.mX * point.mX + point.mY * point.mY +</span>
+                point.mW * point.mW) * signPoint;
+        
+<span class="fc bfc" id="L402" title="All 2 branches covered.">        boolean validX = Math.abs(mX / normThis - point.mX / normPoint) </span>
+                &lt;= threshold;
+<span class="fc bfc" id="L404" title="All 2 branches covered.">        boolean validY = Math.abs(mY / normThis - point.mY / normPoint) </span>
+                &lt;= threshold;
+<span class="fc bfc" id="L406" title="All 2 branches covered.">        boolean validW = Math.abs(mW / normThis - point.mW / normPoint) </span>
+                &lt;= threshold;
+
+<span class="pc bpc" id="L409" title="2 of 6 branches missed.">        return (validX &amp;&amp; validY &amp;&amp; validW);</span>
+    }
+
+    /**
+     * Checks if the homogeneous 2d point described by this instance equals the 
+     * input HomogeneousPoint2d (using a comparison threshold).
+     * @param point Point that will be compared to.
+     * @return True if current point and input point are the same, false 
+     * otherwise.
+     */    
+    public boolean equals(HomogeneousPoint2D point) {
+<span class="fc" id="L420">       return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
+    }
+    
+    /**
+     * Checks if the homogeneous 2d point described by this instance equals the 
+     * input InhomogeneousPoint2d (using a comparison threshold).
+     * @param point Point that will be compared to.
+     * @param threshold threshold grade of tolerance to determine whether the
+     * points are equal or not. It is used because due to machine precision, the
+     * values might not be exactly equal (if not provided 
+     * DEFAULT_COMPARISON_THRESHOLD is used).
+     * @return True if current point and input point are the same, false 
+     * otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */    
+    public boolean equals(InhomogeneousPoint2D point, double threshold)
+            throws IllegalArgumentException {
+        
+<span class="fc bfc" id="L438" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L439">            throw new IllegalArgumentException();</span>
+        }
+                
+<span class="fc bfc" id="L442" title="All 2 branches covered.">        boolean dX = Math.abs(point.getX() - (mX / mW)) &lt;= threshold;</span>
+<span class="fc bfc" id="L443" title="All 2 branches covered.">        boolean dY = Math.abs(point.getY() - (mY / mW)) &lt;= threshold;</span>
+<span class="pc bpc" id="L444" title="1 of 4 branches missed.">        return (dX &amp;&amp; dY);</span>
+    }
+
+    /**
+     * Checks if the homogeneous 2d point described by this instance equals the 
+     * input InhomogeneousPoint2d (using a comparison threshold).
+     * @param point Point that will be compared to.
+     * @return True if current point and input point are the same, false 
+     * otherwise.
+     */        
+    public boolean equals(InhomogeneousPoint2D point) {
+<span class="nc" id="L455">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
+    }
+
+    /**
+     * Checks whether this Point2D is at infinity or not.
+     * @return True if the point is at infinity. False otherwise.
+     */    
+    @Override
+    public boolean isAtInfinity() {
+<span class="fc" id="L464">        return isAtInfinity(DEFAULT_INFINITY_THRESHOLD);</span>
+    }
+    
+    /**
+     * Checks whether this homogeneous 2D point is at infinity or not. An
+     * homogeneous 2D point is at infinity when W coordinates are equal or close
+     * to zero.
+     * @param threshold Grade of tolerance to determine whether the point is at
+     * infinity or not. It is used because due to machine precision, the values
+     * might not be exactly equal.
+     * @return True if point is at infinity, false otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */
+    public boolean isAtInfinity(double threshold) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L479" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L480">            throw new IllegalArgumentException();</span>
+        }
+        
+<span class="fc bfc" id="L483" title="All 2 branches covered.">        return (Math.abs(mW) &lt;= threshold);</span>
+    }
+
+    /**
+     * Returns the type of coordinates used to represent a Point2D.
+     * @return Type of coordinates of this 2d point.
+     */    
+    @Override
+    public CoordinatesType getType() {
+<span class="fc" id="L492">        return CoordinatesType.HOMOGENEOUS_COORDINATES;</span>
+    }
+                
+    /**
+     * Method to normalize a 2d point by dividing all homogeneous components by
+     * its norm. This only applies to homogeneous 2d points, because they are
+     * defined up to scale.
+     */
+    @Override
+    public void normalize() {
+<span class="fc bfc" id="L502" title="All 2 branches covered.">        if (!mNormalized) {</span>
+<span class="fc" id="L503">            double norm = Math.sqrt(mX * mX + mY * mY + mW * mW);</span>
+<span class="fc bfc" id="L504" title="All 2 branches covered.">            if (norm &gt; PRECISION) {</span>
+<span class="fc" id="L505">                mX /= norm;</span>
+<span class="fc" id="L506">                mY /= norm;</span>
+<span class="fc" id="L507">                mW /= norm;</span>
+<span class="fc" id="L508">                mNormalized = true;</span>
+            }
+        }
+<span class="fc" id="L511">    }    </span>
+    
+    /**
+     * Returns boolean indicating whether this point has already been mNormalized
+     * @return True if mNormalized, false otherwise.
+     */
+    @Override
+    public boolean isNormalized() {
+<span class="fc" id="L519">        return mNormalized;</span>
+    }        
+    
+    /**
+     * Converts this instance into an inhomogeneous 2D point and returns the
+     * result as a new inhomogeneous 2D point instance.
+     * @return Converts and returns this point as an inhomogeneous 2D point.
+     */
+    public InhomogeneousPoint2D toInhomogeneous() {
+<span class="fc" id="L528">        return new InhomogeneousPoint2D(mX/mW, mY/mW);</span>
+    }
+    
+    /**
+     * Returns an array containing the coordinates of this Point2D.
+     * @return Array containing coordinates of this Point2D.
+     */    
+    @Override
+    public double[] asArray() {
+<span class="fc" id="L537">        double[] out = new double[POINT2D_HOMOGENEOUS_COORDINATES_LENGTH];</span>
+<span class="fc" id="L538">        asArray(out);</span>
+<span class="fc" id="L539">        return out;</span>
+    } 
+    
+    /**
+     * Uses provided array to store the coordinates of this HomogeneousPoint2D
+     * @param array Array where coordinates will be stored.
+     * @throws IllegalArgumentException Raised if length of array is not 3.
+     */
+    @Override
+    public void asArray(double[] array) throws IllegalArgumentException {
+<span class="pc bpc" id="L549" title="1 of 2 branches missed.">        if (array.length != POINT2D_HOMOGENEOUS_COORDINATES_LENGTH) {</span>
+<span class="nc" id="L550">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L552">        array[0] = mX;</span>
+<span class="fc" id="L553">        array[1] = mY;</span>
+<span class="fc" id="L554">        array[2] = mW;</span>
+<span class="fc" id="L555">    }    </span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

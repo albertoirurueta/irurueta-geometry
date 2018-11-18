@@ -1,0 +1,1612 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MetricTransformation2DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">MetricTransformation2DRobustEstimator.java</span></div><h1>MetricTransformation2DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.MetricTransformation2D;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.refiners.MetricTransformation2DRefiner;
+import com.irurueta.numerical.robust.InliersData;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * This is an abstract class to robustly find the best metric transformation
+ * for collections of matching 2D points.
+ * Implementations of this class should be able to detect and discard outliers 
+ * in order to find the best solution.
+ */
+public abstract class MetricTransformation2DRobustEstimator {
+    
+    /**
+     * Minimum number of matched points required to estimate a metric 2D 
+     * transformation.
+     */
+    public static final int MINIMUM_SIZE = 
+            MetricTransformation2DEstimator.MINIMUM_SIZE;
+    
+    /**
+     * For some point configurations a solution can be found with only 2 points.
+     */
+    public static final int WEAK_MINIMUM_SIZE = 
+            MetricTransformation2DEstimator.WEAK_MINIMUM_SIZE;
+    
+    /**
+     * Default amount of progress variation before notifying a change in 
+     * estimation progress. By default this is set to 5%.
+     */
+    public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
+    
+    /**
+     * Minimum allowed value for progress delta.
+     */
+    public static final float MIN_PROGRESS_DELTA = 0.0f;
+    
+    /**
+     * Maximum allowed value for progress delta.
+     */
+    public static final float MAX_PROGRESS_DELTA = 1.0f;
+    
+    /**
+     * Constant defining default confidence of the estimated result, which is
+     * 99%. This means that with a probability of 99% estimation will be 
+     * accurate because chosen subsamples will be inliers.
+     */
+    public static final double DEFAULT_CONFIDENCE = 0.99;
+    
+    /**
+     * Default maximum allowed number of iterations.
+     */
+    public static final int DEFAULT_MAX_ITERATIONS = 5000;
+    
+    /**
+     * Minimum allowed confidence value.
+     */
+    public static final double MIN_CONFIDENCE = 0.0;
+    
+    /**
+     * Maximum allowed confidence value.
+     */
+    public static final double MAX_CONFIDENCE = 1.0;
+    
+    /**
+     * Minimum allowed number of iterations.
+     */
+    public static final int MIN_ITERATIONS = 1;
+
+    /**
+     * Indicates that is refined by default using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     */
+    public static final boolean DEFAULT_REFINE_RESULT = true;
+    
+    /**
+     * Indicates that covariance is not kept by default after refining result.
+     */
+    public static final boolean DEFAULT_KEEP_COVARIANCE = false;
+    
+    /**
+     * Default robust estimator method when none is provided.
+     */
+<span class="fc" id="L106">    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =</span>
+            RobustEstimatorMethod.PROMedS;
+    
+    /**
+     * Listener to be notified of events such as when estimation starts, ends
+     * or its progress significantly changes.
+     */
+    protected MetricTransformation2DRobustEstimatorListener mListener;
+    
+    /**
+     * Indicates if this estimator is locked because an estimation is being
+     * computed.
+     */
+    protected boolean mLocked;
+    
+    /**
+     * Amount of progress variation before notifying a progress change during
+     * estimation.
+     */
+    protected float mProgressDelta;
+    
+    /**
+     * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
+     * equivalent to 100%). The amount of confidence indicates the probability
+     * that the estimated result is correct. Usually this value will be close
+     * to 1.0, but not exaclty 1.0.
+     */
+    protected double mConfidence;
+    
+    /**
+     * Maximum allowed number of iterations. When the maximum number of 
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     */
+    protected int mMaxIterations;
+    
+    /**
+     * Data related to inliers found after estimation.
+     */
+    protected InliersData mInliersData;
+    
+    /**
+     * Indicates whether result must be refined using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     * If true, inliers will be computed and kept in any implementation
+     * regardless of the settings.
+     */
+    protected boolean mRefineResult;
+    
+    /**
+     * Indicates whether covariance must be kept after refining result.
+     * This setting is only taken into account if result is refined.
+     */
+    protected boolean mKeepCovariance;
+    
+    /**
+     * Estimated covariance of estimated 2D euclidean transformation.
+     * This is only available when result has been refined and covariance is
+     * kept.
+     */
+    protected Matrix mCovariance;
+    
+    /**
+     * List of points to be used to estimate a metric 3D transformation.
+     * Each point in the list of input points must be matched with the 
+     * corresponding point in the list of outputp oints located at the same
+     * position. Hence, both input points and output points must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     */
+    protected List&lt;Point2D&gt; mInputPoints;
+    
+    /**
+     * List of points to be used to estimate a metric 2D transformation.
+     * Each point in the lis tof output points must be matched with the 
+     * corresponding point in the list of input points located at the same
+     * position. Hence, both input points and output ponits must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     */
+    protected List&lt;Point2D&gt; mOutputPoints;
+    
+    /**
+     * Indicates whether estimation can start with only 2 points or not.
+     * True allows 2 points, false requires 3.
+     */
+    private boolean mWeakMinimumSizeAllowed;    
+    
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L195">    public MetricTransformation2DRobustEstimator() {</span>
+<span class="fc" id="L196">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L197">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L198">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L199">        mRefineResult = DEFAULT_REFINE_RESULT;</span>
+<span class="fc" id="L200">        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;                </span>
+<span class="fc" id="L201">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     */
+    public MetricTransformation2DRobustEstimator(
+            MetricTransformation2DRobustEstimatorListener listener) {
+<span class="fc" id="L210">        this();</span>
+<span class="fc" id="L211">        mListener = listener;</span>
+<span class="fc" id="L212">    }</span>
+    
+    /**
+     * Constructor with lists of points to be used to estimate a metric 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be 
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public MetricTransformation2DRobustEstimator(List&lt;Point2D&gt; inputPoints,
+            List&lt;Point2D&gt; outputPoints) throws IllegalArgumentException {
+<span class="fc" id="L229">        this();</span>
+<span class="fc" id="L230">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L231">    }</span>
+    
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 2D transformation.
+     * Points in the list located at the same position are considered to be 
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public MetricTransformation2DRobustEstimator(
+            MetricTransformation2DRobustEstimatorListener listener,
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) 
+            throws IllegalArgumentException {
+<span class="fc" id="L252">        this(listener);</span>
+<span class="fc" id="L253">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L254">    }</span>
+    
+    /**
+     * Constructor.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     */
+    public MetricTransformation2DRobustEstimator(
+            boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L262">        this();</span>
+<span class="fc" id="L263">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L264">    }</span>
+    
+    /**
+     * Constructor.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     */
+    public MetricTransformation2DRobustEstimator(
+            MetricTransformation2DRobustEstimatorListener listener,
+            boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L275">        this();</span>
+<span class="fc" id="L276">        mListener = listener;</span>
+<span class="fc" id="L277">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L278">    }</span>
+    
+    /**
+     * Constructor with lists of points to be used to estimate a metric 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be 
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public MetricTransformation2DRobustEstimator(List&lt;Point2D&gt; inputPoints,
+            List&lt;Point2D&gt; outputPoints, boolean weakMinimumSizeAllowed) 
+            throws IllegalArgumentException {
+<span class="fc" id="L297">        this();</span>
+<span class="fc" id="L298">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L299">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L300">    }</span>
+    
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 2D transformation.
+     * Points in the list located at the same position are considered to be 
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public MetricTransformation2DRobustEstimator(
+            MetricTransformation2DRobustEstimatorListener listener,
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
+            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+<span class="fc" id="L322">        this(listener);</span>
+<span class="fc" id="L323">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L324">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L325">    }    </span>
+    
+    /**
+     * Returns list of input points to be used to estimate a metric 2D
+     * transformation.
+     * Each point in the list of input points must be matched with the
+     * corresponding point in the list of output points located at the same
+     * position. Hence, both input points and output points must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     * @return list of input points to be used to estimate a metric 2D
+     * transformation.
+     */
+    public List&lt;Point2D&gt; getInputPoints() {
+<span class="fc" id="L338">        return mInputPoints;</span>
+    }
+    
+    /**
+     * Returns list of output points to be used to estimate a metric 2D
+     * transformation.
+     * Each point in the list of output points must be matched with the
+     * corresponding point in the list of input points located at the same
+     * position. Hence, both input points and output points must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     * @return list of output points to be used to estimate a metric 2D
+     * transformation.
+     */
+    public List&lt;Point2D&gt; getOutputPoints() {
+<span class="fc" id="L352">        return mOutputPoints;</span>
+    }
+    
+    /**
+     * Sets list of points to be used to estimate a metric 2D 
+     * transformation.
+     * Points in the list located at the same position are considered to be 
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a 
+     * metric 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     * @throws LockedException if estimator is locked because a computation is 
+     * already in progress.
+     */
+    public void setPoints(List&lt;Point2D&gt; inputPoints, 
+            List&lt;Point2D&gt; outputPoints) throws IllegalArgumentException,
+            LockedException {
+<span class="fc bfc" id="L373" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L374">            throw new LockedException();</span>
+        }
+<span class="fc" id="L376">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L377">    }</span>
+    
+    /**
+     * Indicates if estimator is ready to start the metric 2D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched points) are provided
+     * and a minimum of MINIMUM_SIZE points are available.
+     * @return true if estimator is ready, false otherwise.
+     */
+    public boolean isReady() {
+<span class="pc bpc" id="L387" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
+<span class="pc bpc" id="L388" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
+<span class="pc bpc" id="L389" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
+    }
+    
+    /**
+     * Returns quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     * This implementation always returns null.
+     * Subclasses using quality scores must implement proper behaviour.
+     * @return quality scores corresponding to each pair of matched points.
+     */
+    public double[] getQualityScores() {
+<span class="fc" id="L400">        return null;</span>
+    }
+    
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     * This implementation makes no action.
+     * Subclasses using quality scores must implement proper behaviour.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public void setQualityScores(double[] qualityScores) throws LockedException,
+<span class="fc" id="L416">            IllegalArgumentException { }</span>
+    
+    /**
+     * Returns reference to listener to be notified of events such as when
+     * estimation starts, ends or its progress significantly changes.
+     * @return listener to be notified of events.
+     */
+    public MetricTransformation2DRobustEstimatorListener getListener() {
+<span class="fc" id="L424">        return mListener;</span>
+    }
+    
+    /**
+     * Sets listener to be notified of events such as when estimation starts,
+     * ends or its progress significantly changes.
+     * @param listener listener to be notified of events.
+     * @throws LockedException if robust estimator is locked.
+     */
+    public void setListener(
+            MetricTransformation2DRobustEstimatorListener listener)
+            throws LockedException {
+<span class="fc bfc" id="L436" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L437">            throw new LockedException();</span>
+        }
+<span class="fc" id="L439">        mListener = listener;</span>
+<span class="fc" id="L440">    }</span>
+    
+    /**
+     * Indicates whether listener has been provided and is available for
+     * retrieval.
+     * @return true if available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L448" title="All 2 branches covered.">        return mListener != null;</span>
+    }
+    
+    /**
+     * Indicates whether estimation can start with only 2 points or not.
+     * @return true allows 2 points, false requires 3.
+     */
+    public boolean isWeakMinimumSizeAllowed() {
+<span class="fc" id="L456">        return mWeakMinimumSizeAllowed;</span>
+    }
+    
+    /**
+     * Specifies whether estimation can start with only 2 points or not.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setWeakMinimumSizeAllowed(boolean weakMinimumSizeAllowed) 
+            throws LockedException {
+<span class="fc bfc" id="L466" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L467">            throw new LockedException();</span>
+        }
+<span class="fc" id="L469">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L470">    }</span>
+    
+    /**
+     * Required minimum number of point correspondences to start the estimation.
+     * Can be either 2 or 3.
+     * @return minimum number of point correspondences.
+     */
+    public int getMinimumPoints() {
+<span class="fc bfc" id="L478" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
+    }    
+    
+    /**
+     * Indicates if this instance is locked because estimation is being 
+     * computed.
+     * @return true if locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L487">        return mLocked;</span>
+    }
+    
+    /**
+     * Returns amount of progress variation before notifying a progress change
+     * during estimation.
+     * @return amount of progress variation before notifying a progress change
+     * during estimation.
+     */
+    public float getProgressDelta() {
+<span class="fc" id="L497">        return mProgressDelta;</span>
+    }
+    
+    /**
+     * Sets amount of progress variation before notifying a progress change
+     * during estimation.
+     * @param progressDelta amount of progress variation before notifying a
+     * progress change during estimation.
+     * @throws IllegalArgumentException if progress delta is less than zero or
+     * greater than 1.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setProgressDelta(float progressDelta)
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L512" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L513">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L515" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+                progressDelta &gt; MAX_PROGRESS_DELTA) {
+<span class="fc" id="L517">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L519">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L520">    }</span>
+    
+    /**
+     * Returns amount of confidence expressed as a value between 0.0 and 1.0
+     * (which is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     * @return amount of confidence as a value between 0.0 and 1.0.
+     */
+    public double getConfidence() {
+<span class="fc" id="L530">        return mConfidence;</span>
+    }
+    
+    /**
+     * Sets amount of confidence expressed as a value between 0.0 and 1.0 (which
+     * is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     * @param confidence confidence to be set as a value between 0.0 and 1.0.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and 
+     * 1.0.
+     * @throws LockedException if this estimator is locked because an estimator
+     * is being computed.
+     */
+    public void setConfidence(double confidence)
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L546" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L547">            throw new LockedException();</span>
+        }        
+<span class="fc bfc" id="L549" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L550">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L552">        mConfidence = confidence;</span>
+<span class="fc" id="L553">    }</span>
+    
+    /**
+     * Returns maximum allowed number of iterations. If maximum allowed number
+     * of iterations is achieved without converging to a result when calling
+     * estimate(), a RobustEstimatorException will be raised.
+     * @return maximum allowed number of itertions.
+     */
+    public int getMaxIterations() {
+<span class="fc" id="L562">        return mMaxIterations;</span>
+    }
+    
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an 
+     * approximate result will be available for retrieval.
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException if this estimator is locked because an estimation
+     * is being computed.
+     */
+    public void setMaxIterations(int maxIterations) 
+            throws IllegalArgumentException, LockedException {
+<span class="fc bfc" id="L576" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L577">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L579" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L580">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L582">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L583">    }</span>
+    
+    /**
+     * Gets data related to inliers found after estimation.
+     * @return data related to inliers found after estimation.
+     */
+    public InliersData getInliersData() {
+<span class="fc" id="L590">        return mInliersData;</span>
+    }
+    
+    /**
+     * Indicates whether result must be refined using Levenberg-Marquardt 
+     * fitting algorithm over found inliers.
+     * If ture, inliers will be computed and kept in any implementation
+     * regardless of the settings.
+     * @return true to refine result, false to simply use result found by
+     * robust estimator without further refining.
+     */
+    public boolean isResultRefined() {
+<span class="fc" id="L602">        return mRefineResult;</span>
+    }    
+    
+    /**
+     * Specifies whether result must be refined using LEvenberg-Marquardt 
+     * fitting algorithm over found inliers.
+     * @param refineResult true to refine result, false to simply use result
+     * found by robust estimator without further refining.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setResultRefined(boolean refineResult) throws LockedException {
+<span class="pc bpc" id="L613" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L614">            throw new LockedException();</span>
+        }
+<span class="fc" id="L616">        mRefineResult = refineResult;</span>
+<span class="fc" id="L617">    }</span>
+    
+    /**
+     * Indicates whether covariance must be kept after refining result.
+     * This setting is only taken into account if result is refined.
+     * @return true if covariance must be kept after refining result, false
+     * otherwise.
+     */
+    public boolean isCovarianceKept() {
+<span class="fc" id="L626">        return mKeepCovariance;</span>
+    }
+    
+    /**
+     * Specifies whether covariance must be kept after refining result.
+     * This setting is only taken into account if result is refined.
+     * @param keepCovariance true if covariance must be kept after refining
+     * result, false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setCovarianceKept(boolean keepCovariance)
+            throws LockedException {
+<span class="pc bpc" id="L638" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L639">            throw new LockedException();</span>
+        }
+<span class="fc" id="L641">        mKeepCovariance = keepCovariance;</span>
+<span class="fc" id="L642">    }</span>
+    
+    /**
+     * Gets estimated covariance of estimated 3D point if available.
+     * This is only available when result has been refined and covariance is 
+     * kept.
+     * @return estimated covariance or null.
+     */
+    public Matrix getCovariance() {
+<span class="fc" id="L651">        return mCovariance;</span>
+    }
+    
+    /**
+     * Estimates a metric 2D transformation using a robust estimator and the
+     * best set of matched 2D point correspondences found using the robust 
+     * estimator.
+     * @return a metric 2D transformation.
+     * @throws LockedException if robust estimator is locked because an 
+     * estimation is already in progress.
+     * @throws NotReadyException if provided input data is not enough to start
+     * the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     * (i.e. numerical instability, no solution available, etc).
+     */
+    public abstract MetricTransformation2D estimate() throws LockedException,
+            NotReadyException, RobustEstimatorException;
+    
+    /**
+     * Returns method being used for robust estimation.
+     * @return method being used for robust estimation.
+     */
+    public abstract RobustEstimatorMethod getMethod();
+    
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point 
+     * correspondences and using provided robust estimator method.
+     * @param method method of a robust estimator algorithm to estimate
+     * best metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            RobustEstimatorMethod method) {
+<span class="nc bnc" id="L685" title="All 5 branches missed.">        switch (method) {</span>
+            case LMedS:
+<span class="nc" id="L687">                return new LMedSMetricTransformation2DRobustEstimator();</span>
+            case MSAC:
+<span class="nc" id="L689">                return new MSACMetricTransformation2DRobustEstimator();</span>
+            case PROSAC:
+<span class="nc" id="L691">                return new PROSACMetricTransformation2DRobustEstimator();</span>
+            case PROMedS:
+<span class="nc" id="L693">                return new PROMedSMetricTransformation2DRobustEstimator();</span>
+            case RANSAC:
+            default:
+<span class="nc" id="L696">                return new RANSACMetricTransformation2DRobustEstimator();                </span>
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using provided estimator method.
+     * @param inputPoints list of input points to be used to estimate a
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L716" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L718">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints);
+            case MSAC:
+<span class="fc" id="L721">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints);
+            case PROSAC:
+<span class="fc" id="L724">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints);
+            case PROMedS:
+<span class="fc" id="L727">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints);
+            case RANSAC:
+            default:
+<span class="fc" id="L731">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints);
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point 
+     * correspondences and using provided robust esitmator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener, 
+            RobustEstimatorMethod method) {
+<span class="nc bnc" id="L748" title="All 5 branches missed.">        switch (method) {</span>
+            case LMedS:
+<span class="nc" id="L750">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        listener);
+            case MSAC:
+<span class="nc" id="L753">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        listener);
+            case PROSAC:
+<span class="nc" id="L756">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        listener);
+            case PROMedS:
+<span class="nc" id="L759">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        listener);
+            case RANSAC:
+            default:
+<span class="nc" id="L763">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        listener);
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener, 
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L787" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L789">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints);
+            case MSAC:
+<span class="fc" id="L792">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints);
+            case PROSAC:
+<span class="fc" id="L795">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints);
+            case PROMedS:
+<span class="fc" id="L798">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints);
+            case RANSAC:
+            default:
+<span class="fc" id="L802">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints);
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE (i.e. 3 matched points).
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="nc bnc" id="L821" title="All 5 branches missed.">        switch (method) {</span>
+            case LMedS:
+<span class="nc" id="L823">                return new LMedSMetricTransformation2DRobustEstimator();</span>
+            case MSAC:
+<span class="nc" id="L825">                return new MSACMetricTransformation2DRobustEstimator();</span>
+            case PROSAC:
+<span class="nc" id="L827">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        qualityScores);
+            case PROMedS:
+<span class="nc" id="L830">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        qualityScores);
+            case RANSAC:
+            default:
+<span class="nc" id="L834">                return new RANSACMetricTransformation2DRobustEstimator();                </span>
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     * @param inputPoints list of input points to be used to estimate a
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points or scores
+     * don't have the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L857" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L859">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints);
+            case MSAC:
+<span class="fc" id="L862">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints);
+            case PROSAC:
+<span class="fc" id="L865">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints, qualityScores);
+            case PROMedS:
+<span class="fc" id="L868">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints, qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L872">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints);                
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point 
+     * correspondences and using provided robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided quality scores don't have
+     * the required minimum size.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener, 
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="nc bnc" id="L894" title="All 5 branches missed.">        switch (method) {</span>
+            case LMedS:
+<span class="nc" id="L896">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        listener);
+            case MSAC:
+<span class="nc" id="L899">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        listener);
+            case PROSAC:
+<span class="nc" id="L902">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        listener, qualityScores);
+            case PROMedS:
+<span class="nc" id="L905">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        listener, qualityScores);
+            case RANSAC:
+            default:
+<span class="nc" id="L909">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        listener);                
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size of their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener,
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
+            double[] qualityScores, RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L936" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L938">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints);
+            case MSAC:
+<span class="fc" id="L941">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints);
+            case PROSAC:
+<span class="fc" id="L944">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints, qualityScores);
+            case PROMedS:
+<span class="fc" id="L947">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints, qualityScores);
+            case RANSAC:
+            default:
+<span class="fc" id="L951">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints);                
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point 
+     * correspondences and using provided robust estimator method.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method method of a robust estimator algorithm to estimate
+     * best metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
+<span class="nc bnc" id="L966" title="All 5 branches missed.">        switch (method) {</span>
+            case LMedS:
+<span class="nc" id="L968">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        weakMinimumSizeAllowed);
+            case MSAC:
+<span class="nc" id="L971">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        weakMinimumSizeAllowed);
+            case PROSAC:
+<span class="nc" id="L974">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        weakMinimumSizeAllowed);
+            case PROMedS:
+<span class="nc" id="L977">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        weakMinimumSizeAllowed);
+            case RANSAC:
+            default:
+<span class="nc" id="L981">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        weakMinimumSizeAllowed);
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using provided estimator method.
+     * @param inputPoints list of input points to be used to estimate a
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
+            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L1004" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L1006">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case MSAC:
+<span class="fc" id="L1009">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case PROSAC:
+<span class="fc" id="L1012">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case PROMedS:
+<span class="fc" id="L1015">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case RANSAC:
+            default:
+<span class="fc" id="L1019">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints, weakMinimumSizeAllowed);
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point 
+     * correspondences and using provided robust esitmator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener, 
+            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
+<span class="nc bnc" id="L1037" title="All 5 branches missed.">        switch (method) {</span>
+            case LMedS:
+<span class="nc" id="L1039">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        listener, weakMinimumSizeAllowed);
+            case MSAC:
+<span class="nc" id="L1042">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        listener, weakMinimumSizeAllowed);
+            case PROSAC:
+<span class="nc" id="L1045">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        listener, weakMinimumSizeAllowed);
+            case PROMedS:
+<span class="nc" id="L1048">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        listener, weakMinimumSizeAllowed);
+            case RANSAC:
+            default:
+<span class="nc" id="L1052">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        listener, weakMinimumSizeAllowed);
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener, 
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
+            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) 
+            throws IllegalArgumentException {
+<span class="fc bfc" id="L1078" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L1080">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints, 
+                        weakMinimumSizeAllowed);
+            case MSAC:
+<span class="fc" id="L1084">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints, 
+                        weakMinimumSizeAllowed);
+            case PROSAC:
+<span class="fc" id="L1088">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints, 
+                        weakMinimumSizeAllowed);
+            case PROMedS:
+<span class="fc" id="L1092">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints, 
+                        weakMinimumSizeAllowed);
+            case RANSAC:
+            default:
+<span class="fc" id="L1097">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints, 
+                        weakMinimumSizeAllowed);
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     * smaller than MINIMUM_SIZE (i.e. 3 matched points).
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            double[] qualityScores, boolean weakMinimumSizeAllowed, 
+            RobustEstimatorMethod method)
+            throws IllegalArgumentException {
+<span class="nc bnc" id="L1119" title="All 5 branches missed.">        switch (method) {</span>
+            case LMedS:
+<span class="nc" id="L1121">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        weakMinimumSizeAllowed);
+            case MSAC:
+<span class="nc" id="L1124">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        weakMinimumSizeAllowed);
+            case PROSAC:
+<span class="nc" id="L1127">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        qualityScores, weakMinimumSizeAllowed);
+            case PROMedS:
+<span class="nc" id="L1130">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        qualityScores, weakMinimumSizeAllowed);
+            case RANSAC:
+            default:
+<span class="nc" id="L1134">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        weakMinimumSizeAllowed);
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     * @param inputPoints list of input points to be used to estimate a
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points or scores
+     * don't have the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
+            double[] qualityScores, boolean weakMinimumSizeAllowed, 
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L1159" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L1161">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case MSAC:
+<span class="fc" id="L1164">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints, weakMinimumSizeAllowed);
+            case PROSAC:
+<span class="fc" id="L1167">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints, qualityScores, 
+                        weakMinimumSizeAllowed);
+            case PROMedS:
+<span class="fc" id="L1171">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints, qualityScores, 
+                        weakMinimumSizeAllowed);
+            case RANSAC:
+            default:
+<span class="fc" id="L1176">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        inputPoints, outputPoints, weakMinimumSizeAllowed);
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point 
+     * correspondences and using provided robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched 
+     * points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided quality scores don't have
+     * the required minimum size.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener, 
+            double[] qualityScores, boolean weakMinimumSizeAllowed, 
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="nc bnc" id="L1199" title="All 5 branches missed.">        switch (method) {</span>
+            case LMedS:
+<span class="nc" id="L1201">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        listener, weakMinimumSizeAllowed);
+            case MSAC:
+<span class="nc" id="L1204">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        listener, weakMinimumSizeAllowed);
+            case PROSAC:
+<span class="nc" id="L1207">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        listener, qualityScores, weakMinimumSizeAllowed);
+            case PROMedS:
+<span class="nc" id="L1210">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        listener, qualityScores, weakMinimumSizeAllowed);
+            case RANSAC:
+            default:
+<span class="nc" id="L1214">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        listener, weakMinimumSizeAllowed);
+        }
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method method of a robust estimator algorithm to estimate best
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size of their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener,
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
+            double[] qualityScores, boolean weakMinimumSizeAllowed, 
+            RobustEstimatorMethod method) throws IllegalArgumentException {
+<span class="fc bfc" id="L1242" title="All 5 branches covered.">        switch (method) {</span>
+            case LMedS:
+<span class="fc" id="L1244">                return new LMedSMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints, 
+                        weakMinimumSizeAllowed);
+            case MSAC:
+<span class="fc" id="L1248">                return new MSACMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints, 
+                        weakMinimumSizeAllowed);
+            case PROSAC:
+<span class="fc" id="L1252">                return new PROSACMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints, qualityScores, 
+                        weakMinimumSizeAllowed);
+            case PROMedS:
+<span class="fc" id="L1256">                return new PROMedSMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints, qualityScores, 
+                        weakMinimumSizeAllowed);
+            case RANSAC:
+            default:
+<span class="fc" id="L1261">                return new RANSACMetricTransformation2DRobustEstimator(</span>
+                        listener, inputPoints, outputPoints, 
+                        weakMinimumSizeAllowed);                
+        }
+    }    
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     * @return an instance of metric 2D transformation estimator.
+     */
+    public static MetricTransformation2DRobustEstimator create() {
+<span class="nc" id="L1273">        return create(DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     * @param inputPoints list of input points to be used to estimate a
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size of their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints)
+            throws IllegalArgumentException {
+<span class="fc" id="L1290">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @return an instance of metric 2D transformation estimator.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener) {
+<span class="nc" id="L1302">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener,
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints)
+            throws IllegalArgumentException {
+<span class="fc" id="L1322">        return create(listener, inputPoints, outputPoints, </span>
+                DEFAULT_ROBUST_METHOD);
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @return an instance of metric 2D transformation estimator. 
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            double[] qualityScores) {
+<span class="nc" id="L1335">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     * @param inputPoints list of input points to be used to estimate a
+     * metric 2D transformation.
+     * @param outputPoints list of output points ot be used to estimate a
+     * metric 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of points.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L1353">        return create(inputPoints, outputPoints, qualityScores, </span>
+                DEFAULT_ROBUST_METHOD);
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point 
+     * correspondences and using default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @return an instance of metric 2D transformation estimator. 
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener, 
+            double[] qualityScores) {
+<span class="nc" id="L1369">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point 
+     * correspondences and using default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 2D transformation.
+     * @param outputPoints list of output points ot be used to estimate a
+     * metric 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener,
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
+            double[] qualityScores) throws IllegalArgumentException {
+<span class="fc" id="L1391">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
+                DEFAULT_ROBUST_METHOD);
+    }
+
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of metric 2D transformation estimator.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            boolean weakMinimumSizeAllowed) {
+<span class="nc" id="L1403">        return create(weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     * @param inputPoints list of input points to be used to estimate a
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size of their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
+            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+<span class="fc" id="L1421">        return create(inputPoints, outputPoints, weakMinimumSizeAllowed, </span>
+                DEFAULT_ROBUST_METHOD);
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of metric 2D transformation estimator.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener, 
+            boolean weakMinimumSizeAllowed) {
+<span class="nc" id="L1436">        return create(listener, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     * metric 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener,
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
+            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+<span class="fc" id="L1457">        return create(listener, inputPoints, outputPoints, </span>
+                weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of metric 2D transformation estimator. 
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
+<span class="nc" id="L1471">        return create(qualityScores, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     * @param inputPoints list of input points to be used to estimate a
+     * metric 2D transformation.
+     * @param outputPoints list of output points ot be used to estimate a
+     * metric 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of points.
+     * @return an instance of metric 2D transformation estimator.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
+            double[] qualityScores, boolean weakMinimumSizeAllowed) 
+            throws IllegalArgumentException {
+<span class="fc" id="L1491">        return create(inputPoints, outputPoints, qualityScores, </span>
+                weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point 
+     * correspondences and using default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of metric 2D transformation estimator. 
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener, 
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
+<span class="nc" id="L1508">        return create(listener, qualityScores, weakMinimumSizeAllowed, </span>
+                DEFAULT_ROBUST_METHOD);
+    }
+    
+    /**
+     * Creates a metric 2D transformation estimator based on 2D point 
+     * correspondences and using default robust estimator method.
+     * @param listener listener to be notified of events such as when estimation
+     * starts, ends or its progress significantly changes.
+     * @param inputPoints list of input points to be used to estimate a 
+     * metric 2D transformation.
+     * @param outputPoints list of output points ot be used to estimate a
+     * metric 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     * points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of metric 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static MetricTransformation2DRobustEstimator create(
+            MetricTransformation2DRobustEstimatorListener listener,
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
+            double[] qualityScores, boolean weakMinimumSizeAllowed) 
+            throws IllegalArgumentException {
+<span class="fc" id="L1533">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
+                weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
+    }
+    
+    /**
+     * Internal method to set lists of points to be used to estimate an 
+     * metric 2D transformation.
+     * This method does not check whether estimator is locked or not.
+     * @param inputPoints list of input points to be used to estimate an 
+     * metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     * metric 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     * the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    private void internalSetPoints(List&lt;Point2D&gt; inputPoints, 
+            List&lt;Point2D&gt; outputPoints) throws IllegalArgumentException {
+<span class="fc bfc" id="L1550" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L1551">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L1553" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L1554">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L1556">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L1557">        mOutputPoints = outputPoints;        </span>
+<span class="fc" id="L1558">    }    </span>
+    
+    /**
+     * Attempts to refine provided solution if refinement is requested.
+     * This method returns a refined solution of the same provided solution
+     * if refinement is not requested or has failed.
+     * If refinement is enabled and it is requested to keep covariance, this
+     * method will also keep covariance of refined transformation.
+     * @param transformation transformation estimated by a robust estimator 
+     * without refinement.
+     * @return solution after refinement (if requested) or the provided 
+     * non-refined solution if not requested or refinement failed.
+     */    
+    protected MetricTransformation2D attemptRefine(
+            MetricTransformation2D transformation) {
+<span class="fc bfc" id="L1573" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L1574">            MetricTransformation2DRefiner refiner =</span>
+                    new MetricTransformation2DRefiner(transformation, 
+<span class="fc" id="L1576">                    mKeepCovariance, getInliersData(), mInputPoints, </span>
+<span class="fc" id="L1577">                    mOutputPoints, getRefinementStandardDeviation());</span>
+            
+            try {
+<span class="fc" id="L1580">                MetricTransformation2D result = </span>
+                        new MetricTransformation2D();
+<span class="fc" id="L1582">                boolean improved = refiner.refine(result);</span>
+                
+<span class="pc bpc" id="L1584" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+                    //keep covariance
+<span class="fc" id="L1586">                    mCovariance = refiner.getCovariance();</span>
+                }
+                
+<span class="fc bfc" id="L1589" title="All 2 branches covered.">                return improved ? result : transformation;</span>
+<span class="fc" id="L1590">            } catch (Exception e) {</span>
+                //refinement failed, so we return input value
+<span class="fc" id="L1592">                return transformation;</span>
+            }
+        } else {
+<span class="fc" id="L1595">            return transformation;</span>
+        }
+    }
+    
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     * @return standard deviation used for refinement.
+     */
+    protected abstract double getRefinementStandardDeviation();    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
