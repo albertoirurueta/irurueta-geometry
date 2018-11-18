@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c6d6a1cb-41d7-401f-885d-de1ac92dc71e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Line3DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Line3DTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -49,7 +49,7 @@
           <entry key="apt" value="1" />
           <entry key="class" value="1" />
           <entry key="gitignore" value="2" />
-          <entry key="java" value="1751" />
+          <entry key="java" value="1753" />
           <entry key="md" value="3" />
           <entry key="properties" value="2" />
           <entry key="sh" value="5" />
@@ -62,7 +62,7 @@
         <counts>
           <entry key="Bash" value="5" />
           <entry key="CLASS" value="1" />
-          <entry key="JAVA" value="1751" />
+          <entry key="JAVA" value="1753" />
           <entry key="Markdown" value="3" />
           <entry key="PLAIN_TEXT" value="4" />
           <entry key="Properties" value="2" />
@@ -73,7 +73,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gitignore" value="8" />
-          <entry key="java" value="108581" />
+          <entry key="java" value="108591" />
           <entry key="md" value="228" />
           <entry key="properties" value="8" />
           <entry key="sh" value="21" />
@@ -84,7 +84,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Bash" value="21" />
-          <entry key="JAVA" value="108581" />
+          <entry key="JAVA" value="108591" />
           <entry key="Markdown" value="228" />
           <entry key="PLAIN_TEXT" value="8" />
           <entry key="Properties" value="8" />
@@ -118,11 +118,103 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.travis.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="117">
-              <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+            <state relative-caret-position="327">
+              <caret line="45" column="35" lean-forward="true" selection-start-line="45" selection-start-column="35" selection-end-line="45" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Line3DTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="148">
+              <caret line="360" column="19" selection-start-line="360" selection-start-column="19" selection-end-line="360" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="243">
+              <caret line="2263" column="32" selection-start-line="2263" selection-start-column="32" selection-end-line="2263" selection-end-column="32" />
+              <folding>
+                <element signature="e#2509#2586#0" />
+                <element signature="e#2596#2648#0" />
+                <element signature="e#2658#2712#0" />
+                <element signature="e#2722#2757#0" />
+                <element signature="e#2767#2804#0" />
+                <element signature="e#2810#20275#0" />
+                <element signature="e#20285#21237#0" />
+                <element signature="e#21251#22230#0" />
+                <element signature="e#22244#23082#0" />
+                <element signature="e#23092#24126#0" />
+                <element signature="e#24136#24985#0" />
+                <element signature="e#24995#25691#0" />
+                <element signature="e#25701#26408#0" />
+                <element signature="e#26422#27164#0" />
+                <element signature="e#27178#28807#0" />
+                <element signature="e#28817#29439#0" />
+                <element signature="e#29449#30260#0" />
+                <element signature="e#30274#30920#0" />
+                <element signature="e#30934#31817#0" />
+                <element signature="e#31827#32491#0" />
+                <element signature="e#32501#33445#0" />
+                <element signature="e#33455#34086#0" />
+                <element signature="e#34096#34968#0" />
+                <element signature="e#34978#35656#0" />
+                <element signature="e#35666#36553#0" />
+                <element signature="e#36563#37238#0" />
+                <element signature="e#37248#38088#0" />
+                <element signature="e#38102#38673#0" />
+                <element signature="e#38683#39582#0" />
+                <element signature="e#39592#40198#0" />
+                <element signature="e#40212#41214#0" />
+                <element signature="e#46924#46957#0" />
+                <element signature="e#56558#56591#0" />
+                <element signature="e#67028#67061#0" />
+                <element signature="e#71659#79141#0" />
+                <element signature="e#79147#86785#0" />
+                <element signature="e#86791#94492#0" />
+                <element signature="e#94498#102170#0" />
+                <element signature="e#101709#101777#0" />
+                <element signature="e#109486#109554#0" />
+                <element signature="e#110031#117905#0" />
+                <element signature="e#117373#117441#0" />
+                <element signature="e#117911#125561#0" />
+                <element signature="e#125104#125170#0" />
+                <element signature="e#125567#133385#0" />
+                <element signature="e#132860#132928#0" />
+                <element signature="e#133391#141253#0" />
+                <element signature="e#140725#140791#0" />
+                <element signature="e#141259#148827#0" />
+                <element signature="e#148412#148468#0" />
+                <element signature="e#148833#156569#0" />
+                <element signature="e#156082#156138#0" />
+                <element signature="e#156575#164333#0" />
+                <element signature="e#163854#163910#0" />
+                <element signature="e#164339#172469#0" />
+                <element signature="e#172475#180751#0" />
+                <element signature="e#180757#189063#0" />
+                <element signature="e#189069#196993#0" />
+                <element signature="e#196999#205082#0" />
+                <element signature="e#205088#213190#0" />
+                <element signature="e#213196#220352#0" />
+                <element signature="e#220358#227668#0" />
+                <element signature="e#227674#235097#0" />
+                <element signature="e#235107#243665#0" />
+                <element signature="e#243671#252395#0" />
+                <element signature="e#252401#261243#0" />
+                <element signature="e#261249#261457#0" />
+                <element signature="e#261463#261667#0" />
+                <element signature="e#261673#261925#0" />
+                <element signature="e#261931#262186#0" />
+                <element signature="e#262192#262326#0" />
+                <element signature="e#262332#263853#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -151,8 +243,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>LMSEImageOfAbsoluteConicEstimatorTest</find>
-      <find>SlamPairedViewsSparseReconstructorTest</find>
       <find>hashCode</find>
       <find>PairedViewsSparseReconstructorTest</find>
       <find>AxisRotation3DTest</find>
@@ -179,8 +269,10 @@
       <find>RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest</find>
       <find>MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest</find>
       <find>surefire</find>
-      <find>coveralls</find>
       <find>environment</find>
+      <find>Line3DTest</find>
+      <find>coveralls</find>
+      <find>RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest</find>
     </findStrings>
     <replaceStrings>
       <replace>KnownBaselineSparseReconstructorConfiguration</replace>
@@ -213,8 +305,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/Conic.java" />
-        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/refiners/InhomogeneousPoint3DRefinerTest.java" />
         <option value="$PROJECT_DIR$/checkstyle.xml" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/sonar-project.properties" />
@@ -264,6 +354,8 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/.travis.yml" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Line3DTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest.java" />
       </list>
     </option>
   </component>
@@ -306,8 +398,7 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-25" />
-    <option name="y" value="47" />
+    <option name="y" value="23" />
     <option name="width" value="1377" />
     <option name="height" value="877" />
   </component>
@@ -393,7 +484,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542579936424" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542581841147" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.0" />
@@ -431,7 +522,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest">
+  <component name="RunManager" selected="JUnit.RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest">
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
       <module name="" />
       <option name="TESTING_TYPE" value="0" />
@@ -471,16 +562,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DecomposedPointCorrespondencePinholeCameraRefinerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Line3DTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="irurueta-geometry" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.irurueta.geometry.refiners.*" />
+          <option name="PATTERN" value="com.irurueta.geometry.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.irurueta.geometry.refiners" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.refiners.DecomposedPointCorrespondencePinholeCameraRefinerTest" />
+      <option name="PACKAGE_NAME" value="com.irurueta.geometry" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.Line3DTest" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -516,6 +607,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="irurueta-geometry" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.irurueta.geometry.estimators.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.irurueta.geometry.estimators" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.estimators.RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="irurueta-geometry" />
       <extension name="coverage">
@@ -532,21 +638,6 @@
       </method>
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="com.irurueta.geometry in irurueta-geometry" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="irurueta-geometry" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.irurueta.geometry.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.irurueta.geometry" />
-      <option name="TEST_OBJECT" value="package" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -604,19 +695,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="JUnit.DecomposedPointCorrespondencePinholeCameraRefinerTest" />
-      <item itemvalue="JUnit.com.irurueta.geometry in irurueta-geometry" />
       <item itemvalue="JUnit.MSACPointCorrespondenceAffineTransformation3DRobustEstimatorTest" />
       <item itemvalue="JUnit.RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest" />
       <item itemvalue="JUnit.MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest" />
+      <item itemvalue="JUnit.Line3DTest" />
+      <item itemvalue="JUnit.RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest" />
+        <item itemvalue="JUnit.Line3DTest" />
         <item itemvalue="JUnit.MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest" />
         <item itemvalue="JUnit.RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest" />
         <item itemvalue="JUnit.MSACPointCorrespondenceAffineTransformation3DRobustEstimatorTest" />
-        <item itemvalue="JUnit.com.irurueta.geometry in irurueta-geometry" />
-        <item itemvalue="JUnit.DecomposedPointCorrespondencePinholeCameraRefinerTest" />
       </list>
     </recent_temporary>
   </component>
@@ -728,14 +819,11 @@
       <workItem from="1541666421848" duration="12570000" />
       <workItem from="1541859466569" duration="755000" />
       <workItem from="1542230699419" duration="11635000" />
-      <workItem from="1542392209000" duration="36741000" />
+      <workItem from="1542392209000" duration="37506000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest - 2018.11.17 at 01h 35m 57s.xml">
-      <configuration name="DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="DecomposedPointCorrespondencePinholeCameraRefinerTest - 2018.11.17 at 01h 39m 17s.xml">
       <configuration name="DecomposedPointCorrespondencePinholeCameraRefinerTest" configurationId="JUnit" />
     </history-entry>
@@ -763,15 +851,18 @@
     <history-entry file="MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest - 2018.11.18 at 20h 25m 59s.xml">
       <configuration name="MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="Line3DTest - 2018.11.18 at 23h 56m 36s.xml">
+      <configuration name="Line3DTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="670422000" />
+    <option name="totallyTimeSpent" value="671187000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-25" y="47" width="1377" height="877" extended-state="0" />
+    <frame x="-118" y="23" width="1377" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48306596" visible="true" weight="0.28089887" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48306596" visible="true" weight="0.28089887" />
       <window_info id="Nl-Palette" order="1" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Capture Tool" order="3" />
@@ -781,7 +872,7 @@
       <window_info id="Structure" order="7" sideWeight="0.51693404" side_tool="true" weight="0.15955056" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32611465" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.28535032" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28535032" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.31082803" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -836,26 +927,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/CircleRobustEstimatorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="43" column="23" selection-start-line="43" selection-start-column="23" selection-end-line="43" selection-end-column="23" />
-          <folding>
-            <element signature="method#CircleRobustEstimatorTest#0;class#CircleRobustEstimatorTest#0" />
-            <element signature="method#setUpClass#0;class#CircleRobustEstimatorTest#0" />
-            <element signature="method#tearDownClass#0;class#CircleRobustEstimatorTest#0" />
-            <element signature="method#setUp#0;class#CircleRobustEstimatorTest#0" />
-            <element signature="method#tearDown#0;class#CircleRobustEstimatorTest#0" />
-            <element signature="method#testCreate#0;class#CircleRobustEstimatorTest#0" />
-            <element signature="class#11445:11976" />
-            <element signature="method#onEstimateStart#0;class#11445:11976" />
-            <element signature="method#onEstimateEnd#0;class#11445:11976" />
-            <element signature="method#onEstimateNextIteration#0;class#11445:11976" />
-            <element signature="method#onEstimateProgressChange#0;class#11445:11976" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/ConicRobustEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -1894,88 +1965,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-10915">
-          <caret line="85" column="25" lean-forward="true" selection-start-line="85" selection-start-column="25" selection-end-line="85" selection-end-column="25" />
-          <folding>
-            <element signature="e#2509#2586#0" />
-            <element signature="e#2596#2648#0" />
-            <element signature="e#2658#2712#0" />
-            <element signature="e#2722#2757#0" />
-            <element signature="e#2767#2804#0" />
-            <element signature="e#2810#20275#0" />
-            <element signature="e#20285#21237#0" />
-            <element signature="e#21251#22230#0" />
-            <element signature="e#22244#23082#0" />
-            <element signature="e#23092#24126#0" />
-            <element signature="e#24136#24985#0" />
-            <element signature="e#24995#25691#0" />
-            <element signature="e#25701#26408#0" />
-            <element signature="e#26422#27164#0" />
-            <element signature="e#27178#28807#0" />
-            <element signature="e#28817#29439#0" />
-            <element signature="e#29449#30260#0" />
-            <element signature="e#30274#30920#0" />
-            <element signature="e#30934#31817#0" />
-            <element signature="e#31827#32491#0" />
-            <element signature="e#32501#33445#0" />
-            <element signature="e#33455#34086#0" />
-            <element signature="e#34096#34968#0" />
-            <element signature="e#34978#35656#0" />
-            <element signature="e#35666#36553#0" />
-            <element signature="e#36563#37238#0" />
-            <element signature="e#37248#38088#0" />
-            <element signature="e#38102#38673#0" />
-            <element signature="e#38683#39582#0" />
-            <element signature="e#39592#40198#0" />
-            <element signature="e#40212#41214#0" />
-            <element signature="e#46924#46957#0" />
-            <element signature="e#56558#56591#0" />
-            <element signature="e#67028#67061#0" />
-            <element signature="e#71659#79141#0" />
-            <element signature="e#79147#86785#0" />
-            <element signature="e#86791#94492#0" />
-            <element signature="e#94498#102170#0" />
-            <element signature="e#101709#101777#0" />
-            <element signature="e#102176#110025#0" />
-            <element signature="e#109486#109554#0" />
-            <element signature="e#110031#117905#0" />
-            <element signature="e#117373#117441#0" />
-            <element signature="e#117911#125561#0" />
-            <element signature="e#125104#125170#0" />
-            <element signature="e#125567#133385#0" />
-            <element signature="e#132860#132928#0" />
-            <element signature="e#133391#141253#0" />
-            <element signature="e#140725#140791#0" />
-            <element signature="e#141259#148827#0" />
-            <element signature="e#148412#148468#0" />
-            <element signature="e#148833#156569#0" />
-            <element signature="e#156082#156138#0" />
-            <element signature="e#156575#164333#0" />
-            <element signature="e#163854#163910#0" />
-            <element signature="e#164339#172469#0" />
-            <element signature="e#172475#180751#0" />
-            <element signature="e#180757#189063#0" />
-            <element signature="e#189069#196993#0" />
-            <element signature="e#196999#205082#0" />
-            <element signature="e#205088#213190#0" />
-            <element signature="e#213196#220352#0" />
-            <element signature="e#220358#227668#0" />
-            <element signature="e#227674#235097#0" />
-            <element signature="e#235107#243665#0" />
-            <element signature="e#243671#252395#0" />
-            <element signature="e#252401#261243#0" />
-            <element signature="e#261249#261457#0" />
-            <element signature="e#261463#261667#0" />
-            <element signature="e#261673#261925#0" />
-            <element signature="e#261931#262186#0" />
-            <element signature="e#262192#262326#0" />
-            <element signature="e#262332#263853#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/PROMedSUPnPPointCorrespondencePinholeCameraRobustEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -2223,8 +2212,96 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+        <state relative-caret-position="327">
+          <caret line="45" column="35" lean-forward="true" selection-start-line="45" selection-start-column="35" selection-end-line="45" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Line3DTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="360" column="19" selection-start-line="360" selection-start-column="19" selection-end-line="360" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="2263" column="32" selection-start-line="2263" selection-start-column="32" selection-end-line="2263" selection-end-column="32" />
+          <folding>
+            <element signature="e#2509#2586#0" />
+            <element signature="e#2596#2648#0" />
+            <element signature="e#2658#2712#0" />
+            <element signature="e#2722#2757#0" />
+            <element signature="e#2767#2804#0" />
+            <element signature="e#2810#20275#0" />
+            <element signature="e#20285#21237#0" />
+            <element signature="e#21251#22230#0" />
+            <element signature="e#22244#23082#0" />
+            <element signature="e#23092#24126#0" />
+            <element signature="e#24136#24985#0" />
+            <element signature="e#24995#25691#0" />
+            <element signature="e#25701#26408#0" />
+            <element signature="e#26422#27164#0" />
+            <element signature="e#27178#28807#0" />
+            <element signature="e#28817#29439#0" />
+            <element signature="e#29449#30260#0" />
+            <element signature="e#30274#30920#0" />
+            <element signature="e#30934#31817#0" />
+            <element signature="e#31827#32491#0" />
+            <element signature="e#32501#33445#0" />
+            <element signature="e#33455#34086#0" />
+            <element signature="e#34096#34968#0" />
+            <element signature="e#34978#35656#0" />
+            <element signature="e#35666#36553#0" />
+            <element signature="e#36563#37238#0" />
+            <element signature="e#37248#38088#0" />
+            <element signature="e#38102#38673#0" />
+            <element signature="e#38683#39582#0" />
+            <element signature="e#39592#40198#0" />
+            <element signature="e#40212#41214#0" />
+            <element signature="e#46924#46957#0" />
+            <element signature="e#56558#56591#0" />
+            <element signature="e#67028#67061#0" />
+            <element signature="e#71659#79141#0" />
+            <element signature="e#79147#86785#0" />
+            <element signature="e#86791#94492#0" />
+            <element signature="e#94498#102170#0" />
+            <element signature="e#101709#101777#0" />
+            <element signature="e#109486#109554#0" />
+            <element signature="e#110031#117905#0" />
+            <element signature="e#117373#117441#0" />
+            <element signature="e#117911#125561#0" />
+            <element signature="e#125104#125170#0" />
+            <element signature="e#125567#133385#0" />
+            <element signature="e#132860#132928#0" />
+            <element signature="e#133391#141253#0" />
+            <element signature="e#140725#140791#0" />
+            <element signature="e#141259#148827#0" />
+            <element signature="e#148412#148468#0" />
+            <element signature="e#148833#156569#0" />
+            <element signature="e#156082#156138#0" />
+            <element signature="e#156575#164333#0" />
+            <element signature="e#163854#163910#0" />
+            <element signature="e#164339#172469#0" />
+            <element signature="e#172475#180751#0" />
+            <element signature="e#180757#189063#0" />
+            <element signature="e#189069#196993#0" />
+            <element signature="e#196999#205082#0" />
+            <element signature="e#205088#213190#0" />
+            <element signature="e#213196#220352#0" />
+            <element signature="e#220358#227668#0" />
+            <element signature="e#227674#235097#0" />
+            <element signature="e#235107#243665#0" />
+            <element signature="e#243671#252395#0" />
+            <element signature="e#252401#261243#0" />
+            <element signature="e#261249#261457#0" />
+            <element signature="e#261463#261667#0" />
+            <element signature="e#261673#261925#0" />
+            <element signature="e#261931#262186#0" />
+            <element signature="e#262192#262326#0" />
+            <element signature="e#262332#263853#0" />
+          </folding>
         </state>
       </provider>
     </entry>

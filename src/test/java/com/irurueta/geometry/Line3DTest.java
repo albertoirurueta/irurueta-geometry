@@ -366,7 +366,7 @@ public class Line3DTest {
         //because distPoint has moved in perpendicular direction from point,
         //the closest point will be point
         assertTrue(line.getClosestPoint(distPoint).equals(
-                point.toInhomogeneous(), ABSOLUTE_ERROR));
+                point.toInhomogeneous(), 2.0 * ABSOLUTE_ERROR));
         assertTrue(line.getClosestPoint(distPoint, ABSOLUTE_ERROR).equals(
                 point.toInhomogeneous(), ABSOLUTE_ERROR));
         
