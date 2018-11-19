@@ -302,12 +302,12 @@ public class LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
             public void onEstimateProgressChange(
                     RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator, 
                     float progress) {
-<span class="nc bnc" id="L305" title="All 2 branches missed.">                if (mListener != null) {</span>
-<span class="nc" id="L306">                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L305" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L306">                    mListener.onEstimateProgressChange(</span>
                             LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.this, 
                             progress);
                 }
-<span class="nc" id="L310">            }</span>
+<span class="fc" id="L310">            }</span>
         });
         
         try {

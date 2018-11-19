@@ -393,7 +393,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
 <span class="fc bfc" id="L393" title="All 2 branches covered.">        boolean dY = Math.abs((point.getY() / point.getW()) - mY) &lt;= threshold;</span>
 <span class="fc bfc" id="L394" title="All 2 branches covered.">        boolean dZ = Math.abs((point.getZ() / point.getW()) - mZ) &lt;= threshold;</span>
 
-<span class="pc bpc" id="L396" title="2 of 6 branches missed.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
+<span class="pc bpc" id="L396" title="1 of 6 branches missed.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
     }
 
     /**
@@ -430,7 +430,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
 <span class="fc bfc" id="L430" title="All 2 branches covered.">        boolean dY = Math.abs(point.getY() - mY) &lt;= threshold;</span>
 <span class="fc bfc" id="L431" title="All 2 branches covered.">        boolean dZ = Math.abs(point.getZ() - mZ) &lt;= threshold;</span>
         
-<span class="pc bpc" id="L433" title="1 of 6 branches missed.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
+<span class="fc bfc" id="L433" title="All 6 branches covered.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
     }
 
     /**

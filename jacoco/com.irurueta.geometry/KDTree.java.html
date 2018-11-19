@@ -410,8 +410,8 @@ public abstract class KDTree&lt;P extends Point&gt; {
 <span class="fc" id="L410">            d1 = mBoxes[nb].mDau1;</span>
 <span class="fc" id="L411">            d2 = mBoxes[nb].mDau2;</span>
 <span class="fc" id="L412">            double coord = pt.getInhomogeneousCoordinate(jdim);</span>
-<span class="pc bpc" id="L413" title="1 of 2 branches missed.">            if (coord + r &lt;= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {</span>
-<span class="nc" id="L414">                nb = d1;</span>
+<span class="fc bfc" id="L413" title="All 2 branches covered.">            if (coord + r &lt;= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {</span>
+<span class="fc" id="L414">                nb = d1;</span>
 <span class="fc bfc" id="L415" title="All 2 branches covered.">            } else if (coord - r &gt;= mBoxes[d2].getLo().getInhomogeneousCoordinate(jdim)) {</span>
 <span class="fc" id="L416">                nb = d2;</span>
             }
