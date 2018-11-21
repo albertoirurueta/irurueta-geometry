@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c6d6a1cb-41d7-401f-885d-de1ac92dc71e" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/site/apt/index.apt" beforeDir="false" afterPath="$PROJECT_DIR$/src/site/apt/index.apt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,82 +29,12 @@
     <expand />
     <select />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="1759203058">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="20" />
-          <entry key="project.open.time.0" value="5" />
-          <entry key="project.open.time.1" value="2" />
-          <entry key="project.open.time.13" value="1" />
-          <entry key="project.open.time.4" value="1" />
-          <entry key="project.open.time.6" value="1" />
-          <entry key="project.open.time.7" value="5" />
-          <entry key="project.open.time.8" value="4" />
-          <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="20" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="apt" value="1" />
-          <entry key="class" value="1" />
-          <entry key="gitignore" value="2" />
-          <entry key="java" value="1753" />
-          <entry key="md" value="3" />
-          <entry key="properties" value="2" />
-          <entry key="sh" value="5" />
-          <entry key="txt" value="1" />
-          <entry key="xml" value="7" />
-          <entry key="yml" value="2" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="Bash" value="5" />
-          <entry key="CLASS" value="1" />
-          <entry key="JAVA" value="1753" />
-          <entry key="Markdown" value="3" />
-          <entry key="PLAIN_TEXT" value="4" />
-          <entry key="Properties" value="2" />
-          <entry key="XML" value="7" />
-          <entry key="YAML" value="2" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="gitignore" value="8" />
-          <entry key="java" value="108591" />
-          <entry key="md" value="229" />
-          <entry key="properties" value="8" />
-          <entry key="sh" value="21" />
-          <entry key="xml" value="231" />
-          <entry key="yml" value="36" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Bash" value="21" />
-          <entry key="JAVA" value="108591" />
-          <entry key="Markdown" value="229" />
-          <entry key="PLAIN_TEXT" value="8" />
-          <entry key="Properties" value="8" />
-          <entry key="XML" value="231" />
-          <entry key="YAML" value="36" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.js.language.service.starts" />
-      <usages-collector id="statistics.spring.boot.mvc.usages" />
-      <usages-collector id="statistics.spring.boot.run.usages" />
-      <usages-collector id="statistics.vcs.git.usages" />
-    </session>
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
+            <state relative-caret-position="1890">
               <caret line="126" column="16" selection-start-line="126" selection-start-column="16" selection-end-line="126" selection-end-column="16" />
             </state>
           </provider>
@@ -122,13 +52,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.travis.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="38" column="6" lean-forward="true" selection-start-line="38" selection-start-column="6" selection-end-line="38" selection-end-column="6" />
+            <state relative-caret-position="570">
+              <caret line="38" column="6" selection-start-line="38" selection-start-column="6" selection-end-line="38" selection-end-column="6" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
@@ -136,6 +66,15 @@
                 <caret line="26" column="124" selection-start-line="26" selection-start-column="124" selection-end-line="26" selection-end-column="124" />
               </first_editor>
               <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/site/apt/index.apt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="345">
+              <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
             </state>
           </provider>
         </entry>
@@ -197,24 +136,15 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GradleLocalSettings">
-    <option name="modificationStamps">
-      <map>
-        <entry key="$USER_HOME$/Downloads/BoofCV-master" value="2962273132000" />
-        <entry key="$USER_HOME$/Downloads/Smack-master" value="4489949964000" />
-      </map>
-    </option>
-  </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/AffineTransformation3DTest.java" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/ProjectiveTransformation3DTest.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/PlaneTest.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/MetricTransformation3DTest.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/ProjectiveTransformation3DTest.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/checkstyle.xml" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/sonar-project.properties" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/PinholeCameraIntrinsicParameters.java" />
@@ -265,14 +195,9 @@
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/Line3DTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest.java" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/src/site/apt/index.apt" />
       </list>
     </option>
-  </component>
-  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsGulpfileManager">
-    <detection-done>true</detection-done>
-    <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
@@ -316,6 +241,35 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="irurueta-geometry" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="irurueta-geometry" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+            <path>
+              <item name="irurueta-geometry" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="irurueta-geometry" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="irurueta-geometry" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="irurueta-geometry" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="site" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="irurueta-geometry" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="irurueta-geometry" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="site" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="apt" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -355,17 +309,6 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="geometry" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="irurueta-geometry" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="irurueta-geometry" type="2674bda8:ScopeViewTreeModel$GroupNode" />
             </path>
           </expand>
           <select />
@@ -449,7 +392,7 @@
       </Profilers>
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
+    <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -576,7 +519,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="TestNG" factoryName="TestNG">
+    <configuration default="true" type="TestNG">
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <properties />
       <listeners />
@@ -584,11 +527,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
       <option name="PROGRAM_PARAMETERS" />
-      <predefined_log_file id="idea.log" enabled="true" />
+      <predefined_log_file enabled="true" id="idea.log" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -721,6 +664,7 @@
       <workItem from="1542392209000" duration="38206000" />
       <workItem from="1542629361161" duration="269000" />
       <workItem from="1542630806453" duration="112000" />
+      <workItem from="1542823593329" duration="14000" />
     </task>
     <servers />
   </component>
@@ -757,13 +701,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="672268000" />
+    <option name="totallyTimeSpent" value="672282000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1377" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48306596" visible="true" weight="0.2883895" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48306596" visible="true" weight="0.2928839" />
       <window_info id="Nl-Palette" order="1" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Capture Tool" order="3" />
@@ -771,6 +715,7 @@
       <window_info id="UI Designer" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info id="Structure" order="7" sideWeight="0.51693404" side_tool="true" weight="0.15955056" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32611465" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.28535032" />
@@ -783,6 +728,7 @@
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.32356688" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
+      <window_info anchor="right" id="Maven" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -807,9 +753,6 @@
         <option value="1" />
       </list>
     </option>
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1094,9 +1037,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/site/apt/index.apt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/cd/mvnsettings.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1147,7 +1087,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
+        <state relative-caret-position="1890">
           <caret line="126" column="16" selection-start-line="126" selection-start-column="16" selection-end-line="126" selection-end-column="16" />
         </state>
       </provider>
@@ -1161,8 +1101,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="38" column="6" lean-forward="true" selection-start-line="38" selection-start-column="6" selection-end-line="38" selection-end-column="6" />
+        <state relative-caret-position="570">
+          <caret line="38" column="6" selection-start-line="38" selection-start-column="6" selection-end-line="38" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -1173,6 +1113,13 @@
             <caret line="26" column="124" selection-start-line="26" selection-start-column="124" selection-end-line="26" selection-end-column="124" />
           </first_editor>
           <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/site/apt/index.apt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
         </state>
       </provider>
     </entry>
