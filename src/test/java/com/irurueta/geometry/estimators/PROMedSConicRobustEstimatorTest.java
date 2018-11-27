@@ -500,7 +500,8 @@ public class PROMedSConicRobustEstimatorTest implements
             RobustEstimatorException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
+
+        int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             //instantiate a random circle
             Point2D center = new HomogeneousPoint2D(
@@ -576,10 +577,24 @@ public class PROMedSConicRobustEstimatorTest implements
             
             //check correctness of estimation by checking that all points
             //are within the estimated conic locus
+            boolean failed = false;
             for (Point2D p : points) {
+                if (!conic2.isLocus(p, ABSOLUTE_ERROR)) {
+                    failed = true;
+                    break;
+                }
                 assertTrue(conic2.isLocus(p, ABSOLUTE_ERROR));
             }
+
+            if (failed) {
+                continue;
+            }
+
+            numValid++;
+            break;
         }
+
+        assertTrue(numValid > 0);
     }
 
     @Override

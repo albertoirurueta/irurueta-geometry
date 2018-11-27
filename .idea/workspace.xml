@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c6d6a1cb-41d7-401f-885d-de1ac92dc71e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/sonar-project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sonar-project.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/PROMedSConicRobustEstimatorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/PROMedSConicRobustEstimatorTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,10 +31,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/sonar-project.properties">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/PROMedSConicRobustEstimatorTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="21" selection-start-line="4" selection-start-column="21" selection-end-line="4" selection-end-column="21" />
+            <state relative-caret-position="324">
+              <caret line="593" column="18" selection-start-line="593" selection-start-column="18" selection-end-line="593" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -51,7 +51,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>hashCode</find>
       <find>PairedViewsSparseReconstructorTest</find>
       <find>AxisRotation3DTest</find>
       <find>AffineTransformation3DTest</find>
@@ -81,6 +80,7 @@
       <find>Line3DTest</find>
       <find>coveralls</find>
       <find>RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest</find>
+      <find>PROMedSConicRobustEstimatorTest</find>
     </findStrings>
     <replaceStrings>
       <replace>KnownBaselineSparseReconstructorConfiguration</replace>
@@ -105,7 +105,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/PinholeCameraIntrinsicParameters.java" />
         <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/PinholeCameraIntrinsicParametersTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/irurueta/geometry/estimators/LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.java" />
@@ -156,6 +155,7 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/site/apt/index.apt" />
         <option value="$PROJECT_DIR$/sonar-project.properties" />
+        <option value="$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/PROMedSConicRobustEstimatorTest.java" />
       </list>
     </option>
   </component>
@@ -192,7 +192,8 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
+    <option name="x" value="1572" />
+    <option name="y" value="145" />
     <option name="width" value="1377" />
     <option name="height" value="877" />
   </component>
@@ -201,7 +202,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -246,17 +246,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="irurueta-geometry" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="irurueta-geometry" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -268,7 +259,7 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543308100768" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543310128073" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.0" />
@@ -306,7 +297,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest">
+  <component name="RunManager" selected="JUnit.PROMedSConicRobustEstimatorTest">
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
       <module name="" />
       <option name="TESTING_TYPE" value="0" />
@@ -376,7 +367,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MSACPointCorrespondenceAffineTransformation3DRobustEstimatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="PROMedSConicRobustEstimatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="irurueta-geometry" />
       <extension name="coverage">
         <pattern>
@@ -385,7 +376,7 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.irurueta.geometry.estimators" />
-      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.estimators.MSACPointCorrespondenceAffineTransformation3DRobustEstimatorTest" />
+      <option name="MAIN_CLASS_NAME" value="com.irurueta.geometry.estimators.PROMedSConicRobustEstimatorTest" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -479,19 +470,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="JUnit.MSACPointCorrespondenceAffineTransformation3DRobustEstimatorTest" />
       <item itemvalue="JUnit.RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest" />
       <item itemvalue="JUnit.MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest" />
       <item itemvalue="JUnit.Line3DTest" />
       <item itemvalue="JUnit.RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest" />
+      <item itemvalue="JUnit.PROMedSConicRobustEstimatorTest" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.PROMedSConicRobustEstimatorTest" />
         <item itemvalue="JUnit.RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest" />
         <item itemvalue="JUnit.Line3DTest" />
         <item itemvalue="JUnit.MSACDLTPointCorrespondencePinholeCameraRobustEstimatorTest" />
         <item itemvalue="JUnit.RANSACEPnPPointCorrespondencePinholeCameraRobustEstimatorTest" />
-        <item itemvalue="JUnit.MSACPointCorrespondenceAffineTransformation3DRobustEstimatorTest" />
       </list>
     </recent_temporary>
   </component>
@@ -608,13 +599,11 @@
       <workItem from="1542630806453" duration="112000" />
       <workItem from="1542823593329" duration="14000" />
       <workItem from="1543308089962" duration="13000" />
+      <workItem from="1543309837174" duration="252000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="DecomposedPointCorrespondencePinholeCameraRefinerTest_testRefineSuggestedHorizontalFocalLength - 2018.11.17 at 01h 40m 05s.xml">
-      <configuration name="DecomposedPointCorrespondencePinholeCameraRefinerTest.testRefineSuggestedHorizontalFocalLength" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="DecomposedPointCorrespondencePinholeCameraRefinerTest_testRefineSuggestedSkewnessZeroPrincipalPointAndEqualFocalLength - 2018.11.17 at 01h 42m 07s.xml">
       <configuration name="DecomposedPointCorrespondencePinholeCameraRefinerTest.testRefineSuggestedSkewnessZeroPrincipalPointAndEqualFocalLength" configurationId="JUnit" />
     </history-entry>
@@ -642,15 +631,18 @@
     <history-entry file="RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest - 2018.11.18 at 23h 58m 23s.xml">
       <configuration name="RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimatorTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="PROMedSConicRobustEstimatorTest - 2018.11.27 at 10h 15m 05s.xml">
+      <configuration name="PROMedSConicRobustEstimatorTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="672295000" />
+    <option name="totallyTimeSpent" value="672547000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1377" height="877" extended-state="0" />
+    <frame x="1572" y="145" width="1377" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48306596" visible="true" weight="0.29737827" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48306596" visible="true" weight="0.30187267" />
       <window_info id="Nl-Palette" order="1" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Capture Tool" order="3" />
@@ -660,7 +652,7 @@
       <window_info id="Structure" order="7" sideWeight="0.51693404" side_tool="true" weight="0.15955056" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32611465" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.28535032" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28535032" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.31082803" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -714,13 +706,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/ConicRobustEstimatorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="38" column="4" lean-forward="true" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/DLTLinePlaneCorrespondencePinholeCameraEstimatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-17582">
@@ -1063,6 +1048,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="21" selection-start-line="4" selection-start-column="21" selection-end-line="4" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/irurueta/geometry/estimators/PROMedSConicRobustEstimatorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="593" column="18" selection-start-line="593" selection-start-column="18" selection-end-line="593" selection-end-column="18" />
         </state>
       </provider>
     </entry>
