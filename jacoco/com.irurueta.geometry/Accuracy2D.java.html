@@ -42,19 +42,18 @@ public class Accuracy2D extends Accuracy {
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
      * positive definite.
      */
-    public Accuracy2D(Matrix covarianceMatrix) throws IllegalArgumentException,
-            NonSymmetricPositiveDefiniteMatrixException {
-<span class="fc" id="L47">        super(covarianceMatrix);</span>
-<span class="fc" id="L48">    }</span>
+    public Accuracy2D(Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
+<span class="fc" id="L46">        super(covarianceMatrix);</span>
+<span class="fc" id="L47">    }</span>
 
     /**
      * Constructor.
      * @param confidence confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public Accuracy2D(double confidence) throws IllegalArgumentException {
-<span class="fc" id="L56">        super(confidence);</span>
-<span class="fc" id="L57">    }</span>
+    public Accuracy2D(double confidence) {
+<span class="fc" id="L55">        super(confidence);</span>
+<span class="fc" id="L56">    }</span>
 
     /**
      * Constructor.
@@ -68,9 +67,9 @@ public class Accuracy2D extends Accuracy {
      * positive definite.
      */
     public Accuracy2D(Matrix covarianceMatrix, double confidence)
-            throws IllegalArgumentException, NonSymmetricPositiveDefiniteMatrixException {
-<span class="fc" id="L72">        super(covarianceMatrix, confidence);</span>
-<span class="fc" id="L73">    }</span>
+            throws NonSymmetricPositiveDefiniteMatrixException {
+<span class="fc" id="L71">        super(covarianceMatrix, confidence);</span>
+<span class="fc" id="L72">    }</span>
 
     /**
      * Gets number of dimensions.
@@ -78,7 +77,7 @@ public class Accuracy2D extends Accuracy {
      */
     @Override
     public int getNumberOfDimensions() {
-<span class="fc" id="L81">        return Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH;</span>
+<span class="fc" id="L80">        return Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH;</span>
     }
 
     /**
@@ -89,11 +88,11 @@ public class Accuracy2D extends Accuracy {
      * @throws NullPointerException if covariance matrix has not been provided yet.
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
-    public Ellipse toEllipse() throws NullPointerException, InvalidRotationMatrixException {
-<span class="fc" id="L93">        double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(</span>
+    public Ellipse toEllipse() throws InvalidRotationMatrixException {
+<span class="fc" id="L92">        double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(</span>
                 mSqrtSingularValues, mStandardDeviationFactor);
-<span class="fc" id="L95">        Rotation2D rotation = new Rotation2D(mU);</span>
-<span class="fc" id="L96">        return new Ellipse(Point2D.create(), semiAxesLengths[0], semiAxesLengths[1], rotation);</span>
+<span class="fc" id="L94">        Rotation2D rotation = new Rotation2D(mU);</span>
+<span class="fc" id="L95">        return new Ellipse(Point2D.create(), semiAxesLengths[0], semiAxesLengths[1], rotation);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -44,19 +44,18 @@ public class Accuracy3D extends Accuracy {
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
      * positive definite.
      */
-    public Accuracy3D(Matrix covarianceMatrix) throws IllegalArgumentException,
-            NonSymmetricPositiveDefiniteMatrixException {
-<span class="fc" id="L49">        super(covarianceMatrix);</span>
-<span class="fc" id="L50">    }</span>
+    public Accuracy3D(Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
+<span class="fc" id="L48">        super(covarianceMatrix);</span>
+<span class="fc" id="L49">    }</span>
 
     /**
      * Constructor.
      * @param confidence confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public Accuracy3D(double confidence) throws IllegalArgumentException {
-<span class="fc" id="L58">        super(confidence);</span>
-<span class="fc" id="L59">    }</span>
+    public Accuracy3D(double confidence) {
+<span class="fc" id="L57">        super(confidence);</span>
+<span class="fc" id="L58">    }</span>
 
     /**
      * Constructor.
@@ -70,9 +69,9 @@ public class Accuracy3D extends Accuracy {
      * positive definite.
      */
     public Accuracy3D(Matrix covarianceMatrix, double confidence)
-            throws IllegalArgumentException, NonSymmetricPositiveDefiniteMatrixException {
-<span class="fc" id="L74">        super(covarianceMatrix, confidence);</span>
-<span class="fc" id="L75">    }</span>
+            throws NonSymmetricPositiveDefiniteMatrixException {
+<span class="fc" id="L73">        super(covarianceMatrix, confidence);</span>
+<span class="fc" id="L74">    }</span>
 
     /**
      * Gets number of dimensions.
@@ -80,7 +79,7 @@ public class Accuracy3D extends Accuracy {
      */
     @Override
     public int getNumberOfDimensions() {
-<span class="fc" id="L83">        return Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH;</span>
+<span class="fc" id="L82">        return Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH;</span>
     }
 
     /**
@@ -91,8 +90,8 @@ public class Accuracy3D extends Accuracy {
      * @throws NullPointerException if covariance matrix has not been provided yet.
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
-    public Ellipsoid toEllipsoid() throws NullPointerException, InvalidRotationMatrixException {
-<span class="fc" id="L95">        return toEllipsoid(mStandardDeviationFactor);</span>
+    public Ellipsoid toEllipsoid() throws InvalidRotationMatrixException {
+<span class="fc" id="L94">        return toEllipsoid(mStandardDeviationFactor);</span>
     }
 
     /**
@@ -102,17 +101,16 @@ public class Accuracy3D extends Accuracy {
      * @throws NullPointerException if covariance matrix is not defined.
      * @throws GeometryException if intersection cannot be computed.
      */
-    public Accuracy2D flattenTo2D() throws NullPointerException,
-            GeometryException {
+    public Accuracy2D flattenTo2D() throws GeometryException {
         //get intersected ellipse for unitary standard deviation
-<span class="fc" id="L108">        Ellipse ellipse = intersectWithPlane(1.0);</span>
+<span class="fc" id="L106">        Ellipse ellipse = intersectWithPlane(1.0);</span>
 
-<span class="fc" id="L110">        double semiMajorAxis = ellipse.getSemiMajorAxis();</span>
-<span class="fc" id="L111">        double semiMinorAxis = ellipse.getSemiMinorAxis();</span>
-<span class="fc" id="L112">        Rotation2D rotation = ellipse.getRotation();</span>
+<span class="fc" id="L108">        double semiMajorAxis = ellipse.getSemiMajorAxis();</span>
+<span class="fc" id="L109">        double semiMinorAxis = ellipse.getSemiMinorAxis();</span>
+<span class="fc" id="L110">        Rotation2D rotation = ellipse.getRotation();</span>
 
-<span class="fc" id="L114">        Matrix u = rotation.asInhomogeneousMatrix();</span>
-<span class="fc" id="L115">        Matrix s2 = Matrix.diagonal(new double[] {</span>
+<span class="fc" id="L112">        Matrix u = rotation.asInhomogeneousMatrix();</span>
+<span class="fc" id="L113">        Matrix s2 = Matrix.diagonal(new double[] {</span>
                 semiMajorAxis * semiMajorAxis,
                 semiMinorAxis * semiMinorAxis}) ;
 
@@ -120,12 +118,12 @@ public class Accuracy3D extends Accuracy {
             //compute covariance as the squared matrix M = U*S*V'
             //Hence: M*M' = U*S*V'*(U*S*V')' = U*S*V'*V'*S*U' = U*S^2*U'
 
-<span class="fc" id="L123">            s2.multiply(u);</span>
-<span class="fc" id="L124">            u.multiply(s2);</span>
+<span class="fc" id="L121">            s2.multiply(u);</span>
+<span class="fc" id="L122">            u.multiply(s2);</span>
 
-<span class="fc" id="L126">            return new Accuracy2D(u, mConfidence);</span>
-<span class="nc" id="L127">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L128">            throw new GeometryException(e);</span>
+<span class="fc" id="L124">            return new Accuracy2D(u, mConfidence);</span>
+<span class="nc" id="L125">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L126">            throw new GeometryException(e);</span>
         }
     }
 
@@ -135,9 +133,8 @@ public class Accuracy3D extends Accuracy {
      * @throws NullPointerException if covariance matrix is not defined.
      * @throws GeometryException if intersection cannot be computed.
      */
-    public Ellipse intersectWithPlane() throws NullPointerException,
-            GeometryException {
-<span class="fc" id="L140">        return intersectWithPlane(mStandardDeviationFactor);</span>
+    public Ellipse intersectWithPlane() throws GeometryException {
+<span class="fc" id="L137">        return intersectWithPlane(mStandardDeviationFactor);</span>
     }
 
     /**
@@ -149,12 +146,12 @@ public class Accuracy3D extends Accuracy {
      * @throws NullPointerException if covariance matrix has not been provided yet.
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
-    private Ellipsoid toEllipsoid(double standardDeviationFactor) throws NullPointerException,
-            InvalidRotationMatrixException {
-<span class="fc" id="L154">        double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(</span>
+    private Ellipsoid toEllipsoid(double standardDeviationFactor)
+            throws InvalidRotationMatrixException {
+<span class="fc" id="L151">        double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(</span>
                 mSqrtSingularValues, standardDeviationFactor);
-<span class="fc" id="L156">        Rotation3D rotation = new MatrixRotation3D(mU);</span>
-<span class="fc" id="L157">        return new Ellipsoid(Point3D.create(), semiAxesLengths, rotation);</span>
+<span class="fc" id="L153">        Rotation3D rotation = new MatrixRotation3D(mU);</span>
+<span class="fc" id="L154">        return new Ellipsoid(Point3D.create(), semiAxesLengths, rotation);</span>
     }
 
     /**
@@ -166,18 +163,18 @@ public class Accuracy3D extends Accuracy {
      * @throws GeometryException if intersection cannot be computed.
      */
     private Ellipse intersectWithPlane(double standardDeviationFactor)
-            throws NullPointerException, GeometryException {
-<span class="fc" id="L170">        Ellipsoid ellipsoid = toEllipsoid(standardDeviationFactor);</span>
-<span class="fc" id="L171">        Quadric quadric = ellipsoid.toQuadric();</span>
+            throws GeometryException {
+<span class="fc" id="L167">        Ellipsoid ellipsoid = toEllipsoid(standardDeviationFactor);</span>
+<span class="fc" id="L168">        Quadric quadric = ellipsoid.toQuadric();</span>
 
         //create horizontal xy plane located at ellipsoid center
-<span class="fc" id="L174">        Point3D center = ellipsoid.getCenter();</span>
-<span class="fc" id="L175">        double[] directorVector = new double[] { 0.0, 0.0, 1.0 };</span>
-<span class="fc" id="L176">        Plane plane = new Plane(center, directorVector);</span>
+<span class="fc" id="L171">        Point3D center = ellipsoid.getCenter();</span>
+<span class="fc" id="L172">        double[] directorVector = new double[] { 0.0, 0.0, 1.0 };</span>
+<span class="fc" id="L173">        Plane plane = new Plane(center, directorVector);</span>
 
-<span class="fc" id="L178">        Conic conic = quadric.intersectWith(plane);</span>
+<span class="fc" id="L175">        Conic conic = quadric.intersectWith(plane);</span>
 
-<span class="fc" id="L180">        return new Ellipse(conic);</span>
+<span class="fc" id="L177">        return new Ellipse(conic);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

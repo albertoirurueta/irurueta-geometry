@@ -116,19 +116,18 @@ public abstract class Accuracy implements Serializable {
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
      * positive definite.
      */
-    public Accuracy(Matrix covarianceMatrix) throws IllegalArgumentException,
-<span class="fc" id="L120">            NonSymmetricPositiveDefiniteMatrixException {</span>
-<span class="fc" id="L121">        setCovarianceMatrix(covarianceMatrix);</span>
-<span class="fc" id="L122">    }</span>
+<span class="fc" id="L119">    public Accuracy(Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {</span>
+<span class="fc" id="L120">        setCovarianceMatrix(covarianceMatrix);</span>
+<span class="fc" id="L121">    }</span>
 
     /**
      * Constructor.
      * @param confidence confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-<span class="fc" id="L129">    public Accuracy(double confidence) throws IllegalArgumentException {</span>
-<span class="fc" id="L130">        setConfidence(confidence);</span>
-<span class="fc" id="L131">    }</span>
+<span class="fc" id="L128">    public Accuracy(double confidence) {</span>
+<span class="fc" id="L129">        setConfidence(confidence);</span>
+<span class="fc" id="L130">    }</span>
 
     /**
      * Constructor.
@@ -142,17 +141,17 @@ public abstract class Accuracy implements Serializable {
      * positive definite.
      */
     public Accuracy(Matrix covarianceMatrix, double confidence)
-<span class="fc" id="L145">            throws IllegalArgumentException, NonSymmetricPositiveDefiniteMatrixException {</span>
-<span class="fc" id="L146">        setCovarianceMatrix(covarianceMatrix);</span>
-<span class="fc" id="L147">        setConfidence(confidence);</span>
-<span class="fc" id="L148">    }</span>
+<span class="fc" id="L144">            throws NonSymmetricPositiveDefiniteMatrixException {</span>
+<span class="fc" id="L145">        setCovarianceMatrix(covarianceMatrix);</span>
+<span class="fc" id="L146">        setConfidence(confidence);</span>
+<span class="fc" id="L147">    }</span>
 
     /**
      * Gets covariance matrix representing the accuracy of an estimated point or measure.
      * @return covariance matrix representing the accuracy of an estimated point or measure.
      */
     public Matrix getCovarianceMatrix() {
-<span class="fc" id="L155">        return mCovarianceMatrix;</span>
+<span class="fc" id="L154">        return mCovarianceMatrix;</span>
     }
 
     /**
@@ -166,54 +165,54 @@ public abstract class Accuracy implements Serializable {
      * positive definite.
      */
     public void setCovarianceMatrix(Matrix covarianceMatrix)
-            throws IllegalArgumentException, NonSymmetricPositiveDefiniteMatrixException {
-<span class="fc" id="L170">        int dims = getNumberOfDimensions();</span>
-<span class="pc bpc" id="L171" title="1 of 4 branches missed.">        if (covarianceMatrix.getRows() != dims || covarianceMatrix.getColumns() != dims) {</span>
-<span class="fc" id="L172">            throw new IllegalArgumentException();</span>
+            throws NonSymmetricPositiveDefiniteMatrixException {
+<span class="fc" id="L169">        int dims = getNumberOfDimensions();</span>
+<span class="pc bpc" id="L170" title="1 of 4 branches missed.">        if (covarianceMatrix.getRows() != dims || covarianceMatrix.getColumns() != dims) {</span>
+<span class="fc" id="L171">            throw new IllegalArgumentException();</span>
         }
 
         try {
-<span class="fc" id="L176">            mSvdDecomposer.setInputMatrix(covarianceMatrix);</span>
-<span class="fc" id="L177">            mSvdDecomposer.decompose();</span>
+<span class="fc" id="L175">            mSvdDecomposer.setInputMatrix(covarianceMatrix);</span>
+<span class="fc" id="L176">            mSvdDecomposer.decompose();</span>
 
-<span class="fc" id="L179">            double[] singularValues = mSvdDecomposer.getSingularValues();</span>
-<span class="fc" id="L180">            double [] sqrtSingularValues = new double[dims];</span>
+<span class="fc" id="L178">            double[] singularValues = mSvdDecomposer.getSingularValues();</span>
+<span class="fc" id="L179">            double [] sqrtSingularValues = new double[dims];</span>
 
-<span class="fc" id="L182">            double minSqrtSingularValue = Double.MAX_VALUE;</span>
-<span class="fc" id="L183">            double maxSqrtSingularValue = -Double.MAX_VALUE;</span>
-<span class="fc" id="L184">            double avgSqrtSingularValue = 0.0;</span>
-<span class="fc" id="L185">            int i = 0;</span>
-<span class="fc bfc" id="L186" title="All 2 branches covered.">            for (double singularValue : singularValues) {</span>
-<span class="pc bpc" id="L187" title="1 of 2 branches missed.">                if (singularValue &lt; 0.0) {</span>
+<span class="fc" id="L181">            double minSqrtSingularValue = Double.MAX_VALUE;</span>
+<span class="fc" id="L182">            double maxSqrtSingularValue = -Double.MAX_VALUE;</span>
+<span class="fc" id="L183">            double avgSqrtSingularValue = 0.0;</span>
+<span class="fc" id="L184">            int i = 0;</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">            for (double singularValue : singularValues) {</span>
+<span class="pc bpc" id="L186" title="1 of 2 branches missed.">                if (singularValue &lt; 0.0) {</span>
                     //matrix is not positive definite
-<span class="nc" id="L189">                    throw new NonSymmetricPositiveDefiniteMatrixException();</span>
+<span class="nc" id="L188">                    throw new NonSymmetricPositiveDefiniteMatrixException();</span>
                 }
 
-<span class="fc" id="L192">                double sqrtSingularValue = Math.sqrt(singularValue);</span>
-<span class="fc bfc" id="L193" title="All 2 branches covered.">                if (sqrtSingularValue &lt; minSqrtSingularValue) {</span>
-<span class="fc" id="L194">                    minSqrtSingularValue = sqrtSingularValue;</span>
+<span class="fc" id="L191">                double sqrtSingularValue = Math.sqrt(singularValue);</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">                if (sqrtSingularValue &lt; minSqrtSingularValue) {</span>
+<span class="fc" id="L193">                    minSqrtSingularValue = sqrtSingularValue;</span>
                 }
-<span class="fc bfc" id="L196" title="All 2 branches covered.">                if (sqrtSingularValue &gt; maxSqrtSingularValue) {</span>
-<span class="fc" id="L197">                    maxSqrtSingularValue = sqrtSingularValue;</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">                if (sqrtSingularValue &gt; maxSqrtSingularValue) {</span>
+<span class="fc" id="L196">                    maxSqrtSingularValue = sqrtSingularValue;</span>
                 }
-<span class="fc" id="L199">                avgSqrtSingularValue += sqrtSingularValue / dims;</span>
+<span class="fc" id="L198">                avgSqrtSingularValue += sqrtSingularValue / dims;</span>
 
-<span class="fc" id="L201">                sqrtSingularValues[i] = sqrtSingularValue;</span>
-<span class="fc" id="L202">                i++;</span>
+<span class="fc" id="L200">                sqrtSingularValues[i] = sqrtSingularValue;</span>
+<span class="fc" id="L201">                i++;</span>
             }
 
-<span class="fc" id="L205">            mSqrtSingularValues = sqrtSingularValues;</span>
-<span class="fc" id="L206">            mU = mSvdDecomposer.getU();</span>
+<span class="fc" id="L204">            mSqrtSingularValues = sqrtSingularValues;</span>
+<span class="fc" id="L205">            mU = mSvdDecomposer.getU();</span>
 
-<span class="fc" id="L208">            mMinSqrtSingularValue = minSqrtSingularValue;</span>
-<span class="fc" id="L209">            mMaxSqrtSingularValue = maxSqrtSingularValue;</span>
-<span class="fc" id="L210">            mAvgSqrtSingularValue = avgSqrtSingularValue;</span>
+<span class="fc" id="L207">            mMinSqrtSingularValue = minSqrtSingularValue;</span>
+<span class="fc" id="L208">            mMaxSqrtSingularValue = maxSqrtSingularValue;</span>
+<span class="fc" id="L209">            mAvgSqrtSingularValue = avgSqrtSingularValue;</span>
 
-<span class="fc" id="L212">            mCovarianceMatrix = covarianceMatrix;</span>
-<span class="fc" id="L213">        } catch (AlgebraException e) {</span>
-<span class="fc" id="L214">            throw new NonSymmetricPositiveDefiniteMatrixException(e);</span>
-<span class="fc" id="L215">        }</span>
-<span class="fc" id="L216">    }</span>
+<span class="fc" id="L211">            mCovarianceMatrix = covarianceMatrix;</span>
+<span class="fc" id="L212">        } catch (AlgebraException e) {</span>
+<span class="fc" id="L213">            throw new NonSymmetricPositiveDefiniteMatrixException(e);</span>
+<span class="fc" id="L214">        }</span>
+<span class="fc" id="L215">    }</span>
 
     /**
      * Gets standard deviation factor to account for a given accuracy confidence.
@@ -224,7 +223,7 @@ public abstract class Accuracy implements Serializable {
      * @return standard deviation factor.
      */
     public double getStandardDeviationFactor() {
-<span class="fc" id="L227">        return mStandardDeviationFactor;</span>
+<span class="fc" id="L226">        return mStandardDeviationFactor;</span>
     }
 
     /**
@@ -236,14 +235,13 @@ public abstract class Accuracy implements Serializable {
      * @param standardDeviationFactor standard deviation factor to be set.
      * @throws IllegalArgumentException if provided value is zero or negative.
      */
-    public void setStandardDeviationFactor(double standardDeviationFactor)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L241" title="All 2 branches covered.">        if (standardDeviationFactor &lt;= 0.0) {</span>
-<span class="fc" id="L242">            throw new IllegalArgumentException();</span>
+    public void setStandardDeviationFactor(double standardDeviationFactor) {
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        if (standardDeviationFactor &lt;= 0.0) {</span>
+<span class="fc" id="L240">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L244">        mStandardDeviationFactor = standardDeviationFactor;</span>
-<span class="fc" id="L245">        mConfidence = 2.0 * NormalDist.cdf(mStandardDeviationFactor, 0.0, 1.0) - 1.0;</span>
-<span class="fc" id="L246">    }</span>
+<span class="fc" id="L242">        mStandardDeviationFactor = standardDeviationFactor;</span>
+<span class="fc" id="L243">        mConfidence = 2.0 * NormalDist.cdf(mStandardDeviationFactor, 0.0, 1.0) - 1.0;</span>
+<span class="fc" id="L244">    }</span>
 
     /**
      * Gets confidence of provided accuracy of estimated point or measure.
@@ -252,7 +250,7 @@ public abstract class Accuracy implements Serializable {
      * @return confidence of provided accuracy of estimated point or measure.
      */
     public double getConfidence() {
-<span class="fc" id="L255">        return mConfidence;</span>
+<span class="fc" id="L253">        return mConfidence;</span>
     }
 
     /**
@@ -262,14 +260,14 @@ public abstract class Accuracy implements Serializable {
      * @param confidence confidence of provided accuracy of estimated point or measure.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public void setConfidence(double confidence) throws IllegalArgumentException {
-<span class="fc bfc" id="L266" title="All 4 branches covered.">        if (confidence &lt; 0.0 || confidence &gt; 1.0) {</span>
-<span class="fc" id="L267">            throw new IllegalArgumentException();</span>
+    public void setConfidence(double confidence) {
+<span class="fc bfc" id="L264" title="All 4 branches covered.">        if (confidence &lt; 0.0 || confidence &gt; 1.0) {</span>
+<span class="fc" id="L265">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L269">        mConfidence = confidence;</span>
-<span class="fc" id="L270">        mStandardDeviationFactor = NormalDist.invcdf(</span>
+<span class="fc" id="L267">        mConfidence = confidence;</span>
+<span class="fc" id="L268">        mStandardDeviationFactor = NormalDist.invcdf(</span>
                 (confidence + 1.0) / 2.0, 0.0, 1.0);
-<span class="fc" id="L272">    }</span>
+<span class="fc" id="L270">    }</span>
 
     /**
      * Gets smallest (best) accuracy in any direction (i.e. either 2D or 3D).
@@ -277,7 +275,7 @@ public abstract class Accuracy implements Serializable {
      * @return smallest accuracy in any direction.
      */
     public double getSmallestAccuracy() {
-<span class="fc" id="L280">        return mMinSqrtSingularValue * mStandardDeviationFactor;</span>
+<span class="fc" id="L278">        return mMinSqrtSingularValue * mStandardDeviationFactor;</span>
     }
 
     /**
@@ -286,7 +284,7 @@ public abstract class Accuracy implements Serializable {
      * @return largest accuracy in any direction.
      */
     public double getLargestAccuracy() {
-<span class="fc" id="L289">        return mMaxSqrtSingularValue * mStandardDeviationFactor;</span>
+<span class="fc" id="L287">        return mMaxSqrtSingularValue * mStandardDeviationFactor;</span>
     }
 
     /**
@@ -296,7 +294,7 @@ public abstract class Accuracy implements Serializable {
      * @return average accuracy among all directions.
      */
     public double getAverageAccuracy() {
-<span class="fc" id="L299">        return mAvgSqrtSingularValue * mStandardDeviationFactor;</span>
+<span class="fc" id="L297">        return mAvgSqrtSingularValue * mStandardDeviationFactor;</span>
     }
 
     /**
