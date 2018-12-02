@@ -116,8 +116,7 @@ public abstract class Accuracy implements Serializable {
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
      * positive definite.
      */
-    public Accuracy(Matrix covarianceMatrix) throws IllegalArgumentException,
-            NonSymmetricPositiveDefiniteMatrixException {
+    public Accuracy(Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
         setCovarianceMatrix(covarianceMatrix);
     }
 
@@ -126,7 +125,7 @@ public abstract class Accuracy implements Serializable {
      * @param confidence confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public Accuracy(double confidence) throws IllegalArgumentException {
+    public Accuracy(double confidence) {
         setConfidence(confidence);
     }
 
@@ -142,7 +141,7 @@ public abstract class Accuracy implements Serializable {
      * positive definite.
      */
     public Accuracy(Matrix covarianceMatrix, double confidence)
-            throws IllegalArgumentException, NonSymmetricPositiveDefiniteMatrixException {
+            throws NonSymmetricPositiveDefiniteMatrixException {
         setCovarianceMatrix(covarianceMatrix);
         setConfidence(confidence);
     }
@@ -166,7 +165,7 @@ public abstract class Accuracy implements Serializable {
      * positive definite.
      */
     public void setCovarianceMatrix(Matrix covarianceMatrix)
-            throws IllegalArgumentException, NonSymmetricPositiveDefiniteMatrixException {
+            throws NonSymmetricPositiveDefiniteMatrixException {
         int dims = getNumberOfDimensions();
         if (covarianceMatrix.getRows() != dims || covarianceMatrix.getColumns() != dims) {
             throw new IllegalArgumentException();
@@ -236,8 +235,7 @@ public abstract class Accuracy implements Serializable {
      * @param standardDeviationFactor standard deviation factor to be set.
      * @throws IllegalArgumentException if provided value is zero or negative.
      */
-    public void setStandardDeviationFactor(double standardDeviationFactor)
-            throws IllegalArgumentException {
+    public void setStandardDeviationFactor(double standardDeviationFactor) {
         if (standardDeviationFactor <= 0.0) {
             throw new IllegalArgumentException();
         }
@@ -262,7 +260,7 @@ public abstract class Accuracy implements Serializable {
      * @param confidence confidence of provided accuracy of estimated point or measure.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public void setConfidence(double confidence) throws IllegalArgumentException {
+    public void setConfidence(double confidence) {
         if (confidence < 0.0 || confidence > 1.0) {
             throw new IllegalArgumentException();
         }

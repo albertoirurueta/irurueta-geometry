@@ -44,8 +44,7 @@ public class Accuracy3D extends Accuracy {
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
      * positive definite.
      */
-    public Accuracy3D(Matrix covarianceMatrix) throws IllegalArgumentException,
-            NonSymmetricPositiveDefiniteMatrixException {
+    public Accuracy3D(Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
         super(covarianceMatrix);
     }
 
@@ -54,7 +53,7 @@ public class Accuracy3D extends Accuracy {
      * @param confidence confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public Accuracy3D(double confidence) throws IllegalArgumentException {
+    public Accuracy3D(double confidence) {
         super(confidence);
     }
 
@@ -70,7 +69,7 @@ public class Accuracy3D extends Accuracy {
      * positive definite.
      */
     public Accuracy3D(Matrix covarianceMatrix, double confidence)
-            throws IllegalArgumentException, NonSymmetricPositiveDefiniteMatrixException {
+            throws NonSymmetricPositiveDefiniteMatrixException {
         super(covarianceMatrix, confidence);
     }
 
@@ -91,7 +90,7 @@ public class Accuracy3D extends Accuracy {
      * @throws NullPointerException if covariance matrix has not been provided yet.
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
-    public Ellipsoid toEllipsoid() throws NullPointerException, InvalidRotationMatrixException {
+    public Ellipsoid toEllipsoid() throws InvalidRotationMatrixException {
         return toEllipsoid(mStandardDeviationFactor);
     }
 
@@ -102,8 +101,7 @@ public class Accuracy3D extends Accuracy {
      * @throws NullPointerException if covariance matrix is not defined.
      * @throws GeometryException if intersection cannot be computed.
      */
-    public Accuracy2D flattenTo2D() throws NullPointerException,
-            GeometryException {
+    public Accuracy2D flattenTo2D() throws GeometryException {
         //get intersected ellipse for unitary standard deviation
         Ellipse ellipse = intersectWithPlane(1.0);
 
@@ -135,8 +133,7 @@ public class Accuracy3D extends Accuracy {
      * @throws NullPointerException if covariance matrix is not defined.
      * @throws GeometryException if intersection cannot be computed.
      */
-    public Ellipse intersectWithPlane() throws NullPointerException,
-            GeometryException {
+    public Ellipse intersectWithPlane() throws GeometryException {
         return intersectWithPlane(mStandardDeviationFactor);
     }
 
@@ -149,8 +146,8 @@ public class Accuracy3D extends Accuracy {
      * @throws NullPointerException if covariance matrix has not been provided yet.
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
-    private Ellipsoid toEllipsoid(double standardDeviationFactor) throws NullPointerException,
-            InvalidRotationMatrixException {
+    private Ellipsoid toEllipsoid(double standardDeviationFactor)
+            throws InvalidRotationMatrixException {
         double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(
                 mSqrtSingularValues, standardDeviationFactor);
         Rotation3D rotation = new MatrixRotation3D(mU);
@@ -166,7 +163,7 @@ public class Accuracy3D extends Accuracy {
      * @throws GeometryException if intersection cannot be computed.
      */
     private Ellipse intersectWithPlane(double standardDeviationFactor)
-            throws NullPointerException, GeometryException {
+            throws GeometryException {
         Ellipsoid ellipsoid = toEllipsoid(standardDeviationFactor);
         Quadric quadric = ellipsoid.toQuadric();
 

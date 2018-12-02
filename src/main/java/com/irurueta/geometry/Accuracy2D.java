@@ -42,8 +42,7 @@ public class Accuracy2D extends Accuracy {
      * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
      * positive definite.
      */
-    public Accuracy2D(Matrix covarianceMatrix) throws IllegalArgumentException,
-            NonSymmetricPositiveDefiniteMatrixException {
+    public Accuracy2D(Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
         super(covarianceMatrix);
     }
 
@@ -52,7 +51,7 @@ public class Accuracy2D extends Accuracy {
      * @param confidence confidence of provided accuracy of an estimated position.
      * @throws IllegalArgumentException if provided value is not within 0 and 1.
      */
-    public Accuracy2D(double confidence) throws IllegalArgumentException {
+    public Accuracy2D(double confidence) {
         super(confidence);
     }
 
@@ -68,7 +67,7 @@ public class Accuracy2D extends Accuracy {
      * positive definite.
      */
     public Accuracy2D(Matrix covarianceMatrix, double confidence)
-            throws IllegalArgumentException, NonSymmetricPositiveDefiniteMatrixException {
+            throws NonSymmetricPositiveDefiniteMatrixException {
         super(covarianceMatrix, confidence);
     }
 
@@ -89,7 +88,7 @@ public class Accuracy2D extends Accuracy {
      * @throws NullPointerException if covariance matrix has not been provided yet.
      * @throws InvalidRotationMatrixException if rotation cannot be properly determined.
      */
-    public Ellipse toEllipse() throws NullPointerException, InvalidRotationMatrixException {
+    public Ellipse toEllipse() throws InvalidRotationMatrixException {
         double[] semiAxesLengths = ArrayUtils.multiplyByScalarAndReturnNew(
                 mSqrtSingularValues, mStandardDeviationFactor);
         Rotation2D rotation = new Rotation2D(mU);
