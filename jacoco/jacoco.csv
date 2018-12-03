@@ -150,7 +150,7 @@ com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,MSACPlaneRobustE
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,MSACMetricTransformation3DRobustEstimator,16,144,1,7,5,46,1,16,0,13
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,MSACLine2DRobustEstimator,16,94,1,7,5,30,1,11,0,8
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,RANSACMetricTransformation3DRobustEstimator.new RANSACRobustEstimatorListener() {...},1,170,0,10,1,36,0,16,0,11
-com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.new LMedSRobustEstimatorListener() {...},13,247,5,3,4,40,5,9,1,9
+com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.new LMedSRobustEstimatorListener() {...},1,259,4,4,1,43,4,10,0,10
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,PROMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.new PROMedSRobustEstimatorListener() {...},16,178,5,3,6,33,5,11,1,11
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,ConicRobustEstimator,3,550,0,72,2,135,0,86,0,38
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,DLTPointCorrespondencePinholeCameraRobustEstimator,0,326,0,40,0,64,0,52,0,20
@@ -225,13 +225,13 @@ com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,PROMedSPoint3DRo
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.new MSACRobustEstimatorListener() {...},4,186,4,4,3,35,4,11,0,11
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator.new MSACRobustEstimatorListener() {...},1,205,4,4,1,37,4,11,0,11
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator,18,225,3,21,5,69,3,26,0,17
-com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.new LMedSRobustEstimatorListener() {...},16,170,5,3,6,31,5,9,1,9
+com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.new LMedSRobustEstimatorListener() {...},4,182,4,4,3,34,4,10,0,10
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,PROSACCircleRobustEstimator,20,191,3,19,6,60,3,24,0,16
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,MSACLineCorrespondenceProjectiveTransformation2DRobustEstimator,16,110,1,7,5,35,1,12,0,9
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,PROMedSLine2DRobustEstimator.new PROMedSRobustEstimatorListener() {...},13,101,5,3,4,22,5,11,1,11
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,LMedSConicRobustEstimator,16,98,1,7,5,31,1,11,0,8
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,PROMedSPoint3DRobustEstimator.new PROMedSRobustEstimatorListener() {...},13,108,5,3,4,23,5,11,1,11
-com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,MSACConicRobustEstimator.new MSACRobustEstimatorListener() {...},1,138,4,4,1,27,4,11,0,11
+com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,MSACConicRobustEstimator.new MSACRobustEstimatorListener() {...},0,139,4,4,0,28,4,11,0,11
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,RANSACEuclideanTransformation3DRobustEstimator.new RANSACRobustEstimatorListener() {...},1,170,0,10,1,36,0,16,0,11
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,MSACLine2DRobustEstimator.new MSACRobustEstimatorListener() {...},1,109,4,4,1,24,4,11,0,11
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,EPnPPointCorrespondencePinholeCameraEstimator,24,2432,8,102,7,532,9,92,1,45
@@ -242,7 +242,7 @@ com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,LMedSPointCorres
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,LMedSDualQuadricRobustEstimator,16,98,1,7,5,31,1,11,0,8
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,LMedSSphereRobustEstimator,16,98,1,7,5,31,1,11,0,8
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,PROMedSEuclideanTransformation2DRobustEstimator.new PROMedSRobustEstimatorListener() {...},13,162,5,5,4,34,5,12,1,11
-com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,RANSACDualConicRobustEstimator.new RANSACRobustEstimatorListener() {...},0,139,4,4,0,28,4,11,0,11
+com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,RANSACDualConicRobustEstimator.new RANSACRobustEstimatorListener() {...},1,138,4,4,1,27,4,11,0,11
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,RANSACLine2DRobustEstimator,16,94,1,7,5,30,1,11,0,8
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,LMedSLineCorrespondenceAffineTransformation2DRobustEstimator,18,126,2,8,5,38,2,12,0,9
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,PROSACDualConicRobustEstimator,20,191,3,19,6,60,3,24,0,16
@@ -295,7 +295,7 @@ com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,RANSACQuadricRob
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,RANSACPoint3DRobustEstimator.new RANSACRobustEstimatorListener() {...},1,116,0,8,1,25,0,15,0,11
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator,18,225,3,21,5,69,3,26,0,17
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,PROSACPlaneRobustEstimator.new PROSACRobustEstimatorListener() {...},13,110,5,3,4,23,5,11,1,11
-com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,MSACDualConicRobustEstimator.new MSACRobustEstimatorListener() {...},0,139,4,4,0,28,4,11,0,11
+com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,MSACDualConicRobustEstimator.new MSACRobustEstimatorListener() {...},1,138,4,4,1,27,4,11,0,11
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator.new PROMedSRobustEstimatorListener() {...},13,197,5,3,4,35,5,11,1,11
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,PinholeCameraEstimatorType,0,64,0,0,0,7,0,1,0,1
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,LMedSEuclideanTransformation3DRobustEstimator.new LMedSRobustEstimatorListener() {...},1,166,4,6,1,35,4,11,0,10
@@ -394,9 +394,9 @@ com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,RANSACMetricTran
 com.irurueta:irurueta-geometry,com.irurueta.geometry.estimators,LockedException,0,16,0,0,0,8,0,4,0,4
 com.irurueta:irurueta-geometry,com.irurueta.geometry,MetricTransformation2D,2,304,1,3,1,87,1,23,0,22
 com.irurueta:irurueta-geometry,com.irurueta.geometry,ProjectiveTransformation3D,112,4882,11,39,27,922,12,81,4,64
-com.irurueta:irurueta-geometry,com.irurueta.geometry,AffineParameters3D,9,326,3,17,3,84,4,31,1,24
+com.irurueta:irurueta-geometry,com.irurueta.geometry,AffineParameters3D,9,326,3,17,4,83,4,31,1,24
 com.irurueta:irurueta-geometry,com.irurueta.geometry,MetricTransformation3D,2,325,1,3,1,90,1,23,0,22
-com.irurueta:irurueta-geometry,com.irurueta.geometry,AffineParameters2D,5,224,3,17,1,66,3,26,0,19
+com.irurueta:irurueta-geometry,com.irurueta.geometry,AffineParameters2D,5,224,3,17,2,65,3,26,0,19
 com.irurueta:irurueta-geometry,com.irurueta.geometry,DualQuadric,31,1431,1,11,12,251,2,17,1,12
 com.irurueta:irurueta-geometry,com.irurueta.geometry,InvalidRotationMatrixException,0,16,0,0,0,8,0,4,0,4
 com.irurueta:irurueta-geometry,com.irurueta.geometry,Conic,36,871,2,22,13,178,3,26,1,16
@@ -404,7 +404,7 @@ com.irurueta:irurueta-geometry,com.irurueta.geometry,ParallelVectorsException,0,
 com.irurueta:irurueta-geometry,com.irurueta.geometry,Transformation3D,4,325,0,12,3,90,0,35,0,29
 com.irurueta:irurueta-geometry,com.irurueta.geometry,AxisRotation3D,494,968,52,32,87,162,42,37,5,32
 com.irurueta:irurueta-geometry,com.irurueta.geometry,Point3D,21,308,6,25,8,67,7,31,3,18
-com.irurueta:irurueta-geometry,com.irurueta.geometry,KDTree,8,1486,6,142,4,253,6,84,0,16
+com.irurueta:irurueta-geometry,com.irurueta.geometry,KDTree,2,1492,3,145,1,256,3,87,0,16
 com.irurueta:irurueta-geometry,com.irurueta.geometry,EuclideanTransformation3D,8,620,1,15,1,179,1,49,0,42
 com.irurueta:irurueta-geometry,com.irurueta.geometry,KDTree3D,0,19,0,0,0,5,0,4,0,4
 com.irurueta:irurueta-geometry,com.irurueta.geometry,Accuracy,4,320,2,16,1,64,2,20,0,13
@@ -451,8 +451,8 @@ com.irurueta:irurueta-geometry,com.irurueta.geometry,VanGoghTriangulator2D,74,23
 com.irurueta:irurueta-geometry,com.irurueta.geometry,Triangle2D,198,794,58,76,45,188,39,72,0,44
 com.irurueta:irurueta-geometry,com.irurueta.geometry,PinholeCameraIntrinsicParameters,9,427,4,16,2,102,4,38,0,32
 com.irurueta:irurueta-geometry,com.irurueta.geometry,UndefinedPointException,0,16,0,0,0,8,0,4,0,4
-com.irurueta:irurueta-geometry,com.irurueta.geometry,HomogeneousPoint3D,82,670,7,49,15,138,10,60,3,39
-com.irurueta:irurueta-geometry,com.irurueta.geometry,Rectangle,55,4565,20,208,7,712,16,455,0,357
+com.irurueta:irurueta-geometry,com.irurueta.geometry,HomogeneousPoint3D,82,670,8,48,15,138,11,59,3,39
+com.irurueta:irurueta-geometry,com.irurueta.geometry,Rectangle,49,4571,18,210,8,711,16,455,0,357
 com.irurueta:irurueta-geometry,com.irurueta.geometry,ConicType,0,54,0,0,0,6,0,1,0,1
 com.irurueta:irurueta-geometry,com.irurueta.geometry,Rotation2D,17,570,12,40,5,146,12,45,0,31
 com.irurueta:irurueta-geometry,com.irurueta.geometry,Box,0,97,0,6,0,28,0,14,0,11
@@ -462,14 +462,14 @@ com.irurueta:irurueta-geometry,com.irurueta.geometry,RotationUtils,166,1055,18,5
 com.irurueta:irurueta-geometry,com.irurueta.geometry,CameraType,0,14,0,0,0,2,0,1,0,1
 com.irurueta:irurueta-geometry,com.irurueta.geometry,AffineTransformation3D,30,3261,2,26,6,666,2,71,0,59
 com.irurueta:irurueta-geometry,com.irurueta.geometry,InhomogeneousPoint2D,32,316,3,37,5,80,6,46,3,29
-com.irurueta:irurueta-geometry,com.irurueta.geometry,InhomogeneousPoint3D,38,408,4,48,5,96,7,56,3,34
+com.irurueta:irurueta-geometry,com.irurueta.geometry,InhomogeneousPoint3D,38,408,3,49,5,96,6,57,3,34
 com.irurueta:irurueta-geometry,com.irurueta.geometry,Line3D,13,297,2,14,6,69,2,25,0,19
 com.irurueta:irurueta-geometry,com.irurueta.geometry,VanGoghTriangulator3D,81,268,13,31,17,71,13,21,1,11
 com.irurueta:irurueta-geometry,com.irurueta.geometry,Circle,12,675,3,21,3,145,3,40,0,31
 com.irurueta:irurueta-geometry,com.irurueta.geometry,PinholeCamera,126,2488,19,47,31,613,17,100,0,84
 com.irurueta:irurueta-geometry,com.irurueta.geometry,MatrixRotation3D,143,1087,26,36,33,229,27,54,6,44
 com.irurueta:irurueta-geometry,com.irurueta.geometry,DualQuadricNotAvailableException,4,12,0,0,2,6,1,3,1,3
-com.irurueta:irurueta-geometry,com.irurueta.geometry,AffineTransformation2D,30,1902,2,28,6,445,2,66,0,53
+com.irurueta:irurueta-geometry,com.irurueta.geometry,AffineTransformation2D,30,1902,2,28,21,445,2,66,0,53
 com.irurueta:irurueta-geometry,com.irurueta.geometry,BuildInfo,12,113,2,4,4,31,2,11,0,10
 com.irurueta:irurueta-geometry,com.irurueta.geometry,KDTree2D,0,18,0,0,0,5,0,4,0,4
 com.irurueta:irurueta-geometry,com.irurueta.geometry,CoplanarPointsException,0,16,0,0,0,8,0,4,0,4
@@ -481,4 +481,4 @@ com.irurueta:irurueta-geometry,com.irurueta.geometry,Quadric,30,1693,2,12,12,288
 com.irurueta:irurueta-geometry,com.irurueta.geometry,Accuracy3D,6,131,0,0,2,30,0,10,0,10
 com.irurueta:irurueta-geometry,com.irurueta.geometry,NotAvailableException,4,12,0,0,2,6,1,3,1,3
 com.irurueta:irurueta-geometry,com.irurueta.geometry,Rotation3DType,0,34,0,0,0,4,0,1,0,1
-com.irurueta:irurueta-geometry,com.irurueta.geometry,Ellipse,36,2306,5,31,9,402,6,77,1,64
+com.irurueta:irurueta-geometry,com.irurueta.geometry,Ellipse,26,2316,4,32,6,405,5,78,1,64

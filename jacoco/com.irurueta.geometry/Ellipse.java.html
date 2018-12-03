@@ -730,8 +730,8 @@ public class Ellipse implements Serializable {
 <span class="fc" id="L730">            double e = 2.0*ePrime;</span>
 
 <span class="fc" id="L732">            setParameters(aPrime, b, cPrime, d, e, fPrime, threshold);</span>
-<span class="nc" id="L733">        } catch (AlgebraException | IllegalArgumentException ex) {</span>
-<span class="nc" id="L734">            throw new ColinearPointsException(ex);</span>
+<span class="fc" id="L733">        } catch (AlgebraException | IllegalArgumentException ex) {</span>
+<span class="fc" id="L734">            throw new ColinearPointsException(ex);</span>
 <span class="fc" id="L735">        }</span>
 <span class="fc" id="L736">    }</span>
     
@@ -769,9 +769,9 @@ public class Ellipse implements Serializable {
     public final void setParameters(double a, double b, double c, double d, 
             double e, double f, double threshold) 
             throws IllegalArgumentException {
-<span class="pc bpc" id="L772" title="1 of 2 branches missed.">        if (b*b - 4.0*a*c &gt;= threshold) {</span>
+<span class="fc bfc" id="L772" title="All 2 branches covered.">        if (b*b - 4.0*a*c &gt;= threshold) {</span>
             //not an ellipse
-<span class="nc" id="L774">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L774">            throw new IllegalArgumentException();</span>
         }   
         
 <span class="fc" id="L777">        double semiMajorAxis = - Math.sqrt(</span>

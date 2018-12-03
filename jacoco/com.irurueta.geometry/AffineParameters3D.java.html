@@ -145,10 +145,9 @@ public class AffineParameters3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided matrix is not 3x3 or
      * if it is not upper triangular, or if threshold is negative.
      */
-    public AffineParameters3D(Matrix m, double threshold)
-<span class="fc" id="L149">            throws IllegalArgumentException {</span>
-<span class="fc" id="L150">        fromMatrix(m, threshold);</span>
-<span class="fc" id="L151">    }</span>
+<span class="fc" id="L148">    public AffineParameters3D(Matrix m, double threshold) {</span>
+<span class="fc" id="L149">        fromMatrix(m, threshold);</span>
+<span class="fc" id="L150">    }</span>
     
     /**
      * Constructor with matrix.
@@ -156,9 +155,9 @@ public class AffineParameters3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided matrix is not 3x3 or
      * if it is not upper triangular, or if threshold is negative.
      */
-<span class="fc" id="L159">    public AffineParameters3D(Matrix m) throws IllegalArgumentException {</span>
-<span class="fc" id="L160">        fromMatrix(m);</span>
-<span class="fc" id="L161">    }</span>
+<span class="fc" id="L158">    public AffineParameters3D(Matrix m) {</span>
+<span class="fc" id="L159">        fromMatrix(m);</span>
+<span class="fc" id="L160">    }</span>
     
     /**
      * Returns scale for x axis.
@@ -167,7 +166,7 @@ public class AffineParameters3D implements Serializable {
      * @return Scale for x axis.
      */
     public double getScaleX() {
-<span class="fc" id="L170">        return scaleX;</span>
+<span class="fc" id="L169">        return scaleX;</span>
     }
     
     /**
@@ -177,8 +176,8 @@ public class AffineParameters3D implements Serializable {
      * @param scaleX scale to be set on x axis.
      */
     public void setScaleX(double scaleX) {
-<span class="fc" id="L180">        this.scaleX = scaleX;</span>
-<span class="fc" id="L181">    }</span>
+<span class="fc" id="L179">        this.scaleX = scaleX;</span>
+<span class="fc" id="L180">    }</span>
     
     /**
      * Returns scale for y axis.
@@ -187,7 +186,7 @@ public class AffineParameters3D implements Serializable {
      * @return Scale for y axis.
      */
     public double getScaleY() {
-<span class="fc" id="L190">        return scaleY;</span>
+<span class="fc" id="L189">        return scaleY;</span>
     }
     
     /**
@@ -197,8 +196,8 @@ public class AffineParameters3D implements Serializable {
      * @param scaleY scale to be set on y axis.
      */
     public void setScaleY(double scaleY) {
-<span class="fc" id="L200">        this.scaleY = scaleY;</span>
-<span class="fc" id="L201">    }</span>
+<span class="fc" id="L199">        this.scaleY = scaleY;</span>
+<span class="fc" id="L200">    }</span>
 
     /**
      * Returns scale for z axis.
@@ -207,7 +206,7 @@ public class AffineParameters3D implements Serializable {
      * @return Scale for z axis.
      */
     public double getScaleZ() {
-<span class="fc" id="L210">        return scaleZ;</span>
+<span class="fc" id="L209">        return scaleZ;</span>
     }
     
     /**
@@ -217,8 +216,8 @@ public class AffineParameters3D implements Serializable {
      * @param scaleZ scale to be set on z axis.
      */
     public void setScaleZ(double scaleZ) {
-<span class="nc" id="L220">        this.scaleZ = scaleZ;</span>
-<span class="nc" id="L221">    }</span>
+<span class="nc" id="L219">        this.scaleZ = scaleZ;</span>
+<span class="nc" id="L220">    }</span>
     
     /**
      * Sets overall scale (for x, y and z axes).
@@ -227,8 +226,8 @@ public class AffineParameters3D implements Serializable {
      * @param scale Scale to be set for x, y and z axes.
      */
     public void setScale(double scale) {
-<span class="fc" id="L230">        scaleX = scaleY = scaleZ = scale;</span>
-<span class="fc" id="L231">    }</span>
+<span class="fc" id="L229">        scaleX = scaleY = scaleZ = scale;</span>
+<span class="fc" id="L230">    }</span>
     
     /**
      * Returns skewness value for x-y axes.
@@ -237,7 +236,7 @@ public class AffineParameters3D implements Serializable {
      * @return Skewness value for x-y axes.
      */
     public double getSkewnessXY() {
-<span class="fc" id="L240">        return skewnessXY;</span>
+<span class="fc" id="L239">        return skewnessXY;</span>
     }
     
     /**
@@ -247,8 +246,8 @@ public class AffineParameters3D implements Serializable {
      * @param skewnessXY Skewness to be set for x-y axes.
      */
     public void setSkewnessXY(double skewnessXY) {
-<span class="fc" id="L250">        this.skewnessXY = skewnessXY;</span>
-<span class="fc" id="L251">    }</span>
+<span class="fc" id="L249">        this.skewnessXY = skewnessXY;</span>
+<span class="fc" id="L250">    }</span>
 
     /**
      * Returns skewness value for x-z axes.
@@ -257,7 +256,7 @@ public class AffineParameters3D implements Serializable {
      * @return Skewness value for x-z axes.
      */    
     public double getSkewnessXZ() {
-<span class="fc" id="L260">        return skewnessXZ;</span>
+<span class="fc" id="L259">        return skewnessXZ;</span>
     }
 
     /**
@@ -267,8 +266,8 @@ public class AffineParameters3D implements Serializable {
      * @param skewnessXZ Skewness to be set for x-z axes.
      */    
     public void setSkewnessXZ(double skewnessXZ) {
-<span class="fc" id="L270">        this.skewnessXZ = skewnessXZ;</span>
-<span class="fc" id="L271">    }</span>
+<span class="fc" id="L269">        this.skewnessXZ = skewnessXZ;</span>
+<span class="fc" id="L270">    }</span>
     
     /**
      * Returns skewness value for y-z axes.
@@ -277,7 +276,7 @@ public class AffineParameters3D implements Serializable {
      * @return Skewness value for y-z axes.
      */    
     public double getSkewnessYZ() {
-<span class="fc" id="L280">        return skewnessYZ;</span>
+<span class="fc" id="L279">        return skewnessYZ;</span>
     }
     
     /**
@@ -287,20 +286,22 @@ public class AffineParameters3D implements Serializable {
      * @param skewnessYZ Skewness to be set for y-z axes.
      */    
     public void setSkewnessYZ(double skewnessYZ) {
-<span class="fc" id="L290">        this.skewnessYZ = skewnessYZ;</span>
-<span class="fc" id="L291">    }</span>
+<span class="fc" id="L289">        this.skewnessYZ = skewnessYZ;</span>
+<span class="fc" id="L290">    }</span>
     
     /**
      * Converts this affine parameters instance into matrix representation
      * @return A matrix representation of this instance.
      */
     public Matrix asMatrix() {
-<span class="fc" id="L298">        Matrix m = null;</span>
+<span class="fc" id="L297">        Matrix m = null;</span>
         try {
-<span class="fc" id="L300">            m = new Matrix(INHOM_COORDS, INHOM_COORDS);</span>
-<span class="fc" id="L301">            asMatrix(m);</span>
-<span class="pc" id="L302">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L303">        return m;</span>
+<span class="fc" id="L299">            m = new Matrix(INHOM_COORDS, INHOM_COORDS);</span>
+<span class="fc" id="L300">            asMatrix(m);</span>
+<span class="nc" id="L301">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L303">        }</span>
+<span class="fc" id="L304">        return m;</span>
     }
     
     /**
@@ -309,23 +310,23 @@ public class AffineParameters3D implements Serializable {
      * @param m Matrix where representation of this instance will be stored.
      * @throws IllegalArgumentException Raised if provided matrix is not 3x3.
      */
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
-<span class="pc bpc" id="L313" title="2 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
-<span class="nc" id="L314">            throw new IllegalArgumentException();</span>
+    public void asMatrix(Matrix m) {
+<span class="pc bpc" id="L314" title="2 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
+<span class="nc" id="L315">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L317">        m.setElementAt(0, 0, scaleX);</span>
-<span class="fc" id="L318">        m.setElementAt(1, 0, 0.0);</span>
-<span class="fc" id="L319">        m.setElementAt(2, 0, 0.0);</span>
+<span class="fc" id="L318">        m.setElementAt(0, 0, scaleX);</span>
+<span class="fc" id="L319">        m.setElementAt(1, 0, 0.0);</span>
+<span class="fc" id="L320">        m.setElementAt(2, 0, 0.0);</span>
         
-<span class="fc" id="L321">        m.setElementAt(0, 1, skewnessXY);</span>
-<span class="fc" id="L322">        m.setElementAt(1, 1, scaleY);</span>
-<span class="fc" id="L323">        m.setElementAt(2, 1, 0.0);</span>
+<span class="fc" id="L322">        m.setElementAt(0, 1, skewnessXY);</span>
+<span class="fc" id="L323">        m.setElementAt(1, 1, scaleY);</span>
+<span class="fc" id="L324">        m.setElementAt(2, 1, 0.0);</span>
         
-<span class="fc" id="L325">        m.setElementAt(0, 2, skewnessXZ);</span>
-<span class="fc" id="L326">        m.setElementAt(1, 2, skewnessYZ);</span>
-<span class="fc" id="L327">        m.setElementAt(2, 2, scaleZ);</span>
-<span class="fc" id="L328">    }</span>
+<span class="fc" id="L326">        m.setElementAt(0, 2, skewnessXZ);</span>
+<span class="fc" id="L327">        m.setElementAt(1, 2, skewnessYZ);</span>
+<span class="fc" id="L328">        m.setElementAt(2, 2, scaleZ);</span>
+<span class="fc" id="L329">    }</span>
     
     /**
      * Sets parameters of this instance from provided matrix.
@@ -334,9 +335,9 @@ public class AffineParameters3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided matrix is not 3x3 or
      * if it is not upper triangular.
      */
-    public final void fromMatrix(Matrix m) throws IllegalArgumentException {
-<span class="fc" id="L338">        fromMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
-<span class="fc" id="L339">    }</span>
+    public final void fromMatrix(Matrix m) {
+<span class="fc" id="L339">        fromMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
+<span class="fc" id="L340">    }</span>
     
     /**
      * Sets parameters of this instance from provided matrix.
@@ -348,8 +349,7 @@ public class AffineParameters3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided matrix is not 3x3 or
      * it it is not upper triangular or if threshold is negative.
      */
-    public final void fromMatrix(Matrix m, double threshold) 
-            throws IllegalArgumentException {
+    public final void fromMatrix(Matrix m, double threshold) {
 <span class="fc bfc" id="L353" title="All 2 branches covered.">        if (!isValidMatrix(m, threshold)) {</span>
 <span class="fc" id="L354">            throw new IllegalArgumentException();</span>
         }
@@ -389,31 +389,28 @@ public class AffineParameters3D implements Serializable {
      * @return True if matrix is valid, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public static boolean isValidMatrix(Matrix m, double threshold) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L394" title="All 2 branches covered.">        if (threshold &lt; 0.0) {</span>
-<span class="fc" id="L395">            throw new IllegalArgumentException();</span>
+    public static boolean isValidMatrix(Matrix m, double threshold) {
+<span class="fc bfc" id="L393" title="All 2 branches covered.">        if (threshold &lt; 0.0) {</span>
+<span class="fc" id="L394">            throw new IllegalArgumentException();</span>
         }
         
-<span class="pc bpc" id="L398" title="1 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
-<span class="fc" id="L399">            return false;</span>
+<span class="pc bpc" id="L397" title="1 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
+<span class="fc" id="L398">            return false;</span>
         }
         
         //check is upper triangular
-<span class="fc" id="L403">        int rows = m.getRows();</span>
-<span class="fc" id="L404">        int cols = m.getColumns();</span>
+<span class="fc" id="L402">        int rows = m.getRows();</span>
+<span class="fc" id="L403">        int cols = m.getColumns();</span>
         
-<span class="fc bfc" id="L406" title="All 2 branches covered.">        for (int v = 0; v &lt; cols; v++) {</span>
-<span class="fc bfc" id="L407" title="All 2 branches covered.">            for (int u = 0; u &lt; rows; u++) {</span>
-<span class="fc bfc" id="L408" title="All 2 branches covered.">                if (u &gt; v) {</span>
-<span class="fc bfc" id="L409" title="All 2 branches covered.">                    if (Math.abs(m.getElementAt(u, v)) &gt; threshold) {</span>
-<span class="fc" id="L410">                        return false;</span>
-                    }
+<span class="fc bfc" id="L405" title="All 2 branches covered.">        for (int v = 0; v &lt; cols; v++) {</span>
+<span class="fc bfc" id="L406" title="All 2 branches covered.">            for (int u = 0; u &lt; rows; u++) {</span>
+<span class="fc bfc" id="L407" title="All 4 branches covered.">                if (u &gt; v &amp;&amp; Math.abs(m.getElementAt(u, v)) &gt; threshold) {</span>
+<span class="fc" id="L408">                    return false;</span>
                 }
             }
         }
         
-<span class="fc" id="L416">        return true;</span>
+<span class="fc" id="L413">        return true;</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

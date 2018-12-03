@@ -121,10 +121,9 @@ public class AffineParameters2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2 or
      * if it is not upper triangular, or if threshold is negative.
      */
-    public AffineParameters2D(Matrix m, double threshold) 
-<span class="fc" id="L125">            throws IllegalArgumentException {</span>
-<span class="fc" id="L126">        fromMatrix(m, threshold);</span>
-<span class="fc" id="L127">    }</span>
+<span class="fc" id="L124">    public AffineParameters2D(Matrix m, double threshold) {</span>
+<span class="fc" id="L125">        fromMatrix(m, threshold);</span>
+<span class="fc" id="L126">    }</span>
     
     /**
      * Constructor with matrix.
@@ -132,9 +131,9 @@ public class AffineParameters2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2 or
      * if it is not upper triangular.
      */
-<span class="fc" id="L135">    public AffineParameters2D(Matrix m) throws IllegalArgumentException {</span>
-<span class="fc" id="L136">        fromMatrix(m);</span>
-<span class="fc" id="L137">    }</span>
+<span class="fc" id="L134">    public AffineParameters2D(Matrix m) {</span>
+<span class="fc" id="L135">        fromMatrix(m);</span>
+<span class="fc" id="L136">    }</span>
     
     /**
      * Returns horizontal scale.
@@ -143,7 +142,7 @@ public class AffineParameters2D implements Serializable {
      * @return Horizontal scale.
      */
     public double getScaleX() {
-<span class="fc" id="L146">        return scaleX;</span>
+<span class="fc" id="L145">        return scaleX;</span>
     }
     
     /**
@@ -153,8 +152,8 @@ public class AffineParameters2D implements Serializable {
      * @param scaleX Horizontal scale to be set.
      */
     public void setScaleX(double scaleX) {
-<span class="fc" id="L156">        this.scaleX = scaleX;</span>
-<span class="fc" id="L157">    }</span>
+<span class="fc" id="L155">        this.scaleX = scaleX;</span>
+<span class="fc" id="L156">    }</span>
     
     /**
      * Returns vertical scale.
@@ -163,7 +162,7 @@ public class AffineParameters2D implements Serializable {
      * @return Vertical scale.
      */
     public double getScaleY() {
-<span class="fc" id="L166">        return scaleY;</span>
+<span class="fc" id="L165">        return scaleY;</span>
     }
     
     /**
@@ -173,8 +172,8 @@ public class AffineParameters2D implements Serializable {
      * @param scaleY Vertical scale to be set.
      */
     public void setScaleY(double scaleY) {
-<span class="fc" id="L176">        this.scaleY = scaleY;</span>
-<span class="fc" id="L177">    }</span>
+<span class="fc" id="L175">        this.scaleY = scaleY;</span>
+<span class="fc" id="L176">    }</span>
     
     /**
      * Sets overall scale (both, horizontal and vertical).
@@ -183,8 +182,8 @@ public class AffineParameters2D implements Serializable {
      * @param scale Horizontal and vertical scale to be set.
      */
     public void setScale(double scale) {
-<span class="fc" id="L186">        scaleX = scaleY = scale;</span>
-<span class="fc" id="L187">    }</span>
+<span class="fc" id="L185">        scaleX = scaleY = scale;</span>
+<span class="fc" id="L186">    }</span>
     
     /**
      * Returns skewness value.
@@ -193,7 +192,7 @@ public class AffineParameters2D implements Serializable {
      * @return Skewness value.
      */
     public double getSkewness() {
-<span class="fc" id="L196">        return skewness;</span>
+<span class="fc" id="L195">        return skewness;</span>
     }
     
     /**
@@ -203,20 +202,22 @@ public class AffineParameters2D implements Serializable {
      * @param skewness Skewness to be set.
      */
     public void setSkewness(double skewness) {
-<span class="fc" id="L206">        this.skewness = skewness;</span>
-<span class="fc" id="L207">    }</span>
+<span class="fc" id="L205">        this.skewness = skewness;</span>
+<span class="fc" id="L206">    }</span>
     
     /**
      * Converts this affine parameters instance into matrix representation.
      * @return A matrix representation of this instance.
      */
     public Matrix asMatrix() {
-<span class="fc" id="L214">        Matrix m = null;</span>
+<span class="fc" id="L213">        Matrix m = null;</span>
         try {
-<span class="fc" id="L216">            m = new Matrix(INHOM_COORDS, INHOM_COORDS);</span>
-<span class="fc" id="L217">            asMatrix(m);</span>
-<span class="pc" id="L218">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L219">        return m;</span>
+<span class="fc" id="L215">            m = new Matrix(INHOM_COORDS, INHOM_COORDS);</span>
+<span class="fc" id="L216">            asMatrix(m);</span>
+<span class="nc" id="L217">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L219">        }</span>
+<span class="fc" id="L220">        return m;</span>
     }
     
     /**
@@ -225,16 +226,16 @@ public class AffineParameters2D implements Serializable {
      * @param m Matrix where representation of this instance will be stored.
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2.
      */
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
-<span class="pc bpc" id="L229" title="2 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
-<span class="nc" id="L230">            throw new IllegalArgumentException();</span>
+    public void asMatrix(Matrix m) {
+<span class="pc bpc" id="L230" title="2 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
+<span class="nc" id="L231">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L233">        m.setElementAt(0, 0, scaleX);</span>
-<span class="fc" id="L234">        m.setElementAt(1, 0, 0.0);</span>
-<span class="fc" id="L235">        m.setElementAt(0, 1, skewness);</span>
-<span class="fc" id="L236">        m.setElementAt(1, 1, scaleY);</span>
-<span class="fc" id="L237">    }</span>
+<span class="fc" id="L234">        m.setElementAt(0, 0, scaleX);</span>
+<span class="fc" id="L235">        m.setElementAt(1, 0, 0.0);</span>
+<span class="fc" id="L236">        m.setElementAt(0, 1, skewness);</span>
+<span class="fc" id="L237">        m.setElementAt(1, 1, scaleY);</span>
+<span class="fc" id="L238">    }</span>
     
     /**
      * Sets parameters of this instance from provided matrix.
@@ -243,9 +244,9 @@ public class AffineParameters2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2 or
      * if it is not upper triangular.
      */
-    public final void fromMatrix(Matrix m) throws IllegalArgumentException {
-<span class="fc" id="L247">        fromMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
-<span class="fc" id="L248">    }</span>
+    public final void fromMatrix(Matrix m) {
+<span class="fc" id="L248">        fromMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
+<span class="fc" id="L249">    }</span>
     
     /**
      * Sets parameters of this instance from provided matrix.
@@ -257,8 +258,7 @@ public class AffineParameters2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2 or
      * it it is not upper triangular or if threshold is negative.
      */
-    public final void fromMatrix(Matrix m, double threshold) 
-            throws IllegalArgumentException {
+    public final void fromMatrix(Matrix m, double threshold) {
 <span class="fc bfc" id="L262" title="All 2 branches covered.">        if (!isValidMatrix(m, threshold)) {</span>
 <span class="fc" id="L263">            throw new IllegalArgumentException();</span>
         }
@@ -295,31 +295,28 @@ public class AffineParameters2D implements Serializable {
      * @return True if matrix is valid, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public static boolean isValidMatrix(Matrix m, double threshold) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L300" title="All 2 branches covered.">        if (threshold &lt; 0.0) {</span>
-<span class="fc" id="L301">            throw new IllegalArgumentException();</span>
+    public static boolean isValidMatrix(Matrix m, double threshold) {
+<span class="fc bfc" id="L299" title="All 2 branches covered.">        if (threshold &lt; 0.0) {</span>
+<span class="fc" id="L300">            throw new IllegalArgumentException();</span>
         }
         
-<span class="pc bpc" id="L304" title="1 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
-<span class="fc" id="L305">            return false;</span>
+<span class="pc bpc" id="L303" title="1 of 4 branches missed.">        if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {</span>
+<span class="fc" id="L304">            return false;</span>
         }
         
         //check is upper triangular
-<span class="fc" id="L309">        int rows = m.getRows();</span>
-<span class="fc" id="L310">        int cols = m.getColumns();</span>
+<span class="fc" id="L308">        int rows = m.getRows();</span>
+<span class="fc" id="L309">        int cols = m.getColumns();</span>
         
-<span class="fc bfc" id="L312" title="All 2 branches covered.">        for (int v = 0; v &lt; cols; v++) {</span>
-<span class="fc bfc" id="L313" title="All 2 branches covered.">            for (int u = 0; u &lt; rows; u++) {</span>
-<span class="fc bfc" id="L314" title="All 2 branches covered.">                if (u &gt; v) {</span>
-<span class="fc bfc" id="L315" title="All 2 branches covered.">                    if (Math.abs(m.getElementAt(u, v)) &gt; threshold) {</span>
-<span class="fc" id="L316">                        return false;</span>
-                    }
+<span class="fc bfc" id="L311" title="All 2 branches covered.">        for (int v = 0; v &lt; cols; v++) {</span>
+<span class="fc bfc" id="L312" title="All 2 branches covered.">            for (int u = 0; u &lt; rows; u++) {</span>
+<span class="fc bfc" id="L313" title="All 4 branches covered.">                if (u &gt; v &amp;&amp; Math.abs(m.getElementAt(u, v)) &gt; threshold) {</span>
+<span class="fc" id="L314">                    return false;</span>
                 }
             }
         }
         
-<span class="fc" id="L322">        return true;</span>
+<span class="fc" id="L319">        return true;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
