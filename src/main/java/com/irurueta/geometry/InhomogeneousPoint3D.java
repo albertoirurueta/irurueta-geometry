@@ -66,7 +66,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * @throws IllegalArgumentException Raised when the size of the array is not
      * 2.
      */
-    public InhomogeneousPoint3D(double[] v) throws IllegalArgumentException {
+    public InhomogeneousPoint3D(double[] v) {
         super();
         setCoordinates(v);
     }
@@ -162,8 +162,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * valid size.
      */
     @Override
-    public final void setCoordinates(double[] v) 
-            throws IllegalArgumentException {
+    public final void setCoordinates(double[] v) {
         if (v.length != POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         } else {
@@ -204,7 +203,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getHomX() {
-        return mX;
+        return getX();
     }
 
     /**
@@ -213,7 +212,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getHomY() {
-        return mY;
+        return getY();
     }
 
     /**
@@ -222,7 +221,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getHomZ() {
-        return mZ;
+        return getZ();
     }
     
     /**
@@ -257,7 +256,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getInhomX() {
-        return mX;
+        return getX();
     }
 
     /**
@@ -275,7 +274,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getInhomY() {
-        return mY;
+        return getY();
     }
 
     /**
@@ -293,7 +292,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getInhomZ() {
-        return mZ;
+        return getZ();
     }
 
     /**
@@ -358,8 +357,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */    
     @Override
-    public boolean equals(Point3D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean equals(Point3D point, double threshold) {
         
         switch (point.getType()) {
             case INHOMOGENEOUS_COORDINATES:
@@ -382,8 +380,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public boolean equals(HomogeneousPoint3D point, double threshold)
-        throws IllegalArgumentException {
+    public boolean equals(HomogeneousPoint3D point, double threshold) {
         
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -419,8 +416,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */    
-    public boolean equals(InhomogeneousPoint3D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean equals(InhomogeneousPoint3D point, double threshold) {
         
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -490,7 +486,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * @throws IllegalArgumentException Raised if length of array is not 2.
      */
     @Override
-    public void asArray(double[] array) throws IllegalArgumentException {
+    public void asArray(double[] array) {
         if(array.length != POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) 
             throw new IllegalArgumentException();
         array[0] = mX;

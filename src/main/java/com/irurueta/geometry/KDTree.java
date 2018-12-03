@@ -73,7 +73,7 @@ public abstract class KDTree<P extends Point> {
      * @param pts collection of points to store in the tree.
      * @param clazz class of point implementation to use.
      */
-    public KDTree(Collection<P> pts, Class<P> clazz) throws IllegalArgumentException {
+    public KDTree(Collection<P> pts, Class<P> clazz) {
         mNpts = pts.size();
         if (mNpts < MIN_PTS) {
             throw new IllegalArgumentException("number of points must be at least 3");
@@ -87,8 +87,20 @@ public abstract class KDTree<P extends Point> {
         int dim = getDimensions();
 
         //build tree
-        int ntmp, m, k, kk, j, nowtask, jbox, np, tmom, tdim, ptlo, pthi;
-        int hpOffset, cpOffset;
+        int ntmp;
+        int m;
+        int k;
+        int kk;
+        int j;
+        int nowtask;
+        int jbox;
+        int np;
+        int tmom;
+        int tdim;
+        int ptlo;
+        int pthi;
+        int hpOffset;
+        int cpOffset;
         int[] taskmom = new int[N_TASKS];
         int[] taskdim = new int[N_TASKS];
         for (k = 0; k < mNpts; k++) {
@@ -179,8 +191,9 @@ public abstract class KDTree<P extends Point> {
     public int locateBoxIndex(P pt) {
         int dim = getDimensions();
 
-        int nb, d1, jdim;
-        nb = jdim = 0;
+        int nb = 0;
+        int d1;
+        int jdim = 0;
         while (mBoxes[nb].mDau1 != 0) {
             d1 = mBoxes[nb].mDau1;
             if (pt.getInhomogeneousCoordinate(jdim) <= mBoxes[d1].getHi().getInhomogeneousCoordinate(jdim)) {
@@ -208,9 +221,14 @@ public abstract class KDTree<P extends Point> {
      * @return position of closest point.
      */
     public int nearestIndex(P pt) {
-        int i, k, nrst = 0, ntask, pi;
+        int i;
+        int k;
+        int nrst = 0;
+        int ntask;
+        int pi;
         int[] task = new int[N_TASKS];
-        double dnrst = BIG, d;
+        double dnrst = BIG;
+        double d;
 
         //find smallest box index containing point
         k = locateBoxIndex(pt);
@@ -266,7 +284,7 @@ public abstract class KDTree<P extends Point> {
      * @throws IllegalArgumentException if number of nearest points is invalid or if length of arrays
      * containing results are not valid either.
      */
-    public void nNearest(int jpt, int[] nn, double[] dn, int n) throws IllegalArgumentException {
+    public void nNearest(int jpt, int[] nn, double[] dn, int n) {
         if (n < 0) {
             throw new IllegalArgumentException("no neighbours requested");
         }
@@ -277,7 +295,10 @@ public abstract class KDTree<P extends Point> {
             throw new IllegalArgumentException("invalid result array lengths");
         }
 
-        int i, k, ntask, kp;
+        int i;
+        int k;
+        int ntask;
+        int kp;
         int[] task = new int[N_TASKS];
         double d;
         for (i = 0; i < n; i++) {
@@ -336,7 +357,7 @@ public abstract class KDTree<P extends Point> {
      * @throws IllegalArgumentException if number of nearest points is invalid or if length of arrays
      * containing results are not valid either.
      */
-    public void nNearest(P pt, int[] nn, double[] dn, int n) throws IllegalArgumentException {
+    public void nNearest(P pt, int[] nn, double[] dn, int n) {
         nNearest(nearestIndex(pt), nn, dn, n);
     }
 
@@ -349,7 +370,7 @@ public abstract class KDTree<P extends Point> {
      * @throws IllegalArgumentException if number of nearest points is invalid or if length of arrays
      * containing results are not valid either.
      */
-    public void nNearest(int jpt, P[] pn, double[] dn, int n) throws IllegalArgumentException {
+    public void nNearest(int jpt, P[] pn, double[] dn, int n) {
         if (n < 0) {
             throw new IllegalArgumentException("no neighbours requested");
         }
@@ -372,7 +393,7 @@ public abstract class KDTree<P extends Point> {
      * @throws IllegalArgumentException if number of nearest points is invalid or if length of arrays
      * containing results are not valid either.
      */
-    public void nNearest(P pt, P[] pn, double[] dn, int n) throws IllegalArgumentException {
+    public void nNearest(P pt, P[] pn, double[] dn, int n) {
         nNearest(nearestIndex(pt), pn, dn, n);
     }
 
@@ -388,7 +409,7 @@ public abstract class KDTree<P extends Point> {
      * @throws IllegalArgumentException if radius is negative or maximum number of points to search is zero or negative,
      * or list where indices are stored is not large enough.
      */
-    public int locateNear(P pt, double r, int[] list, int nmax) throws IllegalArgumentException {
+    public int locateNear(P pt, double r, int[] list, int nmax) {
         if (r < 0.0) {
             throw new IllegalArgumentException("radius must be nonnegative");
         }
@@ -401,7 +422,15 @@ public abstract class KDTree<P extends Point> {
 
         int dim = getDimensions();
 
-        int k, i, nb, nbold, nret, ntask, jdim, d1, d2;
+        int k;
+        int i;
+        int nb;
+        int nbold;
+        int nret;
+        int ntask;
+        int jdim;
+        int d1;
+        int d2;
         int[] task = new int[N_TASKS];
         nb = jdim = nret = 0;
 
@@ -455,7 +484,7 @@ public abstract class KDTree<P extends Point> {
      * @throws IllegalArgumentException if radius is negative or maximum number of points to search is zero or negative,
      * or list where points are stored is not large enough.
      */
-    public int locateNear(P pt, double r, P[] plist, int nmax) throws IllegalArgumentException {
+    public int locateNear(P pt, double r, P[] plist, int nmax) {
         if (r < 0.0) {
             throw new IllegalArgumentException("radius must be nonnegative");
         }
@@ -502,9 +531,9 @@ public abstract class KDTree<P extends Point> {
      * @return position in the input collection of points.
      */
     private int locate(int jpt) {
-        int nb, d1, jh;
-        jh = mRPtIndx[jpt];
-        nb = 0;
+        int nb = 0;
+        int d1;
+        int jh = mRPtIndx[jpt];
         while (mBoxes[nb].mDau1 != 0) {
             d1 = mBoxes[nb].mDau1;
             if (jh <= mBoxes[d1].mPtHi) {
@@ -533,17 +562,20 @@ public abstract class KDTree<P extends Point> {
      */
     @SuppressWarnings("all")
     private static int selecti(int k, int indxOffset, int[] indx, int n, int arrOffset, double[] arr) {
-        int i, ia, ir, j, l, mid;
+        int i;
+        int ia;
+        int ir = n - 1;
+        int j;
+        int l = 0;
+        int mid;
         double a;
 
-        l = 0;
-        ir = n - 1;
         for (;;) {
             if (ir <= l + 1) {
                 if (ir == l + 1 && arr[arrOffset + indx[indxOffset + ir]] < arr[arrOffset + indx[indxOffset + l]]) {
                     swap(indx, indxOffset + l, indx, indxOffset + ir);
                 }
-                return  indx[indxOffset + k];
+                return indx[indxOffset + k];
             } else {
                 mid = (l + ir) >> 1;
                 swap(indx, indxOffset + mid, indx, indxOffset + l + 1);
@@ -592,11 +624,10 @@ public abstract class KDTree<P extends Point> {
      */
     private static void siftDown(double[] heap, int[] ndx, int nn) {
         int n = nn - 1;
-        int j, jold, ia;
+        int j = 1;
+        int jold = 0;
+        int ia = ndx[0];
         double a = heap[0];
-        ia = ndx[0];
-        jold = 0;
-        j = 1;
         while (j <= n) {
             if (j < n && heap[j] < heap[j + 1]) {
                 j++;
@@ -728,8 +759,8 @@ public abstract class KDTree<P extends Point> {
          * @throws IllegalArgumentException always thrown.
          */
         @Override
-        public void setLo(P lo) throws IllegalArgumentException {
-            throw new IllegalArgumentException("changes are not allowed");
+        public void setLo(P lo) {
+            throw new IllegalArgumentException();
         }
 
         /**
@@ -737,8 +768,8 @@ public abstract class KDTree<P extends Point> {
          * @param hi high coordinate values.
          * @throws IllegalArgumentException always thrown.
          */
-        public void setHi(P hi) throws IllegalArgumentException {
-            throw new IllegalArgumentException("changes are not allowed");
+        public void setHi(P hi) {
+            throw new IllegalArgumentException();
         }
 
         /**
@@ -748,8 +779,8 @@ public abstract class KDTree<P extends Point> {
          * @throws IllegalArgumentException always thrown.
          */
         @Override
-        public void setBounds(P lo, P hi) throws IllegalArgumentException {
-            throw new IllegalArgumentException("changes are not allowed");
+        public void setBounds(P lo, P hi) {
+            throw new IllegalArgumentException();
         }
     }
 }

@@ -138,7 +138,9 @@ public class PinholeCamera extends Camera implements Serializable {
         try {
             mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, 
                     PINHOLE_CAMERA_MATRIX_COLS);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -179,7 +181,9 @@ public class PinholeCamera extends Camera implements Serializable {
         try {
             mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, 
                     PINHOLE_CAMERA_MATRIX_COLS);
-        } catch (WrongSizeException ignore) { } //this will never happen
+        } catch (WrongSizeException ignore) {
+            //this will never happen
+        }
         
         setIntrinsicAndExtrinsicParameters(intrinsicParameters, rotation,
                 originImageCoordinates);
@@ -205,7 +209,9 @@ public class PinholeCamera extends Camera implements Serializable {
         try {
             mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, 
                     PINHOLE_CAMERA_MATRIX_COLS);
-        } catch (WrongSizeException ignore) { } //this will never happen
+        } catch (WrongSizeException ignore) {
+            //this will never happen
+        }
         
         setIntrinsicAndExtrinsicParameters(intrinsicParameters, rotation, 
                 cameraCenter);
@@ -251,7 +257,9 @@ public class PinholeCamera extends Camera implements Serializable {
         try {
             mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, 
                     PINHOLE_CAMERA_MATRIX_COLS);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
 
         setFromPointCorrespondences(point3D1, point3D2, point3D3, point3D4, 
                 point3D5, point3D6, point2D1, point2D2, point2D3, point2D4, 
@@ -286,7 +294,9 @@ public class PinholeCamera extends Camera implements Serializable {
         try {
             mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, 
                     PINHOLE_CAMERA_MATRIX_COLS);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
 
         setFromLineAndPlaneCorrespondences(plane1, plane2, plane3, plane4, 
                 line1, line2, line3, line4);
@@ -308,21 +318,23 @@ public class PinholeCamera extends Camera implements Serializable {
         
         try {
             //copy point3D coordinates in a matrix
-            Matrix M = new Matrix(
+            Matrix m3D = new Matrix(
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
-            M.setElementAtIndex(0, point3D.getHomX());
-            M.setElementAtIndex(1, point3D.getHomY());
-            M.setElementAtIndex(2, point3D.getHomZ());
-            M.setElementAtIndex(3, point3D.getHomW());
+            m3D.setElementAtIndex(0, point3D.getHomX());
+            m3D.setElementAtIndex(1, point3D.getHomY());
+            m3D.setElementAtIndex(2, point3D.getHomZ());
+            m3D.setElementAtIndex(3, point3D.getHomW());
             
             //make product of 3D point column matrix with pinhole camera
             //internal matrix
-            Matrix m = mInternalMatrix.multiplyAndReturnNew(M);
+            Matrix m = mInternalMatrix.multiplyAndReturnNew(m3D);
             
             result.setHomogeneousCoordinates(m.getElementAtIndex(0), 
                     m.getElementAtIndex(1), m.getElementAtIndex(2));
             result.normalize(); //to increase accuracy
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
 
     /**
@@ -354,7 +366,9 @@ public class PinholeCamera extends Camera implements Serializable {
                     m.getElementAtIndex(1), m.getElementAtIndex(2), 
                     m.getElementAtIndex(3));
             result.normalize(); //to increase accuracy
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
 
     /**
@@ -434,7 +448,9 @@ public class PinholeCamera extends Camera implements Serializable {
             m.multiply(mInternalMatrix);
             //resulting matrix m is the internal matrix of a quadric
             result.setParameters(m);
-        } catch (WrongSizeException | NonSymmetricMatrixException ignore) { }
+        } catch (WrongSizeException | NonSymmetricMatrixException ignore) {
+            //never happens
+        }
     }
 
     /**
@@ -686,17 +702,16 @@ public class PinholeCamera extends Camera implements Serializable {
     public void setCameraRotation(Rotation3D cameraRotation) 
             throws CameraException {
         try {
-            Matrix K, R;
             if (!areIntrinsicParametersAvailable()) {
                 //Find intrinsic parameters
                 computeIntrinsicsAndRotation();
             }
-        
-            K = mIntrinsicParameters.getInternalMatrix();
-            R = cameraRotation.asInhomogeneousMatrix();
+
+            Matrix k = mIntrinsicParameters.getInternalMatrix();
+            Matrix r = cameraRotation.asInhomogeneousMatrix();
         
             //compute new left 3x3 submatrix of pinhole camera matrix
-            Matrix Mp = K.multiplyAndReturnNew(R);
+            Matrix mp = k.multiplyAndReturnNew(r);
         
             //set new rotation
             mCameraRotation = cameraRotation;
@@ -704,12 +719,14 @@ public class PinholeCamera extends Camera implements Serializable {
             //set new rotation on left 3x3 submatrix of internal pinhole camera
             //matrix
             mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1, 
-                    PINHOLE_CAMERA_MATRIX_ROWS - 1, Mp);
+                    PINHOLE_CAMERA_MATRIX_ROWS - 1, mp);
         
             //reset camera sign fixed
             mCameraSignFixed = false;
             mNormalized = false;
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -773,50 +790,51 @@ public class PinholeCamera extends Camera implements Serializable {
                     new SingularValueDecomposer(mDiff);
             decomposer.decompose();
             
-            Matrix V = decomposer.getV();
+            Matrix v = decomposer.getV();
             
             //set new rotation matrix by setting mDiff (which is 1st column of
             //V) on the last row of rotation matrix
-            Matrix R = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS,
+            Matrix r = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS,
                     PINHOLE_CAMERA_MATRIX_ROWS);
-            R.setElementAt(2, 0, V.getElementAt(0, 0));
-            R.setElementAt(2, 1, V.getElementAt(1, 0));
-            R.setElementAt(2, 2, V.getElementAt(2, 0));
+            r.setElementAt(2, 0, v.getElementAt(0, 0));
+            r.setElementAt(2, 1, v.getElementAt(1, 0));
+            r.setElementAt(2, 2, v.getElementAt(2, 0));
             
-            R.setElementAt(1, 0, V.getElementAt(0, 1));
-            R.setElementAt(1, 1, V.getElementAt(1, 1));
-            R.setElementAt(1, 2, V.getElementAt(2, 1));
+            r.setElementAt(1, 0, v.getElementAt(0, 1));
+            r.setElementAt(1, 1, v.getElementAt(1, 1));
+            r.setElementAt(1, 2, v.getElementAt(2, 1));
             
-            R.setElementAt(0, 0, V.getElementAt(0, 2));
-            R.setElementAt(0, 1, V.getElementAt(1, 2));
-            R.setElementAt(0, 2, V.getElementAt(2, 2));
+            r.setElementAt(0, 0, v.getElementAt(0, 2));
+            r.setElementAt(0, 1, v.getElementAt(1, 2));
+            r.setElementAt(0, 2, v.getElementAt(2, 2));
             
             //set new rotation
-            Rotation3D rotation = new MatrixRotation3D(R);
+            Rotation3D rotation = new MatrixRotation3D(r);
             setCameraRotation(rotation);
             
             //because left 3x3 sub-matrix has been modified, then last column of
             //internal matrix has to be modified to ensure that camera center 
             //does not change
-            Matrix Mp = mInternalMatrix.getSubmatrix(0, 0, 2, 2);
+            Matrix mp = mInternalMatrix.getSubmatrix(0, 0, 2, 2);
             Matrix center = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS, 1);
             center.setElementAtIndex(0, mCameraCenter.getInhomX());
             center.setElementAtIndex(1, mCameraCenter.getInhomY());
             center.setElementAtIndex(2, mCameraCenter.getInhomZ());
 
             //MP will be p4 (last column)
-            Mp.multiply(center);
-            Mp.multiplyByScalar(-1.0);
+            mp.multiply(center);
+            mp.multiplyByScalar(-1.0);
             
             //set last column of pinhole camera matrix
             mInternalMatrix.setSubmatrix(0, PINHOLE_CAMERA_MATRIX_COLS - 1, 
                     PINHOLE_CAMERA_MATRIX_ROWS - 1, 
-                    PINHOLE_CAMERA_MATRIX_COLS - 1, Mp);
+                    PINHOLE_CAMERA_MATRIX_COLS - 1, mp);
             
             //because we do not check sign of new director vector, we reset
             //camera sign so that it is checked afterwards when needed
             mCameraSignFixed = false;
         } catch (WrongSizeException ignore) {
+            //never happens
         } catch (AlgebraException | InvalidRotationMatrixException e) {
             throw new CameraException(e);
         }
@@ -833,27 +851,27 @@ public class PinholeCamera extends Camera implements Serializable {
             PinholeCameraIntrinsicParameters intrinsicParameters) 
             throws CameraException {
         
-        Matrix K, R;
         if (!isCameraRotationAvailable()) {
             //Find rotation
             computeIntrinsicsAndRotation();
         }
         
         //get K and R matrices
-        K = intrinsicParameters.getInternalMatrix();
-        R = mCameraRotation.asInhomogeneousMatrix();
+        Matrix k = intrinsicParameters.getInternalMatrix();
+        Matrix r = mCameraRotation.asInhomogeneousMatrix();
         
         //compute now left 3x3 submatrix of pinhole camera matrix
-        Matrix M = K;
         try {
-            M.multiply(R);
-        } catch (WrongSizeException ignore) { }
+            k.multiply(r);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         mIntrinsicParameters = intrinsicParameters;
         
         //set new intrinsic parameters on left 3x3 submatrix of internal
         //pinhole camera matrix
         mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1, 
-                PINHOLE_CAMERA_MATRIX_ROWS - 1, M);
+                PINHOLE_CAMERA_MATRIX_ROWS - 1, k);
         mCameraSignFixed = false;
         mNormalized = false;
     }
@@ -894,15 +912,15 @@ public class PinholeCamera extends Camera implements Serializable {
             normalize();
             //new last column is the product of left 3x3 pinhole camera 
             //submatrix by the inhomogeneous coordinates of new camera center
-            Matrix Mp = mInternalMatrix.getSubmatrix(0, 0, 2, 2);
+            Matrix mp = mInternalMatrix.getSubmatrix(0, 0, 2, 2);
             Matrix center = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS, 1);
             center.setElementAtIndex(0, cameraCenter.getInhomX());
             center.setElementAtIndex(1, cameraCenter.getInhomY());
             center.setElementAtIndex(2, cameraCenter.getInhomZ());
 
             //Mp will be p4 (4th column)
-            Mp.multiply(center);
-            Mp.multiplyByScalar(-1.0);
+            mp.multiply(center);
+            mp.multiplyByScalar(-1.0);
         
             //set camera center
             mCameraCenter = cameraCenter;
@@ -910,9 +928,11 @@ public class PinholeCamera extends Camera implements Serializable {
             //set last column of pinhole camera matrix
             mInternalMatrix.setSubmatrix(0, PINHOLE_CAMERA_MATRIX_COLS - 1, 
                     PINHOLE_CAMERA_MATRIX_ROWS - 1, 
-                    PINHOLE_CAMERA_MATRIX_COLS - 1, Mp);
+                    PINHOLE_CAMERA_MATRIX_COLS - 1, mp);
             mNormalized = false;
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -929,11 +949,11 @@ public class PinholeCamera extends Camera implements Serializable {
             normalize();
         
             //K and R are obtained
-            Matrix K = intrinsicParameters.getInternalMatrix();
-            Matrix R = rotation.asInhomogeneousMatrix();
+            Matrix k = intrinsicParameters.getInternalMatrix();
+            Matrix r = rotation.asInhomogeneousMatrix();
         
             //compute new left 3x3 submatrix of pinhole camera matrix (also known as Mp)
-            K.multiply(R);
+            k.multiply(r);
         
             //set new intrinsic parameters
             mIntrinsicParameters = intrinsicParameters;
@@ -943,10 +963,12 @@ public class PinholeCamera extends Camera implements Serializable {
         
             //set new left 3x3 submatrix of internal pinhole camera matrix
             mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1, 
-                    PINHOLE_CAMERA_MATRIX_ROWS - 1, K);
+                    PINHOLE_CAMERA_MATRIX_ROWS - 1, k);
             mCameraSignFixed = false;
             mNormalized = false;
-        } catch (WrongSizeException ignore) { } //this will never happen
+        } catch (WrongSizeException ignore) {
+            //this will never happen
+        }
     }
     
     /**
@@ -1354,7 +1376,9 @@ public class PinholeCamera extends Camera implements Serializable {
             
             result.setHomogeneousCoordinates(mMp.getElementAtIndex(0), 
                     mMp.getElementAtIndex(1), mMp.getElementAtIndex(2));
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -1380,8 +1404,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * @throws CameraException if there is numerical instability in camera 
      * parameters.
      */
-    public void principalAxisArray(double[] result) 
-            throws IllegalArgumentException, CameraException {
+    public void principalAxisArray(double[] result) throws CameraException {
         if (result.length != PINHOLE_CAMERA_MATRIX_ROWS) {
             throw new IllegalArgumentException();
         }
@@ -1403,7 +1426,9 @@ public class PinholeCamera extends Camera implements Serializable {
             //normalize director vector
             double norm = Utils.normF(result);
             ArrayUtils.multiplyByScalar(result, 1.0 / norm, result);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -1544,8 +1569,6 @@ public class PinholeCamera extends Camera implements Serializable {
                 point.getHomY() * mInternalMatrix.getElementAt(2, 1) +
                 point.getHomZ() * mInternalMatrix.getElementAt(2, 2) +
                 point.getHomW() * mInternalMatrix.getElementAt(2, 3);
-                
-        //double hom2DW = projectedPoint.getHomW();
         
         double cheiral = hom3DW * hom2DW;
         
@@ -1709,11 +1732,11 @@ public class PinholeCamera extends Camera implements Serializable {
             decomposer.decompose();
         
             //Intrinsic parameters
-            Matrix R = decomposer.getR();
-            Matrix Q = decomposer.getQ();
+            Matrix r = decomposer.getR();
+            Matrix q = decomposer.getQ();
             
             //norm to normalize R
-            double norm = R.getElementAt(2, 2);
+            double norm = r.getElementAt(2, 2);
         
             //ensure that norm is not too small
             if (Math.abs(norm) < EPS) {
@@ -1726,14 +1749,14 @@ public class PinholeCamera extends Camera implements Serializable {
             double[] vDiag = new double[PINHOLE_CAMERA_MATRIX_ROWS];
             double[] vDiag2 = new double[PINHOLE_CAMERA_MATRIX_ROWS];
         
-            if (invNorm * R.getElementAt(0, 0) > 0.0) {
+            if (invNorm * r.getElementAt(0, 0) > 0.0) {
                 vDiag[0] = invNorm;
                 vDiag2[0] = norm;
             } else {
                 vDiag[0] = -invNorm;
                 vDiag2[0] = -norm;
             }
-            if (invNorm * R.getElementAt(1, 1) > 0.0) {
+            if (invNorm * r.getElementAt(1, 1) > 0.0) {
                 vDiag[1] = invNorm;
                 vDiag2[1] = norm;
             } else {
@@ -1747,21 +1770,23 @@ public class PinholeCamera extends Camera implements Serializable {
             Matrix mDiag = Matrix.diagonal(vDiag);
             Matrix mDiag2 = Matrix.diagonal(vDiag2);
 
-            R.multiply(mDiag);
+            r.multiply(mDiag);
 
-            mDiag2.multiply(Q);
+            mDiag2.multiply(q);
         
             //thresholds should not be a problem and so we disable the change of
             //throwing any exception by setting infinity threshold (and ignoring
             //GeometryException)
             mIntrinsicParameters = new PinholeCameraIntrinsicParameters(
-                    R, Double.POSITIVE_INFINITY);
+                    r, Double.POSITIVE_INFINITY);
         
             mCameraRotation = new MatrixRotation3D(mDiag2,
                     Double.POSITIVE_INFINITY);
         } catch (AlgebraException e) {
             throw new CameraException(e);
-        } catch (GeometryException ignore) { }
+        } catch (GeometryException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -1798,13 +1823,13 @@ public class PinholeCamera extends Camera implements Serializable {
         
             //because camera matrix is at most rank 3, the camera center is the
             //last column of decomposed matrix V
-            Matrix V = decomposer.getV();
+            Matrix v = decomposer.getV();
         
             result.setHomogeneousCoordinates(
-                    V.getElementAt(0, PINHOLE_CAMERA_MATRIX_COLS - 1), 
-                    V.getElementAt(1, PINHOLE_CAMERA_MATRIX_COLS - 1), 
-                    V.getElementAt(2, PINHOLE_CAMERA_MATRIX_COLS - 1), 
-                    V.getElementAt(3, PINHOLE_CAMERA_MATRIX_COLS - 1));
+                    v.getElementAt(0, PINHOLE_CAMERA_MATRIX_COLS - 1),
+                    v.getElementAt(1, PINHOLE_CAMERA_MATRIX_COLS - 1),
+                    v.getElementAt(2, PINHOLE_CAMERA_MATRIX_COLS - 1),
+                    v.getElementAt(3, PINHOLE_CAMERA_MATRIX_COLS - 1));
         } catch (AlgebraException e) {
             throw new CameraException(e);
         }
@@ -2023,8 +2048,8 @@ public class PinholeCamera extends Camera implements Serializable {
             PinholeCamera camera = estimator.estimate();
         
             setInternalMatrix(camera.mInternalMatrix);
-        } catch (Throwable t) {
-            throw new CameraException(t);
+        } catch (WrongSizeException | GeometryException e) {
+            throw new CameraException(e);
         }
     }
     
@@ -2070,8 +2095,8 @@ public class PinholeCamera extends Camera implements Serializable {
             PinholeCamera camera = estimator.estimate();
         
             setInternalMatrix(camera.mInternalMatrix);
-        } catch (Throwable t) {
-            throw new CameraException(t);
+        } catch (WrongSizeException | GeometryException e) {
+            throw new CameraException(e);
         }        
     }
 }

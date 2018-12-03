@@ -134,7 +134,7 @@ public class Line2D implements Serializable {
      * @throws IllegalArgumentException Raised if length of provided array is 
      * not three.
      */
-    public Line2D(double[] array) throws IllegalArgumentException {
+    public Line2D(double[] array) {
         setParameters(array);
     }
     
@@ -144,8 +144,7 @@ public class Line2D implements Serializable {
      * @param vector director vector.
      * @throws IllegalArgumentException raised if vector length is not 2.
      */
-    public Line2D(Point2D point, double[] vector)
-            throws IllegalArgumentException {
+    public Line2D(Point2D point, double[] vector) {
         setParametersFromPointAndDirectorVector(point, vector);
     }
     
@@ -192,8 +191,7 @@ public class Line2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided array does not
      * have length equal to 3.
      */
-    public final void setParameters(double[] array) 
-            throws IllegalArgumentException {
+    public final void setParameters(double[] array) {
         if (array.length != LINE_NUMBER_PARAMS) {
             throw new IllegalArgumentException();
         }
@@ -345,13 +343,15 @@ public class Line2D implements Serializable {
             //Hence l is the null space for both pointA and pointB, or in other 
             //words, pointA and pointB are the locus of l, or l is the line 
             //passing through both pointA and pointB
-            Matrix V = decomposer.getV();
+            Matrix v = decomposer.getV();
         
-            mA = V.getElementAt(0, 2);
-            mB = V.getElementAt(1, 2);
-            mC = V.getElementAt(2, 2);
+            mA = v.getElementAt(0, 2);
+            mB = v.getElementAt(1, 2);
+            mC = v.getElementAt(2, 2);
             mNormalized = false;
-        } catch (AlgebraException ignore) { }
+        } catch (AlgebraException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -364,8 +364,10 @@ public class Line2D implements Serializable {
             Point2D pointB) {
         try {
             setParametersFromPairOfPoints(pointA, pointB, true);
-        } catch (CoincidentPointsException ignore) { }  //exception never raised
-                                                        //because of last true parameter
+        } catch (CoincidentPointsException ignore) {
+            //exception never raised
+            //because of last true parameter
+        }
     }
     
     /**
@@ -375,7 +377,7 @@ public class Line2D implements Serializable {
      * @throws IllegalArgumentException raised if vector length is not 2.
      */
     public final void setParametersFromPointAndDirectorVector(Point2D point,
-            double[] vector) throws IllegalArgumentException {
+            double[] vector) {
         
         if (vector.length != INHOM_VECTOR_SIZE) {
             throw new IllegalArgumentException();
@@ -401,8 +403,7 @@ public class Line2D implements Serializable {
      * @return True if point lies inside the line (is locus), false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Point2D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Point2D point, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -473,8 +474,7 @@ public class Line2D implements Serializable {
      * @return Closest point.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */    
-    public Point2D getClosestPoint(Point2D point, double threshold)
-            throws IllegalArgumentException {
+    public Point2D getClosestPoint(Point2D point, double threshold) {
         Point2D result = Point2D.create();
         closestPoint(point, result, threshold);
         return result;
@@ -503,8 +503,7 @@ public class Line2D implements Serializable {
      * line's locus.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */    
-    public void closestPoint(Point2D point, Point2D result, double threshold)
-            throws IllegalArgumentException {
+    public void closestPoint(Point2D point, Point2D result, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -548,7 +547,7 @@ public class Line2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided array doesn't have
      * length 3.
      */
-    public void asArray(double[] array) throws IllegalArgumentException {
+    public void asArray(double[] array) {
         if (array.length != LINE_NUMBER_PARAMS) {
             throw new IllegalArgumentException();
         }
@@ -601,8 +600,7 @@ public class Line2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided array does not have
      * length 2.
      */
-    public void directorVector(double[] directorVector) 
-            throws IllegalArgumentException {
+    public void directorVector(double[] directorVector) {
         if (directorVector.length != INHOM_VECTOR_SIZE) {
             throw new IllegalArgumentException();
         }
@@ -663,14 +661,14 @@ public class Line2D implements Serializable {
                 throw new NoIntersectionException();
             }
         
-            Matrix V = decomposer.getV();
+            Matrix v = decomposer.getV();
         
             //last column of V contains the right nullspace of m, which is the
             //intersection of lines expressed in homogeneous coordinates.
             //because column is already normalized by SVD decomposition, point
             //will also be normalized
-            result.setHomogeneousCoordinates(V.getElementAt(0, 2), 
-                    V.getElementAt(1, 2), V.getElementAt(2, 2));
+            result.setHomogeneousCoordinates(v.getElementAt(0, 2),
+                    v.getElementAt(1, 2), v.getElementAt(2, 2));
         } catch (AlgebraException e) {
             //lines are numerically unstable
             throw new NoIntersectionException(e);
@@ -702,8 +700,7 @@ public class Line2D implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException if threshold is negative.
      */
-    public boolean equals(Line2D line, double threshold)
-            throws IllegalArgumentException {
+    public boolean equals(Line2D line, double threshold) {
         
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();

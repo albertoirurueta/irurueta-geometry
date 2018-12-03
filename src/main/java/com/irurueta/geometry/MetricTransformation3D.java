@@ -60,8 +60,7 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      * @param rotation a 3D rotation.
      * @throws NullPointerException raised if provided rotation is null.
      */
-    public MetricTransformation3D(Rotation3D rotation)
-            throws NullPointerException {
+    public MetricTransformation3D(Rotation3D rotation) {
         super(rotation);
         scale = DEFAULT_SCALE;
     }
@@ -74,8 +73,7 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      * @throws IllegalArgumentException raised if length of array is not equal 
      * to NUM_TRANSLATION_COORDS.
      */
-    public MetricTransformation3D(double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+    public MetricTransformation3D(double[] translation) {
         super(translation);
         scale = DEFAULT_SCALE;
     }
@@ -106,8 +104,7 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      * to NUM_TRANSLATION_COORDS.
      */
     public MetricTransformation3D(Rotation3D rotation, double[] translation,
-            double scale) throws NullPointerException, 
-            IllegalArgumentException {
+            double scale) {
         super(rotation, translation);
         this.scale = scale;
     }
@@ -170,7 +167,7 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      * matrix.
      */
     @Override
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
+    public void asMatrix(Matrix m) {
         if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -371,13 +368,13 @@ public class MetricTransformation3D extends EuclideanTransformation3D
         
         try {
             //we do translation first, because this.rotation might change later
-            Matrix R1 = getRotation().asInhomogeneousMatrix();
+            Matrix r1 = getRotation().asInhomogeneousMatrix();
             Matrix t2 = Matrix.newFromArray(inputTransformation.getTranslation(), 
                     true);
-            R1.multiply(t2); //this is R1 * t2
-            R1.multiplyByScalar(this.scale);
+            r1.multiply(t2); //this is R1 * t2
+            r1.multiplyByScalar(this.scale);
                   
-            ArrayUtils.sum(R1.toArray(), this.getTranslation(),  
+            ArrayUtils.sum(r1.toArray(), this.getTranslation(),
                     outputTransformation.getTranslation());
             
             outputTransformation.setRotation(
@@ -386,7 +383,9 @@ public class MetricTransformation3D extends EuclideanTransformation3D
             
             outputTransformation.scale = this.scale * inputTransformation.scale;
         
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**

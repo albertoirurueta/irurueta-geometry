@@ -171,10 +171,10 @@ public class Line3D implements Serializable {
         
             //last two columns of V contains director vectors of plane1 and 
             //plane2
-            Matrix V = decomposer.getV();
+            Matrix v = decomposer.getV();
         
-            double[] directorVector1 = V.getSubmatrixAsArray(0, 1, 2, 1);
-            double[] directorVector2 = V.getSubmatrixAsArray(0, 2, 2, 2);
+            double[] directorVector1 = v.getSubmatrixAsArray(0, 1, 2, 1);
+            double[] directorVector2 = v.getSubmatrixAsArray(0, 2, 2, 2);
         
             mPlane1 = new Plane(point1, directorVector1);
             mPlane2 = new Plane(point1, directorVector2);

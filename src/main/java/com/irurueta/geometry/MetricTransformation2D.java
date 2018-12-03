@@ -372,7 +372,9 @@ public class MetricTransformation2D extends EuclideanTransformation2D
             
             outputTransformation.scale = this.scale * inputTransformation.scale;
         
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }   
     
     /**
