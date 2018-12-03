@@ -157,8 +157,7 @@ public class Ellipse implements Serializable {
      * @throws IllegalArgumentException if parameters do not follow 
      * b^2 - 4*a*c &lt; 0.0
      */
-    public Ellipse(double a, double b, double c, double d, double e, double f) 
-            throws IllegalArgumentException {
+    public Ellipse(double a, double b, double c, double d, double e, double f) {
         setParameters(a, b, c, d, e, f);
     }
             
@@ -178,7 +177,7 @@ public class Ellipse implements Serializable {
      * b^2 - 4*A*c &lt; threshold
      */
     public Ellipse(double a, double b, double c, double d, double e, double f, 
-            double threshold) throws IllegalArgumentException {
+            double threshold) {
         setParameters(a, b, c, d, e, f, threshold);
     }
     
@@ -187,7 +186,7 @@ public class Ellipse implements Serializable {
      * @param conic conic to build ellipse from. 
      * @throws IllegalArgumentException if provided conic is not an ellipse.
      */
-    public Ellipse(Conic conic) throws IllegalArgumentException {
+    public Ellipse(Conic conic) {
         setFromConic(conic);
     }
     
@@ -213,7 +212,7 @@ public class Ellipse implements Serializable {
      * @param center center of ellipse.
      * @throws NullPointerException raised if provided center is null.
      */
-    public void setCenter(Point2D center) throws NullPointerException {
+    public void setCenter(Point2D center) {
         if (center == null) {
             throw new NullPointerException();
         }
@@ -554,7 +553,9 @@ public class Ellipse implements Serializable {
                 point2.getInhomY(),
             };
             
-            double x2, y2, rowNorm;
+            double x2;
+            double y2;
+            double rowNorm;
             for (int i = 0; i < 2; i++) {
                 x2 = x[i]*x[i];
                 y2 = y[i]*y[i];
@@ -708,14 +709,14 @@ public class Ellipse implements Serializable {
             
             //the right null-space of m contains the parameters a, b, c, d, e ,f
             //of the conic
-            Matrix V = decomposer.getV();
+            Matrix v = decomposer.getV();
             
-            double aPrime = V.getElementAt(0, 5);
-            double bPrime = V.getElementAt(1, 5);
-            double cPrime = V.getElementAt(2, 5);
-            double dPrime = V.getElementAt(3, 5);
-            double ePrime = V.getElementAt(4, 5);
-            double fPrime = V.getElementAt(5, 5);
+            double aPrime = v.getElementAt(0, 5);
+            double bPrime = v.getElementAt(1, 5);
+            double cPrime = v.getElementAt(2, 5);
+            double dPrime = v.getElementAt(3, 5);
+            double ePrime = v.getElementAt(4, 5);
+            double fPrime = v.getElementAt(5, 5);
             
             //an ellipse follows the generic conic equation
             //A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
@@ -748,7 +749,7 @@ public class Ellipse implements Serializable {
      * b^2 - 4*a*c &lt; 0.0.
      */
     public final void setParameters(double a, double b, double c, double d,
-            double e, double f) throws IllegalArgumentException {
+            double e, double f) {
         setParameters(a, b, c, d, e, f, 0.0);
     }
     
@@ -767,37 +768,31 @@ public class Ellipse implements Serializable {
      * b^2 - 4*A*c &lt; threshold.
      */
     public final void setParameters(double a, double b, double c, double d, 
-            double e, double f, double threshold) 
-            throws IllegalArgumentException {
-        if (b*b - 4.0*a*c >= threshold) {
+            double e, double f, double threshold) {
+        double discriminant = b * b - 4.0 * a * c;
+        if (discriminant >= threshold) {
             //not an ellipse
             throw new IllegalArgumentException();
-        }   
+        }
+
+        double tmp1 = a * e * e + c * d * d - b * d * e + discriminant * f;
+        double tmp2 = Math.sqrt((a - c) * (a - c) + b * b);
+        double semiMajorAxis = - Math.sqrt(2.0 * tmp1 * (a + c + tmp2)) /
+                discriminant;
         
-        double semiMajorAxis = - Math.sqrt(
-                2.0*(a*e*e + c*d*d - b*d*e + (b*b - 4.0*a*c)*f)*
-                (a + c + Math.sqrt((a - c)*(a - c) + b*b))) /
-                (b*b - 4*a*c);
+        double semiMinorAxis = - Math.sqrt(2.0 * tmp1 * (a + c - tmp2)) /
+                discriminant;
         
-        double semiMinorAxis = - Math.sqrt(
-                2.0*(a*e*e + c*d*d - b*d*e + (b*b - 4.0*a*c)*f)*
-                (a + c - Math.sqrt((a - c)*(a - c) + b*b))) /
-                (b*b - 4*a*c);
-        
-        double xc = (2*c*d - b*e) / (b*b - 4.0*a*c);
-        double yc = (2*a*e - b*d) / (b*b - 4.0*a*c);        
+        double xc = (2.0 * c * d - b * e) / discriminant;
+        double yc = (2.0 * a * e - b * d) / discriminant;
         Point2D center = new InhomogeneousPoint2D(xc, yc);
         
         double rotationAngle;
         if (Math.abs(b) <= threshold && a < c) {
-            if (a < c) {
-                rotationAngle = 0.0;
-            } else {
-                rotationAngle = Math.PI / 2.0;
-            }
+            rotationAngle = 0.0;
         } else {
             rotationAngle = Math.atan2(
-                    c - a - Math.sqrt((a - c)*(a - c) + b*b), b);
+                    c - a - tmp2, b);
         }
         
         setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, 
@@ -948,8 +943,9 @@ public class Ellipse implements Serializable {
                 focusPoint2.getInhomX() - focusPoint1.getInhomX());
         
         double f = focusPoint1.distanceTo(center);
-        double f2 = f*f;
-        double a2, b2;
+        double f2 = f * f;
+        double a2;
+        double b2;
         if (keepSemiMinorAxis) {
             b2 = mSemiMinorAxis * mSemiMinorAxis;
             a2 = f2 + b2;
@@ -1042,18 +1038,18 @@ public class Ellipse implements Serializable {
         double a2 = a*a;
         double b2 = b*b;
         
-        double A = a2*sint2 + b2*cost2;
-        double B = 2.0*(b2 - a2)*sint*cost;
-        double C = a2*cost2 + b2*sint2;
-        double D = -2.0*A*xc - B*yc;
-        double E = -B*xc - 2.0*C*yc;
-        double F = A*xc2 + B*xc*yc + C*yc2 - a2*b2;
+        double aParam = a2*sint2 + b2*cost2;
+        double bParam = 2.0*(b2 - a2)*sint*cost;
+        double cParam = a2*cost2 + b2*sint2;
+        double dParam = -2.0*aParam*xc - bParam*yc;
+        double eParam = -bParam*xc - 2.0*cParam*yc;
+        double fParam = aParam*xc2 + bParam*xc*yc + cParam*yc2 - a2*b2;
 
-        double bConic = B / 2.0;
-        double dConic = D / 2.0;
-        double eConic = E / 2.0;
+        double bConic = bParam / 2.0;
+        double dConic = dParam / 2.0;
+        double eConic = eParam / 2.0;
 
-        return new Conic(A, bConic, C, dConic, eConic, F);
+        return new Conic(aParam, bConic, cParam, dConic, eConic, fParam);
     }
     
     /**
@@ -1062,7 +1058,7 @@ public class Ellipse implements Serializable {
      * @param conic conic to set parameters from.
      * @throws IllegalArgumentException if provided conic is not an ellipse.
      */
-    public final void setFromConic(Conic conic) throws IllegalArgumentException {
+    public final void setFromConic(Conic conic) {
         if (conic.getConicType() != ConicType.ELLIPSE_CONIC_TYPE &&
                 conic.getConicType() != ConicType.CIRCLE_CONIC_TYPE) {
             throw new IllegalArgumentException();
@@ -1135,17 +1131,17 @@ public class Ellipse implements Serializable {
         double a2 = a*a;
         double b2 = b*b;
         
-        double A = a2*sint2 + b2*cost2;
-        double B = 2.0*(b2 - a2)*sint*cost;
-        double C = a2*cost2 + b2*sint2;
-        double D = -2.0*A*xc - B*yc;
-        double E = -B*xc - 2.0*C*yc;
-        double F = A*xc2 + B*xc*yc + C*yc2 - a2*b2;
+        double aParam = a2*sint2 + b2*cost2;
+        double bParam = 2.0*(b2 - a2)*sint*cost;
+        double cParam = a2*cost2 + b2*sint2;
+        double dParam = -2.0*aParam*xc - bParam*yc;
+        double eParam = -bParam*xc - 2.0*cParam*yc;
+        double fParam = aParam*xc2 + bParam*xc*yc + cParam*yc2 - a2*b2;
         
         double x = point.getInhomX();
         double y = point.getInhomY();
         
-        return A*x*x + B*x*y + C*y*y + D*x + E*y + F <= threshold;
+        return aParam*x*x + bParam*x*y + cParam*y*y + dParam*x + eParam*y + fParam <= threshold;
     }
 
     /**
@@ -1168,8 +1164,7 @@ public class Ellipse implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is 
      * negative.
      */
-    public boolean isLocus(Point2D point, double threshold) 
-            throws IllegalArgumentException {        
+    public boolean isLocus(Point2D point, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -1194,17 +1189,17 @@ public class Ellipse implements Serializable {
         double a2 = a*a;
         double b2 = b*b;
         
-        double A = a2*sint2 + b2*cost2;
-        double B = 2.0*(b2 - a2)*sint*cost;
-        double C = a2*cost2 + b2*sint2;
-        double D = -2.0*A*xc - B*yc;
-        double E = -B*xc - 2.0*C*yc;
-        double F = A*xc2 + B*xc*yc + C*yc2 - a2*b2;
+        double aParam = a2*sint2 + b2*cost2;
+        double bParam = 2.0*(b2 - a2)*sint*cost;
+        double cParam = a2*cost2 + b2*sint2;
+        double dParam = -2.0*aParam*xc - bParam*yc;
+        double eParam = -bParam*xc - 2.0*cParam*yc;
+        double fParam = aParam*xc2 + bParam*xc*yc + cParam*yc2 - a2*b2;
         
         double x = point.getInhomX();
         double y = point.getInhomY();
         
-        return Math.abs(A*x*x + B*x*y + C*y*y + D*x + E*y + F) <= threshold;
+        return Math.abs(aParam*x*x + bParam*x*y + cParam*y*y + dParam*x + eParam*y + fParam) <= threshold;
     }    
     
     /**
@@ -1241,7 +1236,7 @@ public class Ellipse implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public Line2D getTangentLineAt(Point2D point, double threshold)
-            throws NotLocusException, IllegalArgumentException {
+            throws NotLocusException {
         
         Line2D line = new Line2D();
         tangentLineAt(point, line, threshold);
@@ -1261,7 +1256,7 @@ public class Ellipse implements Serializable {
      */
     @SuppressWarnings("WeakerAccess")
     public void tangentLineAt(Point2D point, Line2D line, double threshold)
-            throws NotLocusException, IllegalArgumentException {
+            throws NotLocusException {
         
         if(!isLocus(point, threshold)) throw new NotLocusException();
         

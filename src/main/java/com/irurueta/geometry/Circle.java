@@ -148,8 +148,7 @@ public class Circle implements Serializable {
      * @throws IllegalArgumentException Raised if provided radius is negative.
      * @throws NullPointerException Raised if provided center is null.
      */
-    public final void setCenterAndRadius(Point2D center, double radius)
-            throws IllegalArgumentException, NullPointerException {
+    public final void setCenterAndRadius(Point2D center, double radius) {
         setRadius(radius);        
         setCenter(center);
     }
@@ -244,7 +243,7 @@ public class Circle implements Serializable {
      * @return Area of a circle having provided radius.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public static double area(double radius) throws IllegalArgumentException {
+    public static double area(double radius) {
         if (radius < MIN_RADIUS) {
             throw new IllegalArgumentException();
         }
@@ -265,8 +264,7 @@ public class Circle implements Serializable {
      * @return Perimeter of a circle having provided radius.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public static double perimeter(double radius) 
-            throws IllegalArgumentException {
+    public static double perimeter(double radius) {
         if (radius < MIN_RADIUS) {
             throw new IllegalArgumentException();
         }
@@ -428,8 +426,7 @@ public class Circle implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is 
      * negative.
      */
-    public boolean isLocus(Point2D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Point2D point, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -471,7 +468,7 @@ public class Circle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public Line2D getTangentLineAt(Point2D point, double threshold)
-            throws NotLocusException, IllegalArgumentException {
+            throws NotLocusException {
         
         Line2D line = new Line2D();
         tangentLineAt(point, line, threshold);
@@ -490,7 +487,7 @@ public class Circle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public void tangentLineAt(Point2D point, Line2D line, double threshold)
-            throws NotLocusException, IllegalArgumentException {
+            throws NotLocusException {
         
         if (!isLocus(point, threshold)) {
             throw new NotLocusException();
@@ -548,7 +545,7 @@ public class Circle implements Serializable {
      * @param conic conic to set parameters from.
      * @throws IllegalArgumentException if provided conic is not a circle.
      */
-    public final void setFromConic(Conic conic) throws IllegalArgumentException {
+    public final void setFromConic(Conic conic) {
         if (conic.getConicType() != ConicType.CIRCLE_CONIC_TYPE) {
             throw new IllegalArgumentException();
         }

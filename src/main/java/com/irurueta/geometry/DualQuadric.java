@@ -62,8 +62,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @throws NonSymmetricMatrixException Raised when the quadric matrix is not
      * symmetric.
      */
-    public DualQuadric(Matrix m) throws IllegalArgumentException,
-            NonSymmetricMatrixException {
+    public DualQuadric(Matrix m) throws NonSymmetricMatrixException {
         super(m);
     }
     
@@ -104,8 +103,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Plane plane, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Plane plane, double threshold) {
 
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -211,7 +209,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * negative.
      */
     public boolean arePerpendicularPlanes(Plane planeA, Plane planeB, 
-            double threshold) throws IllegalArgumentException {
+            double threshold) {
         try {
             //retrieve quadric as matrix
             Matrix transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);
@@ -490,20 +488,20 @@ public class DualQuadric extends BaseQuadric implements Serializable {
             
             //the right null-space of m contains the parameters a, b, c, d, e ,f
             //of the conic
-            Matrix V = decomposer.getV();                        
+            Matrix v = decomposer.getV();
             
-            double a = V.getElementAt(0, 9);
-            double b = V.getElementAt(1, 9);
-            double c = V.getElementAt(2, 9);
-            double d = V.getElementAt(3, 9);
+            double a = v.getElementAt(0, 9);
+            double b = v.getElementAt(1, 9);
+            double c = v.getElementAt(2, 9);
+            double d = v.getElementAt(3, 9);
             
-            double f = V.getElementAt(4, 9);
-            double e = V.getElementAt(5, 9);            
+            double f = v.getElementAt(4, 9);
+            double e = v.getElementAt(5, 9);
             
-            double g = V.getElementAt(6, 9);
-            double h = V.getElementAt(7, 9);
-            double i = V.getElementAt(8, 9);
-            double j = V.getElementAt(9, 9);            
+            double g = v.getElementAt(6, 9);
+            double h = v.getElementAt(7, 9);
+            double i = v.getElementAt(8, 9);
+            double j = v.getElementAt(9, 9);
             
             setParameters(a, b, c, d, e, f, g, h, i, j);            
         } catch (AlgebraException ex) {

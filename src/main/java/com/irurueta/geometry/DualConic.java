@@ -58,8 +58,7 @@ public class DualConic extends BaseConic implements Serializable {
      * @throws NonSymmetricMatrixException Raised when the conic matrix is not 
      * symmetric.
      */
-    public DualConic(Matrix m) throws IllegalArgumentException, 
-            NonSymmetricMatrixException {
+    public DualConic(Matrix m) throws NonSymmetricMatrixException {
         super(m);
     }
     
@@ -90,8 +89,7 @@ public class DualConic extends BaseConic implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Line2D line, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Line2D line, double threshold) {
         
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -191,7 +189,7 @@ public class DualConic extends BaseConic implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean arePerpendicularLines(Line2D lineA, Line2D lineB, 
-            double threshold) throws IllegalArgumentException {
+            double threshold) {
         try {
             //retrieve conic as matrix
             Matrix transHomLineA = new Matrix(1, Line2D.LINE_NUMBER_PARAMS);
@@ -374,15 +372,15 @@ public class DualConic extends BaseConic implements Serializable {
             
             //the right null-space of m contains the parameters a, b, c, d, e ,f
             //of the conic
-            Matrix V = decomposer.getV();
+            Matrix v = decomposer.getV();
             
             //l1^ + 2*l1*l2 + l2^2 + 2*l1*l3 + 2*l2*l3 + l3^2 = 0            
-            double a = V.getElementAt(0, 5);
-            double b = V.getElementAt(1, 5);
-            double c = V.getElementAt(2, 5);
-            double d = V.getElementAt(3, 5);
-            double e = V.getElementAt(4, 5);
-            double f = V.getElementAt(5, 5);
+            double a = v.getElementAt(0, 5);
+            double b = v.getElementAt(1, 5);
+            double c = v.getElementAt(2, 5);
+            double d = v.getElementAt(3, 5);
+            double e = v.getElementAt(4, 5);
+            double f = v.getElementAt(5, 5);
                             
             setParameters(a, b, c, d, e, f);
         } catch (AlgebraException ex) {

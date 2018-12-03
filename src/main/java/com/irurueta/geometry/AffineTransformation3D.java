@@ -1627,7 +1627,7 @@ public class AffineTransformation3D extends Transformation3D
             //initially a contains the inverse of its transpose, so to obtain a we need
             //to transpose it and invert it
             invTransA.transpose();
-            Matrix a = Utils.inverse(invTransA);
+            Matrix a1 = Utils.inverse(invTransA);
 
             Matrix invt = new Matrix(1, 3);
             invt.setSubmatrix(0, 0, 0, 2,
@@ -1637,9 +1637,9 @@ public class AffineTransformation3D extends Transformation3D
             invt.multiplyByScalar(-1.0 / value);
             invt.transpose();
 
-            Matrix t = a.multiplyAndReturnNew(invt);
+            Matrix t = a1.multiplyAndReturnNew(invt);
 
-            this.a = a;
+            this.a = a1;
             this.translation = t.getBuffer();
         } catch (AlgebraException e) {
             throw new CoincidentPlanesException(e);

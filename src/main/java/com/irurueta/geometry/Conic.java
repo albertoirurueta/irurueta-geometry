@@ -58,8 +58,7 @@ public class Conic extends BaseConic implements Serializable {
      * @throws NonSymmetricMatrixException Raised when the conic matrix is not 
      * symmetric.
      */
-    public Conic(Matrix m) throws IllegalArgumentException, 
-            NonSymmetricMatrixException {
+    public Conic(Matrix m) throws NonSymmetricMatrixException {
         super(m);
     }
     
@@ -88,8 +87,7 @@ public class Conic extends BaseConic implements Serializable {
      * @return True if the point lies within this conic, false otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public boolean isLocus(Point2D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Point2D point, double threshold) {
         
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -97,7 +95,7 @@ public class Conic extends BaseConic implements Serializable {
                 
         try {
             normalize();
-            Matrix C = asMatrix();
+            Matrix c = asMatrix();
             Matrix homPoint = 
                     new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 
                     1);
@@ -106,7 +104,7 @@ public class Conic extends BaseConic implements Serializable {
             homPoint.setElementAt(1, 0, point.getHomY());
             homPoint.setElementAt(2, 0, point.getHomW());
             Matrix locusMatrix = homPoint.transposeAndReturnNew();
-            locusMatrix.multiply(C);
+            locusMatrix.multiply(c);
             locusMatrix.multiply(homPoint);                
         
             return Math.abs(locusMatrix.getElementAt(0, 0)) < threshold;
@@ -136,7 +134,7 @@ public class Conic extends BaseConic implements Serializable {
         try {
             //retrieve conic as matrix
             normalize();
-            Matrix C = asMatrix();
+            Matrix c = asMatrix();
             Matrix transHomPointA = 
                 new Matrix(1, Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
             pointA.normalize();
@@ -145,7 +143,7 @@ public class Conic extends BaseConic implements Serializable {
             transHomPointA.setElementAt(0, 2, pointA.getHomW());
         
         
-            Matrix tmp = transHomPointA.multiplyAndReturnNew(C);
+            Matrix tmp = transHomPointA.multiplyAndReturnNew(c);
             tmp.multiply(transHomPointA.transposeAndReturnNew()); //This is 
                                                     //homPointA' * C * homPointA
         
@@ -160,12 +158,12 @@ public class Conic extends BaseConic implements Serializable {
             homPointB.setElementAt(2, 0, pointB.getHomW());
         
             homPointB.transpose(tmp);
-            tmp.multiply(C);
+            tmp.multiply(c);
             tmp.multiply(homPointB);
         
             double normB = tmp.getElementAt(0, 0);
         
-            transHomPointA.multiply(C);
+            transHomPointA.multiply(c);
             transHomPointA.multiply(homPointB); 
                 //This is homPointA' * C * homPointB
                         
@@ -193,7 +191,7 @@ public class Conic extends BaseConic implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean arePerpendicularPoints(Point2D pointA, Point2D pointB,
-            double threshold) throws IllegalArgumentException {
+            double threshold) {
         
         try {
             //retrieve conic as matrix
@@ -213,8 +211,8 @@ public class Conic extends BaseConic implements Serializable {
             homPointB.setElementAt(2, 0, pointB.getHomW());
             
             normalize();
-            Matrix C = asMatrix();
-            transHomPointA.multiply(C);
+            Matrix c = asMatrix();
+            transHomPointA.multiply(c);
             transHomPointA.multiply(homPointB); 
                 //This is homPointA' * C * homPointB
             
@@ -410,14 +408,14 @@ public class Conic extends BaseConic implements Serializable {
             
             //the right null-space of m contains the parameters a, b, c, d, e ,f
             //of the conic
-            Matrix V = decomposer.getV();
+            Matrix v = decomposer.getV();
             
-            double a = V.getElementAt(0, 5);
-            double b = V.getElementAt(1, 5);
-            double c = V.getElementAt(2, 5);
-            double d = V.getElementAt(3, 5);
-            double e = V.getElementAt(4, 5);
-            double f = V.getElementAt(5, 5);
+            double a = v.getElementAt(0, 5);
+            double b = v.getElementAt(1, 5);
+            double c = v.getElementAt(2, 5);
+            double d = v.getElementAt(3, 5);
+            double e = v.getElementAt(4, 5);
+            double f = v.getElementAt(5, 5);
             
             setParameters(a, b, c, d, e, f);
         } catch (AlgebraException ex) {
@@ -449,7 +447,7 @@ public class Conic extends BaseConic implements Serializable {
      */
     @SuppressWarnings("WeakerAccess")
     public Line2D getTangentLineAt(Point2D point, double threshold) 
-            throws NotLocusException, IllegalArgumentException {
+            throws NotLocusException {
         
         Line2D line = new Line2D();
         tangentLineAt(point, line, threshold);
@@ -467,7 +465,7 @@ public class Conic extends BaseConic implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public void tangentLineAt(Point2D point, Line2D line, double threshold)
-            throws NotLocusException, IllegalArgumentException {
+            throws NotLocusException {
         
         if (!isLocus(point, threshold)) {
             throw new NotLocusException();
@@ -476,7 +474,7 @@ public class Conic extends BaseConic implements Serializable {
         point.normalize();
         normalize();
         
-        Matrix C = asMatrix();
+        Matrix c = asMatrix();
         
         try {
             Matrix p = new Matrix(
@@ -485,11 +483,13 @@ public class Conic extends BaseConic implements Serializable {
             p.setElementAt(1, 0, point.getHomY());
             p.setElementAt(2, 0, point.getHomW());
         
-            C.multiply(p);
-        } catch (WrongSizeException ignore) { }
+            c.multiply(p);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         
-        line.setParameters(C.getElementAt(0, 0), C.getElementAt(1, 0), 
-                C.getElementAt(2, 0));        
+        line.setParameters(c.getElementAt(0, 0), c.getElementAt(1, 0),
+                c.getElementAt(2, 0));
     }
         
     /**

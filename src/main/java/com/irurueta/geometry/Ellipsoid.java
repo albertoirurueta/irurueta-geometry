@@ -72,7 +72,7 @@ public class Ellipsoid implements Serializable {
      * three.
      */
     public Ellipsoid(Point3D center, double[] semiAxesLengths, 
-            Rotation3D rotation) throws IllegalArgumentException {
+            Rotation3D rotation) {
         setCenterAxesAndRotation(center, semiAxesLengths, rotation);
     }
         
@@ -89,7 +89,7 @@ public class Ellipsoid implements Serializable {
      * @param center center of ellipsoid.
      * @throws NullPointerException raised if provided center is null.
      */
-    public void setCenter(Point3D center) throws NullPointerException {
+    public void setCenter(Point3D center) {
         if (center == null) {
             throw new NullPointerException();
         }
@@ -110,8 +110,7 @@ public class Ellipsoid implements Serializable {
      * @throws IllegalArgumentException if length of provided array is not 
      * three.
      */
-    public void setSemiAxesLengths(double[] semiAxesLengths) 
-            throws IllegalArgumentException {
+    public void setSemiAxesLengths(double[] semiAxesLengths) {
         if (semiAxesLengths.length != DIMENSIONS) {
             throw new IllegalArgumentException();
         }
