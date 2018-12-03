@@ -121,8 +121,7 @@ public class AffineParameters2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2 or
      * if it is not upper triangular, or if threshold is negative.
      */
-    public AffineParameters2D(Matrix m, double threshold) 
-            throws IllegalArgumentException {
+    public AffineParameters2D(Matrix m, double threshold) {
         fromMatrix(m, threshold);
     }
     
@@ -132,7 +131,7 @@ public class AffineParameters2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2 or
      * if it is not upper triangular.
      */
-    public AffineParameters2D(Matrix m) throws IllegalArgumentException {
+    public AffineParameters2D(Matrix m) {
         fromMatrix(m);
     }
     
@@ -215,7 +214,9 @@ public class AffineParameters2D implements Serializable {
         try {
             m = new Matrix(INHOM_COORDS, INHOM_COORDS);
             asMatrix(m);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         return m;
     }
     
@@ -225,7 +226,7 @@ public class AffineParameters2D implements Serializable {
      * @param m Matrix where representation of this instance will be stored.
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2.
      */
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
+    public void asMatrix(Matrix m) {
         if (m.getRows() != INHOM_COORDS || m.getColumns() != INHOM_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -243,7 +244,7 @@ public class AffineParameters2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2 or
      * if it is not upper triangular.
      */
-    public final void fromMatrix(Matrix m) throws IllegalArgumentException {
+    public final void fromMatrix(Matrix m) {
         fromMatrix(m, DEFAULT_VALID_THRESHOLD);
     }
     
@@ -257,8 +258,7 @@ public class AffineParameters2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided matrix is not 2x2 or
      * it it is not upper triangular or if threshold is negative.
      */
-    public final void fromMatrix(Matrix m, double threshold) 
-            throws IllegalArgumentException {
+    public final void fromMatrix(Matrix m, double threshold) {
         if (!isValidMatrix(m, threshold)) {
             throw new IllegalArgumentException();
         }
@@ -295,8 +295,7 @@ public class AffineParameters2D implements Serializable {
      * @return True if matrix is valid, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public static boolean isValidMatrix(Matrix m, double threshold) 
-            throws IllegalArgumentException {
+    public static boolean isValidMatrix(Matrix m, double threshold) {
         if (threshold < 0.0) {
             throw new IllegalArgumentException();
         }
@@ -311,10 +310,8 @@ public class AffineParameters2D implements Serializable {
         
         for (int v = 0; v < cols; v++) {
             for (int u = 0; u < rows; u++) {
-                if (u > v) {
-                    if (Math.abs(m.getElementAt(u, v)) > threshold) {
-                        return false;
-                    }
+                if (u > v && Math.abs(m.getElementAt(u, v)) > threshold) {
+                    return false;
                 }
             }
         }

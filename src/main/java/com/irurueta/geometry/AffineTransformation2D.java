@@ -52,7 +52,7 @@ public class AffineTransformation2D extends Transformation2D
     /**
      * Linear mapping.
      */
-    private Matrix A;
+    private Matrix a;
     
     /**
      * 2D translation to be performed on geometric objects.
@@ -67,19 +67,22 @@ public class AffineTransformation2D extends Transformation2D
     public AffineTransformation2D() {
         super();
         try {
-            A = Matrix.identity(INHOM_COORDS, INHOM_COORDS);
-        } catch (WrongSizeException ignore) { }
+            a = Matrix.identity(INHOM_COORDS, INHOM_COORDS);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         translation = new double[NUM_TRANSLATION_COORDS];
     }
     
     /**
      * Creates transformation with provided linear mapping matrix.
-     * @param A linear mapping.
+     * @param a linear mapping.
      * @throws NullPointerException raised if provided rotation is null.
+     * @throws IllegalArgumentException raised if provided matrix does not have
+     * size 2x2.
      */
-    public AffineTransformation2D(Matrix A)
-            throws NullPointerException, IllegalArgumentException {
-        setA(A);
+    public AffineTransformation2D(Matrix a) {
+        setA(a);
         translation = new double[NUM_TRANSLATION_COORDS];
     }
     
@@ -92,7 +95,7 @@ public class AffineTransformation2D extends Transformation2D
     public AffineTransformation2D(double scale) {
         double[] diag = new double[INHOM_COORDS];
         Arrays.fill(diag, scale);
-        A = Matrix.diagonal(diag);
+        a = Matrix.diagonal(diag);
         translation = new double[NUM_TRANSLATION_COORDS];
     }
     
@@ -101,9 +104,8 @@ public class AffineTransformation2D extends Transformation2D
      * @param rotation a 2D rotation.
      * @throws NullPointerException Raised if provided rotation is null.
      */
-    public AffineTransformation2D(Rotation2D rotation) 
-            throws NullPointerException {
-        A = rotation.asInhomogeneousMatrix();
+    public AffineTransformation2D(Rotation2D rotation) {
+        a = rotation.asInhomogeneousMatrix();
         translation = new double[NUM_TRANSLATION_COORDS];
     }
     
@@ -115,14 +117,15 @@ public class AffineTransformation2D extends Transformation2D
      * @param rotation a 2D rotation.
      * @throws NullPointerException raised if provided rotation is null.
      */
-    public AffineTransformation2D(double scale, Rotation2D rotation)
-            throws NullPointerException {
+    public AffineTransformation2D(double scale, Rotation2D rotation) {
         double[] diag = new double[INHOM_COORDS];
         Arrays.fill(diag, scale);
-        A = Matrix.diagonal(diag);
+        a = Matrix.diagonal(diag);
         try {
-            A.multiply(rotation.asInhomogeneousMatrix());
-        } catch (WrongSizeException ignore) { }
+            a.multiply(rotation.asInhomogeneousMatrix());
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         translation = new double[NUM_TRANSLATION_COORDS];        
     }
     
@@ -135,11 +138,13 @@ public class AffineTransformation2D extends Transformation2D
      * if provided rotation is null.
      */
     public AffineTransformation2D(AffineParameters2D params, 
-            Rotation2D rotation) throws NullPointerException{
-        A = params.asMatrix();
+            Rotation2D rotation) {
+        a = params.asMatrix();
         try {
-            A.multiply(rotation.asInhomogeneousMatrix());
-        } catch (WrongSizeException ignore) { }
+            a.multiply(rotation.asInhomogeneousMatrix());
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         translation = new double[NUM_TRANSLATION_COORDS];                
     }
         
@@ -151,21 +156,22 @@ public class AffineTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if length of array is not equal
      * to NUM_TRANSLATION_COORDS.
      */
-    public AffineTransformation2D(double[] translation) 
-            throws NullPointerException, IllegalArgumentException {
+    public AffineTransformation2D(double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
         try {
-            A = Matrix.identity(INHOM_COORDS, INHOM_COORDS);
-        } catch (WrongSizeException ignore) { }
+            a = Matrix.identity(INHOM_COORDS, INHOM_COORDS);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         this.translation = translation;
     }
     
     /**
      * Creates transformation with provided linear mapping and translation.
-     * @param A linear mapping.
+     * @param a linear mapping.
      * @param translation array indicating 2D translation using inhomogeneous
      * coordinates.
      * @throws NullPointerException raised if provided array is null or if
@@ -173,14 +179,13 @@ public class AffineTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if length of array is not equal 
      * to NUM_TRANSLATION_COORDS.
      */
-    public AffineTransformation2D(Matrix A, double[] translation) 
-            throws NullPointerException, IllegalArgumentException {
+    public AffineTransformation2D(Matrix a, double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         this.translation = translation;
         
-        setA(A);
+        setA(a);
     }    
     
     /**
@@ -194,15 +199,14 @@ public class AffineTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if provided translation does not
      * have length 2.
      */
-    public AffineTransformation2D(double scale, double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+    public AffineTransformation2D(double scale, double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
         double[] diag = new double[INHOM_COORDS];
         Arrays.fill(diag, scale);
-        A = Matrix.diagonal(diag);
+        a = Matrix.diagonal(diag);
         
         this.translation = translation;        
     }
@@ -217,13 +221,12 @@ public class AffineTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if provided translation does not
      * have length 2.
      */
-    public AffineTransformation2D(Rotation2D rotation, double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+    public AffineTransformation2D(Rotation2D rotation, double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
-        A = rotation.asInhomogeneousMatrix();        
+        a = rotation.asInhomogeneousMatrix();
         this.translation = translation;                
     }
     
@@ -241,18 +244,19 @@ public class AffineTransformation2D extends Transformation2D
      * have length 2.
      */
     public AffineTransformation2D(double scale, Rotation2D rotation, 
-            double[] translation) throws NullPointerException, 
-            IllegalArgumentException {
+            double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
         double[] diag = new double[INHOM_COORDS];
         Arrays.fill(diag, scale);
-        A = Matrix.diagonal(diag);
+        a = Matrix.diagonal(diag);
         try {
-            A.multiply(rotation.asInhomogeneousMatrix());
-        } catch (WrongSizeException ignore) { }
+            a.multiply(rotation.asInhomogeneousMatrix());
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
 
         this.translation = translation;        
     }
@@ -271,16 +275,17 @@ public class AffineTransformation2D extends Transformation2D
      * have length 2.
      */
     public AffineTransformation2D(AffineParameters2D params, 
-            Rotation2D rotation, double[] translation) 
-            throws NullPointerException, IllegalArgumentException {
+            Rotation2D rotation, double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
 
-        A = params.asMatrix();
+        a = params.asMatrix();
         try {
-            A.multiply(rotation.asInhomogeneousMatrix());
-        } catch (WrongSizeException ignore) { }
+            a.multiply(rotation.asInhomogeneousMatrix());
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         this.translation = translation;                
     }
     
@@ -304,8 +309,10 @@ public class AffineTransformation2D extends Transformation2D
             Point2D inputPoint3, Point2D outputPoint1, Point2D outputPoint2, 
             Point2D outputPoint3) throws CoincidentPointsException {
         try {
-            A = new Matrix(INHOM_COORDS, INHOM_COORDS);
-        } catch (WrongSizeException ignore) { }
+            a = new Matrix(INHOM_COORDS, INHOM_COORDS);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         translation = new double[NUM_TRANSLATION_COORDS];
         setTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, 
                 outputPoint1, outputPoint2, outputPoint3);
@@ -333,31 +340,30 @@ public class AffineTransformation2D extends Transformation2D
     
     /**
      * Returns linear mapping matrix to perform affine transformation.
-     * Point transformation is computed as A * x + t, where x is a point and t
+     * Point transformation is computed as a * x + t, where x is a point and t
      * is the amount of translation.
      * @return linear mapping matrix.
      */
     public Matrix getA() {
-        return A;
+        return a;
     }
     
     /**
      * Sets linear mapping matrix to perform affine transformation.
-     * @param A linear mapping matrix.
+     * @param a linear mapping matrix.
      * @throws NullPointerException raised if provided matrix is null.
      * @throws IllegalArgumentException raised if provided matrix does not have
      * size 2x2.
      */
-    public final void setA(Matrix A) throws NullPointerException, 
-            IllegalArgumentException {
-        if (A == null) {
+    public final void setA(Matrix a) {
+        if (a == null) {
             throw new NullPointerException();
         }
-        if (A.getRows() != INHOM_COORDS || A.getColumns() != INHOM_COORDS) {
+        if (a.getRows() != INHOM_COORDS || a.getColumns() != INHOM_COORDS) {
             throw new IllegalArgumentException();
         }
 
-        this.A = A;
+        this.a = a;
     }
     
     /**
@@ -370,7 +376,7 @@ public class AffineTransformation2D extends Transformation2D
      */
     public Rotation2D getRotation() throws AlgebraException {
         //Use QR decomposition to retrieve rotation
-        RQDecomposer decomposer = new RQDecomposer(A);
+        RQDecomposer decomposer = new RQDecomposer(a);
         try {
             decomposer.decompose();
             return new Rotation2D(decomposer.getQ());
@@ -381,22 +387,21 @@ public class AffineTransformation2D extends Transformation2D
     
     /**
      * Sets 2D rotation for this transformation.
-     * @param rotation A 2D rotation.
+     * @param rotation a 2D rotation.
      * @throws NullPointerException raised if provided rotation is null.
      * @throws AlgebraException raised if for numerical reasons rotation cannot
      * be set (usually because of numerical instability in parameters of this
      * transformation).
      */
-    public void setRotation(Rotation2D rotation) throws NullPointerException,
-            AlgebraException {
+    public void setRotation(Rotation2D rotation) throws AlgebraException {
         Matrix rotMatrix = rotation.asInhomogeneousMatrix();
         
         //Use QR decomposition to retrieve parameters matrix
-        RQDecomposer decomposer = new RQDecomposer(A);
+        RQDecomposer decomposer = new RQDecomposer(a);
         decomposer.decompose();
         Matrix localA = decomposer.getR(); //retrieves params matrix
         localA.multiply(rotMatrix);
-        this.A = localA;
+        this.a = localA;
     }
     
     /**
@@ -415,7 +420,7 @@ public class AffineTransformation2D extends Transformation2D
     
     /**
      * Sets scale of this transformation.
-     * @param scale scale value to be set. A value between 0.0 and 1.0 indicates
+     * @param scale scale value to be set. a value between 0.0 and 1.0 indicates
      * that objects will be reduced, a value greater than 1.0 indicates that 
      * objects will be enlarged, and a negative value indicates that objects
      * will be reversed.
@@ -425,13 +430,13 @@ public class AffineTransformation2D extends Transformation2D
      */
     public void setScale(double scale) throws AlgebraException {
         
-        RQDecomposer decomposer = new RQDecomposer(A);
+        RQDecomposer decomposer = new RQDecomposer(a);
         decomposer.decompose();
         Matrix localA = decomposer.getR(); //params
         localA.setElementAt(0, 0, scale);
         localA.setElementAt(1, 1, scale);
         localA.multiply(decomposer.getQ()); //multiply by rotation
-        this.A = localA;
+        this.a = localA;
     }
     
     /**
@@ -441,7 +446,7 @@ public class AffineTransformation2D extends Transformation2D
      * @return affine parameters.
      * @throws AlgebraException raised if for numerical reasons affine 
      * parameters cannot be retrieved (usually because of numerical instability
-     * in matrix A).
+     * in matrix a).
      */
     public AffineParameters2D getParameters() throws AlgebraException {
         AffineParameters2D parameters = new AffineParameters2D();
@@ -457,11 +462,11 @@ public class AffineTransformation2D extends Transformation2D
      * @param result instance where affine parameters will be stored.
      * @throws AlgebraException raised if for numerical reasons affine 
      * parameters cannot be retrieved (usually because of numerical instability
-     * in matrix A).
+     * in matrix a).
      */
     public void getParameters(AffineParameters2D result) 
             throws AlgebraException {
-        RQDecomposer decomposer = new RQDecomposer(A);
+        RQDecomposer decomposer = new RQDecomposer(a);
         decomposer.decompose();
         Matrix params = decomposer.getR();
         result.fromMatrix(params);
@@ -474,17 +479,17 @@ public class AffineTransformation2D extends Transformation2D
      * @param parameters affine parameters to be set.
      * @throws AlgebraException raised if for numerical reasons affine 
      * parameters cannot be set (usually because of numerical instability in
-     * current matrix A).
+     * current matrix a).
      */
     public void setParameters(AffineParameters2D parameters) 
             throws AlgebraException {
-        RQDecomposer decomposer = new RQDecomposer(A);
+        RQDecomposer decomposer = new RQDecomposer(a);
         decomposer.decompose();
         Matrix params = parameters.asMatrix();
         Matrix rotation = decomposer.getQ();
         
         params.multiply(rotation);
-        A = params;
+        a = params;
     }
         
     /**
@@ -503,8 +508,7 @@ public class AffineTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if provided array does not have
      * length equal to NUM_TRANSLATION_COORDS.
      */
-    public void setTranslation(double[] translation) 
-            throws IllegalArgumentException {
+    public void setTranslation(double[] translation) {
         if(translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -520,8 +524,7 @@ public class AffineTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if provided array does not have
      * length equal to NUM_TRANSLATION_COORDS.
      */
-    public void addTranslation(double[] translation)
-            throws IllegalArgumentException {
+    public void addTranslation(double[] translation) {
         ArrayUtils.sum(this.translation, translation, this.translation);
     }
     
@@ -635,7 +638,7 @@ public class AffineTransformation2D extends Transformation2D
     
     /**
      * Represents this transformation as a 3x3 matrix.
-     * A point can be transformed as T * p, where T is the transformation matrix
+     * a point can be transformed as T * p, where T is the transformation matrix
      * and p is a point expressed as an homogeneous vector.
      * @return This transformation in matrix form.
      */
@@ -645,7 +648,9 @@ public class AffineTransformation2D extends Transformation2D
         try {
             m = new Matrix(HOM_COORDS, HOM_COORDS);
             asMatrix(m);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         return m;
     }
     
@@ -657,13 +662,13 @@ public class AffineTransformation2D extends Transformation2D
      * matrix.
      */
     @Override
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
+    public void asMatrix(Matrix m) {
         if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
         //set rotation        
-        m.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, A);
+        m.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
         
         //set translation
         m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
@@ -690,13 +695,14 @@ public class AffineTransformation2D extends Transformation2D
             coords[0] = inputPoint.getInhomX();
             coords[1] = inputPoint.getInhomY();
             
-            Matrix p = A.multiplyAndReturnNew(Matrix.newFromArray(coords, true));
+            Matrix p = a.multiplyAndReturnNew(Matrix.newFromArray(coords, true));
         
             outputPoint.setInhomogeneousCoordinates(
                     p.getElementAtIndex(0) + translation[0], 
                     p.getElementAtIndex(1) + translation[1]);
-        } catch (WrongSizeException ignore) { } //this exception will never be 
-                                                //raised
+        } catch (WrongSizeException ignore) {
+            //this exception will never be raised
+        }
     }
 
     /**
@@ -723,7 +729,7 @@ public class AffineTransformation2D extends Transformation2D
         
         inputConic.normalize();
         
-        Matrix C = inputConic.asMatrix();
+        Matrix c = inputConic.asMatrix();
         Matrix invT = inverseAndReturnNew().asMatrix();
         //normalize transformation matrix invT to increase accuracy
         double norm = Utils.normF(invT);
@@ -731,9 +737,11 @@ public class AffineTransformation2D extends Transformation2D
 
         Matrix m = invT.transposeAndReturnNew();
         try {
-            m.multiply(C);
+            m.multiply(c);
             m.multiply(invT);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
@@ -767,23 +775,25 @@ public class AffineTransformation2D extends Transformation2D
         inputDualConic.normalize();
         
         Matrix dualC = inputDualConic.asMatrix();
-        Matrix T = asMatrix();
+        Matrix t = asMatrix();
         //normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(T);
-        T.multiplyByScalar(1.0 / norm);
+        double norm = Utils.normF(t);
+        t.multiplyByScalar(1.0 / norm);
 
-        Matrix transT = T.transposeAndReturnNew();
+        Matrix transT = t.transposeAndReturnNew();
         try {
-            T.multiply(dualC);
-            T.multiply(transT);
-        } catch (WrongSizeException ignore) { }
+            t.multiply(dualC);
+            t.multiply(transT);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
-        norm = Utils.normF(T);
-        T.multiplyByScalar(1.0 / norm);
+        norm = Utils.normF(t);
+        t.multiplyByScalar(1.0 / norm);
         
-        outputDualConic.setParameters(T);
+        outputDualConic.setParameters(t);
     }
 
     /**
@@ -850,14 +860,14 @@ public class AffineTransformation2D extends Transformation2D
     public void inverse(AffineTransformation2D result)
             throws AlgebraException {
         
-        //x' = A * x + t -->
-        //A^-1 * x' = A^-1 * A * x + A^-1 * t = x + A^-1 * t -->
-        //x = A^-1 * x' - A^-1 * t
+        //x' = a * x + t -->
+        //a^-1 * x' = a^-1 * a * x + a^-1 * t = x + a^-1 * t -->
+        //x = a^-1 * x' - a^-1 * t
         
         try {
             //reverse rotation
-            Matrix invA = Utils.inverse(A);
-            result.A = invA;
+            Matrix invA = Utils.inverse(a);
+            result.a = invA;
         
             //reverse translation
             Matrix t = Matrix.newFromArray(translation, true);
@@ -865,7 +875,9 @@ public class AffineTransformation2D extends Transformation2D
             
             Matrix resultT = invA.multiplyAndReturnNew(t);
             result.translation = resultT.toArray();
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }    
     
     /**
@@ -873,7 +885,7 @@ public class AffineTransformation2D extends Transformation2D
      * @return This transformation converted into a projective transformation.
      */
     public ProjectiveTransformation2D toProjective() {
-        return new ProjectiveTransformation2D(A, translation);
+        return new ProjectiveTransformation2D(a, translation);
     }
     
     /**
@@ -892,7 +904,7 @@ public class AffineTransformation2D extends Transformation2D
      * The combination is equivalent to multiplying the matrix of this
      * transformation with the matrix of provided transformation.
      * @param transformation Transformation to be combined with
-     * @return A new transformation resulting of the combination with this
+     * @return a new transformation resulting of the combination with this
      * transformation and provided transformation.
      */
     public AffineTransformation2D combineAndReturnNew(
@@ -919,17 +931,19 @@ public class AffineTransformation2D extends Transformation2D
         
         try {
             //we do translation first, because this.rotation might change later
-            Matrix A1 = this.A.clone();
+            Matrix a1 = this.a.clone();
             Matrix t2 = Matrix.newFromArray(inputTransformation.translation, true);
-            A1.multiply(t2); //this is R1 * t2
+            a1.multiply(t2); //this is R1 * t2
                   
-            ArrayUtils.sum(A1.toArray(), this.translation,  
+            ArrayUtils.sum(a1.toArray(), this.translation,
                     outputTransformation.translation);
 
-            outputTransformation.A = this.A.multiplyAndReturnNew(
-                    inputTransformation.A);
+            outputTransformation.a = this.a.multiplyAndReturnNew(
+                    inputTransformation.a);
         
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -1061,10 +1075,12 @@ public class AffineTransformation2D extends Transformation2D
             m.setElementAt(5, 3, oWiY / norm);
             m.setElementAt(5, 5, oWiW / norm);
             m.setElementAt(5, 6, -oYiW / norm);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
                         
         //use SVD to decompose matrix m
-        Matrix V;
+        Matrix v;
         try {
             SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
@@ -1072,17 +1088,17 @@ public class AffineTransformation2D extends Transformation2D
             //ensure that matrix m has enough rank and there is a unique 
             //solution (up to scale)
             if(decomposer.getRank() < 6) throw new CoincidentPointsException();
-            V = decomposer.getV(); //V is 7x7
+            v = decomposer.getV(); //V is 7x7
             
             //last column of V will contain parameters of transformation
-            double value = V.getElementAt(6, 6);
-            A.setElementAt(0, 0, V.getElementAt(0, 6) / value);
-            A.setElementAt(0, 1, V.getElementAt(1, 6) / value);
-            A.setElementAt(1, 0, V.getElementAt(2, 6) / value);
-            A.setElementAt(1, 1, V.getElementAt(3, 6) / value);
+            double value = v.getElementAt(6, 6);
+            a.setElementAt(0, 0, v.getElementAt(0, 6) / value);
+            a.setElementAt(0, 1, v.getElementAt(1, 6) / value);
+            a.setElementAt(1, 0, v.getElementAt(2, 6) / value);
+            a.setElementAt(1, 1, v.getElementAt(3, 6) / value);
             
-            translation[0] = V.getElementAt(4, 6) / value;
-            translation[1] = V.getElementAt(5, 6) / value;
+            translation[0] = v.getElementAt(4, 6) / value;
+            translation[1] = v.getElementAt(5, 6) / value;
                         
         } catch(AlgebraException e) {
             throw new CoincidentPointsException(e);
@@ -1244,10 +1260,12 @@ public class AffineTransformation2D extends Transformation2D
             m.setElementAt(5, 4, -oBiA / norm);
             m.setElementAt(5, 5, -oBiB / norm);
             m.setElementAt(5, 6, -oBiC / norm);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
                         
         //use SVD to decompose matrix m
-        Matrix V;
+        Matrix v;
         try {
             SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
@@ -1255,36 +1273,36 @@ public class AffineTransformation2D extends Transformation2D
             //ensure that matrix m has enough rank and there is a unique 
             //solution (up to scale)
             if(decomposer.getRank() < 6) throw new CoincidentLinesException();
-            V = decomposer.getV(); //V is 7x7
+            v = decomposer.getV(); //V is 7x7
             
             //last column of V will contain parameters of transformation
-            double value = V.getElementAt(6, 6);
+            double value = v.getElementAt(6, 6);
 
             Matrix invTransA = new Matrix(AffineParameters2D.INHOM_COORDS,
                     AffineParameters2D.INHOM_COORDS);
-            //copy former 4 elements of 7th column of V into A in row order
+            //copy former 4 elements of 7th column of V into a in row order
             invTransA.setSubmatrix(0, 0, 1, 1,
-                    V.getSubmatrixAsArray(0, 6, 3, 6),
+                    v.getSubmatrixAsArray(0, 6, 3, 6),
                     false);
             //normalize by scale value
             invTransA.multiplyByScalar(1.0 / value);
 
-            //initially A contains the inverse of its transpose, so to obtain A we need
+            //initially a contains the inverse of its transpose, so to obtain a we need
             //to transpose it and invert it
             invTransA.transpose();
-            Matrix A = Utils.inverse(invTransA);
+            Matrix a = Utils.inverse(invTransA);
 
             Matrix invt = new Matrix(1, 2);
             invt.setSubmatrix(0, 0, 0, 1,
-                    V.getSubmatrixAsArray(4, 6, 5, 6),
+                    v.getSubmatrixAsArray(4, 6, 5, 6),
                     false);
             //normalize by scale value (we need to change sign as well)
             invt.multiplyByScalar(-1.0 / value);
             invt.transpose();
 
-            Matrix t = A.multiplyAndReturnNew(invt);
+            Matrix t = a.multiplyAndReturnNew(invt);
 
-            this.A = A;
+            this.a = a;
             this.translation = t.getBuffer();
         } catch (AlgebraException e) {
             throw new CoincidentLinesException(e);
