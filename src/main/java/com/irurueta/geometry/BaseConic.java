@@ -71,7 +71,6 @@ public abstract class BaseConic implements Serializable {
      */
     private static final double PRECISION = 1e-12;    
 
-    
     /**
      * A element of the matrix defining a conic.
      */

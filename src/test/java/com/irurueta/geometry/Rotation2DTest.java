@@ -620,8 +620,8 @@ public class Rotation2DTest {
         
         //create line passing through both points
         Line2D line = new Line2D(point1, point2);
-        assertTrue(line.isLocus(point1));
-        assertTrue(line.isLocus(point2));
+        assertTrue(line.isLocus(point1, ABSOLUTE_ERROR));
+        assertTrue(line.isLocus(point2, ABSOLUTE_ERROR));
         
         //now rotate points and line
         Point2D rotPoint1A = rotation.rotate(point1);

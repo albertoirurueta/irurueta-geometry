@@ -71,8 +71,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @param rotation A 2D rotation.
      * @throws NullPointerException Raised if provided rotation is null.
      */
-    public EuclideanTransformation3D(Rotation3D rotation)
-            throws NullPointerException {
+    public EuclideanTransformation3D(Rotation3D rotation) {
         if (rotation == null) {
             throw new NullPointerException();
         }
@@ -89,8 +88,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @throws IllegalArgumentException Raised if length of array is not equal
      * to NUM_TRANSLATION_COORDS.
      */
-    public EuclideanTransformation3D(double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+    public EuclideanTransformation3D(double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -108,8 +106,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @throws IllegalArgumentException Raised if length of array is not equal
      * to NUM_TRANSLATION_COORDS.
      */
-    public EuclideanTransformation3D(Rotation3D rotation, double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+    public EuclideanTransformation3D(Rotation3D rotation, double[] translation) {
         
         if (rotation == null) {
             throw new NullPointerException();
@@ -163,7 +160,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @param rotation A 3D rotation.
      * @throws NullPointerException Raised if provided rotation is null.
      */
-    public void setRotation(Rotation3D rotation) throws NullPointerException {
+    public void setRotation(Rotation3D rotation) {
         if (rotation == null) {
             throw new NullPointerException();
         }
@@ -195,8 +192,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if provided array does not have
      * length equal to NUM_TRANSLATION_COORDS.
      */
-    public void setTranslation(double[] translation)
-            throws IllegalArgumentException {
+    public void setTranslation(double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -212,8 +208,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if provided array does not have
      * length equal to NUM_TRANSLATION_COORDS.
      */
-    public void addTranslation(double[] translation)
-            throws IllegalArgumentException {
+    public void addTranslation(double[] translation) {
         ArrayUtils.sum(this.translation, translation, this.translation);
     }
     
@@ -374,7 +369,9 @@ public class EuclideanTransformation3D extends Transformation3D
         try {
             m = new Matrix(HOM_COORDS, HOM_COORDS);
             asMatrix(m);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         return m;
     }
     
@@ -386,7 +383,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * matrix.
      */
     @Override
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
+    public void asMatrix(Matrix m) {
         if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -443,7 +440,7 @@ public class EuclideanTransformation3D extends Transformation3D
 
         inputQuadric.normalize();
         
-        Matrix Q = inputQuadric.asMatrix();
+        Matrix q = inputQuadric.asMatrix();
         Matrix invT = inverseAndReturnNew().asMatrix();
         //normalize transformation matrix invT to increase accuracy
         double norm = Utils.normF(invT);
@@ -451,9 +448,11 @@ public class EuclideanTransformation3D extends Transformation3D
         
         Matrix m = invT.transposeAndReturnNew();
         try {
-            m.multiply(Q);
+            m.multiply(q);
             m.multiply(invT);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
@@ -486,23 +485,25 @@ public class EuclideanTransformation3D extends Transformation3D
         inputDualQuadric.normalize();
         
         Matrix dualQ = inputDualQuadric.asMatrix();
-        Matrix T = asMatrix();
+        Matrix t = asMatrix();
         //normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(T);
-        T.multiplyByScalar(1.0 / norm);
+        double norm = Utils.normF(t);
+        t.multiplyByScalar(1.0 / norm);
 
-        Matrix transT = T.transposeAndReturnNew();
+        Matrix transT = t.transposeAndReturnNew();
         try {
-            T.multiply(dualQ);
-            T.multiply(transT);
-        } catch (WrongSizeException ignore) { }
+            t.multiply(dualQ);
+            t.multiply(transT);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
-        norm = Utils.normF(T);
-        T.multiplyByScalar(1.0 / norm);
+        norm = Utils.normF(t);
+        t.multiplyByScalar(1.0 / norm);
         
-        outputDualQuadric.setParameters(T);
+        outputDualQuadric.setParameters(t);
     }
 
     /**
@@ -532,7 +533,9 @@ public class EuclideanTransformation3D extends Transformation3D
         invT.transpose();
         try {
             invT.multiply(plane);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         
         outputPlane.setParameters(invT.getBuffer());
     }
@@ -584,31 +587,7 @@ public class EuclideanTransformation3D extends Transformation3D
         inverse(result);
         return result;
     }
-    
-    /**
-     * Computes the inverse of this transformation and stores the result in
-     * provided instance.
-     * @param result instance where inverse transformation will be stored.
-     */
-    protected void inverse(EuclideanTransformation3D result) {
-        //Transformation is as follows: x' = R* x + t
-        //Then inverse transformation is: R'* x' = R' * R * x + R'*t = x + R'*t
-        //--> x = R'*x' - R'*t
-        
-        //reverse rotation
-        result.rotation = rotation.inverseRotationAndReturnNew();
-        
-        //reverse translation
-        Matrix t = Matrix.newFromArray(translation, true);
-        t.multiplyByScalar(-1.0);
-        Matrix invRot = result.rotation.asInhomogeneousMatrix();
-        try {
-            invRot.multiply(t);
-        } catch (WrongSizeException ignore) { }
-        
-        result.translation = invRot.toArray();
-    }
-    
+
     /**
      * Combines this transformation with provided transformation.
      * The combination is equivalent to multiplying the matrix of this 
@@ -663,7 +642,33 @@ public class EuclideanTransformation3D extends Transformation3D
                 inputPoint3, inputPoint4, outputPoint1, outputPoint2, 
                 outputPoint3, outputPoint4);
     }
-    
+
+    /**
+     * Computes the inverse of this transformation and stores the result in
+     * provided instance.
+     * @param result instance where inverse transformation will be stored.
+     */
+    protected void inverse(EuclideanTransformation3D result) {
+        //Transformation is as follows: x' = R* x + t
+        //Then inverse transformation is: R'* x' = R' * R * x + R'*t = x + R'*t
+        //--> x = R'*x' - R'*t
+
+        //reverse rotation
+        result.rotation = rotation.inverseRotationAndReturnNew();
+
+        //reverse translation
+        Matrix t = Matrix.newFromArray(translation, true);
+        t.multiplyByScalar(-1.0);
+        Matrix invRot = result.rotation.asInhomogeneousMatrix();
+        try {
+            invRot.multiply(t);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
+
+        result.translation = invRot.toArray();
+    }
+
     /**
      * Combines this transformation with provided input transformation and 
      * stores the result into provided output transformation.
@@ -680,17 +685,19 @@ public class EuclideanTransformation3D extends Transformation3D
         
         try {
             //we do translation first, because this.rotation might change later
-            Matrix R1 = this.rotation.asInhomogeneousMatrix();
+            Matrix r1 = this.rotation.asInhomogeneousMatrix();
             Matrix t2 = Matrix.newFromArray(inputTransformation.translation, true);
-            R1.multiply(t2); //this is R1 * t2
+            r1.multiply(t2); //this is R1 * t2
                   
-            ArrayUtils.sum(R1.toArray(), this.translation,  
+            ArrayUtils.sum(r1.toArray(), this.translation,
                     outputTransformation.translation);
             
             outputTransformation.rotation = this.rotation.combineAndReturnNew(
                     inputTransformation.rotation);
         
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }  
     
     /**

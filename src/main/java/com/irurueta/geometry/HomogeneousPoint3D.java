@@ -84,7 +84,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @throws IllegalArgumentException Raised when the size of the array is
      * different of 4.
      */
-    public HomogeneousPoint3D(double[] v) throws IllegalArgumentException {
+    public HomogeneousPoint3D(double[] v) {
         super();
         setCoordinates(v);
     }
@@ -206,8 +206,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * a valid size.
      */    
     @Override
-    public final void setCoordinates(double[] v) 
-            throws IllegalArgumentException {
+    public final void setCoordinates(double[] v) {
         if (v.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         } else {
@@ -254,7 +253,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getHomX() {
-        return mX;
+        return getX();
     }
 
     /**
@@ -263,7 +262,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */            
     @Override
     public double getHomY() {
-        return mY;
+        return getY();
     }
 
     /**
@@ -272,7 +271,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */            
     @Override
     public double getHomZ() {
-        return mZ;
+        return getZ();
     }
 
     /**
@@ -281,7 +280,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */            
     @Override
     public double getHomW() {
-        return mW;
+        return getW();
     }
     
     /**
@@ -420,8 +419,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */        
     @Override
-    public boolean equals(Point3D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean equals(Point3D point, double threshold) {
         switch (point.getType()) {
             case INHOMOGENEOUS_COORDINATES:
                 return equals((InhomogeneousPoint3D)point, threshold);
@@ -443,8 +441,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public boolean equals(HomogeneousPoint3D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean equals(HomogeneousPoint3D point, double threshold) {
         
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -497,8 +494,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */    
-    public boolean equals(InhomogeneousPoint3D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean equals(InhomogeneousPoint3D point, double threshold) {
         
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -540,8 +536,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @return True if point is at infinity, false otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public boolean isAtInfinity(double threshold) 
-            throws IllegalArgumentException {
+    public boolean isAtInfinity(double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -612,7 +607,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @throws IllegalArgumentException Raised if length of array is not 3.
      */
     @Override
-    public void asArray(double[] array) throws IllegalArgumentException {
+    public void asArray(double[] array) {
         if (array.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         }

@@ -61,7 +61,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable {
      * @throws IllegalArgumentException Raised when the size of the array is not
      * 2.
      */
-    public InhomogeneousPoint2D(double[] v) throws IllegalArgumentException {
+    public InhomogeneousPoint2D(double[] v) {
         super();
         setCoordinates(v);
     }
@@ -137,8 +137,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable {
      * valid size.
      */
     @Override
-    public final void setCoordinates(double[] v) 
-            throws IllegalArgumentException {
+    public final void setCoordinates(double[] v) {
         if (v.length != POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         } else {
@@ -155,19 +154,17 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable {
     @Override
     public final void setCoordinates(Point2D point) {
         switch (point.getType()) {
-            case INHOMOGENEOUS_COORDINATES: {
+            case INHOMOGENEOUS_COORDINATES:
                 InhomogeneousPoint2D inhomPoint = (InhomogeneousPoint2D)point;
                 mX = inhomPoint.getX();
                 mY = inhomPoint.getY();
                 break;
-            }
             case HOMOGENEOUS_COORDINATES:
-            default: {
+            default:
                 HomogeneousPoint2D homPoint = (HomogeneousPoint2D)point;
                 mX = homPoint.getInhomX();
                 mY = homPoint.getInhomY();
                 break;
-            }
         }
     }
     
@@ -177,7 +174,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable {
      */        
     @Override
     public double getHomX() {
-        return mX;
+        return getX();
     }
 
     /**
@@ -186,7 +183,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable {
      */        
     @Override
     public double getHomY() {
-        return mY;
+        return getY();
     }
 
     /**
@@ -219,7 +216,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable {
      */        
     @Override
     public double getInhomX() {
-        return mX;
+        return getX();
     }
 
     /**
@@ -237,7 +234,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable {
      */        
     @Override
     public double getInhomY() {
-        return mY;
+        return getY();
     }
 
     /**
@@ -300,8 +297,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */    
     @Override
-    public boolean equals(Point2D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean equals(Point2D point, double threshold) {
         switch (point.getType()) {
             case INHOMOGENEOUS_COORDINATES:
                 return equals((InhomogeneousPoint2D)point, threshold);
@@ -323,8 +319,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public boolean equals(HomogeneousPoint2D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean equals(HomogeneousPoint2D point, double threshold) {
 
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -359,8 +354,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */    
-    public boolean equals(InhomogeneousPoint2D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean equals(InhomogeneousPoint2D point, double threshold) {
 
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -428,7 +422,7 @@ public class InhomogeneousPoint2D extends Point2D implements Serializable {
      * @throws IllegalArgumentException Raised if length of array is not 2.
      */
     @Override
-    public void asArray(double[] array) throws IllegalArgumentException {
+    public void asArray(double[] array) {
         if (array.length != POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         }

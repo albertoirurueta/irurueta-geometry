@@ -37,6 +37,16 @@ public class EuclideanTransformation2D extends Transformation2D
     implements Serializable {
 
     /**
+     * Constant indicating number of coordinates required in translation arrays.
+     */
+    public static final int NUM_TRANSLATION_COORDS = 2;
+
+    /**
+     * Constant defining number of homogeneous coordinates in 2D space.
+     */
+    public static final int HOM_COORDS = 3;
+
+    /**
      * 2D rotation to be performed on geometric objects.
      */
     private Rotation2D rotation;
@@ -46,17 +56,7 @@ public class EuclideanTransformation2D extends Transformation2D
      * Translation is specified using inhomogeneous coordinates.
      */
     private double[] translation;
-    
-    /**
-     * Constant indicating number of coordinates required in translation arrays.
-     */
-    public static final int NUM_TRANSLATION_COORDS = 2;
-    
-    /**
-     * Constant defining number of homogeneous coordinates in 2D space.
-     */
-    public static final int HOM_COORDS = 3;
-    
+
     /**
      * Empty constructor.
      * Creates transformation that has no effect.
@@ -520,33 +520,7 @@ public class EuclideanTransformation2D extends Transformation2D
         inverse(result);
         return result;
     }
-    
-    /**
-     * Computes the inverse of this transformation and stores the result in
-     * provided instance.
-     * @param result instance where inverse transformation will be stored.
-     */
-    protected void inverse(EuclideanTransformation2D result) {
-        //Transformation is as follows: x' = R* x + t
-        //Then inverse transformation is: R* x' = R' * R * x + R'*t = x + R'*t
-        //--> x = R'*x' - R'*t
-        
-        //reverse rotation
-        result.rotation = rotation.inverseRotation();
-        
-        //reverse translation
-        Matrix t = Matrix.newFromArray(translation, true);
-        t.multiplyByScalar(-1.0);
-        Matrix invRot = result.rotation.asInhomogeneousMatrix();
-        try {
-            invRot.multiply(t);
-        } catch (WrongSizeException ignore) {
-            //never happens
-        }
-        
-        result.translation = invRot.toArray();
-    }
-    
+
     /**
      * Combines this transformation with provided transformation.
      * The combination is equivalent to multiplying the matrix of this 
@@ -596,6 +570,32 @@ public class EuclideanTransformation2D extends Transformation2D
             throws CoincidentPointsException {
         internalSetTransformationFromPoints(inputPoint1, inputPoint2, 
                 inputPoint3, outputPoint1, outputPoint2, outputPoint3);
+    }
+
+    /**
+     * Computes the inverse of this transformation and stores the result in
+     * provided instance.
+     * @param result instance where inverse transformation will be stored.
+     */
+    protected void inverse(EuclideanTransformation2D result) {
+        //Transformation is as follows: x' = R* x + t
+        //Then inverse transformation is: R* x' = R' * R * x + R'*t = x + R'*t
+        //--> x = R'*x' - R'*t
+
+        //reverse rotation
+        result.rotation = rotation.inverseRotation();
+
+        //reverse translation
+        Matrix t = Matrix.newFromArray(translation, true);
+        t.multiplyByScalar(-1.0);
+        Matrix invRot = result.rotation.asInhomogeneousMatrix();
+        try {
+            invRot.multiply(t);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
+
+        result.translation = invRot.toArray();
     }
 
     /**
