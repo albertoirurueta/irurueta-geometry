@@ -2328,234 +2328,6 @@ com.irurueta:irurueta-geometry
 <th>File</th>
 <th>Line</th></tr>
 <tr class="a">
-<td>com/irurueta/geometry/AffineTransformation3D.java</td>
-<td><a href="./xref/com/irurueta/geometry/AffineTransformation3D.html#L520">520</a></td></tr>
-<tr class="b">
-<td>com/irurueta/geometry/EuclideanTransformation3D.java</td>
-<td><a href="./xref/com/irurueta/geometry/EuclideanTransformation3D.html#L180">180</a></td></tr>
-<tr class="a"><td colspan='2'>
-<div>
-<pre>    }
-        
-    /**
-     * Returns 3D translation assigned to this transformation as an array 
-     * expressed in inhomogeneous coordinates.
-     * @return 3D translation array.
-     */
-    public double[] getTranslation() {
-        return translation;
-    }
-    
-    /**
-     * Sets 3D translation assigned to this transformation as an array expressed
-     * in inhomogeneous coordinates.
-     * @param translation 3D translation array.
-     * @throws IllegalArgumentException Raised if provided array does not have
-     * length equal to NUM_TRANSLATION_COORDS.
-     */
-    public void setTranslation(double[] translation) 
-            throws IllegalArgumentException {
-        if (translation.length != NUM_TRANSLATION_COORDS) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.translation = translation;
-    }
-    
-    /**
-     * Adds provided translation to current translation on this transformation.
-     * Provided translation must be expressed as an array of inhomogeneous 
-     * coordinates.
-     * @param translation 3D translation array.
-     * @throws IllegalArgumentException Raised if provided array does not have
-     * length equal to NUM_TRANSLATION_COORDS.
-     */
-    public void addTranslation(double[] translation)
-            throws IllegalArgumentException {
-        ArrayUtils.sum(this.translation, translation, this.translation);
-    }
-    
-    /**
-     * Returns current x coordinate translation assigned to this transformation.
-     * @return X coordinate translation.
-     */
-    public double getTranslationX() {
-        return translation[0];
-    }
-    
-    /**
-     * Sets x coordinate translation to be made by this transformation.
-     * @param translationX X coordinate translation to be set.
-     */
-    public void setTranslationX(double translationX) {
-        translation[0] = translationX;
-    }
-    
-    /**
-     * Returns current y coordinate translation assigned to this transformation.
-     * @return Y coordinate translation.
-     */
-    public double getTranslationY() {
-        return translation[1];
-    }
-    
-    /**
-     * Sets y coordinate translation to be made by this transformation.
-     * @param translationY Y coordinate translation to be set.
-     */
-    public void setTranslationY(double translationY) {
-        translation[1] = translationY;
-    }
-
-    /**
-     * Returns current z coordinate translation assigned to this transformation.
-     * @return Z coordinate translation.
-     */
-    public double getTranslationZ() {
-        return translation[2];
-    }
-    
-    /**
-     * Sets z coordinate translation to be made by this transformation.
-     * @param translationZ z coordinate translation to be set.
-     */
-    public void setTranslationZ(double translationZ) {
-        translation[2] = translationZ;
-    }
-    
-    /**
-     * Sets x, y, z coordinates of translation to be made by this 
-     * transformation.
-     * @param translationX translation x coordinate to be set.
-     * @param translationY translation y coordinate to be set.
-     * @param translationZ translation z coordinate to be set.
-     */
-    public void setTranslation(double translationX, double translationY,
-            double translationZ) {
-        translation[0] = translationX;
-        translation[1] = translationY;
-        translation[2] = translationZ;
-    }
-    
-    /**
-     * Sets x, y, z coordinates of translation to be made by this 
-     * transformation.
-     * @param translation translation to be set.
-     */
-    public void setTranslation(Point3D translation) {
-        setTranslation(translation.getInhomX(), translation.getInhomY(),
-                translation.getInhomZ());
-    }
-    
-    /**
-     * Gets x, y, z coordinates of translation to be made by this transformation
-     * as a new point.
-     * @return a new point containing translation coordinates.
-     */
-    public Point3D getTranslationPoint() {
-        Point3D out = Point3D.create();
-        getTranslationPoint(out);
-        return out;
-    }
-    
-    /**
-     * Gets x, y, z coordinates of translation to be made by this transformation
-     * and stores them into provided point.
-     * @param out point where translation coordinates will be stored.
-     */
-    public void getTranslationPoint(Point3D out) {
-        out.setInhomogeneousCoordinates(translation[0], translation[1], 
-                translation[2]);
-    }
-    
-    /**
-     * Adds provided x coordinate to current translation assigned to this 
-     * transformation.
-     * @param translationX X coordinate to be added to current translation.
-     */
-    public void addTranslationX(double translationX) {
-        translation[0] += translationX;
-    }
-    
-    /**
-     * Adds provided y coordinate to current translation assigned to this
-     * transformation.
-     * @param translationY Y coordinate to be added to current translation.
-     */
-    public void addTranslationY(double translationY) {
-        translation[1] += translationY;
-    }
- 
-   /**
-     * Adds provided z coordinate to current translation assigned to this
-     * transformation.
-     * @param translationZ Z coordinate to be added to current translation.
-     */
-    public void addTranslationZ(double translationZ) {
-        translation[2] += translationZ;
-    }   
-    
-    /**
-     * Adds provided coordinates to current translation assigned to this
-     * transformation.
-     * @param translationX x coordinate to be added to current translation.
-     * @param translationY y coordinate to be added to current translation.
-     * @param translationZ z coordinate to be added to current translation.
-     */
-    public void addTranslation(double translationX, double translationY,
-            double translationZ) {
-        translation[0] += translationX;
-        translation[1] += translationY;
-        translation[2] += translationZ;
-    }
-    
-    /**
-     * Adds provided coordinates to current translation assigned to this 
-     * transformation.
-     * @param translation x, y, z coordinates to be added to current 
-     * translation.
-     */
-    public void addTranslation(Point3D translation) {
-        addTranslation(translation.getInhomX(), translation.getInhomY(),
-                translation.getInhomZ());
-    }
-    
-    /**
-     * Represents this transformation as a 4x4 matrix.
-     * A point can be transformed as T * p, where T is the transformation matrix
-     * and p is a point expressed as an homogeneous vector.
-     * @return This transformation in matrix form.
-     */
-    @Override
-    public Matrix asMatrix() {
-        Matrix m = null;
-        try {
-            m = new Matrix(HOM_COORDS, HOM_COORDS);
-            asMatrix(m);
-        } catch (WrongSizeException ignore) { }
-        return m;
-    }
-    
-    /**
-     * Represents this transformation as a 4x4 matrix and stores the result in
-     * provided instance.
-     * @param m instance where transformation matrix will be stored.
-     * @throws IllegalArgumentException raised if provided instance is not a 4x4 
-     * matrix.
-     */
-    @Override
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
-        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
-            throw new IllegalArgumentException();
-        }
-        
-        //set rotation        
-        m.setSubmatrix(0, 0, 2, 2,</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="b">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="a">
 <td>com/irurueta/geometry/Triangle2D.java</td>
 <td><a href="./xref/com/irurueta/geometry/Triangle2D.html#L774">774</a></td></tr>
 <tr class="b">
@@ -2848,6 +2620,194 @@ com.irurueta:irurueta-geometry
             @Override
             public boolean isReady() {
                 return MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="b">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="a">
+<td>com/irurueta/geometry/AffineTransformation3D.java</td>
+<td><a href="./xref/com/irurueta/geometry/AffineTransformation3D.html#L559">559</a></td></tr>
+<tr class="b">
+<td>com/irurueta/geometry/EuclideanTransformation3D.java</td>
+<td><a href="./xref/com/irurueta/geometry/EuclideanTransformation3D.html#L216">216</a></td></tr>
+<tr class="a"><td colspan='2'>
+<div>
+<pre>    public void addTranslation(double[] translation) {
+        ArrayUtils.sum(this.translation, translation, this.translation);
+    }
+    
+    /**
+     * Returns current x coordinate translation assigned to this transformation.
+     * @return X coordinate translation.
+     */
+    public double getTranslationX() {
+        return translation[0];
+    }
+    
+    /**
+     * Sets x coordinate translation to be made by this transformation.
+     * @param translationX X coordinate translation to be set.
+     */
+    public void setTranslationX(double translationX) {
+        translation[0] = translationX;
+    }
+    
+    /**
+     * Returns current y coordinate translation assigned to this transformation.
+     * @return Y coordinate translation.
+     */
+    public double getTranslationY() {
+        return translation[1];
+    }
+    
+    /**
+     * Sets y coordinate translation to be made by this transformation.
+     * @param translationY Y coordinate translation to be set.
+     */
+    public void setTranslationY(double translationY) {
+        translation[1] = translationY;
+    }
+
+    /**
+     * Returns current z coordinate translation assigned to this transformation.
+     * @return Z coordinate translation.
+     */
+    public double getTranslationZ() {
+        return translation[2];
+    }
+    
+    /**
+     * Sets z coordinate translation to be made by this transformation.
+     * @param translationZ z coordinate translation to be set.
+     */
+    public void setTranslationZ(double translationZ) {
+        translation[2] = translationZ;
+    }
+    
+    /**
+     * Sets x, y, z coordinates of translation to be made by this 
+     * transformation.
+     * @param translationX translation x coordinate to be set.
+     * @param translationY translation y coordinate to be set.
+     * @param translationZ translation z coordinate to be set.
+     */
+    public void setTranslation(double translationX, double translationY,
+            double translationZ) {
+        translation[0] = translationX;
+        translation[1] = translationY;
+        translation[2] = translationZ;
+    }
+    
+    /**
+     * Sets x, y, z coordinates of translation to be made by this 
+     * transformation.
+     * @param translation translation to be set.
+     */
+    public void setTranslation(Point3D translation) {
+        setTranslation(translation.getInhomX(), translation.getInhomY(),
+                translation.getInhomZ());
+    }
+    
+    /**
+     * Gets x, y, z coordinates of translation to be made by this transformation
+     * as a new point.
+     * @return a new point containing translation coordinates.
+     */
+    public Point3D getTranslationPoint() {
+        Point3D out = Point3D.create();
+        getTranslationPoint(out);
+        return out;
+    }
+    
+    /**
+     * Gets x, y, z coordinates of translation to be made by this transformation
+     * and stores them into provided point.
+     * @param out point where translation coordinates will be stored.
+     */
+    public void getTranslationPoint(Point3D out) {
+        out.setInhomogeneousCoordinates(translation[0], translation[1], 
+                translation[2]);
+    }
+    
+    /**
+     * Adds provided x coordinate to current translation assigned to this 
+     * transformation.
+     * @param translationX X coordinate to be added to current translation.
+     */
+    public void addTranslationX(double translationX) {
+        translation[0] += translationX;
+    }
+    
+    /**
+     * Adds provided y coordinate to current translation assigned to this
+     * transformation.
+     * @param translationY Y coordinate to be added to current translation.
+     */
+    public void addTranslationY(double translationY) {
+        translation[1] += translationY;
+    }
+ 
+   /**
+     * Adds provided z coordinate to current translation assigned to this
+     * transformation.
+     * @param translationZ Z coordinate to be added to current translation.
+     */
+    public void addTranslationZ(double translationZ) {
+        translation[2] += translationZ;
+    }   
+    
+    /**
+     * Adds provided coordinates to current translation assigned to this
+     * transformation.
+     * @param translationX x coordinate to be added to current translation.
+     * @param translationY y coordinate to be added to current translation.
+     * @param translationZ z coordinate to be added to current translation.
+     */
+    public void addTranslation(double translationX, double translationY,
+            double translationZ) {
+        translation[0] += translationX;
+        translation[1] += translationY;
+        translation[2] += translationZ;
+    }
+    
+    /**
+     * Adds provided coordinates to current translation assigned to this 
+     * transformation.
+     * @param translation x, y, z coordinates to be added to current 
+     * translation.
+     */
+    public void addTranslation(Point3D translation) {
+        addTranslation(translation.getInhomX(), translation.getInhomY(),
+                translation.getInhomZ());
+    }
+    
+    /**
+     * Represents this transformation as a 4x4 matrix.
+     * a point can be transformed as T * p, where T is the transformation matrix
+     * and p is a point expressed as an homogeneous vector.
+     * @return This transformation in matrix form.
+     */
+    @Override
+    public Matrix asMatrix() {
+        Matrix m = null;
+        try {
+            m = new Matrix(HOM_COORDS, HOM_COORDS);
+            asMatrix(m);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
+        return m;
+    }
+    
+    /**
+     * Represents this transformation as a 4x4 matrix and stores the result in
+     * provided instance.
+     * @param m instance where transformation matrix will be stored.
+     * @throws IllegalArgumentException raised if provided instance is not a 4x4 
+     * matrix.
+     */
+    @Override
+    public void asMatrix(Matrix m) {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="b">
 <th>File</th>
@@ -12260,101 +12220,6 @@ com.irurueta:irurueta-geometry
 <th>File</th>
 <th>Line</th></tr>
 <tr class="a">
-<td>com/irurueta/geometry/AffineTransformation3D.java</td>
-<td><a href="./xref/com/irurueta/geometry/AffineTransformation3D.html#L788">788</a></td></tr>
-<tr class="b">
-<td>com/irurueta/geometry/EuclideanTransformation3D.java</td>
-<td><a href="./xref/com/irurueta/geometry/EuclideanTransformation3D.html#L435">435</a></td></tr>
-<tr class="a"><td colspan='2'>
-<div>
-<pre>            throws NonSymmetricMatrixException, AlgebraException {
-        //point' * quadric * point = 0
-        //point' * T' * transformedQuadric * T * point = 0
-        //where:
-        // - transformedPoint = T * point
-
-        //Hence:
-        // transformedQuadric = T^-1' * quadric * T^-1
-
-        inputQuadric.normalize();
-        
-        Matrix Q = inputQuadric.asMatrix();
-        Matrix invT = inverseAndReturnNew().asMatrix();
-        //normalize transformation matrix invT to increase accuracy
-        double norm = Utils.normF(invT);
-        invT.multiplyByScalar(1.0 / norm);
-        
-        Matrix m = invT.transposeAndReturnNew();
-        try {
-            m.multiply(Q);
-            m.multiply(invT);
-        } catch (WrongSizeException ignore) { }
-        
-        //normalize resulting m matrix to increase accuracy so that it can be
-        //considered symmetric
-        norm = Utils.normF(m);
-        m.multiplyByScalar(1.0 / norm);
-        
-        outputQuadric.setParameters(m);
-    }
-
-    /**
-     * Transforms a dual quadric using this transformation and stores the result
-     * into provided output dual quadric.
-     * @param inputDualQuadric dual quadric to be transformed.
-     * @param outputDualQuadric instance where data of transformed dual quadric 
-     * will be stored.
-     * @throws NonSymmetricMatrixException raised if due to numerical precision
-     * the resulting output dual conic matrix is not considered to be symmetric.
-     */
-    @Override
-    public void transform(DualQuadric inputDualQuadric, 
-            DualQuadric outputDualQuadric) throws NonSymmetricMatrixException {
-        //plane' * dualQuadric * plane = 0
-        //plane' * T^-1 * T * dualQuadric * T' * T^-1'*plane
-
-        //Hence:
-        //transformed plane: T^-1'*plane
-        //transformed dual quadric: T * dualQuadric * T'
-        
-        inputDualQuadric.normalize();
-        
-        Matrix dualQ = inputDualQuadric.asMatrix();
-        Matrix T = asMatrix();
-        //normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(T);
-        T.multiplyByScalar(1.0 / norm);
-
-        Matrix transT = T.transposeAndReturnNew();
-        try {
-            T.multiply(dualQ);
-            T.multiply(transT);
-        } catch (WrongSizeException ignore) { }
-        
-        //normalize resulting m matrix to increase accuracy so that it can be
-        //considered symmetric
-        norm = Utils.normF(T);
-        T.multiplyByScalar(1.0 / norm);
-        
-        outputDualQuadric.setParameters(T);
-    }
-
-    /**
-     * Transforms provided input plane using this transformation and stores the
-     * result into provided output plane instance.
-     * @param inputPlane plane to be transformed.
-     * @param outputPlane instance where data of transformed plane will be 
-     * stored.
-     * @throws AlgebraException raised if transformAndReturnNew cannot be
-     * computed because of numerical instabilities.
-     */        
-    @Override
-    public void transform(Plane inputPlane, Plane outputPlane) </pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="b">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="a">
 <td>com/irurueta/geometry/estimators/MSACPointCorrespondenceAffineTransformation2DRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/geometry/estimators/MSACPointCorrespondenceAffineTransformation2DRobustEstimator.html#L185">185</a></td></tr>
 <tr class="b">
@@ -20161,6 +20026,103 @@ com.irurueta:irurueta-geometry
 <th>File</th>
 <th>Line</th></tr>
 <tr class="b">
+<td>com/irurueta/geometry/AffineTransformation2D.java</td>
+<td><a href="./xref/com/irurueta/geometry/AffineTransformation2D.html#L484">484</a></td></tr>
+<tr class="a">
+<td>com/irurueta/geometry/AffineTransformation3D.java</td>
+<td><a href="./xref/com/irurueta/geometry/AffineTransformation3D.html#L516">516</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>    public void setParameters(AffineParameters2D parameters) 
+            throws AlgebraException {
+        RQDecomposer decomposer = new RQDecomposer(a);
+        decomposer.decompose();
+        Matrix params = parameters.asMatrix();
+        Matrix rotation = decomposer.getQ();
+        
+        params.multiply(rotation);
+        a = params;
+    }
+        
+    /**
+     * Returns 2D translation assigned to this transformation as an array 
+     * expressed in inhomogeneous coordinates.
+     * @return 2D translation array.
+     */
+    public double[] getTranslation() {
+        return translation;
+    }
+    
+    /**
+     * Sets 2D translation assigned to this transformation as an array expressed
+     * in inhomogeneous coordinates.
+     * @param translation 2D translation array.
+     * @throws IllegalArgumentException raised if provided array does not have
+     * length equal to NUM_TRANSLATION_COORDS.
+     */
+    public void setTranslation(double[] translation) {
+        if(translation.length != NUM_TRANSLATION_COORDS) {
+            throw new IllegalArgumentException();
+        }
+        
+        this.translation = translation;
+    }
+    
+    /**
+     * Adds provided translation to current translation on this transformation.
+     * Provided translation must be expressed as an array of inhomogeneous 
+     * coordinates.
+     * @param translation 2D translation array.
+     * @throws IllegalArgumentException raised if provided array does not have
+     * length equal to NUM_TRANSLATION_COORDS.
+     */
+    public void addTranslation(double[] translation) {
+        ArrayUtils.sum(this.translation, translation, this.translation);
+    }
+    
+    /**
+     * Returns current x coordinate translation assigned to this transformation.
+     * @return X coordinate translation.
+     */
+    public double getTranslationX() {
+        return translation[0];
+    }
+    
+    /**
+     * Sets x coordinate translation to be made by this transformation.
+     * @param translationX X coordinate translation to be set.
+     */
+    public void setTranslationX(double translationX) {
+        translation[0] = translationX;
+    }
+    
+    /**
+     * Returns current y coordinate translation assigned to this transformation.
+     * @return Y coordinate translation.
+     */
+    public double getTranslationY() {
+        return translation[1];
+    }
+    
+    /**
+     * Sets y coordinate translation to be made by this transformation.
+     * @param translationY Y coordinate translation to be set.
+     */
+    public void setTranslationY(double translationY) {
+        translation[1] = translationY;
+    }
+    
+    /**
+     * Sets x, y coordinates of translation to be made by this transformation.
+     * @param translationX translation x coordinate to be set.
+     * @param translationY translation y coordinate to be set.
+     */
+    public void setTranslation(double translationX, double translationY) {</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
 <td>com/irurueta/geometry/Ellipse.java</td>
 <td><a href="./xref/com/irurueta/geometry/Ellipse.html#L1024">1024</a></td></tr>
 <tr class="a">
@@ -26075,7 +26037,7 @@ com.irurueta:irurueta-geometry
 <th>Line</th></tr>
 <tr class="a">
 <td>com/irurueta/geometry/AxisRotation3D.java</td>
-<td><a href="./xref/com/irurueta/geometry/AxisRotation3D.html#L549">549</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/AxisRotation3D.html#L557">557</a></td></tr>
 <tr class="b">
 <td>com/irurueta/geometry/MatrixRotation3D.java</td>
 <td><a href="./xref/com/irurueta/geometry/MatrixRotation3D.html#L846">846</a></td></tr>
@@ -27678,95 +27640,6 @@ com.irurueta:irurueta-geometry
 <th>File</th>
 <th>Line</th></tr>
 <tr class="a">
-<td>com/irurueta/geometry/AffineTransformation3D.java</td>
-<td><a href="./xref/com/irurueta/geometry/AffineTransformation3D.html#L520">520</a></td></tr>
-<tr class="b">
-<td>com/irurueta/geometry/EuclideanTransformation2D.java</td>
-<td><a href="./xref/com/irurueta/geometry/EuclideanTransformation2D.html#L175">175</a></td></tr>
-<tr class="a"><td colspan='2'>
-<div>
-<pre>    }
-        
-    /**
-     * Returns 3D translation assigned to this transformation as an array 
-     * expressed in inhomogeneous coordinates.
-     * @return 3D translation array.
-     */
-    public double[] getTranslation() {
-        return translation;
-    }
-    
-    /**
-     * Sets 3D translation assigned to this transformation as an array expressed
-     * in inhomogeneous coordinates.
-     * @param translation 3D translation array.
-     * @throws IllegalArgumentException Raised if provided array does not have
-     * length equal to NUM_TRANSLATION_COORDS.
-     */
-    public void setTranslation(double[] translation) 
-            throws IllegalArgumentException {
-        if (translation.length != NUM_TRANSLATION_COORDS) {
-            throw new IllegalArgumentException();
-        }
-        
-        this.translation = translation;
-    }
-    
-    /**
-     * Adds provided translation to current translation on this transformation.
-     * Provided translation must be expressed as an array of inhomogeneous 
-     * coordinates.
-     * @param translation 3D translation array.
-     * @throws IllegalArgumentException Raised if provided array does not have
-     * length equal to NUM_TRANSLATION_COORDS.
-     */
-    public void addTranslation(double[] translation)
-            throws IllegalArgumentException {
-        ArrayUtils.sum(this.translation, translation, this.translation);
-    }
-    
-    /**
-     * Returns current x coordinate translation assigned to this transformation.
-     * @return X coordinate translation.
-     */
-    public double getTranslationX() {
-        return translation[0];
-    }
-    
-    /**
-     * Sets x coordinate translation to be made by this transformation.
-     * @param translationX X coordinate translation to be set.
-     */
-    public void setTranslationX(double translationX) {
-        translation[0] = translationX;
-    }
-    
-    /**
-     * Returns current y coordinate translation assigned to this transformation.
-     * @return Y coordinate translation.
-     */
-    public double getTranslationY() {
-        return translation[1];
-    }
-    
-    /**
-     * Sets y coordinate translation to be made by this transformation.
-     * @param translationY Y coordinate translation to be set.
-     */
-    public void setTranslationY(double translationY) {
-        translation[1] = translationY;
-    }
-
-    /**
-     * Returns current z coordinate translation assigned to this transformation.
-     * @return Z coordinate translation.
-     */
-    public double getTranslationZ() {</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="b">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="a">
 <td>com/irurueta/geometry/estimators/MSACLineCorrespondenceAffineTransformation2DRobustEstimator.java</td>
 <td><a href="./xref/com/irurueta/geometry/estimators/MSACLineCorrespondenceAffineTransformation2DRobustEstimator.html#L300">300</a></td></tr>
 <tr class="b">
@@ -29306,13 +29179,13 @@ com.irurueta:irurueta-geometry
 <th>Line</th></tr>
 <tr class="a">
 <td>com/irurueta/geometry/AffineTransformation3D.java</td>
-<td><a href="./xref/com/irurueta/geometry/AffineTransformation3D.html#L1402">1402</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/AffineTransformation3D.html#L1418">1418</a></td></tr>
 <tr class="b">
 <td>com/irurueta/geometry/AffineTransformation3D.java</td>
-<td><a href="./xref/com/irurueta/geometry/AffineTransformation3D.html#L1466">1466</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/AffineTransformation3D.html#L1482">1482</a></td></tr>
 <tr class="a">
 <td>com/irurueta/geometry/AffineTransformation3D.java</td>
-<td><a href="./xref/com/irurueta/geometry/AffineTransformation3D.html#L1530">1530</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/AffineTransformation3D.html#L1546">1546</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
 <pre>            oD = outputPlane2.getD();
@@ -29615,97 +29488,6 @@ com.irurueta:irurueta-geometry
         
         //pinhole camera estimator using DLT (Direct Linear Transform) algorithm
         final DLTLinePlaneCorrespondencePinholeCameraEstimator nonRobustEstimator =</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="b">
-<td>com/irurueta/geometry/BaseConic.java</td>
-<td><a href="./xref/com/irurueta/geometry/BaseConic.html#L260">260</a></td></tr>
-<tr class="a">
-<td>com/irurueta/geometry/BaseQuadric.java</td>
-<td><a href="./xref/com/irurueta/geometry/BaseQuadric.html#L325">325</a></td></tr>
-<tr class="b"><td colspan='2'>
-<div>
-<pre>                mF = m.getElementAt(2, 2);
-                mNormalized = false;
-            }
-        }
-    }
-    
-    /**
-     * This method sets the matrix used for describing a base conic.
-     * This matrix must be 3x3 and symmetric.
-     * @param m 3x3 Matrix describing a base conic.
-     * @throws IllegalArgumentException Raised when the size of the matrix is 
-     * not 3x3.
-     * @throws NonSymmetricMatrixException Raised when the conic matrix is not 
-     * symmetric.
-     */    
-    public final void setParameters(Matrix m) throws IllegalArgumentException,
-            NonSymmetricMatrixException {
-        setParameters(m, DEFAULT_SYMMETRIC_THRESHOLD);
-    }
-    
-    /**
-     * This method sets the A parameter of a base conic.
-     * @param a Parameter A of the given base conic.
-     */
-    public void setA(double a) {
-        mA = a;
-        mNormalized = false;
-    }
-    
-    /**
-     * This method sets the B parameter of a base conic.
-     * @param b Parameter B of the given base conic.
-     */
-    public void setB(double b) {
-        mB = b;
-        mNormalized = false;
-    }
-
-    /**
-     * This method sets the C parameter of a base conic.
-     * @param c Parameter C of the given base conic.
-     */
-    public void setC(double c) {
-        mC = c;
-        mNormalized = false;
-    }
-
-    /**
-     * This method sets the D parameter of a base conic.
-     * @param d Parameter D of the given base conic.
-     */
-    public void setD(double d) {
-        mD = d;
-        mNormalized = false;
-    }
-
-    /**
-     * This method sets the E parameter of a base conic.
-     * @param e Parameter E of the given base conic.
-     */
-    public void setE(double e) {
-        mE = e;
-        mNormalized = false;
-    }
-
-    /**
-     * This method sets the F parameter of a base conic.
-     * @param f Parameter F of the given base conic.
-     */
-    public void setF(double f) {
-        mF = f;
-        mNormalized = false;
-    }
-
-    /**
-     * Returns the matrix that describes this base conic.
-     * @return 3x3 matrix describing this base conic.
-     */
-    public Matrix asMatrix() {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>File</th>
@@ -31185,6 +30967,96 @@ com.irurueta:irurueta-geometry
             Matrix r = v.multiplyAndReturnNew(u.transposeAndReturnNew());
             
             double[] e = new double[]{1.0, 1.0};</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
+<td>com/irurueta/geometry/BaseConic.java</td>
+<td><a href="./xref/com/irurueta/geometry/BaseConic.html#L259">259</a></td></tr>
+<tr class="a">
+<td>com/irurueta/geometry/BaseQuadric.java</td>
+<td><a href="./xref/com/irurueta/geometry/BaseQuadric.html#L324">324</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>                mF = m.getElementAt(2, 2);
+                mNormalized = false;
+            }
+        }
+    }
+    
+    /**
+     * This method sets the matrix used for describing a base conic.
+     * This matrix must be 3x3 and symmetric.
+     * @param m 3x3 Matrix describing a base conic.
+     * @throws IllegalArgumentException Raised when the size of the matrix is 
+     * not 3x3.
+     * @throws NonSymmetricMatrixException Raised when the conic matrix is not 
+     * symmetric.
+     */    
+    public final void setParameters(Matrix m) throws NonSymmetricMatrixException {
+        setParameters(m, DEFAULT_SYMMETRIC_THRESHOLD);
+    }
+    
+    /**
+     * This method sets the A parameter of a base conic.
+     * @param a Parameter A of the given base conic.
+     */
+    public void setA(double a) {
+        mA = a;
+        mNormalized = false;
+    }
+    
+    /**
+     * This method sets the B parameter of a base conic.
+     * @param b Parameter B of the given base conic.
+     */
+    public void setB(double b) {
+        mB = b;
+        mNormalized = false;
+    }
+
+    /**
+     * This method sets the C parameter of a base conic.
+     * @param c Parameter C of the given base conic.
+     */
+    public void setC(double c) {
+        mC = c;
+        mNormalized = false;
+    }
+
+    /**
+     * This method sets the D parameter of a base conic.
+     * @param d Parameter D of the given base conic.
+     */
+    public void setD(double d) {
+        mD = d;
+        mNormalized = false;
+    }
+
+    /**
+     * This method sets the E parameter of a base conic.
+     * @param e Parameter E of the given base conic.
+     */
+    public void setE(double e) {
+        mE = e;
+        mNormalized = false;
+    }
+
+    /**
+     * This method sets the F parameter of a base conic.
+     * @param f Parameter F of the given base conic.
+     */
+    public void setF(double f) {
+        mF = f;
+        mNormalized = false;
+    }
+
+    /**
+     * Returns the matrix that describes this base conic.
+     * @return 3x3 matrix describing this base conic.
+     */
+    public Matrix asMatrix() {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="a">
 <th>File</th>

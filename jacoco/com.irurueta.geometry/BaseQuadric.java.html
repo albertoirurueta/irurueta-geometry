@@ -165,7 +165,7 @@ public abstract class BaseQuadric implements Serializable {
      * not 4x4.
      */
     public BaseQuadric(Matrix m, double symmetricThreshold)
-<span class="nc" id="L168">            throws NonSymmetricMatrixException, IllegalArgumentException {</span>
+<span class="nc" id="L168">            throws NonSymmetricMatrixException {</span>
 <span class="nc" id="L169">        setParameters(m, symmetricThreshold);</span>
 <span class="nc" id="L170">    }</span>
 
@@ -177,17 +177,16 @@ public abstract class BaseQuadric implements Serializable {
      * @throws IllegalArgumentException Raised when the size of the matrix is 
      * not 4x4.
      */    
-    public BaseQuadric(Matrix m) throws NonSymmetricMatrixException, 
-<span class="fc" id="L181">            IllegalArgumentException {</span>
-<span class="fc" id="L182">        setParameters(m);</span>
-<span class="fc" id="L183">    }</span>
+<span class="fc" id="L180">    public BaseQuadric(Matrix m) throws NonSymmetricMatrixException {</span>
+<span class="fc" id="L181">        setParameters(m);</span>
+<span class="fc" id="L182">    }</span>
     
     /**
      * Returns parameter A of the given base quadric.
      * @return Parameter B of a matrix describing a base quadric.
      */
     public double getA() {
-<span class="fc" id="L190">        return mA;</span>
+<span class="fc" id="L189">        return mA;</span>
     }
     
     /**
@@ -195,7 +194,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter B of a matrix describing a base quadric.
      */
     public double getB() {
-<span class="fc" id="L198">        return mB;</span>
+<span class="fc" id="L197">        return mB;</span>
     }
     
     /**
@@ -203,7 +202,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter C of a matrix describing a base quadric.
      */
     public double getC() {
-<span class="fc" id="L206">        return mC;</span>
+<span class="fc" id="L205">        return mC;</span>
     }
     
     /**
@@ -211,7 +210,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter D of a matrix describing a base quadric.
      */
     public double getD() {
-<span class="fc" id="L214">        return mD;</span>
+<span class="fc" id="L213">        return mD;</span>
     }
     
     /**
@@ -219,7 +218,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter E of a matrix describing a base quadric.
      */
     public double getE() {
-<span class="fc" id="L222">        return mE;</span>
+<span class="fc" id="L221">        return mE;</span>
     }
     
     /**
@@ -227,7 +226,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter F of a matrix describing a base quadric.
      */
     public double getF() {
-<span class="fc" id="L230">        return mF;</span>
+<span class="fc" id="L229">        return mF;</span>
     }
     
     /**
@@ -235,7 +234,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter G of a matrix describing a base quadric.
      */
     public double getG() {
-<span class="fc" id="L238">        return mG;</span>
+<span class="fc" id="L237">        return mG;</span>
     }
     
     /**
@@ -243,7 +242,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter H of a matrix describing a base quadric.
      */
     public double getH() {
-<span class="fc" id="L246">        return mH;</span>
+<span class="fc" id="L245">        return mH;</span>
     }
     
     /**
@@ -251,7 +250,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter I of a matrix describing a base quadric.
      */
     public double getI() {
-<span class="fc" id="L254">        return mI;</span>
+<span class="fc" id="L253">        return mI;</span>
     }
     
     /**
@@ -259,7 +258,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter J of a matrix describing a base quadric.
      */
     public double getJ() {
-<span class="fc" id="L262">        return mJ;</span>
+<span class="fc" id="L261">        return mJ;</span>
     }
     
     /**
@@ -278,18 +277,18 @@ public abstract class BaseQuadric implements Serializable {
      */
     public final void setParameters(double a, double b, double c, double d,
             double e, double f, double g, double h, double i, double j) {
-<span class="fc" id="L281">        mA = a;</span>
-<span class="fc" id="L282">        mB = b;</span>
-<span class="fc" id="L283">        mC = c;</span>
-<span class="fc" id="L284">        mD = d;</span>
-<span class="fc" id="L285">        mE = e;</span>
-<span class="fc" id="L286">        mF = f;</span>
-<span class="fc" id="L287">        mG = g;</span>
-<span class="fc" id="L288">        mH = h;</span>
-<span class="fc" id="L289">        mI = i;</span>
-<span class="fc" id="L290">        mJ = j;</span>
-<span class="fc" id="L291">        mNormalized = false;</span>
-<span class="fc" id="L292">    }</span>
+<span class="fc" id="L280">        mA = a;</span>
+<span class="fc" id="L281">        mB = b;</span>
+<span class="fc" id="L282">        mC = c;</span>
+<span class="fc" id="L283">        mD = d;</span>
+<span class="fc" id="L284">        mE = e;</span>
+<span class="fc" id="L285">        mF = f;</span>
+<span class="fc" id="L286">        mG = g;</span>
+<span class="fc" id="L287">        mH = h;</span>
+<span class="fc" id="L288">        mI = i;</span>
+<span class="fc" id="L289">        mJ = j;</span>
+<span class="fc" id="L290">        mNormalized = false;</span>
+<span class="fc" id="L291">    }</span>
     
     /**
      * This method sets the matrix used for describing a base quadric.
@@ -305,28 +304,28 @@ public abstract class BaseQuadric implements Serializable {
      * symmetric.
      */
     public final void setParameters(Matrix m, double symmetricThreshold)
-            throws IllegalArgumentException, NonSymmetricMatrixException {
-<span class="fc bfc" id="L309" title="All 2 branches covered.">        if (m.getRows() != BASEQUADRIC_MATRIX_ROW_SIZE ||</span>
-<span class="fc bfc" id="L310" title="All 2 branches covered.">                m.getColumns() != BASEQUADRIC_MATRIX_COLUMN_SIZE) {</span>
-<span class="fc" id="L311">            throw new IllegalArgumentException();</span>
+            throws NonSymmetricMatrixException {
+<span class="fc bfc" id="L308" title="All 2 branches covered.">        if (m.getRows() != BASEQUADRIC_MATRIX_ROW_SIZE ||</span>
+<span class="fc bfc" id="L309" title="All 2 branches covered.">                m.getColumns() != BASEQUADRIC_MATRIX_COLUMN_SIZE) {</span>
+<span class="fc" id="L310">            throw new IllegalArgumentException();</span>
         } else {
-<span class="fc bfc" id="L313" title="All 2 branches covered.">            if (!Utils.isSymmetric(m, symmetricThreshold)) {</span>
-<span class="fc" id="L314">                throw new NonSymmetricMatrixException();</span>
+<span class="fc bfc" id="L312" title="All 2 branches covered.">            if (!Utils.isSymmetric(m, symmetricThreshold)) {</span>
+<span class="fc" id="L313">                throw new NonSymmetricMatrixException();</span>
             } else {
-<span class="fc" id="L316">                mA = m.getElementAt(0, 0);</span>
-<span class="fc" id="L317">		        mB = m.getElementAt(1, 1);</span>
-<span class="fc" id="L318">		        mC = m.getElementAt(2, 2);</span>
-<span class="fc" id="L319">		        mD = m.getElementAt(0, 1);</span>
-<span class="fc" id="L320">		        mE = m.getElementAt(2, 1);</span>
-<span class="fc" id="L321">		        mF = m.getElementAt(2, 0);</span>
-<span class="fc" id="L322">		        mG = m.getElementAt(3, 0);</span>
-<span class="fc" id="L323">		        mH = m.getElementAt(3, 1);</span>
-<span class="fc" id="L324">		        mI = m.getElementAt(3, 2);</span>
-<span class="fc" id="L325">		        mJ = m.getElementAt(3, 3);</span>
-<span class="fc" id="L326">                mNormalized = false;</span>
+<span class="fc" id="L315">                mA = m.getElementAt(0, 0);</span>
+<span class="fc" id="L316">		        mB = m.getElementAt(1, 1);</span>
+<span class="fc" id="L317">		        mC = m.getElementAt(2, 2);</span>
+<span class="fc" id="L318">		        mD = m.getElementAt(0, 1);</span>
+<span class="fc" id="L319">		        mE = m.getElementAt(2, 1);</span>
+<span class="fc" id="L320">		        mF = m.getElementAt(2, 0);</span>
+<span class="fc" id="L321">		        mG = m.getElementAt(3, 0);</span>
+<span class="fc" id="L322">		        mH = m.getElementAt(3, 1);</span>
+<span class="fc" id="L323">		        mI = m.getElementAt(3, 2);</span>
+<span class="fc" id="L324">		        mJ = m.getElementAt(3, 3);</span>
+<span class="fc" id="L325">                mNormalized = false;</span>
             }
         }
-<span class="fc" id="L329">    }</span>
+<span class="fc" id="L328">    }</span>
     
     /**
      * This method sets the matrix used for describing a base quadric.
@@ -337,111 +336,112 @@ public abstract class BaseQuadric implements Serializable {
      * @throws NonSymmetricMatrixException Raised when the quadric matrix is not
      * symmetric.
      */
-    public final void setParameters(Matrix m) throws IllegalArgumentException,
-            NonSymmetricMatrixException {
-<span class="fc" id="L342">        setParameters(m, DEFAULT_SYMMETRIC_THRESHOLD);</span>
-<span class="fc" id="L343">    }</span>
+    public final void setParameters(Matrix m) throws NonSymmetricMatrixException {
+<span class="fc" id="L340">        setParameters(m, DEFAULT_SYMMETRIC_THRESHOLD);</span>
+<span class="fc" id="L341">    }</span>
     
     /**
      * This method sets the A parameter of a base quadric.
      * @param a Parameter A of the given base quadric.
      */
     public void setA(double a) {
-<span class="fc" id="L350">        mA = a;</span>
-<span class="fc" id="L351">        mNormalized = false;</span>
-<span class="fc" id="L352">    }</span>
+<span class="fc" id="L348">        mA = a;</span>
+<span class="fc" id="L349">        mNormalized = false;</span>
+<span class="fc" id="L350">    }</span>
     
     /**
      * This method sets the B parameter of a base quadric.
      * @param b Parameter B of the given base quadric.
      */
     public void setB(double b) {
-<span class="fc" id="L359">        mB = b;</span>
-<span class="fc" id="L360">        mNormalized = false;</span>
-<span class="fc" id="L361">    }</span>
+<span class="fc" id="L357">        mB = b;</span>
+<span class="fc" id="L358">        mNormalized = false;</span>
+<span class="fc" id="L359">    }</span>
 
     /**
      * This method sets the C parameter of a base quadric.
      * @param c Parameter C of the given base quadric.
      */
     public void setC(double c) {
-<span class="fc" id="L368">        mC = c;</span>
-<span class="fc" id="L369">        mNormalized = false;</span>
-<span class="fc" id="L370">    }</span>
+<span class="fc" id="L366">        mC = c;</span>
+<span class="fc" id="L367">        mNormalized = false;</span>
+<span class="fc" id="L368">    }</span>
 
     /**
      * This method sets the D parameter of a base quadric.
      * @param d Parameter D of the given base quadric.
      */
     public void setD(double d) {
-<span class="fc" id="L377">        mD = d;</span>
-<span class="fc" id="L378">        mNormalized = false;</span>
-<span class="fc" id="L379">    }</span>
+<span class="fc" id="L375">        mD = d;</span>
+<span class="fc" id="L376">        mNormalized = false;</span>
+<span class="fc" id="L377">    }</span>
 
     /**
      * This method sets the E parameter of a base quadric.
      * @param e Parameter E of the given base quadric.
      */
     public void setE(double e) {
-<span class="fc" id="L386">        mE = e;</span>
-<span class="fc" id="L387">        mNormalized = false;</span>
-<span class="fc" id="L388">    }</span>
+<span class="fc" id="L384">        mE = e;</span>
+<span class="fc" id="L385">        mNormalized = false;</span>
+<span class="fc" id="L386">    }</span>
 
     /**
      * This method sets the F parameter of a base quadric.
      * @param f Parameter F of the given base quadric.
      */
     public void setF(double f) {
-<span class="fc" id="L395">        mF = f;</span>
-<span class="fc" id="L396">        mNormalized = false;</span>
-<span class="fc" id="L397">    }</span>
+<span class="fc" id="L393">        mF = f;</span>
+<span class="fc" id="L394">        mNormalized = false;</span>
+<span class="fc" id="L395">    }</span>
 
     /**
      * This method sets the G parameter of a base quadric.
      * @param g Parameter G of the given base quadric.
      */
     public void setG(double g) {
-<span class="fc" id="L404">        mG = g;</span>
-<span class="fc" id="L405">        mNormalized = false;</span>
-<span class="fc" id="L406">    }</span>
+<span class="fc" id="L402">        mG = g;</span>
+<span class="fc" id="L403">        mNormalized = false;</span>
+<span class="fc" id="L404">    }</span>
 
     /**
      * This method sets the H parameter of a base quadric.
      * @param h Parameter H of the given base quadric.
      */
     public void setH(double h) {
-<span class="fc" id="L413">        mH = h;</span>
-<span class="fc" id="L414">        mNormalized = false;</span>
-<span class="fc" id="L415">    }</span>
+<span class="fc" id="L411">        mH = h;</span>
+<span class="fc" id="L412">        mNormalized = false;</span>
+<span class="fc" id="L413">    }</span>
 
     /**
      * This method sets the I parameter of a base quadric.
      * @param i Parameter I of the given base quadric.
      */
     public void setI(double i) {
-<span class="fc" id="L422">        mI = i;</span>
-<span class="fc" id="L423">        mNormalized = false;</span>
-<span class="fc" id="L424">    }</span>
+<span class="fc" id="L420">        mI = i;</span>
+<span class="fc" id="L421">        mNormalized = false;</span>
+<span class="fc" id="L422">    }</span>
 
     /**
      * This method sets the J parameter of a base quadric.
      * @param j Parameter J of the given base quadric.
      */
     public void setJ(double j) {
-<span class="fc" id="L431">        mJ = j;</span>
-<span class="fc" id="L432">        mNormalized = false;</span>
-<span class="fc" id="L433">    }</span>
+<span class="fc" id="L429">        mJ = j;</span>
+<span class="fc" id="L430">        mNormalized = false;</span>
+<span class="fc" id="L431">    }</span>
     
     /**
      * Returns the matrix that describes this base quadric.
      * @return 4x4 matrix describing this base quadric.
      */
     public Matrix asMatrix() {
-<span class="fc" id="L440">        Matrix out = null;</span>
+<span class="fc" id="L438">        Matrix out = null;</span>
         try {
-<span class="fc" id="L442">            out = new Matrix(BASEQUADRIC_MATRIX_ROW_SIZE,</span>
+<span class="fc" id="L440">            out = new Matrix(BASEQUADRIC_MATRIX_ROW_SIZE,</span>
                     BASEQUADRIC_MATRIX_COLUMN_SIZE);
-<span class="pc" id="L444">        } catch (WrongSizeException ignore) { }</span>
+<span class="nc" id="L442">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L444">        }</span>
 <span class="fc" id="L445">        asMatrix(out);</span>
 <span class="fc" id="L446">        return out;</span>
     }
@@ -451,7 +451,7 @@ public abstract class BaseQuadric implements Serializable {
      * @param m Provided matrix where values will be stored.
      * @throws IllegalArgumentException Raised if provided matrix is not 4x4.
      */
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
+    public void asMatrix(Matrix m) {
         
 <span class="pc bpc" id="L456" title="1 of 2 branches missed.">        if (m.getRows() != BASEQUADRIC_MATRIX_ROW_SIZE ||</span>
 <span class="pc bpc" id="L457" title="1 of 2 branches missed.">                m.getColumns() != BASEQUADRIC_MATRIX_ROW_SIZE) {</span>

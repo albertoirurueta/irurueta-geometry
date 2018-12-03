@@ -99,20 +99,22 @@ public abstract class Box&lt;P extends Point&gt; implements Serializable {
 <span class="fc" id="L99">        int dim = point.getDimensions();</span>
 
 <span class="fc" id="L101">        double dd = 0.0;</span>
-        double pointValue, loValue, hiValue;
-<span class="fc bfc" id="L103" title="All 2 branches covered.">        for (int i = 0; i &lt; dim; i++) {</span>
-<span class="fc" id="L104">            pointValue = point.getInhomogeneousCoordinate(i);</span>
-<span class="fc" id="L105">            loValue = mLo.getInhomogeneousCoordinate(i);</span>
-<span class="fc" id="L106">            hiValue = mHi.getInhomogeneousCoordinate(i);</span>
+        double pointValue;
+        double loValue;
+        double hiValue;
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        for (int i = 0; i &lt; dim; i++) {</span>
+<span class="fc" id="L106">            pointValue = point.getInhomogeneousCoordinate(i);</span>
+<span class="fc" id="L107">            loValue = mLo.getInhomogeneousCoordinate(i);</span>
+<span class="fc" id="L108">            hiValue = mHi.getInhomogeneousCoordinate(i);</span>
 
-<span class="fc bfc" id="L108" title="All 2 branches covered.">            if (pointValue &lt; loValue) {</span>
-<span class="fc" id="L109">                dd += sqr(pointValue - loValue);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">            if (pointValue &lt; loValue) {</span>
+<span class="fc" id="L111">                dd += sqr(pointValue - loValue);</span>
             }
-<span class="fc bfc" id="L111" title="All 2 branches covered.">            if (pointValue &gt; hiValue) {</span>
-<span class="fc" id="L112">                dd += sqr(pointValue - hiValue);</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">            if (pointValue &gt; hiValue) {</span>
+<span class="fc" id="L114">                dd += sqr(pointValue - hiValue);</span>
             }
         }
-<span class="fc" id="L115">        return dd;</span>
+<span class="fc" id="L117">        return dd;</span>
     }
 
     /**
@@ -122,7 +124,7 @@ public abstract class Box&lt;P extends Point&gt; implements Serializable {
      * @return distance of provided point.
      */
     public double getDistance(P point) {
-<span class="fc" id="L125">        return Math.sqrt(getSqrDistance(point));</span>
+<span class="fc" id="L127">        return Math.sqrt(getSqrDistance(point));</span>
     }
 
     /**
@@ -131,7 +133,7 @@ public abstract class Box&lt;P extends Point&gt; implements Serializable {
      * @return squared value.
      */
     private double sqr(double value) {
-<span class="fc" id="L134">        return value * value;</span>
+<span class="fc" id="L136">        return value * value;</span>
     }
 
     /**
@@ -140,8 +142,8 @@ public abstract class Box&lt;P extends Point&gt; implements Serializable {
      * @param hi high coordinate values.
      */
     private void internalSetBounds(P lo, P hi) {
-<span class="fc" id="L143">        mLo = lo;</span>
-<span class="fc" id="L144">        mHi = hi;</span>
-<span class="fc" id="L145">    }</span>
+<span class="fc" id="L145">        mLo = lo;</span>
+<span class="fc" id="L146">        mHi = hi;</span>
+<span class="fc" id="L147">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

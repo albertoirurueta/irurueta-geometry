@@ -1298,7 +1298,7 @@
 <a class="jxr_linenumber" name="L1290" href="#L1290">1290</a>             <em class="jxr_comment">//initially a contains the inverse of its transpose, so to obtain a we need</em>
 <a class="jxr_linenumber" name="L1291" href="#L1291">1291</a>             <em class="jxr_comment">//to transpose it and invert it</em>
 <a class="jxr_linenumber" name="L1292" href="#L1292">1292</a>             invTransA.transpose();
-<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a>             Matrix a = Utils.inverse(invTransA);
+<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a>             Matrix a2 = Utils.inverse(invTransA);
 <a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 
 <a class="jxr_linenumber" name="L1295" href="#L1295">1295</a>             Matrix invt = <strong class="jxr_keyword">new</strong> Matrix(1, 2);
 <a class="jxr_linenumber" name="L1296" href="#L1296">1296</a>             invt.setSubmatrix(0, 0, 0, 1,
@@ -1308,9 +1308,9 @@
 <a class="jxr_linenumber" name="L1300" href="#L1300">1300</a>             invt.multiplyByScalar(-1.0 / value);
 <a class="jxr_linenumber" name="L1301" href="#L1301">1301</a>             invt.transpose();
 <a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 
-<a class="jxr_linenumber" name="L1303" href="#L1303">1303</a>             Matrix t = a.multiplyAndReturnNew(invt);
+<a class="jxr_linenumber" name="L1303" href="#L1303">1303</a>             Matrix t = a2.multiplyAndReturnNew(invt);
 <a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 
-<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a>             <strong class="jxr_keyword">this</strong>.a = a;
+<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a>             <strong class="jxr_keyword">this</strong>.a = a2;
 <a class="jxr_linenumber" name="L1306" href="#L1306">1306</a>             <strong class="jxr_keyword">this</strong>.translation = t.getBuffer();
 <a class="jxr_linenumber" name="L1307" href="#L1307">1307</a>         } <strong class="jxr_keyword">catch</strong> (AlgebraException e) {
 <a class="jxr_linenumber" name="L1308" href="#L1308">1308</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/CoincidentLinesException.html">CoincidentLinesException</a>(e);

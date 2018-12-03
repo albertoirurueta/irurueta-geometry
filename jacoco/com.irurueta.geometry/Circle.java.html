@@ -72,10 +72,9 @@ public class Circle implements Serializable {
      * @param radius Radius of circle.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public Circle(Point2D center, double radius) 
-<span class="fc" id="L76">            throws IllegalArgumentException {</span>
-<span class="fc" id="L77">        setCenterAndRadius(center, radius);</span>
-<span class="fc" id="L78">    }</span>
+<span class="fc" id="L75">    public Circle(Point2D center, double radius) {</span>
+<span class="fc" id="L76">        setCenterAndRadius(center, radius);</span>
+<span class="fc" id="L77">    }</span>
     
     /**
      * Constructor.
@@ -89,9 +88,9 @@ public class Circle implements Serializable {
      * three points in its locus.
      */
     public Circle(Point2D point1, Point2D point2, Point2D point3) 
-<span class="fc" id="L92">            throws ColinearPointsException {</span>
-<span class="fc" id="L93">        setParametersFromPoints(point1, point2, point3);</span>
-<span class="fc" id="L94">    }</span>
+<span class="fc" id="L91">            throws ColinearPointsException {</span>
+<span class="fc" id="L92">        setParametersFromPoints(point1, point2, point3);</span>
+<span class="fc" id="L93">    }</span>
     
     /**
      * Constructor.
@@ -99,16 +98,16 @@ public class Circle implements Serializable {
      * @param conic a conic to create a circle from.
      * @throws IllegalArgumentException if provided conic is not a circle.
      */
-<span class="fc" id="L102">    public Circle(Conic conic) throws IllegalArgumentException {</span>
-<span class="fc" id="L103">        setFromConic(conic);</span>
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L101">    public Circle(Conic conic) {</span>
+<span class="fc" id="L102">        setFromConic(conic);</span>
+<span class="fc" id="L103">    }</span>
     
     /**
      * Returns center of circle.
      * @return Center of circle.
      */
     public Point2D getCenter() {
-<span class="fc" id="L111">        return mCenter;</span>
+<span class="fc" id="L110">        return mCenter;</span>
     }
     
     /**
@@ -116,17 +115,17 @@ public class Circle implements Serializable {
      * @param center Center of circle.
      * @throws NullPointerException Raised if provided center is null.
      */
-    public void setCenter(Point2D center) throws NullPointerException {
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        if(center == null) throw new NullPointerException();</span>
-<span class="fc" id="L121">        mCenter = center;</span>
-<span class="fc" id="L122">    }</span>
+    public void setCenter(Point2D center) {
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        if(center == null) throw new NullPointerException();</span>
+<span class="fc" id="L120">        mCenter = center;</span>
+<span class="fc" id="L121">    }</span>
     
     /**
      * Returns radius of circle.
      * @return Radius of circle.
      */
     public double getRadius() {
-<span class="fc" id="L129">        return mRadius;</span>
+<span class="fc" id="L128">        return mRadius;</span>
     }
     
     /**
@@ -134,13 +133,13 @@ public class Circle implements Serializable {
      * @param radius Radius of circle.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public void setRadius(double radius) throws IllegalArgumentException {
-<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (radius &lt; MIN_RADIUS) {</span>
-<span class="fc" id="L139">            throw new IllegalArgumentException();</span>
+    public void setRadius(double radius) {
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        if (radius &lt; MIN_RADIUS) {</span>
+<span class="fc" id="L138">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L142">        mRadius = radius;</span>
-<span class="fc" id="L143">    }</span>
+<span class="fc" id="L141">        mRadius = radius;</span>
+<span class="fc" id="L142">    }</span>
     
     /**
      * Sets center and radius of this circle.
@@ -151,9 +150,9 @@ public class Circle implements Serializable {
      */
     public final void setCenterAndRadius(Point2D center, double radius)
             throws IllegalArgumentException, NullPointerException {
-<span class="fc" id="L154">        setRadius(radius);        </span>
-<span class="fc" id="L155">        setCenter(center);</span>
-<span class="fc" id="L156">    }</span>
+<span class="fc" id="L153">        setRadius(radius);        </span>
+<span class="fc" id="L154">        setCenter(center);</span>
+<span class="fc" id="L155">    }</span>
     
     /**
      * Sets parameters of a circle by using three points that must belong to its
@@ -170,74 +169,74 @@ public class Circle implements Serializable {
             Point2D point3) throws ColinearPointsException {
         
         //normalize points to increase accuracy
-<span class="fc" id="L173">        point1.normalize();</span>
-<span class="fc" id="L174">        point2.normalize();</span>
-<span class="fc" id="L175">        point3.normalize();</span>
+<span class="fc" id="L172">        point1.normalize();</span>
+<span class="fc" id="L173">        point2.normalize();</span>
+<span class="fc" id="L174">        point3.normalize();</span>
         
         try {
-<span class="fc" id="L178">            Matrix m = new Matrix(3, 3);</span>
-<span class="fc" id="L179">            double[] b = new double[3];</span>
+<span class="fc" id="L177">            Matrix m = new Matrix(3, 3);</span>
+<span class="fc" id="L178">            double[] b = new double[3];</span>
             
             //1st point
-<span class="fc" id="L182">            double x = point1.getHomX();</span>
-<span class="fc" id="L183">            double y = point1.getHomY();</span>
-<span class="fc" id="L184">            double w = point1.getHomW();</span>
-<span class="fc" id="L185">            m.setElementAt(0, 0, 2.0 * x * w);</span>
-<span class="fc" id="L186">            m.setElementAt(0, 1, 2.0 * y * w);</span>
-<span class="fc" id="L187">            m.setElementAt(0, 2, w * w);            </span>
-<span class="fc" id="L188">            b[0] = -x * x - y * y;</span>
+<span class="fc" id="L181">            double x = point1.getHomX();</span>
+<span class="fc" id="L182">            double y = point1.getHomY();</span>
+<span class="fc" id="L183">            double w = point1.getHomW();</span>
+<span class="fc" id="L184">            m.setElementAt(0, 0, 2.0 * x * w);</span>
+<span class="fc" id="L185">            m.setElementAt(0, 1, 2.0 * y * w);</span>
+<span class="fc" id="L186">            m.setElementAt(0, 2, w * w);            </span>
+<span class="fc" id="L187">            b[0] = -x * x - y * y;</span>
             
             //2nd point
-<span class="fc" id="L191">            x = point2.getHomX();</span>
-<span class="fc" id="L192">            y = point2.getHomY();</span>
-<span class="fc" id="L193">            w = point2.getHomW();</span>
-<span class="fc" id="L194">            m.setElementAt(1, 0, 2.0 * x * w);</span>
-<span class="fc" id="L195">            m.setElementAt(1, 1, 2.0 * y * w);</span>
-<span class="fc" id="L196">            m.setElementAt(1, 2, w * w);</span>
-<span class="fc" id="L197">            b[1] = -x * x - y * y;</span>
+<span class="fc" id="L190">            x = point2.getHomX();</span>
+<span class="fc" id="L191">            y = point2.getHomY();</span>
+<span class="fc" id="L192">            w = point2.getHomW();</span>
+<span class="fc" id="L193">            m.setElementAt(1, 0, 2.0 * x * w);</span>
+<span class="fc" id="L194">            m.setElementAt(1, 1, 2.0 * y * w);</span>
+<span class="fc" id="L195">            m.setElementAt(1, 2, w * w);</span>
+<span class="fc" id="L196">            b[1] = -x * x - y * y;</span>
             
             //3rd point
-<span class="fc" id="L200">            x = point3.getHomX();</span>
-<span class="fc" id="L201">            y = point3.getHomY();</span>
-<span class="fc" id="L202">            w = point3.getHomW();</span>
-<span class="fc" id="L203">            m.setElementAt(2, 0, 2.0 * x * w);</span>
-<span class="fc" id="L204">            m.setElementAt(2, 1, 2.0 * y * w);</span>
-<span class="fc" id="L205">            m.setElementAt(2, 2, w * w);</span>
-<span class="fc" id="L206">            b[2] = -x * x - y * y;</span>
+<span class="fc" id="L199">            x = point3.getHomX();</span>
+<span class="fc" id="L200">            y = point3.getHomY();</span>
+<span class="fc" id="L201">            w = point3.getHomW();</span>
+<span class="fc" id="L202">            m.setElementAt(2, 0, 2.0 * x * w);</span>
+<span class="fc" id="L203">            m.setElementAt(2, 1, 2.0 * y * w);</span>
+<span class="fc" id="L204">            m.setElementAt(2, 2, w * w);</span>
+<span class="fc" id="L205">            b[2] = -x * x - y * y;</span>
             
             //normalize each row to increase accuracy
-<span class="fc" id="L209">            double[] row = new double[3];</span>
+<span class="fc" id="L208">            double[] row = new double[3];</span>
             double rowNorm;
             
-<span class="fc bfc" id="L212" title="All 2 branches covered.">            for (int j = 0; j &lt; 3; j++) {</span>
-<span class="fc" id="L213">                m.getSubmatrixAsArray(j, 0, j, 2, row);</span>
-<span class="fc" id="L214">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
-<span class="fc bfc" id="L215" title="All 2 branches covered.">                for (int i = 0; i &lt; 3; i++) {</span>
-<span class="fc" id="L216">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">            for (int j = 0; j &lt; 3; j++) {</span>
+<span class="fc" id="L212">                m.getSubmatrixAsArray(j, 0, j, 2, row);</span>
+<span class="fc" id="L213">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">                for (int i = 0; i &lt; 3; i++) {</span>
+<span class="fc" id="L215">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
                 }
-<span class="fc" id="L218">                b[j] /= rowNorm;</span>
+<span class="fc" id="L217">                b[j] /= rowNorm;</span>
             }
             
-<span class="fc" id="L221">            double[] params = com.irurueta.algebra.Utils.solve(m, b);</span>
+<span class="fc" id="L220">            double[] params = com.irurueta.algebra.Utils.solve(m, b);</span>
             
-<span class="fc" id="L223">            double d = params[0]; //d = -cx</span>
-<span class="fc" id="L224">            double e = params[1]; //e = -cy</span>
-<span class="fc" id="L225">            double f = params[2]; //f = cx^2 + cy^2 - R^2</span>
+<span class="fc" id="L222">            double d = params[0]; //d = -cx</span>
+<span class="fc" id="L223">            double e = params[1]; //e = -cy</span>
+<span class="fc" id="L224">            double f = params[2]; //f = cx^2 + cy^2 - R^2</span>
             
             //compute center
-<span class="fc" id="L228">            double inhomCx = -d;</span>
-<span class="fc" id="L229">            double inhomCy = -e;</span>
-<span class="fc" id="L230">            Point2D center = new InhomogeneousPoint2D(inhomCx, inhomCy);</span>
+<span class="fc" id="L227">            double inhomCx = -d;</span>
+<span class="fc" id="L228">            double inhomCy = -e;</span>
+<span class="fc" id="L229">            Point2D center = new InhomogeneousPoint2D(inhomCx, inhomCy);</span>
             
             //compute radius
-<span class="fc" id="L233">            double radius = Math.sqrt(inhomCx * inhomCx + </span>
+<span class="fc" id="L232">            double radius = Math.sqrt(inhomCx * inhomCx + </span>
                     inhomCy * inhomCy - f);
             
-<span class="fc" id="L236">            setCenterAndRadius(center, radius);</span>
-<span class="fc" id="L237">        } catch (AlgebraException e) {</span>
-<span class="fc" id="L238">            throw new ColinearPointsException(e);</span>
-<span class="fc" id="L239">        }</span>
-<span class="fc" id="L240">    }</span>
+<span class="fc" id="L235">            setCenterAndRadius(center, radius);</span>
+<span class="fc" id="L236">        } catch (AlgebraException e) {</span>
+<span class="fc" id="L237">            throw new ColinearPointsException(e);</span>
+<span class="fc" id="L238">        }</span>
+<span class="fc" id="L239">    }</span>
     
     /**
      * Returns area of a circle having provided radius.
@@ -246,10 +245,10 @@ public class Circle implements Serializable {
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
     public static double area(double radius) throws IllegalArgumentException {
-<span class="pc bpc" id="L249" title="1 of 2 branches missed.">        if (radius &lt; MIN_RADIUS) {</span>
-<span class="nc" id="L250">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L248" title="1 of 2 branches missed.">        if (radius &lt; MIN_RADIUS) {</span>
+<span class="nc" id="L249">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L252">        return Math.PI * radius * radius;</span>
+<span class="fc" id="L251">        return Math.PI * radius * radius;</span>
     }
     
     /**
@@ -257,7 +256,7 @@ public class Circle implements Serializable {
      * @return Area of this circle.
      */
     public double getArea() {
-<span class="fc" id="L260">        return area(mRadius);</span>
+<span class="fc" id="L259">        return area(mRadius);</span>
     }
     
     /**
@@ -268,10 +267,10 @@ public class Circle implements Serializable {
      */
     public static double perimeter(double radius) 
             throws IllegalArgumentException {
-<span class="pc bpc" id="L271" title="1 of 2 branches missed.">        if (radius &lt; MIN_RADIUS) {</span>
-<span class="nc" id="L272">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">        if (radius &lt; MIN_RADIUS) {</span>
+<span class="nc" id="L271">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L274">        return 2.0 * Math.PI * radius;</span>
+<span class="fc" id="L273">        return 2.0 * Math.PI * radius;</span>
     }
     
     /**
@@ -279,7 +278,7 @@ public class Circle implements Serializable {
      * @return Perimeter of this circle.
      */
     public double getPerimeter() {
-<span class="fc" id="L282">        return perimeter(mRadius);</span>
+<span class="fc" id="L281">        return perimeter(mRadius);</span>
     }
     
     /**
@@ -289,7 +288,7 @@ public class Circle implements Serializable {
      * @return curvature of a circle.
      */
     public static double curvature(double radius) {
-<span class="fc" id="L292">        return 1.0 / radius;</span>
+<span class="fc" id="L291">        return 1.0 / radius;</span>
     }
     
     /**
@@ -298,7 +297,7 @@ public class Circle implements Serializable {
      * @return curvature of circle.
      */
     public double getCurvature() {
-<span class="fc" id="L301">        return curvature(mRadius);</span>
+<span class="fc" id="L300">        return curvature(mRadius);</span>
     }
     
     /**
@@ -314,7 +313,7 @@ public class Circle implements Serializable {
      * otherwise.
      */
     public boolean isInside(Point2D point, double threshold) {
-<span class="fc bfc" id="L317" title="All 2 branches covered.">        return point.distanceTo(mCenter) - threshold &lt;= mRadius;</span>
+<span class="fc bfc" id="L316" title="All 2 branches covered.">        return point.distanceTo(mCenter) - threshold &lt;= mRadius;</span>
     }
 
     /**
@@ -324,7 +323,7 @@ public class Circle implements Serializable {
      * otherwise.
      */
     public boolean isInside(Point2D point) {
-<span class="fc" id="L327">        return isInside(point, 0.0);</span>
+<span class="fc" id="L326">        return isInside(point, 0.0);</span>
     }
             
     /**
@@ -336,7 +335,7 @@ public class Circle implements Serializable {
      * @return Distance from point to circle boundary.
      */
     public double getSignedDistance(Point2D point) {
-<span class="fc" id="L339">        return signedDistance(this, point);</span>
+<span class="fc" id="L338">        return signedDistance(this, point);</span>
     }
     
     /**
@@ -349,7 +348,7 @@ public class Circle implements Serializable {
      * @return Distance from point to provided circle boundary.
      */
     public static double signedDistance(Circle circle, Point2D point) {
-<span class="fc" id="L352">        return point.distanceTo(circle.getCenter()) - circle.getRadius();</span>
+<span class="fc" id="L351">        return point.distanceTo(circle.getCenter()) - circle.getRadius();</span>
     }    
     
     /**
@@ -359,7 +358,7 @@ public class Circle implements Serializable {
      * @return Distance from point to circle boundary.
      */
     public double getDistance(Point2D point) {
-<span class="fc" id="L362">        return Math.abs(getSignedDistance(point));</span>
+<span class="fc" id="L361">        return Math.abs(getSignedDistance(point));</span>
     }
     
     /**
@@ -370,7 +369,7 @@ public class Circle implements Serializable {
      * @return Distance from point to provided circle boundary.
      */
     public static double distance(Circle circle, Point2D point) {
-<span class="fc" id="L373">        return Math.abs(signedDistance(circle, point));</span>
+<span class="fc" id="L372">        return Math.abs(signedDistance(circle, point));</span>
     }
     
     /**
@@ -383,9 +382,9 @@ public class Circle implements Serializable {
      */
     public Point2D getClosestPoint(Point2D point) 
             throws UndefinedPointException {
-<span class="fc" id="L386">        Point2D result = Point2D.create();</span>
-<span class="fc" id="L387">        closestPoint(point, result);</span>
-<span class="fc" id="L388">        return result;</span>
+<span class="fc" id="L385">        Point2D result = Point2D.create();</span>
+<span class="fc" id="L386">        closestPoint(point, result);</span>
+<span class="fc" id="L387">        return result;</span>
     }
     
     /**
@@ -399,25 +398,25 @@ public class Circle implements Serializable {
     public void closestPoint(Point2D point, Point2D result) 
             throws UndefinedPointException {
         
-<span class="fc" id="L402">        double directionX = point.getInhomX() - mCenter.getInhomX();</span>
-<span class="fc" id="L403">        double directionY = point.getInhomY() - mCenter.getInhomY();</span>
+<span class="fc" id="L401">        double directionX = point.getInhomX() - mCenter.getInhomX();</span>
+<span class="fc" id="L402">        double directionY = point.getInhomY() - mCenter.getInhomY();</span>
         //normalize direction and multiply by radius to set result as locus of
         //circle
-<span class="fc" id="L406">        double norm = Math.sqrt(directionX * directionX + </span>
+<span class="fc" id="L405">        double norm = Math.sqrt(directionX * directionX + </span>
                 directionY * directionY);
         
         //check if point is at center or very close to center, in that case the
         //closest point cannot be found (would be all points of a circle)
-<span class="fc bfc" id="L411" title="All 2 branches covered.">        if (norm &lt; EPS) {</span>
-<span class="fc" id="L412">            throw new UndefinedPointException();</span>
+<span class="fc bfc" id="L410" title="All 2 branches covered.">        if (norm &lt; EPS) {</span>
+<span class="fc" id="L411">            throw new UndefinedPointException();</span>
         }
         
-<span class="fc" id="L415">        directionX *= mRadius / norm;</span>
-<span class="fc" id="L416">        directionY *= mRadius / norm;</span>
+<span class="fc" id="L414">        directionX *= mRadius / norm;</span>
+<span class="fc" id="L415">        directionY *= mRadius / norm;</span>
         
-<span class="fc" id="L418">        result.setInhomogeneousCoordinates(mCenter.getInhomX() + directionX, </span>
-<span class="fc" id="L419">                mCenter.getInhomY() + directionY);        </span>
-<span class="fc" id="L420">    }</span>
+<span class="fc" id="L417">        result.setInhomogeneousCoordinates(mCenter.getInhomX() + directionX, </span>
+<span class="fc" id="L418">                mCenter.getInhomY() + directionY);        </span>
+<span class="fc" id="L419">    }</span>
     
     /**
      * Determines whether provided point lies at circle boundary or not up to
@@ -431,11 +430,11 @@ public class Circle implements Serializable {
      */
     public boolean isLocus(Point2D point, double threshold) 
             throws IllegalArgumentException {
-<span class="fc bfc" id="L434" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L435">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L433" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L434">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc bfc" id="L438" title="All 2 branches covered.">        return Math.abs(point.distanceTo(mCenter) - mRadius) &lt;= threshold;        </span>
+<span class="fc bfc" id="L437" title="All 2 branches covered.">        return Math.abs(point.distanceTo(mCenter) - mRadius) &lt;= threshold;        </span>
     }    
     
     /**
@@ -444,7 +443,7 @@ public class Circle implements Serializable {
      * @return True if point lies at circle boundary, false otherwise.
      */
     public boolean isLocus(Point2D point) {
-<span class="fc" id="L447">        return isLocus(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L446">        return isLocus(point, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -457,7 +456,7 @@ public class Circle implements Serializable {
      * up to DEFAULT_THRESHOLD.
      */
     public Line2D getTangentLineAt(Point2D point) throws NotLocusException {
-<span class="fc" id="L460">        return getTangentLineAt(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L459">        return getTangentLineAt(point, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -474,9 +473,9 @@ public class Circle implements Serializable {
     public Line2D getTangentLineAt(Point2D point, double threshold)
             throws NotLocusException, IllegalArgumentException {
         
-<span class="fc" id="L477">        Line2D line = new Line2D();</span>
-<span class="fc" id="L478">        tangentLineAt(point, line, threshold);</span>
-<span class="fc" id="L479">        return line;</span>
+<span class="fc" id="L476">        Line2D line = new Line2D();</span>
+<span class="fc" id="L477">        tangentLineAt(point, line, threshold);</span>
+<span class="fc" id="L478">        return line;</span>
     }
     
     /**
@@ -493,12 +492,12 @@ public class Circle implements Serializable {
     public void tangentLineAt(Point2D point, Line2D line, double threshold)
             throws NotLocusException, IllegalArgumentException {
         
-<span class="pc bpc" id="L496" title="1 of 2 branches missed.">        if (!isLocus(point, threshold)) {</span>
-<span class="nc" id="L497">            throw new NotLocusException();</span>
+<span class="pc bpc" id="L495" title="1 of 2 branches missed.">        if (!isLocus(point, threshold)) {</span>
+<span class="nc" id="L496">            throw new NotLocusException();</span>
         }
         
-<span class="fc" id="L500">        point.normalize();</span>
-<span class="fc" id="L501">        mCenter.normalize();</span>
+<span class="fc" id="L499">        point.normalize();</span>
+<span class="fc" id="L500">        mCenter.normalize();</span>
         
         //C =   [1  0   d]
         //      [0  1   e]
@@ -507,20 +506,20 @@ public class Circle implements Serializable {
         //Hence line is l = C * p, where C is the circle conic and p is a 
         //point in the locus of the circle
         
-<span class="fc" id="L510">        double homX = point.getHomX();</span>
-<span class="fc" id="L511">        double homY = point.getHomY();</span>
-<span class="fc" id="L512">        double homW = point.getHomW();</span>
-<span class="fc" id="L513">        double cx = mCenter.getInhomX();</span>
-<span class="fc" id="L514">        double cy = mCenter.getInhomY();</span>
-<span class="fc" id="L515">        double conicD = -cx;</span>
-<span class="fc" id="L516">        double conicE = -cy;</span>
-<span class="fc" id="L517">        double conicF = cx * cx + cy * cy - mRadius * mRadius;</span>
+<span class="fc" id="L509">        double homX = point.getHomX();</span>
+<span class="fc" id="L510">        double homY = point.getHomY();</span>
+<span class="fc" id="L511">        double homW = point.getHomW();</span>
+<span class="fc" id="L512">        double cx = mCenter.getInhomX();</span>
+<span class="fc" id="L513">        double cy = mCenter.getInhomY();</span>
+<span class="fc" id="L514">        double conicD = -cx;</span>
+<span class="fc" id="L515">        double conicE = -cy;</span>
+<span class="fc" id="L516">        double conicF = cx * cx + cy * cy - mRadius * mRadius;</span>
         
-<span class="fc" id="L519">        double lineA = homX + conicD * homW;</span>
-<span class="fc" id="L520">        double lineB = homY + conicE * homW;</span>
-<span class="fc" id="L521">        double lineC = conicD * homX + conicE * homY + conicF * homW;</span>
-<span class="fc" id="L522">        line.setParameters(lineA, lineB, lineC);</span>
-<span class="fc" id="L523">    }</span>
+<span class="fc" id="L518">        double lineA = homX + conicD * homW;</span>
+<span class="fc" id="L519">        double lineB = homY + conicE * homW;</span>
+<span class="fc" id="L520">        double lineC = conicD * homX + conicE * homY + conicF * homW;</span>
+<span class="fc" id="L521">        line.setParameters(lineA, lineB, lineC);</span>
+<span class="fc" id="L522">    }</span>
     
     /**
      * Converts this circle into a conic.
@@ -528,19 +527,19 @@ public class Circle implements Serializable {
      * @return A conic representing this circle.
      */
     public Conic toConic() {
-<span class="fc" id="L531">        mCenter.normalize();</span>
+<span class="fc" id="L530">        mCenter.normalize();</span>
         //use inhomogeneous center coordinates
-<span class="fc" id="L533">        double cx = mCenter.getInhomX();</span>
-<span class="fc" id="L534">        double cy = mCenter.getInhomY();</span>
+<span class="fc" id="L532">        double cx = mCenter.getInhomX();</span>
+<span class="fc" id="L533">        double cy = mCenter.getInhomY();</span>
         
-<span class="fc" id="L536">        double a = 1.0;</span>
-<span class="fc" id="L537">        double b = 0.0;</span>
-<span class="fc" id="L538">        double c = 1.0;</span>
-<span class="fc" id="L539">        double d = -cx;</span>
-<span class="fc" id="L540">        double e = -cy;</span>
-<span class="fc" id="L541">        double f = cx * cx + cy * cy - mRadius * mRadius;</span>
+<span class="fc" id="L535">        double a = 1.0;</span>
+<span class="fc" id="L536">        double b = 0.0;</span>
+<span class="fc" id="L537">        double c = 1.0;</span>
+<span class="fc" id="L538">        double d = -cx;</span>
+<span class="fc" id="L539">        double e = -cy;</span>
+<span class="fc" id="L540">        double f = cx * cx + cy * cy - mRadius * mRadius;</span>
         
-<span class="fc" id="L543">        return new Conic(a, b, c, d, e, f);</span>
+<span class="fc" id="L542">        return new Conic(a, b, c, d, e, f);</span>
     }
     
     /**
@@ -550,25 +549,25 @@ public class Circle implements Serializable {
      * @throws IllegalArgumentException if provided conic is not a circle.
      */
     public final void setFromConic(Conic conic) throws IllegalArgumentException {
-<span class="fc bfc" id="L553" title="All 2 branches covered.">        if (conic.getConicType() != ConicType.CIRCLE_CONIC_TYPE) {</span>
-<span class="fc" id="L554">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L552" title="All 2 branches covered.">        if (conic.getConicType() != ConicType.CIRCLE_CONIC_TYPE) {</span>
+<span class="fc" id="L553">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L557">        conic.normalize();</span>
+<span class="fc" id="L556">        conic.normalize();</span>
         
-<span class="fc" id="L559">        double a = conic.getA();</span>
+<span class="fc" id="L558">        double a = conic.getA();</span>
         //normalize parameters so that a = 1.0, d = -cx, e = -cy and 
         //f = cx^ + cy^2 - r^
-<span class="fc" id="L562">        double normD = conic.getD() / a;</span>
-<span class="fc" id="L563">        double normE = conic.getE() / a;</span>
-<span class="fc" id="L564">        double normF = conic.getF() / a;</span>
+<span class="fc" id="L561">        double normD = conic.getD() / a;</span>
+<span class="fc" id="L562">        double normE = conic.getE() / a;</span>
+<span class="fc" id="L563">        double normF = conic.getF() / a;</span>
         
-<span class="fc" id="L566">        double cx = -normD;</span>
-<span class="fc" id="L567">        double cy = -normE;</span>
-<span class="fc" id="L568">        double radius = Math.sqrt(cx * cx + cy * cy - normF);</span>
+<span class="fc" id="L565">        double cx = -normD;</span>
+<span class="fc" id="L566">        double cy = -normE;</span>
+<span class="fc" id="L567">        double radius = Math.sqrt(cx * cx + cy * cy - normF);</span>
         
-<span class="fc" id="L570">        mCenter = new InhomogeneousPoint2D(cx, cy);</span>
-<span class="fc" id="L571">        mRadius = radius;</span>
-<span class="fc" id="L572">    }</span>
+<span class="fc" id="L569">        mCenter = new InhomogeneousPoint2D(cx, cy);</span>
+<span class="fc" id="L570">        mRadius = radius;</span>
+<span class="fc" id="L571">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
