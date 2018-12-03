@@ -71,7 +71,6 @@ public abstract class BaseConic implements Serializable {
      */
     private static final double PRECISION = 1e-12;    
 
-    
     /**
      * A element of the matrix defining a conic.
      */
@@ -110,10 +109,10 @@ public abstract class BaseConic implements Serializable {
     /**
      * Constructor of this class.
      */
-<span class="fc" id="L113">    public BaseConic() {</span>
-<span class="fc" id="L114">        mA = mB = mC = mD = mE = mF = 0.0;</span>
-<span class="fc" id="L115">        mNormalized = false;</span>
-<span class="fc" id="L116">    }</span>
+<span class="fc" id="L112">    public BaseConic() {</span>
+<span class="fc" id="L113">        mA = mB = mC = mD = mE = mF = 0.0;</span>
+<span class="fc" id="L114">        mNormalized = false;</span>
+<span class="fc" id="L115">    }</span>
     
     /**
      * Constructor of this class. This constructor accepts every parameter
@@ -126,9 +125,9 @@ public abstract class BaseConic implements Serializable {
      * @param f Parameter F of the base conic.
      */
     public BaseConic(double a, double b, double c, double d, double e, 
-<span class="fc" id="L129">            double f) {</span>
-<span class="fc" id="L130">        setParameters(a, b, c, d, e, f);</span>
-<span class="fc" id="L131">    }</span>
+<span class="fc" id="L128">            double f) {</span>
+<span class="fc" id="L129">        setParameters(a, b, c, d, e, f);</span>
+<span class="fc" id="L130">    }</span>
     
     /**
      * Constructor. This constructor accepts a Matrix describing a base conic.
@@ -143,9 +142,9 @@ public abstract class BaseConic implements Serializable {
      * not 3x3.
      */
     public BaseConic(Matrix m, double symmetricThreshold)
-<span class="nc" id="L146">            throws NonSymmetricMatrixException {</span>
-<span class="nc" id="L147">        setParameters(m, symmetricThreshold);</span>
-<span class="nc" id="L148">    }</span>
+<span class="nc" id="L145">            throws NonSymmetricMatrixException {</span>
+<span class="nc" id="L146">        setParameters(m, symmetricThreshold);</span>
+<span class="nc" id="L147">    }</span>
     
     /**
      * Constructor. This constructor accepts a Matrix describing a base conic.
@@ -156,16 +155,16 @@ public abstract class BaseConic implements Serializable {
      * not 3x3.
      * @see #BaseConic(Matrix, double)
      */
-<span class="fc" id="L159">    public BaseConic(Matrix m) throws NonSymmetricMatrixException {</span>
-<span class="fc" id="L160">        setParameters(m);</span>
-<span class="fc" id="L161">    }</span>
+<span class="fc" id="L158">    public BaseConic(Matrix m) throws NonSymmetricMatrixException {</span>
+<span class="fc" id="L159">        setParameters(m);</span>
+<span class="fc" id="L160">    }</span>
     
     /**
      * Returns parameter A of the given base conic.
      * @return Parameter A of a matrix describing a base conic.
      */
     public double getA() {
-<span class="fc" id="L168">        return mA;</span>
+<span class="fc" id="L167">        return mA;</span>
     }
     
     /**
@@ -173,7 +172,7 @@ public abstract class BaseConic implements Serializable {
      * @return Parameter B of a matrix describing a base conic.
      */
     public double getB() {
-<span class="fc" id="L176">        return mB;</span>
+<span class="fc" id="L175">        return mB;</span>
     }
 
     /**
@@ -181,7 +180,7 @@ public abstract class BaseConic implements Serializable {
      * @return Parameter C of a matrix describing a base conic.
      */
     public double getC() {
-<span class="fc" id="L184">        return mC;</span>
+<span class="fc" id="L183">        return mC;</span>
     }
 
     /**
@@ -189,7 +188,7 @@ public abstract class BaseConic implements Serializable {
      * @return Parameter D of a matrix describing a base conic.
      */
     public double getD() {
-<span class="fc" id="L192">        return mD;</span>
+<span class="fc" id="L191">        return mD;</span>
     }
 
     /**
@@ -197,7 +196,7 @@ public abstract class BaseConic implements Serializable {
      * @return Parameter E of a matrix describing a base conic.
      */
     public double getE() {
-<span class="fc" id="L200">        return mE;</span>
+<span class="fc" id="L199">        return mE;</span>
     }
 
     /**
@@ -205,7 +204,7 @@ public abstract class BaseConic implements Serializable {
      * @return Parameter F of a matrix describing a base conic.
      */
     public double getF() {
-<span class="fc" id="L208">        return mF;</span>
+<span class="fc" id="L207">        return mF;</span>
     }
     
     /**
@@ -220,14 +219,14 @@ public abstract class BaseConic implements Serializable {
      */
     public final void setParameters(double a, double b, double c, double d,
             double e, double f) {
-<span class="fc" id="L223">        mA = a;</span>
-<span class="fc" id="L224">        mB = b;</span>
-<span class="fc" id="L225">        mC = c;</span>
-<span class="fc" id="L226">        mD = d;</span>
-<span class="fc" id="L227">        mE = e;</span>
-<span class="fc" id="L228">        mF = f;</span>
-<span class="fc" id="L229">        mNormalized = false;</span>
-<span class="fc" id="L230">    }</span>
+<span class="fc" id="L222">        mA = a;</span>
+<span class="fc" id="L223">        mB = b;</span>
+<span class="fc" id="L224">        mC = c;</span>
+<span class="fc" id="L225">        mD = d;</span>
+<span class="fc" id="L226">        mE = e;</span>
+<span class="fc" id="L227">        mF = f;</span>
+<span class="fc" id="L228">        mNormalized = false;</span>
+<span class="fc" id="L229">    }</span>
     
     /**
      * This method sets the matrix used for describing a base conic.
@@ -244,23 +243,23 @@ public abstract class BaseConic implements Serializable {
      */
     public final void setParameters(Matrix m, double symmetricThreshold) 
             throws NonSymmetricMatrixException {
-<span class="fc bfc" id="L247" title="All 2 branches covered.">        if (m.getRows() != BASECONIC_MATRIX_ROW_SIZE ||</span>
-<span class="fc bfc" id="L248" title="All 2 branches covered.">                m.getColumns() != BASECONIC_MATRIX_COLUMN_SIZE) {</span>
-<span class="fc" id="L249">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">        if (m.getRows() != BASECONIC_MATRIX_ROW_SIZE ||</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">                m.getColumns() != BASECONIC_MATRIX_COLUMN_SIZE) {</span>
+<span class="fc" id="L248">            throw new IllegalArgumentException();</span>
         } else {
-<span class="fc bfc" id="L251" title="All 2 branches covered.">            if (!Utils.isSymmetric(m, symmetricThreshold)) {</span>
-<span class="fc" id="L252">                throw new NonSymmetricMatrixException();</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">            if (!Utils.isSymmetric(m, symmetricThreshold)) {</span>
+<span class="fc" id="L251">                throw new NonSymmetricMatrixException();</span>
             } else {
-<span class="fc" id="L254">                mA = m.getElementAt(0, 0);</span>
-<span class="fc" id="L255">                mB = m.getElementAt(0, 1);</span>
-<span class="fc" id="L256">                mC = m.getElementAt(1, 1);</span>
-<span class="fc" id="L257">                mD = m.getElementAt(0, 2);</span>
-<span class="fc" id="L258">                mE = m.getElementAt(1, 2);</span>
-<span class="fc" id="L259">                mF = m.getElementAt(2, 2);</span>
-<span class="fc" id="L260">                mNormalized = false;</span>
+<span class="fc" id="L253">                mA = m.getElementAt(0, 0);</span>
+<span class="fc" id="L254">                mB = m.getElementAt(0, 1);</span>
+<span class="fc" id="L255">                mC = m.getElementAt(1, 1);</span>
+<span class="fc" id="L256">                mD = m.getElementAt(0, 2);</span>
+<span class="fc" id="L257">                mE = m.getElementAt(1, 2);</span>
+<span class="fc" id="L258">                mF = m.getElementAt(2, 2);</span>
+<span class="fc" id="L259">                mNormalized = false;</span>
             }
         }
-<span class="fc" id="L263">    }</span>
+<span class="fc" id="L262">    }</span>
     
     /**
      * This method sets the matrix used for describing a base conic.
@@ -272,77 +271,77 @@ public abstract class BaseConic implements Serializable {
      * symmetric.
      */    
     public final void setParameters(Matrix m) throws NonSymmetricMatrixException {
-<span class="fc" id="L275">        setParameters(m, DEFAULT_SYMMETRIC_THRESHOLD);</span>
-<span class="fc" id="L276">    }</span>
+<span class="fc" id="L274">        setParameters(m, DEFAULT_SYMMETRIC_THRESHOLD);</span>
+<span class="fc" id="L275">    }</span>
     
     /**
      * This method sets the A parameter of a base conic.
      * @param a Parameter A of the given base conic.
      */
     public void setA(double a) {
-<span class="fc" id="L283">        mA = a;</span>
-<span class="fc" id="L284">        mNormalized = false;</span>
-<span class="fc" id="L285">    }</span>
+<span class="fc" id="L282">        mA = a;</span>
+<span class="fc" id="L283">        mNormalized = false;</span>
+<span class="fc" id="L284">    }</span>
     
     /**
      * This method sets the B parameter of a base conic.
      * @param b Parameter B of the given base conic.
      */
     public void setB(double b) {
-<span class="fc" id="L292">        mB = b;</span>
-<span class="fc" id="L293">        mNormalized = false;</span>
-<span class="fc" id="L294">    }</span>
+<span class="fc" id="L291">        mB = b;</span>
+<span class="fc" id="L292">        mNormalized = false;</span>
+<span class="fc" id="L293">    }</span>
 
     /**
      * This method sets the C parameter of a base conic.
      * @param c Parameter C of the given base conic.
      */
     public void setC(double c) {
-<span class="fc" id="L301">        mC = c;</span>
-<span class="fc" id="L302">        mNormalized = false;</span>
-<span class="fc" id="L303">    }</span>
+<span class="fc" id="L300">        mC = c;</span>
+<span class="fc" id="L301">        mNormalized = false;</span>
+<span class="fc" id="L302">    }</span>
 
     /**
      * This method sets the D parameter of a base conic.
      * @param d Parameter D of the given base conic.
      */
     public void setD(double d) {
-<span class="fc" id="L310">        mD = d;</span>
-<span class="fc" id="L311">        mNormalized = false;</span>
-<span class="fc" id="L312">    }</span>
+<span class="fc" id="L309">        mD = d;</span>
+<span class="fc" id="L310">        mNormalized = false;</span>
+<span class="fc" id="L311">    }</span>
 
     /**
      * This method sets the E parameter of a base conic.
      * @param e Parameter E of the given base conic.
      */
     public void setE(double e) {
-<span class="fc" id="L319">        mE = e;</span>
-<span class="fc" id="L320">        mNormalized = false;</span>
-<span class="fc" id="L321">    }</span>
+<span class="fc" id="L318">        mE = e;</span>
+<span class="fc" id="L319">        mNormalized = false;</span>
+<span class="fc" id="L320">    }</span>
 
     /**
      * This method sets the F parameter of a base conic.
      * @param f Parameter F of the given base conic.
      */
     public void setF(double f) {
-<span class="fc" id="L328">        mF = f;</span>
-<span class="fc" id="L329">        mNormalized = false;</span>
-<span class="fc" id="L330">    }</span>
+<span class="fc" id="L327">        mF = f;</span>
+<span class="fc" id="L328">        mNormalized = false;</span>
+<span class="fc" id="L329">    }</span>
 
     /**
      * Returns the matrix that describes this base conic.
      * @return 3x3 matrix describing this base conic.
      */
     public Matrix asMatrix() {
-<span class="fc" id="L337">        Matrix out = null;</span>
+<span class="fc" id="L336">        Matrix out = null;</span>
         try {
-<span class="fc" id="L339">            out = new Matrix(BASECONIC_MATRIX_ROW_SIZE, </span>
+<span class="fc" id="L338">            out = new Matrix(BASECONIC_MATRIX_ROW_SIZE, </span>
                     BASECONIC_MATRIX_COLUMN_SIZE);
-<span class="nc" id="L341">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L340">        } catch (WrongSizeException ignore) {</span>
             //never happens
-<span class="fc" id="L343">        }</span>
-<span class="fc" id="L344">        asMatrix(out);        </span>
-<span class="fc" id="L345">        return out;</span>
+<span class="fc" id="L342">        }</span>
+<span class="fc" id="L343">        asMatrix(out);        </span>
+<span class="fc" id="L344">        return out;</span>
     }
     
     /**
@@ -352,41 +351,41 @@ public abstract class BaseConic implements Serializable {
      */
     public void asMatrix(Matrix m) {
         
-<span class="pc bpc" id="L355" title="1 of 2 branches missed.">        if (m.getRows() != BASECONIC_MATRIX_ROW_SIZE ||</span>
-<span class="pc bpc" id="L356" title="1 of 2 branches missed.">                m.getColumns() != BASECONIC_MATRIX_ROW_SIZE) {</span>
-<span class="nc" id="L357">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L354" title="1 of 2 branches missed.">        if (m.getRows() != BASECONIC_MATRIX_ROW_SIZE ||</span>
+<span class="pc bpc" id="L355" title="1 of 2 branches missed.">                m.getColumns() != BASECONIC_MATRIX_ROW_SIZE) {</span>
+<span class="nc" id="L356">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L360">        m.setElementAt(0, 0, mA);</span>
-<span class="fc" id="L361">        m.setElementAt(0, 1, mB);</span>
-<span class="fc" id="L362">        m.setElementAt(0, 2, mD);</span>
-<span class="fc" id="L363">        m.setElementAt(1, 0, mB);</span>
-<span class="fc" id="L364">        m.setElementAt(1, 1, mC);</span>
-<span class="fc" id="L365">        m.setElementAt(1, 2, mE);</span>
-<span class="fc" id="L366">        m.setElementAt(2, 0, mD);</span>
-<span class="fc" id="L367">        m.setElementAt(2, 1, mE);</span>
-<span class="fc" id="L368">        m.setElementAt(2, 2, mF);        </span>
-<span class="fc" id="L369">    }</span>
+<span class="fc" id="L359">        m.setElementAt(0, 0, mA);</span>
+<span class="fc" id="L360">        m.setElementAt(0, 1, mB);</span>
+<span class="fc" id="L361">        m.setElementAt(0, 2, mD);</span>
+<span class="fc" id="L362">        m.setElementAt(1, 0, mB);</span>
+<span class="fc" id="L363">        m.setElementAt(1, 1, mC);</span>
+<span class="fc" id="L364">        m.setElementAt(1, 2, mE);</span>
+<span class="fc" id="L365">        m.setElementAt(2, 0, mD);</span>
+<span class="fc" id="L366">        m.setElementAt(2, 1, mE);</span>
+<span class="fc" id="L367">        m.setElementAt(2, 2, mF);        </span>
+<span class="fc" id="L368">    }</span>
     
     /**
      * Normalizes the Conic params using its norm
      */
     public void normalize() {
-<span class="fc bfc" id="L375" title="All 2 branches covered.">        if (!mNormalized) {</span>
-<span class="fc" id="L376">            Matrix m = asMatrix();</span>
-<span class="fc" id="L377">            double norm = Utils.normF(m);</span>
+<span class="fc bfc" id="L374" title="All 2 branches covered.">        if (!mNormalized) {</span>
+<span class="fc" id="L375">            Matrix m = asMatrix();</span>
+<span class="fc" id="L376">            double norm = Utils.normF(m);</span>
         
-<span class="pc bpc" id="L379" title="1 of 4 branches missed.">            if (norm &gt; PRECISION &amp;&amp; !Double.isNaN(norm)) {</span>
-<span class="fc" id="L380">                mA /= norm;</span>
-<span class="fc" id="L381">                mB /= norm;</span>
-<span class="fc" id="L382">                mC /= norm;</span>
-<span class="fc" id="L383">                mD /= norm;</span>
-<span class="fc" id="L384">                mE /= norm;</span>
-<span class="fc" id="L385">                mF /= norm;</span>
-<span class="fc" id="L386">                mNormalized = true;</span>
+<span class="pc bpc" id="L378" title="1 of 4 branches missed.">            if (norm &gt; PRECISION &amp;&amp; !Double.isNaN(norm)) {</span>
+<span class="fc" id="L379">                mA /= norm;</span>
+<span class="fc" id="L380">                mB /= norm;</span>
+<span class="fc" id="L381">                mC /= norm;</span>
+<span class="fc" id="L382">                mD /= norm;</span>
+<span class="fc" id="L383">                mE /= norm;</span>
+<span class="fc" id="L384">                mF /= norm;</span>
+<span class="fc" id="L385">                mNormalized = true;</span>
             }
         }
-<span class="fc" id="L389">    }</span>
+<span class="fc" id="L388">    }</span>
     
     /**
      * Returns boolean indicating whether this base quadric has already been 
@@ -394,7 +393,7 @@ public abstract class BaseConic implements Serializable {
      * @return True if normalized, false otherwise.
      */
     public boolean isNormalized() {
-<span class="fc" id="L397">        return mNormalized;</span>
+<span class="fc" id="L396">        return mNormalized;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

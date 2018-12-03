@@ -58,10 +58,9 @@ public class DualConic extends BaseConic implements Serializable {
      * @throws NonSymmetricMatrixException Raised when the conic matrix is not 
      * symmetric.
      */
-    public DualConic(Matrix m) throws IllegalArgumentException, 
-            NonSymmetricMatrixException {
-<span class="fc" id="L63">        super(m);</span>
-<span class="fc" id="L64">    }</span>
+    public DualConic(Matrix m) throws NonSymmetricMatrixException {
+<span class="fc" id="L62">        super(m);</span>
+<span class="fc" id="L63">    }</span>
     
     /**
      * Instantiates a dual conic where provided lines belong to its locus.
@@ -74,9 +73,9 @@ public class DualConic extends BaseConic implements Serializable {
      * (more than one line is equal) or produce a degenerate configuration.
      */
     public DualConic(Line2D line1, Line2D line2, Line2D line3, Line2D line4, Line2D line5)
-<span class="fc" id="L77">            throws CoincidentLinesException {</span>
-<span class="fc" id="L78">        setParametersFromLines(line1, line2, line3, line4, line5);</span>
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L76">            throws CoincidentLinesException {</span>
+<span class="fc" id="L77">        setParametersFromLines(line1, line2, line3, line4, line5);</span>
+<span class="fc" id="L78">    }</span>
     
     /**
      * Checks if provided line is locus of this dual conic, or in other words,
@@ -90,29 +89,28 @@ public class DualConic extends BaseConic implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Line2D line, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Line2D line, double threshold) {
         
-<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="nc" id="L97">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="nc" id="L95">            throw new IllegalArgumentException();</span>
         }
                 
         try {
-<span class="fc" id="L101">            normalize();</span>
-<span class="fc" id="L102">            Matrix dualC = asMatrix();</span>
-<span class="fc" id="L103">            Matrix homLine = </span>
+<span class="fc" id="L99">            normalize();</span>
+<span class="fc" id="L100">            Matrix dualC = asMatrix();</span>
+<span class="fc" id="L101">            Matrix homLine = </span>
                     new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);
-<span class="fc" id="L105">            line.normalize();</span>
-<span class="fc" id="L106">            homLine.setElementAt(0, 0, line.getA());</span>
-<span class="fc" id="L107">            homLine.setElementAt(1, 0, line.getB());</span>
-<span class="fc" id="L108">            homLine.setElementAt(2, 0, line.getC());</span>
-<span class="fc" id="L109">            Matrix locusMatrix = homLine.transposeAndReturnNew();</span>
-<span class="fc" id="L110">            locusMatrix.multiply(dualC);</span>
-<span class="fc" id="L111">            locusMatrix.multiply(homLine);</span>
+<span class="fc" id="L103">            line.normalize();</span>
+<span class="fc" id="L104">            homLine.setElementAt(0, 0, line.getA());</span>
+<span class="fc" id="L105">            homLine.setElementAt(1, 0, line.getB());</span>
+<span class="fc" id="L106">            homLine.setElementAt(2, 0, line.getC());</span>
+<span class="fc" id="L107">            Matrix locusMatrix = homLine.transposeAndReturnNew();</span>
+<span class="fc" id="L108">            locusMatrix.multiply(dualC);</span>
+<span class="fc" id="L109">            locusMatrix.multiply(homLine);</span>
                 
-<span class="fc bfc" id="L113" title="All 2 branches covered.">            return Math.abs(locusMatrix.getElementAt(0, 0)) &lt; threshold;</span>
-<span class="nc" id="L114">        } catch (WrongSizeException ignore) {</span>
-<span class="nc" id="L115">            return false;</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">            return Math.abs(locusMatrix.getElementAt(0, 0)) &lt; threshold;</span>
+<span class="nc" id="L112">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L113">            return false;</span>
         }
     }
     
@@ -126,7 +124,7 @@ public class DualConic extends BaseConic implements Serializable {
      * @see #isLocus(Line2D, double)
      */    
     public boolean isLocus(Line2D line) {
-<span class="fc" id="L129">        return isLocus(line, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L127">        return isLocus(line, DEFAULT_LOCUS_THRESHOLD);</span>
     }
     
     /**
@@ -138,43 +136,43 @@ public class DualConic extends BaseConic implements Serializable {
     public double angleBetweenLines(Line2D lineA, Line2D lineB) {
         try {
             //retrieve conic as matrix
-<span class="fc" id="L141">            normalize();</span>
-<span class="fc" id="L142">            Matrix dualC = asMatrix();</span>
-<span class="fc" id="L143">            Matrix transHomLineA = new Matrix(1, Line2D.LINE_NUMBER_PARAMS);</span>
-<span class="fc" id="L144">            lineA.normalize();</span>
-<span class="fc" id="L145">            transHomLineA.setElementAt(0, 0, lineA.getA());</span>
-<span class="fc" id="L146">            transHomLineA.setElementAt(0, 1, lineA.getB());</span>
-<span class="fc" id="L147">            transHomLineA.setElementAt(0, 2, lineA.getC());</span>
+<span class="fc" id="L139">            normalize();</span>
+<span class="fc" id="L140">            Matrix dualC = asMatrix();</span>
+<span class="fc" id="L141">            Matrix transHomLineA = new Matrix(1, Line2D.LINE_NUMBER_PARAMS);</span>
+<span class="fc" id="L142">            lineA.normalize();</span>
+<span class="fc" id="L143">            transHomLineA.setElementAt(0, 0, lineA.getA());</span>
+<span class="fc" id="L144">            transHomLineA.setElementAt(0, 1, lineA.getB());</span>
+<span class="fc" id="L145">            transHomLineA.setElementAt(0, 2, lineA.getC());</span>
         
         
-<span class="fc" id="L150">            Matrix tmp = transHomLineA.multiplyAndReturnNew(dualC);</span>
-<span class="fc" id="L151">            tmp.multiply(transHomLineA.transposeAndReturnNew()); //This is </span>
+<span class="fc" id="L148">            Matrix tmp = transHomLineA.multiplyAndReturnNew(dualC);</span>
+<span class="fc" id="L149">            tmp.multiply(transHomLineA.transposeAndReturnNew()); //This is </span>
                                                 //homLineA' * dualC * homLineA
         
-<span class="fc" id="L154">            double normA = tmp.getElementAt(0, 0);</span>
+<span class="fc" id="L152">            double normA = tmp.getElementAt(0, 0);</span>
         
-<span class="fc" id="L156">            Matrix homLineB = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);</span>
-<span class="fc" id="L157">            lineB.normalize();</span>
-<span class="fc" id="L158">            homLineB.setElementAt(0, 0, lineB.getA());</span>
-<span class="fc" id="L159">            homLineB.setElementAt(1, 0, lineB.getB());</span>
-<span class="fc" id="L160">            homLineB.setElementAt(2, 0, lineB.getC());</span>
+<span class="fc" id="L154">            Matrix homLineB = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);</span>
+<span class="fc" id="L155">            lineB.normalize();</span>
+<span class="fc" id="L156">            homLineB.setElementAt(0, 0, lineB.getA());</span>
+<span class="fc" id="L157">            homLineB.setElementAt(1, 0, lineB.getB());</span>
+<span class="fc" id="L158">            homLineB.setElementAt(2, 0, lineB.getC());</span>
         
-<span class="fc" id="L162">            homLineB.transpose(tmp);</span>
-<span class="fc" id="L163">            tmp.multiply(dualC);</span>
-<span class="fc" id="L164">            tmp.multiply(homLineB);</span>
+<span class="fc" id="L160">            homLineB.transpose(tmp);</span>
+<span class="fc" id="L161">            tmp.multiply(dualC);</span>
+<span class="fc" id="L162">            tmp.multiply(homLineB);</span>
         
-<span class="fc" id="L166">            double normB = tmp.getElementAt(0, 0);</span>
+<span class="fc" id="L164">            double normB = tmp.getElementAt(0, 0);</span>
         
-<span class="fc" id="L168">            transHomLineA.multiply(dualC);</span>
-<span class="fc" id="L169">            transHomLineA.multiply(homLineB); </span>
+<span class="fc" id="L166">            transHomLineA.multiply(dualC);</span>
+<span class="fc" id="L167">            transHomLineA.multiply(homLineB); </span>
                 //This is homLineA' * dualC * homLineB
                         
-<span class="fc" id="L172">            double angleNumerator = transHomLineA.getElementAt(0, 0);</span>
+<span class="fc" id="L170">            double angleNumerator = transHomLineA.getElementAt(0, 0);</span>
 
-<span class="fc" id="L174">            double cosTheta = angleNumerator / Math.sqrt(normA * normB);</span>
-<span class="fc" id="L175">            return Math.acos(cosTheta);</span>
-<span class="nc" id="L176">        } catch (WrongSizeException ignore) {</span>
-<span class="nc" id="L177">            return 0.0; //This will never happen</span>
+<span class="fc" id="L172">            double cosTheta = angleNumerator / Math.sqrt(normA * normB);</span>
+<span class="fc" id="L173">            return Math.acos(cosTheta);</span>
+<span class="nc" id="L174">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L175">            return 0.0; //This will never happen</span>
         }
     }
     
@@ -191,34 +189,34 @@ public class DualConic extends BaseConic implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean arePerpendicularLines(Line2D lineA, Line2D lineB, 
-            double threshold) throws IllegalArgumentException {
+            double threshold) {
         try {
             //retrieve conic as matrix
-<span class="fc" id="L197">            Matrix transHomLineA = new Matrix(1, Line2D.LINE_NUMBER_PARAMS);</span>
-<span class="fc" id="L198">            lineA.normalize();</span>
-<span class="fc" id="L199">            transHomLineA.setElementAt(0, 0, lineA.getA());</span>
-<span class="fc" id="L200">            transHomLineA.setElementAt(0, 1, lineA.getB());</span>
-<span class="fc" id="L201">            transHomLineA.setElementAt(0, 2, lineA.getC());</span>
+<span class="fc" id="L195">            Matrix transHomLineA = new Matrix(1, Line2D.LINE_NUMBER_PARAMS);</span>
+<span class="fc" id="L196">            lineA.normalize();</span>
+<span class="fc" id="L197">            transHomLineA.setElementAt(0, 0, lineA.getA());</span>
+<span class="fc" id="L198">            transHomLineA.setElementAt(0, 1, lineA.getB());</span>
+<span class="fc" id="L199">            transHomLineA.setElementAt(0, 2, lineA.getC());</span>
                         
-<span class="fc" id="L203">            Matrix homLineB =</span>
+<span class="fc" id="L201">            Matrix homLineB =</span>
                     new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 
                     1);
-<span class="fc" id="L206">            lineB.normalize();</span>
-<span class="fc" id="L207">            homLineB.setElementAt(0, 0, lineB.getA());</span>
-<span class="fc" id="L208">            homLineB.setElementAt(1, 0, lineB.getB());</span>
-<span class="fc" id="L209">            homLineB.setElementAt(2, 0, lineB.getC());</span>
+<span class="fc" id="L204">            lineB.normalize();</span>
+<span class="fc" id="L205">            homLineB.setElementAt(0, 0, lineB.getA());</span>
+<span class="fc" id="L206">            homLineB.setElementAt(1, 0, lineB.getB());</span>
+<span class="fc" id="L207">            homLineB.setElementAt(2, 0, lineB.getC());</span>
             
-<span class="fc" id="L211">            normalize();</span>
-<span class="fc" id="L212">            Matrix dualC = asMatrix();</span>
-<span class="fc" id="L213">            transHomLineA.multiply(dualC);</span>
-<span class="fc" id="L214">            transHomLineA.multiply(homLineB); </span>
+<span class="fc" id="L209">            normalize();</span>
+<span class="fc" id="L210">            Matrix dualC = asMatrix();</span>
+<span class="fc" id="L211">            transHomLineA.multiply(dualC);</span>
+<span class="fc" id="L212">            transHomLineA.multiply(homLineB); </span>
                 //This is homLineA' * dualC * homLineB
             
-<span class="fc" id="L217">            double perpend = transHomLineA.getElementAt(0, 0);</span>
+<span class="fc" id="L215">            double perpend = transHomLineA.getElementAt(0, 0);</span>
         
-<span class="fc bfc" id="L219" title="All 2 branches covered.">            return Math.abs(perpend) &lt; threshold;</span>
-<span class="nc" id="L220">        } catch (WrongSizeException ignore) {</span>
-<span class="nc" id="L221">            return false; //This will never happen</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">            return Math.abs(perpend) &lt; threshold;</span>
+<span class="nc" id="L218">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L219">            return false; //This will never happen</span>
         }  
     }
 
@@ -230,7 +228,7 @@ public class DualConic extends BaseConic implements Serializable {
      * @return True if provided lines are perpendicular, false otherwise.
      */    
     public boolean arePerpendicularLines(Line2D lineA, Line2D lineB) {
-<span class="nc" id="L233">        return arePerpendicularLines(lineA, lineB, </span>
+<span class="nc" id="L231">        return arePerpendicularLines(lineA, lineB, </span>
                 DEFAULT_PERPENDICULAR_THRESHOLD);
     }
     
@@ -241,9 +239,9 @@ public class DualConic extends BaseConic implements Serializable {
      * matrix is not complete due to wrong parameters or numerical instability.
      */
     public Conic getConic() throws ConicNotAvailableException {
-<span class="fc" id="L244">        Conic c = new Conic();</span>
-<span class="fc" id="L245">        conic(c);</span>
-<span class="fc" id="L246">        return c;</span>
+<span class="fc" id="L242">        Conic c = new Conic();</span>
+<span class="fc" id="L243">        conic(c);</span>
+<span class="fc" id="L244">        return c;</span>
     }
     
     /**
@@ -255,27 +253,27 @@ public class DualConic extends BaseConic implements Serializable {
      */
     public void conic(Conic conic) throws ConicNotAvailableException {
         
-<span class="fc" id="L258">        Matrix dualConicMatrix = asMatrix();</span>
+<span class="fc" id="L256">        Matrix dualConicMatrix = asMatrix();</span>
         try {
-<span class="fc" id="L260">            Matrix invMatrix = com.irurueta.algebra.Utils.inverse(</span>
+<span class="fc" id="L258">            Matrix invMatrix = com.irurueta.algebra.Utils.inverse(</span>
                     dualConicMatrix);
             
             //ensure that resulting matrix after inversion is symmetric
             //by computing the mean of off-diagonal elements
-<span class="fc" id="L265">            double a = invMatrix.getElementAt(0, 0);</span>
-<span class="fc" id="L266">            double b = 0.5 * (invMatrix.getElementAt(0, 1) + </span>
-<span class="fc" id="L267">                    invMatrix.getElementAt(1, 0));</span>
-<span class="fc" id="L268">            double c = invMatrix.getElementAt(1, 1);</span>
-<span class="fc" id="L269">            double d = 0.5 * (invMatrix.getElementAt(0, 2) + </span>
-<span class="fc" id="L270">                    invMatrix.getElementAt(2, 0));</span>
-<span class="fc" id="L271">            double e = 0.5 * (invMatrix.getElementAt(1, 2) + </span>
-<span class="fc" id="L272">                    invMatrix.getElementAt(2, 1));</span>
-<span class="fc" id="L273">            double f = invMatrix.getElementAt(2, 2);</span>
-<span class="fc" id="L274">            conic.setParameters(a, b, c, d, e, f);       </span>
-<span class="nc" id="L275">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L276">            throw new ConicNotAvailableException(e);</span>
-<span class="fc" id="L277">        }</span>
-<span class="fc" id="L278">    }</span>
+<span class="fc" id="L263">            double a = invMatrix.getElementAt(0, 0);</span>
+<span class="fc" id="L264">            double b = 0.5 * (invMatrix.getElementAt(0, 1) + </span>
+<span class="fc" id="L265">                    invMatrix.getElementAt(1, 0));</span>
+<span class="fc" id="L266">            double c = invMatrix.getElementAt(1, 1);</span>
+<span class="fc" id="L267">            double d = 0.5 * (invMatrix.getElementAt(0, 2) + </span>
+<span class="fc" id="L268">                    invMatrix.getElementAt(2, 0));</span>
+<span class="fc" id="L269">            double e = 0.5 * (invMatrix.getElementAt(1, 2) + </span>
+<span class="fc" id="L270">                    invMatrix.getElementAt(2, 1));</span>
+<span class="fc" id="L271">            double f = invMatrix.getElementAt(2, 2);</span>
+<span class="fc" id="L272">            conic.setParameters(a, b, c, d, e, f);       </span>
+<span class="nc" id="L273">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L274">            throw new ConicNotAvailableException(e);</span>
+<span class="fc" id="L275">        }</span>
+<span class="fc" id="L276">    }</span>
     
     /**
      * Sets parameters of this dual conic so that provided lines lie within it 
@@ -293,102 +291,102 @@ public class DualConic extends BaseConic implements Serializable {
             Line2D line4, Line2D line5) throws CoincidentLinesException {
         
         try {
-<span class="fc" id="L296">            line1.normalize();</span>
-<span class="fc" id="L297">            line2.normalize();</span>
-<span class="fc" id="L298">            line3.normalize();</span>
-<span class="fc" id="L299">            line4.normalize();</span>
-<span class="fc" id="L300">            line5.normalize();</span>
+<span class="fc" id="L294">            line1.normalize();</span>
+<span class="fc" id="L295">            line2.normalize();</span>
+<span class="fc" id="L296">            line3.normalize();</span>
+<span class="fc" id="L297">            line4.normalize();</span>
+<span class="fc" id="L298">            line5.normalize();</span>
                 
         
             //estimate dual conic that lines inside of provided 5 lines
-<span class="fc" id="L304">            Matrix m = new Matrix(5, 6);</span>
+<span class="fc" id="L302">            Matrix m = new Matrix(5, 6);</span>
                     
-<span class="fc" id="L306">            double l1 = line1.getA();</span>
-<span class="fc" id="L307">            double l2 = line1.getB();</span>
-<span class="fc" id="L308">            double l3 = line1.getC();</span>
-<span class="fc" id="L309">            m.setElementAt(0, 0, l1 * l1);</span>
-<span class="fc" id="L310">            m.setElementAt(0, 1, 2.0 * l1 * l2);</span>
-<span class="fc" id="L311">            m.setElementAt(0, 2, l2 * l2);</span>
-<span class="fc" id="L312">            m.setElementAt(0, 3, 2.0 * l1 * l3);</span>
-<span class="fc" id="L313">            m.setElementAt(0, 4, 2.0 * l2 * l3);</span>
-<span class="fc" id="L314">            m.setElementAt(0, 5, l3 * l3);</span>
+<span class="fc" id="L304">            double l1 = line1.getA();</span>
+<span class="fc" id="L305">            double l2 = line1.getB();</span>
+<span class="fc" id="L306">            double l3 = line1.getC();</span>
+<span class="fc" id="L307">            m.setElementAt(0, 0, l1 * l1);</span>
+<span class="fc" id="L308">            m.setElementAt(0, 1, 2.0 * l1 * l2);</span>
+<span class="fc" id="L309">            m.setElementAt(0, 2, l2 * l2);</span>
+<span class="fc" id="L310">            m.setElementAt(0, 3, 2.0 * l1 * l3);</span>
+<span class="fc" id="L311">            m.setElementAt(0, 4, 2.0 * l2 * l3);</span>
+<span class="fc" id="L312">            m.setElementAt(0, 5, l3 * l3);</span>
         
-<span class="fc" id="L316">            l1 = line2.getA();</span>
-<span class="fc" id="L317">            l2 = line2.getB();</span>
-<span class="fc" id="L318">            l3 = line2.getC();</span>
-<span class="fc" id="L319">            m.setElementAt(1, 0, l1 * l1);</span>
-<span class="fc" id="L320">            m.setElementAt(1, 1, 2.0 * l1 * l2);</span>
-<span class="fc" id="L321">            m.setElementAt(1, 2, l2 * l2);</span>
-<span class="fc" id="L322">            m.setElementAt(1, 3, 2.0 * l1 * l3);</span>
-<span class="fc" id="L323">            m.setElementAt(1, 4, 2.0 * l2 * l3);</span>
-<span class="fc" id="L324">            m.setElementAt(1, 5, l3 * l3);</span>
+<span class="fc" id="L314">            l1 = line2.getA();</span>
+<span class="fc" id="L315">            l2 = line2.getB();</span>
+<span class="fc" id="L316">            l3 = line2.getC();</span>
+<span class="fc" id="L317">            m.setElementAt(1, 0, l1 * l1);</span>
+<span class="fc" id="L318">            m.setElementAt(1, 1, 2.0 * l1 * l2);</span>
+<span class="fc" id="L319">            m.setElementAt(1, 2, l2 * l2);</span>
+<span class="fc" id="L320">            m.setElementAt(1, 3, 2.0 * l1 * l3);</span>
+<span class="fc" id="L321">            m.setElementAt(1, 4, 2.0 * l2 * l3);</span>
+<span class="fc" id="L322">            m.setElementAt(1, 5, l3 * l3);</span>
 
-<span class="fc" id="L326">            l1 = line3.getA();</span>
-<span class="fc" id="L327">            l2 = line3.getB();</span>
-<span class="fc" id="L328">            l3 = line3.getC();</span>
-<span class="fc" id="L329">            m.setElementAt(2, 0, l1 * l1);</span>
-<span class="fc" id="L330">            m.setElementAt(2, 1, 2.0 * l1 * l2);</span>
-<span class="fc" id="L331">            m.setElementAt(2, 2, l2 * l2);</span>
-<span class="fc" id="L332">            m.setElementAt(2, 3, 2.0 * l1 * l3);</span>
-<span class="fc" id="L333">            m.setElementAt(2, 4, 2.0 * l2 * l3);</span>
-<span class="fc" id="L334">            m.setElementAt(2, 5, l3 * l3);</span>
+<span class="fc" id="L324">            l1 = line3.getA();</span>
+<span class="fc" id="L325">            l2 = line3.getB();</span>
+<span class="fc" id="L326">            l3 = line3.getC();</span>
+<span class="fc" id="L327">            m.setElementAt(2, 0, l1 * l1);</span>
+<span class="fc" id="L328">            m.setElementAt(2, 1, 2.0 * l1 * l2);</span>
+<span class="fc" id="L329">            m.setElementAt(2, 2, l2 * l2);</span>
+<span class="fc" id="L330">            m.setElementAt(2, 3, 2.0 * l1 * l3);</span>
+<span class="fc" id="L331">            m.setElementAt(2, 4, 2.0 * l2 * l3);</span>
+<span class="fc" id="L332">            m.setElementAt(2, 5, l3 * l3);</span>
 
-<span class="fc" id="L336">            l1 = line4.getA();</span>
-<span class="fc" id="L337">            l2 = line4.getB();</span>
-<span class="fc" id="L338">            l3 = line4.getC();</span>
-<span class="fc" id="L339">            m.setElementAt(3, 0, l1 * l1);</span>
-<span class="fc" id="L340">            m.setElementAt(3, 1, 2.0 * l1 * l2);</span>
-<span class="fc" id="L341">            m.setElementAt(3, 2, l2 * l2);</span>
-<span class="fc" id="L342">            m.setElementAt(3, 3, 2.0 * l1 * l3);</span>
-<span class="fc" id="L343">            m.setElementAt(3, 4, 2.0 * l2 * l3);</span>
-<span class="fc" id="L344">            m.setElementAt(3, 5, l3 * l3);       </span>
+<span class="fc" id="L334">            l1 = line4.getA();</span>
+<span class="fc" id="L335">            l2 = line4.getB();</span>
+<span class="fc" id="L336">            l3 = line4.getC();</span>
+<span class="fc" id="L337">            m.setElementAt(3, 0, l1 * l1);</span>
+<span class="fc" id="L338">            m.setElementAt(3, 1, 2.0 * l1 * l2);</span>
+<span class="fc" id="L339">            m.setElementAt(3, 2, l2 * l2);</span>
+<span class="fc" id="L340">            m.setElementAt(3, 3, 2.0 * l1 * l3);</span>
+<span class="fc" id="L341">            m.setElementAt(3, 4, 2.0 * l2 * l3);</span>
+<span class="fc" id="L342">            m.setElementAt(3, 5, l3 * l3);       </span>
 
-<span class="fc" id="L346">            l1 = line5.getA();</span>
-<span class="fc" id="L347">            l2 = line5.getB();</span>
-<span class="fc" id="L348">            l3 = line5.getC();</span>
-<span class="fc" id="L349">            m.setElementAt(4, 0, l1 * l1);</span>
-<span class="fc" id="L350">            m.setElementAt(4, 1, 2.0 * l1 * l2);</span>
-<span class="fc" id="L351">            m.setElementAt(4, 2, l2 * l2);</span>
-<span class="fc" id="L352">            m.setElementAt(4, 3, 2.0 * l1 * l3);</span>
-<span class="fc" id="L353">            m.setElementAt(4, 4, 2.0 * l2 * l3);</span>
-<span class="fc" id="L354">            m.setElementAt(4, 5, l3 * l3);</span>
+<span class="fc" id="L344">            l1 = line5.getA();</span>
+<span class="fc" id="L345">            l2 = line5.getB();</span>
+<span class="fc" id="L346">            l3 = line5.getC();</span>
+<span class="fc" id="L347">            m.setElementAt(4, 0, l1 * l1);</span>
+<span class="fc" id="L348">            m.setElementAt(4, 1, 2.0 * l1 * l2);</span>
+<span class="fc" id="L349">            m.setElementAt(4, 2, l2 * l2);</span>
+<span class="fc" id="L350">            m.setElementAt(4, 3, 2.0 * l1 * l3);</span>
+<span class="fc" id="L351">            m.setElementAt(4, 4, 2.0 * l2 * l3);</span>
+<span class="fc" id="L352">            m.setElementAt(4, 5, l3 * l3);</span>
             
             //normalize each row to increase accuracy
-<span class="fc" id="L357">            double[] row = new double[6];</span>
+<span class="fc" id="L355">            double[] row = new double[6];</span>
             double rowNorm;
             
-<span class="fc bfc" id="L360" title="All 2 branches covered.">            for (int j = 0; j &lt; 5; j++) {</span>
-<span class="fc" id="L361">                m.getSubmatrixAsArray(j, 0, j, 5, row);</span>
-<span class="fc" id="L362">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
-<span class="fc bfc" id="L363" title="All 2 branches covered.">                for (int i = 0; i &lt; 6; i++) {</span>
-<span class="fc" id="L364">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
+<span class="fc bfc" id="L358" title="All 2 branches covered.">            for (int j = 0; j &lt; 5; j++) {</span>
+<span class="fc" id="L359">                m.getSubmatrixAsArray(j, 0, j, 5, row);</span>
+<span class="fc" id="L360">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
+<span class="fc bfc" id="L361" title="All 2 branches covered.">                for (int i = 0; i &lt; 6; i++) {</span>
+<span class="fc" id="L362">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
                 }
             }            
             
-<span class="fc" id="L368">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
-<span class="fc" id="L369">            decomposer.decompose();</span>
+<span class="fc" id="L366">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L367">            decomposer.decompose();</span>
             
-<span class="fc bfc" id="L371" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 5) {</span>
-<span class="fc" id="L372">                throw new CoincidentLinesException();</span>
+<span class="fc bfc" id="L369" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 5) {</span>
+<span class="fc" id="L370">                throw new CoincidentLinesException();</span>
             }
             
             //the right null-space of m contains the parameters a, b, c, d, e ,f
             //of the conic
-<span class="fc" id="L377">            Matrix V = decomposer.getV();</span>
+<span class="fc" id="L375">            Matrix v = decomposer.getV();</span>
             
             //l1^ + 2*l1*l2 + l2^2 + 2*l1*l3 + 2*l2*l3 + l3^2 = 0            
-<span class="fc" id="L380">            double a = V.getElementAt(0, 5);</span>
-<span class="fc" id="L381">            double b = V.getElementAt(1, 5);</span>
-<span class="fc" id="L382">            double c = V.getElementAt(2, 5);</span>
-<span class="fc" id="L383">            double d = V.getElementAt(3, 5);</span>
-<span class="fc" id="L384">            double e = V.getElementAt(4, 5);</span>
-<span class="fc" id="L385">            double f = V.getElementAt(5, 5);</span>
+<span class="fc" id="L378">            double a = v.getElementAt(0, 5);</span>
+<span class="fc" id="L379">            double b = v.getElementAt(1, 5);</span>
+<span class="fc" id="L380">            double c = v.getElementAt(2, 5);</span>
+<span class="fc" id="L381">            double d = v.getElementAt(3, 5);</span>
+<span class="fc" id="L382">            double e = v.getElementAt(4, 5);</span>
+<span class="fc" id="L383">            double f = v.getElementAt(5, 5);</span>
                             
-<span class="fc" id="L387">            setParameters(a, b, c, d, e, f);</span>
-<span class="nc" id="L388">        } catch (AlgebraException ex) {</span>
-<span class="nc" id="L389">            throw new CoincidentLinesException(ex);</span>
-<span class="fc" id="L390">        }</span>
-<span class="fc" id="L391">    }</span>
+<span class="fc" id="L385">            setParameters(a, b, c, d, e, f);</span>
+<span class="nc" id="L386">        } catch (AlgebraException ex) {</span>
+<span class="nc" id="L387">            throw new CoincidentLinesException(ex);</span>
+<span class="fc" id="L388">        }</span>
+<span class="fc" id="L389">    }</span>
     
     /**
      * Creates a canonical instance of the dual absolute conic in the metric
@@ -404,7 +402,7 @@ public class DualConic extends BaseConic implements Serializable {
      * @return a canonical instance of the dual absolute conic.
      */
     public static DualConic createCanonicalDualAbsoluteConic() {
-<span class="fc" id="L407">        return new DualConic(1.0, 0.0, 1.0, 0.0, 0.0, 1.0);</span>
+<span class="fc" id="L405">        return new DualConic(1.0, 0.0, 1.0, 0.0, 0.0, 1.0);</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

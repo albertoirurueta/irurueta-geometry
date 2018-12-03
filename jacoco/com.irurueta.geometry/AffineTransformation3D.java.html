@@ -1627,7 +1627,7 @@ public class AffineTransformation3D extends Transformation3D
             //initially a contains the inverse of its transpose, so to obtain a we need
             //to transpose it and invert it
 <span class="fc" id="L1629">            invTransA.transpose();</span>
-<span class="fc" id="L1630">            Matrix a = Utils.inverse(invTransA);</span>
+<span class="fc" id="L1630">            Matrix a1 = Utils.inverse(invTransA);</span>
 
 <span class="fc" id="L1632">            Matrix invt = new Matrix(1, 3);</span>
 <span class="fc" id="L1633">            invt.setSubmatrix(0, 0, 0, 2,</span>
@@ -1637,9 +1637,9 @@ public class AffineTransformation3D extends Transformation3D
 <span class="fc" id="L1637">            invt.multiplyByScalar(-1.0 / value);</span>
 <span class="fc" id="L1638">            invt.transpose();</span>
 
-<span class="fc" id="L1640">            Matrix t = a.multiplyAndReturnNew(invt);</span>
+<span class="fc" id="L1640">            Matrix t = a1.multiplyAndReturnNew(invt);</span>
 
-<span class="fc" id="L1642">            this.a = a;</span>
+<span class="fc" id="L1642">            this.a = a1;</span>
 <span class="fc" id="L1643">            this.translation = t.getBuffer();</span>
 <span class="nc" id="L1644">        } catch (AlgebraException e) {</span>
 <span class="nc" id="L1645">            throw new CoincidentPlanesException(e);</span>

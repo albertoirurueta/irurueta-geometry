@@ -22,7 +22,7 @@ import java.io.Serializable;
  * Abstract representation of a box for a point in an n-dimensional representation.
  * @param &lt;P&gt; a point implementation.
  */
-public abstract class Box&lt;P extends Point&gt; implements Serializable {
+public abstract class Box&lt;P extends Point &amp; Serializable&gt; implements Serializable {
 
     /**
      * Low coordinate values.

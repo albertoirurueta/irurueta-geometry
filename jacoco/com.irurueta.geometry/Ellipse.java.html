@@ -157,10 +157,9 @@ public class Ellipse implements Serializable {
      * @throws IllegalArgumentException if parameters do not follow 
      * b^2 - 4*a*c &amp;lt; 0.0
      */
-    public Ellipse(double a, double b, double c, double d, double e, double f) 
-<span class="fc" id="L161">            throws IllegalArgumentException {</span>
-<span class="fc" id="L162">        setParameters(a, b, c, d, e, f);</span>
-<span class="fc" id="L163">    }</span>
+<span class="fc" id="L160">    public Ellipse(double a, double b, double c, double d, double e, double f) {</span>
+<span class="fc" id="L161">        setParameters(a, b, c, d, e, f);</span>
+<span class="fc" id="L162">    }</span>
             
     /**
      * Constructor setting parameters of canonical equation of an ellipse, which 
@@ -178,26 +177,26 @@ public class Ellipse implements Serializable {
      * b^2 - 4*A*c &amp;lt; threshold
      */
     public Ellipse(double a, double b, double c, double d, double e, double f, 
-<span class="fc" id="L181">            double threshold) throws IllegalArgumentException {</span>
-<span class="fc" id="L182">        setParameters(a, b, c, d, e, f, threshold);</span>
-<span class="fc" id="L183">    }</span>
+<span class="fc" id="L180">            double threshold) {</span>
+<span class="fc" id="L181">        setParameters(a, b, c, d, e, f, threshold);</span>
+<span class="fc" id="L182">    }</span>
     
     /**
      * Constructor.
      * @param conic conic to build ellipse from. 
      * @throws IllegalArgumentException if provided conic is not an ellipse.
      */
-<span class="fc" id="L190">    public Ellipse(Conic conic) throws IllegalArgumentException {</span>
-<span class="fc" id="L191">        setFromConic(conic);</span>
-<span class="fc" id="L192">    }</span>
+<span class="fc" id="L189">    public Ellipse(Conic conic) {</span>
+<span class="fc" id="L190">        setFromConic(conic);</span>
+<span class="fc" id="L191">    }</span>
     
     /**
      * Constructor.
      * @param circle a circle to set parameters from.
      */
-<span class="fc" id="L198">    public Ellipse(Circle circle) {</span>
-<span class="fc" id="L199">        setFromCircle(circle);</span>
-<span class="fc" id="L200">    }</span>
+<span class="fc" id="L197">    public Ellipse(Circle circle) {</span>
+<span class="fc" id="L198">        setFromCircle(circle);</span>
+<span class="fc" id="L199">    }</span>
     
     
     /**
@@ -205,7 +204,7 @@ public class Ellipse implements Serializable {
      * @return center of ellipse.
      */
     public Point2D getCenter() {
-<span class="fc" id="L208">        return mCenter;</span>
+<span class="fc" id="L207">        return mCenter;</span>
     }
     
     /**
@@ -213,19 +212,19 @@ public class Ellipse implements Serializable {
      * @param center center of ellipse.
      * @throws NullPointerException raised if provided center is null.
      */
-    public void setCenter(Point2D center) throws NullPointerException {
-<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (center == null) {</span>
-<span class="nc" id="L218">            throw new NullPointerException();</span>
+    public void setCenter(Point2D center) {
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">        if (center == null) {</span>
+<span class="nc" id="L217">            throw new NullPointerException();</span>
         }
-<span class="fc" id="L220">        mCenter = center;</span>
-<span class="fc" id="L221">    }</span>
+<span class="fc" id="L219">        mCenter = center;</span>
+<span class="fc" id="L220">    }</span>
     
     /**
      * Gets semi-major axis length.
      * @return semi-major axis length.
      */
     public double getSemiMajorAxis() {
-<span class="fc" id="L228">        return mSemiMajorAxis;</span>
+<span class="fc" id="L227">        return mSemiMajorAxis;</span>
     }
     
     /**
@@ -233,15 +232,15 @@ public class Ellipse implements Serializable {
      * @param semiMajorAxis semi-major axis length.
      */
     public void setSemiMajorAxis(double semiMajorAxis) {
-<span class="fc" id="L236">        mSemiMajorAxis = semiMajorAxis;</span>
-<span class="fc" id="L237">    }</span>
+<span class="fc" id="L235">        mSemiMajorAxis = semiMajorAxis;</span>
+<span class="fc" id="L236">    }</span>
     
     /**
      * Gets semi-minor axis length.
      * @return semi-minor axis length.
      */
     public double getSemiMinorAxis() {
-<span class="fc" id="L244">        return mSemiMinorAxis;</span>
+<span class="fc" id="L243">        return mSemiMinorAxis;</span>
     }
     
     /**
@@ -249,15 +248,15 @@ public class Ellipse implements Serializable {
      * @param semiMinorAxis semi-minor axis length.
      */
     public void setSemiMinorAxis(double semiMinorAxis) {
-<span class="fc" id="L252">        mSemiMinorAxis = semiMinorAxis;</span>
-<span class="fc" id="L253">    }</span>
+<span class="fc" id="L251">        mSemiMinorAxis = semiMinorAxis;</span>
+<span class="fc" id="L252">    }</span>
     
     /**
      * Gets rotation angle expressed in radians.
      * @return rotation angle expressed in radians.
      */
     public double getRotationAngle() {
-<span class="fc" id="L260">        return mRotationAngle;</span>
+<span class="fc" id="L259">        return mRotationAngle;</span>
     }
     
     /**
@@ -265,15 +264,15 @@ public class Ellipse implements Serializable {
      * @param rotationAngle rotation angle expressed in radians.
      */
     public void setRotationAngle(double rotationAngle) {
-<span class="fc" id="L268">        mRotationAngle = rotationAngle;</span>
-<span class="fc" id="L269">    }</span>
+<span class="fc" id="L267">        mRotationAngle = rotationAngle;</span>
+<span class="fc" id="L268">    }</span>
     
     /**
      * Gets 2D rotation.
      * @return 2D rotation.
      */
     public Rotation2D getRotation() {
-<span class="fc" id="L276">        return new Rotation2D(mRotationAngle);</span>
+<span class="fc" id="L275">        return new Rotation2D(mRotationAngle);</span>
     }
     
     /**
@@ -281,8 +280,8 @@ public class Ellipse implements Serializable {
      * @param rotation 2D rotation to be set.
      */
     public void setRotation(Rotation2D rotation) {
-<span class="fc" id="L284">        mRotationAngle = rotation.getTheta();</span>
-<span class="fc" id="L285">    }</span>
+<span class="fc" id="L283">        mRotationAngle = rotation.getTheta();</span>
+<span class="fc" id="L284">    }</span>
     
     /**
      * Gets parameter A of canonical ellipse equation:
@@ -290,19 +289,19 @@ public class Ellipse implements Serializable {
      * @return parameter A.
      */
     public double getA() {
-<span class="fc" id="L293">        double sint = Math.sin(mRotationAngle);</span>
-<span class="fc" id="L294">        double cost = Math.cos(mRotationAngle);</span>
+<span class="fc" id="L292">        double sint = Math.sin(mRotationAngle);</span>
+<span class="fc" id="L293">        double cost = Math.cos(mRotationAngle);</span>
         
-<span class="fc" id="L296">        double a = mSemiMajorAxis;</span>
-<span class="fc" id="L297">        double b = mSemiMinorAxis;</span>
+<span class="fc" id="L295">        double a = mSemiMajorAxis;</span>
+<span class="fc" id="L296">        double b = mSemiMinorAxis;</span>
         
-<span class="fc" id="L299">        double sint2 = sint*sint;</span>
-<span class="fc" id="L300">        double cost2 = cost*cost;</span>
+<span class="fc" id="L298">        double sint2 = sint*sint;</span>
+<span class="fc" id="L299">        double cost2 = cost*cost;</span>
         
-<span class="fc" id="L302">        double a2 = a*a;</span>
-<span class="fc" id="L303">        double b2 = b*b;</span>
+<span class="fc" id="L301">        double a2 = a*a;</span>
+<span class="fc" id="L302">        double b2 = b*b;</span>
         
-<span class="fc" id="L305">        return a2*sint2 + b2*cost2;</span>
+<span class="fc" id="L304">        return a2*sint2 + b2*cost2;</span>
     }
     
     /**
@@ -311,8 +310,8 @@ public class Ellipse implements Serializable {
      * @param a parameter A to be set.
      */
     public void setA(double a) {
-<span class="fc" id="L314">        setParameters(a, getB(), getC(), getD(), getE(), getF());</span>
-<span class="fc" id="L315">    }</span>
+<span class="fc" id="L313">        setParameters(a, getB(), getC(), getD(), getE(), getF());</span>
+<span class="fc" id="L314">    }</span>
     
     /**
      * Gets parameter B of canonical ellipse equation:
@@ -320,14 +319,14 @@ public class Ellipse implements Serializable {
      * @return parameter B.
      */
     public double getB() {
-<span class="fc" id="L323">        double sint = Math.sin(mRotationAngle);</span>
-<span class="fc" id="L324">        double cost = Math.cos(mRotationAngle);</span>
-<span class="fc" id="L325">        double a = mSemiMajorAxis;</span>
-<span class="fc" id="L326">        double b = mSemiMinorAxis;</span>
-<span class="fc" id="L327">        double a2 = a*a;</span>
-<span class="fc" id="L328">        double b2 = b*b;</span>
+<span class="fc" id="L322">        double sint = Math.sin(mRotationAngle);</span>
+<span class="fc" id="L323">        double cost = Math.cos(mRotationAngle);</span>
+<span class="fc" id="L324">        double a = mSemiMajorAxis;</span>
+<span class="fc" id="L325">        double b = mSemiMinorAxis;</span>
+<span class="fc" id="L326">        double a2 = a*a;</span>
+<span class="fc" id="L327">        double b2 = b*b;</span>
         
-<span class="fc" id="L330">        return 2.0*(b2 - a2)*sint*cost;</span>
+<span class="fc" id="L329">        return 2.0*(b2 - a2)*sint*cost;</span>
     }
     
     /**
@@ -336,8 +335,8 @@ public class Ellipse implements Serializable {
      * @param b parameter B to be set.
      */
     public void setB(double b) {
-<span class="fc" id="L339">        setParameters(getA(), b, getC(), getD(), getE(), getF());</span>
-<span class="fc" id="L340">    }</span>
+<span class="fc" id="L338">        setParameters(getA(), b, getC(), getD(), getE(), getF());</span>
+<span class="fc" id="L339">    }</span>
     
     /**
      * Gets parameter C of canonical ellipse equation:
@@ -345,19 +344,19 @@ public class Ellipse implements Serializable {
      * @return parameter C.
      */
     public double getC() {
-<span class="fc" id="L348">        double sint = Math.sin(mRotationAngle);</span>
-<span class="fc" id="L349">        double cost = Math.cos(mRotationAngle);</span>
+<span class="fc" id="L347">        double sint = Math.sin(mRotationAngle);</span>
+<span class="fc" id="L348">        double cost = Math.cos(mRotationAngle);</span>
         
-<span class="fc" id="L351">        double a = mSemiMajorAxis;</span>
-<span class="fc" id="L352">        double b = mSemiMinorAxis;</span>
+<span class="fc" id="L350">        double a = mSemiMajorAxis;</span>
+<span class="fc" id="L351">        double b = mSemiMinorAxis;</span>
         
-<span class="fc" id="L354">        double sint2 = sint*sint;</span>
-<span class="fc" id="L355">        double cost2 = cost*cost;</span>
+<span class="fc" id="L353">        double sint2 = sint*sint;</span>
+<span class="fc" id="L354">        double cost2 = cost*cost;</span>
         
-<span class="fc" id="L357">        double a2 = a*a;</span>
-<span class="fc" id="L358">        double b2 = b*b;</span>
+<span class="fc" id="L356">        double a2 = a*a;</span>
+<span class="fc" id="L357">        double b2 = b*b;</span>
         
-<span class="fc" id="L360">        return a2*cost2 + b2*sint2;</span>
+<span class="fc" id="L359">        return a2*cost2 + b2*sint2;</span>
     }
     
     /**
@@ -366,8 +365,8 @@ public class Ellipse implements Serializable {
      * @param c parameter C to be set.
      */
     public void setC(double c) {
-<span class="fc" id="L369">        setParameters(getA(), getB(), c, getD(), getE(), getF());</span>
-<span class="fc" id="L370">    }</span>
+<span class="fc" id="L368">        setParameters(getA(), getB(), c, getD(), getE(), getF());</span>
+<span class="fc" id="L369">    }</span>
     
     /**
      * Gets parameter D of canonical ellipse equation:
@@ -375,10 +374,10 @@ public class Ellipse implements Serializable {
      * @return parameter D.
      */
     public double getD() {
-<span class="fc" id="L378">        double xc = mCenter.getInhomX();</span>
-<span class="fc" id="L379">        double yc = mCenter.getInhomY();</span>
+<span class="fc" id="L377">        double xc = mCenter.getInhomX();</span>
+<span class="fc" id="L378">        double yc = mCenter.getInhomY();</span>
         
-<span class="fc" id="L381">        return -2.0*getA()*xc - getB()*yc;</span>
+<span class="fc" id="L380">        return -2.0*getA()*xc - getB()*yc;</span>
     }
     
     /**
@@ -387,8 +386,8 @@ public class Ellipse implements Serializable {
      * @param d parameter D to be set.
      */
     public void setD(double d) {
-<span class="fc" id="L390">        setParameters(getA(), getB(), getC(), d, getE(), getF());</span>
-<span class="fc" id="L391">    }</span>
+<span class="fc" id="L389">        setParameters(getA(), getB(), getC(), d, getE(), getF());</span>
+<span class="fc" id="L390">    }</span>
     
     /**
      * Gets parameter E of canonical ellipse equation:
@@ -396,10 +395,10 @@ public class Ellipse implements Serializable {
      * @return parameter E.
      */
     public double getE() {
-<span class="fc" id="L399">        double xc = mCenter.getInhomX();</span>
-<span class="fc" id="L400">        double yc = mCenter.getInhomY();</span>
+<span class="fc" id="L398">        double xc = mCenter.getInhomX();</span>
+<span class="fc" id="L399">        double yc = mCenter.getInhomY();</span>
         
-<span class="fc" id="L402">        return -getB()*xc - 2.0*getC()*yc;</span>
+<span class="fc" id="L401">        return -getB()*xc - 2.0*getC()*yc;</span>
     }
     
     /**
@@ -408,8 +407,8 @@ public class Ellipse implements Serializable {
      * @param e parameter E to be set.
      */
     public void setE(double e) {
-<span class="fc" id="L411">        setParameters(getA(), getB(), getC(), getD(), e, getF());</span>
-<span class="fc" id="L412">    }</span>
+<span class="fc" id="L410">        setParameters(getA(), getB(), getC(), getD(), e, getF());</span>
+<span class="fc" id="L411">    }</span>
     
     /**
      * Gets parameter F of canonical ellipse equation:
@@ -417,19 +416,19 @@ public class Ellipse implements Serializable {
      * @return parameter F.
      */
     public double getF() {
-<span class="fc" id="L420">        double xc = mCenter.getInhomX();</span>
-<span class="fc" id="L421">        double yc = mCenter.getInhomY();</span>
+<span class="fc" id="L419">        double xc = mCenter.getInhomX();</span>
+<span class="fc" id="L420">        double yc = mCenter.getInhomY();</span>
         
-<span class="fc" id="L423">        double a = mSemiMajorAxis;</span>
-<span class="fc" id="L424">        double b = mSemiMinorAxis;</span>
+<span class="fc" id="L422">        double a = mSemiMajorAxis;</span>
+<span class="fc" id="L423">        double b = mSemiMinorAxis;</span>
         
-<span class="fc" id="L426">        double xc2 = xc*xc;</span>
-<span class="fc" id="L427">        double yc2 = yc*yc;        </span>
+<span class="fc" id="L425">        double xc2 = xc*xc;</span>
+<span class="fc" id="L426">        double yc2 = yc*yc;        </span>
         
-<span class="fc" id="L429">        double a2 = a*a;</span>
-<span class="fc" id="L430">        double b2 = b*b;</span>
+<span class="fc" id="L428">        double a2 = a*a;</span>
+<span class="fc" id="L429">        double b2 = b*b;</span>
         
-<span class="fc" id="L432">        return getA()*xc2 + getB()*xc*yc + getC()*yc2 - a2*b2;</span>
+<span class="fc" id="L431">        return getA()*xc2 + getB()*xc*yc + getC()*yc2 - a2*b2;</span>
     }
     
     /**
@@ -438,8 +437,8 @@ public class Ellipse implements Serializable {
      * @param f parameter F to be set.
      */
     public void setF(double f) {
-<span class="fc" id="L441">        setParameters(getA(), getB(), getC(), getD(), getE(), f);</span>
-<span class="fc" id="L442">    }</span>
+<span class="fc" id="L440">        setParameters(getA(), getB(), getC(), getD(), getE(), f);</span>
+<span class="fc" id="L441">    }</span>
     
     /**
      * Sets ellipse parameters.
@@ -450,11 +449,11 @@ public class Ellipse implements Serializable {
      */
     public final void setCenterAxesAndRotation(Point2D center, 
             double semiMajorAxis, double semiMinorAxis, double rotationAngle) {
-<span class="fc" id="L453">        mCenter = center;        </span>
-<span class="fc" id="L454">        mSemiMajorAxis = Math.max(semiMajorAxis, semiMinorAxis);</span>
-<span class="fc" id="L455">        mSemiMinorAxis = Math.min(semiMinorAxis, semiMajorAxis);</span>
-<span class="fc" id="L456">        mRotationAngle = rotationAngle;        </span>
-<span class="fc" id="L457">    }</span>
+<span class="fc" id="L452">        mCenter = center;        </span>
+<span class="fc" id="L453">        mSemiMajorAxis = Math.max(semiMajorAxis, semiMinorAxis);</span>
+<span class="fc" id="L454">        mSemiMinorAxis = Math.min(semiMinorAxis, semiMajorAxis);</span>
+<span class="fc" id="L455">        mRotationAngle = rotationAngle;        </span>
+<span class="fc" id="L456">    }</span>
     
     /**
      * Sets ellipse parameters.
@@ -465,9 +464,9 @@ public class Ellipse implements Serializable {
      */    
     public final void setCenterAxesAndRotation(Point2D center,
             double semiMajorAxis, double semiMinorAxis, Rotation2D rotation) {
-<span class="fc" id="L468">        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, </span>
-<span class="fc" id="L469">                rotation.getTheta());</span>
-<span class="fc" id="L470">    }</span>
+<span class="fc" id="L467">        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, </span>
+<span class="fc" id="L468">                rotation.getTheta());</span>
+<span class="fc" id="L469">    }</span>
     
     /**
      * Sets parameters from 2 points, ellipse center and rotation.
@@ -528,75 +527,77 @@ public class Ellipse implements Serializable {
         //a^2/b^2 and a^2
         
         try {
-<span class="fc" id="L531">            double sint = Math.sin(theta);</span>
-<span class="fc" id="L532">            double cost = Math.cos(theta);</span>
+<span class="fc" id="L530">            double sint = Math.sin(theta);</span>
+<span class="fc" id="L531">            double cost = Math.cos(theta);</span>
             
-<span class="fc" id="L534">            double sint2 = sint*sint;</span>
-<span class="fc" id="L535">            double cost2 = cost*cost;</span>
-<span class="fc" id="L536">            double sintcost = sint*cost;</span>
+<span class="fc" id="L533">            double sint2 = sint*sint;</span>
+<span class="fc" id="L534">            double cost2 = cost*cost;</span>
+<span class="fc" id="L535">            double sintcost = sint*cost;</span>
             
-<span class="fc" id="L538">            double xc = center.getInhomX();</span>
-<span class="fc" id="L539">            double yc = center.getInhomY();</span>
-<span class="fc" id="L540">            double xc2 = xc*xc;</span>
-<span class="fc" id="L541">            double yc2 = yc*yc;</span>
+<span class="fc" id="L537">            double xc = center.getInhomX();</span>
+<span class="fc" id="L538">            double yc = center.getInhomY();</span>
+<span class="fc" id="L539">            double xc2 = xc*xc;</span>
+<span class="fc" id="L540">            double yc2 = yc*yc;</span>
             
             
-<span class="fc" id="L544">            Matrix m = new Matrix(2, 2);</span>
-<span class="fc" id="L545">            double[] b = new double[2];</span>
+<span class="fc" id="L543">            Matrix m = new Matrix(2, 2);</span>
+<span class="fc" id="L544">            double[] b = new double[2];</span>
             
-<span class="fc" id="L547">            double[] x = new double[] {</span>
-<span class="fc" id="L548">                point1.getInhomX(),</span>
-<span class="fc" id="L549">                point2.getInhomX(),</span>
+<span class="fc" id="L546">            double[] x = new double[] {</span>
+<span class="fc" id="L547">                point1.getInhomX(),</span>
+<span class="fc" id="L548">                point2.getInhomX(),</span>
             };
             
-<span class="fc" id="L552">            double[] y = new double[] {</span>
-<span class="fc" id="L553">                point1.getInhomY(),</span>
-<span class="fc" id="L554">                point2.getInhomY(),</span>
+<span class="fc" id="L551">            double[] y = new double[] {</span>
+<span class="fc" id="L552">                point1.getInhomY(),</span>
+<span class="fc" id="L553">                point2.getInhomY(),</span>
             };
             
-            double x2, y2, rowNorm;
-<span class="fc bfc" id="L558" title="All 2 branches covered.">            for (int i = 0; i &lt; 2; i++) {</span>
-<span class="fc" id="L559">                x2 = x[i]*x[i];</span>
-<span class="fc" id="L560">                y2 = y[i]*y[i];</span>
-<span class="fc" id="L561">                m.setElementAt(i, 0, sint2*x2 - 2.0*sintcost*x[i]*y[i] +</span>
+            double x2;
+            double y2;
+            double rowNorm;
+<span class="fc bfc" id="L559" title="All 2 branches covered.">            for (int i = 0; i &lt; 2; i++) {</span>
+<span class="fc" id="L560">                x2 = x[i]*x[i];</span>
+<span class="fc" id="L561">                y2 = y[i]*y[i];</span>
+<span class="fc" id="L562">                m.setElementAt(i, 0, sint2*x2 - 2.0*sintcost*x[i]*y[i] +</span>
                         cost2*y2 - 2.0*sint2*xc*x[i] + 2.0*sintcost*yc*x[i] +
                         2.0*sintcost*xc*y[i] - 2.0*cost2*yc*y[i] + sint2*xc2 -
                         2.0*sintcost*xc*yc + cost2*yc2);
-<span class="fc" id="L565">                m.setElementAt(i, 1, -1.0);</span>
+<span class="fc" id="L566">                m.setElementAt(i, 1, -1.0);</span>
                 
-<span class="fc" id="L567">                b[i] = - cost2*x2 - 2.0*sintcost*x[i]*y[i] - </span>
+<span class="fc" id="L568">                b[i] = - cost2*x2 - 2.0*sintcost*x[i]*y[i] - </span>
                         sint2*y2 + 2.0*cost2*xc*x[i] + 2.0*sintcost*yc*x[i] +
                         2.0*sintcost*xc*y[i] + 2.0*sint2*yc*y[i] -
                         cost2*xc2  - 2.0*sintcost*xc*yc - sint2*yc2;
                 
                 //normalize row to increase accuracy
-<span class="fc" id="L573">                rowNorm = 0.0;</span>
-<span class="fc bfc" id="L574" title="All 2 branches covered.">                for (int j = 0; j &lt; 2; j++) {</span>
-<span class="fc" id="L575">                    rowNorm += Math.pow(m.getElementAt(i, j), 2.0);</span>
+<span class="fc" id="L574">                rowNorm = 0.0;</span>
+<span class="fc bfc" id="L575" title="All 2 branches covered.">                for (int j = 0; j &lt; 2; j++) {</span>
+<span class="fc" id="L576">                    rowNorm += Math.pow(m.getElementAt(i, j), 2.0);</span>
                 }
-<span class="fc" id="L577">                rowNorm = Math.sqrt(rowNorm);</span>
+<span class="fc" id="L578">                rowNorm = Math.sqrt(rowNorm);</span>
                 
-<span class="fc bfc" id="L579" title="All 2 branches covered.">                for (int j = 0; j &lt; 2; j++) {</span>
-<span class="fc" id="L580">                    m.setElementAt(i, j, m.getElementAt(i, j) / rowNorm);</span>
+<span class="fc bfc" id="L580" title="All 2 branches covered.">                for (int j = 0; j &lt; 2; j++) {</span>
+<span class="fc" id="L581">                    m.setElementAt(i, j, m.getElementAt(i, j) / rowNorm);</span>
                 }
                 
-<span class="fc" id="L583">                b[i] /= rowNorm;</span>
+<span class="fc" id="L584">                b[i] /= rowNorm;</span>
             }
             
-<span class="fc" id="L586">            double[] params = com.irurueta.algebra.Utils.solve(m, b);</span>
+<span class="fc" id="L587">            double[] params = com.irurueta.algebra.Utils.solve(m, b);</span>
 
             //params[1] = a^2
-<span class="fc" id="L589">            double semiMajorAxis = Math.sqrt(Math.abs(params[1]));</span>
+<span class="fc" id="L590">            double semiMajorAxis = Math.sqrt(Math.abs(params[1]));</span>
             
             //params[0] = a^2/b^2 --&gt; b^2 = a^2/params[0] = params[1]/params[0]
-<span class="fc" id="L592">            double semiMinorAxis = Math.sqrt(Math.abs(params[1]/params[0]));</span>
+<span class="fc" id="L593">            double semiMinorAxis = Math.sqrt(Math.abs(params[1]/params[0]));</span>
             
-<span class="fc" id="L594">            setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, </span>
+<span class="fc" id="L595">            setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, </span>
                     theta);
-<span class="nc" id="L596">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L597">            throw new ColinearPointsException(e);</span>
-<span class="fc" id="L598">        }</span>
-<span class="fc" id="L599">    }</span>
+<span class="nc" id="L597">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L598">            throw new ColinearPointsException(e);</span>
+<span class="fc" id="L599">        }</span>
+<span class="fc" id="L600">    }</span>
     
     /**
      * Sets parameters from 5 points.
@@ -611,8 +612,8 @@ public class Ellipse implements Serializable {
     public final void setParametersFromPoints(Point2D point1, Point2D point2, 
             Point2D point3, Point2D point4, Point2D point5) 
             throws ColinearPointsException {
-<span class="fc" id="L614">        setParametersFromPoints(point1, point2, point3, point4, point5, 0.0);</span>
-<span class="fc" id="L615">    }</span>
+<span class="fc" id="L615">        setParametersFromPoints(point1, point2, point3, point4, point5, 0.0);</span>
+<span class="fc" id="L616">    }</span>
     
     /**
      * Sets parameters from 5 points.
@@ -630,92 +631,92 @@ public class Ellipse implements Serializable {
             Point2D point3, Point2D point4, Point2D point5, double threshold) 
             throws ColinearPointsException {
         //normalize points to increase accuracy
-<span class="fc" id="L633">        point1.normalize();</span>
-<span class="fc" id="L634">        point2.normalize();</span>
-<span class="fc" id="L635">        point3.normalize();</span>
-<span class="fc" id="L636">        point4.normalize();</span>
-<span class="fc" id="L637">        point5.normalize();</span>
+<span class="fc" id="L634">        point1.normalize();</span>
+<span class="fc" id="L635">        point2.normalize();</span>
+<span class="fc" id="L636">        point3.normalize();</span>
+<span class="fc" id="L637">        point4.normalize();</span>
+<span class="fc" id="L638">        point5.normalize();</span>
         
         try {
             //each point belonging to a conic follows equation:
             //p' * C * p = 0 ==&gt;
             //x^2 + y^2 + w^2 + 2*x*y + 2*x*w + 2*y*w = 0
-<span class="fc" id="L643">            Matrix m = new Matrix(5, 6);</span>
-<span class="fc" id="L644">            double x = point1.getHomX();</span>
-<span class="fc" id="L645">            double y = point1.getHomY();</span>
-<span class="fc" id="L646">            double w = point1.getHomW();</span>
-<span class="fc" id="L647">            m.setElementAt(0, 0, x * x);</span>
-<span class="fc" id="L648">            m.setElementAt(0, 1, 2.0 * x * y);</span>
-<span class="fc" id="L649">            m.setElementAt(0, 2, y * y);</span>
-<span class="fc" id="L650">            m.setElementAt(0, 3, 2.0 * x * w);</span>
-<span class="fc" id="L651">            m.setElementAt(0, 4, 2.0 * y * w);</span>
-<span class="fc" id="L652">            m.setElementAt(0, 5, w * w);</span>
-<span class="fc" id="L653">            x = point2.getHomX();</span>
-<span class="fc" id="L654">            y = point2.getHomY();</span>
-<span class="fc" id="L655">            w = point2.getHomW();</span>
-<span class="fc" id="L656">            m.setElementAt(1, 0, x * x);</span>
-<span class="fc" id="L657">            m.setElementAt(1, 1, 2.0 * x * y);</span>
-<span class="fc" id="L658">            m.setElementAt(1, 2, y * y);</span>
-<span class="fc" id="L659">            m.setElementAt(1, 3, 2.0 * x * w);</span>
-<span class="fc" id="L660">            m.setElementAt(1, 4, 2.0 * y * w);</span>
-<span class="fc" id="L661">            m.setElementAt(1, 5, w * w);</span>
-<span class="fc" id="L662">            x = point3.getHomX();</span>
-<span class="fc" id="L663">            y = point3.getHomY();</span>
-<span class="fc" id="L664">            w = point3.getHomW();</span>
-<span class="fc" id="L665">            m.setElementAt(2, 0, x * x);</span>
-<span class="fc" id="L666">            m.setElementAt(2, 1, 2.0 * x * y);</span>
-<span class="fc" id="L667">            m.setElementAt(2, 2, y * y);</span>
-<span class="fc" id="L668">            m.setElementAt(2, 3, 2.0 * x * w);</span>
-<span class="fc" id="L669">            m.setElementAt(2, 4, 2.0 * y * w);</span>
-<span class="fc" id="L670">            m.setElementAt(2, 5, w * w);</span>
-<span class="fc" id="L671">            x = point4.getHomX();</span>
-<span class="fc" id="L672">            y = point4.getHomY();</span>
-<span class="fc" id="L673">            w = point4.getHomW();</span>
-<span class="fc" id="L674">            m.setElementAt(3, 0, x * x);</span>
-<span class="fc" id="L675">            m.setElementAt(3, 1, 2.0 * x * y);</span>
-<span class="fc" id="L676">            m.setElementAt(3, 2, y * y);</span>
-<span class="fc" id="L677">            m.setElementAt(3, 3, 2.0 * x * w);</span>
-<span class="fc" id="L678">            m.setElementAt(3, 4, 2.0 * y * w);</span>
-<span class="fc" id="L679">            m.setElementAt(3, 5, w * w);</span>
-<span class="fc" id="L680">            x = point5.getHomX();</span>
-<span class="fc" id="L681">            y = point5.getHomY();</span>
-<span class="fc" id="L682">            w = point5.getHomW();</span>
-<span class="fc" id="L683">            m.setElementAt(4, 0, x * x);</span>
-<span class="fc" id="L684">            m.setElementAt(4, 1, 2.0 * x * y);</span>
-<span class="fc" id="L685">            m.setElementAt(4, 2, y * y);</span>
-<span class="fc" id="L686">            m.setElementAt(4, 3, 2.0 * x * w);</span>
-<span class="fc" id="L687">            m.setElementAt(4, 4, 2.0 * y * w);</span>
-<span class="fc" id="L688">            m.setElementAt(4, 5, w * w);</span>
+<span class="fc" id="L644">            Matrix m = new Matrix(5, 6);</span>
+<span class="fc" id="L645">            double x = point1.getHomX();</span>
+<span class="fc" id="L646">            double y = point1.getHomY();</span>
+<span class="fc" id="L647">            double w = point1.getHomW();</span>
+<span class="fc" id="L648">            m.setElementAt(0, 0, x * x);</span>
+<span class="fc" id="L649">            m.setElementAt(0, 1, 2.0 * x * y);</span>
+<span class="fc" id="L650">            m.setElementAt(0, 2, y * y);</span>
+<span class="fc" id="L651">            m.setElementAt(0, 3, 2.0 * x * w);</span>
+<span class="fc" id="L652">            m.setElementAt(0, 4, 2.0 * y * w);</span>
+<span class="fc" id="L653">            m.setElementAt(0, 5, w * w);</span>
+<span class="fc" id="L654">            x = point2.getHomX();</span>
+<span class="fc" id="L655">            y = point2.getHomY();</span>
+<span class="fc" id="L656">            w = point2.getHomW();</span>
+<span class="fc" id="L657">            m.setElementAt(1, 0, x * x);</span>
+<span class="fc" id="L658">            m.setElementAt(1, 1, 2.0 * x * y);</span>
+<span class="fc" id="L659">            m.setElementAt(1, 2, y * y);</span>
+<span class="fc" id="L660">            m.setElementAt(1, 3, 2.0 * x * w);</span>
+<span class="fc" id="L661">            m.setElementAt(1, 4, 2.0 * y * w);</span>
+<span class="fc" id="L662">            m.setElementAt(1, 5, w * w);</span>
+<span class="fc" id="L663">            x = point3.getHomX();</span>
+<span class="fc" id="L664">            y = point3.getHomY();</span>
+<span class="fc" id="L665">            w = point3.getHomW();</span>
+<span class="fc" id="L666">            m.setElementAt(2, 0, x * x);</span>
+<span class="fc" id="L667">            m.setElementAt(2, 1, 2.0 * x * y);</span>
+<span class="fc" id="L668">            m.setElementAt(2, 2, y * y);</span>
+<span class="fc" id="L669">            m.setElementAt(2, 3, 2.0 * x * w);</span>
+<span class="fc" id="L670">            m.setElementAt(2, 4, 2.0 * y * w);</span>
+<span class="fc" id="L671">            m.setElementAt(2, 5, w * w);</span>
+<span class="fc" id="L672">            x = point4.getHomX();</span>
+<span class="fc" id="L673">            y = point4.getHomY();</span>
+<span class="fc" id="L674">            w = point4.getHomW();</span>
+<span class="fc" id="L675">            m.setElementAt(3, 0, x * x);</span>
+<span class="fc" id="L676">            m.setElementAt(3, 1, 2.0 * x * y);</span>
+<span class="fc" id="L677">            m.setElementAt(3, 2, y * y);</span>
+<span class="fc" id="L678">            m.setElementAt(3, 3, 2.0 * x * w);</span>
+<span class="fc" id="L679">            m.setElementAt(3, 4, 2.0 * y * w);</span>
+<span class="fc" id="L680">            m.setElementAt(3, 5, w * w);</span>
+<span class="fc" id="L681">            x = point5.getHomX();</span>
+<span class="fc" id="L682">            y = point5.getHomY();</span>
+<span class="fc" id="L683">            w = point5.getHomW();</span>
+<span class="fc" id="L684">            m.setElementAt(4, 0, x * x);</span>
+<span class="fc" id="L685">            m.setElementAt(4, 1, 2.0 * x * y);</span>
+<span class="fc" id="L686">            m.setElementAt(4, 2, y * y);</span>
+<span class="fc" id="L687">            m.setElementAt(4, 3, 2.0 * x * w);</span>
+<span class="fc" id="L688">            m.setElementAt(4, 4, 2.0 * y * w);</span>
+<span class="fc" id="L689">            m.setElementAt(4, 5, w * w);</span>
             
             //normalize each row to increase accuracy
-<span class="fc" id="L691">            double[] row = new double[6];</span>
+<span class="fc" id="L692">            double[] row = new double[6];</span>
             double rowNorm;
             
-<span class="fc bfc" id="L694" title="All 2 branches covered.">            for (int j = 0; j &lt; 5; j++) {</span>
-<span class="fc" id="L695">                m.getSubmatrixAsArray(j, 0, j, 5, row);</span>
-<span class="fc" id="L696">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
-<span class="fc bfc" id="L697" title="All 2 branches covered.">                for (int i = 0; i &lt; 6; i++) {</span>
-<span class="fc" id="L698">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
+<span class="fc bfc" id="L695" title="All 2 branches covered.">            for (int j = 0; j &lt; 5; j++) {</span>
+<span class="fc" id="L696">                m.getSubmatrixAsArray(j, 0, j, 5, row);</span>
+<span class="fc" id="L697">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
+<span class="fc bfc" id="L698" title="All 2 branches covered.">                for (int i = 0; i &lt; 6; i++) {</span>
+<span class="fc" id="L699">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
                 }
             }            
             
-<span class="fc" id="L702">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
-<span class="fc" id="L703">            decomposer.decompose();</span>
+<span class="fc" id="L703">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L704">            decomposer.decompose();</span>
             
-<span class="pc bpc" id="L705" title="1 of 2 branches missed.">            if (decomposer.getRank() &lt; 5) {</span>
-<span class="nc" id="L706">                throw new ColinearPointsException();</span>
+<span class="pc bpc" id="L706" title="1 of 2 branches missed.">            if (decomposer.getRank() &lt; 5) {</span>
+<span class="nc" id="L707">                throw new ColinearPointsException();</span>
             }
             
             //the right null-space of m contains the parameters a, b, c, d, e ,f
             //of the conic
-<span class="fc" id="L711">            Matrix V = decomposer.getV();</span>
+<span class="fc" id="L712">            Matrix v = decomposer.getV();</span>
             
-<span class="fc" id="L713">            double aPrime = V.getElementAt(0, 5);</span>
-<span class="fc" id="L714">            double bPrime = V.getElementAt(1, 5);</span>
-<span class="fc" id="L715">            double cPrime = V.getElementAt(2, 5);</span>
-<span class="fc" id="L716">            double dPrime = V.getElementAt(3, 5);</span>
-<span class="fc" id="L717">            double ePrime = V.getElementAt(4, 5);</span>
-<span class="fc" id="L718">            double fPrime = V.getElementAt(5, 5);</span>
+<span class="fc" id="L714">            double aPrime = v.getElementAt(0, 5);</span>
+<span class="fc" id="L715">            double bPrime = v.getElementAt(1, 5);</span>
+<span class="fc" id="L716">            double cPrime = v.getElementAt(2, 5);</span>
+<span class="fc" id="L717">            double dPrime = v.getElementAt(3, 5);</span>
+<span class="fc" id="L718">            double ePrime = v.getElementAt(4, 5);</span>
+<span class="fc" id="L719">            double fPrime = v.getElementAt(5, 5);</span>
             
             //an ellipse follows the generic conic equation
             //A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
@@ -725,15 +726,15 @@ public class Ellipse implements Serializable {
             //[B/2  C   E/2 ] = [B' C'  E']
             //[D/2  E/2 F   ]   [D' E'  F']
 
-<span class="fc" id="L728">            double b = 2.0*bPrime;</span>
-<span class="fc" id="L729">            double d = 2.0*dPrime;</span>
-<span class="fc" id="L730">            double e = 2.0*ePrime;</span>
+<span class="fc" id="L729">            double b = 2.0*bPrime;</span>
+<span class="fc" id="L730">            double d = 2.0*dPrime;</span>
+<span class="fc" id="L731">            double e = 2.0*ePrime;</span>
 
-<span class="fc" id="L732">            setParameters(aPrime, b, cPrime, d, e, fPrime, threshold);</span>
-<span class="nc" id="L733">        } catch (AlgebraException | IllegalArgumentException ex) {</span>
-<span class="nc" id="L734">            throw new ColinearPointsException(ex);</span>
-<span class="fc" id="L735">        }</span>
-<span class="fc" id="L736">    }</span>
+<span class="fc" id="L733">            setParameters(aPrime, b, cPrime, d, e, fPrime, threshold);</span>
+<span class="nc" id="L734">        } catch (AlgebraException | IllegalArgumentException ex) {</span>
+<span class="nc" id="L735">            throw new ColinearPointsException(ex);</span>
+<span class="fc" id="L736">        }</span>
+<span class="fc" id="L737">    }</span>
     
     /**
      * Sets parameters of canonical equation of an ellipse, which is:
@@ -748,9 +749,9 @@ public class Ellipse implements Serializable {
      * b^2 - 4*a*c &amp;lt; 0.0.
      */
     public final void setParameters(double a, double b, double c, double d,
-            double e, double f) throws IllegalArgumentException {
-<span class="fc" id="L752">        setParameters(a, b, c, d, e, f, 0.0);</span>
-<span class="fc" id="L753">    }</span>
+            double e, double f) {
+<span class="fc" id="L753">        setParameters(a, b, c, d, e, f, 0.0);</span>
+<span class="fc" id="L754">    }</span>
     
     /**
      * Sets parameters of canonical equation of an ellipse, which is:
@@ -767,42 +768,36 @@ public class Ellipse implements Serializable {
      * b^2 - 4*A*c &amp;lt; threshold.
      */
     public final void setParameters(double a, double b, double c, double d, 
-            double e, double f, double threshold) 
-            throws IllegalArgumentException {
-<span class="pc bpc" id="L772" title="1 of 2 branches missed.">        if (b*b - 4.0*a*c &gt;= threshold) {</span>
+            double e, double f, double threshold) {
+<span class="fc" id="L772">        double discriminant = b * b - 4.0 * a * c;</span>
+<span class="pc bpc" id="L773" title="1 of 2 branches missed.">        if (discriminant &gt;= threshold) {</span>
             //not an ellipse
-<span class="nc" id="L774">            throw new IllegalArgumentException();</span>
-        }   
+<span class="nc" id="L775">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L778">        double tmp1 = a * e * e + c * d * d - b * d * e + discriminant * f;</span>
+<span class="fc" id="L779">        double tmp2 = Math.sqrt((a - c) * (a - c) + b * b);</span>
+<span class="fc" id="L780">        double semiMajorAxis = - Math.sqrt(2.0 * tmp1 * (a + c + tmp2)) /</span>
+                discriminant;
         
-<span class="fc" id="L777">        double semiMajorAxis = - Math.sqrt(</span>
-                2.0*(a*e*e + c*d*d - b*d*e + (b*b - 4.0*a*c)*f)*
-<span class="fc" id="L779">                (a + c + Math.sqrt((a - c)*(a - c) + b*b))) /</span>
-                (b*b - 4*a*c);
+<span class="fc" id="L783">        double semiMinorAxis = - Math.sqrt(2.0 * tmp1 * (a + c - tmp2)) /</span>
+                discriminant;
         
-<span class="fc" id="L782">        double semiMinorAxis = - Math.sqrt(</span>
-                2.0*(a*e*e + c*d*d - b*d*e + (b*b - 4.0*a*c)*f)*
-<span class="fc" id="L784">                (a + c - Math.sqrt((a - c)*(a - c) + b*b))) /</span>
-                (b*b - 4*a*c);
-        
-<span class="fc" id="L787">        double xc = (2*c*d - b*e) / (b*b - 4.0*a*c);</span>
-<span class="fc" id="L788">        double yc = (2*a*e - b*d) / (b*b - 4.0*a*c);        </span>
-<span class="fc" id="L789">        Point2D center = new InhomogeneousPoint2D(xc, yc);</span>
+<span class="fc" id="L786">        double xc = (2.0 * c * d - b * e) / discriminant;</span>
+<span class="fc" id="L787">        double yc = (2.0 * a * e - b * d) / discriminant;</span>
+<span class="fc" id="L788">        Point2D center = new InhomogeneousPoint2D(xc, yc);</span>
         
         double rotationAngle;
-<span class="fc bfc" id="L792" title="All 4 branches covered.">        if (Math.abs(b) &lt;= threshold &amp;&amp; a &lt; c) {</span>
-<span class="pc bpc" id="L793" title="1 of 2 branches missed.">            if (a &lt; c) {</span>
-<span class="fc" id="L794">                rotationAngle = 0.0;</span>
-            } else {
-<span class="nc" id="L796">                rotationAngle = Math.PI / 2.0;</span>
-            }
+<span class="fc bfc" id="L791" title="All 4 branches covered.">        if (Math.abs(b) &lt;= threshold &amp;&amp; a &lt; c) {</span>
+<span class="fc" id="L792">            rotationAngle = 0.0;</span>
         } else {
-<span class="fc" id="L799">            rotationAngle = Math.atan2(</span>
-<span class="fc" id="L800">                    c - a - Math.sqrt((a - c)*(a - c) + b*b), b);</span>
+<span class="fc" id="L794">            rotationAngle = Math.atan2(</span>
+                    c - a - tmp2, b);
         }
         
-<span class="fc" id="L803">        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, </span>
+<span class="fc" id="L798">        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, </span>
                 rotationAngle);
-<span class="fc" id="L805">    }</span>
+<span class="fc" id="L800">    }</span>
     
     /**
      * Gets focus distance of ellipse.
@@ -813,8 +808,8 @@ public class Ellipse implements Serializable {
      * @return focus distance.
      */
     public double getFocus() {
-<span class="fc" id="L816">        return Math.sqrt(Math.pow(mSemiMajorAxis, 2.0) - </span>
-<span class="fc" id="L817">                Math.pow(mSemiMinorAxis, 2.0));</span>
+<span class="fc" id="L811">        return Math.sqrt(Math.pow(mSemiMajorAxis, 2.0) - </span>
+<span class="fc" id="L812">                Math.pow(mSemiMinorAxis, 2.0));</span>
     }
     
     /**
@@ -823,19 +818,19 @@ public class Ellipse implements Serializable {
      * stored.
      */
     public void getSemiMajorAxisCoordinates(double[] coords) {
-<span class="fc" id="L826">        coords[0] = mSemiMajorAxis * Math.cos(mRotationAngle);</span>
-<span class="fc" id="L827">        coords[1] = mSemiMajorAxis * Math.sin(mRotationAngle);</span>
-<span class="fc" id="L828">    }</span>
+<span class="fc" id="L821">        coords[0] = mSemiMajorAxis * Math.cos(mRotationAngle);</span>
+<span class="fc" id="L822">        coords[1] = mSemiMajorAxis * Math.sin(mRotationAngle);</span>
+<span class="fc" id="L823">    }</span>
     
     /**
      * Gets semi major axis x,y coordinates.
      * @return array containing x, y coordinates of semi major axis.
      */
     public double[] getSemiMajorAxisCoordinates() {
-<span class="fc" id="L835">        double[] coords = new double[</span>
+<span class="fc" id="L830">        double[] coords = new double[</span>
                 Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
-<span class="fc" id="L837">        getSemiMajorAxisCoordinates(coords);</span>
-<span class="fc" id="L838">        return coords;</span>
+<span class="fc" id="L832">        getSemiMajorAxisCoordinates(coords);</span>
+<span class="fc" id="L833">        return coords;</span>
     }
     
     /**
@@ -844,9 +839,9 @@ public class Ellipse implements Serializable {
      * @param coords coordinates of semi major axis.
      */
     public void setSemiMajorAxisCoordinates(double[] coords) {
-<span class="fc" id="L847">        mRotationAngle = Math.atan2(coords[1], coords[0]);</span>
-<span class="fc" id="L848">        mSemiMajorAxis = com.irurueta.algebra.Utils.normF(coords);</span>
-<span class="fc" id="L849">    }</span>
+<span class="fc" id="L842">        mRotationAngle = Math.atan2(coords[1], coords[0]);</span>
+<span class="fc" id="L843">        mSemiMajorAxis = com.irurueta.algebra.Utils.normF(coords);</span>
+<span class="fc" id="L844">    }</span>
     
     /**
      * Gets semi minor axis x,y coordinates.
@@ -854,19 +849,19 @@ public class Ellipse implements Serializable {
      * stored.
      */
     public void getSemiMinorAxisCoordinates(double[] coords) {
-<span class="fc" id="L857">        coords[0] = -mSemiMinorAxis * Math.sin(mRotationAngle);</span>
-<span class="fc" id="L858">        coords[1] = mSemiMinorAxis * Math.cos(mRotationAngle);</span>
-<span class="fc" id="L859">    }</span>
+<span class="fc" id="L852">        coords[0] = -mSemiMinorAxis * Math.sin(mRotationAngle);</span>
+<span class="fc" id="L853">        coords[1] = mSemiMinorAxis * Math.cos(mRotationAngle);</span>
+<span class="fc" id="L854">    }</span>
     
     /**
      * Gets semi minor axis x,y coordinates.
      * @return array containing x,y coordinates of semi minor axis.
      */
     public double[] getSemiMinorAxisCoordinates() {
-<span class="fc" id="L866">        double[] coords = new double[</span>
+<span class="fc" id="L861">        double[] coords = new double[</span>
                 Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];
-<span class="fc" id="L868">        getSemiMinorAxisCoordinates(coords);</span>
-<span class="fc" id="L869">        return coords;</span>
+<span class="fc" id="L863">        getSemiMinorAxisCoordinates(coords);</span>
+<span class="fc" id="L864">        return coords;</span>
     }
     
     /**
@@ -875,9 +870,9 @@ public class Ellipse implements Serializable {
      * @param coords coordinates of semi minor axis.
      */
     public void setSemiMinorAxisCoordinates(double[] coords) {
-<span class="fc" id="L878">        mRotationAngle = Math.atan2(-coords[0], coords[1]);</span>
-<span class="fc" id="L879">        mSemiMinorAxis = com.irurueta.algebra.Utils.normF(coords);</span>
-<span class="fc" id="L880">    }</span>
+<span class="fc" id="L873">        mRotationAngle = Math.atan2(-coords[0], coords[1]);</span>
+<span class="fc" id="L874">        mSemiMinorAxis = com.irurueta.algebra.Utils.normF(coords);</span>
+<span class="fc" id="L875">    }</span>
     
     /**
      * Gets 1st focus point.
@@ -886,12 +881,12 @@ public class Ellipse implements Serializable {
      * @param focusPoint1 1st focus point.
      */
     public void getFocusPoint1(Point2D focusPoint1) {
-<span class="fc" id="L889">        double focus = getFocus();</span>
+<span class="fc" id="L884">        double focus = getFocus();</span>
         
-<span class="fc" id="L891">        focusPoint1.setInhomogeneousCoordinates(</span>
-<span class="fc" id="L892">                mCenter.getInhomX() - focus * Math.cos(mRotationAngle), </span>
-<span class="fc" id="L893">                mCenter.getInhomY() - focus * Math.sin(mRotationAngle));</span>
-<span class="fc" id="L894">    }</span>
+<span class="fc" id="L886">        focusPoint1.setInhomogeneousCoordinates(</span>
+<span class="fc" id="L887">                mCenter.getInhomX() - focus * Math.cos(mRotationAngle), </span>
+<span class="fc" id="L888">                mCenter.getInhomY() - focus * Math.sin(mRotationAngle));</span>
+<span class="fc" id="L889">    }</span>
     
     /**
      * Gets 1st focus point.
@@ -900,9 +895,9 @@ public class Ellipse implements Serializable {
      * @return 1st focus point.
      */
     public Point2D getFocusPoint1() {
-<span class="fc" id="L903">        Point2D result = Point2D.create();</span>
-<span class="fc" id="L904">        getFocusPoint1(result);</span>
-<span class="fc" id="L905">        return result;</span>
+<span class="fc" id="L898">        Point2D result = Point2D.create();</span>
+<span class="fc" id="L899">        getFocusPoint1(result);</span>
+<span class="fc" id="L900">        return result;</span>
     }
     
     /**
@@ -912,12 +907,12 @@ public class Ellipse implements Serializable {
      * @param focusPoint2 2nd focus point.
      */
     public void getFocusPoint2(Point2D focusPoint2) {
-<span class="fc" id="L915">        double focus = getFocus();</span>
+<span class="fc" id="L910">        double focus = getFocus();</span>
         
-<span class="fc" id="L917">        focusPoint2.setInhomogeneousCoordinates(</span>
-<span class="fc" id="L918">                mCenter.getInhomX() + focus * Math.cos(mRotationAngle), </span>
-<span class="fc" id="L919">                mCenter.getInhomY() + focus * Math.sin(mRotationAngle));</span>
-<span class="fc" id="L920">    }</span>
+<span class="fc" id="L912">        focusPoint2.setInhomogeneousCoordinates(</span>
+<span class="fc" id="L913">                mCenter.getInhomX() + focus * Math.cos(mRotationAngle), </span>
+<span class="fc" id="L914">                mCenter.getInhomY() + focus * Math.sin(mRotationAngle));</span>
+<span class="fc" id="L915">    }</span>
     
     /**
      * Gets 2nd focus point.
@@ -926,9 +921,9 @@ public class Ellipse implements Serializable {
      * @return 2nd focus point.
      */
     public Point2D getFocusPoint2() {
-<span class="fc" id="L929">        Point2D result = Point2D.create();</span>
-<span class="fc" id="L930">        getFocusPoint2(result);</span>
-<span class="fc" id="L931">        return result;</span>
+<span class="fc" id="L924">        Point2D result = Point2D.create();</span>
+<span class="fc" id="L925">        getFocusPoint2(result);</span>
+<span class="fc" id="L926">        return result;</span>
     }
     
     /**
@@ -940,37 +935,38 @@ public class Ellipse implements Serializable {
      */
     public void setFocusPoints(Point2D focusPoint1, Point2D focusPoint2, 
             boolean keepSemiMinorAxis) {
-<span class="fc" id="L943">        InhomogeneousPoint2D center = new InhomogeneousPoint2D(</span>
-<span class="fc" id="L944">                (focusPoint1.getInhomX() + focusPoint2.getInhomX()) / 2.0, </span>
-<span class="fc" id="L945">                (focusPoint1.getInhomY() + focusPoint2.getInhomY()) / 2.0);</span>
-<span class="fc" id="L946">        double rotationAngle = Math.atan2(</span>
-<span class="fc" id="L947">                focusPoint2.getInhomY() - focusPoint1.getInhomY(), </span>
-<span class="fc" id="L948">                focusPoint2.getInhomX() - focusPoint1.getInhomX());</span>
+<span class="fc" id="L938">        InhomogeneousPoint2D center = new InhomogeneousPoint2D(</span>
+<span class="fc" id="L939">                (focusPoint1.getInhomX() + focusPoint2.getInhomX()) / 2.0, </span>
+<span class="fc" id="L940">                (focusPoint1.getInhomY() + focusPoint2.getInhomY()) / 2.0);</span>
+<span class="fc" id="L941">        double rotationAngle = Math.atan2(</span>
+<span class="fc" id="L942">                focusPoint2.getInhomY() - focusPoint1.getInhomY(), </span>
+<span class="fc" id="L943">                focusPoint2.getInhomX() - focusPoint1.getInhomX());</span>
         
-<span class="fc" id="L950">        double f = focusPoint1.distanceTo(center);</span>
-<span class="fc" id="L951">        double f2 = f*f;</span>
-        double a2, b2;
-<span class="fc bfc" id="L953" title="All 2 branches covered.">        if (keepSemiMinorAxis) {</span>
-<span class="fc" id="L954">            b2 = mSemiMinorAxis * mSemiMinorAxis;</span>
-<span class="fc" id="L955">            a2 = f2 + b2;</span>
+<span class="fc" id="L945">        double f = focusPoint1.distanceTo(center);</span>
+<span class="fc" id="L946">        double f2 = f * f;</span>
+        double a2;
+        double b2;
+<span class="fc bfc" id="L949" title="All 2 branches covered.">        if (keepSemiMinorAxis) {</span>
+<span class="fc" id="L950">            b2 = mSemiMinorAxis * mSemiMinorAxis;</span>
+<span class="fc" id="L951">            a2 = f2 + b2;</span>
         } else {
-<span class="fc" id="L957">            a2 = mSemiMajorAxis * mSemiMajorAxis;</span>
-<span class="fc" id="L958">            b2 = a2 - f2;</span>
+<span class="fc" id="L953">            a2 = mSemiMajorAxis * mSemiMajorAxis;</span>
+<span class="fc" id="L954">            b2 = a2 - f2;</span>
         }
         
-<span class="fc" id="L961">        double semiMajorAxis = Math.sqrt(a2);</span>
-<span class="fc" id="L962">        double semiMinorAxis = Math.sqrt(b2);</span>
+<span class="fc" id="L957">        double semiMajorAxis = Math.sqrt(a2);</span>
+<span class="fc" id="L958">        double semiMinorAxis = Math.sqrt(b2);</span>
         
-<span class="fc" id="L964">        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, </span>
+<span class="fc" id="L960">        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, </span>
                 rotationAngle);
-<span class="fc" id="L966">    }</span>
+<span class="fc" id="L962">    }</span>
     
     /**
      * Gets eccentricity of ellipsis.
      * @return eccentricity of ellipsis.
      */
     public double getEccentricity() {
-<span class="fc" id="L973">        return getFocus() / mSemiMajorAxis;</span>
+<span class="fc" id="L969">        return getFocus() / mSemiMajorAxis;</span>
     }
     
     /**
@@ -978,7 +974,7 @@ public class Ellipse implements Serializable {
      * @return area of this ellipse.
      */
     public double getArea() {
-<span class="fc" id="L981">        return Math.PI * mSemiMajorAxis * mSemiMinorAxis;</span>
+<span class="fc" id="L977">        return Math.PI * mSemiMajorAxis * mSemiMinorAxis;</span>
     }
     
     /**
@@ -986,10 +982,10 @@ public class Ellipse implements Serializable {
      * @return Perimeter of this ellipse.
      */
     public double getPerimeter() {
-<span class="fc" id="L989">        double a = mSemiMajorAxis;</span>
-<span class="fc" id="L990">        double b = mSemiMinorAxis;</span>
+<span class="fc" id="L985">        double a = mSemiMajorAxis;</span>
+<span class="fc" id="L986">        double b = mSemiMinorAxis;</span>
         
-<span class="fc" id="L992">        return Math.PI * (3.0 * (a + b) - Math.sqrt((3.0*a + b) * (a + 3.0*b)));</span>
+<span class="fc" id="L988">        return Math.PI * (3.0 * (a + b) - Math.sqrt((3.0*a + b) * (a + 3.0*b)));</span>
     }    
 
     /**
@@ -998,22 +994,22 @@ public class Ellipse implements Serializable {
      * @return curvature of ellipse.
      */
     public double getCurvature(Point2D point) {
-<span class="fc" id="L1001">        double a = mSemiMajorAxis;</span>
-<span class="fc" id="L1002">        double b = mSemiMinorAxis;</span>
+<span class="fc" id="L997">        double a = mSemiMajorAxis;</span>
+<span class="fc" id="L998">        double b = mSemiMinorAxis;</span>
         
-<span class="fc" id="L1004">        double a2 = a*a;</span>
-<span class="fc" id="L1005">        double b2 = b*b;</span>
+<span class="fc" id="L1000">        double a2 = a*a;</span>
+<span class="fc" id="L1001">        double b2 = b*b;</span>
         
-<span class="fc" id="L1007">        double a4 = a2*a2;</span>
-<span class="fc" id="L1008">        double b4 = b2*b2;</span>
+<span class="fc" id="L1003">        double a4 = a2*a2;</span>
+<span class="fc" id="L1004">        double b4 = b2*b2;</span>
         
-<span class="fc" id="L1010">        double x = point.getInhomX() - mCenter.getInhomX();</span>
-<span class="fc" id="L1011">        double y = point.getInhomY() - mCenter.getInhomY();</span>
+<span class="fc" id="L1006">        double x = point.getInhomX() - mCenter.getInhomX();</span>
+<span class="fc" id="L1007">        double y = point.getInhomY() - mCenter.getInhomY();</span>
         
-<span class="fc" id="L1013">        double x2 = x*x;</span>
-<span class="fc" id="L1014">        double y2 = y*y;</span>
+<span class="fc" id="L1009">        double x2 = x*x;</span>
+<span class="fc" id="L1010">        double y2 = y*y;</span>
         
-<span class="fc" id="L1016">        return Math.pow(x2 / a4 + y2 / b4, -3.0 / 2.0) / (a2*b2);</span>
+<span class="fc" id="L1012">        return Math.pow(x2 / a4 + y2 / b4, -3.0 / 2.0) / (a2*b2);</span>
     }
     
     /**
@@ -1022,38 +1018,38 @@ public class Ellipse implements Serializable {
      * @return A conic representing this circle
      */
     public Conic toConic() {
-<span class="fc" id="L1025">        mCenter.normalize();</span>
+<span class="fc" id="L1021">        mCenter.normalize();</span>
         //use inhomogeneous center coordinates
-<span class="fc" id="L1027">        double xc = mCenter.getInhomX();</span>
-<span class="fc" id="L1028">        double yc = mCenter.getInhomY();</span>
+<span class="fc" id="L1023">        double xc = mCenter.getInhomX();</span>
+<span class="fc" id="L1024">        double yc = mCenter.getInhomY();</span>
         
-<span class="fc" id="L1030">        double sint = Math.sin(mRotationAngle);</span>
-<span class="fc" id="L1031">        double cost = Math.cos(mRotationAngle);</span>
+<span class="fc" id="L1026">        double sint = Math.sin(mRotationAngle);</span>
+<span class="fc" id="L1027">        double cost = Math.cos(mRotationAngle);</span>
         
-<span class="fc" id="L1033">        double a = mSemiMajorAxis;</span>
-<span class="fc" id="L1034">        double b = mSemiMinorAxis;</span>
+<span class="fc" id="L1029">        double a = mSemiMajorAxis;</span>
+<span class="fc" id="L1030">        double b = mSemiMinorAxis;</span>
         
-<span class="fc" id="L1036">        double xc2 = xc*xc;</span>
-<span class="fc" id="L1037">        double yc2 = yc*yc;</span>
+<span class="fc" id="L1032">        double xc2 = xc*xc;</span>
+<span class="fc" id="L1033">        double yc2 = yc*yc;</span>
         
-<span class="fc" id="L1039">        double sint2 = sint*sint;</span>
-<span class="fc" id="L1040">        double cost2 = cost*cost;</span>
+<span class="fc" id="L1035">        double sint2 = sint*sint;</span>
+<span class="fc" id="L1036">        double cost2 = cost*cost;</span>
         
-<span class="fc" id="L1042">        double a2 = a*a;</span>
-<span class="fc" id="L1043">        double b2 = b*b;</span>
+<span class="fc" id="L1038">        double a2 = a*a;</span>
+<span class="fc" id="L1039">        double b2 = b*b;</span>
         
-<span class="fc" id="L1045">        double A = a2*sint2 + b2*cost2;</span>
-<span class="fc" id="L1046">        double B = 2.0*(b2 - a2)*sint*cost;</span>
-<span class="fc" id="L1047">        double C = a2*cost2 + b2*sint2;</span>
-<span class="fc" id="L1048">        double D = -2.0*A*xc - B*yc;</span>
-<span class="fc" id="L1049">        double E = -B*xc - 2.0*C*yc;</span>
-<span class="fc" id="L1050">        double F = A*xc2 + B*xc*yc + C*yc2 - a2*b2;</span>
+<span class="fc" id="L1041">        double aParam = a2*sint2 + b2*cost2;</span>
+<span class="fc" id="L1042">        double bParam = 2.0*(b2 - a2)*sint*cost;</span>
+<span class="fc" id="L1043">        double cParam = a2*cost2 + b2*sint2;</span>
+<span class="fc" id="L1044">        double dParam = -2.0*aParam*xc - bParam*yc;</span>
+<span class="fc" id="L1045">        double eParam = -bParam*xc - 2.0*cParam*yc;</span>
+<span class="fc" id="L1046">        double fParam = aParam*xc2 + bParam*xc*yc + cParam*yc2 - a2*b2;</span>
 
-<span class="fc" id="L1052">        double bConic = B / 2.0;</span>
-<span class="fc" id="L1053">        double dConic = D / 2.0;</span>
-<span class="fc" id="L1054">        double eConic = E / 2.0;</span>
+<span class="fc" id="L1048">        double bConic = bParam / 2.0;</span>
+<span class="fc" id="L1049">        double dConic = dParam / 2.0;</span>
+<span class="fc" id="L1050">        double eConic = eParam / 2.0;</span>
 
-<span class="fc" id="L1056">        return new Conic(A, bConic, C, dConic, eConic, F);</span>
+<span class="fc" id="L1052">        return new Conic(aParam, bConic, cParam, dConic, eConic, fParam);</span>
     }
     
     /**
@@ -1062,20 +1058,20 @@ public class Ellipse implements Serializable {
      * @param conic conic to set parameters from.
      * @throws IllegalArgumentException if provided conic is not an ellipse.
      */
-    public final void setFromConic(Conic conic) throws IllegalArgumentException {
-<span class="fc bfc" id="L1066" title="All 2 branches covered.">        if (conic.getConicType() != ConicType.ELLIPSE_CONIC_TYPE &amp;&amp;</span>
-<span class="fc bfc" id="L1067" title="All 2 branches covered.">                conic.getConicType() != ConicType.CIRCLE_CONIC_TYPE) {</span>
-<span class="fc" id="L1068">            throw new IllegalArgumentException();</span>
+    public final void setFromConic(Conic conic) {
+<span class="fc bfc" id="L1062" title="All 2 branches covered.">        if (conic.getConicType() != ConicType.ELLIPSE_CONIC_TYPE &amp;&amp;</span>
+<span class="fc bfc" id="L1063" title="All 2 branches covered.">                conic.getConicType() != ConicType.CIRCLE_CONIC_TYPE) {</span>
+<span class="fc" id="L1064">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L1071">        conic.normalize();</span>
+<span class="fc" id="L1067">        conic.normalize();</span>
 
-<span class="fc" id="L1073">        double aConic = conic.getA();</span>
-<span class="fc" id="L1074">        double bConic = conic.getB();</span>
-<span class="fc" id="L1075">        double cConic = conic.getC();</span>
-<span class="fc" id="L1076">        double dConic = conic.getD();</span>
-<span class="fc" id="L1077">        double eConic = conic.getE();</span>
-<span class="fc" id="L1078">        double fConic = conic.getF();</span>
+<span class="fc" id="L1069">        double aConic = conic.getA();</span>
+<span class="fc" id="L1070">        double bConic = conic.getB();</span>
+<span class="fc" id="L1071">        double cConic = conic.getC();</span>
+<span class="fc" id="L1072">        double dConic = conic.getD();</span>
+<span class="fc" id="L1073">        double eConic = conic.getE();</span>
+<span class="fc" id="L1074">        double fConic = conic.getF();</span>
             
         //an ellipse follows the generic conic equation
         //A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
@@ -1085,22 +1081,22 @@ public class Ellipse implements Serializable {
         //[B/2  C   E/2 ] = [B' C'  E']
         //[D/2  E/2 F   ]   [D' E'  F']
 
-<span class="fc" id="L1088">        double b = 2.0*bConic;</span>
-<span class="fc" id="L1089">        double d = 2.0*dConic;</span>
-<span class="fc" id="L1090">        double e = 2.0*eConic;</span>
+<span class="fc" id="L1084">        double b = 2.0*bConic;</span>
+<span class="fc" id="L1085">        double d = 2.0*dConic;</span>
+<span class="fc" id="L1086">        double e = 2.0*eConic;</span>
 
-<span class="fc" id="L1092">        setParameters(aConic, b, cConic, d, e, fConic);</span>
-<span class="fc" id="L1093">    }    </span>
+<span class="fc" id="L1088">        setParameters(aConic, b, cConic, d, e, fConic);</span>
+<span class="fc" id="L1089">    }    </span>
     
     /**
      * Sets parameters of this ellipse from a circle.
      * @param circle a circle to set parameters from.
      */
     public final void setFromCircle(Circle circle) {
-<span class="fc" id="L1100">        mCenter = circle.getCenter();</span>
-<span class="fc" id="L1101">        mSemiMajorAxis = mSemiMinorAxis = circle.getRadius();</span>
-<span class="fc" id="L1102">        mRotationAngle = 0.0;</span>
-<span class="fc" id="L1103">    }</span>
+<span class="fc" id="L1096">        mCenter = circle.getCenter();</span>
+<span class="fc" id="L1097">        mSemiMajorAxis = mSemiMinorAxis = circle.getRadius();</span>
+<span class="fc" id="L1098">        mRotationAngle = 0.0;</span>
+<span class="fc" id="L1099">    }</span>
     
     /**
      * Determines if provided point is inside this ellipse or not up to a 
@@ -1115,37 +1111,37 @@ public class Ellipse implements Serializable {
      * otherwise.
      */
     public boolean isInside(Point2D point, double threshold) {
-<span class="fc" id="L1118">        mCenter.normalize();</span>
+<span class="fc" id="L1114">        mCenter.normalize();</span>
         //use inhomogeneous center coordinates
-<span class="fc" id="L1120">        double xc = mCenter.getInhomX();</span>
-<span class="fc" id="L1121">        double yc = mCenter.getInhomY();</span>
+<span class="fc" id="L1116">        double xc = mCenter.getInhomX();</span>
+<span class="fc" id="L1117">        double yc = mCenter.getInhomY();</span>
         
-<span class="fc" id="L1123">        double sint = Math.sin(mRotationAngle);</span>
-<span class="fc" id="L1124">        double cost = Math.cos(mRotationAngle);</span>
+<span class="fc" id="L1119">        double sint = Math.sin(mRotationAngle);</span>
+<span class="fc" id="L1120">        double cost = Math.cos(mRotationAngle);</span>
         
-<span class="fc" id="L1126">        double a = mSemiMajorAxis;</span>
-<span class="fc" id="L1127">        double b = mSemiMinorAxis;</span>
+<span class="fc" id="L1122">        double a = mSemiMajorAxis;</span>
+<span class="fc" id="L1123">        double b = mSemiMinorAxis;</span>
         
-<span class="fc" id="L1129">        double xc2 = xc*xc;</span>
-<span class="fc" id="L1130">        double yc2 = yc*yc;</span>
+<span class="fc" id="L1125">        double xc2 = xc*xc;</span>
+<span class="fc" id="L1126">        double yc2 = yc*yc;</span>
         
-<span class="fc" id="L1132">        double sint2 = sint*sint;</span>
-<span class="fc" id="L1133">        double cost2 = cost*cost;</span>
+<span class="fc" id="L1128">        double sint2 = sint*sint;</span>
+<span class="fc" id="L1129">        double cost2 = cost*cost;</span>
         
-<span class="fc" id="L1135">        double a2 = a*a;</span>
-<span class="fc" id="L1136">        double b2 = b*b;</span>
+<span class="fc" id="L1131">        double a2 = a*a;</span>
+<span class="fc" id="L1132">        double b2 = b*b;</span>
         
-<span class="fc" id="L1138">        double A = a2*sint2 + b2*cost2;</span>
-<span class="fc" id="L1139">        double B = 2.0*(b2 - a2)*sint*cost;</span>
-<span class="fc" id="L1140">        double C = a2*cost2 + b2*sint2;</span>
-<span class="fc" id="L1141">        double D = -2.0*A*xc - B*yc;</span>
-<span class="fc" id="L1142">        double E = -B*xc - 2.0*C*yc;</span>
-<span class="fc" id="L1143">        double F = A*xc2 + B*xc*yc + C*yc2 - a2*b2;</span>
+<span class="fc" id="L1134">        double aParam = a2*sint2 + b2*cost2;</span>
+<span class="fc" id="L1135">        double bParam = 2.0*(b2 - a2)*sint*cost;</span>
+<span class="fc" id="L1136">        double cParam = a2*cost2 + b2*sint2;</span>
+<span class="fc" id="L1137">        double dParam = -2.0*aParam*xc - bParam*yc;</span>
+<span class="fc" id="L1138">        double eParam = -bParam*xc - 2.0*cParam*yc;</span>
+<span class="fc" id="L1139">        double fParam = aParam*xc2 + bParam*xc*yc + cParam*yc2 - a2*b2;</span>
         
-<span class="fc" id="L1145">        double x = point.getInhomX();</span>
-<span class="fc" id="L1146">        double y = point.getInhomY();</span>
+<span class="fc" id="L1141">        double x = point.getInhomX();</span>
+<span class="fc" id="L1142">        double y = point.getInhomY();</span>
         
-<span class="fc bfc" id="L1148" title="All 2 branches covered.">        return A*x*x + B*x*y + C*y*y + D*x + E*y + F &lt;= threshold;</span>
+<span class="fc bfc" id="L1144" title="All 2 branches covered.">        return aParam*x*x + bParam*x*y + cParam*y*y + dParam*x + eParam*y + fParam &lt;= threshold;</span>
     }
 
     /**
@@ -1155,7 +1151,7 @@ public class Ellipse implements Serializable {
      * otherwise.
      */
     public boolean isInside(Point2D point) {
-<span class="fc" id="L1158">        return isInside(point, 0.0);</span>
+<span class="fc" id="L1154">        return isInside(point, 0.0);</span>
     }    
     
     /**
@@ -1168,43 +1164,42 @@ public class Ellipse implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is 
      * negative.
      */
-    public boolean isLocus(Point2D point, double threshold) 
-            throws IllegalArgumentException {        
-<span class="fc bfc" id="L1173" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L1174">            throw new IllegalArgumentException();</span>
+    public boolean isLocus(Point2D point, double threshold) {
+<span class="fc bfc" id="L1168" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L1169">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L1177">        mCenter.normalize();</span>
+<span class="fc" id="L1172">        mCenter.normalize();</span>
         //use inhomogeneous center coordinates
-<span class="fc" id="L1179">        double xc = mCenter.getInhomX();</span>
-<span class="fc" id="L1180">        double yc = mCenter.getInhomY();</span>
+<span class="fc" id="L1174">        double xc = mCenter.getInhomX();</span>
+<span class="fc" id="L1175">        double yc = mCenter.getInhomY();</span>
         
-<span class="fc" id="L1182">        double sint = Math.sin(mRotationAngle);</span>
-<span class="fc" id="L1183">        double cost = Math.cos(mRotationAngle);</span>
+<span class="fc" id="L1177">        double sint = Math.sin(mRotationAngle);</span>
+<span class="fc" id="L1178">        double cost = Math.cos(mRotationAngle);</span>
         
-<span class="fc" id="L1185">        double a = mSemiMajorAxis;</span>
-<span class="fc" id="L1186">        double b = mSemiMinorAxis;</span>
+<span class="fc" id="L1180">        double a = mSemiMajorAxis;</span>
+<span class="fc" id="L1181">        double b = mSemiMinorAxis;</span>
         
-<span class="fc" id="L1188">        double xc2 = xc*xc;</span>
-<span class="fc" id="L1189">        double yc2 = yc*yc;</span>
+<span class="fc" id="L1183">        double xc2 = xc*xc;</span>
+<span class="fc" id="L1184">        double yc2 = yc*yc;</span>
         
-<span class="fc" id="L1191">        double sint2 = sint*sint;</span>
-<span class="fc" id="L1192">        double cost2 = cost*cost;</span>
+<span class="fc" id="L1186">        double sint2 = sint*sint;</span>
+<span class="fc" id="L1187">        double cost2 = cost*cost;</span>
         
-<span class="fc" id="L1194">        double a2 = a*a;</span>
-<span class="fc" id="L1195">        double b2 = b*b;</span>
+<span class="fc" id="L1189">        double a2 = a*a;</span>
+<span class="fc" id="L1190">        double b2 = b*b;</span>
         
-<span class="fc" id="L1197">        double A = a2*sint2 + b2*cost2;</span>
-<span class="fc" id="L1198">        double B = 2.0*(b2 - a2)*sint*cost;</span>
-<span class="fc" id="L1199">        double C = a2*cost2 + b2*sint2;</span>
-<span class="fc" id="L1200">        double D = -2.0*A*xc - B*yc;</span>
-<span class="fc" id="L1201">        double E = -B*xc - 2.0*C*yc;</span>
-<span class="fc" id="L1202">        double F = A*xc2 + B*xc*yc + C*yc2 - a2*b2;</span>
+<span class="fc" id="L1192">        double aParam = a2*sint2 + b2*cost2;</span>
+<span class="fc" id="L1193">        double bParam = 2.0*(b2 - a2)*sint*cost;</span>
+<span class="fc" id="L1194">        double cParam = a2*cost2 + b2*sint2;</span>
+<span class="fc" id="L1195">        double dParam = -2.0*aParam*xc - bParam*yc;</span>
+<span class="fc" id="L1196">        double eParam = -bParam*xc - 2.0*cParam*yc;</span>
+<span class="fc" id="L1197">        double fParam = aParam*xc2 + bParam*xc*yc + cParam*yc2 - a2*b2;</span>
         
-<span class="fc" id="L1204">        double x = point.getInhomX();</span>
-<span class="fc" id="L1205">        double y = point.getInhomY();</span>
+<span class="fc" id="L1199">        double x = point.getInhomX();</span>
+<span class="fc" id="L1200">        double y = point.getInhomY();</span>
         
-<span class="fc bfc" id="L1207" title="All 2 branches covered.">        return Math.abs(A*x*x + B*x*y + C*y*y + D*x + E*y + F) &lt;= threshold;</span>
+<span class="fc bfc" id="L1202" title="All 2 branches covered.">        return Math.abs(aParam*x*x + bParam*x*y + cParam*y*y + dParam*x + eParam*y + fParam) &lt;= threshold;</span>
     }    
     
     /**
@@ -1213,7 +1208,7 @@ public class Ellipse implements Serializable {
      * @return True if point lies at ellipse boundary, false otherwise.
      */
     public boolean isLocus(Point2D point) {
-<span class="fc" id="L1216">        return isLocus(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L1211">        return isLocus(point, DEFAULT_THRESHOLD);</span>
     }    
 
     /**
@@ -1226,7 +1221,7 @@ public class Ellipse implements Serializable {
      * up to DEFAULT_THRESHOLD.
      */
     public Line2D getTangentLineAt(Point2D point) throws NotLocusException {
-<span class="nc" id="L1229">        return getTangentLineAt(point, DEFAULT_THRESHOLD);</span>
+<span class="nc" id="L1224">        return getTangentLineAt(point, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -1241,11 +1236,11 @@ public class Ellipse implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public Line2D getTangentLineAt(Point2D point, double threshold)
-            throws NotLocusException, IllegalArgumentException {
+            throws NotLocusException {
         
-<span class="fc" id="L1246">        Line2D line = new Line2D();</span>
-<span class="fc" id="L1247">        tangentLineAt(point, line, threshold);</span>
-<span class="fc" id="L1248">        return line;</span>
+<span class="fc" id="L1241">        Line2D line = new Line2D();</span>
+<span class="fc" id="L1242">        tangentLineAt(point, line, threshold);</span>
+<span class="fc" id="L1243">        return line;</span>
     }
     
     /**
@@ -1261,12 +1256,12 @@ public class Ellipse implements Serializable {
      */
     @SuppressWarnings(&quot;WeakerAccess&quot;)
     public void tangentLineAt(Point2D point, Line2D line, double threshold)
-            throws NotLocusException, IllegalArgumentException {
+            throws NotLocusException {
         
-<span class="pc bpc" id="L1266" title="1 of 2 branches missed.">        if(!isLocus(point, threshold)) throw new NotLocusException();</span>
+<span class="pc bpc" id="L1261" title="1 of 2 branches missed.">        if(!isLocus(point, threshold)) throw new NotLocusException();</span>
         
-<span class="fc" id="L1268">        Conic c = toConic();</span>
-<span class="fc" id="L1269">        c.tangentLineAt(point, line, threshold);</span>
-<span class="fc" id="L1270">    }        </span>
+<span class="fc" id="L1263">        Conic c = toConic();</span>
+<span class="fc" id="L1264">        c.tangentLineAt(point, line, threshold);</span>
+<span class="fc" id="L1265">    }        </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

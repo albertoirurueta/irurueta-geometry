@@ -72,7 +72,7 @@ public class Ellipsoid implements Serializable {
      * three.
      */
     public Ellipsoid(Point3D center, double[] semiAxesLengths, 
-<span class="fc" id="L75">            Rotation3D rotation) throws IllegalArgumentException {</span>
+<span class="fc" id="L75">            Rotation3D rotation) {</span>
 <span class="fc" id="L76">        setCenterAxesAndRotation(center, semiAxesLengths, rotation);</span>
 <span class="fc" id="L77">    }</span>
         
@@ -89,7 +89,7 @@ public class Ellipsoid implements Serializable {
      * @param center center of ellipsoid.
      * @throws NullPointerException raised if provided center is null.
      */
-    public void setCenter(Point3D center) throws NullPointerException {
+    public void setCenter(Point3D center) {
 <span class="pc bpc" id="L93" title="1 of 2 branches missed.">        if (center == null) {</span>
 <span class="nc" id="L94">            throw new NullPointerException();</span>
         }
@@ -110,20 +110,19 @@ public class Ellipsoid implements Serializable {
      * @throws IllegalArgumentException if length of provided array is not 
      * three.
      */
-    public void setSemiAxesLengths(double[] semiAxesLengths) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (semiAxesLengths.length != DIMENSIONS) {</span>
-<span class="fc" id="L116">            throw new IllegalArgumentException();</span>
+    public void setSemiAxesLengths(double[] semiAxesLengths) {
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (semiAxesLengths.length != DIMENSIONS) {</span>
+<span class="fc" id="L115">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L118">        mSemiAxesLengths = semiAxesLengths;</span>
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L117">        mSemiAxesLengths = semiAxesLengths;</span>
+<span class="fc" id="L118">    }</span>
     
     /**
      * Gets rotation.
      * @return rotation.
      */
     public Rotation3D getRotation() {
-<span class="fc" id="L126">        return mRotation;</span>
+<span class="fc" id="L125">        return mRotation;</span>
     }
     
     /**
@@ -131,8 +130,8 @@ public class Ellipsoid implements Serializable {
      * @param rotation rotation.
      */
     public void setRotation(Rotation3D rotation) {
-<span class="fc" id="L134">        mRotation = rotation;</span>
-<span class="fc" id="L135">    }</span>
+<span class="fc" id="L133">        mRotation = rotation;</span>
+<span class="fc" id="L134">    }</span>
     
     /**
      * Sets ellipsoid parameters.
@@ -145,23 +144,23 @@ public class Ellipsoid implements Serializable {
     @SuppressWarnings(&quot;WeakerAccess&quot;)
     public final void setCenterAxesAndRotation(Point3D center, 
             double[] semiAxesLengths, Rotation3D rotation) {
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (semiAxesLengths.length != DIMENSIONS) {</span>
-<span class="fc" id="L149">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (semiAxesLengths.length != DIMENSIONS) {</span>
+<span class="fc" id="L148">            throw new IllegalArgumentException();</span>
         }        
-<span class="fc" id="L151">        mCenter = center;</span>
-<span class="fc" id="L152">        mSemiAxesLengths = semiAxesLengths;</span>
-<span class="fc" id="L153">        mRotation = rotation;</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L150">        mCenter = center;</span>
+<span class="fc" id="L151">        mSemiAxesLengths = semiAxesLengths;</span>
+<span class="fc" id="L152">        mRotation = rotation;</span>
+<span class="fc" id="L153">    }</span>
     
     /**
      * Returns volume of this ellipsoid.
      * @return volume of htis ellipsoid.
      */
     public double getVolume() {
-<span class="fc" id="L161">        double a = mSemiAxesLengths[0];</span>
-<span class="fc" id="L162">        double b = mSemiAxesLengths[1];</span>
-<span class="fc" id="L163">        double c = mSemiAxesLengths[2];</span>
-<span class="fc" id="L164">        return 4.0 / 3.0 * Math.PI * a * b * c;</span>
+<span class="fc" id="L160">        double a = mSemiAxesLengths[0];</span>
+<span class="fc" id="L161">        double b = mSemiAxesLengths[1];</span>
+<span class="fc" id="L162">        double c = mSemiAxesLengths[2];</span>
+<span class="fc" id="L163">        return 4.0 / 3.0 * Math.PI * a * b * c;</span>
     }
     
     /**
@@ -169,12 +168,12 @@ public class Ellipsoid implements Serializable {
      * @return surface of this ellipsoid.
      */
     public double getSurface() {
-<span class="fc" id="L172">        double a = mSemiAxesLengths[0];</span>
-<span class="fc" id="L173">        double b = mSemiAxesLengths[1];</span>
-<span class="fc" id="L174">        double c = mSemiAxesLengths[2];</span>
+<span class="fc" id="L171">        double a = mSemiAxesLengths[0];</span>
+<span class="fc" id="L172">        double b = mSemiAxesLengths[1];</span>
+<span class="fc" id="L173">        double c = mSemiAxesLengths[2];</span>
         
-<span class="fc" id="L176">        return 4.0 * Math.PI * Math.pow(</span>
-<span class="fc" id="L177">                (Math.pow(a*b, P) + Math.pow(a*c, P) + Math.pow(b*c, P)) / 3.0, </span>
+<span class="fc" id="L175">        return 4.0 * Math.PI * Math.pow(</span>
+<span class="fc" id="L176">                (Math.pow(a*b, P) + Math.pow(a*c, P) + Math.pow(b*c, P)) / 3.0, </span>
                 1.0 / P);
     }
     
@@ -206,30 +205,30 @@ public class Ellipsoid implements Serializable {
         //when centered at origin and having no rotation
         
         //if we take an arbitrary center position:
-<span class="fc" id="L209">        double a = 1.0 / Math.pow(mSemiAxesLengths[0], 2.0);</span>
-<span class="fc" id="L210">        double b = 1.0 / Math.pow(mSemiAxesLengths[1], 2.0);</span>
-<span class="fc" id="L211">        double c = 1.0 / Math.pow(mSemiAxesLengths[2], 2.0);</span>
-<span class="fc" id="L212">        double d = 0.0;</span>
-<span class="fc" id="L213">        double e = 0.0;</span>
-<span class="fc" id="L214">        double f = 0.0;</span>
-<span class="fc" id="L215">        double g = 0.0;</span>
-<span class="fc" id="L216">        double h = 0.0;</span>
-<span class="fc" id="L217">        double i = 0.0;</span>
-<span class="fc" id="L218">        double j = -1;</span>
+<span class="fc" id="L208">        double a = 1.0 / Math.pow(mSemiAxesLengths[0], 2.0);</span>
+<span class="fc" id="L209">        double b = 1.0 / Math.pow(mSemiAxesLengths[1], 2.0);</span>
+<span class="fc" id="L210">        double c = 1.0 / Math.pow(mSemiAxesLengths[2], 2.0);</span>
+<span class="fc" id="L211">        double d = 0.0;</span>
+<span class="fc" id="L212">        double e = 0.0;</span>
+<span class="fc" id="L213">        double f = 0.0;</span>
+<span class="fc" id="L214">        double g = 0.0;</span>
+<span class="fc" id="L215">        double h = 0.0;</span>
+<span class="fc" id="L216">        double i = 0.0;</span>
+<span class="fc" id="L217">        double j = -1;</span>
         
-<span class="fc" id="L220">        Quadric q = new Quadric(a, b, c, d, e, f, g, h, i, j);</span>
-<span class="fc" id="L221">        EuclideanTransformation3D t = </span>
+<span class="fc" id="L219">        Quadric q = new Quadric(a, b, c, d, e, f, g, h, i, j);</span>
+<span class="fc" id="L220">        EuclideanTransformation3D t = </span>
                 new EuclideanTransformation3D(mRotation, new double[]{ 
-<span class="fc" id="L223">                    mCenter.getInhomX(), mCenter.getInhomY(), </span>
-<span class="fc" id="L224">                    mCenter.getInhomZ()});</span>
+<span class="fc" id="L222">                    mCenter.getInhomX(), mCenter.getInhomY(), </span>
+<span class="fc" id="L223">                    mCenter.getInhomZ()});</span>
         
         try {
-<span class="fc" id="L227">            t.transform(q);</span>
-<span class="nc" id="L228">        } catch (NonSymmetricMatrixException | AlgebraException ex) {</span>
-<span class="nc" id="L229">            throw new GeometryException(ex);</span>
-<span class="fc" id="L230">        }</span>
+<span class="fc" id="L226">            t.transform(q);</span>
+<span class="nc" id="L227">        } catch (NonSymmetricMatrixException | AlgebraException ex) {</span>
+<span class="nc" id="L228">            throw new GeometryException(ex);</span>
+<span class="fc" id="L229">        }</span>
         
-<span class="fc" id="L232">        return q;</span>
+<span class="fc" id="L231">        return q;</span>
     }
     
     /**
@@ -237,9 +236,9 @@ public class Ellipsoid implements Serializable {
      * @param sphere a sphere to set parameters from.
      */
     public final void setFromSphere(Sphere sphere) {
-<span class="fc" id="L240">        mCenter = sphere.getCenter();</span>
-<span class="fc" id="L241">        Arrays.fill(mSemiAxesLengths, sphere.getRadius());</span>
-<span class="fc" id="L242">        mRotation = Rotation3D.create();</span>
-<span class="fc" id="L243">    }</span>
+<span class="fc" id="L239">        mCenter = sphere.getCenter();</span>
+<span class="fc" id="L240">        Arrays.fill(mSemiAxesLengths, sphere.getRadius());</span>
+<span class="fc" id="L241">        mRotation = Rotation3D.create();</span>
+<span class="fc" id="L242">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

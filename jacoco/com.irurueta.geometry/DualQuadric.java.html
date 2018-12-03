@@ -62,10 +62,9 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @throws NonSymmetricMatrixException Raised when the quadric matrix is not
      * symmetric.
      */
-    public DualQuadric(Matrix m) throws IllegalArgumentException,
-            NonSymmetricMatrixException {
-<span class="fc" id="L67">        super(m);</span>
-<span class="fc" id="L68">    }</span>
+    public DualQuadric(Matrix m) throws NonSymmetricMatrixException {
+<span class="fc" id="L66">        super(m);</span>
+<span class="fc" id="L67">    }</span>
     
     /**
      * Creates a dual matrix where provided planes are its locus, or in other
@@ -86,10 +85,10 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      */
     public DualQuadric(Plane plane1, Plane plane2, Plane plane3, Plane plane4,
             Plane plane5, Plane plane6, Plane plane7, Plane plane8, 
-<span class="fc" id="L89">            Plane plane9) throws CoincidentPlanesException {</span>
-<span class="fc" id="L90">        setParametersFromPlanes(plane1, plane2, plane3, plane4, plane5, plane6,</span>
+<span class="fc" id="L88">            Plane plane9) throws CoincidentPlanesException {</span>
+<span class="fc" id="L89">        setParametersFromPlanes(plane1, plane2, plane3, plane4, plane5, plane6,</span>
                 plane7, plane8, plane9);
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L91">    }</span>
     
     /**
      * Checks if provided plane is locus of this dual quadric, or in other 
@@ -104,29 +103,28 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Plane plane, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Plane plane, double threshold) {
 
-<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="nc" id="L111">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="nc" id="L109">            throw new IllegalArgumentException();</span>
         }
         
         try {
-<span class="fc" id="L115">            normalize();</span>
-<span class="fc" id="L116">            Matrix dualQ = asMatrix();</span>
-<span class="fc" id="L117">            Matrix homPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);</span>
-<span class="fc" id="L118">            plane.normalize();</span>
-<span class="fc" id="L119">            homPlane.setElementAt(0, 0, plane.getA());</span>
-<span class="fc" id="L120">            homPlane.setElementAt(1, 0, plane.getB());</span>
-<span class="fc" id="L121">            homPlane.setElementAt(2, 0, plane.getC());</span>
-<span class="fc" id="L122">            homPlane.setElementAt(3, 0, plane.getD());</span>
-<span class="fc" id="L123">            Matrix locusMatrix = homPlane.transposeAndReturnNew();</span>
-<span class="fc" id="L124">            locusMatrix.multiply(dualQ);</span>
-<span class="fc" id="L125">            locusMatrix.multiply(homPlane);</span>
+<span class="fc" id="L113">            normalize();</span>
+<span class="fc" id="L114">            Matrix dualQ = asMatrix();</span>
+<span class="fc" id="L115">            Matrix homPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);</span>
+<span class="fc" id="L116">            plane.normalize();</span>
+<span class="fc" id="L117">            homPlane.setElementAt(0, 0, plane.getA());</span>
+<span class="fc" id="L118">            homPlane.setElementAt(1, 0, plane.getB());</span>
+<span class="fc" id="L119">            homPlane.setElementAt(2, 0, plane.getC());</span>
+<span class="fc" id="L120">            homPlane.setElementAt(3, 0, plane.getD());</span>
+<span class="fc" id="L121">            Matrix locusMatrix = homPlane.transposeAndReturnNew();</span>
+<span class="fc" id="L122">            locusMatrix.multiply(dualQ);</span>
+<span class="fc" id="L123">            locusMatrix.multiply(homPlane);</span>
             
-<span class="fc bfc" id="L127" title="All 2 branches covered.">            return Math.abs(locusMatrix.getElementAt(0, 0)) &lt; threshold;</span>
-<span class="nc" id="L128">        } catch(WrongSizeException ignore) {</span>
-<span class="nc" id="L129">            return false;</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">            return Math.abs(locusMatrix.getElementAt(0, 0)) &lt; threshold;</span>
+<span class="nc" id="L126">        } catch(WrongSizeException ignore) {</span>
+<span class="nc" id="L127">            return false;</span>
         }
     }
     
@@ -141,7 +139,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @see #isLocus(Plane, double)
      */
     public boolean isLocus(Plane plane) {
-<span class="fc" id="L144">        return isLocus(plane, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L142">        return isLocus(plane, DEFAULT_LOCUS_THRESHOLD);</span>
     }
     
     /**
@@ -156,44 +154,44 @@ public class DualQuadric extends BaseQuadric implements Serializable {
     public double angleBetweenPlanes(Plane planeA, Plane planeB) {
         try {
             //retrieve quadric as matrix
-<span class="fc" id="L159">            normalize();</span>
-<span class="fc" id="L160">            Matrix dualQ = asMatrix();</span>
-<span class="fc" id="L161">            Matrix transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);</span>
-<span class="fc" id="L162">            planeA.normalize();</span>
-<span class="fc" id="L163">            transHomPlaneA.setElementAt(0, 0, planeA.getA());</span>
-<span class="fc" id="L164">            transHomPlaneA.setElementAt(0, 1, planeA.getB());</span>
-<span class="fc" id="L165">            transHomPlaneA.setElementAt(0, 2, planeA.getC());</span>
-<span class="fc" id="L166">            transHomPlaneA.setElementAt(0, 3, planeA.getD());</span>
+<span class="fc" id="L157">            normalize();</span>
+<span class="fc" id="L158">            Matrix dualQ = asMatrix();</span>
+<span class="fc" id="L159">            Matrix transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);</span>
+<span class="fc" id="L160">            planeA.normalize();</span>
+<span class="fc" id="L161">            transHomPlaneA.setElementAt(0, 0, planeA.getA());</span>
+<span class="fc" id="L162">            transHomPlaneA.setElementAt(0, 1, planeA.getB());</span>
+<span class="fc" id="L163">            transHomPlaneA.setElementAt(0, 2, planeA.getC());</span>
+<span class="fc" id="L164">            transHomPlaneA.setElementAt(0, 3, planeA.getD());</span>
             
-<span class="fc" id="L168">            Matrix tmp = transHomPlaneA.multiplyAndReturnNew(dualQ);</span>
-<span class="fc" id="L169">            tmp.multiply(transHomPlaneA.transposeAndReturnNew()); //This is</span>
+<span class="fc" id="L166">            Matrix tmp = transHomPlaneA.multiplyAndReturnNew(dualQ);</span>
+<span class="fc" id="L167">            tmp.multiply(transHomPlaneA.transposeAndReturnNew()); //This is</span>
                                             //homPlaneA' * dualQ * homPlaneA
             
-<span class="fc" id="L172">            double normA = tmp.getElementAt(0, 0);</span>
+<span class="fc" id="L170">            double normA = tmp.getElementAt(0, 0);</span>
             
-<span class="fc" id="L174">            Matrix homPlaneB = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);</span>
-<span class="fc" id="L175">            planeB.normalize();</span>
-<span class="fc" id="L176">            homPlaneB.setElementAt(0, 0, planeB.getA());</span>
-<span class="fc" id="L177">            homPlaneB.setElementAt(1, 0, planeB.getB());</span>
-<span class="fc" id="L178">            homPlaneB.setElementAt(2, 0, planeB.getC());</span>
-<span class="fc" id="L179">            homPlaneB.setElementAt(3, 0, planeB.getD());</span>
+<span class="fc" id="L172">            Matrix homPlaneB = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);</span>
+<span class="fc" id="L173">            planeB.normalize();</span>
+<span class="fc" id="L174">            homPlaneB.setElementAt(0, 0, planeB.getA());</span>
+<span class="fc" id="L175">            homPlaneB.setElementAt(1, 0, planeB.getB());</span>
+<span class="fc" id="L176">            homPlaneB.setElementAt(2, 0, planeB.getC());</span>
+<span class="fc" id="L177">            homPlaneB.setElementAt(3, 0, planeB.getD());</span>
             
-<span class="fc" id="L181">            homPlaneB.transpose(tmp);</span>
-<span class="fc" id="L182">            tmp.multiply(dualQ);</span>
-<span class="fc" id="L183">            tmp.multiply(homPlaneB);</span>
+<span class="fc" id="L179">            homPlaneB.transpose(tmp);</span>
+<span class="fc" id="L180">            tmp.multiply(dualQ);</span>
+<span class="fc" id="L181">            tmp.multiply(homPlaneB);</span>
             
-<span class="fc" id="L185">            double normB = tmp.getElementAt(0, 0);</span>
+<span class="fc" id="L183">            double normB = tmp.getElementAt(0, 0);</span>
             
-<span class="fc" id="L187">            transHomPlaneA.multiply(dualQ);</span>
-<span class="fc" id="L188">            transHomPlaneA.multiply(homPlaneB);</span>
+<span class="fc" id="L185">            transHomPlaneA.multiply(dualQ);</span>
+<span class="fc" id="L186">            transHomPlaneA.multiply(homPlaneB);</span>
                 //This is homPlaneA' * dualQ * homPlaneB
             
-<span class="fc" id="L191">            double angleNumerator = transHomPlaneA.getElementAt(0, 0);</span>
+<span class="fc" id="L189">            double angleNumerator = transHomPlaneA.getElementAt(0, 0);</span>
             
-<span class="fc" id="L193">            double cosTheta = angleNumerator / Math.sqrt(normA * normB);</span>
-<span class="fc" id="L194">            return Math.acos(cosTheta);</span>
-<span class="nc" id="L195">        } catch (WrongSizeException ignore) {</span>
-<span class="nc" id="L196">            return 0.0; //This will never happen</span>
+<span class="fc" id="L191">            double cosTheta = angleNumerator / Math.sqrt(normA * normB);</span>
+<span class="fc" id="L192">            return Math.acos(cosTheta);</span>
+<span class="nc" id="L193">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L194">            return 0.0; //This will never happen</span>
         }
     }
     
@@ -211,36 +209,36 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * negative.
      */
     public boolean arePerpendicularPlanes(Plane planeA, Plane planeB, 
-            double threshold) throws IllegalArgumentException {
+            double threshold) {
         try {
             //retrieve quadric as matrix
-<span class="fc" id="L217">            Matrix transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);</span>
-<span class="fc" id="L218">            planeA.normalize();</span>
-<span class="fc" id="L219">            transHomPlaneA.setElementAt(0, 0, planeA.getA());</span>
-<span class="fc" id="L220">            transHomPlaneA.setElementAt(0, 1, planeA.getB());</span>
-<span class="fc" id="L221">            transHomPlaneA.setElementAt(0, 2, planeA.getC());</span>
-<span class="fc" id="L222">            transHomPlaneA.setElementAt(0, 3, planeA.getD());</span>
+<span class="fc" id="L215">            Matrix transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);</span>
+<span class="fc" id="L216">            planeA.normalize();</span>
+<span class="fc" id="L217">            transHomPlaneA.setElementAt(0, 0, planeA.getA());</span>
+<span class="fc" id="L218">            transHomPlaneA.setElementAt(0, 1, planeA.getB());</span>
+<span class="fc" id="L219">            transHomPlaneA.setElementAt(0, 2, planeA.getC());</span>
+<span class="fc" id="L220">            transHomPlaneA.setElementAt(0, 3, planeA.getD());</span>
             
-<span class="fc" id="L224">            Matrix homPlaneB = </span>
+<span class="fc" id="L222">            Matrix homPlaneB = </span>
                     new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 
                     1);
-<span class="fc" id="L227">            planeB.normalize();</span>
-<span class="fc" id="L228">            homPlaneB.setElementAt(0, 0, planeB.getA());</span>
-<span class="fc" id="L229">            homPlaneB.setElementAt(1, 0, planeB.getB());</span>
-<span class="fc" id="L230">            homPlaneB.setElementAt(2, 0, planeB.getC());</span>
-<span class="fc" id="L231">            homPlaneB.setElementAt(3, 0, planeB.getD());</span>
+<span class="fc" id="L225">            planeB.normalize();</span>
+<span class="fc" id="L226">            homPlaneB.setElementAt(0, 0, planeB.getA());</span>
+<span class="fc" id="L227">            homPlaneB.setElementAt(1, 0, planeB.getB());</span>
+<span class="fc" id="L228">            homPlaneB.setElementAt(2, 0, planeB.getC());</span>
+<span class="fc" id="L229">            homPlaneB.setElementAt(3, 0, planeB.getD());</span>
             
-<span class="fc" id="L233">            normalize();</span>
-<span class="fc" id="L234">            Matrix dualQ = asMatrix();</span>
-<span class="fc" id="L235">            transHomPlaneA.multiply(dualQ);</span>
-<span class="fc" id="L236">            transHomPlaneA.multiply(homPlaneB);</span>
+<span class="fc" id="L231">            normalize();</span>
+<span class="fc" id="L232">            Matrix dualQ = asMatrix();</span>
+<span class="fc" id="L233">            transHomPlaneA.multiply(dualQ);</span>
+<span class="fc" id="L234">            transHomPlaneA.multiply(homPlaneB);</span>
                 //This is homPlaneA' * dualQ * homPlaneB
             
-<span class="fc" id="L239">            double perpend = transHomPlaneA.getElementAt(0, 0);</span>
+<span class="fc" id="L237">            double perpend = transHomPlaneA.getElementAt(0, 0);</span>
             
-<span class="fc bfc" id="L241" title="All 2 branches covered.">            return Math.abs(perpend) &lt; threshold;</span>
-<span class="nc" id="L242">        } catch (WrongSizeException ignore) {</span>
-<span class="nc" id="L243">            return false; //This will never happen</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">            return Math.abs(perpend) &lt; threshold;</span>
+<span class="nc" id="L240">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L241">            return false; //This will never happen</span>
         }
     }
     
@@ -252,7 +250,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @return True if provided planes are perpendicular, false otherwise.
      */    
     public boolean arePerpendicularPlanes(Plane planeA, Plane planeB) {
-<span class="nc" id="L255">        return arePerpendicularPlanes(planeA, planeB, </span>
+<span class="nc" id="L253">        return arePerpendicularPlanes(planeA, planeB, </span>
                 DEFAULT_PERPENDICULAR_THRESHOLD);
     }
     
@@ -264,9 +262,9 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * instability.
      */
     public Quadric getQuadric() throws QuadricNotAvailableException {
-<span class="fc" id="L267">        Quadric q = new Quadric();</span>
-<span class="fc" id="L268">        quadric(q);</span>
-<span class="fc" id="L269">        return q;</span>
+<span class="fc" id="L265">        Quadric q = new Quadric();</span>
+<span class="fc" id="L266">        quadric(q);</span>
+<span class="fc" id="L267">        return q;</span>
     }
     
     /**
@@ -279,32 +277,32 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      */
     public void quadric(Quadric quadric) throws QuadricNotAvailableException {
         
-<span class="fc" id="L282">        Matrix dualQuadricMatrix = asMatrix();</span>
+<span class="fc" id="L280">        Matrix dualQuadricMatrix = asMatrix();</span>
         try {
-<span class="fc" id="L284">            Matrix invMatrix = com.irurueta.algebra.Utils.inverse(</span>
+<span class="fc" id="L282">            Matrix invMatrix = com.irurueta.algebra.Utils.inverse(</span>
                     dualQuadricMatrix);
             
-<span class="fc" id="L287">            double a = invMatrix.getElementAt(0, 0);</span>
-<span class="fc" id="L288">            double b = invMatrix.getElementAt(1, 1);</span>
-<span class="fc" id="L289">            double c = invMatrix.getElementAt(2, 2);</span>
-<span class="fc" id="L290">            double d = 0.5 * (invMatrix.getElementAt(0, 1) + </span>
-<span class="fc" id="L291">                    invMatrix.getElementAt(1, 0));</span>
-<span class="fc" id="L292">            double e = 0.5 * (invMatrix.getElementAt(2, 1) + </span>
-<span class="fc" id="L293">                    invMatrix.getElementAt(1, 2));</span>
-<span class="fc" id="L294">            double f = 0.5 * (invMatrix.getElementAt(2, 0) +</span>
-<span class="fc" id="L295">                    invMatrix.getElementAt(0, 2));</span>
-<span class="fc" id="L296">            double g = 0.5 * (invMatrix.getElementAt(3, 0) + </span>
-<span class="fc" id="L297">                    invMatrix.getElementAt(0, 3));</span>
-<span class="fc" id="L298">            double h = 0.5 * (invMatrix.getElementAt(3, 1) +</span>
-<span class="fc" id="L299">                    invMatrix.getElementAt(1, 3));</span>
-<span class="fc" id="L300">            double i = 0.5 * (invMatrix.getElementAt(3, 2) +</span>
-<span class="fc" id="L301">                    invMatrix.getElementAt(2, 3));</span>
-<span class="fc" id="L302">            double j = invMatrix.getElementAt(3, 3);</span>
-<span class="fc" id="L303">            quadric.setParameters(a, b, c, d, e, f, g, h, i, j);</span>
-<span class="nc" id="L304">        } catch(AlgebraException e) {</span>
-<span class="nc" id="L305">            throw new QuadricNotAvailableException(e);</span>
-<span class="fc" id="L306">        }</span>
-<span class="fc" id="L307">    }</span>
+<span class="fc" id="L285">            double a = invMatrix.getElementAt(0, 0);</span>
+<span class="fc" id="L286">            double b = invMatrix.getElementAt(1, 1);</span>
+<span class="fc" id="L287">            double c = invMatrix.getElementAt(2, 2);</span>
+<span class="fc" id="L288">            double d = 0.5 * (invMatrix.getElementAt(0, 1) + </span>
+<span class="fc" id="L289">                    invMatrix.getElementAt(1, 0));</span>
+<span class="fc" id="L290">            double e = 0.5 * (invMatrix.getElementAt(2, 1) + </span>
+<span class="fc" id="L291">                    invMatrix.getElementAt(1, 2));</span>
+<span class="fc" id="L292">            double f = 0.5 * (invMatrix.getElementAt(2, 0) +</span>
+<span class="fc" id="L293">                    invMatrix.getElementAt(0, 2));</span>
+<span class="fc" id="L294">            double g = 0.5 * (invMatrix.getElementAt(3, 0) + </span>
+<span class="fc" id="L295">                    invMatrix.getElementAt(0, 3));</span>
+<span class="fc" id="L296">            double h = 0.5 * (invMatrix.getElementAt(3, 1) +</span>
+<span class="fc" id="L297">                    invMatrix.getElementAt(1, 3));</span>
+<span class="fc" id="L298">            double i = 0.5 * (invMatrix.getElementAt(3, 2) +</span>
+<span class="fc" id="L299">                    invMatrix.getElementAt(2, 3));</span>
+<span class="fc" id="L300">            double j = invMatrix.getElementAt(3, 3);</span>
+<span class="fc" id="L301">            quadric.setParameters(a, b, c, d, e, f, g, h, i, j);</span>
+<span class="nc" id="L302">        } catch(AlgebraException e) {</span>
+<span class="nc" id="L303">            throw new QuadricNotAvailableException(e);</span>
+<span class="fc" id="L304">        }</span>
+<span class="fc" id="L305">    }</span>
     
     /**
      * Sets parameters of this dual quadric so that provided planes lie within
@@ -328,15 +326,15 @@ public class DualQuadric extends BaseQuadric implements Serializable {
             throws CoincidentPlanesException {
         
         //normalize planes to increase accuracy
-<span class="fc" id="L331">        plane1.normalize();</span>
-<span class="fc" id="L332">        plane2.normalize();</span>
-<span class="fc" id="L333">        plane3.normalize();</span>
-<span class="fc" id="L334">        plane4.normalize();</span>
-<span class="fc" id="L335">        plane5.normalize();</span>
-<span class="fc" id="L336">        plane6.normalize();</span>
-<span class="fc" id="L337">        plane7.normalize();</span>
-<span class="fc" id="L338">        plane8.normalize();</span>
-<span class="fc" id="L339">        plane9.normalize();</span>
+<span class="fc" id="L329">        plane1.normalize();</span>
+<span class="fc" id="L330">        plane2.normalize();</span>
+<span class="fc" id="L331">        plane3.normalize();</span>
+<span class="fc" id="L332">        plane4.normalize();</span>
+<span class="fc" id="L333">        plane5.normalize();</span>
+<span class="fc" id="L334">        plane6.normalize();</span>
+<span class="fc" id="L335">        plane7.normalize();</span>
+<span class="fc" id="L336">        plane8.normalize();</span>
+<span class="fc" id="L337">        plane9.normalize();</span>
         
         try {
             //each plane belonging to a dual quadric follows equation:
@@ -344,172 +342,172 @@ public class DualQuadric extends BaseQuadric implements Serializable {
             //pA^2 + pB^2 + pC^2 + 2*pA*pB + 2*pA*pC + 2*pB*pC + 2*pA*pD + 
             //2*pB*pD + 2*pC*pD + pD^2 = 0            
             
-<span class="fc" id="L347">            Matrix m = new Matrix(9, 10);</span>
-<span class="fc" id="L348">            double pA = plane1.getA();</span>
-<span class="fc" id="L349">            double pB = plane1.getB();</span>
-<span class="fc" id="L350">            double pC = plane1.getC();</span>
-<span class="fc" id="L351">            double pD = plane1.getD();</span>
-<span class="fc" id="L352">            m.setElementAt(0, 0, pA * pA);</span>
-<span class="fc" id="L353">            m.setElementAt(0, 1, pB * pB);</span>
-<span class="fc" id="L354">            m.setElementAt(0, 2, pC * pC);</span>
-<span class="fc" id="L355">            m.setElementAt(0, 3, 2.0 * pA * pB);</span>
-<span class="fc" id="L356">            m.setElementAt(0, 4, 2.0 * pA * pC);</span>
-<span class="fc" id="L357">            m.setElementAt(0, 5, 2.0 * pB * pC);</span>
-<span class="fc" id="L358">            m.setElementAt(0, 6, 2.0 * pA * pD);</span>
-<span class="fc" id="L359">            m.setElementAt(0, 7, 2.0 * pB * pD);</span>
-<span class="fc" id="L360">            m.setElementAt(0, 8, 2.0 * pC * pD);</span>
-<span class="fc" id="L361">            m.setElementAt(0, 9, pD * pD);</span>
-<span class="fc" id="L362">            pA = plane2.getA();</span>
-<span class="fc" id="L363">            pB = plane2.getB();</span>
-<span class="fc" id="L364">            pC = plane2.getC();</span>
-<span class="fc" id="L365">            pD = plane2.getD();</span>
-<span class="fc" id="L366">            m.setElementAt(1, 0, pA * pA);</span>
-<span class="fc" id="L367">            m.setElementAt(1, 1, pB * pB);</span>
-<span class="fc" id="L368">            m.setElementAt(1, 2, pC * pC);</span>
-<span class="fc" id="L369">            m.setElementAt(1, 3, 2.0 * pA * pB);</span>
-<span class="fc" id="L370">            m.setElementAt(1, 4, 2.0 * pA * pC);</span>
-<span class="fc" id="L371">            m.setElementAt(1, 5, 2.0 * pB * pC);</span>
-<span class="fc" id="L372">            m.setElementAt(1, 6, 2.0 * pA * pD);</span>
-<span class="fc" id="L373">            m.setElementAt(1, 7, 2.0 * pB * pD);</span>
-<span class="fc" id="L374">            m.setElementAt(1, 8, 2.0 * pC * pD);</span>
-<span class="fc" id="L375">            m.setElementAt(1, 9, pD * pD);</span>
-<span class="fc" id="L376">            pA = plane3.getA();</span>
-<span class="fc" id="L377">            pB = plane3.getB();</span>
-<span class="fc" id="L378">            pC = plane3.getC();</span>
-<span class="fc" id="L379">            pD = plane3.getD();</span>
-<span class="fc" id="L380">            m.setElementAt(2, 0, pA * pA);</span>
-<span class="fc" id="L381">            m.setElementAt(2, 1, pB * pB);</span>
-<span class="fc" id="L382">            m.setElementAt(2, 2, pC * pC);</span>
-<span class="fc" id="L383">            m.setElementAt(2, 3, 2.0 * pA * pB);</span>
-<span class="fc" id="L384">            m.setElementAt(2, 4, 2.0 * pA * pC);</span>
-<span class="fc" id="L385">            m.setElementAt(2, 5, 2.0 * pB * pC);</span>
-<span class="fc" id="L386">            m.setElementAt(2, 6, 2.0 * pA * pD);</span>
-<span class="fc" id="L387">            m.setElementAt(2, 7, 2.0 * pB * pD);</span>
-<span class="fc" id="L388">            m.setElementAt(2, 8, 2.0 * pC * pD);</span>
-<span class="fc" id="L389">            m.setElementAt(2, 9, pD * pD);</span>
-<span class="fc" id="L390">            pA = plane4.getA();</span>
-<span class="fc" id="L391">            pB = plane4.getB();</span>
-<span class="fc" id="L392">            pC = plane4.getC();</span>
-<span class="fc" id="L393">            pD = plane4.getD();</span>
-<span class="fc" id="L394">            m.setElementAt(3, 0, pA * pA);</span>
-<span class="fc" id="L395">            m.setElementAt(3, 1, pB * pB);</span>
-<span class="fc" id="L396">            m.setElementAt(3, 2, pC * pC);</span>
-<span class="fc" id="L397">            m.setElementAt(3, 3, 2.0 * pA * pB);</span>
-<span class="fc" id="L398">            m.setElementAt(3, 4, 2.0 * pA * pC);</span>
-<span class="fc" id="L399">            m.setElementAt(3, 5, 2.0 * pB * pC);</span>
-<span class="fc" id="L400">            m.setElementAt(3, 6, 2.0 * pA * pD);</span>
-<span class="fc" id="L401">            m.setElementAt(3, 7, 2.0 * pB * pD);</span>
-<span class="fc" id="L402">            m.setElementAt(3, 8, 2.0 * pC * pD);</span>
-<span class="fc" id="L403">            m.setElementAt(3, 9, pD * pD);</span>
-<span class="fc" id="L404">            pA = plane5.getA();</span>
-<span class="fc" id="L405">            pB = plane5.getB();</span>
-<span class="fc" id="L406">            pC = plane5.getC();</span>
-<span class="fc" id="L407">            pD = plane5.getD();</span>
-<span class="fc" id="L408">            m.setElementAt(4, 0, pA * pA);</span>
-<span class="fc" id="L409">            m.setElementAt(4, 1, pB * pB);</span>
-<span class="fc" id="L410">            m.setElementAt(4, 2, pC * pC);</span>
-<span class="fc" id="L411">            m.setElementAt(4, 3, 2.0 * pA * pB);</span>
-<span class="fc" id="L412">            m.setElementAt(4, 4, 2.0 * pA * pC);</span>
-<span class="fc" id="L413">            m.setElementAt(4, 5, 2.0 * pB * pC);</span>
-<span class="fc" id="L414">            m.setElementAt(4, 6, 2.0 * pA * pD);</span>
-<span class="fc" id="L415">            m.setElementAt(4, 7, 2.0 * pB * pD);</span>
-<span class="fc" id="L416">            m.setElementAt(4, 8, 2.0 * pC * pD);</span>
-<span class="fc" id="L417">            m.setElementAt(4, 9, pD * pD);</span>
-<span class="fc" id="L418">            pA = plane6.getA();</span>
-<span class="fc" id="L419">            pB = plane6.getB();</span>
-<span class="fc" id="L420">            pC = plane6.getC();</span>
-<span class="fc" id="L421">            pD = plane6.getD();</span>
-<span class="fc" id="L422">            m.setElementAt(5, 0, pA * pA);</span>
-<span class="fc" id="L423">            m.setElementAt(5, 1, pB * pB);</span>
-<span class="fc" id="L424">            m.setElementAt(5, 2, pC * pC);</span>
-<span class="fc" id="L425">            m.setElementAt(5, 3, 2.0 * pA * pB);</span>
-<span class="fc" id="L426">            m.setElementAt(5, 4, 2.0 * pA * pC);</span>
-<span class="fc" id="L427">            m.setElementAt(5, 5, 2.0 * pB * pC);</span>
-<span class="fc" id="L428">            m.setElementAt(5, 6, 2.0 * pA * pD);</span>
-<span class="fc" id="L429">            m.setElementAt(5, 7, 2.0 * pB * pD);</span>
-<span class="fc" id="L430">            m.setElementAt(5, 8, 2.0 * pC * pD);</span>
-<span class="fc" id="L431">            m.setElementAt(5, 9, pD * pD);</span>
-<span class="fc" id="L432">            pA = plane7.getA();</span>
-<span class="fc" id="L433">            pB = plane7.getB();</span>
-<span class="fc" id="L434">            pC = plane7.getC();</span>
-<span class="fc" id="L435">            pD = plane7.getD();</span>
-<span class="fc" id="L436">            m.setElementAt(6, 0, pA * pA);</span>
-<span class="fc" id="L437">            m.setElementAt(6, 1, pB * pB);</span>
-<span class="fc" id="L438">            m.setElementAt(6, 2, pC * pC);</span>
-<span class="fc" id="L439">            m.setElementAt(6, 3, 2.0 * pA * pB);</span>
-<span class="fc" id="L440">            m.setElementAt(6, 4, 2.0 * pA * pC);</span>
-<span class="fc" id="L441">            m.setElementAt(6, 5, 2.0 * pB * pC);</span>
-<span class="fc" id="L442">            m.setElementAt(6, 6, 2.0 * pA * pD);</span>
-<span class="fc" id="L443">            m.setElementAt(6, 7, 2.0 * pB * pD);</span>
-<span class="fc" id="L444">            m.setElementAt(6, 8, 2.0 * pC * pD);</span>
-<span class="fc" id="L445">            m.setElementAt(6, 9, pD * pD);</span>
-<span class="fc" id="L446">            pA = plane8.getA();</span>
-<span class="fc" id="L447">            pB = plane8.getB();</span>
-<span class="fc" id="L448">            pC = plane8.getC();</span>
-<span class="fc" id="L449">            pD = plane8.getD();</span>
-<span class="fc" id="L450">            m.setElementAt(7, 0, pA * pA);</span>
-<span class="fc" id="L451">            m.setElementAt(7, 1, pB * pB);</span>
-<span class="fc" id="L452">            m.setElementAt(7, 2, pC * pC);</span>
-<span class="fc" id="L453">            m.setElementAt(7, 3, 2.0 * pA * pB);</span>
-<span class="fc" id="L454">            m.setElementAt(7, 4, 2.0 * pA * pC);</span>
-<span class="fc" id="L455">            m.setElementAt(7, 5, 2.0 * pB * pC);</span>
-<span class="fc" id="L456">            m.setElementAt(7, 6, 2.0 * pA * pD);</span>
-<span class="fc" id="L457">            m.setElementAt(7, 7, 2.0 * pB * pD);</span>
-<span class="fc" id="L458">            m.setElementAt(7, 8, 2.0 * pC * pD);</span>
-<span class="fc" id="L459">            m.setElementAt(7, 9, pD * pD);</span>
-<span class="fc" id="L460">            pA = plane9.getA();</span>
-<span class="fc" id="L461">            pB = plane9.getB();</span>
-<span class="fc" id="L462">            pC = plane9.getC();</span>
-<span class="fc" id="L463">            pD = plane9.getD();</span>
-<span class="fc" id="L464">            m.setElementAt(8, 0, pA * pA);</span>
-<span class="fc" id="L465">            m.setElementAt(8, 1, pB * pB);</span>
-<span class="fc" id="L466">            m.setElementAt(8, 2, pC * pC);</span>
-<span class="fc" id="L467">            m.setElementAt(8, 3, 2.0 * pA * pB);</span>
-<span class="fc" id="L468">            m.setElementAt(8, 4, 2.0 * pA * pC);</span>
-<span class="fc" id="L469">            m.setElementAt(8, 5, 2.0 * pB * pC);</span>
-<span class="fc" id="L470">            m.setElementAt(8, 6, 2.0 * pA * pD);</span>
-<span class="fc" id="L471">            m.setElementAt(8, 7, 2.0 * pB * pD);</span>
-<span class="fc" id="L472">            m.setElementAt(8, 8, 2.0 * pC * pD);</span>
-<span class="fc" id="L473">            m.setElementAt(8, 9, pD * pD);</span>
+<span class="fc" id="L345">            Matrix m = new Matrix(9, 10);</span>
+<span class="fc" id="L346">            double pA = plane1.getA();</span>
+<span class="fc" id="L347">            double pB = plane1.getB();</span>
+<span class="fc" id="L348">            double pC = plane1.getC();</span>
+<span class="fc" id="L349">            double pD = plane1.getD();</span>
+<span class="fc" id="L350">            m.setElementAt(0, 0, pA * pA);</span>
+<span class="fc" id="L351">            m.setElementAt(0, 1, pB * pB);</span>
+<span class="fc" id="L352">            m.setElementAt(0, 2, pC * pC);</span>
+<span class="fc" id="L353">            m.setElementAt(0, 3, 2.0 * pA * pB);</span>
+<span class="fc" id="L354">            m.setElementAt(0, 4, 2.0 * pA * pC);</span>
+<span class="fc" id="L355">            m.setElementAt(0, 5, 2.0 * pB * pC);</span>
+<span class="fc" id="L356">            m.setElementAt(0, 6, 2.0 * pA * pD);</span>
+<span class="fc" id="L357">            m.setElementAt(0, 7, 2.0 * pB * pD);</span>
+<span class="fc" id="L358">            m.setElementAt(0, 8, 2.0 * pC * pD);</span>
+<span class="fc" id="L359">            m.setElementAt(0, 9, pD * pD);</span>
+<span class="fc" id="L360">            pA = plane2.getA();</span>
+<span class="fc" id="L361">            pB = plane2.getB();</span>
+<span class="fc" id="L362">            pC = plane2.getC();</span>
+<span class="fc" id="L363">            pD = plane2.getD();</span>
+<span class="fc" id="L364">            m.setElementAt(1, 0, pA * pA);</span>
+<span class="fc" id="L365">            m.setElementAt(1, 1, pB * pB);</span>
+<span class="fc" id="L366">            m.setElementAt(1, 2, pC * pC);</span>
+<span class="fc" id="L367">            m.setElementAt(1, 3, 2.0 * pA * pB);</span>
+<span class="fc" id="L368">            m.setElementAt(1, 4, 2.0 * pA * pC);</span>
+<span class="fc" id="L369">            m.setElementAt(1, 5, 2.0 * pB * pC);</span>
+<span class="fc" id="L370">            m.setElementAt(1, 6, 2.0 * pA * pD);</span>
+<span class="fc" id="L371">            m.setElementAt(1, 7, 2.0 * pB * pD);</span>
+<span class="fc" id="L372">            m.setElementAt(1, 8, 2.0 * pC * pD);</span>
+<span class="fc" id="L373">            m.setElementAt(1, 9, pD * pD);</span>
+<span class="fc" id="L374">            pA = plane3.getA();</span>
+<span class="fc" id="L375">            pB = plane3.getB();</span>
+<span class="fc" id="L376">            pC = plane3.getC();</span>
+<span class="fc" id="L377">            pD = plane3.getD();</span>
+<span class="fc" id="L378">            m.setElementAt(2, 0, pA * pA);</span>
+<span class="fc" id="L379">            m.setElementAt(2, 1, pB * pB);</span>
+<span class="fc" id="L380">            m.setElementAt(2, 2, pC * pC);</span>
+<span class="fc" id="L381">            m.setElementAt(2, 3, 2.0 * pA * pB);</span>
+<span class="fc" id="L382">            m.setElementAt(2, 4, 2.0 * pA * pC);</span>
+<span class="fc" id="L383">            m.setElementAt(2, 5, 2.0 * pB * pC);</span>
+<span class="fc" id="L384">            m.setElementAt(2, 6, 2.0 * pA * pD);</span>
+<span class="fc" id="L385">            m.setElementAt(2, 7, 2.0 * pB * pD);</span>
+<span class="fc" id="L386">            m.setElementAt(2, 8, 2.0 * pC * pD);</span>
+<span class="fc" id="L387">            m.setElementAt(2, 9, pD * pD);</span>
+<span class="fc" id="L388">            pA = plane4.getA();</span>
+<span class="fc" id="L389">            pB = plane4.getB();</span>
+<span class="fc" id="L390">            pC = plane4.getC();</span>
+<span class="fc" id="L391">            pD = plane4.getD();</span>
+<span class="fc" id="L392">            m.setElementAt(3, 0, pA * pA);</span>
+<span class="fc" id="L393">            m.setElementAt(3, 1, pB * pB);</span>
+<span class="fc" id="L394">            m.setElementAt(3, 2, pC * pC);</span>
+<span class="fc" id="L395">            m.setElementAt(3, 3, 2.0 * pA * pB);</span>
+<span class="fc" id="L396">            m.setElementAt(3, 4, 2.0 * pA * pC);</span>
+<span class="fc" id="L397">            m.setElementAt(3, 5, 2.0 * pB * pC);</span>
+<span class="fc" id="L398">            m.setElementAt(3, 6, 2.0 * pA * pD);</span>
+<span class="fc" id="L399">            m.setElementAt(3, 7, 2.0 * pB * pD);</span>
+<span class="fc" id="L400">            m.setElementAt(3, 8, 2.0 * pC * pD);</span>
+<span class="fc" id="L401">            m.setElementAt(3, 9, pD * pD);</span>
+<span class="fc" id="L402">            pA = plane5.getA();</span>
+<span class="fc" id="L403">            pB = plane5.getB();</span>
+<span class="fc" id="L404">            pC = plane5.getC();</span>
+<span class="fc" id="L405">            pD = plane5.getD();</span>
+<span class="fc" id="L406">            m.setElementAt(4, 0, pA * pA);</span>
+<span class="fc" id="L407">            m.setElementAt(4, 1, pB * pB);</span>
+<span class="fc" id="L408">            m.setElementAt(4, 2, pC * pC);</span>
+<span class="fc" id="L409">            m.setElementAt(4, 3, 2.0 * pA * pB);</span>
+<span class="fc" id="L410">            m.setElementAt(4, 4, 2.0 * pA * pC);</span>
+<span class="fc" id="L411">            m.setElementAt(4, 5, 2.0 * pB * pC);</span>
+<span class="fc" id="L412">            m.setElementAt(4, 6, 2.0 * pA * pD);</span>
+<span class="fc" id="L413">            m.setElementAt(4, 7, 2.0 * pB * pD);</span>
+<span class="fc" id="L414">            m.setElementAt(4, 8, 2.0 * pC * pD);</span>
+<span class="fc" id="L415">            m.setElementAt(4, 9, pD * pD);</span>
+<span class="fc" id="L416">            pA = plane6.getA();</span>
+<span class="fc" id="L417">            pB = plane6.getB();</span>
+<span class="fc" id="L418">            pC = plane6.getC();</span>
+<span class="fc" id="L419">            pD = plane6.getD();</span>
+<span class="fc" id="L420">            m.setElementAt(5, 0, pA * pA);</span>
+<span class="fc" id="L421">            m.setElementAt(5, 1, pB * pB);</span>
+<span class="fc" id="L422">            m.setElementAt(5, 2, pC * pC);</span>
+<span class="fc" id="L423">            m.setElementAt(5, 3, 2.0 * pA * pB);</span>
+<span class="fc" id="L424">            m.setElementAt(5, 4, 2.0 * pA * pC);</span>
+<span class="fc" id="L425">            m.setElementAt(5, 5, 2.0 * pB * pC);</span>
+<span class="fc" id="L426">            m.setElementAt(5, 6, 2.0 * pA * pD);</span>
+<span class="fc" id="L427">            m.setElementAt(5, 7, 2.0 * pB * pD);</span>
+<span class="fc" id="L428">            m.setElementAt(5, 8, 2.0 * pC * pD);</span>
+<span class="fc" id="L429">            m.setElementAt(5, 9, pD * pD);</span>
+<span class="fc" id="L430">            pA = plane7.getA();</span>
+<span class="fc" id="L431">            pB = plane7.getB();</span>
+<span class="fc" id="L432">            pC = plane7.getC();</span>
+<span class="fc" id="L433">            pD = plane7.getD();</span>
+<span class="fc" id="L434">            m.setElementAt(6, 0, pA * pA);</span>
+<span class="fc" id="L435">            m.setElementAt(6, 1, pB * pB);</span>
+<span class="fc" id="L436">            m.setElementAt(6, 2, pC * pC);</span>
+<span class="fc" id="L437">            m.setElementAt(6, 3, 2.0 * pA * pB);</span>
+<span class="fc" id="L438">            m.setElementAt(6, 4, 2.0 * pA * pC);</span>
+<span class="fc" id="L439">            m.setElementAt(6, 5, 2.0 * pB * pC);</span>
+<span class="fc" id="L440">            m.setElementAt(6, 6, 2.0 * pA * pD);</span>
+<span class="fc" id="L441">            m.setElementAt(6, 7, 2.0 * pB * pD);</span>
+<span class="fc" id="L442">            m.setElementAt(6, 8, 2.0 * pC * pD);</span>
+<span class="fc" id="L443">            m.setElementAt(6, 9, pD * pD);</span>
+<span class="fc" id="L444">            pA = plane8.getA();</span>
+<span class="fc" id="L445">            pB = plane8.getB();</span>
+<span class="fc" id="L446">            pC = plane8.getC();</span>
+<span class="fc" id="L447">            pD = plane8.getD();</span>
+<span class="fc" id="L448">            m.setElementAt(7, 0, pA * pA);</span>
+<span class="fc" id="L449">            m.setElementAt(7, 1, pB * pB);</span>
+<span class="fc" id="L450">            m.setElementAt(7, 2, pC * pC);</span>
+<span class="fc" id="L451">            m.setElementAt(7, 3, 2.0 * pA * pB);</span>
+<span class="fc" id="L452">            m.setElementAt(7, 4, 2.0 * pA * pC);</span>
+<span class="fc" id="L453">            m.setElementAt(7, 5, 2.0 * pB * pC);</span>
+<span class="fc" id="L454">            m.setElementAt(7, 6, 2.0 * pA * pD);</span>
+<span class="fc" id="L455">            m.setElementAt(7, 7, 2.0 * pB * pD);</span>
+<span class="fc" id="L456">            m.setElementAt(7, 8, 2.0 * pC * pD);</span>
+<span class="fc" id="L457">            m.setElementAt(7, 9, pD * pD);</span>
+<span class="fc" id="L458">            pA = plane9.getA();</span>
+<span class="fc" id="L459">            pB = plane9.getB();</span>
+<span class="fc" id="L460">            pC = plane9.getC();</span>
+<span class="fc" id="L461">            pD = plane9.getD();</span>
+<span class="fc" id="L462">            m.setElementAt(8, 0, pA * pA);</span>
+<span class="fc" id="L463">            m.setElementAt(8, 1, pB * pB);</span>
+<span class="fc" id="L464">            m.setElementAt(8, 2, pC * pC);</span>
+<span class="fc" id="L465">            m.setElementAt(8, 3, 2.0 * pA * pB);</span>
+<span class="fc" id="L466">            m.setElementAt(8, 4, 2.0 * pA * pC);</span>
+<span class="fc" id="L467">            m.setElementAt(8, 5, 2.0 * pB * pC);</span>
+<span class="fc" id="L468">            m.setElementAt(8, 6, 2.0 * pA * pD);</span>
+<span class="fc" id="L469">            m.setElementAt(8, 7, 2.0 * pB * pD);</span>
+<span class="fc" id="L470">            m.setElementAt(8, 8, 2.0 * pC * pD);</span>
+<span class="fc" id="L471">            m.setElementAt(8, 9, pD * pD);</span>
             
             //normalize each row to increase accuracy
-<span class="fc" id="L476">            double[] row = new double[10];</span>
+<span class="fc" id="L474">            double[] row = new double[10];</span>
             double rowNorm;
                         
-<span class="fc bfc" id="L479" title="All 2 branches covered.">            for (int j = 0; j &lt; 9; j++) {</span>
-<span class="fc" id="L480">                m.getSubmatrixAsArray(j, 0, j, 9, row);</span>
-<span class="fc" id="L481">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
-<span class="fc bfc" id="L482" title="All 2 branches covered.">                for(int i = 0; i &lt; 10; i++) </span>
-<span class="fc" id="L483">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
+<span class="fc bfc" id="L477" title="All 2 branches covered.">            for (int j = 0; j &lt; 9; j++) {</span>
+<span class="fc" id="L478">                m.getSubmatrixAsArray(j, 0, j, 9, row);</span>
+<span class="fc" id="L479">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
+<span class="fc bfc" id="L480" title="All 2 branches covered.">                for(int i = 0; i &lt; 10; i++) </span>
+<span class="fc" id="L481">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
             }     
             
-<span class="fc" id="L486">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
-<span class="fc" id="L487">            decomposer.decompose();</span>
+<span class="fc" id="L484">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L485">            decomposer.decompose();</span>
             
-<span class="fc bfc" id="L489" title="All 2 branches covered.">            if(decomposer.getRank() &lt; 9) throw new CoincidentPlanesException();</span>
+<span class="fc bfc" id="L487" title="All 2 branches covered.">            if(decomposer.getRank() &lt; 9) throw new CoincidentPlanesException();</span>
             
             //the right null-space of m contains the parameters a, b, c, d, e ,f
             //of the conic
-<span class="fc" id="L493">            Matrix V = decomposer.getV();                        </span>
+<span class="fc" id="L491">            Matrix v = decomposer.getV();</span>
             
-<span class="fc" id="L495">            double a = V.getElementAt(0, 9);</span>
-<span class="fc" id="L496">            double b = V.getElementAt(1, 9);</span>
-<span class="fc" id="L497">            double c = V.getElementAt(2, 9);</span>
-<span class="fc" id="L498">            double d = V.getElementAt(3, 9);</span>
+<span class="fc" id="L493">            double a = v.getElementAt(0, 9);</span>
+<span class="fc" id="L494">            double b = v.getElementAt(1, 9);</span>
+<span class="fc" id="L495">            double c = v.getElementAt(2, 9);</span>
+<span class="fc" id="L496">            double d = v.getElementAt(3, 9);</span>
             
-<span class="fc" id="L500">            double f = V.getElementAt(4, 9);</span>
-<span class="fc" id="L501">            double e = V.getElementAt(5, 9);            </span>
+<span class="fc" id="L498">            double f = v.getElementAt(4, 9);</span>
+<span class="fc" id="L499">            double e = v.getElementAt(5, 9);</span>
             
-<span class="fc" id="L503">            double g = V.getElementAt(6, 9);</span>
-<span class="fc" id="L504">            double h = V.getElementAt(7, 9);</span>
-<span class="fc" id="L505">            double i = V.getElementAt(8, 9);</span>
-<span class="fc" id="L506">            double j = V.getElementAt(9, 9);            </span>
+<span class="fc" id="L501">            double g = v.getElementAt(6, 9);</span>
+<span class="fc" id="L502">            double h = v.getElementAt(7, 9);</span>
+<span class="fc" id="L503">            double i = v.getElementAt(8, 9);</span>
+<span class="fc" id="L504">            double j = v.getElementAt(9, 9);</span>
             
-<span class="fc" id="L508">            setParameters(a, b, c, d, e, f, g, h, i, j);            </span>
-<span class="nc" id="L509">        } catch (AlgebraException ex) {</span>
-<span class="nc" id="L510">            throw new CoincidentPlanesException(ex);</span>
-<span class="fc" id="L511">        }        </span>
-<span class="fc" id="L512">    }</span>
+<span class="fc" id="L506">            setParameters(a, b, c, d, e, f, g, h, i, j);            </span>
+<span class="nc" id="L507">        } catch (AlgebraException ex) {</span>
+<span class="nc" id="L508">            throw new CoincidentPlanesException(ex);</span>
+<span class="fc" id="L509">        }        </span>
+<span class="fc" id="L510">    }</span>
     
     /**
      * Creates a canonical instance of the dual absolute quadric in the metric
@@ -521,7 +519,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @return a canonical instance of the dual absolute quadric
      */
     public static DualQuadric createCanonicalDualAbsoluteQuadric() {
-<span class="fc" id="L524">        return new DualQuadric(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, </span>
+<span class="fc" id="L522">        return new DualQuadric(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, </span>
                 0.0);
     }        
 }

@@ -628,8 +628,8 @@
 <a class="jxr_linenumber" name="L620" href="#L620">620</a>         
 <a class="jxr_linenumber" name="L621" href="#L621">621</a>         <em class="jxr_comment">//create line passing through both points</em>
 <a class="jxr_linenumber" name="L622" href="#L622">622</a>         Line2D line = <strong class="jxr_keyword">new</strong> Line2D(point1, point2);
-<a class="jxr_linenumber" name="L623" href="#L623">623</a>         assertTrue(line.isLocus(point1));
-<a class="jxr_linenumber" name="L624" href="#L624">624</a>         assertTrue(line.isLocus(point2));
+<a class="jxr_linenumber" name="L623" href="#L623">623</a>         assertTrue(line.isLocus(point1, ABSOLUTE_ERROR));
+<a class="jxr_linenumber" name="L624" href="#L624">624</a>         assertTrue(line.isLocus(point2, ABSOLUTE_ERROR));
 <a class="jxr_linenumber" name="L625" href="#L625">625</a>         
 <a class="jxr_linenumber" name="L626" href="#L626">626</a>         <em class="jxr_comment">//now rotate points and line</em>
 <a class="jxr_linenumber" name="L627" href="#L627">627</a>         Point2D rotPoint1A = rotation.rotate(point1);
