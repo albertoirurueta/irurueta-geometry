@@ -99,7 +99,9 @@ public abstract class Box<P extends Point> implements Serializable {
         int dim = point.getDimensions();
 
         double dd = 0.0;
-        double pointValue, loValue, hiValue;
+        double pointValue;
+        double loValue;
+        double hiValue;
         for (int i = 0; i < dim; i++) {
             pointValue = point.getInhomogeneousCoordinate(i);
             loValue = mLo.getInhomogeneousCoordinate(i);

@@ -165,7 +165,7 @@ public abstract class BaseQuadric implements Serializable {
      * not 4x4.
      */
     public BaseQuadric(Matrix m, double symmetricThreshold)
-            throws NonSymmetricMatrixException, IllegalArgumentException {
+            throws NonSymmetricMatrixException {
         setParameters(m, symmetricThreshold);
     }
 
@@ -177,8 +177,7 @@ public abstract class BaseQuadric implements Serializable {
      * @throws IllegalArgumentException Raised when the size of the matrix is 
      * not 4x4.
      */    
-    public BaseQuadric(Matrix m) throws NonSymmetricMatrixException, 
-            IllegalArgumentException {
+    public BaseQuadric(Matrix m) throws NonSymmetricMatrixException {
         setParameters(m);
     }
     
@@ -305,7 +304,7 @@ public abstract class BaseQuadric implements Serializable {
      * symmetric.
      */
     public final void setParameters(Matrix m, double symmetricThreshold)
-            throws IllegalArgumentException, NonSymmetricMatrixException {
+            throws NonSymmetricMatrixException {
         if (m.getRows() != BASEQUADRIC_MATRIX_ROW_SIZE ||
                 m.getColumns() != BASEQUADRIC_MATRIX_COLUMN_SIZE) {
             throw new IllegalArgumentException();
@@ -337,8 +336,7 @@ public abstract class BaseQuadric implements Serializable {
      * @throws NonSymmetricMatrixException Raised when the quadric matrix is not
      * symmetric.
      */
-    public final void setParameters(Matrix m) throws IllegalArgumentException,
-            NonSymmetricMatrixException {
+    public final void setParameters(Matrix m) throws NonSymmetricMatrixException {
         setParameters(m, DEFAULT_SYMMETRIC_THRESHOLD);
     }
     
@@ -441,7 +439,9 @@ public abstract class BaseQuadric implements Serializable {
         try {
             out = new Matrix(BASEQUADRIC_MATRIX_ROW_SIZE,
                     BASEQUADRIC_MATRIX_COLUMN_SIZE);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         asMatrix(out);
         return out;
     }
@@ -451,7 +451,7 @@ public abstract class BaseQuadric implements Serializable {
      * @param m Provided matrix where values will be stored.
      * @throws IllegalArgumentException Raised if provided matrix is not 4x4.
      */
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
+    public void asMatrix(Matrix m) {
         
         if (m.getRows() != BASEQUADRIC_MATRIX_ROW_SIZE ||
                 m.getColumns() != BASEQUADRIC_MATRIX_ROW_SIZE) {

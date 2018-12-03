@@ -16,10 +16,12 @@
 
 package com.irurueta.geometry;
 
+import java.io.Serializable;
+
 /**
  * Interface defining a point (either in 2D or 3D, or any other further dimensions that might be defined).
  */
-public interface Point<P extends Point> {
+public interface Point<P extends Point> extends Serializable {
 
     /**
      * Returns number of dimensions of this point implementation.

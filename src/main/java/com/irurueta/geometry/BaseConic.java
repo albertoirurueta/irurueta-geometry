@@ -143,7 +143,7 @@ public abstract class BaseConic implements Serializable {
      * not 3x3.
      */
     public BaseConic(Matrix m, double symmetricThreshold)
-            throws NonSymmetricMatrixException, IllegalArgumentException {
+            throws NonSymmetricMatrixException {
         setParameters(m, symmetricThreshold);
     }
     
@@ -156,8 +156,7 @@ public abstract class BaseConic implements Serializable {
      * not 3x3.
      * @see #BaseConic(Matrix, double)
      */
-    public BaseConic(Matrix m) throws NonSymmetricMatrixException, 
-            IllegalArgumentException {
+    public BaseConic(Matrix m) throws NonSymmetricMatrixException {
         setParameters(m);
     }
     
@@ -244,7 +243,7 @@ public abstract class BaseConic implements Serializable {
      * symmetric.
      */
     public final void setParameters(Matrix m, double symmetricThreshold) 
-            throws IllegalArgumentException, NonSymmetricMatrixException {
+            throws NonSymmetricMatrixException {
         if (m.getRows() != BASECONIC_MATRIX_ROW_SIZE ||
                 m.getColumns() != BASECONIC_MATRIX_COLUMN_SIZE) {
             throw new IllegalArgumentException();
@@ -272,8 +271,7 @@ public abstract class BaseConic implements Serializable {
      * @throws NonSymmetricMatrixException Raised when the conic matrix is not 
      * symmetric.
      */    
-    public final void setParameters(Matrix m) throws IllegalArgumentException,
-            NonSymmetricMatrixException {
+    public final void setParameters(Matrix m) throws NonSymmetricMatrixException {
         setParameters(m, DEFAULT_SYMMETRIC_THRESHOLD);
     }
     
@@ -340,7 +338,9 @@ public abstract class BaseConic implements Serializable {
         try {
             out = new Matrix(BASECONIC_MATRIX_ROW_SIZE, 
                     BASECONIC_MATRIX_COLUMN_SIZE);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         asMatrix(out);        
         return out;
     }
@@ -350,7 +350,7 @@ public abstract class BaseConic implements Serializable {
      * @param m Provided matrix where values will be stored
      * @throws IllegalArgumentException Raised if provided matrix is not 3x3
      */
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
+    public void asMatrix(Matrix m) {
         
         if (m.getRows() != BASECONIC_MATRIX_ROW_SIZE ||
                 m.getColumns() != BASECONIC_MATRIX_ROW_SIZE) {

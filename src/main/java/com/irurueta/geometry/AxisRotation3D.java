@@ -79,8 +79,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      * @param theta rotation angle in radians.
      * @throws IllegalArgumentException if provided axis length is not 3.
      */
-    public AxisRotation3D(double[] axis, double theta) 
-           throws IllegalArgumentException {
+    public AxisRotation3D(double[] axis, double theta) {
         setAxisAndRotation(axis, theta);
     }
        
@@ -109,7 +108,9 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
     public AxisRotation3D(Rotation3D rot) {
         try {
             fromMatrix(rot.asInhomogeneousMatrix());
-        } catch (InvalidRotationMatrixException ignore) { }
+        } catch (InvalidRotationMatrixException ignore) {
+            //never happens
+        }
     }
    
     /** 
@@ -232,7 +233,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      * length 3.
      */    
     @Override
-    public void rotationAxis(double[] axis) throws IllegalArgumentException {
+    public void rotationAxis(double[] axis) {
         if (axis.length != INHOM_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -294,7 +295,9 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
             inverseRotation(rot);
             try {
                 result.fromMatrix(rot.asInhomogeneousMatrix());
-            } catch (InvalidRotationMatrixException ignore) { }
+            } catch (InvalidRotationMatrixException ignore) {
+                //never happens
+            }
         }
     }
     
@@ -317,7 +320,9 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
         Matrix result = null;
         try {
             result = new Matrix(INHOM_COORDS, INHOM_COORDS);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         asInhomogeneousMatrix(result);
         return result;
     }
@@ -330,8 +335,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      * have size 3x3.
      */    
     @Override
-    public void asInhomogeneousMatrix(Matrix result) 
-            throws IllegalArgumentException {
+    public void asInhomogeneousMatrix(Matrix result) {
         if (result.getRows() != INHOM_COORDS ||
                 result.getColumns() != INHOM_COORDS) {
             throw new IllegalArgumentException();
@@ -383,7 +387,9 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
             //instance, the remaining part will continue to be the identity
             result.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, 
                     asInhomogeneousMatrix());
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         return result;
     }
     
@@ -395,8 +401,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      * have size 4x4.
      */    
     @Override
-    public void asHomogeneousMatrix(Matrix result) 
-            throws IllegalArgumentException{
+    public void asHomogeneousMatrix(Matrix result) {
         if (result.getRows() != HOM_COORDS ||
                 result.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
@@ -424,7 +429,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
      */        
     @Override
     public void fromInhomogeneousMatrix(Matrix m, double threshold)
-            throws InvalidRotationMatrixException, IllegalArgumentException {
+            throws InvalidRotationMatrixException {
         
         if (m.getRows() != INHOM_COORDS ||
                 m.getColumns() != INHOM_COORDS) {
@@ -434,7 +439,10 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
             throw new InvalidRotationMatrixException();
         }
                 
-        double angle, x, y, z; // variables for result
+        double angle;
+        double x;
+        double y;
+        double z; // variables for result
 	    double epsilon = 0.01; // margin to allow for rounding errors
 	    double epsilon2 = 0.1; // margin to distinguish between 0 and 180 degrees
 
@@ -467,7 +475,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
 		        double yz = (m.getElementAt(1, 2) + m.getElementAt(2, 1)) / 4.0;
 		        if ((xx > yy) && (xx > zz)) { // m.getElementAt(0, 0) is the
                                                 //largest diagonal term
-			        if (xx< epsilon) {
+			        if (xx < epsilon) {
 				        x = 0.0;
 				        y = Math.sqrt(2.0) / 2.0;
 				        z = Math.sqrt(2.0) / 2.0;
@@ -478,7 +486,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
 			        }
 		        } else if (yy > zz) { // m.getElementAt(1, 1) is the largest
                                         //diagonal term
-			        if (yy< epsilon) {
+			        if (yy < epsilon) {
 				        x = Math.sqrt(2.0) / 2.0;
 				        y = 0.0;
 				        z = Math.sqrt(2.0) / 2.0;
@@ -489,7 +497,7 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
 			        }
 		        } else { // m.getElementAt(2, 2) is the largest diagonal term so
                         //base result on this
-			        if (zz< epsilon) {
+			        if (zz < epsilon) {
 				        x = Math.sqrt(2.0) / 2.0;
 				        y = Math.sqrt(2.0) / 2.0;
 				        z = 0.0;
@@ -670,7 +678,9 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
         try {
             m1.multiply(m2);
             result.fromMatrix(m1);
-        } catch (InvalidRotationMatrixException | WrongSizeException ignore) { }
+        } catch (InvalidRotationMatrixException | WrongSizeException ignore) {
+            //never happens
+        }
     }       
     
     /**

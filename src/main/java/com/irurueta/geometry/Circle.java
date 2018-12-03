@@ -72,8 +72,7 @@ public class Circle implements Serializable {
      * @param radius Radius of circle.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public Circle(Point2D center, double radius) 
-            throws IllegalArgumentException {
+    public Circle(Point2D center, double radius) {
         setCenterAndRadius(center, radius);
     }
     
@@ -99,7 +98,7 @@ public class Circle implements Serializable {
      * @param conic a conic to create a circle from.
      * @throws IllegalArgumentException if provided conic is not a circle.
      */
-    public Circle(Conic conic) throws IllegalArgumentException {
+    public Circle(Conic conic) {
         setFromConic(conic);
     }
     
@@ -116,7 +115,7 @@ public class Circle implements Serializable {
      * @param center Center of circle.
      * @throws NullPointerException Raised if provided center is null.
      */
-    public void setCenter(Point2D center) throws NullPointerException {
+    public void setCenter(Point2D center) {
         if(center == null) throw new NullPointerException();
         mCenter = center;
     }
@@ -134,7 +133,7 @@ public class Circle implements Serializable {
      * @param radius Radius of circle.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public void setRadius(double radius) throws IllegalArgumentException {
+    public void setRadius(double radius) {
         if (radius < MIN_RADIUS) {
             throw new IllegalArgumentException();
         }
