@@ -72,8 +72,7 @@ public class Sphere implements Serializable {
      * @param radius Radius of sphere.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public Sphere(Point3D center, double radius) 
-            throws IllegalArgumentException {
+    public Sphere(Point3D center, double radius) {
         setCenterAndRadius(center, radius);
     }
     
@@ -100,7 +99,7 @@ public class Sphere implements Serializable {
      * @param quadric a quadric to create a sphere from.
      * @throws IllegalArgumentException if provided quadric is not a sphere.
      */
-    public Sphere(Quadric quadric) throws IllegalArgumentException {
+    public Sphere(Quadric quadric) {
         setFromQuadric(quadric);
     }
     
@@ -117,7 +116,7 @@ public class Sphere implements Serializable {
      * @param center Center of sphere.
      * @throws NullPointerException Raised if provided center is null.
      */
-    public void setCenter(Point3D center) throws NullPointerException {
+    public void setCenter(Point3D center) {
         if (center == null) {
             throw new NullPointerException();
         }
@@ -138,7 +137,7 @@ public class Sphere implements Serializable {
      * @param radius Radius of sphere.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public void setRadius(double radius) throws IllegalArgumentException {
+    public void setRadius(double radius) {
         if (radius < MIN_RADIUS) {
             throw new IllegalArgumentException();
         }
@@ -153,8 +152,7 @@ public class Sphere implements Serializable {
      * @throws IllegalArgumentException Raised if provided radius is negative.
      * @throws NullPointerException Raised if provided center is null.
      */
-    public final void setCenterAndRadius(Point3D center, double radius)
-            throws IllegalArgumentException, NullPointerException {
+    public final void setCenterAndRadius(Point3D center, double radius) {
         setRadius(radius);        
         setCenter(center);
     }
@@ -271,7 +269,7 @@ public class Sphere implements Serializable {
      * @return Volume of a sphere having provided radius.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public static double volume(double radius) throws IllegalArgumentException {
+    public static double volume(double radius) {
         if (radius < MIN_RADIUS) {
             throw new IllegalArgumentException();
         }
@@ -292,8 +290,7 @@ public class Sphere implements Serializable {
      * @return Surface of a sphere having provided radius.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public static double surface(double radius) 
-            throws IllegalArgumentException {
+    public static double surface(double radius) {
         if (radius < MIN_RADIUS) {
             throw new IllegalArgumentException();
         }
@@ -438,8 +435,7 @@ public class Sphere implements Serializable {
      * @return True if point lies at sphere boundary, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */    
-    public boolean isLocus(Point3D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Point3D point, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -481,7 +477,7 @@ public class Sphere implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public Plane getTangentPlaneAt(Point3D point, double threshold)
-            throws NotLocusException, IllegalArgumentException {
+            throws NotLocusException {
         Plane plane = new Plane();
         tangentPlaneAt(point, plane, threshold);
         return plane;
@@ -498,7 +494,7 @@ public class Sphere implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public void tangentPlaneAt(Point3D point, Plane plane, double threshold)
-            throws NotLocusException, IllegalArgumentException {
+            throws NotLocusException {
         
         if (!isLocus(point, threshold)) {
             throw new NotLocusException();
@@ -577,8 +573,7 @@ public class Sphere implements Serializable {
      * @param quadric quadric to set parameters from.
      * @throws IllegalArgumentException if provided quadric is not a sphere.
      */
-    public final void setFromQuadric(Quadric quadric) 
-            throws IllegalArgumentException {
+    public final void setFromQuadric(Quadric quadric) {
         boolean isSphere = quadric.getA() == quadric.getB() && 
                 quadric.getB() == quadric.getC() && quadric.getA() != 0.0 &&
                 quadric.getD() == 0.0 && quadric.getE() == 0.0 && 

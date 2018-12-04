@@ -241,7 +241,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * is being computed.
      */
     public void setProgressDelta(float progressDelta) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -275,7 +275,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * is being computed.
      */
     public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -305,7 +305,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * is being computed.
      */
     public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -420,7 +420,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
                 inputPoints, outputPoints, method);
     }            
@@ -443,7 +443,7 @@ public abstract class AffineTransformation3DRobustEstimator {
     public static AffineTransformation3DRobustEstimator createFromPoints(
             AffineTransformation3DRobustEstimatorListener listener, 
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, method);
     }            
@@ -465,8 +465,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
                 inputPoints, outputPoints, qualityScores, method);
     }            
@@ -491,8 +490,7 @@ public abstract class AffineTransformation3DRobustEstimator {
     public static AffineTransformation3DRobustEstimator createFromPoints(
             AffineTransformation3DRobustEstimatorListener listener, 
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, qualityScores, method);
     }            
@@ -509,8 +507,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         return PointCorrespondenceAffineTransformation3DRobustEstimator.
                 create(inputPoints, outputPoints);
     }            
@@ -530,8 +527,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
             AffineTransformation3DRobustEstimatorListener listener, 
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints);
     }            
@@ -551,7 +547,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      */
     public static AffineTransformation3DRobustEstimator createFromPoints(
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
                 inputPoints, outputPoints, qualityScores);
     }            
@@ -574,7 +570,7 @@ public abstract class AffineTransformation3DRobustEstimator {
     public static AffineTransformation3DRobustEstimator createFromPoints(
             AffineTransformation3DRobustEstimatorListener listener, 
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return PointCorrespondenceAffineTransformation3DRobustEstimator.create(
                 listener, inputPoints, outputPoints, qualityScores);
     }     
@@ -594,7 +590,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
                 inputPlanes, outputPlanes, method);
     }
@@ -617,7 +613,7 @@ public abstract class AffineTransformation3DRobustEstimator {
     public static AffineTransformation3DRobustEstimator createFromPlanes(
             AffineTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
                 listener, inputPlanes, outputPlanes, method);
     }
@@ -639,8 +635,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
                 inputPlanes, outputPlanes, qualityScores, method);
     }
@@ -665,8 +660,7 @@ public abstract class AffineTransformation3DRobustEstimator {
     public static AffineTransformation3DRobustEstimator createFromPlanes(
             AffineTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
                 listener, inputPlanes, outputPlanes, qualityScores, method);
     }
@@ -683,8 +677,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
-            List<Plane> inputPlanes, List<Plane> outputPlanes)
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
                 inputPlanes, outputPlanes);
     }
@@ -704,8 +697,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
             AffineTransformation3DRobustEstimatorListener listener,
-            List<Plane> inputPlanes, List<Plane> outputPlanes)
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
                 listener, inputPlanes, outputPlanes);
     }
@@ -725,7 +717,7 @@ public abstract class AffineTransformation3DRobustEstimator {
      */
     public static AffineTransformation3DRobustEstimator createFromPlanes(
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
                 inputPlanes, outputPlanes, qualityScores);
     }
@@ -748,7 +740,7 @@ public abstract class AffineTransformation3DRobustEstimator {
     public static AffineTransformation3DRobustEstimator createFromPlanes(
             AffineTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return PlaneCorrespondenceAffineTransformation3DRobustEstimator.create(
                 listener, inputPlanes, outputPlanes, qualityScores);
     }                

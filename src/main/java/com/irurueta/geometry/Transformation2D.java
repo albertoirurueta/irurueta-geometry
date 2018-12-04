@@ -362,5 +362,5 @@ public abstract class Transformation2D {
      * @throws IllegalArgumentException Raised if provided instance is not a 3x3 
      * matrix.
      */
-    public abstract void asMatrix(Matrix m) throws IllegalArgumentException;    
+    public abstract void asMatrix(Matrix m);
 }
