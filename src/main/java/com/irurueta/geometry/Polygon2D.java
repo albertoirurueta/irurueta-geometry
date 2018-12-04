@@ -263,7 +263,7 @@ public class Polygon2D implements Serializable {
      * failed.
      */
     public boolean isInside(Point2D point, double threshold)
-            throws IllegalArgumentException, TriangulatorException {
+            throws TriangulatorException {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -296,7 +296,8 @@ public class Polygon2D implements Serializable {
      */
     public void center(Point2D result) {
         //compute average location of all vertices
-        double inhomX = 0.0, inhomY = 0.0;
+        double inhomX = 0.0;
+        double inhomY = 0.0;
         int total = mVertices.size();
         
         for (Point2D point : mVertices) {
@@ -318,8 +319,7 @@ public class Polygon2D implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Point2D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Point2D point, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -364,7 +364,8 @@ public class Polygon2D implements Serializable {
         Point2D prevPoint = iterator.next();
         prevPoint.normalize(); //to increase accuracy
         Point2D curPoint;
-        double bestDist = Double.MAX_VALUE, dist;
+        double bestDist = Double.MAX_VALUE;
+        double dist;
         boolean found = false;
         Line2D line = new Line2D();
         Point2D pointInLine = Point2D.create();
@@ -465,7 +466,8 @@ public class Polygon2D implements Serializable {
         Point2D prevPoint = iterator.next();
         prevPoint.normalize(); //to increase accuracy
         Point2D curPoint;
-        double bestDist = Double.MAX_VALUE, dist;
+        double bestDist = Double.MAX_VALUE;
+        double dist;
         boolean found = false;
         Line2D line = new Line2D();
         Point2D pointInLine = Point2D.create();

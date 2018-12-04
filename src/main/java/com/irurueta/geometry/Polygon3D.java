@@ -172,7 +172,9 @@ public class Polygon3D implements Serializable {
         Point3D prevPoint = iterator.next(); //because there are at least 3 
                                             //vertices
         Point3D curPoint;
-        double avgX = 0.0, avgY = 0.0, avgZ = 0.0;
+        double avgX = 0.0;
+        double avgY = 0.0;
+        double avgZ = 0.0;
         while (iterator.hasNext()) {
             curPoint = iterator.next();
             
@@ -263,7 +265,7 @@ public class Polygon3D implements Serializable {
      * failed.
      */
     public boolean isInside(Point3D point, double threshold)
-            throws IllegalArgumentException, TriangulatorException {
+            throws TriangulatorException {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -296,7 +298,9 @@ public class Polygon3D implements Serializable {
      */
     public void center(Point3D result) {
         //compute average location of all vertices
-        double inhomX = 0.0, inhomY = 0.0, inhomZ = 0.0;
+        double inhomX = 0.0;
+        double inhomY = 0.0;
+        double inhomZ = 0.0;
         int total = mVertices.size();
         
         for (Point3D point : mVertices) {
@@ -319,8 +323,7 @@ public class Polygon3D implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Point3D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Point3D point, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -374,7 +377,8 @@ public class Polygon3D implements Serializable {
         Point3D prevPoint = iterator.next();
         prevPoint.normalize(); //to increase accuracy
         Point3D curPoint;
-        double bestDist = Double.MAX_VALUE, dist;
+        double bestDist = Double.MAX_VALUE;
+        double dist;
         boolean found = false;
         Line3D line = null;
         Point3D pointInLine = Point3D.create();
@@ -492,7 +496,8 @@ public class Polygon3D implements Serializable {
         prevPoint.normalize(); //to increase accuracy
         
         Point3D curPoint;
-        double bestDist = Double.MAX_VALUE, dist;
+        double bestDist = Double.MAX_VALUE;
+        double dist;
         boolean found = false;
         Line3D line = null;
         Point3D pointInLine = Point3D.create();
@@ -624,8 +629,7 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */
     public static void orientation(List<Point3D> vertices, double[] result,
-            double threshold) throws IllegalArgumentException, 
-            CoincidentPointsException {
+            double threshold) throws CoincidentPointsException {
         int numVertices = vertices.size();
         if (numVertices < MIN_VERTICES) {
             throw new IllegalArgumentException();
@@ -638,11 +642,14 @@ public class Polygon3D implements Serializable {
         }
         
         
-        double avgX = 0.0, avgY = 0.0, avgZ = 0.0;
+        double avgX = 0.0;
+        double avgY = 0.0;
+        double avgZ = 0.0;
         
         Iterator<Point3D> iterator = vertices.iterator();
         Point3D prevPoint = iterator.next();
-        Point3D origin = prevPoint, curPoint;
+        Point3D origin = prevPoint;
+        Point3D curPoint;
         double inhomX0 = origin.getInhomX();
         double inhomY0 = origin.getInhomY();
         double inhomZ0 = origin.getInhomZ();
@@ -712,7 +719,7 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */    
     public static void orientation(List<Point3D> vertices, double[] result) 
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         orientation(vertices, result, DEFAULT_THRESHOLD);
     }    
     
@@ -740,7 +747,7 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */    
     public static double[] orientation(List<Point3D> vertices, double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         double[] out = new double[INHOM_COORDS];
         orientation(vertices, out, threshold);
         return out;
@@ -763,7 +770,7 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */        
     public static double[] orientation(List<Point3D> vertices) 
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         return orientation(vertices, DEFAULT_THRESHOLD);
     }
     
@@ -790,8 +797,7 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */    
     public static void orientation(Polygon3D polygon, double[] result, 
-            double threshold) throws IllegalArgumentException, 
-            CoincidentPointsException {
+            double threshold) throws CoincidentPointsException {
         orientation(polygon.getVertices(), result, threshold);
     }
 
@@ -812,7 +818,7 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */        
     public static void orientation(Polygon3D polygon, double[] result) 
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         orientation(polygon, result, DEFAULT_THRESHOLD);
     }    
     
@@ -839,7 +845,7 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */        
     public static double[] orientation(Polygon3D polygon, double threshold)
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         return orientation(polygon.getVertices(), threshold);
     }
     
@@ -884,7 +890,7 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */        
     public void orientation(double[] result, double threshold)
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         orientation(mVertices, result, threshold);
     }
     
@@ -903,8 +909,7 @@ public class Polygon3D implements Serializable {
      * that consecutive vertices of the polygon are too close (i.e. coincident)
      * or when there are polygon degeneracies or numerical instabilities.
      */        
-    public void orientation(double[] result) throws IllegalArgumentException, 
-            CoincidentPointsException {
+    public void orientation(double[] result) throws CoincidentPointsException {
         orientation(result, DEFAULT_THRESHOLD);
     }
     
@@ -930,7 +935,7 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */        
     public double[] getOrientation(double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         return orientation(mVertices, threshold);
     }
 
@@ -970,7 +975,7 @@ public class Polygon3D implements Serializable {
      */
     public static double getAngleBetweenPolygons(Polygon3D polygon1, 
             Polygon3D polygon2, double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         return getAngleBetweenPolygons(polygon1.getVertices(), 
                 polygon2.getVertices(), threshold);
     }
@@ -1016,7 +1021,7 @@ public class Polygon3D implements Serializable {
      */    
     public static double getAngleBetweenPolygons(List<Point3D> vertices1,
             List<Point3D> vertices2, double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         return getAngleBetweenOrientations(Polygon3D.orientation(vertices1, 
                 threshold), Polygon3D.orientation(vertices2, threshold));
     }
@@ -1039,8 +1044,7 @@ public class Polygon3D implements Serializable {
      * @see #orientation(Polygon3D, double[])
      */        
     public static double getAngleBetweenPolygons(List<Point3D> vertices1,
-            List<Point3D> vertices2) throws IllegalArgumentException, 
-            CoincidentPointsException {
+            List<Point3D> vertices2) throws CoincidentPointsException {
         return getAngleBetweenPolygons(vertices1, vertices2, DEFAULT_THRESHOLD);
     }
     
@@ -1056,7 +1060,7 @@ public class Polygon3D implements Serializable {
      * do not have length 3.
      */
     private static double getAngleBetweenOrientations(double[] orientation1, 
-            double[] orientation2) throws IllegalArgumentException {
+            double[] orientation2) {
         if (orientation1.length != INHOM_COORDS ||
                 orientation2.length != INHOM_COORDS) {
             throw new IllegalArgumentException();
