@@ -185,8 +185,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * the same size and enough points.
      */
     public EPnPPointCorrespondencePinholeCameraEstimator(List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException,
-            WrongListSizesException {
+            List<Point2D> points2D) throws WrongListSizesException {
         super();
         internalSetLists(points3D, points2D);
     }
@@ -203,7 +202,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     public EPnPPointCorrespondencePinholeCameraEstimator(List<Point3D> points3D, 
             List<Point2D> points2D, PinholeCameraEstimatorListener listener)
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         super(listener);
         internalSetLists(points3D, points2D);
     }
@@ -228,8 +227,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     public EPnPPointCorrespondencePinholeCameraEstimator(
             PinholeCameraIntrinsicParameters intrinsic,
-            PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException {
+            PinholeCameraEstimatorListener listener) {
         this(listener);
         mIntrinsic = intrinsic;
     }
@@ -247,7 +245,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     public EPnPPointCorrespondencePinholeCameraEstimator(
             PinholeCameraIntrinsicParameters intrinsic,
             List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         this(points3D, points2D);
         mIntrinsic = intrinsic;
     }
@@ -268,7 +266,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             PinholeCameraIntrinsicParameters intrinsic,
             List<Point3D> points3D, List<Point2D> points2D, 
             PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         this(points3D, points2D, listener);
         mIntrinsic = intrinsic;
     }
@@ -284,8 +282,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     @Override
     public void setLists(List<Point3D> points3D, List<Point2D> points2D)
-            throws LockedException, IllegalArgumentException, 
-            WrongListSizesException {
+            throws LockedException, WrongListSizesException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -404,7 +401,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws LockedException if estimator is locked.
      */
     public void setPlanarThreshold(double planarThreshold) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -509,42 +506,48 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             computeBarycentricCoordinates();
             buildM();
             solveNullspace();
-            
-            mSolutions = new ArrayList<>();
-            
-            //general case
-            try {
-                generalSolution1();
-            } catch (Exception ignore) { }
-            if (mNullspaceDimension2Allowed) {
-                try {
-                    generalSolution2();
-                } catch (Exception ignore) { }
-            }
-            if (mNullspaceDimension3Allowed && !mIsPlanar) {
-                try {
-                    generalSolution3();
-                } catch (Exception ignore) { }
-            }
-            
-            //pick best solution
-            Solution bestSolution = pickBestSolution();
-            
-            if (mListener != null) {
-                mListener.onEstimateEnd(this);
-            }
-            
-            if (bestSolution == null) {
-                throw new PinholeCameraEstimatorException();
-            }
-            
-            return attemptRefine(bestSolution.camera);
         } catch (AlgebraException e) {
-            throw new PinholeCameraEstimatorException(e);
-        } finally {
             mLocked = false;
+            throw new PinholeCameraEstimatorException(e);
         }
-    }  
+
+            
+        mSolutions = new ArrayList<>();
+            
+        //general case
+        try {
+            generalSolution1();
+        } catch (GeometryException ignore) {
+            //continue attempting 2nd solution if 1st one fails
+        }
+        if (mNullspaceDimension2Allowed) {
+            try {
+                generalSolution2();
+            } catch (GeometryException | AlgebraException ignore) {
+                //continue attempting 3rd solution if 2nd one fails
+            }
+        }
+        if (mNullspaceDimension3Allowed && !mIsPlanar) {
+            try {
+                generalSolution3();
+            } catch (GeometryException | AlgebraException ignore) {
+                //3rd solution could not be found
+            }
+        }
+            
+        //pick best solution
+        Solution bestSolution = pickBestSolution();
+            
+        if (mListener != null) {
+            mListener.onEstimateEnd(this);
+        }
+            
+        if (bestSolution == null) {
+            throw new PinholeCameraEstimatorException();
+        }
+        mLocked = false;
+        return attemptRefine(bestSolution.camera);
+    }
         
  
     /**
@@ -583,8 +586,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * the same size and enough points.
      */
     private void internalSetLists(List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException,
-            WrongListSizesException {
+            List<Point2D> points2D) throws WrongListSizesException {
         
         if (points3D == null || points2D == null) {
             throw new IllegalArgumentException();
@@ -692,7 +694,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         
         double[] a = Utils.solve(c, rhos);
         
-        double beta1, beta2, beta3;
+        double beta1;
+        double beta2;
+        double beta3;
         if (a[0] < 0.0) {
             beta1 = Math.sqrt(-a[0]);
             beta2 = a[3] < 0.0 ? Math.sqrt(-a[3]) : 0.0;
@@ -738,15 +742,15 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         //different signs, so we add solutions for each combination so that the 
         //one with the smallest reprojection error will be picked
         beta1 = -initialBeta1;
-        beta2 = initialBeta2;
-        beta3 = initialBeta3;
+        //no need to set: beta2 = initialBeta2 and beta3 = initialBeta3 because they already have
+        //those values
         
         ArrayUtils.multiplyByScalar(va, beta1, tmp1);
         ArrayUtils.multiplyByScalar(vb, beta2, tmp2);
         ArrayUtils.multiplyByScalar(vc, beta3, tmp3);
         ArrayUtils.sum(tmp1, tmp2, tmp1);
         ArrayUtils.sum(tmp1, tmp3, tmp1);
-        v = tmp1;
+        //no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(v);
         
         solution = computePossibleSolutionWithPoseAndReprojectionError(
@@ -756,14 +760,14 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
 
         beta1 = initialBeta1;
         beta2 = -initialBeta2;
-        beta3 = initialBeta3;
+        //no need to set: beta3 = initialBeta3 as it already has that value
         
         ArrayUtils.multiplyByScalar(va, beta1, tmp1);
         ArrayUtils.multiplyByScalar(vb, beta2, tmp2);
         ArrayUtils.multiplyByScalar(vc, beta3, tmp3);
         ArrayUtils.sum(tmp1, tmp2, tmp1);
         ArrayUtils.sum(tmp1, tmp3, tmp1);
-        v = tmp1;
+        //no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(v);
         
         solution = computePossibleSolutionWithPoseAndReprojectionError(
@@ -773,14 +777,14 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
 
         beta1 = -initialBeta1;
         beta2 = -initialBeta2;
-        beta3 = initialBeta3;
+        //no need to set beta3 = initialBeta3, as it already has that value
         
         ArrayUtils.multiplyByScalar(va, beta1, tmp1);
         ArrayUtils.multiplyByScalar(vb, beta2, tmp2);
         ArrayUtils.multiplyByScalar(vc, beta3, tmp3);
         ArrayUtils.sum(tmp1, tmp2, tmp1);
         ArrayUtils.sum(tmp1, tmp3, tmp1);
-        v = tmp1;
+        //no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(v);
         
         solution = computePossibleSolutionWithPoseAndReprojectionError(
@@ -797,7 +801,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         ArrayUtils.multiplyByScalar(vc, beta3, tmp3);
         ArrayUtils.sum(tmp1, tmp2, tmp1);
         ArrayUtils.sum(tmp1, tmp3, tmp1);
-        v = tmp1;
+        //no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(v);
         
         solution = computePossibleSolutionWithPoseAndReprojectionError(
@@ -806,7 +810,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         
         
         beta1 = -initialBeta1;
-        beta2 = initialBeta2;
+        //no need to set beta2 = initialBeta2, because it already has this value
         beta3 = -initialBeta3;
         
         ArrayUtils.multiplyByScalar(va, beta1, tmp1);
@@ -814,7 +818,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         ArrayUtils.multiplyByScalar(vc, beta3, tmp3);
         ArrayUtils.sum(tmp1, tmp2, tmp1);
         ArrayUtils.sum(tmp1, tmp3, tmp1);
-        v = tmp1;
+        //no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(v);
         
         solution = computePossibleSolutionWithPoseAndReprojectionError(
@@ -831,7 +835,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         ArrayUtils.multiplyByScalar(vc, beta3, tmp3);
         ArrayUtils.sum(tmp1, tmp2, tmp1);
         ArrayUtils.sum(tmp1, tmp3, tmp1);
-        v = tmp1;
+        //no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(v);
         
         solution = computePossibleSolutionWithPoseAndReprojectionError(
@@ -848,7 +852,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         ArrayUtils.multiplyByScalar(vc, beta3, tmp3);
         ArrayUtils.sum(tmp1, tmp2, tmp1);
         ArrayUtils.sum(tmp1, tmp3, tmp1);
-        v = tmp1;
+        //no need to set v = tmp1, because it already has this value
         controlCameraPoints = controlPointsFromV(v);
         
         solution = computePossibleSolutionWithPoseAndReprojectionError(
@@ -925,7 +929,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         //alpha2 = beta1*beta2
         //alpha3 = beta2^2
         
-        double beta1, beta2;
+        double beta1;
+        double beta2;
         if (a[0] < 0.0) {
             beta1 = Math.sqrt(-a[0]);
             beta2 = a[2] < 0.0 ? Math.sqrt(-a[2]) : 0.0;
@@ -963,7 +968,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         ArrayUtils.multiplyByScalar(va, beta1, tmp1);
         ArrayUtils.multiplyByScalar(vb, beta2, tmp2);
         ArrayUtils.sum(tmp1, tmp2, tmp1);
-        v = tmp1;
+        //no need to set v = tmp1, as it already has this value
         controlCameraPoints = controlPointsFromV(v);
         
         solution = computePossibleSolutionWithPoseAndReprojectionError(
@@ -977,7 +982,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         ArrayUtils.multiplyByScalar(va, beta1, tmp1);
         ArrayUtils.multiplyByScalar(vb, beta2, tmp2);
         ArrayUtils.sum(tmp1, tmp2, tmp1);
-        v = tmp1;
+        //no need to set v = tmp1, as it already has this value
         controlCameraPoints = controlPointsFromV(v);
         
         solution = computePossibleSolutionWithPoseAndReprojectionError(
@@ -991,7 +996,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         ArrayUtils.multiplyByScalar(va, beta1, tmp1);
         ArrayUtils.multiplyByScalar(vb, beta2, tmp2);
         ArrayUtils.sum(tmp1, tmp2, tmp1);
-        v = tmp1;
+        //no need to set v = tmp1, as it already has this value
         controlCameraPoints = controlPointsFromV(v);
         
         solution = computePossibleSolutionWithPoseAndReprojectionError(
@@ -1348,7 +1353,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         int n = mPoints2D.size();
         
         Point3D point3D;
-        Point2D projected = Point2D.create(), point2D;
+        Point2D projected = Point2D.create();
+        Point2D point2D;
         double error = 0.0;
         for (int i = 0; i < n; i++) {
             point3D = mPoints3D.get(i);

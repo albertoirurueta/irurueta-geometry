@@ -290,8 +290,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public EuclideanTransformation3DRobustEstimator(List<Point3D> inputPoints,
-            List<Point3D> outputPoints, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            List<Point3D> outputPoints, boolean weakMinimumSizeAllowed) {
         this();
         mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
         internalSetPoints(inputPoints, outputPoints);
@@ -316,7 +315,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public EuclideanTransformation3DRobustEstimator(
             EuclideanTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         this(listener);
         mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
         internalSetPoints(inputPoints, outputPoints);
@@ -366,8 +365,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * already in progress.
      */
     public void setPoints(List<Point3D> inputPoints, 
-            List<Point3D> outputPoints) throws IllegalArgumentException,
-            LockedException {
+            List<Point3D> outputPoints) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -410,8 +408,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException { }
+    public void setQualityScores(double[] qualityScores) throws LockedException { }
     
     /**
      * Returns reference to listener to be notified of events such as when
@@ -506,7 +503,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * is being computed.
      */
     public void setProgressDelta(float progressDelta)
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -539,8 +536,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }        
@@ -569,8 +565,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+    public void setMaxIterations(int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -710,7 +705,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEuclideanTransformation3DRobustEstimator(
@@ -781,7 +776,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener, 
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEuclideanTransformation3DRobustEstimator(
@@ -814,8 +809,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 3 matched points).
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEuclideanTransformation3DRobustEstimator();
@@ -850,8 +844,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEuclideanTransformation3DRobustEstimator(
@@ -887,8 +880,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEuclideanTransformation3DRobustEstimator(
@@ -929,8 +921,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEuclideanTransformation3DRobustEstimator(
@@ -997,8 +988,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEuclideanTransformation3DRobustEstimator(
@@ -1071,8 +1061,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener, 
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEuclideanTransformation3DRobustEstimator(
@@ -1112,7 +1101,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEuclideanTransformation3DRobustEstimator(
@@ -1152,7 +1141,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             List<Point3D> inputPoints, List<Point3D> outputPoints,
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEuclideanTransformation3DRobustEstimator(
@@ -1192,7 +1181,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener, 
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEuclideanTransformation3DRobustEstimator(
@@ -1235,7 +1224,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             EuclideanTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEuclideanTransformation3DRobustEstimator(
@@ -1282,8 +1271,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * the same size of their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation3DRobustEstimator create(
-            List<Point3D> inputPoints, List<Point3D> outputPoints)
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1314,8 +1302,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener,
-            List<Point3D> inputPoints, List<Point3D> outputPoints)
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         return create(listener, inputPoints, outputPoints, 
                 DEFAULT_ROBUST_METHOD);
     }
@@ -1346,7 +1333,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(inputPoints, outputPoints, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }
@@ -1384,7 +1371,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, inputPoints, outputPoints, qualityScores,
                 DEFAULT_ROBUST_METHOD);
     }
@@ -1414,8 +1401,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            boolean weakMinimumSizeAllowed)
-            throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         return create(inputPoints, outputPoints, weakMinimumSizeAllowed, 
                 DEFAULT_ROBUST_METHOD);
     }
@@ -1451,7 +1437,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         return create(listener, inputPoints, outputPoints, 
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
@@ -1485,8 +1471,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
         return create(inputPoints, outputPoints, qualityScores, 
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
@@ -1527,8 +1512,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
         return create(listener, inputPoints, outputPoints, qualityScores,
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
@@ -1546,7 +1530,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetPoints(List<Point3D> inputPoints, 
-            List<Point3D> outputPoints) throws IllegalArgumentException {
+            List<Point3D> outputPoints) {
         if (inputPoints.size() < getMinimumPoints()) {
             throw new IllegalArgumentException();
         }
