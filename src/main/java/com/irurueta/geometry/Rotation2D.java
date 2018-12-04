@@ -128,7 +128,7 @@ public class Rotation2D implements Serializable {
      * @see #isValidRotationMatrix(Matrix)
      */
     public Rotation2D(Matrix m, double threshold) 
-            throws InvalidRotationMatrixException, IllegalArgumentException {
+            throws InvalidRotationMatrixException {
         fromMatrix(m, threshold);
     }
     

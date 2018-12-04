@@ -473,7 +473,7 @@ public abstract class Transformation3D {
      * @throws IllegalArgumentException raised if provided instance is not a 3x3
      * matrix.
      */
-    public abstract void asMatrix(Matrix m) throws IllegalArgumentException;
+    public abstract void asMatrix(Matrix m);
         
     /**
      * Transforms a camera using this transformation.

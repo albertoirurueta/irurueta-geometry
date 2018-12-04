@@ -97,6 +97,7 @@ public abstract class Triangulator3D {
      * @param method A triangulator method.
      * @return A triangulator for 3D polygons.
      */
+    @SuppressWarnings("all")
     public static Triangulator3D create(TriangulatorMethod method) {
         switch (method) {
             case VAN_GOGH_TRIANGULATOR:

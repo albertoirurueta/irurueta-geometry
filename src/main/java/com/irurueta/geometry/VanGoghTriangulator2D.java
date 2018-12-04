@@ -27,11 +27,6 @@ import java.util.List;
 public class VanGoghTriangulator2D extends Triangulator2D {
    
     /**
-     * Empty constructor.
-     */
-    public VanGoghTriangulator2D() { }
-    
-    /**
      * Returns triangulator method.
      * Each method implementation will divide polygons into triangles using
      * different techniques.
@@ -129,8 +124,8 @@ public class VanGoghTriangulator2D extends Triangulator2D {
         }
         
         List<Triangle2D> result = new LinkedList<>();
-        
-        boolean isEar, madeCut;
+
+        boolean madeCut;
         
         Triangle2D triangle = null; 
         
@@ -157,24 +152,20 @@ public class VanGoghTriangulator2D extends Triangulator2D {
                     triangle.setVertices(verticesCopy.get(i - 1),
                             verticesCopy.get(i), verticesCopy.get(i + 1));
                 }
-
-                isEar = isEar(triangle, verticesCopy);
                 
-                if (!isEar) {
-                    continue;
+                if (isEar(triangle, verticesCopy)) {
+                    // If it is an ear, we build a face out of the triangle being
+                    //cut and remove it from polygon by cutting it
+                    result.add(triangle);
+                    triangle = null; //so that it cannot be reused after being added
+
+                    //cut ear
+                    verticesCopy.remove(i);
+                    madeCut = true;
+
+                    //Leave from FOR loop to loop again to new reduced vertices set
+                    break;
                 }
-
-                // If it is an ear, we build a face out of the triangle being 
-                //cut and remove it from polygon by cutting it
-                result.add(triangle);
-                triangle = null; //so that it cannot be reused after being added
-                
-                //cut ear
-                verticesCopy.remove(i);
-                madeCut = true;
-                
-                //Leave from FOR loop to loop again to new reduced vertices set
-                break;
             }
             
             //if arrived here but no cut was made and polygon size contains
@@ -213,7 +204,8 @@ public class VanGoghTriangulator2D extends Triangulator2D {
     private static void computeIndices(List<Point2D> vertices,
             List<Triangle2D> triangles, List<int[]> indices) {
         if (indices != null) {
-            int vertexCounter, triangleVertexCounter;
+            int vertexCounter;
+            int triangleVertexCounter;
             int[] triangleIndices;
             for (Triangle2D t : triangles) {
                 triangleVertexCounter = 0;
@@ -248,7 +240,8 @@ public class VanGoghTriangulator2D extends Triangulator2D {
     private static boolean isEar(Triangle2D triangle, 
             List<Point2D> polygonVertices) {
         
-        boolean isInside, isNotConvex; 
+        boolean isInside;
+        boolean isNotConvex;
         //in a counterclockwise polygon, reversed orientation means that 
         //triangle is not convex and cannot be an ear
         

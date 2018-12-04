@@ -62,8 +62,7 @@ public class Triangle2D implements Serializable {
      * @param vertex3 3rd vertex.
      * @throws NullPointerException Raised if any of the vertices is null.
      */
-    public Triangle2D(Point2D vertex1, Point2D vertex2, Point2D vertex3)
-            throws NullPointerException {
+    public Triangle2D(Point2D vertex1, Point2D vertex2, Point2D vertex3) {
         setVertices(vertex1, vertex2, vertex3);
     }
     
@@ -80,7 +79,7 @@ public class Triangle2D implements Serializable {
      * @param vertex1 1st vertex.
      * @throws NullPointerException Raised if provided vertex is null.
      */
-    public void setVertex1(Point2D vertex1) throws NullPointerException {
+    public void setVertex1(Point2D vertex1) {
         if (vertex1 == null) {
             throw new NullPointerException();
         }
@@ -100,7 +99,7 @@ public class Triangle2D implements Serializable {
      * @param vertex2 2nd vertex.
      * @throws NullPointerException Raised if provided vertex is null.
      */
-    public void setVertex2(Point2D vertex2) throws NullPointerException {
+    public void setVertex2(Point2D vertex2) {
         if (vertex2 == null) {
             throw new NullPointerException();
         }
@@ -120,7 +119,7 @@ public class Triangle2D implements Serializable {
      * @param vertex3 3rd vertex.
      * @throws NullPointerException Raised if provided vertex is null.
      */
-    public void setVertex3(Point2D vertex3) throws NullPointerException {
+    public void setVertex3(Point2D vertex3) {
         if (vertex3 == null) {
             throw new NullPointerException();
         }
@@ -157,7 +156,7 @@ public class Triangle2D implements Serializable {
      * @throws NullPointerException Raised if any of the vertices is null.
      */
     public final void setVertices(Point2D vertex1, Point2D vertex2, 
-            Point2D vertex3) throws NullPointerException {
+            Point2D vertex3) {
         if (vertex1 == null || vertex2 == null || vertex3 == null) {
             throw new NullPointerException();
         }
@@ -275,8 +274,7 @@ public class Triangle2D implements Serializable {
      * @return True if vertices are colinear, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean areVerticesColinear(double threshold) 
-            throws IllegalArgumentException {
+    public boolean areVerticesColinear(double threshold) {
         
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -333,8 +331,7 @@ public class Triangle2D implements Serializable {
      * @return True if point lies inside this triangle, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isInside(Point2D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean isInside(Point2D point, double threshold) {
         return isInside(mVertex1, mVertex2, mVertex3, point, threshold);
     }
     
@@ -359,7 +356,7 @@ public class Triangle2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public static boolean isInside(Triangle2D triangle, Point2D point,
-            double threshold) throws IllegalArgumentException {
+            double threshold) {
         return isInside(triangle.getVertex1(), triangle.getVertex2(), 
                 triangle.getVertex3(), point, threshold);
     }
@@ -394,8 +391,7 @@ public class Triangle2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public static boolean isInside(Point2D vertex1, Point2D vertex2, 
-            Point2D vertex3, Point2D point, double threshold) 
-            throws IllegalArgumentException {
+            Point2D vertex3, Point2D point, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -481,7 +477,8 @@ public class Triangle2D implements Serializable {
     public static void center(Point2D vertex1, Point2D vertex2, Point2D vertex3,
             Point2D result) {
         
-        double x, y;
+        double x;
+        double y;
         
         x = (vertex1.getInhomX() + vertex2.getInhomX() + vertex3.getInhomX()) / 
                 3.0;
@@ -553,7 +550,8 @@ public class Triangle2D implements Serializable {
         vertex3.normalize();
         point.normalize();
         
-        double bestDist, dist;
+        double bestDist;
+        double dist;
         
         Line2D line = new Line2D();
         line.setParametersFromPairOfPoints(vertex1, vertex2);
@@ -657,8 +655,7 @@ public class Triangle2D implements Serializable {
      * @return Closest point laying in this triangle boundaries.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public Point2D getClosestPoint(Point2D point, double threshold)
-            throws IllegalArgumentException {
+    public Point2D getClosestPoint(Point2D point, double threshold) {
         Point2D result = Point2D.create();
         closestPoint(point, result, threshold);
         return result;
@@ -684,8 +681,7 @@ public class Triangle2D implements Serializable {
      * triangle or not.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public void closestPoint(Point2D point, Point2D result, double threshold)
-            throws IllegalArgumentException {
+    public void closestPoint(Point2D point, Point2D result, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -816,21 +812,21 @@ public class Triangle2D implements Serializable {
             } else {
                 result.setCoordinates(closest2);
             }
-        } else if (!between1 && between2) { // && between3
+        } else if (!between1 && between2) { // and between3
             //determine if closest2 or closest3
             if (distClosest2 < distClosest3) {
                 result.setCoordinates(closest2);
             } else {
                 result.setCoordinates(closest3);
             }
-        } else if (between1 && !between2) { // && between3
+        } else if (between1 && !between2) { // and between3
             //determine if closest1 or closest3
             if (distClosest1 < distClosest3) {
                 result.setCoordinates(closest1);
             } else {
                 result.setCoordinates(closest3);
             }
-        } else if (between1) { // && between2 && between3
+        } else if (between1) { // and between2 and between3
             //determine if closest1, closest2 or closest3
             if (distClosest1 < distClosest2 && distClosest1 < distClosest3) {
                 //pick closest1
@@ -844,7 +840,7 @@ public class Triangle2D implements Serializable {
                 result.setCoordinates(closest3);
             }
         } else {
-            //all clasest points are outside vertex limits, so we pick the
+            //all closest points are outside vertex limits, so we pick the
             //closest vertex
             
             if (distVertex1 < distVertex2 && distVertex1 < distVertex3) {
@@ -869,14 +865,13 @@ public class Triangle2D implements Serializable {
      * @return True if provided point is locus, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Point2D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Point2D point, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
         return point.isBetween(mVertex1, mVertex2, threshold) || 
-                point.isBetween(mVertex1, mVertex2, threshold) ||
+                point.isBetween(mVertex1, mVertex3, threshold) ||
                 point.isBetween(mVertex2, mVertex3, threshold);
     }    
     

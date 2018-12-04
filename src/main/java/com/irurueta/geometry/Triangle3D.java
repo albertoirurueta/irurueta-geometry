@@ -66,8 +66,7 @@ public class Triangle3D implements Serializable {
      * @param vertex3 3rd vertex.
      * @throws NullPointerException Raised if any of the vertices is null.
      */
-    public Triangle3D(Point3D vertex1, Point3D vertex2, Point3D vertex3)
-        throws NullPointerException {
+    public Triangle3D(Point3D vertex1, Point3D vertex2, Point3D vertex3) {
         
         setVertices(vertex1, vertex2, vertex3);
     }
@@ -85,7 +84,7 @@ public class Triangle3D implements Serializable {
      * @param vertex1 1st vertex.
      * @throws NullPointerException Raised if provided vertex is null.
      */
-    public void setVertex1(Point3D vertex1) throws NullPointerException {
+    public void setVertex1(Point3D vertex1) {
         if (vertex1 == null) {
             throw new NullPointerException();
         }
@@ -105,7 +104,7 @@ public class Triangle3D implements Serializable {
      * @param vertex2 2nd vertex.
      * @throws NullPointerException Raised if provided vertex is null.
      */
-    public void setVertex2(Point3D vertex2) throws NullPointerException {
+    public void setVertex2(Point3D vertex2) {
         if (vertex2 == null) {
             throw new NullPointerException();
         }
@@ -125,7 +124,7 @@ public class Triangle3D implements Serializable {
      * @param vertex3 3rd vertex.
      * @throws NullPointerException Raised if provided vertex is null.
      */
-    public void setVertex3(Point3D vertex3) throws NullPointerException {
+    public void setVertex3(Point3D vertex3) {
         if (vertex3 == null) {
             throw new NullPointerException();
         }
@@ -162,7 +161,7 @@ public class Triangle3D implements Serializable {
      * @throws NullPointerException Raised if any of the vertices is null.
      */
     public final void setVertices(Point3D vertex1, Point3D vertex2, 
-            Point3D vertex3) throws NullPointerException {
+            Point3D vertex3) {
         if (vertex1 == null || vertex2 == null || vertex3 == null) {
             throw new NullPointerException();
         }
@@ -247,8 +246,7 @@ public class Triangle3D implements Serializable {
      * @return True if vertices are colinear, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean areVerticesColinear(double threshold) 
-            throws IllegalArgumentException {
+    public boolean areVerticesColinear(double threshold) {
         
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -309,8 +307,7 @@ public class Triangle3D implements Serializable {
      * @return True if point lies inside this triangle, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isInside(Point3D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean isInside(Point3D point, double threshold) {
         return isInside(mVertex1, mVertex2, mVertex3, point, threshold);
     }
     
@@ -339,7 +336,7 @@ public class Triangle3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public static boolean isInside(Triangle3D triangle, Point3D point,
-            double threshold) throws IllegalArgumentException {
+            double threshold) {
         return isInside(triangle.getVertex1(), triangle.getVertex2(), 
                 triangle.getVertex3(), point, threshold);
     }
@@ -378,8 +375,7 @@ public class Triangle3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public static boolean isInside(Point3D vertex1, Point3D vertex2, 
-            Point3D vertex3, Point3D point, double threshold) 
-            throws IllegalArgumentException {
+            Point3D vertex3, Point3D point, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -490,15 +486,12 @@ public class Triangle3D implements Serializable {
     public static void center(Point3D vertex1, Point3D vertex2, Point3D vertex3,
             Point3D result) {
         
-        double x, y, z;
-        
-        x = (vertex1.getInhomX() + vertex2.getInhomX() + vertex3.getInhomX()) / 
+        double x = (vertex1.getInhomX() + vertex2.getInhomX() + vertex3.getInhomX()) /
                 3.0;
-        y = (vertex1.getInhomY() + vertex2.getInhomY() + vertex3.getInhomY()) / 
+        double y = (vertex1.getInhomY() + vertex2.getInhomY() + vertex3.getInhomY()) /
                 3.0;
-        z = (vertex1.getInhomZ() + vertex2.getInhomZ() + vertex3.getInhomZ()) / 
+        double z = (vertex1.getInhomZ() + vertex2.getInhomZ() + vertex3.getInhomZ()) /
                 3.0;
-        
         
         result.setInhomogeneousCoordinates(x, y, z);
     }
@@ -564,7 +557,8 @@ public class Triangle3D implements Serializable {
         vertex3.normalize();
         point.normalize();
         
-        double bestDist = Double.MAX_VALUE, dist = Double.MAX_VALUE;
+        double bestDist = Double.MAX_VALUE;
+        double dist = Double.MAX_VALUE;
         
         Line3D line = null;
         try {
@@ -699,8 +693,7 @@ public class Triangle3D implements Serializable {
      * @return Closest point laying in this triangle boundaries.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public Point3D getClosestPoint(Point3D point, double threshold)
-            throws IllegalArgumentException {
+    public Point3D getClosestPoint(Point3D point, double threshold) {
         Point3D result = Point3D.create();
         closestPoint(point, result, threshold);
         return result;
@@ -726,8 +719,7 @@ public class Triangle3D implements Serializable {
      * triangle or not.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public void closestPoint(Point3D point, Point3D result, double threshold)
-            throws IllegalArgumentException {
+    public void closestPoint(Point3D point, Point3D result, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -738,7 +730,9 @@ public class Triangle3D implements Serializable {
         mVertex3.normalize();
         point.normalize();
         
-        Line3D line1, line2, line3;
+        Line3D line1;
+        Line3D line2;
+        Line3D line3;
         try {
             line1 = new Line3D(mVertex1, mVertex2);
             line1.normalize(); //to increase accuracy
@@ -833,7 +827,9 @@ public class Triangle3D implements Serializable {
         
         //point does not belong to any line forming a side of the triangle
         //so we find the closest point for each side
-        Point3D closest1, closest2, closest3;
+        Point3D closest1;
+        Point3D closest2;
+        Point3D closest3;
 
         closest1 = line1.getClosestPoint(point, threshold);
         closest1.normalize(); //to increase accuracy
@@ -886,21 +882,21 @@ public class Triangle3D implements Serializable {
             } else {
                 result.setCoordinates(closest2);
             }
-        } else if (!between1 && between2) { // && between3
+        } else if (!between1 && between2) { // and between3
             //determine if closest2 or closest3
             if (distClosest2 < distClosest3) {
                 result.setCoordinates(closest2);
             } else {
                 result.setCoordinates(closest3);
             }
-        } else if (between1 && !between2) { // && between3
+        } else if (between1 && !between2) { // and between3
             //determine if closest1 or closest3
             if (distClosest1 < distClosest3) {
                 result.setCoordinates(closest1);
             } else {
                 result.setCoordinates(closest3);
             }
-        } else if (between1) { // && between2 && between3
+        } else if (between1) { // and between2 and between3
             //determine if closest1, closest2 or closest3
             if (distClosest1 < distClosest2 && distClosest1 < distClosest3) {
                 //pick closest1
@@ -939,14 +935,13 @@ public class Triangle3D implements Serializable {
      * @return True if provided point is locus, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Point3D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Point3D point, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
         return point.isBetween(mVertex1, mVertex2, threshold) || 
-                point.isBetween(mVertex1, mVertex2, threshold) ||
+                point.isBetween(mVertex1, mVertex3, threshold) ||
                 point.isBetween(mVertex2, mVertex3, threshold);
     }    
     
@@ -980,8 +975,8 @@ public class Triangle3D implements Serializable {
      * @throws CoincidentPointsException  Raised if vertices of this triangle
      * are too close to each other.
      */
-    public double[] getOrientation(double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
+    public double[] getOrientation(double threshold)
+            throws CoincidentPointsException {
         return orientation(this, threshold);
     }
     
@@ -994,8 +989,8 @@ public class Triangle3D implements Serializable {
      * @throws CoincidentPointsException Raised if vertices of this triangle
      * are too close to each other.
      */
-    public void orientation(double[] result) throws IllegalArgumentException,
-            CoincidentPointsException {
+    public void orientation(double[] result)
+            throws CoincidentPointsException {
         orientation(this, result);
     }
     
@@ -1011,7 +1006,7 @@ public class Triangle3D implements Serializable {
      * are too close to each other.
      */
     public void orientation(double[] result, double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         orientation(this, result, threshold);
     }
     
@@ -1039,7 +1034,7 @@ public class Triangle3D implements Serializable {
      * too close to each other.
      */
     public static double[] orientation(Triangle3D triangle, double threshold)
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         return orientation(triangle.getVertex1(), triangle.getVertex2(),
                 triangle.getVertex3(), threshold);
     }
@@ -1055,7 +1050,7 @@ public class Triangle3D implements Serializable {
      * are too close to each other.
      */
     public static void orientation(Triangle3D triangle, double[] result) 
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         orientation(triangle.getVertex1(), triangle.getVertex2(), 
                 triangle.getVertex3(), result);
     }
@@ -1073,8 +1068,7 @@ public class Triangle3D implements Serializable {
      * are too close to each other.
      */
     public static void orientation(Triangle3D triangle, double[] result, 
-            double threshold) throws IllegalArgumentException, 
-            CoincidentPointsException {
+            double threshold) throws CoincidentPointsException {
         orientation(triangle.getVertex1(), triangle.getVertex2(), 
                 triangle.getVertex3(), result, threshold);
     }
@@ -1106,8 +1100,7 @@ public class Triangle3D implements Serializable {
      * close to each other.
      */
     public static double[] orientation(Point3D vertex1, Point3D vertex2, 
-            Point3D vertex3, double threshold) throws IllegalArgumentException, 
-            CoincidentPointsException {
+            Point3D vertex3, double threshold) throws CoincidentPointsException {
         double[] result = new double[INHOM_COORDS];
         orientation(vertex1, vertex2, vertex3, result, threshold);
         return result;
@@ -1126,8 +1119,7 @@ public class Triangle3D implements Serializable {
      * close to each other.
      */
     public static void orientation(Point3D vertex1, Point3D vertex2, 
-            Point3D vertex3, double[] result) throws IllegalArgumentException, 
-            CoincidentPointsException {
+            Point3D vertex3, double[] result) throws CoincidentPointsException {
         orientation(vertex1, vertex2, vertex3, result, DEFAULT_THRESHOLD);
     }
     
@@ -1147,7 +1139,7 @@ public class Triangle3D implements Serializable {
      */
     public static void orientation(Point3D vertex1, Point3D vertex2, 
             Point3D vertex3, double[] result, double threshold)                         
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -1226,7 +1218,7 @@ public class Triangle3D implements Serializable {
      * don't have length 3.
      */
     private static double getAngleBetweenTriangles(double[] orientation1, 
-            double[] orientation2) throws IllegalArgumentException {
+            double[] orientation2) {
         if (orientation1.length != INHOM_COORDS ||
                 orientation2.length != INHOM_COORDS) {
             throw new IllegalArgumentException();

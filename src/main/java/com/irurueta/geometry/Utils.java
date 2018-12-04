@@ -30,6 +30,12 @@ public class Utils {
      */
     @SuppressWarnings("WeakerAccess")
     public static final double HALF_TURN_RADIANS = Math.PI;
+
+    /**
+     * Constructor.
+     * Prevents instantiation.
+     */
+    private Utils() { }
     
     /**
      * Converts provided value from radians to degrees.

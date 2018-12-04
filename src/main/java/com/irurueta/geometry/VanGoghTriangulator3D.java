@@ -42,11 +42,6 @@ public class VanGoghTriangulator3D extends Triangulator3D {
     public static final int INHOM_COORDS = 3;
 
     /**
-     * Empty constructor.
-     */
-    public VanGoghTriangulator3D() { }
-    
-    /**
      * Returns triangulator method.
      * Each method implementation will divide polygons into triangles using
      * different techniques.
@@ -119,144 +114,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
         List<Point3D> verticesCopy = new ArrayList<>(vertices);
         return internalTriangulate(verticesCopy, indices, vertices);        
     }
-    
-    /**
-     * Internal method that computes the actual triangulation.
-     * @param verticesCopy List of points considered as verticesCopy of a 
-     * polygon. This list will be modified after execution of this method
-     * @param indices List where indices of original verticesCopy will be 
-     * stored.
-     * This list can be used to refer to the original order of verticesCopy. 
-     * Notice that verticesCopy indices might be repeated because verticesCopy 
-     * might appear in more than one triangle after triangulation. If this 
-     * parameter is null, indices won't be stored in this list.
-     * @param originalVertices Reference to original list of vertices that won't
-     * be modified.
-     * @return List of triangles forming the polygon that has been triangulated.
-     * @throws TriangulatorException Raised if triangulation cannot be done.
-     * Usually this indicates numerical instability or polygon degeneracy.
-     */
-    private static List<Triangle3D> internalTriangulate(
-            List<Point3D> verticesCopy, List<int[]> indices, 
-            List<Point3D> originalVertices) throws TriangulatorException {
-        if (verticesCopy.size() < MIN_VERTICES) {
-            throw new TriangulatorException();
-        }
-        
-        List<Triangle3D> result = new LinkedList<>();
-        
-        //boolean isConvex;
-        boolean isEar, madeCut;
-        
-        Triangle3D triangle = null; 
-        
-        // Second, apply algorithm
-        while (verticesCopy.size() > MIN_VERTICES) {
-            madeCut = false;
-            int lastElement = verticesCopy.size() - 1;
-            for (int i=0; i <= lastElement; i++) {
 
-
-                if (i == 0) {
-                    if (triangle == null) {
-                        //instantiate triangle if not already instantiated
-                        triangle = new Triangle3D(verticesCopy.get(lastElement),
-                                verticesCopy.get(0), verticesCopy.get(1));
-                    } else {
-                        triangle.setVertices(verticesCopy.get(lastElement),
-                                verticesCopy.get(0), verticesCopy.get(1));
-                    }
-                } else if (i == lastElement) {
-                    triangle.setVertices(verticesCopy.get(lastElement - 1),
-                            verticesCopy.get(lastElement),
-                            verticesCopy.get(0));
-                } else {
-                    triangle.setVertices(verticesCopy.get(i - 1),
-                            verticesCopy.get(i), verticesCopy.get(i + 1));
-                }
-
-                try {
-                    isEar = isEar(triangle, verticesCopy);
-                } catch (CoincidentPointsException e) {
-                    isEar = false;
-                }
-                
-                if (!isEar) {
-                    continue;
-                }
-
-                // If it is an ear, we build a face out of the triangle being 
-                //cut and remove it from polygon by cutting it
-                result.add(triangle);
-                triangle = null; //so that it cannot be reused after being added
-                
-                //cut ear
-                verticesCopy.remove(i);
-                madeCut = true;
-                
-                //Leave from FOR loop to loop again to new reduced verticesCopy set
-                break;
-            }
-            
-            //if arrived here but no cut was made and polygon size contains
-            //more than 3 verticesCopy, then the algorithm failed for some reason
-            if (!madeCut) {
-                throw new TriangulatorException();
-            }
-        }
-
-        //instantiate final triangle
-        triangle = new Triangle3D(verticesCopy.get(0),
-                verticesCopy.get(1), verticesCopy.get(2));
-
-
-        boolean arePointsColinear = triangle.areVerticesColinear();
-        
-        //only add final triangle if not colinear (area greater than small 
-        //threshold)
-        if (!arePointsColinear) {
-            result.add(triangle);
-        }
-
-        //add indices of triangles verticesCopy
-        computeIndices(originalVertices, result, indices);
-
-        return result;
-    }        
-    
-    /**
-     * Computes indices of resulting triangles vertices respect to original 
-     * polygon vertices. Indices are stored in provided indices list.
-     * @param vertices Vertices of polygon.
-     * @param triangles Triangles obtained after triangulation.
-     * @param indices Indices of original positions of resulting triangle's
-     * vertices.
-     */
-    private static void computeIndices(List<Point3D> vertices,
-            List<Triangle3D> triangles, List<int[]> indices) {
-        if (indices != null) {
-            int vertexCounter, triangleVertexCounter;
-            int[] triangleIndices;
-            for (Triangle3D t : triangles) {
-                triangleVertexCounter = 0;
-                triangleIndices = new int[Triangle3D.NUM_VERTICES];
-                for (Point3D p1 : t.getVertices()) {
-                    vertexCounter = 0;
-                    for (Point3D p2 : vertices) {
-                        if (p1 == p2) {
-                            triangleIndices[triangleVertexCounter] = 
-                                    vertexCounter;
-                            break;
-                        }
-                        vertexCounter++;
-                    }
-                    triangleVertexCounter++;
-                }
-                indices.add(triangleIndices);
-            }
-        }                
-    }
-    
     /**
      * Determines if provided triangle can be considered as an ear of the 
      * remaining polygon formed by provided vertices.
@@ -273,7 +131,8 @@ public class VanGoghTriangulator3D extends Triangulator3D {
     public static boolean isEar(Triangle3D triangle, 
             List<Point3D> polygonVertices) throws CoincidentPointsException {
         
-        boolean isInside, isReversed; 
+        boolean isInside;
+        boolean isReversed;
         //in a counterclockwise polygon, reversed orientation means that 
         //triangle is not convex and cannot be an ear
         
@@ -372,5 +231,142 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      */    
     public static boolean isOrientationReversed(double angle, double threshold) {
         return Math.abs(angle) > Math.abs(threshold);
-    } 
+    }
+
+    /**
+     * Internal method that computes the actual triangulation.
+     * @param verticesCopy List of points considered as verticesCopy of a
+     * polygon. This list will be modified after execution of this method
+     * @param indices List where indices of original verticesCopy will be
+     * stored.
+     * This list can be used to refer to the original order of verticesCopy.
+     * Notice that verticesCopy indices might be repeated because verticesCopy
+     * might appear in more than one triangle after triangulation. If this
+     * parameter is null, indices won't be stored in this list.
+     * @param originalVertices Reference to original list of vertices that won't
+     * be modified.
+     * @return List of triangles forming the polygon that has been triangulated.
+     * @throws TriangulatorException Raised if triangulation cannot be done.
+     * Usually this indicates numerical instability or polygon degeneracy.
+     */
+    private static List<Triangle3D> internalTriangulate(
+            List<Point3D> verticesCopy, List<int[]> indices,
+            List<Point3D> originalVertices) throws TriangulatorException {
+        if (verticesCopy.size() < MIN_VERTICES) {
+            throw new TriangulatorException();
+        }
+
+        List<Triangle3D> result = new LinkedList<>();
+
+        //boolean isConvex;
+        boolean isEar;
+        boolean madeCut;
+
+        Triangle3D triangle = null;
+
+        // Second, apply algorithm
+        while (verticesCopy.size() > MIN_VERTICES) {
+            madeCut = false;
+            int lastElement = verticesCopy.size() - 1;
+            for (int i=0; i <= lastElement; i++) {
+
+
+                if (i == 0) {
+                    if (triangle == null) {
+                        //instantiate triangle if not already instantiated
+                        triangle = new Triangle3D(verticesCopy.get(lastElement),
+                                verticesCopy.get(0), verticesCopy.get(1));
+                    } else {
+                        triangle.setVertices(verticesCopy.get(lastElement),
+                                verticesCopy.get(0), verticesCopy.get(1));
+                    }
+                } else if (i == lastElement) {
+                    triangle.setVertices(verticesCopy.get(lastElement - 1),
+                            verticesCopy.get(lastElement),
+                            verticesCopy.get(0));
+                } else {
+                    triangle.setVertices(verticesCopy.get(i - 1),
+                            verticesCopy.get(i), verticesCopy.get(i + 1));
+                }
+
+                try {
+                    isEar = isEar(triangle, verticesCopy);
+                } catch (CoincidentPointsException e) {
+                    isEar = false;
+                }
+
+                if (isEar) {
+                    // If it is an ear, we build a face out of the triangle being
+                    //cut and remove it from polygon by cutting it
+                    result.add(triangle);
+                    triangle = null; //so that it cannot be reused after being added
+
+                    //cut ear
+                    verticesCopy.remove(i);
+                    madeCut = true;
+
+                    //Leave from FOR loop to loop again to new reduced verticesCopy set
+                    break;
+                }
+            }
+
+            //if arrived here but no cut was made and polygon size contains
+            //more than 3 verticesCopy, then the algorithm failed for some reason
+            if (!madeCut) {
+                throw new TriangulatorException();
+            }
+        }
+
+        //instantiate final triangle
+        triangle = new Triangle3D(verticesCopy.get(0),
+                verticesCopy.get(1), verticesCopy.get(2));
+
+
+        boolean arePointsColinear = triangle.areVerticesColinear();
+
+        //only add final triangle if not colinear (area greater than small
+        //threshold)
+        if (!arePointsColinear) {
+            result.add(triangle);
+        }
+
+        //add indices of triangles verticesCopy
+        computeIndices(originalVertices, result, indices);
+
+        return result;
+    }
+
+    /**
+     * Computes indices of resulting triangles vertices respect to original
+     * polygon vertices. Indices are stored in provided indices list.
+     * @param vertices Vertices of polygon.
+     * @param triangles Triangles obtained after triangulation.
+     * @param indices Indices of original positions of resulting triangle's
+     * vertices.
+     */
+    private static void computeIndices(List<Point3D> vertices,
+                                       List<Triangle3D> triangles, List<int[]> indices) {
+        if (indices != null) {
+            int vertexCounter;
+            int triangleVertexCounter;
+            int[] triangleIndices;
+            for (Triangle3D t : triangles) {
+                triangleVertexCounter = 0;
+                triangleIndices = new int[Triangle3D.NUM_VERTICES];
+                for (Point3D p1 : t.getVertices()) {
+                    vertexCounter = 0;
+                    for (Point3D p2 : vertices) {
+                        if (p1 == p2) {
+                            triangleIndices[triangleVertexCounter] =
+                                    vertexCounter;
+                            break;
+                        }
+                        vertexCounter++;
+                    }
+                    triangleVertexCounter++;
+                }
+                indices.add(triangleIndices);
+            }
+        }
+    }
 }

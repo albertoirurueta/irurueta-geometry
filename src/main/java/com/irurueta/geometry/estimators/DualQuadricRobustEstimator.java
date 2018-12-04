@@ -692,7 +692,7 @@ public abstract class DualQuadricRobustEstimator {
      * greater or equal than MINIMUM_SIZE.
      */
     public static DualQuadricRobustEstimator create(List<Plane> planes,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(planes, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -707,8 +707,7 @@ public abstract class DualQuadricRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 9 planes).
      */
     public static DualQuadricRobustEstimator create(
-            DualQuadricRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
+            DualQuadricRobustEstimatorListener listener, double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -726,7 +725,7 @@ public abstract class DualQuadricRobustEstimator {
      */
     public static DualQuadricRobustEstimator create(
             DualQuadricRobustEstimatorListener listener, List<Plane> planes,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, planes, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -759,8 +758,7 @@ public abstract class DualQuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes doesn't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    private void internalSetPlanes(List<Plane> planes)
-            throws IllegalArgumentException {
+    private void internalSetPlanes(List<Plane> planes) {
         if (planes.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

@@ -96,11 +96,12 @@ public abstract class Triangulator2D {
      * @param method A triangulator method.
      * @return A triangulator for 2D polygons.
      */
+    @SuppressWarnings("all")
     public static Triangulator2D create(TriangulatorMethod method){
         switch (method) {
             case VAN_GOGH_TRIANGULATOR:
             default:
                 return new VanGoghTriangulator2D();
-        }        
+        }
     }
 }
