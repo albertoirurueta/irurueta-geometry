@@ -64,7 +64,9 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
         try {
             mInternalMatrix = Matrix.identity(INTRINSIC_MATRIX_ROWS, 
                     INTRINSIC_MATRIX_COLS);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -107,8 +109,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      */
     public PinholeCameraIntrinsicParameters(Matrix internalMatrix, 
             double threshold) 
-            throws InvalidPinholeCameraIntrinsicParametersException,
-            IllegalArgumentException {
+            throws InvalidPinholeCameraIntrinsicParametersException {
         setInternalMatrix(internalMatrix, threshold);
     }
         
@@ -146,7 +147,9 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
         try {
             mInternalMatrix = Matrix.identity(INTRINSIC_MATRIX_ROWS, 
                     INTRINSIC_MATRIX_COLS);                        
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         
         //set parameters
         setHorizontalFocalLength(horizontalFocalLength);
@@ -194,8 +197,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      */
     public final void setInternalMatrix(Matrix internalMatrix,
             double threshold)
-            throws InvalidPinholeCameraIntrinsicParametersException,
-            IllegalArgumentException{
+            throws InvalidPinholeCameraIntrinsicParametersException {
         
         //normalizes provided matrix to ensure that lelemen 3,3 is 1
         normalize(internalMatrix);
@@ -473,8 +475,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * negative.
      */
     public static PinholeCameraIntrinsicParameters 
-            createTypicalIntrinsicParameters(int imageWidth, int imageHeight) 
-            throws IllegalArgumentException {
+            createTypicalIntrinsicParameters(int imageWidth, int imageHeight) {
         //throw exception if width or height is negative
         if (imageWidth < 0 || imageHeight < 0) {
             throw new IllegalArgumentException();
@@ -512,8 +513,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @return True if provided matrix is valid, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public static boolean isValidMatrix(Matrix m, double threshold)
-        throws IllegalArgumentException {
+    public static boolean isValidMatrix(Matrix m, double threshold) {
         
         if (threshold < 0) {
             throw new IllegalArgumentException();
@@ -537,7 +537,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
         }
         
         //check that lower right element is 1.0
-        return !(Math.abs(m.getElementAt(2, 2)) - 1.0 > threshold);
+        return Math.abs(m.getElementAt(2, 2)) - 1.0 <= threshold;
     }    
     
     /**

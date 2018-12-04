@@ -65,7 +65,7 @@ public class ProjectiveTransformation2D extends Transformation2D
     /**
      * Internal 3x3 matrix containing transformation.
      */
-    private Matrix T;
+    private Matrix t;
     
     /**
      * Indicates whether internal matrix is normalized.
@@ -79,8 +79,10 @@ public class ProjectiveTransformation2D extends Transformation2D
     public ProjectiveTransformation2D() {
         super();
         try {
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
-        } catch (WrongSizeException ignore) { }
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
     
@@ -88,11 +90,10 @@ public class ProjectiveTransformation2D extends Transformation2D
      * Creates transformation with provided internal matrix.
      * Notice that provided matrix should usually be invertible, otherwise the
      * transformation will be degenerate and its inverse will not be available.
-     * @param T Internal 3x3 matrix.
+     * @param t Internal 3x3 matrix.
      */
-    public ProjectiveTransformation2D(Matrix T)
-            throws NullPointerException, IllegalArgumentException {
-        setT(T);
+    public ProjectiveTransformation2D(Matrix t) {
+        setT(t);
         normalize();
     }
     
@@ -106,7 +107,7 @@ public class ProjectiveTransformation2D extends Transformation2D
         double[] diag = new double[HOM_COORDS];
         Arrays.fill(diag, scale);
         diag[HOM_COORDS - 1] = 1.0; //set las element to 1.0
-        T = Matrix.diagonal(diag);
+        t = Matrix.diagonal(diag);
         normalize();
     }
     
@@ -115,9 +116,8 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @param rotation a 2D rotation.
      * @throws NullPointerException raised if provided rotation is null.
      */
-    public ProjectiveTransformation2D(Rotation2D rotation)
-            throws NullPointerException {
-        T = rotation.asHomogeneousMatrix();
+    public ProjectiveTransformation2D(Rotation2D rotation) {
+        t = rotation.asHomogeneousMatrix();
         normalize();
     }
     
@@ -129,17 +129,18 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @param rotation a 2D rotation.
      * @throws NullPointerException raised if provided rotation is null.
      */
-    public ProjectiveTransformation2D(double scale, Rotation2D rotation)
-            throws NullPointerException {
+    public ProjectiveTransformation2D(double scale, Rotation2D rotation) {
         try {
             double[] diag = new double[INHOM_COORDS];
             Arrays.fill(diag, scale);
-            Matrix A = Matrix.diagonal(diag);
-            A.multiply(rotation.asInhomogeneousMatrix());
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1,
-                    INHOM_COORDS - 1, A);
-        } catch (WrongSizeException ignore) { }
+            Matrix a = Matrix.diagonal(diag);
+            a.multiply(rotation.asInhomogeneousMatrix());
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, a);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
     
@@ -152,14 +153,16 @@ public class ProjectiveTransformation2D extends Transformation2D
      * if provided rotation is null.
      */
     public ProjectiveTransformation2D(AffineParameters2D params, 
-            Rotation2D rotation) throws NullPointerException {
+            Rotation2D rotation) {
         try {
-            Matrix A = params.asMatrix();
-            A.multiply(rotation.asInhomogeneousMatrix());
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1,
-                    INHOM_COORDS - 1, A);
-        } catch (WrongSizeException ignore) { }
+            Matrix a = params.asMatrix();
+            a.multiply(rotation.asInhomogeneousMatrix());
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, a);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
     
@@ -171,23 +174,24 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if length of array is not equal
      * to NUM_TRANSLATION_COORDS.
      */
-    public ProjectiveTransformation2D(double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+    public ProjectiveTransformation2D(double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
         try {
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
-            T.setSubmatrix(0, 2, 1, 2, translation);
-        } catch (WrongSizeException ignore) { }
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            t.setSubmatrix(0, 2, 1, 2, translation);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
     
     /**
      * Creates transformation with provided affine linear mapping and 
      * translation.
-     * @param A affine linear mapping.
+     * @param a affine linear mapping.
      * @param translation array indicating 2D translation using inhomogeneous
      * coordinates.
      * @throws NullPointerException raised if provided array is null or if
@@ -195,19 +199,20 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if length of array is not equal 
      * to NUM_TRANSLATION_COORDS.
      */
-    public ProjectiveTransformation2D(Matrix A, double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+    public ProjectiveTransformation2D(Matrix a, double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
         try {
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1,
-                    INHOM_COORDS - 1, A);
-            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, a);
+            t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
     
@@ -222,8 +227,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if provided translation does not
      * have length 2.
      */
-    public ProjectiveTransformation2D(double scale, double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+    public ProjectiveTransformation2D(double scale, double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -231,10 +235,10 @@ public class ProjectiveTransformation2D extends Transformation2D
         double[] diag = new double[HOM_COORDS];
         Arrays.fill(diag, scale);
         diag[HOM_COORDS - 1] = 1.0; //set last element to 1.0
-        T = Matrix.diagonal(diag);
+        t = Matrix.diagonal(diag);
         
         //set translation
-        T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+        t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                 HOM_COORDS - 1, translation);
         normalize();
     }
@@ -249,16 +253,15 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if provided translation does not
      * have length 2.
      */
-    public ProjectiveTransformation2D(Rotation2D rotation, double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+    public ProjectiveTransformation2D(Rotation2D rotation, double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
-        T = rotation.asHomogeneousMatrix();
+        t = rotation.asHomogeneousMatrix();
         
         //set translation
-        T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+        t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                 HOM_COORDS - 1, translation);    
         normalize();
     }
@@ -277,8 +280,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      * have length 2.
      */
     public ProjectiveTransformation2D(double scale, Rotation2D rotation,
-            double[] translation) throws NullPointerException,
-            IllegalArgumentException {
+            double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -286,17 +288,19 @@ public class ProjectiveTransformation2D extends Transformation2D
         try {
             double[] diag = new double[INHOM_COORDS];
             Arrays.fill(diag, scale);
-            Matrix A = Matrix.diagonal(diag);
-            A.multiply(rotation.asInhomogeneousMatrix());
+            Matrix a = Matrix.diagonal(diag);
+            a.multiply(rotation.asInhomogeneousMatrix());
         
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             //set A
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1,
-                    INHOM_COORDS - 1, A);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, a);
             //set translation
-            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+            t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
 
@@ -316,8 +320,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      * have length 2 or if projective parameters array doesn't have length 3.
      */
     public ProjectiveTransformation2D(double scale, Rotation2D rotation,
-            double[] translation, double[] projectiveParameters) 
-            throws NullPointerException, IllegalArgumentException {
+            double[] translation, double[] projectiveParameters) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -329,21 +332,23 @@ public class ProjectiveTransformation2D extends Transformation2D
             double value = projectiveParameters[HOM_COORDS - 1];
             double[] diag = new double[INHOM_COORDS];
             Arrays.fill(diag, scale);
-            Matrix A = Matrix.diagonal(diag);
-            A.multiply(rotation.asInhomogeneousMatrix());
+            Matrix a = Matrix.diagonal(diag);
+            a.multiply(rotation.asInhomogeneousMatrix());
         
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             //set A
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1,
-                    INHOM_COORDS - 1, A);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, a);
             //set translation
-            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+            t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
-            T.multiplyByScalar(value);
+            t.multiplyByScalar(value);
             
-            T.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1,
+            t.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1,
                     HOM_COORDS - 1, projectiveParameters);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
     
@@ -361,23 +366,24 @@ public class ProjectiveTransformation2D extends Transformation2D
      * have length 2.
      */
     public ProjectiveTransformation2D(AffineParameters2D params,
-            Rotation2D rotation, double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+            Rotation2D rotation, double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
         try {
-            Matrix A = params.asMatrix();
-            A.multiply(rotation.asInhomogeneousMatrix());
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            Matrix a = params.asMatrix();
+            a.multiply(rotation.asInhomogeneousMatrix());
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             //set A
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1,
-                    INHOM_COORDS - 1, A);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, a);
             //set translation
-            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+            t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
 
@@ -398,8 +404,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      */
     public ProjectiveTransformation2D(AffineParameters2D params,
             Rotation2D rotation, double[] translation, 
-            double[] projectiveParameters)
-            throws NullPointerException, IllegalArgumentException {
+            double[] projectiveParameters) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -408,20 +413,22 @@ public class ProjectiveTransformation2D extends Transformation2D
         }
         
         try {
-            Matrix A = params.asMatrix();
-            A.multiply(rotation.asInhomogeneousMatrix());
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            Matrix a = params.asMatrix();
+            a.multiply(rotation.asInhomogeneousMatrix());
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             //set A
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, A);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
             //set translation
-            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+            t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
             double value = projectiveParameters[HOM_COORDS - 1];
-            T.multiplyByScalar(value);
+            t.multiplyByScalar(value);
             
-            T.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1, HOM_COORDS - 1, 
+            t.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1, HOM_COORDS - 1,
                 projectiveParameters);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
     
@@ -449,8 +456,10 @@ public class ProjectiveTransformation2D extends Transformation2D
             Point2D outputPoint2, Point2D outputPoint3, Point2D outputPoint4)
             throws CoincidentPointsException {
         try {
-            T = new Matrix(HOM_COORDS, HOM_COORDS);
-        } catch (WrongSizeException ignore) { }
+            t = new Matrix(HOM_COORDS, HOM_COORDS);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         setTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, 
                 inputPoint4, outputPoint1, outputPoint2, outputPoint3, 
                 outputPoint4);
@@ -481,7 +490,7 @@ public class ProjectiveTransformation2D extends Transformation2D
     
     /**
      * Returns internal matrix containing this transformation data.
-     * Point transformation is computed as T * x, where x is a 2D point 
+     * Point transformation is computed as t * x, where x is a 2D point
      * expressed using homogeneous coordinates.
      * Usually the internal transformation matrix will be invertible.
      * When this is not the case, the transformation is considered degenerate
@@ -489,48 +498,46 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @return internal transformation matrix.
      */
     public Matrix getT() {
-        return T;
+        return t;
     }
     
     /**
      * Sets internal matrix containing this transformation data.
-     * Point transformation is computed as T * x, where x is a 2D point
+     * Point transformation is computed as t * x, where x is a 2D point
      * expressed using homogeneous coordinates.
      * Usually provided matrix will be invertible, when this is not the case
      * this transformation will become degenerate and its inverse will not be
      * available.
      * This method does not check whether provided matrix is invertible or not.
-     * @param T transformation matrix.
+     * @param t transformation matrix.
      * @throws NullPointerException raised if provided matrix is null.
      * @throws IllegalArgumentException raised if provided matrix is not 3x3
      */
-    public final void setT(Matrix T) throws NullPointerException,
-            IllegalArgumentException {
-        if (T.getRows() != HOM_COORDS || T.getColumns() != HOM_COORDS) {
+    public final void setT(Matrix t) {
+        if (t.getRows() != HOM_COORDS || t.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
-        this.T = T;
+        this.t = t;
         normalized = false;
     }
     
     /**
      * Returns boolean indicating whether provided matrix will produce a 
      * degenerate projective transformation or not.
-     * @param T a 3x3 matrix to be used as the internal matrix of a projective
+     * @param t a 3x3 matrix to be used as the internal matrix of a projective
      * transformation.
      * @return true if matrix will produce a degenerate transformation, false
      * otherwise.
      * @throws IllegalArgumentException raised if provided matrix is not 3x3.
      */
-    public static boolean isDegenerate(Matrix T) 
-            throws IllegalArgumentException {
-        if (T.getRows() != HOM_COORDS || T.getColumns() != HOM_COORDS) {
+    public static boolean isDegenerate(Matrix t) {
+        if (t.getRows() != HOM_COORDS || t.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
         try {
-            LUDecomposer decomposer = new LUDecomposer(T);
+            LUDecomposer decomposer = new LUDecomposer(t);
             decomposer.decompose();
             return decomposer.isSingular();
         } catch (AlgebraException e) {
@@ -546,7 +553,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @return true if transformation is degenerate, false otherwise.
      */
     public boolean isDegenerate() {
-        return isDegenerate(T);
+        return isDegenerate(t);
     }
 
     /**
@@ -555,33 +562,32 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @return linear mapping matrix.
      */
     public Matrix getA() {
-        Matrix A = T.getSubmatrix(0, 0,
+        Matrix a = t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1);
-        A.multiplyByScalar(1.0 / T.getElementAt(HOM_COORDS - 1, 
+        a.multiplyByScalar(1.0 / t.getElementAt(HOM_COORDS - 1,
                 HOM_COORDS - 1));
-        return A;
+        return a;
     }
     
     /**
      * Sets affine linear mapping matrix.
      * @see AffineTransformation2D
-     * @param A linear mapping matrix.
+     * @param a linear mapping matrix.
      * @throws NullPointerException raised if provided matrix is null.
      * @throws IllegalArgumentException raised if provided matrix does not have
      * size 2x2.
      */
-    public final void setA(Matrix A) throws NullPointerException, 
-            IllegalArgumentException {
-        if (A == null) {
+    public final void setA(Matrix a) {
+        if (a == null) {
             throw new NullPointerException();
         }
-        if (A.getRows() != INHOM_COORDS || A.getColumns() != INHOM_COORDS) {
+        if (a.getRows() != INHOM_COORDS || a.getColumns() != INHOM_COORDS) {
             throw new IllegalArgumentException();
         }
 
-        T.setSubmatrix(0, 0, INHOM_COORDS - 1,
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1,
                 INHOM_COORDS - 1,
-                A.multiplyByScalarAndReturnNew(1.0 * T.getElementAt(
+                a.multiplyByScalarAndReturnNew(1.0 * t.getElementAt(
                 HOM_COORDS - 1, HOM_COORDS - 1)));
     }
     
@@ -590,9 +596,9 @@ public class ProjectiveTransformation2D extends Transformation2D
      */
     public final void normalize() {
         if (!normalized) {
-            double norm = Utils.normF(T);
+            double norm = Utils.normF(t);
             if (norm > EPS) {
-                T.multiplyByScalar(1.0 / norm);
+                t.multiplyByScalar(1.0 / norm);
             }
             normalized = true;
         }
@@ -610,7 +616,7 @@ public class ProjectiveTransformation2D extends Transformation2D
         //Use QR decomposition to retrieve rotation component of this 
         //transformation
         normalize();
-        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, 
+        RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         try {
             decomposer.decompose();
@@ -630,17 +636,16 @@ public class ProjectiveTransformation2D extends Transformation2D
      * be set (usually because of numerical instability in parameters of this
      * transformation).
      */
-    public void setRotation(Rotation2D rotation) throws NullPointerException,
-            AlgebraException {
+    public void setRotation(Rotation2D rotation) throws AlgebraException {
         Matrix rotMatrix = rotation.asInhomogeneousMatrix();
         
         //Use QR decomposition to retrieve parameters matrix
-        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, 
+        RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
         Matrix localA = decomposer.getR(); //retrieves params matrix
         localA.multiply(rotMatrix);
-        T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, localA);
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, localA);
         normalized = false;
     }
     
@@ -670,15 +675,15 @@ public class ProjectiveTransformation2D extends Transformation2D
      */
     public void setScale(double scale) throws AlgebraException {
         normalize();
-        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, 
+        double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
         Matrix localA = decomposer.getR(); //params
         localA.setElementAt(0, 0, scale * value);
         localA.setElementAt(1, 1, scale * value);
         localA.multiply(decomposer.getQ());
-        T.setSubmatrix(0, 0, INHOM_COORDS - 1,
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1,
                 INHOM_COORDS - 1, localA);
         normalized = false;
     }
@@ -711,13 +716,13 @@ public class ProjectiveTransformation2D extends Transformation2D
     public void getAffineParameters(AffineParameters2D result)
             throws AlgebraException {
         normalize();
-        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, 
+        double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
-        Matrix R = decomposer.getR();
-        R.multiplyByScalar(1.0 / value);
-        result.fromMatrix(R);
+        Matrix r = decomposer.getR();
+        r.multiplyByScalar(1.0 / value);
+        result.fromMatrix(r);
     }
     
     /**
@@ -732,8 +737,8 @@ public class ProjectiveTransformation2D extends Transformation2D
     public void setAffineParameters(AffineParameters2D parameters)
             throws AlgebraException {
         normalize();
-        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, 
+        double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
         Matrix params = parameters.asMatrix();
@@ -742,7 +747,7 @@ public class ProjectiveTransformation2D extends Transformation2D
         params.multiply(rotation);  //params is equivalent to A because it
                                     //has been multiplied by rotation
         params.multiplyByScalar(value); //normalize
-        T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, params);
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, params);
         normalized = false;
     }
     
@@ -757,8 +762,8 @@ public class ProjectiveTransformation2D extends Transformation2D
      * of the last row of the internal transformation matrix.
      */
     public double[] getProjectiveParameters() {
-        //return last row of matrix T
-        return T.getSubmatrixAsArray(HOM_COORDS - 1, 0, HOM_COORDS - 1, 
+        //return last row of matrix t
+        return t.getSubmatrixAsArray(HOM_COORDS - 1, 0, HOM_COORDS - 1,
                 HOM_COORDS - 1, true);
     }
     
@@ -774,13 +779,12 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if provided array does not have
      * length 3.
      */
-    public final void setProjectiveParameters(double[] params) 
-            throws IllegalArgumentException {
+    public final void setProjectiveParameters(double[] params) {
         if (params.length != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
-        T.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1,
+        t.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1,
                 HOM_COORDS - 1, params);
         normalized = false;
     }
@@ -795,9 +799,9 @@ public class ProjectiveTransformation2D extends Transformation2D
      */
     public double[] getTranslation() {
         normalize();
-        double[] translation = T.getSubmatrixAsArray(0, HOM_COORDS - 1, 
+        double[] translation = t.getSubmatrixAsArray(0, HOM_COORDS - 1,
                 INHOM_COORDS - 1, HOM_COORDS - 1);
-        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
         ArrayUtils.multiplyByScalar(translation, 1.0 / value, translation);
         return translation;
     }
@@ -811,9 +815,9 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws WrongSizeException if provided array does not have length 2.
      */
     public void getTranslation(double[] out) throws WrongSizeException {
-        T.getSubmatrixAsArray(0, HOM_COORDS - 1, 
+        t.getSubmatrixAsArray(0, HOM_COORDS - 1,
                 INHOM_COORDS - 1, HOM_COORDS - 1, out);
-        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
         ArrayUtils.multiplyByScalar(out, 1.0 / value, out);
     }
     
@@ -824,16 +828,15 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if provided array does not have
      * length equal to NUM_TRANSLATION_COORDS.
      */
-    public void setTranslation(double[] translation)
-            throws IllegalArgumentException {
+    public void setTranslation(double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
-        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
         double[] translation2 = ArrayUtils.multiplyByScalarAndReturnNew(
                 translation, value);
-        T.setSubmatrix(0, HOM_COORDS - 1, translation2.length - 1, 
+        t.setSubmatrix(0, HOM_COORDS - 1, translation2.length - 1,
                 HOM_COORDS - 1, translation2);
         normalized = false;
     }
@@ -846,8 +849,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if provided array does not have
      * length equal to NUM_TRANSLATION_COORDS.
      */
-    public void addTranslation(double[] translation)
-            throws IllegalArgumentException {
+    public void addTranslation(double[] translation) {
         double[] currentTranslation = getTranslation();
         ArrayUtils.sum(currentTranslation, translation, currentTranslation);
         setTranslation(currentTranslation);
@@ -859,7 +861,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      */
     public double getTranslationX() {
         normalize();
-        return T.getElementAt(0, HOM_COORDS - 1) / T.getElementAt(
+        return t.getElementAt(0, HOM_COORDS - 1) / t.getElementAt(
                 HOM_COORDS - 1, HOM_COORDS - 1);
     }
     
@@ -868,7 +870,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @param translationX X coordinate translation to be set.
      */
     public void setTranslationX(double translationX) {
-        T.setElementAt(0, HOM_COORDS - 1, translationX * T.getElementAt(
+        t.setElementAt(0, HOM_COORDS - 1, translationX * t.getElementAt(
                 HOM_COORDS - 1, HOM_COORDS - 1));
         normalized = false;
     }
@@ -879,7 +881,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      */
     public double getTranslationY() {
         normalize();
-        return T.getElementAt(1, HOM_COORDS - 1) / T.getElementAt(
+        return t.getElementAt(1, HOM_COORDS - 1) / t.getElementAt(
                 HOM_COORDS - 1, HOM_COORDS - 1);
     }
     
@@ -888,7 +890,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @param translationY Y coordinate translation to be set.
      */
     public void setTranslationY(double translationY) {
-        T.setElementAt(1, HOM_COORDS - 1, translationY * T.getElementAt(
+        t.setElementAt(1, HOM_COORDS - 1, translationY * t.getElementAt(
                 HOM_COORDS - 1, HOM_COORDS - 1));
         normalized = false;
     }
@@ -971,13 +973,13 @@ public class ProjectiveTransformation2D extends Transformation2D
     
     /**
      * Represents this transformation as a 3x3 matrix.
-     * A point can be transformed as T * p, where T is the transformation matrix
+     * A point can be transformed as t * p, where t is the transformation matrix
      * and p is a point expressed as an homogeneous vector.
      * @return This transformation in matrix form.
      */
     @Override
     public Matrix asMatrix() {
-        return T.clone();
+        return t.clone();
     }
     
     /**
@@ -988,12 +990,12 @@ public class ProjectiveTransformation2D extends Transformation2D
      * matrix.
      */
     @Override
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
+    public void asMatrix(Matrix m) {
         if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
-        m.copyFrom(T);
+        m.copyFrom(t);
     }
     
     /**
@@ -1014,13 +1016,15 @@ public class ProjectiveTransformation2D extends Transformation2D
             point.setElementAtIndex(1, inputPoint.getHomY());
             point.setElementAtIndex(2, inputPoint.getHomW());
         
-            Matrix transformedPoint = T.multiplyAndReturnNew(point);
+            Matrix transformedPoint = t.multiplyAndReturnNew(point);
         
             outputPoint.setHomogeneousCoordinates(
                     transformedPoint.getElementAtIndex(0), 
                     transformedPoint.getElementAtIndex(1), 
                     transformedPoint.getElementAtIndex(2));
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -1038,16 +1042,16 @@ public class ProjectiveTransformation2D extends Transformation2D
     public void transform(Conic inputConic, Conic outputConic)
             throws NonSymmetricMatrixException, AlgebraException {
         //point' * conic * point = 0
-        //point' * T' * transformedConic * T * point = 0
+        //point' * t' * transformedConic * t * point = 0
         //where:
-        // - transformedPoint = T * point
+        // - transformedPoint = t * point
 
         //Hence:
-        // transformedConic = T^-' * conic * T^-1
+        // transformedConic = t^-' * conic * t^-1
 
         inputConic.normalize();
         
-        Matrix C = inputConic.asMatrix();
+        Matrix c = inputConic.asMatrix();
         normalize();
 
         Matrix invT = inverseAndReturnNew().asMatrix();
@@ -1057,9 +1061,11 @@ public class ProjectiveTransformation2D extends Transformation2D
         
         Matrix m = invT.transposeAndReturnNew();
         try {
-            m.multiply(C);
+            m.multiply(c);
             m.multiply(invT);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
@@ -1084,19 +1090,19 @@ public class ProjectiveTransformation2D extends Transformation2D
     public void transform(DualConic inputDualConic, DualConic outputDualConic) 
             throws NonSymmetricMatrixException, AlgebraException {
         //line' * dualConic * line = 0
-        //line' * T^-1 * T * dualConic * T' * T^-1' * line
+        //line' * t^-1 * t * dualConic * t' * t^-1' * line
 
         //Hence:
-        //transformed line : T^-1'*line
-        //transformed dual conic: T * dualConic * T'
+        //transformed line : t^-1'*line
+        //transformed dual conic: t * dualConic * t'
 
         inputDualConic.normalize();
         normalize();
         
         Matrix dualC = inputDualConic.asMatrix();
-        Matrix transT = T.transposeAndReturnNew();
+        Matrix transT = t.transposeAndReturnNew();
 
-        Matrix m = T.multiplyAndReturnNew(dualC);
+        Matrix m = t.multiplyAndReturnNew(dualC);
         m.multiply(transT);
 
         //normalize resulting m matrix to increase accuracy so that it can be
@@ -1118,11 +1124,11 @@ public class ProjectiveTransformation2D extends Transformation2D
     @Override
     public void transform(Line2D inputLine, Line2D outputLine) 
             throws AlgebraException {
-        //line' * point = 0 --> line' * T^-1 * T * point
-        //(line' * T^-1)*(T*point) = (T^-1'*line)'*(T*point)
+        //line' * point = 0 --> line' * t^-1 * t * point
+        //(line' * t^-1)*(t*point) = (t^-1'*line)'*(t*point)
         //where:
-        //- transformedLine = T^-1'*line
-        //- transformedPoint = T*point
+        //- transformedLine = t^-1'*line
+        //- transformedPoint = t*point
 
         
         inputLine.normalize();
@@ -1169,7 +1175,7 @@ public class ProjectiveTransformation2D extends Transformation2D
     protected void inverse(ProjectiveTransformation2D result) 
             throws AlgebraException {
 
-        result.T = Utils.inverse(T);
+        result.t = Utils.inverse(t);
     }    
     
     /**
@@ -1216,10 +1222,12 @@ public class ProjectiveTransformation2D extends Transformation2D
         
         
         try {
-            outputTransformation.T = this.T.multiplyAndReturnNew(
-                    inputTransformation.T);
+            outputTransformation.t = this.t.multiplyAndReturnNew(
+                    inputTransformation.t);
             
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }    
     
     /**
@@ -1431,10 +1439,12 @@ public class ProjectiveTransformation2D extends Transformation2D
             m.setElementAt(7, 6, -oYiX / norm);
             m.setElementAt(7, 7, -oYiY / norm);
             m.setElementAt(7, 8, -oYiW / norm);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
                         
         //use SVD to decompose matrix m
-        Matrix V;
+        Matrix v;
         try {
             SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
@@ -1444,11 +1454,11 @@ public class ProjectiveTransformation2D extends Transformation2D
             if (decomposer.getRank() < 8) {
                 throw new CoincidentPointsException();
             }
-            V = decomposer.getV(); //V is 9x9
+            v = decomposer.getV(); //V is 9x9
             
             //last column of V will contain parameters of transformation
-            T.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1, 
-                    V.getSubmatrix(0, 8, 8, 8).toArray(), false);
+            t.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1,
+                    v.getSubmatrix(0, 8, 8, 8).toArray(), false);
             normalized = true; //because columns of V are normalized after SVD
             
         } catch (AlgebraException e) {
@@ -1665,10 +1675,12 @@ public class ProjectiveTransformation2D extends Transformation2D
             m.setElementAt(7, 6, -oBiA / norm);
             m.setElementAt(7, 7, -oBiB / norm);
             m.setElementAt(7, 8, -oBiC / norm);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
                         
         //use SVD to decompose matrix m
-        Matrix V;
+        Matrix v;
         try {
             SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
@@ -1678,16 +1690,16 @@ public class ProjectiveTransformation2D extends Transformation2D
             if (decomposer.getRank() < 8) {
                 throw new CoincidentLinesException();
             }
-            V = decomposer.getV(); //V is 9x9
+            v = decomposer.getV(); //V is 9x9
             
             //last column of V will contain parameters of transformation
             Matrix transInvT = new Matrix(HOM_COORDS, HOM_COORDS);
             transInvT.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1,
-                    V.getSubmatrix(0, 8, 8, 8).toArray(),
+                    v.getSubmatrix(0, 8, 8, 8).toArray(),
                     false);
             transInvT.transpose(); //this is now invT
-            T = Utils.inverse(transInvT);
-            normalized = false; //invT is normalized, but not T
+            t = Utils.inverse(transInvT);
+            normalized = false; //invT is normalized, but not t
             
         } catch(AlgebraException e) {
             throw new CoincidentLinesException(e);

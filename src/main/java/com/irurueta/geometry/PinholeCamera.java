@@ -473,7 +473,9 @@ public class PinholeCamera extends Camera implements Serializable {
             m.multiply(mInternalMatrix.transposeAndReturnNew());
             //resulting matrix m is the internal matrix of a dual conic
             result.setParameters(m);
-        } catch (WrongSizeException | NonSymmetricMatrixException ignore) { }
+        } catch (WrongSizeException | NonSymmetricMatrixException ignore) {
+            //never happens
+        }
     }
 
     /**

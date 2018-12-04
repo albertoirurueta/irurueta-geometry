@@ -74,7 +74,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
         try {
             internalMatrix = Matrix.identity(ROTATION3D_INHOM_MATRIX_ROWS, 
                     ROTATION3D_INHOM_MATRIX_ROWS);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -127,7 +129,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * {@link #isValidRotationMatrix(Matrix)}.
      */
     public MatrixRotation3D(Matrix m, double threshold) 
-            throws InvalidRotationMatrixException, IllegalArgumentException {
+            throws InvalidRotationMatrixException {
         fromMatrix(m, threshold);
     }
     
@@ -154,8 +156,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided axis does not have
      * length 3.
      */
-    public MatrixRotation3D(double[] axis, double theta) 
-            throws IllegalArgumentException {
+    public MatrixRotation3D(double[] axis, double theta) {
         setAxisAndRotation(axis, theta);
     }
     
@@ -220,7 +221,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * negative.
      */
     public final void setInternalMatrix(Matrix m, double threshold)
-            throws InvalidRotationMatrixException, IllegalArgumentException {
+            throws InvalidRotationMatrixException {
         if (m.getRows() != ROTATION3D_INHOM_MATRIX_ROWS ||
                 m.getColumns() != ROTATION3D_INHOM_MATRIX_COLS) {
             throw new InvalidRotationMatrixException();
@@ -277,28 +278,30 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
         double cosGamma = Math.cos(gammaEuler);
         
         //reuse internal matrix if possible
-        if (internalMatrix == null) {
-            try {
+        try {
+            if (internalMatrix == null) {
                 internalMatrix = new Matrix(ROTATION3D_INHOM_MATRIX_ROWS,
                         ROTATION3D_INHOM_MATRIX_COLS);
-            } catch (WrongSizeException ignore) { }
+            }
+
+            internalMatrix.setElementAt(0, 0, cosAlpha * cosGamma -
+                    sinAlpha * sinBeta * sinGamma);
+            internalMatrix.setElementAt(1, 0, cosAlpha * sinGamma +
+                    sinAlpha * sinBeta * cosGamma);
+            internalMatrix.setElementAt(2, 0, -sinAlpha * cosBeta);
+
+            internalMatrix.setElementAt(0, 1, -cosBeta * sinGamma);
+            internalMatrix.setElementAt(1, 1, cosBeta * cosGamma);
+            internalMatrix.setElementAt(2, 1, sinBeta);
+
+            internalMatrix.setElementAt(0, 2, sinAlpha * cosGamma +
+                    cosAlpha * sinBeta * sinGamma);
+            internalMatrix.setElementAt(1, 2, sinAlpha * sinGamma -
+                    cosAlpha * sinBeta * cosGamma);
+            internalMatrix.setElementAt(2, 2, cosAlpha * cosBeta);
+        } catch (WrongSizeException ignore) {
+            //never happens
         }
-        
-        internalMatrix.setElementAt(0, 0, cosAlpha * cosGamma - 
-                sinAlpha * sinBeta * sinGamma);
-        internalMatrix.setElementAt(1, 0, cosAlpha * sinGamma + 
-                sinAlpha * sinBeta * cosGamma);
-        internalMatrix.setElementAt(2, 0, -sinAlpha * cosBeta);
-        
-        internalMatrix.setElementAt(0, 1, -cosBeta * sinGamma);
-        internalMatrix.setElementAt(1, 1, cosBeta * cosGamma);
-        internalMatrix.setElementAt(2, 1, sinBeta);
-        
-        internalMatrix.setElementAt(0, 2, sinAlpha * cosGamma + 
-                cosAlpha * sinBeta * sinGamma);
-        internalMatrix.setElementAt(1, 2, sinAlpha * sinGamma - 
-                cosAlpha * sinBeta * cosGamma);
-        internalMatrix.setElementAt(2, 2, cosAlpha * cosBeta);
     }
     
     /**
@@ -476,26 +479,28 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
         
         double sy = Math.sin(yaw);
         double cy = Math.cos(yaw);
-                
-        //reuse internal matrix if possible
-        if (internalMatrix == null) {
-            try {
+
+        try {
+            //reuse internal matrix if possible
+            if (internalMatrix == null) {
                 internalMatrix = new Matrix(ROTATION3D_INHOM_MATRIX_ROWS,
                         ROTATION3D_INHOM_MATRIX_COLS);
-            } catch (WrongSizeException ignore) { }
+            }
+
+            internalMatrix.setElementAt(0, 0, cp * cy);
+            internalMatrix.setElementAt(1, 0, cp * sy);
+            internalMatrix.setElementAt(2, 0, -sp);
+
+            internalMatrix.setElementAt(0, 1, -cr * sy + sr * sp * cy);
+            internalMatrix.setElementAt(1, 1, cr * cy + sr * sp * sy);
+            internalMatrix.setElementAt(2, 1, sr * cp);
+
+            internalMatrix.setElementAt(0, 2, sr * sy + cr * sp * cy);
+            internalMatrix.setElementAt(1, 2, -sr * cy + cr * sp * sy);
+            internalMatrix.setElementAt(2, 2, cr * cp);
+        } catch (WrongSizeException ignore) {
+            //never happens
         }
-        
-        internalMatrix.setElementAt(0, 0, cp * cy);
-        internalMatrix.setElementAt(1, 0, cp * sy);
-        internalMatrix.setElementAt(2, 0, -sp);
-        
-        internalMatrix.setElementAt(0, 1, -cr * sy + sr * sp * cy);
-        internalMatrix.setElementAt(1, 1, cr * cy + sr * sp * sy);
-        internalMatrix.setElementAt(2, 1, sr * cp);
-        
-        internalMatrix.setElementAt(0, 2, sr * sy + cr * sp * cy);
-        internalMatrix.setElementAt(1, 2, -sr * cy + cr * sp * sy);
-        internalMatrix.setElementAt(2, 2, cr * cp);
     }
         
     /**
@@ -522,31 +527,33 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
         
         double sinTheta = Math.sin(theta);
         double cosTheta = Math.cos(theta);
-        
-        if (internalMatrix == null) {
-            try {
+
+        try {
+            if (internalMatrix == null) {
                 internalMatrix = new Matrix(ROTATION3D_INHOM_MATRIX_ROWS,
                         ROTATION3D_INHOM_MATRIX_COLS);
-            } catch (WrongSizeException ignore) { }
+            }
+
+            internalMatrix.setElementAt(0, 0, axisX2 + (1.0 - axisX2) * cosTheta);
+            internalMatrix.setElementAt(1, 0, axisXY * (1.0 - cosTheta) +
+                    axisZ * sinTheta);
+            internalMatrix.setElementAt(2, 0, axisXZ * (1.0 - cosTheta) -
+                    axisY * sinTheta);
+
+            internalMatrix.setElementAt(0, 1, axisXY * (1.0 - cosTheta) -
+                    axisZ * sinTheta);
+            internalMatrix.setElementAt(1, 1, axisY2 + (1.0 - axisY2) * cosTheta);
+            internalMatrix.setElementAt(2, 1, axisYZ * (1.0 - cosTheta) +
+                    axisX * sinTheta);
+
+            internalMatrix.setElementAt(0, 2, axisXZ * (1.0 - cosTheta) +
+                    axisY * sinTheta);
+            internalMatrix.setElementAt(1, 2, axisYZ * (1.0 - cosTheta) -
+                    axisX * sinTheta);
+            internalMatrix.setElementAt(2, 2, axisZ2 + (1.0 - axisZ2) * cosTheta);
+        } catch (WrongSizeException ignore) {
+            //never happens
         }
-        
-        internalMatrix.setElementAt(0, 0, axisX2 + (1.0 - axisX2) * cosTheta);
-        internalMatrix.setElementAt(1, 0, axisXY * (1.0 - cosTheta) + 
-                axisZ * sinTheta);
-        internalMatrix.setElementAt(2, 0, axisXZ * (1.0 - cosTheta) - 
-                axisY * sinTheta);
-        
-        internalMatrix.setElementAt(0, 1, axisXY * (1.0 - cosTheta) -
-                axisZ * sinTheta);
-        internalMatrix.setElementAt(1, 1, axisY2 + (1.0 - axisY2) * cosTheta);
-        internalMatrix.setElementAt(2, 1, axisYZ * (1.0 - cosTheta) +
-                axisX * sinTheta);
-        
-        internalMatrix.setElementAt(0, 2, axisXZ * (1.0 - cosTheta) +
-                axisY * sinTheta);
-        internalMatrix.setElementAt(1, 2, axisYZ * (1.0 - cosTheta) -
-                axisX * sinTheta);
-        internalMatrix.setElementAt(2, 2, axisZ2 + (1.0 - axisZ2) * cosTheta);        
     }
         
     /**
@@ -560,8 +567,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * determinant equal to 1), this exception will rarely happen.
      */
     @Override
-    public void rotationAxis(double[] axis) throws IllegalArgumentException,
-            RotationException {
+    public void rotationAxis(double[] axis) throws RotationException {
         if (axis.length != ROTATION3D_INHOM_MATRIX_ROWS) {
             throw new IllegalArgumentException();
         }
@@ -701,7 +707,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     public void inverseRotation(MatrixRotation3D result) {
         try {
             result.internalMatrix = Utils.inverse(internalMatrix);
-        } catch (AlgebraException ignore){ } //matrix should always be invertible
+        } catch (AlgebraException ignore) {
+            //matrix should always be invertible
+        }
     }
     
     /**
@@ -719,7 +727,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
             inverseRotation(rot);
             try {
                 result.fromMatrix(rot.asInhomogeneousMatrix());
-            } catch (InvalidRotationMatrixException ignore) { }
+            } catch (InvalidRotationMatrixException ignore) {
+                //never happens
+            }
         }
     }    
     
@@ -751,8 +761,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * have size 3x3.
      */
     @Override
-    public void asInhomogeneousMatrix(Matrix result) 
-            throws IllegalArgumentException {
+    public void asInhomogeneousMatrix(Matrix result) {
         if (result.getRows() != ROTATION3D_INHOM_MATRIX_ROWS ||
                 result.getColumns() != ROTATION3D_INHOM_MATRIX_COLS) {
             throw new IllegalArgumentException();
@@ -775,7 +784,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
             //instance, the remaining part will continue to be the identity
             result.setSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1, 
                     ROTATION3D_INHOM_MATRIX_COLS - 1, internalMatrix);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         return result;
     }
 
@@ -787,8 +798,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * have size 4x4.
      */
     @Override
-    public void asHomogeneousMatrix(Matrix result) 
-            throws IllegalArgumentException {
+    public void asHomogeneousMatrix(Matrix result) {
         if (result.getRows() != ROTATION3D_HOM_MATRIX_ROWS ||
                 result.getColumns() != ROTATION3D_HOM_MATRIX_COLS) {
             throw new IllegalArgumentException();
@@ -818,7 +828,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */    
     @Override
     public void fromInhomogeneousMatrix(Matrix m, double threshold)
-            throws InvalidRotationMatrixException, IllegalArgumentException {
+            throws InvalidRotationMatrixException {
         setInternalMatrix(m, threshold);
     }
         
@@ -871,7 +881,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     @Override
     public void rotate(Point3D inputPoint, Point3D resultPoint) {
         try {
-            Matrix R = asHomogeneousMatrix();
+            Matrix r = asHomogeneousMatrix();
             Matrix p = new Matrix(
                 Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             
@@ -882,12 +892,14 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
             p.setElementAt(3, 0, inputPoint.getHomW());
             
             //Rotated point below is R * p
-            R.multiply(p);
+            r.multiply(p);
             
-            resultPoint.setHomogeneousCoordinates(R.getElementAt(0, 0), 
-                    R.getElementAt(1, 0), R.getElementAt(2, 0), 
-                    R.getElementAt(3, 0));
-        } catch (WrongSizeException ignore) { }
+            resultPoint.setHomogeneousCoordinates(r.getElementAt(0, 0),
+                    r.getElementAt(1, 0), r.getElementAt(2, 0),
+                    r.getElementAt(3, 0));
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
                             
     /**
@@ -959,7 +971,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
         try {
             result.internalMatrix = rot1.internalMatrix.multiplyAndReturnNew(
                     rot2.internalMatrix);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**

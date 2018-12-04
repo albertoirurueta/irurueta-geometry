@@ -210,8 +210,7 @@ public class Line3D implements Serializable {
      * @return True if provided point belongs to this 3D line, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Point3D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean isLocus(Point3D point, double threshold) {
         return mPlane1.isLocus(point, threshold) && 
                 mPlane2.isLocus(point, threshold);
     }
@@ -254,8 +253,7 @@ public class Line3D implements Serializable {
      * @return Closest point belonging to this 3D line respect provided point.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public Point3D getClosestPoint(Point3D point, double threshold)
-            throws IllegalArgumentException {
+    public Point3D getClosestPoint(Point3D point, double threshold) {
         Point3D result = Point3D.create();
         closestPoint(point, result, threshold);
         return result;
@@ -279,8 +277,7 @@ public class Line3D implements Serializable {
      * @param threshold Threshold to determine closest point.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public void closestPoint(Point3D point, Point3D result, double threshold)
-            throws IllegalArgumentException {
+    public void closestPoint(Point3D point, Point3D result, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -299,7 +296,9 @@ public class Line3D implements Serializable {
         Plane p = new Plane(point, getDirection());
         try {
             intersection(p, result);
-        } catch (NoIntersectionException ignore) { }
+        } catch (NoIntersectionException ignore) {
+            //never happens
+        }
     }
     
     /**

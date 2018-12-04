@@ -60,8 +60,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * @param rotation a 2D rotation.
      * @throws NullPointerException raised if provided rotation is null.
      */
-    public MetricTransformation2D(Rotation2D rotation)
-            throws NullPointerException {
+    public MetricTransformation2D(Rotation2D rotation) {
         super(rotation);
         scale = DEFAULT_SCALE;
     }
@@ -74,8 +73,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * @throws IllegalArgumentException raised if length of array is not equal
      * to NUM_TRANSLATION_COORDS.
      */
-    public MetricTransformation2D(double[] translation) 
-            throws NullPointerException, IllegalArgumentException {
+    public MetricTransformation2D(double[] translation) {
         super(translation);
         scale = DEFAULT_SCALE;
     }
@@ -106,8 +104,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * to NUM_TRANSLATION_COORDS.
      */
     public MetricTransformation2D(Rotation2D rotation, double[] translation,
-            double scale) throws NullPointerException, 
-            IllegalArgumentException {
+            double scale) {
         super(rotation, translation);
         this.scale = scale;
     }
@@ -160,7 +157,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * matrix.
      */
     @Override
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
+    public void asMatrix(Matrix m) {
         if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -357,13 +354,13 @@ public class MetricTransformation2D extends EuclideanTransformation2D
         
         try {
             //we do translation first, because this.rotation might change later
-            Matrix R1 = getRotation().asInhomogeneousMatrix();
+            Matrix r1 = getRotation().asInhomogeneousMatrix();
             Matrix t2 = Matrix.newFromArray(inputTransformation.getTranslation(), 
                     true);
-            R1.multiply(t2); //this is R1 * t2
-            R1.multiplyByScalar(this.scale);
+            r1.multiply(t2); //this is R1 * t2
+            r1.multiplyByScalar(this.scale);
                   
-            ArrayUtils.sum(R1.toArray(), this.getTranslation(),  
+            ArrayUtils.sum(r1.toArray(), this.getTranslation(),
                     outputTransformation.getTranslation());
             
             outputTransformation.setRotation(
