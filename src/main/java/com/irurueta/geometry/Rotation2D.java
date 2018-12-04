@@ -188,7 +188,9 @@ public class Rotation2D implements Serializable {
         try {
             result = new Matrix(ROTATION2D_INHOM_MATRIX_ROWS, 
                     ROTATION2D_INHOM_MATRIX_COLS);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         asInhomogeneousMatrix(result);
         return result;
     }       
@@ -200,8 +202,7 @@ public class Rotation2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided instance does not
      * have size 2x2.
      */
-    public void asInhomogeneousMatrix(Matrix result) 
-            throws IllegalArgumentException {
+    public void asInhomogeneousMatrix(Matrix result) {
         if (result.getRows() != ROTATION2D_INHOM_MATRIX_ROWS ||
                 result.getColumns() != ROTATION2D_INHOM_MATRIX_COLS) {
             throw new IllegalArgumentException();
@@ -225,7 +226,9 @@ public class Rotation2D implements Serializable {
         try {
             result = new Matrix(ROTATION2D_HOM_MATRIX_ROWS,
                     ROTATION2D_HOM_MATRIX_COLS);            
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         asHomogeneousMatrix(result);
         return result;
     }
@@ -237,8 +240,7 @@ public class Rotation2D implements Serializable {
      * @throws IllegalArgumentException Raised if provided instance does not
      * have size 3x3.
      */
-    public void asHomogeneousMatrix(Matrix result) 
-            throws IllegalArgumentException {
+    public void asHomogeneousMatrix(Matrix result) {
         if (result.getRows() != ROTATION2D_HOM_MATRIX_ROWS ||
                 result.getColumns() != ROTATION2D_HOM_MATRIX_COLS) {
             throw new IllegalArgumentException();
@@ -272,7 +274,7 @@ public class Rotation2D implements Serializable {
      * @see #isValidRotationMatrix(Matrix)
      */
     public final void fromMatrix(Matrix m, double threshold)
-            throws InvalidRotationMatrixException, IllegalArgumentException {
+            throws InvalidRotationMatrixException {
         if (m.getRows() == ROTATION2D_INHOM_MATRIX_ROWS &&
                 m.getColumns() == ROTATION2D_INHOM_MATRIX_COLS) {
             //inhomogeneous matrix
@@ -316,7 +318,7 @@ public class Rotation2D implements Serializable {
      * @see #isValidRotationMatrix(Matrix)
      */    
     public void fromInhomogeneousMatrix(Matrix m, double threshold)
-            throws InvalidRotationMatrixException, IllegalArgumentException {
+            throws InvalidRotationMatrixException {
         if (m.getRows() != ROTATION2D_INHOM_MATRIX_ROWS ||
                 m.getColumns() != ROTATION2D_INHOM_MATRIX_COLS) {
             throw new InvalidRotationMatrixException();
@@ -414,7 +416,7 @@ public class Rotation2D implements Serializable {
      */
     public void rotate(Point2D inputPoint, Point2D resultPoint) {
         try {
-            Matrix R = asHomogeneousMatrix();
+            Matrix r = asHomogeneousMatrix();
             Matrix p = new Matrix(
                 Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             
@@ -424,11 +426,13 @@ public class Rotation2D implements Serializable {
             p.setElementAt(2, 0, inputPoint.getHomW());
             
             //Rotated point below is R * p
-            R.multiply(p);
+            r.multiply(p);
             
-            resultPoint.setHomogeneousCoordinates(R.getElementAt(0, 0), 
-                    R.getElementAt(1, 0), R.getElementAt(2, 0));
-        } catch (WrongSizeException ignore) { }
+            resultPoint.setHomogeneousCoordinates(r.getElementAt(0, 0),
+                    r.getElementAt(1, 0), r.getElementAt(2, 0));
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -455,7 +459,7 @@ public class Rotation2D implements Serializable {
      */    
     public void rotate(Line2D inputLine, Line2D resultLine) {
         try {
-            Matrix R = asHomogeneousMatrix();
+            Matrix r = asHomogeneousMatrix();
             //because of the duality theorem:
             //l'*m = 0 --> l*R^-1*R*m = 0 --> l2' = l'*R^-1 and m2 = R*m
             //where l2 and m2 are rotated line and point, however rotated
@@ -471,11 +475,13 @@ public class Rotation2D implements Serializable {
             l.setElementAt(2, 0, inputLine.getC());
             
             //Rotated line below is R * l
-            R.multiply(l);
+            r.multiply(l);
             
-            resultLine.setParameters(R.getElementAt(0, 0), 
-                    R.getElementAt(1, 0), R.getElementAt(2, 0));            
-        } catch (WrongSizeException ignore) { }
+            resultLine.setParameters(r.getElementAt(0, 0),
+                    r.getElementAt(1, 0), r.getElementAt(2, 0));
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -503,8 +509,7 @@ public class Rotation2D implements Serializable {
      * @return True if matrix is valid, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public static boolean isValidRotationMatrix(Matrix m, double threshold)
-            throws IllegalArgumentException {
+    public static boolean isValidRotationMatrix(Matrix m, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -574,8 +579,7 @@ public class Rotation2D implements Serializable {
      * @return true if they are equal, false otherwise.
      * @throws IllegalArgumentException if threshold is negative.
      */
-    public boolean equals(Rotation2D other, double threshold) 
-            throws IllegalArgumentException {
+    public boolean equals(Rotation2D other, double threshold) {
         if (threshold < MIN_COMPARISON_THRESHOLD) {
             throw new IllegalArgumentException();
         }

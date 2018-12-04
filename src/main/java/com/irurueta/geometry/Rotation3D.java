@@ -49,7 +49,7 @@ public abstract class Rotation3D {
     /**
      * Constant defining default type if none is provided.
      */
-    public static Rotation3DType DEFAULT_TYPE = Rotation3DType.AXIS_ROTATION3D;
+    public static final Rotation3DType DEFAULT_TYPE = Rotation3DType.AXIS_ROTATION3D;
     
     /**
      * Default threshold to determine if two instances are equal.
@@ -84,8 +84,7 @@ public abstract class Rotation3D {
      * @throws IllegalArgumentException Raised if provided axis array does not
      * have length 3.
      */
-    public final void setAxisAndRotation(double[] axis, double theta) 
-            throws IllegalArgumentException {
+    public final void setAxisAndRotation(double[] axis, double theta) {
         if (axis.length != INHOM_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -128,7 +127,7 @@ public abstract class Rotation3D {
      * @throws RotationException Raised if numerical instabilities happen.
      */    
     public abstract void rotationAxis(double[] axis) 
-            throws IllegalArgumentException, RotationException;
+            throws RotationException;
     
     /**
      * Returns rotation amount or angle in radians around the rotation axis
@@ -176,8 +175,7 @@ public abstract class Rotation3D {
      * @throws IllegalArgumentException Raised if provided instance does not
      * have size 3x3.
      */    
-    public abstract void asInhomogeneousMatrix(Matrix result) 
-            throws IllegalArgumentException;
+    public abstract void asInhomogeneousMatrix(Matrix result);
     
     /**
      * Returns this 3D rotation instance expressed as a 4x4 homogeneous matrix.
@@ -192,8 +190,7 @@ public abstract class Rotation3D {
      * @throws IllegalArgumentException Raised if provided instance does not
      * have size 4x4.
      */    
-    public abstract void asHomogeneousMatrix(Matrix result) 
-            throws IllegalArgumentException;
+    public abstract void asHomogeneousMatrix(Matrix result);
     
     /**
      * Sets amount of rotation from provided rotation matrix.
@@ -210,7 +207,7 @@ public abstract class Rotation3D {
      * {@link #isValidRotationMatrix(Matrix)}
      */    
     public final void fromMatrix(Matrix m, double threshold)
-            throws InvalidRotationMatrixException, IllegalArgumentException {
+            throws InvalidRotationMatrixException {
         if (m.getRows() == INHOM_COORDS &&
                 m.getColumns() == INHOM_COORDS) {
             //inhomogeneous matrix
@@ -256,7 +253,7 @@ public abstract class Rotation3D {
      * {@link #isValidRotationMatrix(Matrix)}
      */        
     public abstract void fromInhomogeneousMatrix(Matrix m, double threshold)
-            throws InvalidRotationMatrixException, IllegalArgumentException;
+            throws InvalidRotationMatrixException;
     
     /**
      * Sets amount of rotation from provided inhomogeneous rotation matrix.
@@ -344,7 +341,7 @@ public abstract class Rotation3D {
      */        
     public void rotate(Plane inputPlane, Plane resultPlane) {
         try {
-            Matrix R = asHomogeneousMatrix();
+            Matrix r = asHomogeneousMatrix();
             //because of the duality theorem:
             //P'*M = 0 --> P*R^-1*R*M = 0 --> P2' = P'*R^-1 and M2 = R*M
             //where P2 and M2 are rotated plane and point, however rotated
@@ -352,21 +349,23 @@ public abstract class Rotation3D {
             //Hence P2' = P' * R', and by undoing the transposition
             //P2 = (P' * R')' = R'' * P'' = R * P
                         
-            Matrix P = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
+            Matrix p = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
             
             inputPlane.normalize(); //to increase accuracy
-            P.setElementAt(0, 0, inputPlane.getA());
-            P.setElementAt(1, 0, inputPlane.getB());
-            P.setElementAt(2, 0, inputPlane.getC());
-            P.setElementAt(3, 0, inputPlane.getD());
+            p.setElementAt(0, 0, inputPlane.getA());
+            p.setElementAt(1, 0, inputPlane.getB());
+            p.setElementAt(2, 0, inputPlane.getC());
+            p.setElementAt(3, 0, inputPlane.getD());
             
             //Rotated plane below is R * P
-            R.multiply(P);
+            r.multiply(p);
             
-            resultPlane.setParameters(R.getElementAt(0, 0), 
-                    R.getElementAt(1, 0), R.getElementAt(2, 0),
-                    R.getElementAt(3, 0));
-        } catch (WrongSizeException ignore) { }
+            resultPlane.setParameters(r.getElementAt(0, 0),
+                    r.getElementAt(1, 0), r.getElementAt(2, 0),
+                    r.getElementAt(3, 0));
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -396,8 +395,7 @@ public abstract class Rotation3D {
      * @throws IllegalArgumentException Raised if provided threshold is 
      * negative.
      */    
-    public static boolean isValidRotationMatrix(Matrix m, double threshold)
-            throws IllegalArgumentException {
+    public static boolean isValidRotationMatrix(Matrix m, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -479,8 +477,7 @@ public abstract class Rotation3D {
      * @throws IllegalArgumentException Raised if provided axis array does not
      * have length 3.
      */
-    public static Rotation3D create(double[] axis, double theta) 
-           throws IllegalArgumentException {
+    public static Rotation3D create(double[] axis, double theta) {
         return create(axis, theta, DEFAULT_TYPE);
     }
     
@@ -497,7 +494,7 @@ public abstract class Rotation3D {
      * have length 3.
      */
     public static Rotation3D create(double[] axis, double theta,
-            Rotation3DType type) throws IllegalArgumentException {
+            Rotation3DType type) {
         switch (type) {
             case AXIS_ROTATION3D:
                 return new AxisRotation3D(axis, theta);
@@ -555,7 +552,7 @@ public abstract class Rotation3D {
      * @throws RotationException if rotation angle or axis cannot be determined.
      */
     public boolean equals(Rotation3D other, double threshold)
-            throws IllegalArgumentException, RotationException {
+            throws RotationException {
         
         if (threshold < MIN_COMPARISON_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -665,6 +662,10 @@ public abstract class Rotation3D {
     /**
      * Sets vcalues of this rotation from another rotation.
      * @param rot a 3D rotation to set values from.
+     * @throws IllegalArgumentException if provided rotation type is
+     * not supported. Only {@link Rotation3DType#AXIS_ROTATION3D},
+     * {@link Rotation3DType#MATRIX_ROTATION3D} and
+     * {@link Rotation3DType#QUATERNION} are supported.
      */
     public void fromRotation(Rotation3D rot) {
         switch (rot.getType()) {
@@ -676,6 +677,9 @@ public abstract class Rotation3D {
                 break;
             case QUATERNION:
                 fromRotation((Quaternion)rot);
+                break;
+            default:
+                throw new IllegalArgumentException();
         }
     }
     

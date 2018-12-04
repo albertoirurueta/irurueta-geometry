@@ -119,7 +119,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException if provided array does not have length 
      * 4.
      */
-    public Quaternion(double[] values) throws IllegalArgumentException {
+    public Quaternion(double[] values) {
         setValues(values);
     }
     
@@ -130,8 +130,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException if provided axis array does not have 
      * length 3.
      */
-    public Quaternion(double[] axis, double theta) 
-            throws IllegalArgumentException {
+    public Quaternion(double[] axis, double theta) {
         setFromAxisAndRotation(axis, theta);
     }
     
@@ -244,7 +243,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @param result array where quaternion parameters will be stored.
      * @throws IllegalArgumentException if length of provided array is not 4.
      */
-    public void values(double[] result) throws IllegalArgumentException {
+    public void values(double[] result) {
         if (result.length != N_PARAMS) {
             throw new IllegalArgumentException("result length must be 4");
         }
@@ -261,8 +260,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * k).
      * @throws IllegalArgumentException if provided array length is not 4.
      */
-    public final void setValues(double[] values) 
-            throws IllegalArgumentException {
+    public final void setValues(double[] values) {
         if (values.length != N_PARAMS) {
             throw new IllegalArgumentException("values length must be 4");
         }
@@ -337,7 +335,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      */
     public void setFromAxisAndRotation(double axisX, double axisY, 
             double axisZ, double theta, Matrix jacobianOfTheta, 
-            Matrix jacobianOfAxis) throws IllegalArgumentException {
+            Matrix jacobianOfAxis) {
         
         //validations
         if (jacobianOfTheta != null && (jacobianOfTheta.getRows() != N_PARAMS ||
@@ -387,8 +385,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException if provided axis array does not have 
      * length 3.
      */
-    public final void setFromAxisAndRotation(double[] axis, double theta) 
-            throws IllegalArgumentException {
+    public final void setFromAxisAndRotation(double[] axis, double theta) {
         setFromAxisAndRotation(axis, theta, null, null);
     }
     
@@ -405,8 +402,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * does not have proper size.
      */    
     public void setFromAxisAndRotation(double[] axis, double theta, 
-            Matrix jacobianOfTheta, Matrix jacobianOfAxis) 
-            throws IllegalArgumentException {
+            Matrix jacobianOfTheta, Matrix jacobianOfAxis) {
         if (axis.length != AxisRotation3D.AXIS_PARAMS) {
             throw new IllegalArgumentException("axis length must be 3");
         }
@@ -434,8 +430,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * does not have proper size.
      */
     public void setFromAxisAndRotation(AxisRotation3D axisRotation,
-            Matrix jacobianOfTheta, Matrix jacobianOfAxis)
-            throws IllegalArgumentException {
+            Matrix jacobianOfTheta, Matrix jacobianOfAxis) {
 
         double theta = axisRotation.getRotationAngle();
         
@@ -500,8 +495,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @see <a href="https://github.com/joansola/slamtb">qProd.m at https://github.com/joansola/slamtb</a>
      */
     public static void product(Quaternion q1, Quaternion q2, Quaternion result,
-            Matrix jacobianQ1, Matrix jacobianQ2) 
-            throws IllegalArgumentException {
+            Matrix jacobianQ1, Matrix jacobianQ2) {
         
         if (jacobianQ1 != null && (jacobianQ1.getRows() != Quaternion.N_PARAMS ||
                 jacobianQ1.getColumns() != Quaternion.N_PARAMS)) {
@@ -583,7 +577,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @see <a href="https://github.com/joansola/slamtb">e2q.m at https://github.com/joansola/slamtb</a>
      */
     public void setFromEulerAngles(double roll, double pitch, double yaw, 
-            Matrix jacobian) throws IllegalArgumentException {
+            Matrix jacobian) {
         
         if (jacobian != null && (jacobian.getRows() != N_PARAMS ||
                 jacobian.getColumns() != N_ANGLES)) {
@@ -650,8 +644,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException if provided array does not have length 
      * 3.
      */
-    public void setFromEulerAngles(double[] angles, Matrix jacobian) 
-            throws IllegalArgumentException {
+    public void setFromEulerAngles(double[] angles, Matrix jacobian) {
         if (angles.length != N_ANGLES) {
             throw new IllegalArgumentException("angles length must be 3");
         }
@@ -666,8 +659,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException if provided array does not have length 
      * 3.
      */
-    public void setFromEulerAngles(double[] angles) 
-            throws IllegalArgumentException {
+    public void setFromEulerAngles(double[] angles) {
         setFromEulerAngles(angles, null);
     }   
     
@@ -683,8 +675,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @see <a href="https://github.com/joansola/slamtb">e2R.m at https://github.com/joansola/slamtb</a>
      */
     public static void eulerToMatrixRotation(double roll, double pitch, 
-            double yaw, MatrixRotation3D result, Matrix jacobian) 
-            throws IllegalArgumentException {
+            double yaw, MatrixRotation3D result, Matrix jacobian) {
         
         if (jacobian != null && (jacobian.getRows() != 3 * N_ANGLES ||
                 jacobian.getColumns() != N_ANGLES)) {
@@ -758,8 +749,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @see <a href="https://github.com/joansola/slamtb">e2R.m at https://github.com/joansola/slamtb</a>
      */
     public static void eulerToMatrixRotation(double[] angles, 
-            MatrixRotation3D result, Matrix jacobian) 
-            throws IllegalArgumentException {
+            MatrixRotation3D result, Matrix jacobian) {
         if (angles.length != N_ANGLES) {
             throw new IllegalArgumentException("angles must have length 3");
         }
@@ -777,7 +767,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @see <a href="https://github.com/joansola/slamtb">e2R.m at https://github.com/joansola/slamtb</a>
      */    
     public static void eulerToMatrixRotation(double[] angles, 
-            MatrixRotation3D result) throws IllegalArgumentException {
+            MatrixRotation3D result) {
         eulerToMatrixRotation(angles, result, null);
     }
             
@@ -794,7 +784,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @see <a href="https://github.com/joansola/slamtb">q2au.m at https://github.com/joansola/slamtb</a>
      */
     public double toAxisAndRotationAngle(double[] axis, Matrix jacobianAngle,
-            Matrix jacobianAxis) throws IllegalArgumentException {
+            Matrix jacobianAxis) {
         if (axis.length != AxisRotation3D.AXIS_PARAMS) {
             throw new IllegalArgumentException("axis length must be 3");
         }
@@ -870,8 +860,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @return rotation angle expressed in radians.
      * @throws IllegalArgumentException if length of axis is not 3.
      */
-    public double toAxisAndRotationAngle(double[] axis) 
-            throws IllegalArgumentException {
+    public double toAxisAndRotationAngle(double[] axis) {
         return toAxisAndRotationAngle(axis, null, null);
     }
     
@@ -908,8 +897,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * provided jacobian is not 3x4.
      * @see <a href="https://github.com/joansola/slamtb">q2v.m at https://github.com/joansola/slamtb</a>
      */
-    public void toRotationVector(double[] result, Matrix jacobian) 
-            throws IllegalArgumentException {
+    public void toRotationVector(double[] result, Matrix jacobian) {
         if (result.length != AxisRotation3D.AXIS_PARAMS) {
             throw new IllegalArgumentException("result length must be 3");
         }
@@ -961,8 +949,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @param result array where rotation vector is stored.
      * @throws IllegalArgumentException if length of result is not 3.
      */
-    public void toRotationVector(double[] result) 
-            throws IllegalArgumentException {
+    public void toRotationVector(double[] result) {
         toRotationVector(result, null);
     }
     
@@ -976,8 +963,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * or if provided jacobian matrix is not 3x4.
      * @see <a href="https://github.com/joansola/slamtb">q2e.m at https://github.com/joansola/slamtb</a>
      */
-    public void toEulerAngles(double[] angles, Matrix jacobian) 
-            throws IllegalArgumentException {
+    public void toEulerAngles(double[] angles, Matrix jacobian) {
         if (angles.length != N_ANGLES) {
             throw new IllegalArgumentException("angles length must be 3");
         }
@@ -1042,7 +1028,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException if provided angles array length is not 
      * 3.
      */
-    public void toEulerAngles(double[] angles) throws IllegalArgumentException {
+    public void toEulerAngles(double[] angles) {
         toEulerAngles(angles, null);
     }
     
@@ -1065,8 +1051,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException if provided matrix is not 4x4.
      * @see <a href="https://github.com/joansola/slamtb">q2Q.m at https://github.com/joansola/slamtb</a>
      */
-    public void quaternionMatrix(Matrix result) 
-            throws IllegalArgumentException {
+    public void quaternionMatrix(Matrix result) {
         if (result.getRows() != N_PARAMS || result.getColumns() != N_PARAMS) {
             throw new IllegalArgumentException("matrix must be 4x4");
         }
@@ -1116,8 +1101,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException if provided jacobian matrix is not 4x4.
      * @see <a href="https://github.com/joansola/slamtb">q2qc.m at https://github.com/joansola/slamtb</a>
      */
-    public void conjugate(Quaternion result, Matrix jacobian) 
-            throws IllegalArgumentException {
+    public void conjugate(Quaternion result, Matrix jacobian) {
         if (jacobian != null && (jacobian.getRows() != N_PARAMS ||
                 jacobian.getColumns() != N_PARAMS)) {
             throw new IllegalArgumentException("jacobian must be 4x4");
@@ -1169,8 +1153,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException if provided matrix is not 4x4.
      * @see <a href="https://github.com/joansola/slamtb">q2Qn.m at https://github.com/joansola/slamtb</a>
      */
-    public void quaternionMatrixN(Matrix result) 
-            throws IllegalArgumentException {
+    public void quaternionMatrixN(Matrix result) {
         if (result.getRows() != N_PARAMS || result.getColumns() != N_PARAMS) {
             throw new IllegalArgumentException("matrix must be 4x4");
         }
@@ -1222,8 +1205,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * jacobian matrix is not 9x4.
      * @see <a href="https://github.com/joansola/slamtb">q2R.m at https://github.com/joansola/slamtb</a>
      */
-    public void toMatrixRotation(Matrix result, Matrix jacobian) 
-            throws IllegalArgumentException {
+    public void toMatrixRotation(Matrix result, Matrix jacobian) {
         if (result.getRows() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS ||
                 result.getColumns() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS) {
             throw new IllegalArgumentException("result matrix is not 3x3");
@@ -1310,7 +1292,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException if provided result matrix is not 3x3.
      * @see <a href="https://github.com/joansola/slamtb">q2R.m at https://github.com/joansola/slamtb</a>
      */
-    public void toMatrixRotation(Matrix result) throws IllegalArgumentException {
+    public void toMatrixRotation(Matrix result) {
         toMatrixRotation(result, null);
     }
     
@@ -1352,7 +1334,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      */
     public static void rotate(Quaternion q, Point3D inputPoint, 
             Point3D resultPoint, Matrix jacobianPoint, 
-            Matrix jacobianQuaternion) throws IllegalArgumentException {
+            Matrix jacobianQuaternion) {
         if (jacobianPoint != null && (jacobianPoint.getRows() != N_ANGLES ||
                 jacobianPoint.getColumns() != N_ANGLES)) {
             throw new IllegalArgumentException("jacobian of point must be 3x3");
@@ -1424,8 +1406,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @see <a href="https://github.com/joansola/slamtb">qRot.m at https://github.com/joansola/slamtb</a>
      */
     public void rotate(Point3D inputPoint, Point3D resultPoint, 
-            Matrix jacobianPoint, Matrix jacobianQuaternion)
-            throws IllegalArgumentException {
+            Matrix jacobianPoint, Matrix jacobianQuaternion) {
         
         rotate(this, inputPoint, resultPoint, jacobianPoint, 
                 jacobianQuaternion);
@@ -1471,14 +1452,18 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @see <a href="https://github.com/joansola/slamtb">R2q.m at https://github.com/joansola/slamtb</a>
      */
     public static void matrixRotationToQuaternion(Matrix r, 
-            Quaternion result) throws IllegalArgumentException {
+            Quaternion result) {
         if (r.getRows() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS ||
                 r.getColumns() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS) {
             throw new IllegalArgumentException("rotation matrix must be 3x3");
         }
         
         double trace = com.irurueta.algebra.Utils.trace(r) + 1.0;
-        double s, a, b, c, d;
+        double s;
+        double a;
+        double b;
+        double c;
+        double d;
         
         if (trace > TRACE_THRESHOLD) { //to avoid large distortions
             s = 2.0 * Math.sqrt(trace);
@@ -1545,8 +1530,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException if provided matrix is not 3x3. 
      * @see <a href="https://github.com/joansola/slamtb">R2q.m at https://github.com/joansola/slamtb</a>
      */
-    public void setFromMatrixRotation(Matrix matrix) 
-            throws IllegalArgumentException {
+    public void setFromMatrixRotation(Matrix matrix) {
         matrixRotationToQuaternion(matrix, this);
     }
     
@@ -1575,7 +1559,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      */
     public static double rotationVectorToRotationAxisAndAngle(
             double [] rotationVector, double[] axis, Matrix jacobianAlpha, 
-            Matrix jacobianRotationVector) throws IllegalArgumentException {
+            Matrix jacobianRotationVector) {
         if (rotationVector.length != AxisRotation3D.AXIS_PARAMS) {
             throw new IllegalArgumentException(
                     "rotation vector length must be 3");
@@ -1654,8 +1638,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @see <a href="https://github.com/joansola/slamtb">v2au.m at https://github.com/joansola/slamtb</a>
      */
     public static double rotationVectorToRotationAxisAndAngle(
-            double[] rotationVector, double[] axis) 
-            throws IllegalArgumentException {
+            double[] rotationVector, double[] axis) {
         return rotationVectorToRotationAxisAndAngle(rotationVector, axis, null, 
                 null);
     }
@@ -1673,7 +1656,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @see <a href="https://github.com/joansola/slamtb">v2q.m at https://github.com/joansola/slamtb</a>
      */
     public static void rotationVectorToQuaternion(double[] rotationVector, 
-            Quaternion result, Matrix jacobian) throws IllegalArgumentException {
+            Quaternion result, Matrix jacobian) {
         if (rotationVector.length != AxisRotation3D.AXIS_PARAMS) {
             throw new IllegalArgumentException(
                     "rotation vector length must be 3");
@@ -1755,7 +1738,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @see <a href="https://github.com/joansola/slamtb">v2q.m at https://github.com/joansola/slamtb</a>
      */
     public static void rotationVectorToQuaternion(double[] rotationVector, 
-            Quaternion result) throws IllegalArgumentException {
+            Quaternion result) {
         rotationVectorToQuaternion(rotationVector, result, null);
     }
     
@@ -1769,8 +1752,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * have length 3.
      * @see <a href="https://github.com/joansola/slamtb">v2q.m at https://github.com/joansola/slamtb</a>
      */
-    public void setFromRotationVector(double[] rotationVector) 
-            throws IllegalArgumentException {
+    public void setFromRotationVector(double[] rotationVector) {
         rotationVectorToQuaternion(rotationVector, this);
     }
 
@@ -1786,7 +1768,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @see <a href="https://github.com/joansola/slamtb">v2R.m at https://github.com/joansola/slamtb</a>
      */
     public static void rotationVectorToMatrixRotation(double[] rotationVector, 
-            Matrix result) throws IllegalArgumentException {
+            Matrix result) {
         double[] axis = new double[AxisRotation3D.AXIS_PARAMS];
         double alpha = rotationVectorToRotationAxisAndAngle(rotationVector, 
                 axis);
@@ -1806,7 +1788,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * @see <a href="https://github.com/joansola/slamtb">v2R.m at https://github.com/joansola/slamtb</a>
      */
     public static void rotationVectorToMatrixRotation(double[] rotationVector,
-            MatrixRotation3D result) throws IllegalArgumentException {
+            MatrixRotation3D result) {
         rotationVectorToMatrixRotation(rotationVector, result.internalMatrix);
     }
 
@@ -1844,7 +1826,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * length 3.
      */        
     @Override
-    public void rotationAxis(double[] axis) throws IllegalArgumentException {
+    public void rotationAxis(double[] axis) {
         toAxisAndRotationAngle(axis);
     }
 
@@ -1885,8 +1867,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * have size 3x3.
      */        
     @Override
-    public void asInhomogeneousMatrix(Matrix result) 
-            throws IllegalArgumentException {
+    public void asInhomogeneousMatrix(Matrix result) {
         toMatrixRotation(result);
     }
 
@@ -1912,8 +1893,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * have size 4x4.
      */        
     @Override
-    public void asHomogeneousMatrix(Matrix result) 
-            throws IllegalArgumentException {
+    public void asHomogeneousMatrix(Matrix result) {
         result.initialize(0.0);
         result.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);
         result.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, 
@@ -1932,8 +1912,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * {@link #isValidRotationMatrix(Matrix)}
      */            
     @Override
-    public void fromInhomogeneousMatrix(Matrix m, double threshold) 
-            throws IllegalArgumentException {
+    public void fromInhomogeneousMatrix(Matrix m, double threshold) {
         setFromMatrixRotation(m);
     }
 
@@ -2169,7 +2148,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * be 4x4.
      * @throws IllegalArgumentException if provided jacobian is not 4x4.
      */
-    public void normalize(Matrix jacobian) throws IllegalArgumentException {
+    public void normalize(Matrix jacobian) {
         if (jacobian != null && (jacobian.getRows() != N_PARAMS ||
                 jacobian.getColumns() != N_PARAMS)) {
             throw new IllegalArgumentException("jacobian must be 4x4");

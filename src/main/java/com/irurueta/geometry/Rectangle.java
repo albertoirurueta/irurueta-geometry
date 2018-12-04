@@ -5227,8 +5227,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */        
     public static boolean isLocusToRightSide(Point2D point, Point2D center,
-            double width, double height, double threshold)
-            throws IllegalArgumentException {
+            double width, double height, double threshold) {
         return isLocusToRightSide(point.getInhomX(), point.getInhomY(), center,
                 width, height, threshold);
     }
@@ -5244,8 +5243,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */        
-    public boolean isLocusToRightSide(double x, double y, double threshold)
-            throws IllegalArgumentException {
+    public boolean isLocusToRightSide(double x, double y, double threshold) {
         return isLocusToRightSide(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -5259,8 +5257,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */        
-    public boolean isLocusToRightSide(Point2D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean isLocusToRightSide(Point2D point, double threshold) {
         return isLocusToRightSide(point, mTopLeft, mBottomRight, threshold);
     }
     
@@ -5406,8 +5403,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */        
     public static boolean isLocusToBottomSide(double x, double y, double left,
-            double top, double right, double bottom, double threshold)
-            throws IllegalArgumentException {
+            double top, double right, double bottom, double threshold) {
         if (threshold < 0.0) {
             throw new IllegalArgumentException("threshold must be positive");
         }
@@ -5432,8 +5428,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
     public static boolean isLocusToBottomSide(Point2D point, double left,
-            double top, double right, double bottom, double threshold)
-            throws IllegalArgumentException {
+            double top, double right, double bottom, double threshold) {
         return isLocusToBottomSide(point.getInhomX(), point.getInhomY(), left,
                 top, right, bottom, threshold);
     }
@@ -5454,8 +5449,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
     public static boolean isLocusToBottomSide(double x, double y,
-            Point2D topLeft, Point2D bottomRight, double threshold)
-            throws IllegalArgumentException {
+            Point2D topLeft, Point2D bottomRight, double threshold) {
         return isLocusToBottomSide(x, y, topLeft.getInhomX(), 
                 topLeft.getInhomY(), bottomRight.getInhomX(), 
                 bottomRight.getInhomY(), threshold);
@@ -5475,8 +5469,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
     public static boolean isLocusToBottomSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight, double threshold)
-            throws IllegalArgumentException {
+            Point2D bottomRight, double threshold) {
         return isLocusToBottomSide(point.getInhomX(), point.getInhomY(), 
                 topLeft, bottomRight, threshold);
     }
@@ -5497,8 +5490,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
     public static boolean isLocusToBottomSide(double x, double y, 
-            Point2D center, double width, double height, double threshold)
-            throws IllegalArgumentException {
+            Point2D center, double width, double height, double threshold) {
         double halfWidth = width/2.0;
         double halfHeight = height/2.0;
         double centerX = center.getInhomX();
@@ -5523,8 +5515,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
     public static boolean isLocusToBottomSide(Point2D point, Point2D center,
-            double width, double height, double threshold)
-            throws IllegalArgumentException {
+            double width, double height, double threshold) {
         return isLocusToBottomSide(point.getInhomX(), point.getInhomY(), center,
                 width, height, threshold);
     }
@@ -5540,8 +5531,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
-    public boolean isLocusToBottomSide(double x, double y, double threshold)
-            throws IllegalArgumentException {
+    public boolean isLocusToBottomSide(double x, double y, double threshold) {
         return isLocusToBottomSide(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -5555,8 +5545,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
-    public boolean isLocusToBottomSide(Point2D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean isLocusToBottomSide(Point2D point, double threshold) {
         return isLocusToBottomSide(point, mTopLeft, mBottomRight, threshold);
     }
     
@@ -5701,8 +5690,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public static boolean isLocus(double x, double y, double left, double top,
-            double right, double bottom, double threshold)
-            throws IllegalArgumentException {
+            double right, double bottom, double threshold) {
         if (threshold < 0.0) {
             throw new IllegalArgumentException("threshold must be positive");
         }
@@ -5728,8 +5716,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public static boolean isLocus(Point2D point, double left, double top, 
-            double right, double bottom, double threshold)
-            throws IllegalArgumentException {
+            double right, double bottom, double threshold) {
         return isLocusToLeftSide(point, left, top, right, bottom, threshold) ||
                 isLocusToTopSide(point, left, top, right, bottom, threshold) ||
                 isLocusToRightSide(point, left, top, right, bottom, threshold) ||
@@ -5750,8 +5737,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public static boolean isLocus(double x, double y, Point2D topLeft, 
-            Point2D bottomRight, double threshold)
-            throws IllegalArgumentException {
+            Point2D bottomRight, double threshold) {
         return isLocusToLeftSide(x, y, topLeft, bottomRight, threshold) ||
                 isLocusToTopSide(x, y, topLeft, bottomRight, threshold) ||
                 isLocusToRightSide(x, y, topLeft, bottomRight, threshold) ||
@@ -5771,8 +5757,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public static boolean isLocus(Point2D point, Point2D topLeft, 
-            Point2D bottomRight, double threshold)
-            throws IllegalArgumentException {
+            Point2D bottomRight, double threshold) {
         return isLocusToLeftSide(point, topLeft, bottomRight, threshold) ||
                 isLocusToTopSide(point, topLeft, bottomRight, threshold) ||
                 isLocusToRightSide(point, topLeft, bottomRight, threshold) ||
@@ -5793,8 +5778,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public static boolean isLocus(double x, double y, Point2D center, 
-            double width, double height, double threshold)
-            throws IllegalArgumentException {
+            double width, double height, double threshold) {
         return isLocusToLeftSide(x, y, center, width, height, threshold) ||
                 isLocusToTopSide(x, y, center, width, height, threshold) ||
                 isLocusToRightSide(x, y, center, width, height, threshold) ||
@@ -5814,8 +5798,7 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public static boolean isLocus(Point2D point, Point2D center, double width,
-            double height, double threshold)
-            throws IllegalArgumentException {
+            double height, double threshold) {
         return isLocusToLeftSide(point, center, width, height, threshold) ||
                 isLocusToTopSide(point, center, width, height, threshold) ||
                 isLocusToRightSide(point, center, width, height, threshold) ||
@@ -5832,8 +5815,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus of rectangle, false otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public boolean isLocus(double x, double y, double threshold)
-            throws IllegalArgumentException {
+    public boolean isLocus(double x, double y, double threshold) {
         return isLocus(x, y, mTopLeft, mBottomRight, threshold);
     }
     
@@ -5846,8 +5828,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus of rectangle, false otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public boolean isLocus(Point2D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean isLocus(Point2D point, double threshold) {
         return isLocus(point, mTopLeft, mBottomRight, threshold);
     }
 
