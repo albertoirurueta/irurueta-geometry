@@ -557,13 +557,13 @@ public class PinholeCamera extends Camera implements Serializable {
 <span class="fc" id="L557">            double p21 = mInternalMatrix.getElementAt(2, 1);</span>
 <span class="fc" id="L558">            double p22 = mInternalMatrix.getElementAt(2, 2);</span>
 <span class="fc" id="L559">            double norm = Math.sqrt(p20 * p20 + p21 * p21 + p22 * p22);</span>
-<span class="fc bfc" id="L560" title="All 2 branches covered.">            if (Math.abs(norm) &gt; EPS) {</span>
+<span class="pc bpc" id="L560" title="1 of 2 branches missed.">            if (Math.abs(norm) &gt; EPS) {</span>
                 //only normalize if camera is not affine!
 <span class="fc" id="L562">                mInternalMatrix.multiplyByScalar(1.0 / norm);</span>
             } else {
                 //camera is affine, so we use whole matrix norm
-<span class="fc" id="L565">                norm = Utils.normF(mInternalMatrix);</span>
-<span class="fc" id="L566">                mInternalMatrix.multiplyByScalar(1.0 / norm);</span>
+<span class="nc" id="L565">                norm = Utils.normF(mInternalMatrix);</span>
+<span class="nc" id="L566">                mInternalMatrix.multiplyByScalar(1.0 / norm);</span>
             }
 <span class="fc" id="L568">            mNormalized = true;</span>
         }

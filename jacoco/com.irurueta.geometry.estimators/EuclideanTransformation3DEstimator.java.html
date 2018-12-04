@@ -87,7 +87,7 @@ public class EuclideanTransformation3DEstimator {
      * the same size or their size is smaller than 4.
      */
     public EuclideanTransformation3DEstimator(List&lt;Point3D&gt; inputPoints,
-<span class="fc" id="L90">            List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException {</span>
+<span class="fc" id="L90">            List&lt;Point3D&gt; outputPoints) {</span>
 <span class="fc" id="L91">        internalSetPoints(inputPoints, outputPoints);</span>
 <span class="fc" id="L92">    }</span>
     
@@ -112,19 +112,18 @@ public class EuclideanTransformation3DEstimator {
      */
     public EuclideanTransformation3DEstimator(
             EuclideanTransformation3DEstimatorListener listener, 
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-<span class="fc" id="L116">            throws IllegalArgumentException {</span>
-<span class="fc" id="L117">        mListener = listener;</span>
-<span class="fc" id="L118">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L115">            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {</span>
+<span class="fc" id="L116">        mListener = listener;</span>
+<span class="fc" id="L117">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L118">    }</span>
 
     /**
      * Constructor.
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      */
-<span class="fc" id="L125">    public EuclideanTransformation3DEstimator(boolean weakMinimumSizeAllowed) {</span>
-<span class="fc" id="L126">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L127">    }</span>
+<span class="fc" id="L124">    public EuclideanTransformation3DEstimator(boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L125">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L126">    }</span>
     
     /**
      * Constructor.
@@ -135,11 +134,10 @@ public class EuclideanTransformation3DEstimator {
      * the same size or their size is smaller than 4.
      */
     public EuclideanTransformation3DEstimator(List&lt;Point3D&gt; inputPoints,
-            List&lt;Point3D&gt; outputPoints, boolean weakMinimumSizeAllowed) 
-<span class="fc" id="L139">            throws IllegalArgumentException {</span>
-<span class="fc" id="L140">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L141">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L142">    }</span>
+<span class="fc" id="L137">            List&lt;Point3D&gt; outputPoints, boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L138">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L139">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L140">    }</span>
     
     /**
      * Constructor.
@@ -149,10 +147,10 @@ public class EuclideanTransformation3DEstimator {
      */
     public EuclideanTransformation3DEstimator(
             EuclideanTransformation3DEstimatorListener listener,
-<span class="fc" id="L152">            boolean weakMinimumSizeAllowed) {</span>
-<span class="fc" id="L153">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L154">        mListener = listener;</span>
-<span class="fc" id="L155">    }</span>
+<span class="fc" id="L150">            boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L151">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L152">        mListener = listener;</span>
+<span class="fc" id="L153">    }</span>
     
     /**
      * Constructor.
@@ -167,12 +165,11 @@ public class EuclideanTransformation3DEstimator {
     public EuclideanTransformation3DEstimator(
             EuclideanTransformation3DEstimatorListener listener, 
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) 
-<span class="fc" id="L171">            throws IllegalArgumentException {</span>
-<span class="fc" id="L172">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L173">        mListener = listener;</span>
-<span class="fc" id="L174">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L175">    }</span>
+<span class="fc" id="L168">            boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L169">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L170">        mListener = listener;</span>
+<span class="fc" id="L171">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L172">    }</span>
     
     /**
      * Returns list of input points to be used to estimate an euclidean 3D
@@ -185,7 +182,7 @@ public class EuclideanTransformation3DEstimator {
      * transformation.
      */
     public List&lt;Point3D&gt; getInputPoints() {
-<span class="fc" id="L188">        return mInputPoints;</span>
+<span class="fc" id="L185">        return mInputPoints;</span>
     }
     
     /**
@@ -199,7 +196,7 @@ public class EuclideanTransformation3DEstimator {
      * transformation.
      */
     public List&lt;Point3D&gt; getOutputPoints() {
-<span class="fc" id="L202">        return mOutputPoints;</span>
+<span class="fc" id="L199">        return mOutputPoints;</span>
     }
     
     /**
@@ -218,13 +215,12 @@ public class EuclideanTransformation3DEstimator {
      * already in progress.
      */
     public void setPoints(List&lt;Point3D&gt; inputPoints, 
-            List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L223" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L224">            throw new LockedException();</span>
+            List&lt;Point3D&gt; outputPoints) throws LockedException {
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L220">            throw new LockedException();</span>
         }
-<span class="fc" id="L226">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L227">    }</span>
+<span class="fc" id="L222">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L223">    }</span>
     
     /**
      * Returns reference to listener to be notified of events such as when
@@ -232,7 +228,7 @@ public class EuclideanTransformation3DEstimator {
      * @return listener to be notified of events.
      */
     public EuclideanTransformation3DEstimatorListener getListener() {
-<span class="fc" id="L235">        return mListener;</span>
+<span class="fc" id="L231">        return mListener;</span>
     }
     
     /**
@@ -243,18 +239,18 @@ public class EuclideanTransformation3DEstimator {
      */
     public void setListener(EuclideanTransformation3DEstimatorListener listener)
             throws LockedException {
-<span class="fc bfc" id="L246" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L247">            throw new LockedException();</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L243">            throw new LockedException();</span>
         }
-<span class="fc" id="L249">        mListener = listener;</span>
-<span class="fc" id="L250">    }</span>
+<span class="fc" id="L245">        mListener = listener;</span>
+<span class="fc" id="L246">    }</span>
     
     /**
      * Indicates whether estimation can start with only 3 points or not.
      * @return true allows 3 points, false requires 4.
      */
     public boolean isWeakMinimumSizeAllowed() {
-<span class="fc" id="L257">        return mWeakMinimumSizeAllowed;</span>
+<span class="fc" id="L253">        return mWeakMinimumSizeAllowed;</span>
     }
     
     /**
@@ -264,11 +260,11 @@ public class EuclideanTransformation3DEstimator {
      */
     public void setWeakMinimumSizeAllowed(boolean weakMinimumSizeAllowed) 
             throws LockedException {
-<span class="fc bfc" id="L267" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L268">            throw new LockedException();</span>
+<span class="fc bfc" id="L263" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L264">            throw new LockedException();</span>
         }
-<span class="fc" id="L270">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L271">    }</span>
+<span class="fc" id="L266">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L267">    }</span>
     
     /**
      * Required minimum number of point correspondences to start the estimation.
@@ -276,7 +272,7 @@ public class EuclideanTransformation3DEstimator {
      * @return minimum number of point correspondences.
      */
     public int getMinimumPoints() {
-<span class="fc bfc" id="L279" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
     }    
     
     /**
@@ -285,7 +281,7 @@ public class EuclideanTransformation3DEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L288" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">        return mListener != null;</span>
     }
     
     /**
@@ -294,7 +290,7 @@ public class EuclideanTransformation3DEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L297">        return mLocked;</span>
+<span class="fc" id="L293">        return mLocked;</span>
     }
     
     /**
@@ -305,9 +301,9 @@ public class EuclideanTransformation3DEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L308" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
-<span class="pc bpc" id="L309" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
-<span class="pc bpc" id="L310" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
+<span class="pc bpc" id="L304" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
+<span class="pc bpc" id="L305" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
+<span class="pc bpc" id="L306" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
     }
     
     /**
@@ -324,9 +320,9 @@ public class EuclideanTransformation3DEstimator {
      */
     public EuclideanTransformation3D estimate() throws LockedException,
             NotReadyException, CoincidentPointsException {
-<span class="fc" id="L327">        EuclideanTransformation3D result = new EuclideanTransformation3D();</span>
-<span class="fc" id="L328">        estimate(result);</span>
-<span class="fc" id="L329">        return result;</span>
+<span class="fc" id="L323">        EuclideanTransformation3D result = new EuclideanTransformation3D();</span>
+<span class="fc" id="L324">        estimate(result);</span>
+<span class="fc" id="L325">        return result;</span>
     }
     
     /**
@@ -344,102 +340,103 @@ public class EuclideanTransformation3DEstimator {
     public void estimate(EuclideanTransformation3D result) 
             throws LockedException, NotReadyException, 
             CoincidentPointsException {
-<span class="fc bfc" id="L347" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L348">            throw new LockedException();</span>
+<span class="fc bfc" id="L343" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L344">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L350" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L351">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L346" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L347">            throw new NotReadyException();</span>
         }
         
         try {
-<span class="fc" id="L355">            mLocked = true;</span>
+<span class="fc" id="L351">            mLocked = true;</span>
             
-<span class="fc bfc" id="L357" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L358">                mListener.onEstimateStart(this);</span>
+<span class="fc bfc" id="L353" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L354">                mListener.onEstimateStart(this);</span>
             }
             
-<span class="fc" id="L361">            Matrix inCentroid = computeCentroid(mInputPoints);        </span>
-<span class="fc" id="L362">            Matrix outCentroid = computeCentroid(mOutputPoints);</span>
+<span class="fc" id="L357">            Matrix inCentroid = computeCentroid(mInputPoints);        </span>
+<span class="fc" id="L358">            Matrix outCentroid = computeCentroid(mOutputPoints);</span>
         
-<span class="fc" id="L364">            Matrix m = new Matrix(</span>
+<span class="fc" id="L360">            Matrix m = new Matrix(</span>
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
         
-<span class="fc" id="L368">            int n = mInputPoints.size();</span>
-            Point3D inputPoint, outputPoint;
-<span class="fc" id="L370">            Matrix col = new Matrix(</span>
+<span class="fc" id="L364">            int n = mInputPoints.size();</span>
+            Point3D inputPoint;
+            Point3D outputPoint;
+<span class="fc" id="L367">            Matrix col = new Matrix(</span>
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
-<span class="fc" id="L372">            Matrix row = new Matrix(1, </span>
+<span class="fc" id="L369">            Matrix row = new Matrix(1, </span>
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
-<span class="fc" id="L374">            Matrix tmp = new Matrix(</span>
+<span class="fc" id="L371">            Matrix tmp = new Matrix(</span>
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
-<span class="fc bfc" id="L377" title="All 2 branches covered.">            for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L378">                inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L379">                outputPoint = mOutputPoints.get(i);</span>
+<span class="fc bfc" id="L374" title="All 2 branches covered.">            for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L375">                inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L376">                outputPoint = mOutputPoints.get(i);</span>
                 
-<span class="fc" id="L381">                col.setElementAtIndex(0, inputPoint.getInhomX() - </span>
-<span class="fc" id="L382">                        inCentroid.getElementAtIndex(0));</span>
-<span class="fc" id="L383">                col.setElementAtIndex(1, inputPoint.getInhomY() - </span>
-<span class="fc" id="L384">                        inCentroid.getElementAtIndex(1));</span>
-<span class="fc" id="L385">                col.setElementAtIndex(2, inputPoint.getInhomZ() - </span>
-<span class="fc" id="L386">                        inCentroid.getElementAtIndex(2));</span>
+<span class="fc" id="L378">                col.setElementAtIndex(0, inputPoint.getInhomX() - </span>
+<span class="fc" id="L379">                        inCentroid.getElementAtIndex(0));</span>
+<span class="fc" id="L380">                col.setElementAtIndex(1, inputPoint.getInhomY() - </span>
+<span class="fc" id="L381">                        inCentroid.getElementAtIndex(1));</span>
+<span class="fc" id="L382">                col.setElementAtIndex(2, inputPoint.getInhomZ() - </span>
+<span class="fc" id="L383">                        inCentroid.getElementAtIndex(2));</span>
                 
-<span class="fc" id="L388">                row.setElementAtIndex(0, outputPoint.getInhomX() - </span>
-<span class="fc" id="L389">                        outCentroid.getElementAtIndex(0));</span>
-<span class="fc" id="L390">                row.setElementAtIndex(1, outputPoint.getInhomY() - </span>
-<span class="fc" id="L391">                        outCentroid.getElementAtIndex(1));</span>
-<span class="fc" id="L392">                row.setElementAtIndex(2, outputPoint.getInhomZ() - </span>
-<span class="fc" id="L393">                        outCentroid.getElementAtIndex(2));</span>
+<span class="fc" id="L385">                row.setElementAtIndex(0, outputPoint.getInhomX() - </span>
+<span class="fc" id="L386">                        outCentroid.getElementAtIndex(0));</span>
+<span class="fc" id="L387">                row.setElementAtIndex(1, outputPoint.getInhomY() - </span>
+<span class="fc" id="L388">                        outCentroid.getElementAtIndex(1));</span>
+<span class="fc" id="L389">                row.setElementAtIndex(2, outputPoint.getInhomZ() - </span>
+<span class="fc" id="L390">                        outCentroid.getElementAtIndex(2));</span>
                 
-<span class="fc" id="L395">                col.multiply(row, tmp);</span>
-<span class="fc" id="L396">                m.add(tmp);</span>
+<span class="fc" id="L392">                col.multiply(row, tmp);</span>
+<span class="fc" id="L393">                m.add(tmp);</span>
             }
             
-<span class="fc" id="L399">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
-<span class="fc" id="L400">            decomposer.decompose();</span>
+<span class="fc" id="L396">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L397">            decomposer.decompose();</span>
             
-<span class="pc bpc" id="L402" title="1 of 4 branches missed.">            if (!mWeakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {</span>
-<span class="nc" id="L403">                throw new CoincidentPointsException();</span>
+<span class="pc bpc" id="L399" title="1 of 4 branches missed.">            if (!mWeakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {</span>
+<span class="nc" id="L400">                throw new CoincidentPointsException();</span>
             }            
             
-<span class="fc" id="L406">            Matrix u = decomposer.getU();</span>
-<span class="fc" id="L407">            Matrix v = decomposer.getV();</span>
+<span class="fc" id="L403">            Matrix u = decomposer.getU();</span>
+<span class="fc" id="L404">            Matrix v = decomposer.getV();</span>
                         
             //rotation R = V*U^T            
-<span class="fc" id="L410">            u.transpose();</span>
-<span class="fc" id="L411">            v.multiply(u);</span>
-<span class="fc" id="L412">            Matrix r = v;</span>
+<span class="fc" id="L407">            u.transpose();</span>
+<span class="fc" id="L408">            v.multiply(u);</span>
+<span class="fc" id="L409">            Matrix r = v;</span>
             
-<span class="fc bfc" id="L414" title="All 2 branches covered.">            if (Utils.det(r) &lt; 0.0) {</span>
+<span class="fc bfc" id="L411" title="All 2 branches covered.">            if (Utils.det(r) &lt; 0.0) {</span>
                 //multiply 3rd column of R by -1
-<span class="fc" id="L416">                r.setElementAt(0, 2, -r.getElementAt(0, 2));</span>
-<span class="fc" id="L417">                r.setElementAt(1, 2, -r.getElementAt(1, 2));</span>
-<span class="fc" id="L418">                r.setElementAt(2, 2, -r.getElementAt(2, 2));</span>
+<span class="fc" id="L413">                r.setElementAt(0, 2, -r.getElementAt(0, 2));</span>
+<span class="fc" id="L414">                r.setElementAt(1, 2, -r.getElementAt(1, 2));</span>
+<span class="fc" id="L415">                r.setElementAt(2, 2, -r.getElementAt(2, 2));</span>
             }
             
-<span class="fc" id="L421">            MatrixRotation3D rotation = new MatrixRotation3D(r);</span>
+<span class="fc" id="L418">            MatrixRotation3D rotation = new MatrixRotation3D(r);</span>
             
             //translation
-<span class="fc" id="L424">            Matrix t = r.multiplyAndReturnNew(inCentroid);</span>
-<span class="fc" id="L425">            t.multiplyByScalar(-1.0);</span>
-<span class="fc" id="L426">            t.add(outCentroid);</span>
+<span class="fc" id="L421">            Matrix t = r.multiplyAndReturnNew(inCentroid);</span>
+<span class="fc" id="L422">            t.multiplyByScalar(-1.0);</span>
+<span class="fc" id="L423">            t.add(outCentroid);</span>
             
-<span class="fc" id="L428">            result.setRotation(rotation);</span>
-<span class="fc" id="L429">            result.setTranslation(t.getBuffer());</span>
+<span class="fc" id="L425">            result.setRotation(rotation);</span>
+<span class="fc" id="L426">            result.setTranslation(t.getBuffer());</span>
             
-<span class="fc bfc" id="L431" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L432">                mListener.onEstimateEnd(this);</span>
+<span class="fc bfc" id="L428" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L429">                mListener.onEstimateEnd(this);</span>
             }
             
-<span class="nc" id="L435">        } catch (CoincidentPointsException e) {</span>
-<span class="nc" id="L436">            throw e;</span>
-<span class="nc" id="L437">        } catch (AlgebraException | InvalidRotationMatrixException e) {</span>
-<span class="nc" id="L438">            throw new CoincidentPointsException(e);</span>
+<span class="nc" id="L432">        } catch (CoincidentPointsException e) {</span>
+<span class="nc" id="L433">            throw e;</span>
+<span class="nc" id="L434">        } catch (AlgebraException | InvalidRotationMatrixException e) {</span>
+<span class="nc" id="L435">            throw new CoincidentPointsException(e);</span>
         } finally {
-<span class="fc" id="L440">            mLocked = false;</span>
+<span class="fc" id="L437">            mLocked = false;</span>
         }
-<span class="fc" id="L442">    }</span>
+<span class="fc" id="L439">    }</span>
     
     /**
      * Computes centroid of provided list of points using inhomogeneous
@@ -450,20 +447,22 @@ public class EuclideanTransformation3DEstimator {
      */
     private static Matrix computeCentroid(List&lt;Point3D&gt; points) 
             throws AlgebraException {        
-<span class="fc" id="L453">        double x = 0.0, y = 0.0, z = 0.0;</span>
-<span class="fc" id="L454">        double n = points.size();</span>
-<span class="fc bfc" id="L455" title="All 2 branches covered.">        for (Point3D p : points) {</span>
-<span class="fc" id="L456">            x += p.getInhomX() / n;</span>
-<span class="fc" id="L457">            y += p.getInhomY() / n;</span>
-<span class="fc" id="L458">            z += p.getInhomZ() / n;</span>
-<span class="fc" id="L459">        }</span>
+<span class="fc" id="L450">        double x = 0.0;</span>
+<span class="fc" id="L451">        double y = 0.0;</span>
+<span class="fc" id="L452">        double z = 0.0;</span>
+<span class="fc" id="L453">        double n = points.size();</span>
+<span class="fc bfc" id="L454" title="All 2 branches covered.">        for (Point3D p : points) {</span>
+<span class="fc" id="L455">            x += p.getInhomX() / n;</span>
+<span class="fc" id="L456">            y += p.getInhomY() / n;</span>
+<span class="fc" id="L457">            z += p.getInhomZ() / n;</span>
+<span class="fc" id="L458">        }</span>
         
-<span class="fc" id="L461">        Matrix result = new Matrix(</span>
+<span class="fc" id="L460">        Matrix result = new Matrix(</span>
                 Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
-<span class="fc" id="L463">        result.setElementAtIndex(0, x);</span>
-<span class="fc" id="L464">        result.setElementAtIndex(1, y);</span>
-<span class="fc" id="L465">        result.setElementAtIndex(2, z);</span>
-<span class="fc" id="L466">        return result;</span>
+<span class="fc" id="L462">        result.setElementAtIndex(0, x);</span>
+<span class="fc" id="L463">        result.setElementAtIndex(1, y);</span>
+<span class="fc" id="L464">        result.setElementAtIndex(2, z);</span>
+<span class="fc" id="L465">        return result;</span>
     }
     
     /**
@@ -478,15 +477,15 @@ public class EuclideanTransformation3DEstimator {
      * the same size or their size is smaller than #getMinimumPoints.
      */
     private void internalSetPoints(List&lt;Point3D&gt; inputPoints,
-            List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException {
-<span class="fc bfc" id="L482" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
-<span class="fc" id="L483">            throw new IllegalArgumentException();</span>
+            List&lt;Point3D&gt; outputPoints) {
+<span class="fc bfc" id="L481" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L482">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L485" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
-<span class="fc" id="L486">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L484" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L485">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L488">        mInputPoints = inputPoints;</span>
-<span class="fc" id="L489">        mOutputPoints = outputPoints;        </span>
-<span class="fc" id="L490">    }</span>
+<span class="fc" id="L487">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L488">        mOutputPoints = outputPoints;        </span>
+<span class="fc" id="L489">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

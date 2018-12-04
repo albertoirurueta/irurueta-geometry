@@ -84,11 +84,10 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      * don't have the same size and enough correspondences.
      */
     public DLTLinePlaneCorrespondencePinholeCameraEstimator(List&lt;Plane&gt; planes,
-            List&lt;Line2D&gt; lines2D) throws IllegalArgumentException,
-            WrongListSizesException {
-<span class="fc" id="L89">        super(planes, lines2D);</span>
-<span class="fc" id="L90">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L91">    }</span>
+            List&lt;Line2D&gt; lines2D) throws WrongListSizesException {
+<span class="fc" id="L88">        super(planes, lines2D);</span>
+<span class="fc" id="L89">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L90">    }</span>
 
     /**
      * Constructor.
@@ -102,10 +101,10 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      */
     public DLTLinePlaneCorrespondencePinholeCameraEstimator(List&lt;Plane&gt; planes,
             List&lt;Line2D&gt; lines2D, PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
-<span class="fc" id="L106">        super(planes, lines2D, listener);</span>
-<span class="fc" id="L107">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
-<span class="fc" id="L108">    }</span>
+            throws WrongListSizesException {
+<span class="fc" id="L105">        super(planes, lines2D, listener);</span>
+<span class="fc" id="L106">        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L107">    }</span>
     
     /**
      * Indicates if an LMSE (Least Mean Square Error) solution is allowed if 
@@ -115,7 +114,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      * @return true if LMSE solution is allowed, false otherwise.
      */
     public boolean isLMSESolutionAllowed() {
-<span class="fc" id="L118">        return mAllowLMSESolution;</span>
+<span class="fc" id="L117">        return mAllowLMSESolution;</span>
     }
     
     /**
@@ -127,11 +126,11 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      * @throws LockedException if estimator is locked.
      */
     public void setLMSESolutionAllowed(boolean allowed) throws LockedException {
-<span class="fc bfc" id="L130" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L131">            throw new LockedException();</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L130">            throw new LockedException();</span>
         }
-<span class="fc" id="L133">        mAllowLMSESolution = allowed;</span>
-<span class="fc" id="L134">    }            </span>
+<span class="fc" id="L132">        mAllowLMSESolution = allowed;</span>
+<span class="fc" id="L133">    }            </span>
     
     /**
      * Indicates if this estimator is ready to start the estimation.
@@ -139,7 +138,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      */
     @Override
     public boolean isReady() {
-<span class="fc" id="L142">        return areListsAvailable();</span>
+<span class="fc" id="L141">        return areListsAvailable();</span>
     }
 
     /**
@@ -154,222 +153,227 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
     public PinholeCamera estimate() throws LockedException, NotReadyException, 
         PinholeCameraEstimatorException {
         
-<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L158">            throw new LockedException();</span>
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L157">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L161">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L160">            throw new NotReadyException();</span>
         }
         
         try {
-<span class="fc" id="L165">            int nLines = mLines2D.size();</span>
+<span class="fc" id="L164">            int nLines = mLines2D.size();</span>
             
-<span class="fc" id="L167">            mLocked = true;</span>
-<span class="fc bfc" id="L168" title="All 2 branches covered.">            if(mListener != null) mListener.onEstimateStart(this);</span>
+<span class="fc" id="L166">            mLocked = true;</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">            if(mListener != null) mListener.onEstimateStart(this);</span>
             
             Matrix a;
-<span class="pc bpc" id="L171" title="1 of 2 branches missed.">            if (isLMSESolutionAllowed()) {</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">            if (isLMSESolutionAllowed()) {</span>
                 //initialize new matrix to zero when LMSE is enabled
-<span class="nc" id="L173">                a = new Matrix(3 * nLines, 12);</span>
+<span class="nc" id="L172">                a = new Matrix(3 * nLines, 12);</span>
             } else {
                 //When LMSE is disabled, initialize new matrix to zero only with
                 //11 equations
-<span class="fc" id="L177">                a = new Matrix(MIN_NUMBER_OF_EQUATIONS, 12);</span>
+<span class="fc" id="L176">                a = new Matrix(MIN_NUMBER_OF_EQUATIONS, 12);</span>
             }
             
-<span class="fc" id="L180">            Iterator&lt;Line2D&gt; iterator2D = mLines2D.iterator();</span>
-<span class="fc" id="L181">            Iterator&lt;Plane&gt; iterator3D = mPlanes.iterator();</span>
+<span class="fc" id="L179">            Iterator&lt;Line2D&gt; iterator2D = mLines2D.iterator();</span>
+<span class="fc" id="L180">            Iterator&lt;Plane&gt; iterator3D = mPlanes.iterator();</span>
             
             Line2D line2D;
             Plane plane;
-<span class="fc" id="L185">            int counter = 0;</span>
-            double la, lb, lc;
-            double A, B, C, D;
+<span class="fc" id="L184">            int counter = 0;</span>
+            double la;
+            double lb;
+            double lc;
+            double pA;
+            double pB;
+            double pC;
+            double pD;
             double rowNorm;
-<span class="pc bpc" id="L189" title="2 of 4 branches missed.">            while (iterator2D.hasNext() &amp;&amp; iterator3D.hasNext()) {</span>
-<span class="fc" id="L190">                line2D = iterator2D.next();</span>
-<span class="fc" id="L191">                plane = iterator3D.next();</span>
+<span class="pc bpc" id="L193" title="2 of 4 branches missed.">            while (iterator2D.hasNext() &amp;&amp; iterator3D.hasNext()) {</span>
+<span class="fc" id="L194">                line2D = iterator2D.next();</span>
+<span class="fc" id="L195">                plane = iterator3D.next();</span>
                 
                 //normalize lines and planes to increase accuracy
-<span class="fc" id="L194">                line2D.normalize();</span>
-<span class="fc" id="L195">                plane.normalize();</span>
+<span class="fc" id="L198">                line2D.normalize();</span>
+<span class="fc" id="L199">                plane.normalize();</span>
                 
-<span class="fc" id="L197">                la = line2D.getA();</span>
-<span class="fc" id="L198">                lb = line2D.getB();</span>
-<span class="fc" id="L199">                lc = line2D.getC();</span>
+<span class="fc" id="L201">                la = line2D.getA();</span>
+<span class="fc" id="L202">                lb = line2D.getB();</span>
+<span class="fc" id="L203">                lc = line2D.getC();</span>
                 
-<span class="fc" id="L201">                A = plane.getA();</span>
-<span class="fc" id="L202">                B = plane.getB();</span>
-<span class="fc" id="L203">                C = plane.getC();</span>
-<span class="fc" id="L204">                D = plane.getD();</span>
+<span class="fc" id="L205">                pA = plane.getA();</span>
+<span class="fc" id="L206">                pB = plane.getB();</span>
+<span class="fc" id="L207">                pC = plane.getC();</span>
+<span class="fc" id="L208">                pD = plane.getD();</span>
                 
                 //first row
-<span class="fc" id="L207">                a.setElementAt(counter, 0, -D * la);</span>
-<span class="fc" id="L208">                a.setElementAt(counter, 1, -D * lb);</span>
-<span class="fc" id="L209">                a.setElementAt(counter, 2, -D * lc);</span>
+<span class="fc" id="L211">                a.setElementAt(counter, 0, -pD * la);</span>
+<span class="fc" id="L212">                a.setElementAt(counter, 1, -pD * lb);</span>
+<span class="fc" id="L213">                a.setElementAt(counter, 2, -pD * lc);</span>
                 
                 //columns 3, 4, 5, 6, 7, 8 are left with zero values
                 
-<span class="fc" id="L213">                a.setElementAt(counter, 9, A * la);</span>
-<span class="fc" id="L214">                a.setElementAt(counter, 10, A * lb);</span>
-<span class="fc" id="L215">                a.setElementAt(counter, 11, A * lc);</span>
+<span class="fc" id="L217">                a.setElementAt(counter, 9, pA * la);</span>
+<span class="fc" id="L218">                a.setElementAt(counter, 10, pA * lb);</span>
+<span class="fc" id="L219">                a.setElementAt(counter, 11, pA * lc);</span>
                 
                 //normalize row
-<span class="fc" id="L218">                rowNorm = Math.sqrt(</span>
-<span class="fc" id="L219">                        Math.pow(a.getElementAt(counter, 0), 2.0) +</span>
-<span class="fc" id="L220">                        Math.pow(a.getElementAt(counter, 1), 2.0) +</span>
-<span class="fc" id="L221">                        Math.pow(a.getElementAt(counter, 2), 2.0) +</span>
-<span class="fc" id="L222">                        Math.pow(a.getElementAt(counter, 9), 2.0) +</span>
-<span class="fc" id="L223">                        Math.pow(a.getElementAt(counter, 10), 2.0) +</span>
-<span class="fc" id="L224">                        Math.pow(a.getElementAt(counter, 11), 2.0));</span>
+<span class="fc" id="L222">                rowNorm = Math.sqrt(</span>
+<span class="fc" id="L223">                        Math.pow(a.getElementAt(counter, 0), 2.0) +</span>
+<span class="fc" id="L224">                        Math.pow(a.getElementAt(counter, 1), 2.0) +</span>
+<span class="fc" id="L225">                        Math.pow(a.getElementAt(counter, 2), 2.0) +</span>
+<span class="fc" id="L226">                        Math.pow(a.getElementAt(counter, 9), 2.0) +</span>
+<span class="fc" id="L227">                        Math.pow(a.getElementAt(counter, 10), 2.0) +</span>
+<span class="fc" id="L228">                        Math.pow(a.getElementAt(counter, 11), 2.0));</span>
                 
-<span class="fc" id="L226">                a.setElementAt(counter, 0, a.getElementAt(counter, 0) / </span>
+<span class="fc" id="L230">                a.setElementAt(counter, 0, a.getElementAt(counter, 0) / </span>
                         rowNorm);
-<span class="fc" id="L228">                a.setElementAt(counter, 1, a.getElementAt(counter, 1) / </span>
+<span class="fc" id="L232">                a.setElementAt(counter, 1, a.getElementAt(counter, 1) / </span>
                         rowNorm);
-<span class="fc" id="L230">                a.setElementAt(counter, 2, a.getElementAt(counter, 2) / </span>
+<span class="fc" id="L234">                a.setElementAt(counter, 2, a.getElementAt(counter, 2) / </span>
                         rowNorm);
-<span class="fc" id="L232">                a.setElementAt(counter, 9, a.getElementAt(counter, 9) / </span>
+<span class="fc" id="L236">                a.setElementAt(counter, 9, a.getElementAt(counter, 9) / </span>
                         rowNorm);
-<span class="fc" id="L234">                a.setElementAt(counter, 10, a.getElementAt(counter, 10) / </span>
+<span class="fc" id="L238">                a.setElementAt(counter, 10, a.getElementAt(counter, 10) / </span>
                         rowNorm);
-<span class="fc" id="L236">                a.setElementAt(counter, 11, a.getElementAt(counter, 11) / </span>
+<span class="fc" id="L240">                a.setElementAt(counter, 11, a.getElementAt(counter, 11) / </span>
                         rowNorm);
-<span class="fc" id="L238">                counter++;                </span>
+<span class="fc" id="L242">                counter++;                </span>
 
                 //second row
                 
                 //columns 0, 1, 2 are left with zero values
                 
-<span class="fc" id="L244">                a.setElementAt(counter, 3, -D * la);</span>
-<span class="fc" id="L245">                a.setElementAt(counter, 4, -D * lb);</span>
-<span class="fc" id="L246">                a.setElementAt(counter, 5, -D * lc);</span>
+<span class="fc" id="L248">                a.setElementAt(counter, 3, -pD * la);</span>
+<span class="fc" id="L249">                a.setElementAt(counter, 4, -pD * lb);</span>
+<span class="fc" id="L250">                a.setElementAt(counter, 5, -pD * lc);</span>
                 
                 //columns 6, 7, 8 are left with zero values
                 
-<span class="fc" id="L250">                a.setElementAt(counter, 9, B * la);</span>
-<span class="fc" id="L251">                a.setElementAt(counter, 10, B * lb);</span>
-<span class="fc" id="L252">                a.setElementAt(counter, 11, B * lc);</span>
+<span class="fc" id="L254">                a.setElementAt(counter, 9, pB * la);</span>
+<span class="fc" id="L255">                a.setElementAt(counter, 10, pB * lb);</span>
+<span class="fc" id="L256">                a.setElementAt(counter, 11, pB * lc);</span>
                 
                 //normalize row
-<span class="fc" id="L255">                rowNorm = Math.sqrt(</span>
-<span class="fc" id="L256">                        Math.pow(a.getElementAt(counter, 3), 2.0) +</span>
-<span class="fc" id="L257">                        Math.pow(a.getElementAt(counter, 4), 2.0) +</span>
-<span class="fc" id="L258">                        Math.pow(a.getElementAt(counter, 5), 2.0) +</span>
-<span class="fc" id="L259">                        Math.pow(a.getElementAt(counter, 9), 2.0) +</span>
-<span class="fc" id="L260">                        Math.pow(a.getElementAt(counter, 10), 2.0) +</span>
-<span class="fc" id="L261">                        Math.pow(a.getElementAt(counter, 11), 2.0));</span>
+<span class="fc" id="L259">                rowNorm = Math.sqrt(</span>
+<span class="fc" id="L260">                        Math.pow(a.getElementAt(counter, 3), 2.0) +</span>
+<span class="fc" id="L261">                        Math.pow(a.getElementAt(counter, 4), 2.0) +</span>
+<span class="fc" id="L262">                        Math.pow(a.getElementAt(counter, 5), 2.0) +</span>
+<span class="fc" id="L263">                        Math.pow(a.getElementAt(counter, 9), 2.0) +</span>
+<span class="fc" id="L264">                        Math.pow(a.getElementAt(counter, 10), 2.0) +</span>
+<span class="fc" id="L265">                        Math.pow(a.getElementAt(counter, 11), 2.0));</span>
                 
-<span class="fc" id="L263">                a.setElementAt(counter, 3, a.getElementAt(counter, 3) / </span>
+<span class="fc" id="L267">                a.setElementAt(counter, 3, a.getElementAt(counter, 3) / </span>
                         rowNorm);
-<span class="fc" id="L265">                a.setElementAt(counter, 4, a.getElementAt(counter, 4) / </span>
+<span class="fc" id="L269">                a.setElementAt(counter, 4, a.getElementAt(counter, 4) / </span>
                         rowNorm);
-<span class="fc" id="L267">                a.setElementAt(counter, 5, a.getElementAt(counter, 5) / </span>
+<span class="fc" id="L271">                a.setElementAt(counter, 5, a.getElementAt(counter, 5) / </span>
                         rowNorm);
-<span class="fc" id="L269">                a.setElementAt(counter, 9, a.getElementAt(counter, 9) / </span>
+<span class="fc" id="L273">                a.setElementAt(counter, 9, a.getElementAt(counter, 9) / </span>
                         rowNorm);
-<span class="fc" id="L271">                a.setElementAt(counter, 10, a.getElementAt(counter, 10) / </span>
+<span class="fc" id="L275">                a.setElementAt(counter, 10, a.getElementAt(counter, 10) / </span>
                         rowNorm);
-<span class="fc" id="L273">                a.setElementAt(counter, 11, a.getElementAt(counter, 11) / </span>
+<span class="fc" id="L277">                a.setElementAt(counter, 11, a.getElementAt(counter, 11) / </span>
                         rowNorm);
-<span class="fc" id="L275">                counter++;                </span>
+<span class="fc" id="L279">                counter++;                </span>
                 
                 
                 //in case we want an exact solution (up to scale) when LMSE is
                 //disabled, we stop after 11 equations
-<span class="pc bpc" id="L280" title="1 of 4 branches missed.">                if (!isLMSESolutionAllowed() &amp;&amp; (counter &gt;= MIN_NUMBER_OF_EQUATIONS)) {</span>
-<span class="fc" id="L281">                    break;</span>
+<span class="pc bpc" id="L284" title="1 of 4 branches missed.">                if (!isLMSESolutionAllowed() &amp;&amp; (counter &gt;= MIN_NUMBER_OF_EQUATIONS)) {</span>
+<span class="fc" id="L285">                    break;</span>
                 }
                 
                 //third row
                 
                 //columns 0, 1, 2, 3, 4, 5 are left with zero values
                 
-<span class="fc" id="L288">                a.setElementAt(counter, 6, -D * la);</span>
-<span class="fc" id="L289">                a.setElementAt(counter, 7, -D * lb);</span>
-<span class="fc" id="L290">                a.setElementAt(counter, 8, -D * lc);                </span>
+<span class="fc" id="L292">                a.setElementAt(counter, 6, -pD * la);</span>
+<span class="fc" id="L293">                a.setElementAt(counter, 7, -pD * lb);</span>
+<span class="fc" id="L294">                a.setElementAt(counter, 8, -pD * lc);</span>
                 
-<span class="fc" id="L292">                a.setElementAt(counter, 9, C * la);</span>
-<span class="fc" id="L293">                a.setElementAt(counter, 10, C * lb);</span>
-<span class="fc" id="L294">                a.setElementAt(counter, 11, C * lc);</span>
+<span class="fc" id="L296">                a.setElementAt(counter, 9, pC * la);</span>
+<span class="fc" id="L297">                a.setElementAt(counter, 10, pC * lb);</span>
+<span class="fc" id="L298">                a.setElementAt(counter, 11, pC * lc);</span>
                 
                 //normalize row
-<span class="fc" id="L297">                rowNorm = Math.sqrt(</span>
-<span class="fc" id="L298">                        Math.pow(a.getElementAt(counter, 6), 2.0) +</span>
-<span class="fc" id="L299">                        Math.pow(a.getElementAt(counter, 7), 2.0) +</span>
-<span class="fc" id="L300">                        Math.pow(a.getElementAt(counter, 8), 2.0) +</span>
-<span class="fc" id="L301">                        Math.pow(a.getElementAt(counter, 9), 2.0) +</span>
-<span class="fc" id="L302">                        Math.pow(a.getElementAt(counter, 10), 2.0) +</span>
-<span class="fc" id="L303">                        Math.pow(a.getElementAt(counter, 11), 2.0));</span>
+<span class="fc" id="L301">                rowNorm = Math.sqrt(</span>
+<span class="fc" id="L302">                        Math.pow(a.getElementAt(counter, 6), 2.0) +</span>
+<span class="fc" id="L303">                        Math.pow(a.getElementAt(counter, 7), 2.0) +</span>
+<span class="fc" id="L304">                        Math.pow(a.getElementAt(counter, 8), 2.0) +</span>
+<span class="fc" id="L305">                        Math.pow(a.getElementAt(counter, 9), 2.0) +</span>
+<span class="fc" id="L306">                        Math.pow(a.getElementAt(counter, 10), 2.0) +</span>
+<span class="fc" id="L307">                        Math.pow(a.getElementAt(counter, 11), 2.0));</span>
                 
-<span class="fc" id="L305">                a.setElementAt(counter, 6, a.getElementAt(counter, 6) / </span>
+<span class="fc" id="L309">                a.setElementAt(counter, 6, a.getElementAt(counter, 6) / </span>
                         rowNorm);
-<span class="fc" id="L307">                a.setElementAt(counter, 7, a.getElementAt(counter, 7) / </span>
+<span class="fc" id="L311">                a.setElementAt(counter, 7, a.getElementAt(counter, 7) / </span>
                         rowNorm);
-<span class="fc" id="L309">                a.setElementAt(counter, 8, a.getElementAt(counter, 8) / </span>
+<span class="fc" id="L313">                a.setElementAt(counter, 8, a.getElementAt(counter, 8) / </span>
                         rowNorm);
-<span class="fc" id="L311">                a.setElementAt(counter, 9, a.getElementAt(counter, 9) / </span>
+<span class="fc" id="L315">                a.setElementAt(counter, 9, a.getElementAt(counter, 9) / </span>
                         rowNorm);
-<span class="fc" id="L313">                a.setElementAt(counter, 10, a.getElementAt(counter, 10) / </span>
+<span class="fc" id="L317">                a.setElementAt(counter, 10, a.getElementAt(counter, 10) / </span>
                         rowNorm);
-<span class="fc" id="L315">                a.setElementAt(counter, 11, a.getElementAt(counter, 11) / </span>
+<span class="fc" id="L319">                a.setElementAt(counter, 11, a.getElementAt(counter, 11) / </span>
                         rowNorm);
-<span class="fc" id="L317">                counter++;                </span>
+<span class="fc" id="L321">                counter++;                </span>
             }
             
-<span class="fc" id="L320">            SingularValueDecomposer decomposer = new SingularValueDecomposer(a);</span>
-<span class="fc" id="L321">            decomposer.decompose();</span>
+<span class="fc" id="L324">            SingularValueDecomposer decomposer = new SingularValueDecomposer(a);</span>
+<span class="fc" id="L325">            decomposer.decompose();</span>
             
-<span class="fc bfc" id="L323" title="All 2 branches covered.">            if (decomposer.getNullity() &gt; 1) {</span>
+<span class="fc bfc" id="L327" title="All 2 branches covered.">            if (decomposer.getNullity() &gt; 1) {</span>
                 //line/plane configuration is degenerate and exists a linear 
                 //combination of possible pinhole cameras (i.e. solution is not
                 //unique up to scale)
-<span class="fc" id="L327">                throw new PinholeCameraEstimatorException();</span>
+<span class="fc" id="L331">                throw new PinholeCameraEstimatorException();</span>
             }
             
-<span class="fc" id="L330">            Matrix v = decomposer.getV();</span>
+<span class="fc" id="L334">            Matrix v = decomposer.getV();</span>
             
             //use last column of V as pinhole camera vector
             
             //the last column of V contains pinhole camera matrix ordered by
             //columns as: P11, P21, P31, P12, P22, P32, P13, P23, P33, P14, P24, 
             //P34, hence we reorder p
-<span class="fc" id="L337">            Matrix pinholeCameraMatrix = new Matrix(</span>
+<span class="fc" id="L341">            Matrix pinholeCameraMatrix = new Matrix(</span>
                     PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS,
                     PinholeCamera.PINHOLE_CAMERA_MATRIX_COLS);
             
-<span class="fc" id="L341">            pinholeCameraMatrix.setElementAt(0, 0, v.getElementAt(0, 11));</span>
-<span class="fc" id="L342">            pinholeCameraMatrix.setElementAt(1, 0, v.getElementAt(1, 11));</span>
-<span class="fc" id="L343">            pinholeCameraMatrix.setElementAt(2, 0, v.getElementAt(2, 11));</span>
+<span class="fc" id="L345">            pinholeCameraMatrix.setElementAt(0, 0, v.getElementAt(0, 11));</span>
+<span class="fc" id="L346">            pinholeCameraMatrix.setElementAt(1, 0, v.getElementAt(1, 11));</span>
+<span class="fc" id="L347">            pinholeCameraMatrix.setElementAt(2, 0, v.getElementAt(2, 11));</span>
 
-<span class="fc" id="L345">            pinholeCameraMatrix.setElementAt(0, 1, v.getElementAt(3, 11));</span>
-<span class="fc" id="L346">            pinholeCameraMatrix.setElementAt(1, 1, v.getElementAt(4, 11));</span>
-<span class="fc" id="L347">            pinholeCameraMatrix.setElementAt(2, 1, v.getElementAt(5, 11));</span>
+<span class="fc" id="L349">            pinholeCameraMatrix.setElementAt(0, 1, v.getElementAt(3, 11));</span>
+<span class="fc" id="L350">            pinholeCameraMatrix.setElementAt(1, 1, v.getElementAt(4, 11));</span>
+<span class="fc" id="L351">            pinholeCameraMatrix.setElementAt(2, 1, v.getElementAt(5, 11));</span>
 
-<span class="fc" id="L349">            pinholeCameraMatrix.setElementAt(0, 2, v.getElementAt(6, 11));</span>
-<span class="fc" id="L350">            pinholeCameraMatrix.setElementAt(1, 2, v.getElementAt(7, 11));</span>
-<span class="fc" id="L351">            pinholeCameraMatrix.setElementAt(2, 2, v.getElementAt(8, 11));</span>
+<span class="fc" id="L353">            pinholeCameraMatrix.setElementAt(0, 2, v.getElementAt(6, 11));</span>
+<span class="fc" id="L354">            pinholeCameraMatrix.setElementAt(1, 2, v.getElementAt(7, 11));</span>
+<span class="fc" id="L355">            pinholeCameraMatrix.setElementAt(2, 2, v.getElementAt(8, 11));</span>
 
-<span class="fc" id="L353">            pinholeCameraMatrix.setElementAt(0, 3, v.getElementAt(9, 11));</span>
-<span class="fc" id="L354">            pinholeCameraMatrix.setElementAt(1, 3, v.getElementAt(10, 11));</span>
-<span class="fc" id="L355">            pinholeCameraMatrix.setElementAt(2, 3, v.getElementAt(11, 11));</span>
+<span class="fc" id="L357">            pinholeCameraMatrix.setElementAt(0, 3, v.getElementAt(9, 11));</span>
+<span class="fc" id="L358">            pinholeCameraMatrix.setElementAt(1, 3, v.getElementAt(10, 11));</span>
+<span class="fc" id="L359">            pinholeCameraMatrix.setElementAt(2, 3, v.getElementAt(11, 11));</span>
             
             //because pinholeCameraMatrix has been obtained as the last column 
             //of V, then its frobenius norm will be 1 because SVD already 
             //returns normalized singular vector
             
-<span class="fc" id="L361">            PinholeCamera camera = new PinholeCamera(pinholeCameraMatrix);</span>
+<span class="fc" id="L365">            PinholeCamera camera = new PinholeCamera(pinholeCameraMatrix);</span>
             
-<span class="fc bfc" id="L363" title="All 2 branches covered.">            if(mListener != null) mListener.onEstimateEnd(this);</span>
+<span class="fc bfc" id="L367" title="All 2 branches covered.">            if(mListener != null) mListener.onEstimateEnd(this);</span>
             
-<span class="fc" id="L365">            return attemptRefine(camera);</span>
+<span class="fc" id="L369">            return attemptRefine(camera);</span>
             
-<span class="fc" id="L367">        } catch (PinholeCameraEstimatorException e) {</span>
-<span class="fc" id="L368">            throw e;</span>
-<span class="nc" id="L369">        } catch (Exception e) {</span>
-<span class="nc" id="L370">            throw new PinholeCameraEstimatorException(e);</span>
+<span class="fc" id="L371">        } catch (PinholeCameraEstimatorException e) {</span>
+<span class="fc" id="L372">            throw e;</span>
+<span class="nc" id="L373">        } catch (Exception e) {</span>
+<span class="nc" id="L374">            throw new PinholeCameraEstimatorException(e);</span>
         } finally {
-<span class="fc" id="L372">            mLocked = false;</span>
+<span class="fc" id="L376">            mLocked = false;</span>
         }
     }
 
@@ -379,7 +383,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      */        
     @Override
     public PinholeCameraEstimatorType getType() {
-<span class="fc" id="L382">        return PinholeCameraEstimatorType.</span>
+<span class="fc" id="L386">        return PinholeCameraEstimatorType.</span>
                 DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR;
     }    
 }

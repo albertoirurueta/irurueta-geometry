@@ -164,13 +164,12 @@ public abstract class ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public ConicRobustEstimator(List&lt;Point2D&gt; points) 
-<span class="fc" id="L168">            throws IllegalArgumentException {</span>
-<span class="fc" id="L169">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L170">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L171">        mMaxIterations = DEFAULT_MAX_ITERATIONS; </span>
-<span class="fc" id="L172">        internalSetPoints(points);</span>
-<span class="fc" id="L173">    }</span>
+<span class="fc" id="L167">    public ConicRobustEstimator(List&lt;Point2D&gt; points) {</span>
+<span class="fc" id="L168">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L169">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L170">        mMaxIterations = DEFAULT_MAX_ITERATIONS; </span>
+<span class="fc" id="L171">        internalSetPoints(points);</span>
+<span class="fc" id="L172">    }</span>
     
     /**
      * Constructor.
@@ -181,13 +180,13 @@ public abstract class ConicRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public ConicRobustEstimator(ConicRobustEstimatorListener listener,
-<span class="fc" id="L184">            List&lt;Point2D&gt; points) throws IllegalArgumentException {</span>
-<span class="fc" id="L185">        mListener = listener;</span>
-<span class="fc" id="L186">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L187">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L188">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
-<span class="fc" id="L189">        internalSetPoints(points);</span>
-<span class="fc" id="L190">    }</span>
+<span class="fc" id="L183">            List&lt;Point2D&gt; points) {</span>
+<span class="fc" id="L184">        mListener = listener;</span>
+<span class="fc" id="L185">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L186">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L187">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L188">        internalSetPoints(points);</span>
+<span class="fc" id="L189">    }</span>
     
     
     /**
@@ -196,7 +195,7 @@ public abstract class ConicRobustEstimator {
      * @return listener to be notified of events.
      */
     public ConicRobustEstimatorListener getListener() {
-<span class="fc" id="L199">        return mListener;</span>
+<span class="fc" id="L198">        return mListener;</span>
     }
     
     /**
@@ -207,11 +206,11 @@ public abstract class ConicRobustEstimator {
      */
     public void setListener(ConicRobustEstimatorListener listener) 
             throws LockedException {
-<span class="fc bfc" id="L210" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L211">            throw new LockedException();</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L210">            throw new LockedException();</span>
         }
-<span class="fc" id="L213">        mListener = listener;</span>
-<span class="fc" id="L214">    }</span>
+<span class="fc" id="L212">        mListener = listener;</span>
+<span class="fc" id="L213">    }</span>
     
     /**
      * Indicates whether listener has been provided and is available for 
@@ -219,7 +218,7 @@ public abstract class ConicRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L222" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">        return mListener != null;</span>
     }
     
     /**
@@ -227,7 +226,7 @@ public abstract class ConicRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L230">        return mLocked;</span>
+<span class="fc" id="L229">        return mLocked;</span>
     }
 
     /**
@@ -237,7 +236,7 @@ public abstract class ConicRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L240">        return mProgressDelta;</span>
+<span class="fc" id="L239">        return mProgressDelta;</span>
     }
     
     /**
@@ -250,17 +249,16 @@ public abstract class ConicRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L255" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L256">            throw new LockedException();</span>
+    public void setProgressDelta(float progressDelta) throws LockedException {
+<span class="fc bfc" id="L253" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L254">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L258" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L256" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L260">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L258">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L262">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L263">    }</span>
+<span class="fc" id="L260">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L261">    }</span>
     
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
@@ -270,7 +268,7 @@ public abstract class ConicRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L273">        return mConfidence;</span>
+<span class="fc" id="L271">        return mConfidence;</span>
     }
     
     /**
@@ -284,16 +282,15 @@ public abstract class ConicRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L289" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L290">            throw new LockedException();</span>
+    public void setConfidence(double confidence) throws LockedException {
+<span class="fc bfc" id="L286" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L287">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L292" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L293">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L289" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L290">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L295">        mConfidence = confidence;</span>
-<span class="fc" id="L296">    }</span>
+<span class="fc" id="L292">        mConfidence = confidence;</span>
+<span class="fc" id="L293">    }</span>
     
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
@@ -302,7 +299,7 @@ public abstract class ConicRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-<span class="fc" id="L305">        return mMaxIterations;</span>
+<span class="fc" id="L302">        return mMaxIterations;</span>
     }
     
     /**
@@ -314,16 +311,15 @@ public abstract class ConicRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L319" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L320">            throw new LockedException();</span>
+    public void setMaxIterations(int maxIterations) throws LockedException {
+<span class="fc bfc" id="L315" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L316">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L322" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L323">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L318" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L319">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L325">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L326">    }  </span>
+<span class="fc" id="L321">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L322">    }  </span>
     
     /**
      * Returns list of points to be used to estimate a conic.
@@ -331,7 +327,7 @@ public abstract class ConicRobustEstimator {
      * @return list of points to be used to estimate a conic.
      */
     public List&lt;Point2D&gt; getPoints() {
-<span class="fc" id="L334">        return mPoints;</span>
+<span class="fc" id="L330">        return mPoints;</span>
     }
     
     /**
@@ -343,13 +339,12 @@ public abstract class ConicRobustEstimator {
      * @throws LockedException if estimator is locked because a computation is
      * already in progress.
      */
-    public void setPoints(List&lt;Point2D&gt; points) throws IllegalArgumentException,
-            LockedException {
-<span class="fc bfc" id="L348" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L349">            throw new LockedException();</span>
+    public void setPoints(List&lt;Point2D&gt; points) throws LockedException {
+<span class="fc bfc" id="L343" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L344">            throw new LockedException();</span>
         }
-<span class="fc" id="L351">        internalSetPoints(points);</span>
-<span class="fc" id="L352">    }</span>
+<span class="fc" id="L346">        internalSetPoints(points);</span>
+<span class="fc" id="L347">    }</span>
     
     /**
      * Indicates if estimator is ready to start the conic estimation.
@@ -357,7 +352,7 @@ public abstract class ConicRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="fc bfc" id="L360" title="All 4 branches covered.">        return mPoints != null &amp;&amp; mPoints.size() &gt;= MINIMUM_SIZE;</span>
+<span class="fc bfc" id="L355" title="All 4 branches covered.">        return mPoints != null &amp;&amp; mPoints.size() &gt;= MINIMUM_SIZE;</span>
     }
     
     /**
@@ -368,7 +363,7 @@ public abstract class ConicRobustEstimator {
      * @return quality scores corresponding to each point.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L371">        return null;</span>
+<span class="fc" id="L366">        return null;</span>
     }
     
     /**
@@ -383,8 +378,7 @@ public abstract class ConicRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 5 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="fc" id="L387">            IllegalArgumentException { }</span>
+<span class="fc" id="L381">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
     
     /**
      * Creates a conic robust estimator based on 2D point samples and using
@@ -394,18 +388,18 @@ public abstract class ConicRobustEstimator {
      * @return an instance of a conic robust estimator.
      */
     public static ConicRobustEstimator create(RobustEstimatorMethod method) {
-<span class="fc bfc" id="L397" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L391" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L399">                return new LMedSConicRobustEstimator();</span>
+<span class="fc" id="L393">                return new LMedSConicRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L401">                return new MSACConicRobustEstimator();</span>
+<span class="fc" id="L395">                return new MSACConicRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L403">                return new PROSACConicRobustEstimator();</span>
+<span class="fc" id="L397">                return new PROSACConicRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L405">                return new PROMedSConicRobustEstimator();</span>
+<span class="fc" id="L399">                return new PROMedSConicRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L408">                return new RANSACConicRobustEstimator();</span>
+<span class="fc" id="L402">                return new RANSACConicRobustEstimator();</span>
         }
     }
     
@@ -420,19 +414,19 @@ public abstract class ConicRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static ConicRobustEstimator create(List&lt;Point2D&gt; points, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L424" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L418" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L426">                return new LMedSConicRobustEstimator(points);</span>
+<span class="fc" id="L420">                return new LMedSConicRobustEstimator(points);</span>
             case MSAC:
-<span class="fc" id="L428">                return new MSACConicRobustEstimator(points);</span>
+<span class="fc" id="L422">                return new MSACConicRobustEstimator(points);</span>
             case PROSAC:
-<span class="fc" id="L430">                return new PROSACConicRobustEstimator(points);</span>
+<span class="fc" id="L424">                return new PROSACConicRobustEstimator(points);</span>
             case PROMedS:
-<span class="fc" id="L432">                return new PROMedSConicRobustEstimator(points);</span>
+<span class="fc" id="L426">                return new PROMedSConicRobustEstimator(points);</span>
             case RANSAC:
             default:
-<span class="fc" id="L435">                return new RANSACConicRobustEstimator(points);</span>
+<span class="fc" id="L429">                return new RANSACConicRobustEstimator(points);</span>
         }
     }
     
@@ -448,18 +442,18 @@ public abstract class ConicRobustEstimator {
     public static ConicRobustEstimator create(
             ConicRobustEstimatorListener listener, 
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L451" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L445" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L453">                return new LMedSConicRobustEstimator(listener);</span>
+<span class="fc" id="L447">                return new LMedSConicRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L455">                return new MSACConicRobustEstimator(listener);</span>
+<span class="fc" id="L449">                return new MSACConicRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L457">                return new PROSACConicRobustEstimator(listener);</span>
+<span class="fc" id="L451">                return new PROSACConicRobustEstimator(listener);</span>
             case PROMedS:
-<span class="fc" id="L459">                return new PROMedSConicRobustEstimator(listener);</span>
+<span class="fc" id="L453">                return new PROMedSConicRobustEstimator(listener);</span>
             case RANSAC:
             default:
-<span class="fc" id="L462">                return new RANSACConicRobustEstimator(listener);</span>
+<span class="fc" id="L456">                return new RANSACConicRobustEstimator(listener);</span>
         }
     }
     
@@ -477,19 +471,19 @@ public abstract class ConicRobustEstimator {
      */
     public static ConicRobustEstimator create(
             ConicRobustEstimatorListener listener, List&lt;Point2D&gt; points,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L481" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L475" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L483">                return new LMedSConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L477">                return new LMedSConicRobustEstimator(listener, points);</span>
             case MSAC:
-<span class="fc" id="L485">                return new MSACConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L479">                return new MSACConicRobustEstimator(listener, points);</span>
             case PROSAC:
-<span class="fc" id="L487">                return new PROSACConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L481">                return new PROSACConicRobustEstimator(listener, points);</span>
             case PROMedS:
-<span class="fc" id="L489">                return new PROMedSConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L483">                return new PROMedSConicRobustEstimator(listener, points);</span>
             case RANSAC:
             default:
-<span class="fc" id="L492">                return new RANSACConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L486">                return new RANSACConicRobustEstimator(listener, points);</span>
         }
     }
     
@@ -504,19 +498,19 @@ public abstract class ConicRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 5 points).
      */
     public static ConicRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L508" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L502" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L510">                return new LMedSConicRobustEstimator();</span>
+<span class="fc" id="L504">                return new LMedSConicRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L512">                return new MSACConicRobustEstimator();</span>
+<span class="fc" id="L506">                return new MSACConicRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L514">                return new PROSACConicRobustEstimator(qualityScores);</span>
+<span class="fc" id="L508">                return new PROSACConicRobustEstimator(qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L516">                return new PROMedSConicRobustEstimator(qualityScores);</span>
+<span class="fc" id="L510">                return new PROMedSConicRobustEstimator(qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L519">                return new RANSACConicRobustEstimator();</span>
+<span class="fc" id="L513">                return new RANSACConicRobustEstimator();</span>
         }
     }
     
@@ -533,20 +527,19 @@ public abstract class ConicRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static ConicRobustEstimator create(List&lt;Point2D&gt; points, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L538" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L531" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L540">                return new LMedSConicRobustEstimator(points);</span>
+<span class="fc" id="L533">                return new LMedSConicRobustEstimator(points);</span>
             case MSAC:
-<span class="fc" id="L542">                return new MSACConicRobustEstimator(points);</span>
+<span class="fc" id="L535">                return new MSACConicRobustEstimator(points);</span>
             case PROSAC:
-<span class="fc" id="L544">                return new PROSACConicRobustEstimator(points, qualityScores);</span>
+<span class="fc" id="L537">                return new PROSACConicRobustEstimator(points, qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L546">                return new PROMedSConicRobustEstimator(points, qualityScores);</span>
+<span class="fc" id="L539">                return new PROMedSConicRobustEstimator(points, qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L549">                return new RANSACConicRobustEstimator(points);</span>
+<span class="fc" id="L542">                return new RANSACConicRobustEstimator(points);</span>
         }
     }
     
@@ -564,19 +557,19 @@ public abstract class ConicRobustEstimator {
      */
     public static ConicRobustEstimator create(
             ConicRobustEstimatorListener listener, double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L568" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L561" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L570">                return new LMedSConicRobustEstimator(listener);</span>
+<span class="fc" id="L563">                return new LMedSConicRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L572">                return new MSACConicRobustEstimator(listener);</span>
+<span class="fc" id="L565">                return new MSACConicRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L574">                return new PROSACConicRobustEstimator(listener, qualityScores);</span>
+<span class="fc" id="L567">                return new PROSACConicRobustEstimator(listener, qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L576">                return new PROMedSConicRobustEstimator(listener, qualityScores);</span>
+<span class="fc" id="L569">                return new PROMedSConicRobustEstimator(listener, qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L579">                return new RANSACConicRobustEstimator(listener);</span>
+<span class="fc" id="L572">                return new RANSACConicRobustEstimator(listener);</span>
         }
     }
     
@@ -596,22 +589,21 @@ public abstract class ConicRobustEstimator {
      */
     public static ConicRobustEstimator create(
             ConicRobustEstimatorListener listener, List&lt;Point2D&gt; points,
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L601" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L593" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L603">                return new LMedSConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L595">                return new LMedSConicRobustEstimator(listener, points);</span>
             case MSAC:
-<span class="fc" id="L605">                return new MSACConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L597">                return new MSACConicRobustEstimator(listener, points);</span>
             case PROSAC:
-<span class="fc" id="L607">                return new PROSACConicRobustEstimator(listener, points, </span>
+<span class="fc" id="L599">                return new PROSACConicRobustEstimator(listener, points, </span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L610">                return new PROMedSConicRobustEstimator(listener, points, </span>
+<span class="fc" id="L602">                return new PROMedSConicRobustEstimator(listener, points, </span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L614">                return new RANSACConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L606">                return new RANSACConicRobustEstimator(listener, points);</span>
         }
     }    
     
@@ -621,7 +613,7 @@ public abstract class ConicRobustEstimator {
      * @return an instance of a conic robust estimator.
      */
     public static ConicRobustEstimator create() {
-<span class="fc" id="L624">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L616">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -632,9 +624,8 @@ public abstract class ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have a
      * size greater or equal than MINIMUM_SIZE.
      */
-    public static ConicRobustEstimator create(List&lt;Point2D&gt; points) 
-            throws IllegalArgumentException {
-<span class="fc" id="L637">        return create(points, DEFAULT_ROBUST_METHOD);</span>
+    public static ConicRobustEstimator create(List&lt;Point2D&gt; points) {
+<span class="fc" id="L628">        return create(points, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -646,7 +637,7 @@ public abstract class ConicRobustEstimator {
      */
     public static ConicRobustEstimator create(
             ConicRobustEstimatorListener listener) {
-<span class="fc" id="L649">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L640">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -660,9 +651,8 @@ public abstract class ConicRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static ConicRobustEstimator create(
-            ConicRobustEstimatorListener listener, List&lt;Point2D&gt; points) 
-            throws IllegalArgumentException {
-<span class="fc" id="L665">        return create(listener, points, DEFAULT_ROBUST_METHOD);</span>
+            ConicRobustEstimatorListener listener, List&lt;Point2D&gt; points) {
+<span class="fc" id="L655">        return create(listener, points, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -673,9 +663,8 @@ public abstract class ConicRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 5 points).
      */
-    public static ConicRobustEstimator create(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L678">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    public static ConicRobustEstimator create(double[] qualityScores) {
+<span class="fc" id="L667">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -689,8 +678,8 @@ public abstract class ConicRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static ConicRobustEstimator create(List&lt;Point2D&gt; points, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L693">        return create(points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L682">        return create(points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -704,9 +693,8 @@ public abstract class ConicRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 5 points).
      */
     public static ConicRobustEstimator create(
-            ConicRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
-<span class="fc" id="L709">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            ConicRobustEstimatorListener listener, double[] qualityScores) {
+<span class="fc" id="L697">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -723,8 +711,8 @@ public abstract class ConicRobustEstimator {
      */
     public static ConicRobustEstimator create(
             ConicRobustEstimatorListener listener, List&lt;Point2D&gt; points,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L727">        return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L715">        return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }        
     
     /**
@@ -755,13 +743,12 @@ public abstract class ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    private void internalSetPoints(List&lt;Point2D&gt; points) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L760" title="All 2 branches covered.">        if (points.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L761">            throw new IllegalArgumentException();</span>
+    private void internalSetPoints(List&lt;Point2D&gt; points) {
+<span class="fc bfc" id="L747" title="All 2 branches covered.">        if (points.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L748">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L763">        mPoints = points;</span>
-<span class="fc" id="L764">    }</span>
+<span class="fc" id="L750">        mPoints = points;</span>
+<span class="fc" id="L751">    }</span>
     
     /**
      * Computes the residual between a conic and a point.
@@ -770,29 +757,29 @@ public abstract class ConicRobustEstimator {
      * @return residual.
      */
     protected double residual(Conic c, Point2D point) {
-<span class="fc" id="L773">        c.normalize();</span>
+<span class="fc" id="L760">        c.normalize();</span>
         try {
-<span class="fc bfc" id="L775" title="All 2 branches covered.">            if (mTestC == null) {</span>
-<span class="fc" id="L776">                mTestC = c.asMatrix();</span>
+<span class="fc bfc" id="L762" title="All 2 branches covered.">            if (mTestC == null) {</span>
+<span class="fc" id="L763">                mTestC = c.asMatrix();</span>
             } else {
-<span class="fc" id="L778">                c.asMatrix(mTestC);</span>
+<span class="fc" id="L765">                c.asMatrix(mTestC);</span>
             }
 
-<span class="fc bfc" id="L781" title="All 2 branches covered.">            if (mTestPoint == null) {</span>
-<span class="fc" id="L782">                mTestPoint = new Matrix(</span>
+<span class="fc bfc" id="L768" title="All 2 branches covered.">            if (mTestPoint == null) {</span>
+<span class="fc" id="L769">                mTestPoint = new Matrix(</span>
                     Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 
                     1);
             }
-<span class="fc" id="L786">            point.normalize();</span>
-<span class="fc" id="L787">            mTestPoint.setElementAt(0, 0, point.getHomX());</span>
-<span class="fc" id="L788">            mTestPoint.setElementAt(1, 0, point.getHomY());</span>
-<span class="fc" id="L789">            mTestPoint.setElementAt(2, 0, point.getHomW());</span>
-<span class="fc" id="L790">            Matrix locusMatrix = mTestPoint.transposeAndReturnNew();</span>
-<span class="fc" id="L791">            locusMatrix.multiply(mTestC);</span>
-<span class="fc" id="L792">            locusMatrix.multiply(mTestPoint);  </span>
-<span class="fc" id="L793">            return Math.abs(locusMatrix.getElementAt(0, 0));</span>
-<span class="nc" id="L794">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L795">            return Double.MAX_VALUE;</span>
+<span class="fc" id="L773">            point.normalize();</span>
+<span class="fc" id="L774">            mTestPoint.setElementAt(0, 0, point.getHomX());</span>
+<span class="fc" id="L775">            mTestPoint.setElementAt(1, 0, point.getHomY());</span>
+<span class="fc" id="L776">            mTestPoint.setElementAt(2, 0, point.getHomW());</span>
+<span class="fc" id="L777">            Matrix locusMatrix = mTestPoint.transposeAndReturnNew();</span>
+<span class="fc" id="L778">            locusMatrix.multiply(mTestC);</span>
+<span class="fc" id="L779">            locusMatrix.multiply(mTestPoint);  </span>
+<span class="fc" id="L780">            return Math.abs(locusMatrix.getElementAt(0, 0));</span>
+<span class="nc" id="L781">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L782">            return Double.MAX_VALUE;</span>
         }       
     }
 }

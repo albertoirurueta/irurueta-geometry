@@ -1469,8 +1469,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         
 <span class="fc" id="L1470">        mM = new Matrix(2 * n, 3 * numControlPoints);</span>
         
-        int row, col;
-        
+        int row;
+        int col;
         double alpha;
         
 <span class="fc" id="L1476">        double horizontalFocalLength = mIntrinsic.getHorizontalFocalLength();</span>
@@ -1481,31 +1481,32 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L1481">        double verticalPrincipalPoint = mIntrinsic.getVerticalPrincipalPoint();</span>
         
         Point2D p;
-        double pX, pY;
-<span class="fc bfc" id="L1485" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L1486">            p = mPoints2D.get(i);</span>
-<span class="fc" id="L1487">            pX = p.getInhomX();</span>
-<span class="fc" id="L1488">            pY = p.getInhomY();</span>
+        double pX;
+        double pY;
+<span class="fc bfc" id="L1486" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L1487">            p = mPoints2D.get(i);</span>
+<span class="fc" id="L1488">            pX = p.getInhomX();</span>
+<span class="fc" id="L1489">            pY = p.getInhomY();</span>
             
-<span class="fc" id="L1490">            row = i * 2;</span>
+<span class="fc" id="L1491">            row = i * 2;</span>
             
-<span class="fc bfc" id="L1492" title="All 2 branches covered.">            for (int j = 0; j &lt; numControlPoints; j++) {</span>
-<span class="fc" id="L1493">                col = j * 3;</span>
+<span class="fc bfc" id="L1493" title="All 2 branches covered.">            for (int j = 0; j &lt; numControlPoints; j++) {</span>
+<span class="fc" id="L1494">                col = j * 3;</span>
                 
-<span class="fc" id="L1495">                alpha = mAlphas.getElementAt(i, j);</span>
+<span class="fc" id="L1496">                alpha = mAlphas.getElementAt(i, j);</span>
                 
-<span class="fc" id="L1497">                mM.setElementAt(row, col, alpha * horizontalFocalLength);</span>
-<span class="fc" id="L1498">                mM.setElementAt(row, col + 1, alpha * skewness);</span>
-<span class="fc" id="L1499">                mM.setElementAt(row, col + 2, </span>
+<span class="fc" id="L1498">                mM.setElementAt(row, col, alpha * horizontalFocalLength);</span>
+<span class="fc" id="L1499">                mM.setElementAt(row, col + 1, alpha * skewness);</span>
+<span class="fc" id="L1500">                mM.setElementAt(row, col + 2, </span>
                         alpha * (horizontalPrincipalPoint - pX));
                 
-<span class="fc" id="L1502">                mM.setElementAt(row + 1, col, 0.0);</span>
-<span class="fc" id="L1503">                mM.setElementAt(row + 1, col + 1, alpha * verticalFocalLength);</span>
-<span class="fc" id="L1504">                mM.setElementAt(row + 1, col + 2, </span>
+<span class="fc" id="L1503">                mM.setElementAt(row + 1, col, 0.0);</span>
+<span class="fc" id="L1504">                mM.setElementAt(row + 1, col + 1, alpha * verticalFocalLength);</span>
+<span class="fc" id="L1505">                mM.setElementAt(row + 1, col + 2, </span>
                         alpha * (verticalPrincipalPoint - pY));                
             }
         }                
-<span class="fc" id="L1508">    }</span>
+<span class="fc" id="L1509">    }</span>
             
     /**
      * Computes the coordinates of each provided world point in terms of 
@@ -1563,65 +1564,65 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         //In the planar case we have only 3 control points, and the last one
         //(c3) is the centroid.
         
-<span class="fc" id="L1566">        int numControl = mControlWorldPoints.size();</span>
-<span class="fc" id="L1567">        int numDimensions = numControl - 1;</span>
-<span class="fc" id="L1568">        int numControlMinusTwo = numControl - 2;</span>
-<span class="fc" id="L1569">        Matrix c = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, </span>
+<span class="fc" id="L1567">        int numControl = mControlWorldPoints.size();</span>
+<span class="fc" id="L1568">        int numDimensions = numControl - 1;</span>
+<span class="fc" id="L1569">        int numControlMinusTwo = numControl - 2;</span>
+<span class="fc" id="L1570">        Matrix c = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, </span>
                 numDimensions);
         
         //the last control point is the centroid (or mean point)
-<span class="fc" id="L1573">        Point3D mean = mControlWorldPoints.get(numDimensions);</span>
-<span class="fc" id="L1574">        double meanX = mean.getInhomX();</span>
-<span class="fc" id="L1575">        double meanY = mean.getInhomY();</span>
-<span class="fc" id="L1576">        double meanZ = mean.getInhomZ();</span>
+<span class="fc" id="L1574">        Point3D mean = mControlWorldPoints.get(numDimensions);</span>
+<span class="fc" id="L1575">        double meanX = mean.getInhomX();</span>
+<span class="fc" id="L1576">        double meanY = mean.getInhomY();</span>
+<span class="fc" id="L1577">        double meanZ = mean.getInhomZ();</span>
         
         Point3D controlPoint;
-<span class="fc bfc" id="L1579" title="All 2 branches covered.">        for (int i = 0; i &lt; numDimensions; i++) {</span>
-<span class="fc" id="L1580">            controlPoint = mControlWorldPoints.get(i);</span>
-<span class="fc" id="L1581">            c.setElementAt(0, i, controlPoint.getInhomX() - meanX);</span>
-<span class="fc" id="L1582">            c.setElementAt(1, i, controlPoint.getInhomY() - meanY);</span>
-<span class="fc" id="L1583">            c.setElementAt(2, i, controlPoint.getInhomZ() - meanZ);            </span>
+<span class="fc bfc" id="L1580" title="All 2 branches covered.">        for (int i = 0; i &lt; numDimensions; i++) {</span>
+<span class="fc" id="L1581">            controlPoint = mControlWorldPoints.get(i);</span>
+<span class="fc" id="L1582">            c.setElementAt(0, i, controlPoint.getInhomX() - meanX);</span>
+<span class="fc" id="L1583">            c.setElementAt(1, i, controlPoint.getInhomY() - meanY);</span>
+<span class="fc" id="L1584">            c.setElementAt(2, i, controlPoint.getInhomZ() - meanZ);            </span>
         }
         
         //to find  reduced alphas, we need to inverse the reduced C matrix and
         //multiply it by [p - centroid], where centroid can be c4 or c3 in 
         //planar case. 
         
-<span class="fc" id="L1590">        Matrix invC = Utils.inverse(c);</span>
+<span class="fc" id="L1591">        Matrix invC = Utils.inverse(c);</span>
         
         //x is p - centroid, where p is each 3D world point
-<span class="fc" id="L1593">        int n = mPoints3D.size();</span>
-<span class="fc" id="L1594">        Matrix reducedPoint = new Matrix(</span>
+<span class="fc" id="L1594">        int n = mPoints3D.size();</span>
+<span class="fc" id="L1595">        Matrix reducedPoint = new Matrix(</span>
                 Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,1);
-<span class="fc" id="L1596">        Matrix reducedAlpha = new Matrix(numDimensions, 1);</span>
+<span class="fc" id="L1597">        Matrix reducedAlpha = new Matrix(numDimensions, 1);</span>
         double[] buffer;
         Point3D worldPoint;
-<span class="fc" id="L1599">        mAlphas = new Matrix(n, numControl);</span>
-<span class="fc bfc" id="L1600" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L1601">            worldPoint = mPoints3D.get(i);</span>
-<span class="fc" id="L1602">            reducedPoint.setElementAtIndex(0, worldPoint.getInhomX() - meanX);</span>
-<span class="fc" id="L1603">            reducedPoint.setElementAtIndex(1, worldPoint.getInhomY() - meanY);</span>
-<span class="fc" id="L1604">            reducedPoint.setElementAtIndex(2, worldPoint.getInhomZ() - meanZ);</span>
+<span class="fc" id="L1600">        mAlphas = new Matrix(n, numControl);</span>
+<span class="fc bfc" id="L1601" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L1602">            worldPoint = mPoints3D.get(i);</span>
+<span class="fc" id="L1603">            reducedPoint.setElementAtIndex(0, worldPoint.getInhomX() - meanX);</span>
+<span class="fc" id="L1604">            reducedPoint.setElementAtIndex(1, worldPoint.getInhomY() - meanY);</span>
+<span class="fc" id="L1605">            reducedPoint.setElementAtIndex(2, worldPoint.getInhomZ() - meanZ);</span>
             
-<span class="fc" id="L1606">            invC.multiply(reducedPoint, reducedAlpha);</span>
-<span class="fc" id="L1607">            buffer = reducedAlpha.getBuffer();</span>
+<span class="fc" id="L1607">            invC.multiply(reducedPoint, reducedAlpha);</span>
+<span class="fc" id="L1608">            buffer = reducedAlpha.getBuffer();</span>
             
             //copy reducedAlpha into the former components of i-th row of alphas
-<span class="fc" id="L1610">            mAlphas.setSubmatrix(i, 0, i, numControlMinusTwo, buffer);</span>
+<span class="fc" id="L1611">            mAlphas.setSubmatrix(i, 0, i, numControlMinusTwo, buffer);</span>
             
             //The last component of each alpha for each point is computed so 
             //that their sum is equal to one            
-<span class="fc bfc" id="L1614" title="All 2 branches covered.">            if (numControl == GENERAL_NUM_CONTROL_POINTS) {</span>
+<span class="fc bfc" id="L1615" title="All 2 branches covered.">            if (numControl == GENERAL_NUM_CONTROL_POINTS) {</span>
                 //general configuration
-<span class="fc" id="L1616">                mAlphas.setElementAt(i, numDimensions, </span>
+<span class="fc" id="L1617">                mAlphas.setElementAt(i, numDimensions, </span>
                         1.0 - buffer[0] - buffer[1] - buffer[2]);
             } else {
                 //planar configuration
-<span class="fc" id="L1620">                mAlphas.setElementAt(i, numDimensions, </span>
+<span class="fc" id="L1621">                mAlphas.setElementAt(i, numDimensions, </span>
                         1.0 - buffer[0] - buffer[1]);
             }
         }
-<span class="fc" id="L1624">    }</span>
+<span class="fc" id="L1625">    }</span>
     
     
     /**
@@ -1648,88 +1649,97 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     private void computeWorldControlPointsAndPointConfiguration() 
             throws AlgebraException {        
-<span class="fc" id="L1651">        Point3D centroid = Point3D.centroid(mPoints3D);</span>
+<span class="fc" id="L1652">        Point3D centroid = Point3D.centroid(mPoints3D);</span>
         
         //covariance matrix elements, summed up here for speed
-<span class="fc" id="L1654">        double c11 = 0.0, c12 = 0.0, c13 = 0.0, c22 = 0.0, c23 = 0.0, c33 = 0.0;</span>
-        double dx, dy, dz;
-<span class="fc" id="L1656">        int n = mPoints3D.size();</span>
-<span class="fc bfc" id="L1657" title="All 2 branches covered.">        for (Point3D point : mPoints3D) {</span>
-<span class="fc" id="L1658">            dx = point.getInhomX() - centroid.getInhomX();</span>
-<span class="fc" id="L1659">            dy = point.getInhomY() - centroid.getInhomY();</span>
-<span class="fc" id="L1660">            dz = point.getInhomZ() - centroid.getInhomZ();</span>
+<span class="fc" id="L1655">        double c11 = 0.0;</span>
+<span class="fc" id="L1656">        double c12 = 0.0;</span>
+<span class="fc" id="L1657">        double c13 = 0.0;</span>
+<span class="fc" id="L1658">        double c22 = 0.0;</span>
+<span class="fc" id="L1659">        double c23 = 0.0;</span>
+<span class="fc" id="L1660">        double c33 = 0.0;</span>
+        double dx;
+        double dy;
+        double dz;
+<span class="fc" id="L1664">        int n = mPoints3D.size();</span>
+<span class="fc bfc" id="L1665" title="All 2 branches covered.">        for (Point3D point : mPoints3D) {</span>
+<span class="fc" id="L1666">            dx = point.getInhomX() - centroid.getInhomX();</span>
+<span class="fc" id="L1667">            dy = point.getInhomY() - centroid.getInhomY();</span>
+<span class="fc" id="L1668">            dz = point.getInhomZ() - centroid.getInhomZ();</span>
             
-<span class="fc" id="L1662">            c11 += dx * dx;</span>
-<span class="fc" id="L1663">            c12 += dx * dy;</span>
-<span class="fc" id="L1664">            c13 += dx * dz;</span>
+<span class="fc" id="L1670">            c11 += dx * dx;</span>
+<span class="fc" id="L1671">            c12 += dx * dy;</span>
+<span class="fc" id="L1672">            c13 += dx * dz;</span>
             
-<span class="fc" id="L1666">            c22 += dy * dy;</span>
-<span class="fc" id="L1667">            c23 += dy * dz;</span>
+<span class="fc" id="L1674">            c22 += dy * dy;</span>
+<span class="fc" id="L1675">            c23 += dy * dz;</span>
             
-<span class="fc" id="L1669">            c33 += dz * dz;</span>
-<span class="fc" id="L1670">        }</span>
-<span class="fc" id="L1671">        c11 /= n;</span>
-<span class="fc" id="L1672">        c12 /= n;</span>
-<span class="fc" id="L1673">        c13 /= n;</span>
-<span class="fc" id="L1674">        c22 /= n;</span>
-<span class="fc" id="L1675">        c23 /= n;</span>
-<span class="fc" id="L1676">        c33 /= n;</span>
+<span class="fc" id="L1677">            c33 += dz * dz;</span>
+<span class="fc" id="L1678">        }</span>
+<span class="fc" id="L1679">        c11 /= n;</span>
+<span class="fc" id="L1680">        c12 /= n;</span>
+<span class="fc" id="L1681">        c13 /= n;</span>
+<span class="fc" id="L1682">        c22 /= n;</span>
+<span class="fc" id="L1683">        c23 /= n;</span>
+<span class="fc" id="L1684">        c33 /= n;</span>
         
-<span class="fc" id="L1678">        Matrix covar = new Matrix(3, 3);</span>
-<span class="fc" id="L1679">        covar.setElementAt(0, 0, c11);</span>
-<span class="fc" id="L1680">        covar.setElementAt(1, 0, c12);</span>
-<span class="fc" id="L1681">        covar.setElementAt(2, 0, c13);</span>
+<span class="fc" id="L1686">        Matrix covar = new Matrix(3, 3);</span>
+<span class="fc" id="L1687">        covar.setElementAt(0, 0, c11);</span>
+<span class="fc" id="L1688">        covar.setElementAt(1, 0, c12);</span>
+<span class="fc" id="L1689">        covar.setElementAt(2, 0, c13);</span>
         
-<span class="fc" id="L1683">        covar.setElementAt(0, 1, c12);</span>
-<span class="fc" id="L1684">        covar.setElementAt(1, 1, c22);</span>
-<span class="fc" id="L1685">        covar.setElementAt(2, 1, c23);</span>
+<span class="fc" id="L1691">        covar.setElementAt(0, 1, c12);</span>
+<span class="fc" id="L1692">        covar.setElementAt(1, 1, c22);</span>
+<span class="fc" id="L1693">        covar.setElementAt(2, 1, c23);</span>
         
-<span class="fc" id="L1687">        covar.setElementAt(0, 2, c13);</span>
-<span class="fc" id="L1688">        covar.setElementAt(1, 2, c23);</span>
-<span class="fc" id="L1689">        covar.setElementAt(2, 2, c33);</span>
+<span class="fc" id="L1695">        covar.setElementAt(0, 2, c13);</span>
+<span class="fc" id="L1696">        covar.setElementAt(1, 2, c23);</span>
+<span class="fc" id="L1697">        covar.setElementAt(2, 2, c33);</span>
         
-<span class="fc" id="L1691">        SingularValueDecomposer decomposer = new SingularValueDecomposer(covar);</span>
-<span class="fc" id="L1692">        decomposer.decompose();</span>
+<span class="fc" id="L1699">        SingularValueDecomposer decomposer = new SingularValueDecomposer(covar);</span>
+<span class="fc" id="L1700">        decomposer.decompose();</span>
         
-<span class="fc" id="L1694">        double[] singularValues = decomposer.getSingularValues();</span>
-<span class="fc" id="L1695">        Matrix v = decomposer.getV();</span>
+<span class="fc" id="L1702">        double[] singularValues = decomposer.getSingularValues();</span>
+<span class="fc" id="L1703">        Matrix v = decomposer.getV();</span>
 
         //planar check
         int numControl;
-<span class="pc bpc" id="L1699" title="1 of 2 branches missed.">        if (!mPlanarConfigurationAllowed ||</span>
-<span class="fc" id="L1700">                Math.abs(singularValues[0]) &lt; </span>
-<span class="fc bfc" id="L1701" title="All 2 branches covered.">                Math.abs(singularValues[2]) * mPlanarThreshold) {</span>
+<span class="pc bpc" id="L1707" title="1 of 2 branches missed.">        if (!mPlanarConfigurationAllowed ||</span>
+<span class="fc" id="L1708">                Math.abs(singularValues[0]) &lt; </span>
+<span class="fc bfc" id="L1709" title="All 2 branches covered.">                Math.abs(singularValues[2]) * mPlanarThreshold) {</span>
             //general onfiguration
-<span class="fc" id="L1703">            numControl = GENERAL_NUM_CONTROL_POINTS;</span>
-<span class="fc" id="L1704">            mIsPlanar = false;</span>
+<span class="fc" id="L1711">            numControl = GENERAL_NUM_CONTROL_POINTS;</span>
+<span class="fc" id="L1712">            mIsPlanar = false;</span>
         } else {
             //planar configuration (only if allowed)
-<span class="fc" id="L1707">            numControl = PLANAR_NUM_CONTROL_POINTS;</span>
-<span class="fc" id="L1708">            mIsPlanar = true;</span>
+<span class="fc" id="L1715">            numControl = PLANAR_NUM_CONTROL_POINTS;</span>
+<span class="fc" id="L1716">            mIsPlanar = true;</span>
         }
         
-<span class="fc" id="L1711">        mControlWorldPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L1719">        mControlWorldPoints = new ArrayList&lt;&gt;();</span>
                 
-<span class="fc" id="L1713">        double centroidX = centroid.getInhomX();</span>
-<span class="fc" id="L1714">        double centroidY = centroid.getInhomY();</span>
-<span class="fc" id="L1715">        double centroidZ = centroid.getInhomZ();</span>
+<span class="fc" id="L1721">        double centroidX = centroid.getInhomX();</span>
+<span class="fc" id="L1722">        double centroidY = centroid.getInhomY();</span>
+<span class="fc" id="L1723">        double centroidZ = centroid.getInhomZ();</span>
         
-<span class="fc" id="L1717">        int numDimensions = numControl - 1;</span>
-<span class="fc" id="L1718">        double k = Math.sqrt(singularValues[0] / n);</span>
-        double vx, vy, vz;
-<span class="fc bfc" id="L1720" title="All 2 branches covered.">        for (int i = 0; i &lt; numDimensions; i++) {</span>
-<span class="fc" id="L1721">            vx = v.getElementAt(0, i) * k;</span>
-<span class="fc" id="L1722">            vy = v.getElementAt(1, i) * k;</span>
-<span class="fc" id="L1723">            vz = v.getElementAt(2, i) * k;</span>
+<span class="fc" id="L1725">        int numDimensions = numControl - 1;</span>
+<span class="fc" id="L1726">        double k = Math.sqrt(singularValues[0] / n);</span>
+        double vx;
+        double vy;
+        double vz;
+<span class="fc bfc" id="L1730" title="All 2 branches covered.">        for (int i = 0; i &lt; numDimensions; i++) {</span>
+<span class="fc" id="L1731">            vx = v.getElementAt(0, i) * k;</span>
+<span class="fc" id="L1732">            vy = v.getElementAt(1, i) * k;</span>
+<span class="fc" id="L1733">            vz = v.getElementAt(2, i) * k;</span>
             
-<span class="fc" id="L1725">            mControlWorldPoints.add(new InhomogeneousPoint3D(centroidX + vx, </span>
+<span class="fc" id="L1735">            mControlWorldPoints.add(new InhomogeneousPoint3D(centroidX + vx, </span>
                     centroidY + vy, centroidZ + vz));
         }
                 
         //add centroid (it will be used for the metric transformation 
         //estimation)
-<span class="fc" id="L1731">        mControlWorldPoints.add(centroid);          </span>
-<span class="fc" id="L1732">    }    </span>
+<span class="fc" id="L1741">        mControlWorldPoints.add(centroid);          </span>
+<span class="fc" id="L1742">    }    </span>
     
     /**
      * A possible solution.

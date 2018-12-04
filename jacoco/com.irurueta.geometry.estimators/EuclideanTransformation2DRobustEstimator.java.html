@@ -226,7 +226,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public EuclideanTransformation2DRobustEstimator(List&lt;Point2D&gt; inputPoints,
-            List&lt;Point2D&gt; outputPoints) throws IllegalArgumentException {
+            List&lt;Point2D&gt; outputPoints) {
 <span class="fc" id="L230">        this();</span>
 <span class="fc" id="L231">        internalSetPoints(inputPoints, outputPoints);</span>
 <span class="fc" id="L232">    }</span>
@@ -248,11 +248,10 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public EuclideanTransformation2DRobustEstimator(
             EuclideanTransformation2DRobustEstimatorListener listener,
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L253">        this(listener);</span>
-<span class="fc" id="L254">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L255">    }</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L252">        this(listener);</span>
+<span class="fc" id="L253">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L254">    }</span>
 
     /**
      * Constructor.
@@ -260,9 +259,9 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public EuclideanTransformation2DRobustEstimator(
             boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L263">        this();</span>
-<span class="fc" id="L264">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L265">    }</span>
+<span class="fc" id="L262">        this();</span>
+<span class="fc" id="L263">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L264">    }</span>
     
     /**
      * Constructor.
@@ -273,10 +272,10 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public EuclideanTransformation2DRobustEstimator(
             EuclideanTransformation2DRobustEstimatorListener listener,
             boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L276">        this();</span>
-<span class="fc" id="L277">        mListener = listener;</span>
-<span class="fc" id="L278">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L279">    }</span>
+<span class="fc" id="L275">        this();</span>
+<span class="fc" id="L276">        mListener = listener;</span>
+<span class="fc" id="L277">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L278">    }</span>
     
     /**
      * Constructor with lists of points to be used to estimate an euclidean 2D
@@ -293,12 +292,11 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public EuclideanTransformation2DRobustEstimator(List&lt;Point2D&gt; inputPoints,
-            List&lt;Point2D&gt; outputPoints, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
-<span class="fc" id="L298">        this();</span>
-<span class="fc" id="L299">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L300">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L301">    }</span>
+            List&lt;Point2D&gt; outputPoints, boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L296">        this();</span>
+<span class="fc" id="L297">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L298">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L299">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
@@ -319,11 +317,11 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public EuclideanTransformation2DRobustEstimator(
             EuclideanTransformation2DRobustEstimatorListener listener,
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
-<span class="fc" id="L323">        this(listener);</span>
-<span class="fc" id="L324">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L325">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L326">    }</span>
+            boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L321">        this(listener);</span>
+<span class="fc" id="L322">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L323">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L324">    }</span>
     
     /**
      * Returns list of input points to be used to estimate an euclidean 2D
@@ -336,7 +334,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * transformation.
      */
     public List&lt;Point2D&gt; getInputPoints() {
-<span class="fc" id="L339">        return mInputPoints;</span>
+<span class="fc" id="L337">        return mInputPoints;</span>
     }
     
     /**
@@ -350,7 +348,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * transformation.
      */
     public List&lt;Point2D&gt; getOutputPoints() {
-<span class="fc" id="L353">        return mOutputPoints;</span>
+<span class="fc" id="L351">        return mOutputPoints;</span>
     }
     
     /**
@@ -369,13 +367,12 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * already in progress.
      */
     public void setPoints(List&lt;Point2D&gt; inputPoints, 
-            List&lt;Point2D&gt; outputPoints) throws IllegalArgumentException,
-            LockedException {
-<span class="fc bfc" id="L374" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L375">            throw new LockedException();</span>
+            List&lt;Point2D&gt; outputPoints) throws LockedException {
+<span class="fc bfc" id="L371" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L372">            throw new LockedException();</span>
         }
-<span class="fc" id="L377">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L378">    }</span>
+<span class="fc" id="L374">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L375">    }</span>
     
     /**
      * Indicates if estimator is ready to start the euclidean 2D transformation
@@ -385,9 +382,9 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L388" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
-<span class="pc bpc" id="L389" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
-<span class="pc bpc" id="L390" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
+<span class="pc bpc" id="L385" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
+<span class="pc bpc" id="L386" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
+<span class="pc bpc" id="L387" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
     }
     
     /**
@@ -398,7 +395,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return quality scores corresponding to each pair of matched points.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L401">        return null;</span>
+<span class="fc" id="L398">        return null;</span>
     }
     
     /**
@@ -413,8 +410,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="fc" id="L417">            IllegalArgumentException { }</span>
+<span class="fc" id="L413">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
     
     /**
      * Returns reference to listener to be notified of events such as when
@@ -422,7 +418,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return listener to be notified of events.
      */
     public EuclideanTransformation2DRobustEstimatorListener getListener() {
-<span class="fc" id="L425">        return mListener;</span>
+<span class="fc" id="L421">        return mListener;</span>
     }
     
     /**
@@ -434,11 +430,11 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public void setListener(
             EuclideanTransformation2DRobustEstimatorListener listener)
             throws LockedException {
-<span class="fc bfc" id="L437" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L438">            throw new LockedException();</span>
+<span class="fc bfc" id="L433" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L434">            throw new LockedException();</span>
         }
-<span class="fc" id="L440">        mListener = listener;</span>
-<span class="fc" id="L441">    }</span>
+<span class="fc" id="L436">        mListener = listener;</span>
+<span class="fc" id="L437">    }</span>
     
     /**
      * Indicates whether listener has been provided and is available for
@@ -446,7 +442,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L449" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L445" title="All 2 branches covered.">        return mListener != null;</span>
     }
     
     /**
@@ -454,7 +450,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return true allows 2 points, false requires 3.
      */
     public boolean isWeakMinimumSizeAllowed() {
-<span class="fc" id="L457">        return mWeakMinimumSizeAllowed;</span>
+<span class="fc" id="L453">        return mWeakMinimumSizeAllowed;</span>
     }
     
     /**
@@ -464,11 +460,11 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public void setWeakMinimumSizeAllowed(boolean weakMinimumSizeAllowed) 
             throws LockedException {
-<span class="fc bfc" id="L467" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L468">            throw new LockedException();</span>
+<span class="fc bfc" id="L463" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L464">            throw new LockedException();</span>
         }
-<span class="fc" id="L470">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L471">    }</span>
+<span class="fc" id="L466">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L467">    }</span>
     
     /**
      * Required minimum number of point correspondences to start the estimation.
@@ -476,7 +472,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return minimum number of point correspondences.
      */
     public int getMinimumPoints() {
-<span class="fc bfc" id="L479" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
+<span class="fc bfc" id="L475" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
     }        
     
     /**
@@ -485,7 +481,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L488">        return mLocked;</span>
+<span class="fc" id="L484">        return mLocked;</span>
     }
     
     /**
@@ -495,7 +491,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L498">        return mProgressDelta;</span>
+<span class="fc" id="L494">        return mProgressDelta;</span>
     }
     
     /**
@@ -508,17 +504,16 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L513" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L514">            throw new LockedException();</span>
+    public void setProgressDelta(float progressDelta) throws LockedException {
+<span class="fc bfc" id="L508" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L509">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L516" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L511" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L518">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L513">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L520">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L521">    }</span>
+<span class="fc" id="L515">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L516">    }</span>
     
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
@@ -528,7 +523,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L531">        return mConfidence;</span>
+<span class="fc" id="L526">        return mConfidence;</span>
     }
     
     /**
@@ -542,16 +537,15 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L547" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L548">            throw new LockedException();</span>
+    public void setConfidence(double confidence) throws LockedException {
+<span class="fc bfc" id="L541" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L542">            throw new LockedException();</span>
         }        
-<span class="fc bfc" id="L550" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L551">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L544" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L545">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L553">        mConfidence = confidence;</span>
-<span class="fc" id="L554">    }</span>
+<span class="fc" id="L547">        mConfidence = confidence;</span>
+<span class="fc" id="L548">    }</span>
     
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
@@ -560,7 +554,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return maximum allowed number of itertions.
      */
     public int getMaxIterations() {
-<span class="fc" id="L563">        return mMaxIterations;</span>
+<span class="fc" id="L557">        return mMaxIterations;</span>
     }
     
     /**
@@ -572,23 +566,22 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L577" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L578">            throw new LockedException();</span>
+    public void setMaxIterations(int maxIterations) throws LockedException {
+<span class="fc bfc" id="L570" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L571">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L580" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L581">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L573" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L574">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L583">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L584">    }</span>
+<span class="fc" id="L576">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L577">    }</span>
     
     /**
      * Gets data related to inliers found after estimation.
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-<span class="fc" id="L591">        return mInliersData;</span>
+<span class="fc" id="L584">        return mInliersData;</span>
     }
     
     /**
@@ -600,7 +593,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-<span class="fc" id="L603">        return mRefineResult;</span>
+<span class="fc" id="L596">        return mRefineResult;</span>
     }    
     
     /**
@@ -611,11 +604,11 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @throws LockedException if estimator is locked.
      */
     public void setResultRefined(boolean refineResult) throws LockedException {
-<span class="pc bpc" id="L614" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L615">            throw new LockedException();</span>
+<span class="pc bpc" id="L607" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L608">            throw new LockedException();</span>
         }
-<span class="fc" id="L617">        mRefineResult = refineResult;</span>
-<span class="fc" id="L618">    }</span>
+<span class="fc" id="L610">        mRefineResult = refineResult;</span>
+<span class="fc" id="L611">    }</span>
     
     /**
      * Indicates whether covariance must be kept after refining result.
@@ -624,7 +617,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * otherwise.
      */
     public boolean isCovarianceKept() {
-<span class="fc" id="L627">        return mKeepCovariance;</span>
+<span class="fc" id="L620">        return mKeepCovariance;</span>
     }
     
     /**
@@ -636,11 +629,11 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public void setCovarianceKept(boolean keepCovariance)
             throws LockedException {
-<span class="pc bpc" id="L639" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L640">            throw new LockedException();</span>
+<span class="pc bpc" id="L632" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L633">            throw new LockedException();</span>
         }
-<span class="fc" id="L642">        mKeepCovariance = keepCovariance;</span>
-<span class="fc" id="L643">    }</span>
+<span class="fc" id="L635">        mKeepCovariance = keepCovariance;</span>
+<span class="fc" id="L636">    }</span>
     
     /**
      * Gets estimated covariance of estimated 3D point if available.
@@ -649,7 +642,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-<span class="fc" id="L652">        return mCovariance;</span>
+<span class="fc" id="L645">        return mCovariance;</span>
     }
     
     /**
@@ -683,18 +676,18 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             RobustEstimatorMethod method) {
-<span class="nc bnc" id="L686" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L679" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L688">                return new LMedSEuclideanTransformation2DRobustEstimator();</span>
+<span class="nc" id="L681">                return new LMedSEuclideanTransformation2DRobustEstimator();</span>
             case MSAC:
-<span class="nc" id="L690">                return new MSACEuclideanTransformation2DRobustEstimator();</span>
+<span class="nc" id="L683">                return new MSACEuclideanTransformation2DRobustEstimator();</span>
             case PROSAC:
-<span class="nc" id="L692">                return new PROSACEuclideanTransformation2DRobustEstimator();</span>
+<span class="nc" id="L685">                return new PROSACEuclideanTransformation2DRobustEstimator();</span>
             case PROMedS:
-<span class="nc" id="L694">                return new PROMedSEuclideanTransformation2DRobustEstimator();</span>
+<span class="nc" id="L687">                return new PROMedSEuclideanTransformation2DRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="nc" id="L697">                return new RANSACEuclideanTransformation2DRobustEstimator();                </span>
+<span class="nc" id="L690">                return new RANSACEuclideanTransformation2DRobustEstimator();                </span>
         }
     }
     
@@ -713,23 +706,23 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L717" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L710" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L719">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L712">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L722">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L715">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L725">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L718">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L728">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L721">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L732">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L725">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
         }
     }
@@ -746,22 +739,22 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener, 
             RobustEstimatorMethod method) {
-<span class="nc bnc" id="L749" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L742" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L751">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L744">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="nc" id="L754">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L747">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="nc" id="L757">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L750">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         listener);
             case PROMedS:
-<span class="nc" id="L760">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L753">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener);
             case RANSAC:
             default:
-<span class="nc" id="L764">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L757">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         listener);
         }
     }
@@ -784,23 +777,23 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener, 
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L788" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L781" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L790">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L783">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L793">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L786">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L796">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L789">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L799">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L792">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L803">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L796">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
         }
     }
@@ -817,22 +810,21 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 3 matched points).
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="nc bnc" id="L822" title="All 5 branches missed.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="nc bnc" id="L814" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L824">                return new LMedSEuclideanTransformation2DRobustEstimator();</span>
+<span class="nc" id="L816">                return new LMedSEuclideanTransformation2DRobustEstimator();</span>
             case MSAC:
-<span class="nc" id="L826">                return new MSACEuclideanTransformation2DRobustEstimator();</span>
+<span class="nc" id="L818">                return new MSACEuclideanTransformation2DRobustEstimator();</span>
             case PROSAC:
-<span class="nc" id="L828">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L820">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         qualityScores);
             case PROMedS:
-<span class="nc" id="L831">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L823">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="nc" id="L835">                return new RANSACEuclideanTransformation2DRobustEstimator();                </span>
+<span class="nc" id="L827">                return new RANSACEuclideanTransformation2DRobustEstimator();                </span>
         }
     }
     
@@ -853,24 +845,23 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L858" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L849" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L860">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L851">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L863">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L854">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L866">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L857">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L869">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L860">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L873">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L864">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);                
         }
     }
@@ -890,24 +881,23 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="nc bnc" id="L895" title="All 5 branches missed.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="nc bnc" id="L885" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L897">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L887">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="nc" id="L900">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L890">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="nc" id="L903">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L893">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, qualityScores);
             case PROMedS:
-<span class="nc" id="L906">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L896">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener, qualityScores);
             case RANSAC:
             default:
-<span class="nc" id="L910">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L900">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         listener);                
         }
     }
@@ -932,24 +922,23 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener,
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L937" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L926" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L939">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L928">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L942">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L931">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L945">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L934">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L948">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L937">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L952">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L941">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);                
         }
     }
@@ -964,22 +953,22 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
-<span class="nc bnc" id="L967" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L956" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L969">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L958">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L972">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L961">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L975">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L964">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L978">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L967">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L982">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L971">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         weakMinimumSizeAllowed);                
         }
     }
@@ -1000,24 +989,23 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L1005" title="All 5 branches covered.">        switch (method) {</span>
+            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L993" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1007">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L995">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1010">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L998">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1013">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1001">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1016">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1004">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1020">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1008">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
         }
     }
@@ -1035,22 +1023,22 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener, 
             boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
-<span class="nc bnc" id="L1038" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L1026" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L1040">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1028">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L1043">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1031">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L1046">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1034">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L1049">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1037">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L1053">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1041">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
         }
     }
@@ -1074,28 +1062,27 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener, 
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L1079" title="All 5 branches covered.">        switch (method) {</span>
+            boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L1066" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1081">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1068">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1085">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1072">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1089">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1076">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1093">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1080">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1098">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1085">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
         }
@@ -1115,24 +1102,23 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
-            RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="nc bnc" id="L1120" title="All 5 branches missed.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="nc bnc" id="L1106" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L1122">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1108">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L1125">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1111">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L1128">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1114">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         qualityScores, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L1131">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1117">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         qualityScores, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L1135">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1121">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         weakMinimumSizeAllowed);                
         }
     }
@@ -1156,25 +1142,25 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public static EuclideanTransformation2DRobustEstimator create(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L1160" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L1146" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1162">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1148">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1165">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1151">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1168">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1154">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores, 
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1172">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1158">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores, 
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1177">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1163">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);                
         }
     }
@@ -1196,23 +1182,23 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener, 
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="nc bnc" id="L1200" title="All 5 branches missed.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="nc bnc" id="L1186" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L1202">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1188">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L1205">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1191">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L1208">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1194">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, qualityScores, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L1211">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1197">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener, qualityScores, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L1215">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="nc" id="L1201">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
         }
     }
@@ -1239,27 +1225,27 @@ public abstract class EuclideanTransformation2DRobustEstimator {
             EuclideanTransformation2DRobustEstimatorListener listener,
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L1243" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L1229" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1245">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1231">                return new LMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1249">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1235">                return new MSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1253">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1239">                return new PROSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores,
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1257">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1243">                return new PROMedSEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores,
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1262">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
+<span class="fc" id="L1248">                return new RANSACEuclideanTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
         }
@@ -1272,7 +1258,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * @return an instance of euclidean 2D transformation estimator.
      */
     public static EuclideanTransformation2DRobustEstimator create() {
-<span class="nc" id="L1275">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1261">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1287,9 +1273,8 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * the same size of their size is smaller than MINIMUM_SIZE.
      */
     public static EuclideanTransformation2DRobustEstimator create(
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints)
-            throws IllegalArgumentException {
-<span class="fc" id="L1292">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L1277">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1301,7 +1286,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener) {
-<span class="nc" id="L1304">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1289">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1319,9 +1304,8 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener,
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints)
-            throws IllegalArgumentException {
-<span class="fc" id="L1324">        return create(listener, inputPoints, outputPoints, </span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L1308">        return create(listener, inputPoints, outputPoints, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1334,7 +1318,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             double[] qualityScores) {
-<span class="nc" id="L1337">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1321">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1351,8 +1335,8 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L1355">        return create(inputPoints, outputPoints, qualityScores, </span>
+            double[] qualityScores) {
+<span class="fc" id="L1339">        return create(inputPoints, outputPoints, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1368,7 +1352,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener, 
             double[] qualityScores) {
-<span class="nc" id="L1371">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1355">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1389,8 +1373,8 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener,
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L1393">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
+            double[] qualityScores) {
+<span class="fc" id="L1377">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1402,7 +1386,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1405">        return create(weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1389">        return create(weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1419,8 +1403,8 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
-<span class="fc" id="L1423">        return create(inputPoints, outputPoints, weakMinimumSizeAllowed, </span>
+            boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1407">        return create(inputPoints, outputPoints, weakMinimumSizeAllowed, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1435,7 +1419,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener,
             boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1438">        return create(listener, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1422">        return create(listener, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1455,8 +1439,8 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener,
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
-<span class="fc" id="L1459">        return create(listener, inputPoints, outputPoints, </span>
+            boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1443">        return create(listener, inputPoints, outputPoints, </span>
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1470,7 +1454,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             double[] qualityScores, boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1473">        return create(qualityScores, weakMinimumSizeAllowed, </span>
+<span class="nc" id="L1457">        return create(qualityScores, weakMinimumSizeAllowed, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1489,9 +1473,8 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */
     public static EuclideanTransformation2DRobustEstimator create(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
-<span class="fc" id="L1494">        return create(inputPoints, outputPoints, qualityScores, </span>
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1477">        return create(inputPoints, outputPoints, qualityScores, </span>
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1508,7 +1491,7 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener, 
             double[] qualityScores, boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1511">        return create(listener, qualityScores, weakMinimumSizeAllowed, </span>
+<span class="nc" id="L1494">        return create(listener, qualityScores, weakMinimumSizeAllowed, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1531,9 +1514,8 @@ public abstract class EuclideanTransformation2DRobustEstimator {
     public static EuclideanTransformation2DRobustEstimator create(
             EuclideanTransformation2DRobustEstimatorListener listener,
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
-<span class="fc" id="L1536">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1518">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1550,16 +1532,16 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetPoints(List&lt;Point2D&gt; inputPoints, 
-            List&lt;Point2D&gt; outputPoints) throws IllegalArgumentException {
-<span class="fc bfc" id="L1554" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
-<span class="fc" id="L1555">            throw new IllegalArgumentException();</span>
+            List&lt;Point2D&gt; outputPoints) {
+<span class="fc bfc" id="L1536" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L1537">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L1557" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
-<span class="fc" id="L1558">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L1539" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L1540">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L1560">        mInputPoints = inputPoints;</span>
-<span class="fc" id="L1561">        mOutputPoints = outputPoints;        </span>
-<span class="fc" id="L1562">    }</span>
+<span class="fc" id="L1542">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L1543">        mOutputPoints = outputPoints;        </span>
+<span class="fc" id="L1544">    }</span>
     
     /**
      * Attempts to refine provided solution if refinement is requested.
@@ -1574,29 +1556,29 @@ public abstract class EuclideanTransformation2DRobustEstimator {
      */    
     protected EuclideanTransformation2D attemptRefine(
             EuclideanTransformation2D transformation) {
-<span class="fc bfc" id="L1577" title="All 2 branches covered.">        if (mRefineResult) {</span>
-<span class="fc" id="L1578">            EuclideanTransformation2DRefiner refiner =</span>
+<span class="fc bfc" id="L1559" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L1560">            EuclideanTransformation2DRefiner refiner =</span>
                     new EuclideanTransformation2DRefiner(transformation, 
-<span class="fc" id="L1580">                    mKeepCovariance, getInliersData(), mInputPoints, </span>
-<span class="fc" id="L1581">                    mOutputPoints, getRefinementStandardDeviation());</span>
+<span class="fc" id="L1562">                    mKeepCovariance, getInliersData(), mInputPoints, </span>
+<span class="fc" id="L1563">                    mOutputPoints, getRefinementStandardDeviation());</span>
             
             try {
-<span class="fc" id="L1584">                EuclideanTransformation2D result = </span>
+<span class="fc" id="L1566">                EuclideanTransformation2D result = </span>
                         new EuclideanTransformation2D();
-<span class="fc" id="L1586">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L1568">                boolean improved = refiner.refine(result);</span>
                 
-<span class="pc bpc" id="L1588" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L1570" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L1590">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L1572">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="fc bfc" id="L1593" title="All 2 branches covered.">                return improved ? result : transformation;</span>
-<span class="fc" id="L1594">            } catch (Exception e) {</span>
+<span class="fc bfc" id="L1575" title="All 2 branches covered.">                return improved ? result : transformation;</span>
+<span class="fc" id="L1576">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="fc" id="L1596">                return transformation;</span>
+<span class="fc" id="L1578">                return transformation;</span>
             }
         } else {
-<span class="fc" id="L1599">            return transformation;</span>
+<span class="fc" id="L1581">            return transformation;</span>
         }
     }
     

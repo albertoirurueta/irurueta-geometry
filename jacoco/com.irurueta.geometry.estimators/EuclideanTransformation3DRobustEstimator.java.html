@@ -224,7 +224,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public EuclideanTransformation3DRobustEstimator(List&lt;Point3D&gt; inputPoints,
-            List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException {
+            List&lt;Point3D&gt; outputPoints) {
 <span class="fc" id="L228">        this();</span>
 <span class="fc" id="L229">        internalSetPoints(inputPoints, outputPoints);</span>
 <span class="fc" id="L230">    }</span>
@@ -246,11 +246,10 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public EuclideanTransformation3DRobustEstimator(
             EuclideanTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L251">        this(listener);</span>
-<span class="fc" id="L252">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L253">    }</span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L250">        this(listener);</span>
+<span class="fc" id="L251">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L252">    }</span>
     
     /**
      * Constructor.
@@ -258,9 +257,9 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public EuclideanTransformation3DRobustEstimator(
             boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L261">        this();</span>
-<span class="fc" id="L262">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L263">    }</span>
+<span class="fc" id="L260">        this();</span>
+<span class="fc" id="L261">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L262">    }</span>
     
     /**
      * Constructor.
@@ -271,10 +270,10 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public EuclideanTransformation3DRobustEstimator(
             EuclideanTransformation3DRobustEstimatorListener listener,
             boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L274">        this();</span>
-<span class="fc" id="L275">        mListener = listener;</span>
-<span class="fc" id="L276">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L277">    }</span>
+<span class="fc" id="L273">        this();</span>
+<span class="fc" id="L274">        mListener = listener;</span>
+<span class="fc" id="L275">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L276">    }</span>
     
     /**
      * Constructor with lists of points to be used to estimate an euclidean 3D
@@ -293,10 +292,10 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public EuclideanTransformation3DRobustEstimator(List&lt;Point3D&gt; inputPoints,
             List&lt;Point3D&gt; outputPoints, boolean weakMinimumSizeAllowed) 
             throws IllegalArgumentException {
-<span class="fc" id="L296">        this();</span>
-<span class="fc" id="L297">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L298">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L299">    }</span>
+<span class="fc" id="L295">        this();</span>
+<span class="fc" id="L296">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L297">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L298">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
@@ -318,10 +317,10 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             EuclideanTransformation3DRobustEstimatorListener listener,
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
-<span class="fc" id="L321">        this(listener);</span>
-<span class="fc" id="L322">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L323">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L324">    }</span>
+<span class="fc" id="L320">        this(listener);</span>
+<span class="fc" id="L321">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L322">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L323">    }</span>
     
     /**
      * Returns list of input points to be used to estimate an euclidean 3D
@@ -334,7 +333,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * transformation.
      */
     public List&lt;Point3D&gt; getInputPoints() {
-<span class="fc" id="L337">        return mInputPoints;</span>
+<span class="fc" id="L336">        return mInputPoints;</span>
     }
     
     /**
@@ -348,7 +347,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * transformation.
      */
     public List&lt;Point3D&gt; getOutputPoints() {
-<span class="fc" id="L351">        return mOutputPoints;</span>
+<span class="fc" id="L350">        return mOutputPoints;</span>
     }
     
     /**
@@ -369,11 +368,11 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public void setPoints(List&lt;Point3D&gt; inputPoints, 
             List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException,
             LockedException {
-<span class="fc bfc" id="L372" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L373">            throw new LockedException();</span>
+<span class="fc bfc" id="L371" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L372">            throw new LockedException();</span>
         }
-<span class="fc" id="L375">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L376">    }</span>
+<span class="fc" id="L374">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L375">    }</span>
     
     /**
      * Indicates if estimator is ready to start the euclidean 3D transformation
@@ -383,9 +382,9 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L386" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
-<span class="pc bpc" id="L387" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
-<span class="pc bpc" id="L388" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
+<span class="pc bpc" id="L385" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
+<span class="pc bpc" id="L386" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
+<span class="pc bpc" id="L387" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
     }
     
     /**
@@ -396,7 +395,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @return quality scores corresponding to each pair of matched points.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L399">        return null;</span>
+<span class="fc" id="L398">        return null;</span>
     }
     
     /**
@@ -412,7 +411,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="fc" id="L415">            IllegalArgumentException { }</span>
+<span class="fc" id="L414">            IllegalArgumentException { }</span>
     
     /**
      * Returns reference to listener to be notified of events such as when
@@ -420,7 +419,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @return listener to be notified of events.
      */
     public EuclideanTransformation3DRobustEstimatorListener getListener() {
-<span class="fc" id="L423">        return mListener;</span>
+<span class="fc" id="L422">        return mListener;</span>
     }
     
     /**
@@ -432,11 +431,11 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public void setListener(
             EuclideanTransformation3DRobustEstimatorListener listener)
             throws LockedException {
-<span class="fc bfc" id="L435" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L436">            throw new LockedException();</span>
+<span class="fc bfc" id="L434" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L435">            throw new LockedException();</span>
         }
-<span class="fc" id="L438">        mListener = listener;</span>
-<span class="fc" id="L439">    }</span>
+<span class="fc" id="L437">        mListener = listener;</span>
+<span class="fc" id="L438">    }</span>
     
     /**
      * Indicates whether listener has been provided and is available for
@@ -444,7 +443,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L447" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L446" title="All 2 branches covered.">        return mListener != null;</span>
     }
     
     /**
@@ -452,7 +451,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @return true allows 3 points, false requires 4.
      */
     public boolean isWeakMinimumSizeAllowed() {
-<span class="fc" id="L455">        return mWeakMinimumSizeAllowed;</span>
+<span class="fc" id="L454">        return mWeakMinimumSizeAllowed;</span>
     }
     
     /**
@@ -462,11 +461,11 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public void setWeakMinimumSizeAllowed(boolean weakMinimumSizeAllowed) 
             throws LockedException {
-<span class="fc bfc" id="L465" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L466">            throw new LockedException();</span>
+<span class="fc bfc" id="L464" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L465">            throw new LockedException();</span>
         }
-<span class="fc" id="L468">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L469">    }</span>
+<span class="fc" id="L467">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L468">    }</span>
     
     /**
      * Required minimum number of point correspondences to start the estimation.
@@ -474,7 +473,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @return minimum number of point correspondences.
      */
     public int getMinimumPoints() {
-<span class="fc bfc" id="L477" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
+<span class="fc bfc" id="L476" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
     }        
     
     /**
@@ -483,7 +482,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L486">        return mLocked;</span>
+<span class="fc" id="L485">        return mLocked;</span>
     }
     
     /**
@@ -493,7 +492,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L496">        return mProgressDelta;</span>
+<span class="fc" id="L495">        return mProgressDelta;</span>
     }
     
     /**
@@ -508,15 +507,15 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public void setProgressDelta(float progressDelta)
             throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L511" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L512">            throw new LockedException();</span>
+<span class="fc bfc" id="L510" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L511">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L514" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L513" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L516">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L515">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L518">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L519">    }</span>
+<span class="fc" id="L517">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L518">    }</span>
     
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
@@ -526,7 +525,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L529">        return mConfidence;</span>
+<span class="fc" id="L528">        return mConfidence;</span>
     }
     
     /**
@@ -542,14 +541,14 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public void setConfidence(double confidence)
             throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L545" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L546">            throw new LockedException();</span>
+<span class="fc bfc" id="L544" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L545">            throw new LockedException();</span>
         }        
-<span class="fc bfc" id="L548" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L549">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L547" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L548">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L551">        mConfidence = confidence;</span>
-<span class="fc" id="L552">    }</span>
+<span class="fc" id="L550">        mConfidence = confidence;</span>
+<span class="fc" id="L551">    }</span>
     
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
@@ -558,7 +557,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @return maximum allowed number of itertions.
      */
     public int getMaxIterations() {
-<span class="fc" id="L561">        return mMaxIterations;</span>
+<span class="fc" id="L560">        return mMaxIterations;</span>
     }
     
     /**
@@ -572,21 +571,21 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public void setMaxIterations(int maxIterations) 
             throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L575" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L576">            throw new LockedException();</span>
+<span class="fc bfc" id="L574" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L575">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L578" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L579">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L577" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L578">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L581">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L582">    }</span>
+<span class="fc" id="L580">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L581">    }</span>
     
     /**
      * Gets data related to inliers found after estimation.
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-<span class="fc" id="L589">        return mInliersData;</span>
+<span class="fc" id="L588">        return mInliersData;</span>
     }
     
     /**
@@ -598,7 +597,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-<span class="fc" id="L601">        return mRefineResult;</span>
+<span class="fc" id="L600">        return mRefineResult;</span>
     }    
     
     /**
@@ -609,11 +608,11 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @throws LockedException if estimator is locked.
      */
     public void setResultRefined(boolean refineResult) throws LockedException {
-<span class="pc bpc" id="L612" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L613">            throw new LockedException();</span>
+<span class="pc bpc" id="L611" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L612">            throw new LockedException();</span>
         }
-<span class="fc" id="L615">        mRefineResult = refineResult;</span>
-<span class="fc" id="L616">    }</span>
+<span class="fc" id="L614">        mRefineResult = refineResult;</span>
+<span class="fc" id="L615">    }</span>
     
     /**
      * Indicates whether covariance must be kept after refining result.
@@ -622,7 +621,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * otherwise.
      */
     public boolean isCovarianceKept() {
-<span class="fc" id="L625">        return mKeepCovariance;</span>
+<span class="fc" id="L624">        return mKeepCovariance;</span>
     }
     
     /**
@@ -634,11 +633,11 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public void setCovarianceKept(boolean keepCovariance)
             throws LockedException {
-<span class="pc bpc" id="L637" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L638">            throw new LockedException();</span>
+<span class="pc bpc" id="L636" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L637">            throw new LockedException();</span>
         }
-<span class="fc" id="L640">        mKeepCovariance = keepCovariance;</span>
-<span class="fc" id="L641">    }</span>
+<span class="fc" id="L639">        mKeepCovariance = keepCovariance;</span>
+<span class="fc" id="L640">    }</span>
     
     /**
      * Gets estimated covariance of estimated 3D point if available.
@@ -647,7 +646,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-<span class="fc" id="L650">        return mCovariance;</span>
+<span class="fc" id="L649">        return mCovariance;</span>
     }
     
     /**
@@ -681,18 +680,18 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             RobustEstimatorMethod method) {
-<span class="nc bnc" id="L684" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L683" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L686">                return new LMedSEuclideanTransformation3DRobustEstimator();</span>
+<span class="nc" id="L685">                return new LMedSEuclideanTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="nc" id="L688">                return new MSACEuclideanTransformation3DRobustEstimator();</span>
+<span class="nc" id="L687">                return new MSACEuclideanTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="nc" id="L690">                return new PROSACEuclideanTransformation3DRobustEstimator();</span>
+<span class="nc" id="L689">                return new PROSACEuclideanTransformation3DRobustEstimator();</span>
             case PROMedS:
-<span class="nc" id="L692">                return new PROMedSEuclideanTransformation3DRobustEstimator();</span>
+<span class="nc" id="L691">                return new PROMedSEuclideanTransformation3DRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="nc" id="L695">                return new RANSACEuclideanTransformation3DRobustEstimator();                </span>
+<span class="nc" id="L694">                return new RANSACEuclideanTransformation3DRobustEstimator();                </span>
         }
     }
     
@@ -712,22 +711,22 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L715" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L714" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L717">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L716">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L720">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L719">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L723">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L722">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L726">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L725">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L730">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L729">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
         }
     }
@@ -744,22 +743,22 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener, 
             RobustEstimatorMethod method) {
-<span class="nc bnc" id="L747" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L746" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L749">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L748">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="nc" id="L752">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L751">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="nc" id="L755">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L754">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         listener);
             case PROMedS:
-<span class="nc" id="L758">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L757">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener);
             case RANSAC:
             default:
-<span class="nc" id="L762">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L761">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         listener);
         }
     }
@@ -783,22 +782,22 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             EuclideanTransformation3DRobustEstimatorListener listener, 
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
             RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L786" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L785" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L788">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L787">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L791">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L790">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L794">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L793">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L797">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L796">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L801">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L800">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
         }
     }
@@ -817,20 +816,20 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             double[] qualityScores, RobustEstimatorMethod method)
             throws IllegalArgumentException {
-<span class="nc bnc" id="L820" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L819" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L822">                return new LMedSEuclideanTransformation3DRobustEstimator();</span>
+<span class="nc" id="L821">                return new LMedSEuclideanTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="nc" id="L824">                return new MSACEuclideanTransformation3DRobustEstimator();</span>
+<span class="nc" id="L823">                return new MSACEuclideanTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="nc" id="L826">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L825">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         qualityScores);
             case PROMedS:
-<span class="nc" id="L829">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L828">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="nc" id="L833">                return new RANSACEuclideanTransformation3DRobustEstimator();                </span>
+<span class="nc" id="L832">                return new RANSACEuclideanTransformation3DRobustEstimator();                </span>
         }
     }
     
@@ -853,22 +852,22 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             double[] qualityScores, RobustEstimatorMethod method)
             throws IllegalArgumentException {
-<span class="fc bfc" id="L856" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L855" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L858">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L857">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L861">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L860">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L864">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L863">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L867">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L866">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L871">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L870">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);                
         }
     }
@@ -890,22 +889,22 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             EuclideanTransformation3DRobustEstimatorListener listener, 
             double[] qualityScores, RobustEstimatorMethod method)
             throws IllegalArgumentException {
-<span class="nc bnc" id="L893" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L892" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L895">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L894">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="nc" id="L898">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L897">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="nc" id="L901">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L900">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, qualityScores);
             case PROMedS:
-<span class="nc" id="L904">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L903">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, qualityScores);
             case RANSAC:
             default:
-<span class="nc" id="L908">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L907">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         listener);                
         }
     }
@@ -932,22 +931,22 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             double[] qualityScores, RobustEstimatorMethod method)
             throws IllegalArgumentException {
-<span class="fc bfc" id="L935" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L934" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L937">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L936">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L940">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L939">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L943">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L942">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L946">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L945">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L950">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L949">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);                
         }
     }
@@ -962,22 +961,22 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
-<span class="nc bnc" id="L965" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L964" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L967">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L966">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L970">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L969">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L973">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L972">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L976">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L975">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L980">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L979">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
         }
     }
@@ -1000,22 +999,22 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) 
             throws IllegalArgumentException {
-<span class="fc bfc" id="L1003" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L1002" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1005">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1004">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1008">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1007">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1011">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1010">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1014">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1013">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1018">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1017">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
         }
     }
@@ -1033,22 +1032,22 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener, 
             boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
-<span class="nc bnc" id="L1036" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L1035" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L1038">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1037">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L1041">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1040">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L1044">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1043">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L1047">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1046">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L1051">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1050">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
         }
     }
@@ -1074,26 +1073,26 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
             boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) 
             throws IllegalArgumentException {
-<span class="fc bfc" id="L1077" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L1076" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1079">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1078">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1083">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1082">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1087">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1086">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1091">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1090">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1096">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1095">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
         }
@@ -1114,22 +1113,22 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
             RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="nc bnc" id="L1117" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L1116" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L1119">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1118">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L1122">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1121">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L1125">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1124">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         qualityScores, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L1128">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1127">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         qualityScores, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L1132">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1131">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
         }
     }
@@ -1154,24 +1153,24 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
             RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L1157" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L1156" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1159">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1158">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1162">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1161">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1165">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1164">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores, 
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1169">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1168">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores, 
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1174">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1173">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
         }
     }
@@ -1194,22 +1193,22 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             EuclideanTransformation3DRobustEstimatorListener listener, 
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
             RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="nc bnc" id="L1197" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L1196" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L1199">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1198">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L1202">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1201">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L1205">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1204">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, qualityScores, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L1208">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1207">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, qualityScores, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L1212">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1211">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
         }
     }
@@ -1237,26 +1236,26 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
             RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L1240" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L1239" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1242">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1241">                return new LMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1246">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1245">                return new MSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1250">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1249">                return new PROSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores,
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1254">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1253">                return new PROMedSEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores, 
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1259">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1258">                return new RANSACEuclideanTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
         }
@@ -1268,7 +1267,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * @return an instance of euclidean 3D transformation estimator.
      */
     public static EuclideanTransformation3DRobustEstimator create() {
-<span class="nc" id="L1271">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1270">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1285,7 +1284,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints)
             throws IllegalArgumentException {
-<span class="fc" id="L1288">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L1287">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1297,7 +1296,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener) {
-<span class="nc" id="L1300">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1299">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1317,7 +1316,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             EuclideanTransformation3DRobustEstimatorListener listener,
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints)
             throws IllegalArgumentException {
-<span class="fc" id="L1320">        return create(listener, inputPoints, outputPoints, </span>
+<span class="fc" id="L1319">        return create(listener, inputPoints, outputPoints, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1330,7 +1329,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             double[] qualityScores) {
-<span class="nc" id="L1333">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1332">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1348,7 +1347,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
             double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L1351">        return create(inputPoints, outputPoints, qualityScores, </span>
+<span class="fc" id="L1350">        return create(inputPoints, outputPoints, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1364,7 +1363,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener, 
             double[] qualityScores) {
-<span class="nc" id="L1367">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1366">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1386,7 +1385,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             EuclideanTransformation3DRobustEstimatorListener listener,
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L1389">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
+<span class="fc" id="L1388">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1398,7 +1397,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1401">        return create(weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1400">        return create(weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1417,7 +1416,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
             boolean weakMinimumSizeAllowed)
             throws IllegalArgumentException {
-<span class="fc" id="L1420">        return create(inputPoints, outputPoints, weakMinimumSizeAllowed, </span>
+<span class="fc" id="L1419">        return create(inputPoints, outputPoints, weakMinimumSizeAllowed, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1432,7 +1431,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener, 
             boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1435">        return create(listener, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1434">        return create(listener, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1453,7 +1452,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             EuclideanTransformation3DRobustEstimatorListener listener,
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
-<span class="fc" id="L1456">        return create(listener, inputPoints, outputPoints, </span>
+<span class="fc" id="L1455">        return create(listener, inputPoints, outputPoints, </span>
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1467,7 +1466,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public static EuclideanTransformation3DRobustEstimator create(
             double[] qualityScores, boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1470">        return create(qualityScores, weakMinimumSizeAllowed, </span>
+<span class="nc" id="L1469">        return create(qualityScores, weakMinimumSizeAllowed, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1488,7 +1487,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
             double[] qualityScores, boolean weakMinimumSizeAllowed) 
             throws IllegalArgumentException {
-<span class="fc" id="L1491">        return create(inputPoints, outputPoints, qualityScores, </span>
+<span class="fc" id="L1490">        return create(inputPoints, outputPoints, qualityScores, </span>
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1505,7 +1504,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
     public static EuclideanTransformation3DRobustEstimator create(
             EuclideanTransformation3DRobustEstimatorListener listener, 
             double[] qualityScores, boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1508">        return create(listener, qualityScores, weakMinimumSizeAllowed, </span>
+<span class="nc" id="L1507">        return create(listener, qualityScores, weakMinimumSizeAllowed, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1530,7 +1529,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             double[] qualityScores, boolean weakMinimumSizeAllowed) 
             throws IllegalArgumentException {
-<span class="fc" id="L1533">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
+<span class="fc" id="L1532">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1548,15 +1547,15 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     private void internalSetPoints(List&lt;Point3D&gt; inputPoints, 
             List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException {
-<span class="fc bfc" id="L1551" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
-<span class="fc" id="L1552">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L1550" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L1551">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L1554" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
-<span class="fc" id="L1555">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L1553" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L1554">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L1557">        mInputPoints = inputPoints;</span>
-<span class="fc" id="L1558">        mOutputPoints = outputPoints;        </span>
-<span class="fc" id="L1559">    }   </span>
+<span class="fc" id="L1556">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L1557">        mOutputPoints = outputPoints;        </span>
+<span class="fc" id="L1558">    }   </span>
     
     /**
      * Attempts to refine provided solution if refinement is requested.
@@ -1571,29 +1570,29 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */    
     protected EuclideanTransformation3D attemptRefine(
             EuclideanTransformation3D transformation) {
-<span class="fc bfc" id="L1574" title="All 2 branches covered.">        if (mRefineResult) {</span>
-<span class="fc" id="L1575">            EuclideanTransformation3DRefiner refiner =</span>
+<span class="fc bfc" id="L1573" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L1574">            EuclideanTransformation3DRefiner refiner =</span>
                     new EuclideanTransformation3DRefiner(transformation,
-<span class="fc" id="L1577">                    mKeepCovariance, getInliersData(), mInputPoints,</span>
-<span class="fc" id="L1578">                    mOutputPoints, getRefinementStandardDeviation());</span>
+<span class="fc" id="L1576">                    mKeepCovariance, getInliersData(), mInputPoints,</span>
+<span class="fc" id="L1577">                    mOutputPoints, getRefinementStandardDeviation());</span>
             
             try {
-<span class="fc" id="L1581">                EuclideanTransformation3D result =</span>
+<span class="fc" id="L1580">                EuclideanTransformation3D result =</span>
                         new EuclideanTransformation3D();
-<span class="fc" id="L1583">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L1582">                boolean improved = refiner.refine(result);</span>
                 
-<span class="pc bpc" id="L1585" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L1584" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L1587">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L1586">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="fc bfc" id="L1590" title="All 2 branches covered.">                return improved ? result : transformation;</span>
-<span class="fc" id="L1591">            } catch (Exception e) {</span>
+<span class="fc bfc" id="L1589" title="All 2 branches covered.">                return improved ? result : transformation;</span>
+<span class="fc" id="L1590">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="fc" id="L1593">                return transformation;</span>
+<span class="fc" id="L1592">                return transformation;</span>
             }
         } else {
-<span class="fc" id="L1596">            return transformation;</span>
+<span class="fc" id="L1595">            return transformation;</span>
         }
     }
     
