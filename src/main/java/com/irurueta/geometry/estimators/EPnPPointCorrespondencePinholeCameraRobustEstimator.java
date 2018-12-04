@@ -108,8 +108,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * correspondences).
      */
     public EPnPPointCorrespondencePinholeCameraRobustEstimator(
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(points3D, points2D);
     }
         
@@ -130,8 +129,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      */
     public EPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener, 
-            List<Point3D> points3D, List<Point2D> points2D)
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(listener, points3D, points2D);
     }
     
@@ -174,7 +172,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      */
     public EPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException {
+            List<Point2D> points2D) {
         this(points3D, points2D);
         mIntrinsic = intrinsic;
     }
@@ -198,7 +196,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     public EPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener, 
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException {
+            List<Point2D> points2D) {
         this(listener, points3D, points2D);
         mIntrinsic = intrinsic;
     }
@@ -314,7 +312,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * @throws LockedException if estimator is locked.
      */
     public void setPlanarThreshold(double planarThreshold) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -424,7 +422,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             List<Point3D> points3D, List<Point2D> points2D, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
@@ -495,7 +493,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             List<Point3D> points3D, List<Point2D> points2D,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
@@ -528,8 +526,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * smaller than required minimum size (6 samples).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
@@ -565,8 +562,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             List<Point3D> points3D, List<Point2D> points2D, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
@@ -602,8 +598,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
@@ -645,8 +640,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             List<Point3D> points3D, List<Point2D> points2D, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
@@ -715,7 +709,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraIntrinsicParameters intrinsic, 
             List<Point3D> points3D, List<Point2D> points2D, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
@@ -790,7 +784,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic, 
             List<Point3D> points3D, List<Point2D> points2D,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
@@ -825,8 +819,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraIntrinsicParameters intrinsic,
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
@@ -867,8 +860,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraIntrinsicParameters intrinsic,
             List<Point3D> points3D, List<Point2D> points2D, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
@@ -906,8 +898,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(            
             PinholeCameraRobustEstimatorListener listener, 
             PinholeCameraIntrinsicParameters intrinsic,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
@@ -951,8 +942,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic,
             List<Point3D> points3D, List<Point2D> points2D, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
@@ -994,8 +984,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         return create(points3D, points2D, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1028,8 +1017,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         return create(listener, points3D, points2D, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1043,7 +1031,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * smalelr than required minimum size (6 samples).
      */    
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1063,7 +1051,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             List<Point3D> points3D, List<Point2D> points2D, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1081,7 +1069,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1104,7 +1092,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             List<Point3D> points3D, List<Point2D> points2D,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, points3D, points2D, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }            
@@ -1134,8 +1122,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraIntrinsicParameters intrinsic,
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         return create(intrinsic, points3D, points2D, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1172,8 +1159,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic,
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         return create(listener, intrinsic, points3D, points2D, 
                 DEFAULT_ROBUST_METHOD);
     }
@@ -1190,7 +1176,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      */    
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraIntrinsicParameters intrinsic,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(intrinsic, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1212,7 +1198,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraIntrinsicParameters intrinsic,
             List<Point3D> points3D, List<Point2D> points2D, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(intrinsic, points3D, points2D, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }
@@ -1233,7 +1219,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
             PinholeCameraIntrinsicParameters intrinsic,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, intrinsic, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }
@@ -1259,7 +1245,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic,
             List<Point3D> points3D, List<Point2D> points2D,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, intrinsic, points3D, points2D, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }    

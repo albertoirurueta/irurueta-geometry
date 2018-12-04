@@ -1469,8 +1469,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         
         mM = new Matrix(2 * n, 3 * numControlPoints);
         
-        int row, col;
-        
+        int row;
+        int col;
         double alpha;
         
         double horizontalFocalLength = mIntrinsic.getHorizontalFocalLength();
@@ -1481,7 +1481,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         double verticalPrincipalPoint = mIntrinsic.getVerticalPrincipalPoint();
         
         Point2D p;
-        double pX, pY;
+        double pX;
+        double pY;
         for (int i = 0; i < n; i++) {
             p = mPoints2D.get(i);
             pX = p.getInhomX();
@@ -1651,8 +1652,15 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         Point3D centroid = Point3D.centroid(mPoints3D);
         
         //covariance matrix elements, summed up here for speed
-        double c11 = 0.0, c12 = 0.0, c13 = 0.0, c22 = 0.0, c23 = 0.0, c33 = 0.0;
-        double dx, dy, dz;
+        double c11 = 0.0;
+        double c12 = 0.0;
+        double c13 = 0.0;
+        double c22 = 0.0;
+        double c23 = 0.0;
+        double c33 = 0.0;
+        double dx;
+        double dy;
+        double dz;
         int n = mPoints3D.size();
         for (Point3D point : mPoints3D) {
             dx = point.getInhomX() - centroid.getInhomX();
@@ -1716,7 +1724,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         
         int numDimensions = numControl - 1;
         double k = Math.sqrt(singularValues[0] / n);
-        double vx, vy, vz;
+        double vx;
+        double vy;
+        double vz;
         for (int i = 0; i < numDimensions; i++) {
             vx = v.getElementAt(0, i) * k;
             vy = v.getElementAt(1, i) * k;

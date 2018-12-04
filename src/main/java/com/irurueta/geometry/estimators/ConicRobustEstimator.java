@@ -164,8 +164,7 @@ public abstract class ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public ConicRobustEstimator(List<Point2D> points) 
-            throws IllegalArgumentException {
+    public ConicRobustEstimator(List<Point2D> points) {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
         mMaxIterations = DEFAULT_MAX_ITERATIONS; 
@@ -181,7 +180,7 @@ public abstract class ConicRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public ConicRobustEstimator(ConicRobustEstimatorListener listener,
-            List<Point2D> points) throws IllegalArgumentException {
+            List<Point2D> points) {
         mListener = listener;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
@@ -250,8 +249,7 @@ public abstract class ConicRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta) 
-            throws IllegalArgumentException, LockedException {
+    public void setProgressDelta(float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -284,8 +282,7 @@ public abstract class ConicRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -314,8 +311,7 @@ public abstract class ConicRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+    public void setMaxIterations(int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -343,8 +339,7 @@ public abstract class ConicRobustEstimator {
      * @throws LockedException if estimator is locked because a computation is
      * already in progress.
      */
-    public void setPoints(List<Point2D> points) throws IllegalArgumentException,
-            LockedException {
+    public void setPoints(List<Point2D> points) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -383,8 +378,7 @@ public abstract class ConicRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 5 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException { }
+    public void setQualityScores(double[] qualityScores) throws LockedException { }
     
     /**
      * Creates a conic robust estimator based on 2D point samples and using
@@ -420,7 +414,7 @@ public abstract class ConicRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static ConicRobustEstimator create(List<Point2D> points, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSConicRobustEstimator(points);
@@ -477,7 +471,7 @@ public abstract class ConicRobustEstimator {
      */
     public static ConicRobustEstimator create(
             ConicRobustEstimatorListener listener, List<Point2D> points,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSConicRobustEstimator(listener, points);
@@ -504,7 +498,7 @@ public abstract class ConicRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 5 points).
      */
     public static ConicRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSConicRobustEstimator();
@@ -533,8 +527,7 @@ public abstract class ConicRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static ConicRobustEstimator create(List<Point2D> points, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSConicRobustEstimator(points);
@@ -564,7 +557,7 @@ public abstract class ConicRobustEstimator {
      */
     public static ConicRobustEstimator create(
             ConicRobustEstimatorListener listener, double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSConicRobustEstimator(listener);
@@ -596,8 +589,7 @@ public abstract class ConicRobustEstimator {
      */
     public static ConicRobustEstimator create(
             ConicRobustEstimatorListener listener, List<Point2D> points,
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSConicRobustEstimator(listener, points);
@@ -632,8 +624,7 @@ public abstract class ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have a
      * size greater or equal than MINIMUM_SIZE.
      */
-    public static ConicRobustEstimator create(List<Point2D> points) 
-            throws IllegalArgumentException {
+    public static ConicRobustEstimator create(List<Point2D> points) {
         return create(points, DEFAULT_ROBUST_METHOD);
     }
     
@@ -660,8 +651,7 @@ public abstract class ConicRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static ConicRobustEstimator create(
-            ConicRobustEstimatorListener listener, List<Point2D> points) 
-            throws IllegalArgumentException {
+            ConicRobustEstimatorListener listener, List<Point2D> points) {
         return create(listener, points, DEFAULT_ROBUST_METHOD);
     }
     
@@ -673,8 +663,7 @@ public abstract class ConicRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 5 points).
      */
-    public static ConicRobustEstimator create(double[] qualityScores) 
-            throws IllegalArgumentException {
+    public static ConicRobustEstimator create(double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -689,7 +678,7 @@ public abstract class ConicRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static ConicRobustEstimator create(List<Point2D> points, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -704,8 +693,7 @@ public abstract class ConicRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 5 points).
      */
     public static ConicRobustEstimator create(
-            ConicRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
+            ConicRobustEstimatorListener listener, double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -723,7 +711,7 @@ public abstract class ConicRobustEstimator {
      */
     public static ConicRobustEstimator create(
             ConicRobustEstimatorListener listener, List<Point2D> points,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);
     }        
     
@@ -755,8 +743,7 @@ public abstract class ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    private void internalSetPoints(List<Point2D> points) 
-            throws IllegalArgumentException {
+    private void internalSetPoints(List<Point2D> points) {
         if (points.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

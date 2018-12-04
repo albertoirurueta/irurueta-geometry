@@ -86,7 +86,7 @@ public class EuclideanTransformation2DEstimator {
      * the same size or their size is smaller than 3.
      */
     public EuclideanTransformation2DEstimator(List<Point2D> inputPoints,
-            List<Point2D> outputPoints) throws IllegalArgumentException {
+            List<Point2D> outputPoints) {
         internalSetPoints(inputPoints, outputPoints);
     }
     
@@ -111,8 +111,7 @@ public class EuclideanTransformation2DEstimator {
      */
     public EuclideanTransformation2DEstimator(
             EuclideanTransformation2DEstimatorListener listener,
-            List<Point2D> inputPoints, List<Point2D> outputPoints)
-            throws IllegalArgumentException {
+            List<Point2D> inputPoints, List<Point2D> outputPoints) {
         mListener = listener;
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -134,8 +133,7 @@ public class EuclideanTransformation2DEstimator {
      * the same size or their size is smaller than 3.
      */
     public EuclideanTransformation2DEstimator(List<Point2D> inputPoints,
-            List<Point2D> outputPoints, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            List<Point2D> outputPoints, boolean weakMinimumSizeAllowed) {
         mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -166,8 +164,7 @@ public class EuclideanTransformation2DEstimator {
     public EuclideanTransformation2DEstimator(
             EuclideanTransformation2DEstimatorListener listener,
             List<Point2D> inputPoints, List<Point2D> outputPoints,
-            boolean weakMinimumSizeAllowed)
-            throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
         mListener = listener;
         internalSetPoints(inputPoints, outputPoints);
@@ -217,8 +214,7 @@ public class EuclideanTransformation2DEstimator {
      * already in progress.
      */
     public void setPoints(List<Point2D> inputPoints, 
-            List<Point2D> outputPoints) throws IllegalArgumentException,
-            LockedException {
+            List<Point2D> outputPoints) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -365,7 +361,8 @@ public class EuclideanTransformation2DEstimator {
                     Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH);
             
             int n = mInputPoints.size();
-            Point2D inputPoint, outputPoint;
+            Point2D inputPoint;
+            Point2D outputPoint;
             Matrix col = new Matrix(
                     Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
             Matrix row = new Matrix(1,
@@ -442,7 +439,8 @@ public class EuclideanTransformation2DEstimator {
      */
     private static Matrix computeCentroid(List<Point2D> points)
             throws AlgebraException {
-        double x = 0.0, y = 0.0;
+        double x = 0.0;
+        double y = 0.0;
         double n = points.size();
         for (Point2D p : points) {
             x += p.getInhomX() / n;
@@ -468,7 +466,7 @@ public class EuclideanTransformation2DEstimator {
      * the same size or their size is smaller than #getMinimumPoints.
      */
     private void internalSetPoints(List<Point2D> inputPoints,
-            List<Point2D> outputPoints) throws IllegalArgumentException {
+            List<Point2D> outputPoints) {
         if (inputPoints.size() < getMinimumPoints()) {
             throw new IllegalArgumentException();
         }

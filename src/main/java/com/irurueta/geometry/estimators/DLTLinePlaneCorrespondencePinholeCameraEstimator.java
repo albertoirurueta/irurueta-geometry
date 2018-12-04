@@ -84,8 +84,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      * don't have the same size and enough correspondences.
      */
     public DLTLinePlaneCorrespondencePinholeCameraEstimator(List<Plane> planes,
-            List<Line2D> lines2D) throws IllegalArgumentException,
-            WrongListSizesException {
+            List<Line2D> lines2D) throws WrongListSizesException {
         super(planes, lines2D);
         mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
@@ -102,7 +101,7 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
      */
     public DLTLinePlaneCorrespondencePinholeCameraEstimator(List<Plane> planes,
             List<Line2D> lines2D, PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         super(planes, lines2D, listener);
         mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
@@ -183,8 +182,13 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
             Line2D line2D;
             Plane plane;
             int counter = 0;
-            double la, lb, lc;
-            double A, B, C, D;
+            double la;
+            double lb;
+            double lc;
+            double pA;
+            double pB;
+            double pC;
+            double pD;
             double rowNorm;
             while (iterator2D.hasNext() && iterator3D.hasNext()) {
                 line2D = iterator2D.next();
@@ -198,21 +202,21 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
                 lb = line2D.getB();
                 lc = line2D.getC();
                 
-                A = plane.getA();
-                B = plane.getB();
-                C = plane.getC();
-                D = plane.getD();
+                pA = plane.getA();
+                pB = plane.getB();
+                pC = plane.getC();
+                pD = plane.getD();
                 
                 //first row
-                a.setElementAt(counter, 0, -D * la);
-                a.setElementAt(counter, 1, -D * lb);
-                a.setElementAt(counter, 2, -D * lc);
+                a.setElementAt(counter, 0, -pD * la);
+                a.setElementAt(counter, 1, -pD * lb);
+                a.setElementAt(counter, 2, -pD * lc);
                 
                 //columns 3, 4, 5, 6, 7, 8 are left with zero values
                 
-                a.setElementAt(counter, 9, A * la);
-                a.setElementAt(counter, 10, A * lb);
-                a.setElementAt(counter, 11, A * lc);
+                a.setElementAt(counter, 9, pA * la);
+                a.setElementAt(counter, 10, pA * lb);
+                a.setElementAt(counter, 11, pA * lc);
                 
                 //normalize row
                 rowNorm = Math.sqrt(
@@ -241,15 +245,15 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
                 
                 //columns 0, 1, 2 are left with zero values
                 
-                a.setElementAt(counter, 3, -D * la);
-                a.setElementAt(counter, 4, -D * lb);
-                a.setElementAt(counter, 5, -D * lc);
+                a.setElementAt(counter, 3, -pD * la);
+                a.setElementAt(counter, 4, -pD * lb);
+                a.setElementAt(counter, 5, -pD * lc);
                 
                 //columns 6, 7, 8 are left with zero values
                 
-                a.setElementAt(counter, 9, B * la);
-                a.setElementAt(counter, 10, B * lb);
-                a.setElementAt(counter, 11, B * lc);
+                a.setElementAt(counter, 9, pB * la);
+                a.setElementAt(counter, 10, pB * lb);
+                a.setElementAt(counter, 11, pB * lc);
                 
                 //normalize row
                 rowNorm = Math.sqrt(
@@ -285,13 +289,13 @@ public class DLTLinePlaneCorrespondencePinholeCameraEstimator extends
                 
                 //columns 0, 1, 2, 3, 4, 5 are left with zero values
                 
-                a.setElementAt(counter, 6, -D * la);
-                a.setElementAt(counter, 7, -D * lb);
-                a.setElementAt(counter, 8, -D * lc);                
+                a.setElementAt(counter, 6, -pD * la);
+                a.setElementAt(counter, 7, -pD * lb);
+                a.setElementAt(counter, 8, -pD * lc);
                 
-                a.setElementAt(counter, 9, C * la);
-                a.setElementAt(counter, 10, C * lb);
-                a.setElementAt(counter, 11, C * lc);
+                a.setElementAt(counter, 9, pC * la);
+                a.setElementAt(counter, 10, pC * lb);
+                a.setElementAt(counter, 11, pC * lc);
                 
                 //normalize row
                 rowNorm = Math.sqrt(
