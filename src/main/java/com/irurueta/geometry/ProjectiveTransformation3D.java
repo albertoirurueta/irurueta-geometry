@@ -65,7 +65,7 @@ public class ProjectiveTransformation3D extends Transformation3D
     /**
      * Internal 4x4 matrix containing transformation.
      */
-    private Matrix T;
+    private Matrix t;
     
     /**
      * Indicates whether internal matrix is normalized.
@@ -79,8 +79,10 @@ public class ProjectiveTransformation3D extends Transformation3D
     public ProjectiveTransformation3D() {
         super();
         try {
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
-        } catch (WrongSizeException ignore) { }
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
     
@@ -88,11 +90,12 @@ public class ProjectiveTransformation3D extends Transformation3D
      * Creates transformation with provided internal matrix.
      * Notice that provided matrix should usually be invertible, otherwise the
      * transformation will be degenerate and its inverse will not be available.
-     * @param T Internal 4x4 matrix.
+     * @param t Internal 4x4 matrix.
+     * @throws NullPointerException raised if provided matrix is null.
+     * @throws IllegalArgumentException raised if provided matrix is not 4x4.
      */
-    public ProjectiveTransformation3D(Matrix T)
-            throws NullPointerException, IllegalArgumentException {
-        setT(T);
+    public ProjectiveTransformation3D(Matrix t) {
+        setT(t);
         normalize();
     }
     
@@ -106,7 +109,7 @@ public class ProjectiveTransformation3D extends Transformation3D
         double[] diag = new double[HOM_COORDS];
         Arrays.fill(diag, scale);
         diag[HOM_COORDS - 1] = 1.0; //set las element to 1.0
-        T = Matrix.diagonal(diag);
+        t = Matrix.diagonal(diag);
         normalize();
     }
     
@@ -115,9 +118,8 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @param rotation a 3D rotation.
      * @throws NullPointerException raised if provided rotation is null.
      */
-    public ProjectiveTransformation3D(Rotation3D rotation)
-            throws NullPointerException {
-        T = rotation.asHomogeneousMatrix();
+    public ProjectiveTransformation3D(Rotation3D rotation) {
+        t = rotation.asHomogeneousMatrix();
         normalize();
     }
     
@@ -129,16 +131,17 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @param rotation a 3D rotation.
      * @throws NullPointerException raised if provided rotation is null.
      */
-    public ProjectiveTransformation3D(double scale, Rotation3D rotation)
-            throws NullPointerException {
+    public ProjectiveTransformation3D(double scale, Rotation3D rotation) {
         try {
             double[] diag = new double[INHOM_COORDS];
             Arrays.fill(diag, scale);
-            Matrix A = Matrix.diagonal(diag);
-            A.multiply(rotation.asInhomogeneousMatrix());
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, A);
-        } catch (WrongSizeException ignore) { }
+            Matrix a = Matrix.diagonal(diag);
+            a.multiply(rotation.asInhomogeneousMatrix());
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
     
@@ -151,13 +154,15 @@ public class ProjectiveTransformation3D extends Transformation3D
      * if provided rotation is null.
      */
     public ProjectiveTransformation3D(AffineParameters3D params, 
-            Rotation3D rotation) throws NullPointerException {
+            Rotation3D rotation) {
         try {
-            Matrix A = params.asMatrix();
-            A.multiply(rotation.asInhomogeneousMatrix());
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, A);
-        } catch (WrongSizeException ignore) { }
+            Matrix a = params.asMatrix();
+            a.multiply(rotation.asInhomogeneousMatrix());
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
     
@@ -169,23 +174,24 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if length of array is not equal
      * to NUM_TRANSLATION_COORDS.
      */
-    public ProjectiveTransformation3D(double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+    public ProjectiveTransformation3D(double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
         try {
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
-            T.setSubmatrix(0, 3, 2, 3, translation);
-        } catch (WrongSizeException ignore) { }
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            t.setSubmatrix(0, 3, 2, 3, translation);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
     
     /**
      * Creates transformation with provided affine linear mapping and 
      * translation.
-     * @param A affine linear mapping.
+     * @param a affine linear mapping.
      * @param translation array indicating 3D translation using inhomogeneous
      * coordinates.
      * @throws NullPointerException raised if provided array is null or if
@@ -193,18 +199,19 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if length of array is not equal 
      * to NUM_TRANSLATION_COORDS.
      */
-    public ProjectiveTransformation3D(Matrix A, double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+    public ProjectiveTransformation3D(Matrix a, double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
         try {
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, A);
-            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
+            t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
     
@@ -219,8 +226,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws IllegalArgumentException Raised if provided translation does not
      * have length 3.
      */
-    public ProjectiveTransformation3D(double scale, double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+    public ProjectiveTransformation3D(double scale, double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -228,10 +234,10 @@ public class ProjectiveTransformation3D extends Transformation3D
         double[] diag = new double[HOM_COORDS];
         Arrays.fill(diag, scale);
         diag[HOM_COORDS - 1] = 1.0; //set last element to 1.0
-        T = Matrix.diagonal(diag);
+        t = Matrix.diagonal(diag);
         
         //set translation
-        T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+        t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                 HOM_COORDS - 1, translation);
         normalize();
     }
@@ -246,16 +252,15 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if provided translation does not
      * have length 3.
      */
-    public ProjectiveTransformation3D(Rotation3D rotation, double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+    public ProjectiveTransformation3D(Rotation3D rotation, double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
-        T = rotation.asHomogeneousMatrix();
+        t = rotation.asHomogeneousMatrix();
         
         //set translation
-        T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+        t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                 HOM_COORDS - 1, translation);    
         normalize();
     }
@@ -274,8 +279,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * have length 3.
      */
     public ProjectiveTransformation3D(double scale, Rotation3D rotation,
-            double[] translation) throws NullPointerException,
-            IllegalArgumentException {
+            double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -283,16 +287,18 @@ public class ProjectiveTransformation3D extends Transformation3D
         try {
             double[] diag = new double[INHOM_COORDS];
             Arrays.fill(diag, scale);
-            Matrix A = Matrix.diagonal(diag);
-            A.multiply(rotation.asInhomogeneousMatrix());
+            Matrix a = Matrix.diagonal(diag);
+            a.multiply(rotation.asInhomogeneousMatrix());
         
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             //set A
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, A);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
             //set translation
-            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+            t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
 
@@ -312,8 +318,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * have length 3 or if projective parameters array doesn't have length 4.
      */
     public ProjectiveTransformation3D(double scale, Rotation3D rotation,
-            double[] translation, double[] projectiveParameters) 
-            throws NullPointerException, IllegalArgumentException {
+            double[] translation, double[] projectiveParameters) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -325,20 +330,22 @@ public class ProjectiveTransformation3D extends Transformation3D
             double value = projectiveParameters[HOM_COORDS - 1];
             double[] diag = new double[INHOM_COORDS];
             Arrays.fill(diag, scale);
-            Matrix A = Matrix.diagonal(diag);
-            A.multiply(rotation.asInhomogeneousMatrix());
+            Matrix a = Matrix.diagonal(diag);
+            a.multiply(rotation.asInhomogeneousMatrix());
         
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             //set A
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, A);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
             //set translation
-            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+            t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
-            T.multiplyByScalar(value);
+            t.multiplyByScalar(value);
             
-            T.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1, HOM_COORDS - 1, 
+            t.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1, HOM_COORDS - 1,
                 projectiveParameters);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }
 
@@ -356,22 +363,23 @@ public class ProjectiveTransformation3D extends Transformation3D
      * have length 3.
      */
     public ProjectiveTransformation3D(AffineParameters3D params,
-            Rotation3D rotation, double[] translation)
-            throws NullPointerException, IllegalArgumentException {
+            Rotation3D rotation, double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
         try {
-            Matrix A = params.asMatrix();
-            A.multiply(rotation.asInhomogeneousMatrix());
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            Matrix a = params.asMatrix();
+            a.multiply(rotation.asInhomogeneousMatrix());
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             //set A
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, A);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
             //set translation
-            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+            t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }    
 
@@ -392,8 +400,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public ProjectiveTransformation3D(AffineParameters3D params,
             Rotation3D rotation, double[] translation, 
-            double[] projectiveParameters)
-            throws NullPointerException, IllegalArgumentException {
+            double[] projectiveParameters) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -402,20 +409,22 @@ public class ProjectiveTransformation3D extends Transformation3D
         }
         
         try {
-            Matrix A = params.asMatrix();
-            A.multiply(rotation.asInhomogeneousMatrix());
-            T = Matrix.identity(HOM_COORDS, HOM_COORDS);
+            Matrix a = params.asMatrix();
+            a.multiply(rotation.asInhomogeneousMatrix());
+            t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             //set A
-            T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, A);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
             //set translation
-            T.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+            t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
             double value = projectiveParameters[HOM_COORDS - 1];
-            T.multiplyByScalar(value);
+            t.multiplyByScalar(value);
             
-            T.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1, HOM_COORDS - 1, 
+            t.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1, HOM_COORDS - 1,
                 projectiveParameters);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         normalize();
     }    
         
@@ -447,8 +456,10 @@ public class ProjectiveTransformation3D extends Transformation3D
             Point3D outputPoint4, Point3D outputPoint5)
             throws CoincidentPointsException {
         try {
-            T = new Matrix(HOM_COORDS, HOM_COORDS);
-        } catch (WrongSizeException ignore) { }
+            t = new Matrix(HOM_COORDS, HOM_COORDS);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         setTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, 
                 inputPoint4, inputPoint5, outputPoint1, outputPoint2, 
                 outputPoint3, outputPoint4, outputPoint5);
@@ -509,7 +520,7 @@ public class ProjectiveTransformation3D extends Transformation3D
     
    /**
      * Returns internal matrix containing this transformation data.
-     * Point transformation is computed as T * x, where x is a 3D point 
+     * Point transformation is computed as t * x, where x is a 3D point
      * expressed using homogeneous coordinates.
      * Usually the internal transformation matrix will be invertible.
      * When this is not the case, the transformation is considered degenerate
@@ -517,48 +528,46 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @return internal transformation matrix.
      */
     public Matrix getT() {
-        return T;
+        return t;
     }
     
     /**
      * Sets internal matrix containing this transformation data.
-     * Point transformation is computed as T * x, where x is a 3D point
+     * Point transformation is computed as t * x, where x is a 3D point
      * expressed using homogeneous coordinates.
      * Usually provided matrix will be invertible, when this is not the case
      * this transformation will become degenerate and its inverse will not be
      * available.
      * This method does not check whether provided matrix is invertible or not.
-     * @param T transformation matrix.
+     * @param t transformation matrix.
      * @throws NullPointerException raised if provided matrix is null.
      * @throws IllegalArgumentException raised if provided matrix is not 4x4.
      */
-    public final void setT(Matrix T) throws NullPointerException,
-            IllegalArgumentException {
-        if (T.getRows() != HOM_COORDS || T.getColumns() != HOM_COORDS) {
+    public final void setT(Matrix t) {
+        if (t.getRows() != HOM_COORDS || t.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
-        this.T = T;
+        this.t = t;
         normalized = false;
     }
     
     /**
      * Returns boolean indicating whether provided matrix will produce a 
      * degenerate projective transformation or not.
-     * @param T a 4x4 matrix to be used as the internal matrix of a projective
+     * @param t a 4x4 matrix to be used as the internal matrix of a projective
      * transformation.
      * @return true if matrix will produce a degenerate transformation, false
      * otherwise.
      * @throws IllegalArgumentException raised if provided matrix is not 4x4.
      */
-    public static boolean isDegenerate(Matrix T) 
-            throws IllegalArgumentException {
-        if (T.getRows() != HOM_COORDS || T.getColumns() != HOM_COORDS) {
+    public static boolean isDegenerate(Matrix t) {
+        if (t.getRows() != HOM_COORDS || t.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
         try {
-            LUDecomposer decomposer = new LUDecomposer(T);
+            LUDecomposer decomposer = new LUDecomposer(t);
             decomposer.decompose();
             return decomposer.isSingular();
         } catch (AlgebraException e) {
@@ -574,7 +583,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @return true if transformation is degenerate, false otherwise.
      */
     public boolean isDegenerate() {
-        return isDegenerate(T);
+        return isDegenerate(t);
     }
     
     /**
@@ -583,33 +592,32 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @return linear mapping matrix.
      */
     public Matrix getA() {
-        Matrix A = T.getSubmatrix(0, 0, INHOM_COORDS - 1,
+        Matrix a = t.getSubmatrix(0, 0, INHOM_COORDS - 1,
                 INHOM_COORDS - 1);
-        A.multiplyByScalar(1.0 / T.getElementAt(HOM_COORDS - 1, 
+        a.multiplyByScalar(1.0 / t.getElementAt(HOM_COORDS - 1,
                 HOM_COORDS - 1));
-        return A;
+        return a;
     }
     
     /**
      * Sets affine linear mapping matrix.
      * @see AffineTransformation3D
-     * @param A Linear mapping matrix.
+     * @param a Linear mapping matrix.
      * @throws NullPointerException raised if provided matrix is null.
      * @throws IllegalArgumentException raised if provided matrix does not have
      * size 3x3.
      */
-    public final void setA(Matrix A) throws NullPointerException, 
-            IllegalArgumentException {
-        if (A == null) {
+    public final void setA(Matrix a) {
+        if (a == null) {
             throw new NullPointerException();
         }
-        if (A.getRows() != INHOM_COORDS || A.getColumns() != INHOM_COORDS) {
+        if (a.getRows() != INHOM_COORDS || a.getColumns() != INHOM_COORDS) {
             throw new IllegalArgumentException();
         }
 
-        T.setSubmatrix(0, 0, INHOM_COORDS - 1,
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1,
                 INHOM_COORDS - 1,
-                A.multiplyByScalarAndReturnNew(1.0 * T.getElementAt(
+                a.multiplyByScalarAndReturnNew(1.0 * t.getElementAt(
                 HOM_COORDS - 1, HOM_COORDS - 1)));
     }
     
@@ -618,9 +626,9 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public final void normalize() {
         if (!normalized) {
-            double norm = Utils.normF(T);
+            double norm = Utils.normF(t);
             if (norm > EPS) {
-                T.multiplyByScalar(1.0 / norm);
+                t.multiplyByScalar(1.0 / norm);
             }
             normalized = true;
         }
@@ -638,7 +646,7 @@ public class ProjectiveTransformation3D extends Transformation3D
         //Use QR decomposition to retrieve rotation component of this 
         //transformation
         normalize();
-        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, 
+        RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         try {
             decomposer.decompose();
@@ -658,17 +666,16 @@ public class ProjectiveTransformation3D extends Transformation3D
      * be set (usually because of numerical instability in parameters of this
      * transformation).
      */
-    public void setRotation(Rotation3D rotation) throws NullPointerException,
-            AlgebraException {
+    public void setRotation(Rotation3D rotation) throws AlgebraException {
         Matrix rotMatrix = rotation.asInhomogeneousMatrix();
         
         //Use QR decomposition to retrieve parameters matrix
-        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, 
+        RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
         Matrix localA = decomposer.getR(); //retrieves params matrix
         localA.multiply(rotMatrix);
-        T.setSubmatrix(0, 0, INHOM_COORDS - 1,
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1,
                 INHOM_COORDS - 1, localA);
         normalized = false;
     }
@@ -699,8 +706,8 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public void setScale(double scale) throws AlgebraException {
         normalize();
-        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, 
+        double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
         Matrix localA = decomposer.getR(); //params
@@ -708,7 +715,7 @@ public class ProjectiveTransformation3D extends Transformation3D
         localA.setElementAt(1, 1, scale * value);
         localA.setElementAt(2, 2, scale * value);
         localA.multiply(decomposer.getQ());
-        T.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, localA);
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, localA);
         normalized = false;
     }
     
@@ -740,13 +747,13 @@ public class ProjectiveTransformation3D extends Transformation3D
     public void getAffineParameters(AffineParameters3D result)
             throws AlgebraException {
         normalize();
-        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, 
+        double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
-        Matrix R = decomposer.getR();
-        R.multiplyByScalar(1.0 / value);
-        result.fromMatrix(R);
+        Matrix r = decomposer.getR();
+        r.multiplyByScalar(1.0 / value);
+        result.fromMatrix(r);
     }
     
     /**
@@ -761,8 +768,8 @@ public class ProjectiveTransformation3D extends Transformation3D
     public void setAffineParameters(AffineParameters3D parameters)
             throws AlgebraException {
         normalize();
-        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        RQDecomposer decomposer = new RQDecomposer(T.getSubmatrix(0, 0, 
+        double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
         Matrix params = parameters.asMatrix();
@@ -771,7 +778,7 @@ public class ProjectiveTransformation3D extends Transformation3D
         params.multiply(rotation);  //params is equivalent to A because it
                                     //has been multiplied by rotation
         params.multiplyByScalar(value); //normalize
-        T.setSubmatrix(0, 0, INHOM_COORDS - 1,
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1,
                 INHOM_COORDS - 1, params);
         normalized = false;
     }    
@@ -787,8 +794,8 @@ public class ProjectiveTransformation3D extends Transformation3D
      * of the last row of the internal transformation matrix.
      */
     public double[] getProjectiveParameters() {
-        //return last row of matrix T
-        return T.getSubmatrixAsArray(HOM_COORDS - 1, 0, HOM_COORDS - 1, 
+        //return last row of matrix t
+        return t.getSubmatrixAsArray(HOM_COORDS - 1, 0, HOM_COORDS - 1,
                 HOM_COORDS - 1, true);
     }    
     
@@ -804,13 +811,12 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if provided array does not have
      * length 4.
      */
-    public final void setProjectiveParameters(double[] params) 
-            throws IllegalArgumentException {
+    public final void setProjectiveParameters(double[] params) {
         if (params.length != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
-        T.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1,
+        t.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1,
                 HOM_COORDS - 1, params);
         normalized = false;
     }    
@@ -825,9 +831,9 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public double[] getTranslation() {
         normalize();
-        double[] translation = T.getSubmatrixAsArray(0, HOM_COORDS - 1, 
+        double[] translation = t.getSubmatrixAsArray(0, HOM_COORDS - 1,
                 INHOM_COORDS - 1, HOM_COORDS - 1);
-        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
         ArrayUtils.multiplyByScalar(translation, 1.0 / value, translation);
         return translation;
     }
@@ -842,9 +848,9 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws WrongSizeException if provided array does not have length 3.
      */
     public void getTranslation(double[] out) throws WrongSizeException {
-        T.getSubmatrixAsArray(0, HOM_COORDS - 1, INHOM_COORDS - 1, 
+        t.getSubmatrixAsArray(0, HOM_COORDS - 1, INHOM_COORDS - 1,
                 HOM_COORDS - 1, out);
-        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
         ArrayUtils.multiplyByScalar(out, 1.0 / value, out);
     }
     
@@ -855,16 +861,15 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if provided array does not have
      * length equal to NUM_TRANSLATION_COORDS.
      */
-    public void setTranslation(double[] translation)
-            throws IllegalArgumentException {
+    public void setTranslation(double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
         
-        double value = T.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
         double[] translation2 = ArrayUtils.multiplyByScalarAndReturnNew(
                 translation, value);
-        T.setSubmatrix(0, HOM_COORDS - 1, translation2.length - 1, 
+        t.setSubmatrix(0, HOM_COORDS - 1, translation2.length - 1,
                 HOM_COORDS - 1, translation2);
         normalized = false;
     }
@@ -877,8 +882,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if provided array does not have
      * length equal to NUM_TRANSLATION_COORDS.
      */
-    public void addTranslation(double[] translation)
-            throws IllegalArgumentException {
+    public void addTranslation(double[] translation) {
         double[] currentTranslation = getTranslation();
         ArrayUtils.sum(currentTranslation, translation, currentTranslation);
         setTranslation(currentTranslation);
@@ -890,7 +894,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public double getTranslationX() {
         normalize();
-        return T.getElementAt(0, HOM_COORDS - 1) / T.getElementAt(
+        return t.getElementAt(0, HOM_COORDS - 1) / t.getElementAt(
                 HOM_COORDS - 1, HOM_COORDS - 1);
     }
     
@@ -899,7 +903,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @param translationX X coordinate translation to be set.
      */
     public void setTranslationX(double translationX) {
-        T.setElementAt(0, HOM_COORDS - 1, translationX * T.getElementAt(
+        t.setElementAt(0, HOM_COORDS - 1, translationX * t.getElementAt(
                 HOM_COORDS - 1, HOM_COORDS - 1));
         normalized = false;
     }
@@ -910,7 +914,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public double getTranslationY() {
         normalize();
-        return T.getElementAt(1, HOM_COORDS - 1) / T.getElementAt(
+        return t.getElementAt(1, HOM_COORDS - 1) / t.getElementAt(
                 HOM_COORDS - 1, HOM_COORDS - 1);
     }
     
@@ -919,7 +923,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @param translationY Y coordinate translation to be set.
      */
     public void setTranslationY(double translationY) {
-        T.setElementAt(1, HOM_COORDS - 1, translationY * T.getElementAt(
+        t.setElementAt(1, HOM_COORDS - 1, translationY * t.getElementAt(
                 HOM_COORDS - 1, HOM_COORDS - 1));
         normalized = false;
     }
@@ -930,7 +934,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public double getTranslationZ() {
         normalize();
-        return T.getElementAt(2, HOM_COORDS - 1) / T.getElementAt(
+        return t.getElementAt(2, HOM_COORDS - 1) / t.getElementAt(
                 HOM_COORDS - 1, HOM_COORDS - 1);
     }
     
@@ -939,7 +943,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @param translationZ z coordinate translation to be set.
      */
     public void setTranslationZ(double translationZ) {
-        T.setElementAt(2, HOM_COORDS - 1, translationZ * T.getElementAt(
+        t.setElementAt(2, HOM_COORDS - 1, translationZ * t.getElementAt(
                 HOM_COORDS - 1, HOM_COORDS - 1));
         normalized = false;
     }
@@ -1043,13 +1047,13 @@ public class ProjectiveTransformation3D extends Transformation3D
     
    /**
      * Represents this transformation as a 4x4 matrix.
-     * A point can be transformed as T * p, where T is the transformation matrix
+     * A point can be transformed as t * p, where t is the transformation matrix
      * and p is a point expressed as an homogeneous vector.
      * @return This transformation in matrix form.
      */
     @Override
     public Matrix asMatrix() {
-        return T.clone();
+        return t.clone();
     }
     
     /**
@@ -1060,12 +1064,12 @@ public class ProjectiveTransformation3D extends Transformation3D
      * matrix.
      */
     @Override
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
+    public void asMatrix(Matrix m) {
         if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
         
-        m.copyFrom(T);
+        m.copyFrom(t);
     }    
     
    /**
@@ -1087,14 +1091,16 @@ public class ProjectiveTransformation3D extends Transformation3D
             point.setElementAtIndex(2, inputPoint.getHomZ());
             point.setElementAtIndex(3, inputPoint.getHomW());
         
-            Matrix transformedPoint = T.multiplyAndReturnNew(point);
+            Matrix transformedPoint = t.multiplyAndReturnNew(point);
         
             outputPoint.setHomogeneousCoordinates(
                     transformedPoint.getElementAtIndex(0), 
                     transformedPoint.getElementAtIndex(1), 
                     transformedPoint.getElementAtIndex(2),
                     transformedPoint.getElementAtIndex(3));
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }
     
     /**
@@ -1112,16 +1118,16 @@ public class ProjectiveTransformation3D extends Transformation3D
     public void transform(Quadric inputQuadric, Quadric outputQuadric)
             throws NonSymmetricMatrixException, AlgebraException {
         //point' * quadric * point = 0
-        //point' * T' * transformedQuadric * T * point = 0
+        //point' * t' * transformedQuadric * t * point = 0
         //where:
-        // - transformedPoint = T * point
+        // - transformedPoint = t * point
 
         //Hence:
-        // transformedQuadric = T^-1' * quadric * T^-1
+        // transformedQuadric = t^-1' * quadric * t^-1
         
         inputQuadric.normalize();
         
-        Matrix Q = inputQuadric.asMatrix();
+        Matrix q = inputQuadric.asMatrix();
         normalize();
 
         Matrix invT = inverseAndReturnNew().asMatrix();
@@ -1131,9 +1137,11 @@ public class ProjectiveTransformation3D extends Transformation3D
 
         Matrix m = invT.transposeAndReturnNew();
         try {
-            m.multiply(Q);
+            m.multiply(q);
             m.multiply(invT);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
@@ -1160,19 +1168,19 @@ public class ProjectiveTransformation3D extends Transformation3D
             DualQuadric outputDualQuadric) throws NonSymmetricMatrixException,
             AlgebraException {
         //plane' * dualQuadric * plane = 0
-        //plane' * T^-1 * T * dualQuadric * T' * T^-1'*plane
+        //plane' * t^-1 * t * dualQuadric * t' * t^-1'*plane
 
         //Hence:
-        //transformed plane: T^-1'*plane
-        //transformed dual quadric: T * dualQuadric * T'
+        //transformed plane: t^-1'*plane
+        //transformed dual quadric: t * dualQuadric * t'
 
         inputDualQuadric.normalize();
         normalize();
         
         Matrix dualQ = inputDualQuadric.asMatrix();
-        Matrix transT = T.transposeAndReturnNew();
+        Matrix transT = t.transposeAndReturnNew();
 
-        Matrix m = T.multiplyAndReturnNew(dualQ);
+        Matrix m = t.multiplyAndReturnNew(dualQ);
         m.multiply(transT);
 
         //normalize resulting m matrix to increase accuracy so that it can be
@@ -1195,11 +1203,11 @@ public class ProjectiveTransformation3D extends Transformation3D
     @Override
     public void transform(Plane inputPlane, Plane outputPlane) 
             throws AlgebraException {
-        //plane' * point = 0 --> plane' * T^-1 * T * point
-        //(plane' * T^-1)*(T*point) = (T^-1'*plane)'*(T*point)
+        //plane' * point = 0 --> plane' * t^-1 * t * point
+        //(plane' * t^-1)*(t*point) = (t^-1'*plane)'*(t*point)
         //where:
-        //- transformedPlane = T^-1'*plane
-        //- transformedPoint = T*point
+        //- transformedPlane = t^-1'*plane
+        //- transformedPoint = t*point
 
         
         inputPlane.normalize();
@@ -1268,7 +1276,7 @@ public class ProjectiveTransformation3D extends Transformation3D
     protected void inverse(ProjectiveTransformation3D result) 
             throws AlgebraException {
 
-        result.T = Utils.inverse(T);
+        result.t = Utils.inverse(t);
     }        
     
     /**
@@ -1315,10 +1323,12 @@ public class ProjectiveTransformation3D extends Transformation3D
         
         
         try {
-            outputTransformation.T = this.T.multiplyAndReturnNew(
-                    inputTransformation.T);
+            outputTransformation.t = this.t.multiplyAndReturnNew(
+                    inputTransformation.t);
             
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
     }    
     
    /**
@@ -1727,10 +1737,12 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(14, 13, -oZiY / norm);
             m.setElementAt(14, 14, -oZiZ / norm);
             m.setElementAt(14, 15, -oZiW / norm);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         
         //use SVD to decompose matrix m
-        Matrix V;
+        Matrix v;
         try {
             SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
@@ -1740,11 +1752,11 @@ public class ProjectiveTransformation3D extends Transformation3D
             if (decomposer.getRank() < 15) {
                 throw new CoincidentPointsException();
             }
-            V = decomposer.getV(); //V is 16x16
+            v = decomposer.getV(); //V is 16x16
             
             //last column of V will contain parameters of transformation
-            T.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1, 
-                    V.getSubmatrix(0, 15, 15, 15).toArray(), false);
+            t.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1,
+                    v.getSubmatrix(0, 15, 15, 15).toArray(), false);
             normalized = true; //because columns of V are normalized after SVD
             
         } catch (AlgebraException e) {
@@ -2159,10 +2171,12 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(14, 13, -oCiB / norm);
             m.setElementAt(14, 14, -oCiC / norm);
             m.setElementAt(14, 15, -oCiD / norm);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
                         
         //use SVD to decompose matrix m
-        Matrix V;
+        Matrix v;
         try {
             SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
@@ -2172,17 +2186,17 @@ public class ProjectiveTransformation3D extends Transformation3D
             if (decomposer.getRank() < 15) {
                 throw new CoincidentPlanesException();
             }
-            V = decomposer.getV(); //V is 16x16
+            v = decomposer.getV(); //V is 16x16
             
             //last column of V will contain parameters of transformation
             Matrix transInvT = new Matrix(HOM_COORDS, HOM_COORDS);
             transInvT.setSubmatrix(0, 0, HOM_COORDS - 1,
                     HOM_COORDS - 1,
-                    V.getSubmatrix(0, 15, 15, 15).toArray(),
+                    v.getSubmatrix(0, 15, 15, 15).toArray(),
                     false);
             transInvT.transpose(); //this is now invT
-            T = Utils.inverse(transInvT);
-            normalized = false; //invT is normalized, but not T
+            t = Utils.inverse(transInvT);
+            normalized = false; //invT is normalized, but not t
             
         } catch (AlgebraException e) {
             throw new CoincidentPlanesException(e);

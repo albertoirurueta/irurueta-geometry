@@ -91,6 +91,8 @@ public class ProjectiveTransformation2D extends Transformation2D
      * Notice that provided matrix should usually be invertible, otherwise the
      * transformation will be degenerate and its inverse will not be available.
      * @param t Internal 3x3 matrix.
+     * @throws NullPointerException raised if provided matrix is null.
+     * @throws IllegalArgumentException raised if provided matrix is not 3x3
      */
     public ProjectiveTransformation2D(Matrix t) {
         setT(t);

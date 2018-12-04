@@ -63,8 +63,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @throws NonSymmetricMatrixException Raised when the quadric matrix is not
      * symmetric.
      */
-    public Quadric(Matrix m) throws IllegalArgumentException,
-            NonSymmetricMatrixException {
+    public Quadric(Matrix m) throws NonSymmetricMatrixException {
         super(m);
     }
     
@@ -99,8 +98,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @return True if the point lies within this quadric, false otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public boolean isLocus(Point3D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean isLocus(Point3D point, double threshold) {
         
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
@@ -108,7 +106,7 @@ public class Quadric extends BaseQuadric implements Serializable {
         
         try {
             normalize();
-            Matrix Q = asMatrix();
+            Matrix q = asMatrix();
             Matrix homPoint = new Matrix(
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             point.normalize();
@@ -117,11 +115,11 @@ public class Quadric extends BaseQuadric implements Serializable {
             homPoint.setElementAt(2, 0, point.getHomZ());
             homPoint.setElementAt(3, 0, point.getHomW());
             Matrix locusMatrix = homPoint.transposeAndReturnNew();
-            locusMatrix.multiply(Q);
+            locusMatrix.multiply(q);
             locusMatrix.multiply(homPoint);
             
             return Math.abs(locusMatrix.getElementAt(0, 0)) < threshold;
-        } catch (WrongSizeException ignore) {
+        } catch (WrongSizeException e) {
             return false;
         }
     }
@@ -146,7 +144,7 @@ public class Quadric extends BaseQuadric implements Serializable {
     public double angleBetweenPoints(Point3D pointA, Point3D pointB) {
         try {
             //retrieve quadric as matrix
-            Matrix Q = asMatrix();
+            Matrix q = asMatrix();
             Matrix transHomPointA = new Matrix(1, 
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
             pointA.normalize();
@@ -155,7 +153,7 @@ public class Quadric extends BaseQuadric implements Serializable {
             transHomPointA.setElementAt(0, 2, pointA.getHomZ());
             transHomPointA.setElementAt(0, 3, pointA.getHomW());
             
-            Matrix tmp = transHomPointA.multiplyAndReturnNew(Q);
+            Matrix tmp = transHomPointA.multiplyAndReturnNew(q);
             tmp.multiply(transHomPointA.transposeAndReturnNew()); //This is
                                                 //homPointA' * Q * homPointA
             
@@ -170,12 +168,12 @@ public class Quadric extends BaseQuadric implements Serializable {
             homPointB.setElementAt(3, 0, pointB.getHomW());
             
             homPointB.transpose(tmp);
-            tmp.multiply(Q);
+            tmp.multiply(q);
             tmp.multiply(homPointB);
             
             double normB = tmp.getElementAt(0, 0);
             
-            transHomPointA.multiply(Q);
+            transHomPointA.multiply(q);
             transHomPointA.multiply(homPointB);
             //This is homPointA' * Q * homPointB
             
@@ -203,7 +201,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean arePerpendicularPoints(Point3D pointA, Point3D pointB,
-            double threshold) throws IllegalArgumentException {
+            double threshold) {
         
         try {
             //retrieve quadric as matrix
@@ -224,8 +222,8 @@ public class Quadric extends BaseQuadric implements Serializable {
             homPointB.setElementAt(3, 0, pointB.getHomW());
             
             normalize();
-            Matrix Q = asMatrix();
-            transHomPointA.multiply(Q);
+            Matrix q = asMatrix();
+            transHomPointA.multiply(q);
             transHomPointA.multiply(homPointB);
                 //This is homPointA' * Q * homPointB
             
@@ -492,20 +490,20 @@ public class Quadric extends BaseQuadric implements Serializable {
             
             //the right null-space of m contains the parameters a, b, c, d, e ,f
             //of the conic
-            Matrix V = decomposer.getV();                        
+            Matrix v = decomposer.getV();
             
-            double a = V.getElementAt(0, 9);
-            double b = V.getElementAt(1, 9);
-            double c = V.getElementAt(2, 9);
-            double d = V.getElementAt(3, 9);
+            double a = v.getElementAt(0, 9);
+            double b = v.getElementAt(1, 9);
+            double c = v.getElementAt(2, 9);
+            double d = v.getElementAt(3, 9);
             
-            double f = V.getElementAt(4, 9);
-            double e = V.getElementAt(5, 9);            
+            double f = v.getElementAt(4, 9);
+            double e = v.getElementAt(5, 9);
             
-            double g = V.getElementAt(6, 9);
-            double h = V.getElementAt(7, 9);
-            double i = V.getElementAt(8, 9);
-            double j = V.getElementAt(9, 9);            
+            double g = v.getElementAt(6, 9);
+            double h = v.getElementAt(7, 9);
+            double i = v.getElementAt(8, 9);
+            double j = v.getElementAt(9, 9);
             
             setParameters(a, b, c, d, e, f, g, h, i, j);            
         } catch (AlgebraException ex) {
@@ -551,7 +549,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negtive.
      */
     public void tangentPlaneAt(Point3D point, Plane plane, double threshold)
-            throws NotLocusException, IllegalArgumentException {
+            throws NotLocusException {
         
         if (!isLocus(point, threshold)) {
             throw new NotLocusException();
@@ -560,7 +558,7 @@ public class Quadric extends BaseQuadric implements Serializable {
         point.normalize();
         normalize();
         
-        Matrix Q = asMatrix();
+        Matrix q = asMatrix();
         
         try {
             Matrix p = new Matrix(
@@ -570,11 +568,13 @@ public class Quadric extends BaseQuadric implements Serializable {
             p.setElementAt(2, 0, point.getHomZ());
             p.setElementAt(3, 0, point.getHomW());
             
-            Q.multiply(p);
-        } catch (WrongSizeException ignore) { }
+            q.multiply(p);
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         
-        plane.setParameters(Q.getElementAt(0, 0), Q.getElementAt(1, 0), 
-                Q.getElementAt(2, 0), Q.getElementAt(3, 0));
+        plane.setParameters(q.getElementAt(0, 0), q.getElementAt(1, 0),
+                q.getElementAt(2, 0), q.getElementAt(3, 0));
         //TODO: must be tested
     }
     
@@ -619,12 +619,22 @@ public class Quadric extends BaseQuadric implements Serializable {
         //A*x^2 + 2*B*x*y + C*y^2 + 2*D*x*w + 2*E*y*w + F*w^2 = 0
         
         //Quadric parameters
-        double aQ = getA(), bQ = getB(), cQ = getC(), dQ = getD(), eQ = getE(),
-                fQ = getF(), gQ = getG(), hQ = getH(), iQ = getI(), jQ = getJ();
+        double aQ = getA();
+        double bQ = getB();
+        double cQ = getC();
+        double dQ = getD();
+        double eQ = getE();
+        double fQ = getF();
+        double gQ = getG();
+        double hQ = getH();
+        double iQ = getI();
+        double jQ = getJ();
         
         //Plane parameters
-        double aP = plane.getA(), bP = plane.getB(), cP = plane.getC(),
-                dP = plane.getD();
+        double aP = plane.getA();
+        double bP = plane.getB();
+        double cP = plane.getC(),
+        double dP = plane.getD();
         
         //we solve the following system of equations:
         //aQ*x^2 + bQ*y^2 + cQ*z^2 + 2*dQ*x*y + 2*eQ*y*z + 2*fQ*x*z + 2*gQ*x*w + 2*hQ*y*w + 2*iQ*z*w + jQ*w^2 = 0

@@ -5012,7 +5012,7 @@ public class LMedSDLTPointCorrespondencePinholeCameraRobustEstimatorTest
             throws IllegalArgumentException, LockedException, NotReadyException, 
             CameraException, NotAvailableException {
         int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+        for (int t = 0; t < 2 * TIMES; t++) {
             UniformRandomizer randomizer = new UniformRandomizer(new Random());
             double focalLength = randomizer.nextDouble(
                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
