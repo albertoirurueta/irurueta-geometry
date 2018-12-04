@@ -69,7 +69,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * not valid.
      */
     public static Point2D create(CoordinatesType coordinatesType,
-            double[] v) throws IllegalArgumentException {
+            double[] v) {
         switch (coordinatesType) {
             case INHOMOGENEOUS_COORDINATES:
                 return new InhomogeneousPoint2D(v);
@@ -90,7 +90,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @throws IllegalArgumentException Raised if the size of provided array
      * is not valid.
      */
-    public static Point2D create(double[] v) throws IllegalArgumentException {
+    public static Point2D create(double[] v) {
         return create(DEFAULT_COORDINATES_TYPE, v);
     }
     
@@ -130,8 +130,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @param array Array where coordinates will be stored.
      * @throws IllegalArgumentException Raised if length of array is not valid.
      */
-    public abstract void asArray(double[] array) 
-            throws IllegalArgumentException;
+    public abstract void asArray(double[] array);
     
     /**
      * Sets the coordinates of a 2d point using an array containing its
@@ -140,8 +139,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @throws IllegalArgumentException Raised if provided array does not have
      * a valid size.
      */
-    public abstract void setCoordinates(double[] v) 
-            throws IllegalArgumentException;
+    public abstract void setCoordinates(double[] v);
     
     /**
      * Sets coordinates of this instance using the coordinates of provided 2D 
@@ -221,8 +219,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public abstract boolean equals(Point2D point, double threshold)
-            throws IllegalArgumentException;
+    public abstract boolean equals(Point2D point, double threshold);
     
     /**
      * Checks if the 2d point described by this class equals the input Point2d
@@ -309,7 +306,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @throws IllegalArgumentException if provided dimension value is negative or exceeds number of dimensions.
      */
     @Override
-    public double getInhomogeneousCoordinate(int dim) throws IllegalArgumentException {
+    public double getInhomogeneousCoordinate(int dim) {
         if (dim < 0 || dim >= getDimensions()) {
             throw new IllegalArgumentException();
         }
@@ -330,11 +327,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @throws IllegalArgumentException if provided dimension value is negative or exceeds number of dimensions.
      */
     @Override
-    public void setInhomogeneousCoordinate(int dim, double value) throws IllegalArgumentException {
-        if (dim < 0 || dim >= getDimensions()) {
-            throw new IllegalArgumentException();
-        }
-
+    public void setInhomogeneousCoordinate(int dim, double value) {
         switch (dim) {
             case 0:
                 setInhomX(value);
@@ -342,6 +335,8 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
             case 1:
                 setInhomY(value);
                 break;
+            default:
+                throw new IllegalArgumentException();
         }
     }
 
@@ -414,8 +409,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @param threshold Threshold to determine if point is between.
      * @return True if point is between point1 and point2, false otherwise.
      */    
-    public boolean isBetween(Point2D point1, Point2D point2, double threshold)
-            throws IllegalArgumentException {
+    public boolean isBetween(Point2D point1, Point2D point2, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }

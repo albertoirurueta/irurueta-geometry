@@ -35,7 +35,7 @@ public interface Point<P extends Point> extends Serializable {
      * @return value of inhomogeneous coordinate.
      * @throws IllegalArgumentException if provided dimension value is negative or exceeds number of dimensions.
      */
-    double getInhomogeneousCoordinate(int dim) throws IllegalArgumentException;
+    double getInhomogeneousCoordinate(int dim);
 
     /**
      * Sets value of inhomogeneous coordinate for provided dimension.
@@ -43,7 +43,7 @@ public interface Point<P extends Point> extends Serializable {
      * @param value value to be set.
      * @throws IllegalArgumentException if provided dimension value is negative or exceeds number of dimensions.
      */
-    void setInhomogeneousCoordinate(int dim, double value) throws IllegalArgumentException;
+    void setInhomogeneousCoordinate(int dim, double value);
 
     /**
      * Returns euclidean distance between this point and provided point.

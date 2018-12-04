@@ -121,7 +121,7 @@ public class Plane implements Serializable {
      * @param array Array containing plane parameters.
      * @throws IllegalArgumentException Raised if length of array is not 4.
      */
-    public Plane(double[] array) throws IllegalArgumentException {
+    public Plane(double[] array) {
         setParameters(array);
     }
     
@@ -152,7 +152,7 @@ public class Plane implements Serializable {
      * @throws ParallelVectorsException Raised if provided vectors are parallel.
      */
     public Plane(Point3D point, double[] vectorA, double[] vectorB)
-            throws IllegalArgumentException, ParallelVectorsException {
+            throws ParallelVectorsException {
         setParametersFrom1PointAnd2Vectors(point, vectorA, vectorB);
     }
     
@@ -163,8 +163,7 @@ public class Plane implements Serializable {
      * @param vector Director vector.
      * @throws IllegalArgumentException Raised if vector length is not 3.
      */    
-    public Plane(Point3D point, double[] vector) 
-            throws IllegalArgumentException {
+    public Plane(Point3D point, double[] vector) {
         setParametersFromPointAndDirectorVector(point, vector);
     }
     
@@ -221,8 +220,7 @@ public class Plane implements Serializable {
      * @throws IllegalArgumentException Raised if provided array does not
      * have length equal to 4.
      */    
-    public final void setParameters(double[] array) 
-            throws IllegalArgumentException {
+    public final void setParameters(double[] array) {
         if (array.length != PLANE_NUMBER_PARAMS) {
             throw new IllegalArgumentException();
         }
@@ -396,8 +394,7 @@ public class Plane implements Serializable {
      * @throws ParallelVectorsException Raised if provided vectors are parallel.
      */
     public final void setParametersFrom1PointAnd2Vectors(Point3D point,
-            double[] vectorA, double[] vectorB) throws IllegalArgumentException,
-            ParallelVectorsException {
+            double[] vectorA, double[] vectorB) throws ParallelVectorsException {
         
         if (vectorA.length != INHOM_VECTOR_SIZE ||
                 vectorB.length != INHOM_VECTOR_SIZE) {
@@ -445,7 +442,7 @@ public class Plane implements Serializable {
      * @throws IllegalArgumentException Raised if vector length is not 3.
      */
     public final void setParametersFromPointAndDirectorVector(Point3D point,
-            double[] vector) throws IllegalArgumentException {
+            double[] vector) {
         
         if (vector.length != INHOM_VECTOR_SIZE) {
             throw new IllegalArgumentException();
@@ -481,8 +478,7 @@ public class Plane implements Serializable {
      * @return True if point is locus of this plane, false otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public boolean isLocus(Point3D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Point3D point, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -543,8 +539,7 @@ public class Plane implements Serializable {
      * @return Closest point.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */    
-    public Point3D getClosestPoint(Point3D point, double threshold)
-            throws IllegalArgumentException {
+    public Point3D getClosestPoint(Point3D point, double threshold) {
         Point3D result = Point3D.create();
         closestPoint(point, result, threshold);
         return result;
@@ -573,8 +568,7 @@ public class Plane implements Serializable {
      * this plane.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */    
-    public void closestPoint(Point3D point, Point3D result, double threshold)
-            throws IllegalArgumentException {
+    public void closestPoint(Point3D point, Point3D result, double threshold) {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -619,7 +613,7 @@ public class Plane implements Serializable {
      * @throws IllegalArgumentException Raised if provided array doesn't have
      * length 4.
      */
-    public void asArray(double[] array) throws IllegalArgumentException {
+    public void asArray(double[] array) {
         if (array.length != PLANE_NUMBER_PARAMS) {
             throw new IllegalArgumentException();
         }
@@ -675,8 +669,7 @@ public class Plane implements Serializable {
      * @throws IllegalArgumentException Raised if provided array does not have
      * length 3.
      */
-    public void directorVector(double[] directorVector) 
-            throws IllegalArgumentException {
+    public void directorVector(double[] directorVector) {
         if (directorVector.length != INHOM_VECTOR_SIZE) {
             throw new IllegalArgumentException();
         }
@@ -747,15 +740,15 @@ public class Plane implements Serializable {
                 throw new NoIntersectionException();
             }
         
-            Matrix V = decomposer.getV();
+            Matrix v = decomposer.getV();
         
             //last column of V contains the right nullspace of m, which is the
             //intersection of lines expressed in homogeneous coordinates.
             //because column is already normalized by SVD decomposition, point
             //will also be normalized
-            result.setHomogeneousCoordinates(V.getElementAt(0, 3), 
-                    V.getElementAt(1, 3), V.getElementAt(2, 3), 
-                    V.getElementAt(3, 3));
+            result.setHomogeneousCoordinates(v.getElementAt(0, 3),
+                    v.getElementAt(1, 3), v.getElementAt(2, 3),
+                    v.getElementAt(3, 3));
         } catch (AlgebraException e) {
             //lines are numerically unstable
             throw new NoIntersectionException(e);
@@ -787,8 +780,7 @@ public class Plane implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException if threshold is negative.
      */
-    public boolean equals(Plane plane, double threshold)
-            throws IllegalArgumentException {
+    public boolean equals(Plane plane, double threshold) {
         
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
