@@ -185,11 +185,10 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * the same size and enough points.
      */
     public EPnPPointCorrespondencePinholeCameraEstimator(List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D) throws IllegalArgumentException,
-            WrongListSizesException {
-<span class="fc" id="L190">        super();</span>
-<span class="fc" id="L191">        internalSetLists(points3D, points2D);</span>
-<span class="fc" id="L192">    }</span>
+            List&lt;Point2D&gt; points2D) throws WrongListSizesException {
+<span class="fc" id="L189">        super();</span>
+<span class="fc" id="L190">        internalSetLists(points3D, points2D);</span>
+<span class="fc" id="L191">    }</span>
     
     /**
      * Constructor.
@@ -203,10 +202,10 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     public EPnPPointCorrespondencePinholeCameraEstimator(List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, PinholeCameraEstimatorListener listener)
-            throws IllegalArgumentException, WrongListSizesException {
-<span class="fc" id="L207">        super(listener);</span>
-<span class="fc" id="L208">        internalSetLists(points3D, points2D);</span>
-<span class="fc" id="L209">    }</span>
+            throws WrongListSizesException {
+<span class="fc" id="L206">        super(listener);</span>
+<span class="fc" id="L207">        internalSetLists(points3D, points2D);</span>
+<span class="fc" id="L208">    }</span>
 
     /**
      * Constructor.
@@ -214,9 +213,9 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     public EPnPPointCorrespondencePinholeCameraEstimator(
             PinholeCameraIntrinsicParameters intrinsic) {
-<span class="fc" id="L217">        this();</span>
-<span class="fc" id="L218">        mIntrinsic = intrinsic;</span>
-<span class="fc" id="L219">    }</span>
+<span class="fc" id="L216">        this();</span>
+<span class="fc" id="L217">        mIntrinsic = intrinsic;</span>
+<span class="fc" id="L218">    }</span>
     
     /**
      * Constructor with listener.
@@ -228,11 +227,10 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     public EPnPPointCorrespondencePinholeCameraEstimator(
             PinholeCameraIntrinsicParameters intrinsic,
-            PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException {
-<span class="fc" id="L233">        this(listener);</span>
-<span class="fc" id="L234">        mIntrinsic = intrinsic;</span>
-<span class="fc" id="L235">    }</span>
+            PinholeCameraEstimatorListener listener) {
+<span class="fc" id="L231">        this(listener);</span>
+<span class="fc" id="L232">        mIntrinsic = intrinsic;</span>
+<span class="fc" id="L233">    }</span>
     
     /**
      * Constructor.
@@ -247,10 +245,10 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     public EPnPPointCorrespondencePinholeCameraEstimator(
             PinholeCameraIntrinsicParameters intrinsic,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
-            throws IllegalArgumentException, WrongListSizesException {
-<span class="fc" id="L251">        this(points3D, points2D);</span>
-<span class="fc" id="L252">        mIntrinsic = intrinsic;</span>
-<span class="fc" id="L253">    }</span>
+            throws WrongListSizesException {
+<span class="fc" id="L249">        this(points3D, points2D);</span>
+<span class="fc" id="L250">        mIntrinsic = intrinsic;</span>
+<span class="fc" id="L251">    }</span>
     
     /**
      * Constructor.
@@ -268,10 +266,10 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             PinholeCameraIntrinsicParameters intrinsic,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
             PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
-<span class="fc" id="L272">        this(points3D, points2D, listener);</span>
-<span class="fc" id="L273">        mIntrinsic = intrinsic;</span>
-<span class="fc" id="L274">    }</span>
+            throws WrongListSizesException {
+<span class="fc" id="L270">        this(points3D, points2D, listener);</span>
+<span class="fc" id="L271">        mIntrinsic = intrinsic;</span>
+<span class="fc" id="L272">    }</span>
     
     /**
      * Sets list of corresponding points.
@@ -284,14 +282,13 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     @Override
     public void setLists(List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D)
-            throws LockedException, IllegalArgumentException, 
-            WrongListSizesException {
-<span class="fc bfc" id="L289" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L290">            throw new LockedException();</span>
+            throws LockedException, WrongListSizesException {
+<span class="fc bfc" id="L286" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L287">            throw new LockedException();</span>
         }
         
-<span class="fc" id="L293">        internalSetLists(points3D, points2D);</span>
-<span class="fc" id="L294">    }</span>
+<span class="fc" id="L290">        internalSetLists(points3D, points2D);</span>
+<span class="fc" id="L291">    }</span>
             
     /**
      * Indicates whether planar configuration is checked to determine whether
@@ -301,7 +298,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * false to always find a solution assuming the general case.
      */
     public boolean isPlanarConfigurationAllowed() {
-<span class="fc" id="L304">        return mPlanarConfigurationAllowed;</span>
+<span class="fc" id="L301">        return mPlanarConfigurationAllowed;</span>
     }
     
     /**
@@ -315,11 +312,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     public void setPlanarConfigurationAllowed(
             boolean planarConfigurationAllowed) throws LockedException {
-<span class="fc bfc" id="L318" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L319">            throw new LockedException();</span>
+<span class="fc bfc" id="L315" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L316">            throw new LockedException();</span>
         }
-<span class="fc" id="L321">        mPlanarConfigurationAllowed = planarConfigurationAllowed;</span>
-<span class="fc" id="L322">    }</span>
+<span class="fc" id="L318">        mPlanarConfigurationAllowed = planarConfigurationAllowed;</span>
+<span class="fc" id="L319">    }</span>
     
     /**
      * Indicates whether the case where a dimension 2 nullspace is allowed.
@@ -329,7 +326,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return true to allow 2 dimensional nullspace, false otherwise.
      */
     public boolean isNullspaceDimension2Allowed() {
-<span class="fc" id="L332">        return mNullspaceDimension2Allowed;</span>
+<span class="fc" id="L329">        return mNullspaceDimension2Allowed;</span>
     }
     
     /**
@@ -343,11 +340,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     public void setNullspaceDimension2Allowed(
             boolean nullspaceDimension2Allowed) throws LockedException {
-<span class="fc bfc" id="L346" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L347">            throw new LockedException();</span>
+<span class="fc bfc" id="L343" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L344">            throw new LockedException();</span>
         }
-<span class="fc" id="L349">        mNullspaceDimension2Allowed = nullspaceDimension2Allowed;</span>
-<span class="fc" id="L350">    }</span>
+<span class="fc" id="L346">        mNullspaceDimension2Allowed = nullspaceDimension2Allowed;</span>
+<span class="fc" id="L347">    }</span>
         
     /**
      * Indicates whether the case where a dimension 3 nullspace is allowed.
@@ -358,7 +355,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return true to allow 3 dimensional nullspace, false otherwise.
      */
     public boolean isNullspaceDimension3Allowed() {
-<span class="fc" id="L361">        return mNullspaceDimension3Allowed;</span>
+<span class="fc" id="L358">        return mNullspaceDimension3Allowed;</span>
     }
     
     /**
@@ -373,11 +370,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     public void setNullspaceDimension3Allowed(
             boolean nullspaceDimension3Allowed) throws LockedException {
-<span class="fc bfc" id="L376" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L377">            throw new LockedException();</span>
+<span class="fc bfc" id="L373" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L374">            throw new LockedException();</span>
         }
-<span class="fc" id="L379">        mNullspaceDimension3Allowed = nullspaceDimension3Allowed;</span>
-<span class="fc" id="L380">    }</span>
+<span class="fc" id="L376">        mNullspaceDimension3Allowed = nullspaceDimension3Allowed;</span>
+<span class="fc" id="L377">    }</span>
     
     /**
      * Gets threshold to determine whether 3D matched points are in a planar
@@ -389,7 +386,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * configuration.
      */
     public double getPlanarThreshold() {
-<span class="fc" id="L392">        return mPlanarThreshold;</span>
+<span class="fc" id="L389">        return mPlanarThreshold;</span>
     }
     
     /**
@@ -404,22 +401,22 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws LockedException if estimator is locked.
      */
     public void setPlanarThreshold(double planarThreshold) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L408" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L409">            throw new LockedException();</span>
+            throws LockedException {
+<span class="fc bfc" id="L405" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L406">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L411" title="1 of 2 branches missed.">        if (planarThreshold &lt; 0.0) {</span>
-<span class="nc" id="L412">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L408" title="1 of 2 branches missed.">        if (planarThreshold &lt; 0.0) {</span>
+<span class="nc" id="L409">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L414">        mPlanarThreshold = planarThreshold;</span>
-<span class="fc" id="L415">    }</span>
+<span class="fc" id="L411">        mPlanarThreshold = planarThreshold;</span>
+<span class="fc" id="L412">    }</span>
     
     /**
      * Gets intrinsic parameters of camera to be estimated.
      * @return intrinsic parameters of camera to be estimated.
      */
     public PinholeCameraIntrinsicParameters getIntrinsic() {
-<span class="fc" id="L422">        return mIntrinsic;</span>
+<span class="fc" id="L419">        return mIntrinsic;</span>
     }
     
     /**
@@ -429,11 +426,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     public void setIntrinsic(PinholeCameraIntrinsicParameters intrinsic)
             throws LockedException {
-<span class="fc bfc" id="L432" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L433">            throw new LockedException();</span>
+<span class="fc bfc" id="L429" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L430">            throw new LockedException();</span>
         }
-<span class="fc" id="L435">        mIntrinsic = intrinsic;</span>
-<span class="fc" id="L436">    }</span>
+<span class="fc" id="L432">        mIntrinsic = intrinsic;</span>
+<span class="fc" id="L433">    }</span>
     
     /**
      * Indicates if this estimator is ready to start the estimation.
@@ -441,7 +438,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */    
     @Override
     public boolean isReady() {
-<span class="pc bpc" id="L444" title="1 of 6 branches missed.">        return areListsAvailable() &amp;&amp; areValidLists(mPoints3D, mPoints2D) &amp;&amp;</span>
+<span class="pc bpc" id="L441" title="1 of 6 branches missed.">        return areListsAvailable() &amp;&amp; areValidLists(mPoints3D, mPoints2D) &amp;&amp;</span>
                 mIntrinsic != null;
     }
 
@@ -451,7 +448,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */    
     @Override
     public PinholeCameraEstimatorType getType() {
-<span class="fc" id="L454">        return PinholeCameraEstimatorType.EPnP_PINHOLE_CAMERA_ESTIMATOR;</span>
+<span class="fc" id="L451">        return PinholeCameraEstimatorType.EPnP_PINHOLE_CAMERA_ESTIMATOR;</span>
     }
     
     /**
@@ -462,7 +459,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     @Override
     public boolean arePointCorrespondencesNormalized() {
-<span class="fc" id="L465">        return false;</span>
+<span class="fc" id="L462">        return false;</span>
     }
     
     /**
@@ -476,10 +473,10 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     public void setPointCorrespondencesNormalized(boolean normalize)
         throws LockedException {
         
-<span class="fc bfc" id="L479" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L480">            throw new LockedException();</span>
+<span class="fc bfc" id="L476" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L477">            throw new LockedException();</span>
         }
-<span class="fc" id="L482">    }</span>
+<span class="fc" id="L479">    }</span>
     
     /**
      * Estimates a pinhole camera.
@@ -492,59 +489,65 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     @Override
     public PinholeCamera estimate() throws LockedException, NotReadyException,
             PinholeCameraEstimatorException {
-<span class="fc bfc" id="L495" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L496">            throw new LockedException();            </span>
+<span class="fc bfc" id="L492" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L493">            throw new LockedException();            </span>
         }
-<span class="pc bpc" id="L498" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L499">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L495" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L496">            throw new NotReadyException();</span>
         }
         
         try {
-<span class="fc" id="L503">            mLocked = true;</span>
-<span class="fc bfc" id="L504" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L505">                mListener.onEstimateStart(this);</span>
+<span class="fc" id="L500">            mLocked = true;</span>
+<span class="fc bfc" id="L501" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L502">                mListener.onEstimateStart(this);</span>
             }
             
-<span class="fc" id="L508">            computeWorldControlPointsAndPointConfiguration();</span>
-<span class="fc" id="L509">            computeBarycentricCoordinates();</span>
-<span class="fc" id="L510">            buildM();</span>
-<span class="fc" id="L511">            solveNullspace();</span>
+<span class="fc" id="L505">            computeWorldControlPointsAndPointConfiguration();</span>
+<span class="fc" id="L506">            computeBarycentricCoordinates();</span>
+<span class="fc" id="L507">            buildM();</span>
+<span class="fc" id="L508">            solveNullspace();</span>
+<span class="nc" id="L509">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L510">            mLocked = false;</span>
+<span class="nc" id="L511">            throw new PinholeCameraEstimatorException(e);</span>
+<span class="fc" id="L512">        }</span>
+
             
-<span class="fc" id="L513">            mSolutions = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L515">        mSolutions = new ArrayList&lt;&gt;();</span>
             
-            //general case
+        //general case
+        try {
+<span class="fc" id="L519">            generalSolution1();</span>
+<span class="nc" id="L520">        } catch (GeometryException ignore) {</span>
+            //continue attempting 2nd solution if 1st one fails
+<span class="fc" id="L522">        }</span>
+<span class="pc bpc" id="L523" title="1 of 2 branches missed.">        if (mNullspaceDimension2Allowed) {</span>
             try {
-<span class="fc" id="L517">                generalSolution1();</span>
-<span class="pc" id="L518">            } catch (Exception ignore) { }</span>
-<span class="pc bpc" id="L519" title="1 of 2 branches missed.">            if (mNullspaceDimension2Allowed) {</span>
-                try {
-<span class="fc" id="L521">                    generalSolution2();</span>
-<span class="pc" id="L522">                } catch (Exception ignore) { }</span>
-            }
-<span class="pc bpc" id="L524" title="1 of 4 branches missed.">            if (mNullspaceDimension3Allowed &amp;&amp; !mIsPlanar) {</span>
-                try {
-<span class="fc" id="L526">                    generalSolution3();</span>
-<span class="pc" id="L527">                } catch (Exception ignore) { }</span>
-            }
-            
-            //pick best solution
-<span class="fc" id="L531">            Solution bestSolution = pickBestSolution();</span>
-            
-<span class="fc bfc" id="L533" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L534">                mListener.onEstimateEnd(this);</span>
-            }
-            
-<span class="pc bpc" id="L537" title="1 of 2 branches missed.">            if (bestSolution == null) {</span>
-<span class="nc" id="L538">                throw new PinholeCameraEstimatorException();</span>
-            }
-            
-<span class="fc" id="L541">            return attemptRefine(bestSolution.camera);</span>
-<span class="nc" id="L542">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L543">            throw new PinholeCameraEstimatorException(e);</span>
-        } finally {
-<span class="fc" id="L545">            mLocked = false;</span>
+<span class="fc" id="L525">                generalSolution2();</span>
+<span class="nc" id="L526">            } catch (GeometryException | AlgebraException ignore) {</span>
+                //continue attempting 3rd solution if 2nd one fails
+<span class="fc" id="L528">            }</span>
         }
-    }  
+<span class="pc bpc" id="L530" title="1 of 4 branches missed.">        if (mNullspaceDimension3Allowed &amp;&amp; !mIsPlanar) {</span>
+            try {
+<span class="fc" id="L532">                generalSolution3();</span>
+<span class="nc" id="L533">            } catch (GeometryException | AlgebraException ignore) {</span>
+                //3rd solution could not be found
+<span class="fc" id="L535">            }</span>
+        }
+            
+        //pick best solution
+<span class="fc" id="L539">        Solution bestSolution = pickBestSolution();</span>
+            
+<span class="fc bfc" id="L541" title="All 2 branches covered.">        if (mListener != null) {</span>
+<span class="fc" id="L542">            mListener.onEstimateEnd(this);</span>
+        }
+            
+<span class="pc bpc" id="L545" title="1 of 2 branches missed.">        if (bestSolution == null) {</span>
+<span class="nc" id="L546">            throw new PinholeCameraEstimatorException();</span>
+        }
+<span class="fc" id="L548">        mLocked = false;</span>
+<span class="fc" id="L549">        return attemptRefine(bestSolution.camera);</span>
+    }
         
  
     /**
@@ -554,7 +557,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * false otherwise.
      */
     public boolean isPlanar() {
-<span class="fc" id="L557">        return mIsPlanar;</span>
+<span class="fc" id="L560">        return mIsPlanar;</span>
     }                
     
     /**
@@ -570,7 +573,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     @Override
     protected Matrix internalEstimate(List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D) {
-<span class="nc" id="L573">        return null;</span>
+<span class="nc" id="L576">        return null;</span>
     }    
         
     /**
@@ -583,36 +586,35 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * the same size and enough points.
      */
     private void internalSetLists(List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D) throws IllegalArgumentException,
-            WrongListSizesException {
+            List&lt;Point2D&gt; points2D) throws WrongListSizesException {
         
-<span class="fc bfc" id="L589" title="All 4 branches covered.">        if (points3D == null || points2D == null) {</span>
-<span class="fc" id="L590">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L591" title="All 4 branches covered.">        if (points3D == null || points2D == null) {</span>
+<span class="fc" id="L592">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc bfc" id="L593" title="All 2 branches covered.">        if (!areValidLists(points3D, points2D)) {</span>
-<span class="fc" id="L594">            throw new WrongListSizesException();</span>
+<span class="fc bfc" id="L595" title="All 2 branches covered.">        if (!areValidLists(points3D, points2D)) {</span>
+<span class="fc" id="L596">            throw new WrongListSizesException();</span>
         }
         
-<span class="fc" id="L597">        mPoints3D = points3D;</span>
-<span class="fc" id="L598">        mPoints2D = points2D;     </span>
-<span class="fc" id="L599">    }</span>
+<span class="fc" id="L599">        mPoints3D = points3D;</span>
+<span class="fc" id="L600">        mPoints2D = points2D;     </span>
+<span class="fc" id="L601">    }</span>
     
     /**
      * Picks best solution (the one having the smallest reprojection error).
      * @return best solution.
      */
     private Solution pickBestSolution() {
-<span class="fc" id="L606">        Solution bestSolution = null;</span>
-<span class="fc" id="L607">        double bestError = Double.MAX_VALUE;</span>
-<span class="fc bfc" id="L608" title="All 2 branches covered.">        for(Solution s : mSolutions) {</span>
-<span class="fc bfc" id="L609" title="All 2 branches covered.">            if(s.reprojectionError &lt; bestError) {</span>
-<span class="fc" id="L610">                bestError = s.reprojectionError;</span>
-<span class="fc" id="L611">                bestSolution = s;</span>
+<span class="fc" id="L608">        Solution bestSolution = null;</span>
+<span class="fc" id="L609">        double bestError = Double.MAX_VALUE;</span>
+<span class="fc bfc" id="L610" title="All 2 branches covered.">        for(Solution s : mSolutions) {</span>
+<span class="fc bfc" id="L611" title="All 2 branches covered.">            if(s.reprojectionError &lt; bestError) {</span>
+<span class="fc" id="L612">                bestError = s.reprojectionError;</span>
+<span class="fc" id="L613">                bestSolution = s;</span>
             }
-<span class="fc" id="L613">        }</span>
+<span class="fc" id="L615">        }</span>
         
-<span class="fc" id="L615">        return bestSolution;</span>
+<span class="fc" id="L617">        return bestSolution;</span>
     }    
     
     /**
@@ -626,8 +628,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     private void generalSolution3() throws AlgebraException, 
             LockedException, NotReadyException, CoincidentPointsException {
-<span class="pc bpc" id="L629" title="1 of 2 branches missed.">        if (mIsPlanar) {</span>
-<span class="nc" id="L630">            return;</span>
+<span class="pc bpc" id="L631" title="1 of 2 branches missed.">        if (mIsPlanar) {</span>
+<span class="nc" id="L632">            return;</span>
         }
         
         //we have the distance constraints between control world points (c) and
@@ -678,35 +680,37 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
 
         //this also produces 6 equations as in case 2.
         
-<span class="fc" id="L681">        double[] va = mNullspace.get(0);</span>
-<span class="fc" id="L682">        double[] vb = mNullspace.get(1);</span>
-<span class="fc" id="L683">        double[] vc = mNullspace.get(2);</span>
+<span class="fc" id="L683">        double[] va = mNullspace.get(0);</span>
+<span class="fc" id="L684">        double[] vb = mNullspace.get(1);</span>
+<span class="fc" id="L685">        double[] vc = mNullspace.get(2);</span>
         
-<span class="fc" id="L685">        List&lt;Point3D&gt; controlCameraPointsA = controlPointsFromV(va);</span>
-<span class="fc" id="L686">        List&lt;Point3D&gt; controlCameraPointsB = controlPointsFromV(vb);</span>
-<span class="fc" id="L687">        List&lt;Point3D&gt; controlCameraPointsC = controlPointsFromV(vc);</span>
+<span class="fc" id="L687">        List&lt;Point3D&gt; controlCameraPointsA = controlPointsFromV(va);</span>
+<span class="fc" id="L688">        List&lt;Point3D&gt; controlCameraPointsB = controlPointsFromV(vb);</span>
+<span class="fc" id="L689">        List&lt;Point3D&gt; controlCameraPointsC = controlPointsFromV(vc);</span>
         
-<span class="fc" id="L689">        Matrix c = constraintMatrixSolution3(controlCameraPointsA, </span>
+<span class="fc" id="L691">        Matrix c = constraintMatrixSolution3(controlCameraPointsA, </span>
                 controlCameraPointsB, controlCameraPointsC);
-<span class="fc" id="L691">        double[] rhos = rhos(mControlWorldPoints);</span>
+<span class="fc" id="L693">        double[] rhos = rhos(mControlWorldPoints);</span>
         
-<span class="fc" id="L693">        double[] a = Utils.solve(c, rhos);</span>
+<span class="fc" id="L695">        double[] a = Utils.solve(c, rhos);</span>
         
-        double beta1, beta2, beta3;
-<span class="fc bfc" id="L696" title="All 2 branches covered.">        if (a[0] &lt; 0.0) {</span>
-<span class="fc" id="L697">            beta1 = Math.sqrt(-a[0]);</span>
-<span class="fc bfc" id="L698" title="All 2 branches covered.">            beta2 = a[3] &lt; 0.0 ? Math.sqrt(-a[3]) : 0.0;</span>
+        double beta1;
+        double beta2;
+        double beta3;
+<span class="fc bfc" id="L700" title="All 2 branches covered.">        if (a[0] &lt; 0.0) {</span>
+<span class="fc" id="L701">            beta1 = Math.sqrt(-a[0]);</span>
+<span class="fc bfc" id="L702" title="All 2 branches covered.">            beta2 = a[3] &lt; 0.0 ? Math.sqrt(-a[3]) : 0.0;</span>
         } else {
-<span class="fc" id="L700">            beta1 = Math.sqrt(a[0]);</span>
-<span class="fc bfc" id="L701" title="All 2 branches covered.">            beta2 = a[3] &gt; 0.0 ? Math.sqrt(a[3]) : 0.0;</span>
+<span class="fc" id="L704">            beta1 = Math.sqrt(a[0]);</span>
+<span class="fc bfc" id="L705" title="All 2 branches covered.">            beta2 = a[3] &gt; 0.0 ? Math.sqrt(a[3]) : 0.0;</span>
         }
         
         //fix sign of betas
-<span class="fc bfc" id="L705" title="All 2 branches covered.">        if (a[1] &lt; 0.0) {</span>
-<span class="fc" id="L706">            beta1 = -beta1;</span>
+<span class="fc bfc" id="L709" title="All 2 branches covered.">        if (a[1] &lt; 0.0) {</span>
+<span class="fc" id="L710">            beta1 = -beta1;</span>
         }
         
-<span class="fc" id="L709">        beta3 = a[2] / beta1;     </span>
+<span class="fc" id="L713">        beta3 = a[2] / beta1;     </span>
         
         //We linearize the equation assuming:
         //alpha1 = beta1^2
@@ -716,145 +720,145 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         //alpha5 = beta*beta3
         //alpha6 = beta3^2
         
-<span class="fc" id="L719">        double initialBeta1 = beta1;</span>
-<span class="fc" id="L720">        double initialBeta2 = beta2;</span>
-<span class="fc" id="L721">        double initialBeta3 = beta3;</span>
+<span class="fc" id="L723">        double initialBeta1 = beta1;</span>
+<span class="fc" id="L724">        double initialBeta2 = beta2;</span>
+<span class="fc" id="L725">        double initialBeta3 = beta3;</span>
         
         //compute linear combination of va and vb as 
         //v = beta1*va + beta2*vb + beta3*vc
-<span class="fc" id="L725">        double[] tmp1 = ArrayUtils.multiplyByScalarAndReturnNew(va, beta1);</span>
-<span class="fc" id="L726">        double[] tmp2 = ArrayUtils.multiplyByScalarAndReturnNew(vb, beta2);</span>
-<span class="fc" id="L727">        double[] tmp3 = ArrayUtils.multiplyByScalarAndReturnNew(vc, beta3);</span>
-<span class="fc" id="L728">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
-<span class="fc" id="L729">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
-<span class="fc" id="L730">        double[] v = tmp1;</span>
-<span class="fc" id="L731">        List&lt;Point3D&gt; controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L729">        double[] tmp1 = ArrayUtils.multiplyByScalarAndReturnNew(va, beta1);</span>
+<span class="fc" id="L730">        double[] tmp2 = ArrayUtils.multiplyByScalarAndReturnNew(vb, beta2);</span>
+<span class="fc" id="L731">        double[] tmp3 = ArrayUtils.multiplyByScalarAndReturnNew(vc, beta3);</span>
+<span class="fc" id="L732">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
+<span class="fc" id="L733">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
+<span class="fc" id="L734">        double[] v = tmp1;</span>
+<span class="fc" id="L735">        List&lt;Point3D&gt; controlCameraPoints = controlPointsFromV(v);</span>
         
-<span class="fc" id="L733">        Solution solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L737">        Solution solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L735">        mSolutions.add(solution);    </span>
+<span class="fc" id="L739">        mSolutions.add(solution);    </span>
         
         //because solutions are square roots, beta1, beta2 and beta3 can have 
         //different signs, so we add solutions for each combination so that the 
         //one with the smallest reprojection error will be picked
-<span class="fc" id="L740">        beta1 = -initialBeta1;</span>
-<span class="fc" id="L741">        beta2 = initialBeta2;</span>
-<span class="fc" id="L742">        beta3 = initialBeta3;</span>
+<span class="fc" id="L744">        beta1 = -initialBeta1;</span>
+        //no need to set: beta2 = initialBeta2 and beta3 = initialBeta3 because they already have
+        //those values
         
-<span class="fc" id="L744">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
-<span class="fc" id="L745">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
-<span class="fc" id="L746">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
-<span class="fc" id="L747">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
-<span class="fc" id="L748">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
-<span class="fc" id="L749">        v = tmp1;</span>
-<span class="fc" id="L750">        controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L748">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
+<span class="fc" id="L749">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
+<span class="fc" id="L750">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
+<span class="fc" id="L751">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
+<span class="fc" id="L752">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
+        //no need to set v = tmp1, because it already has this value
+<span class="fc" id="L754">        controlCameraPoints = controlPointsFromV(v);</span>
         
-<span class="fc" id="L752">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L756">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L754">        mSolutions.add(solution);    </span>
+<span class="fc" id="L758">        mSolutions.add(solution);    </span>
 
 
-<span class="fc" id="L757">        beta1 = initialBeta1;</span>
-<span class="fc" id="L758">        beta2 = -initialBeta2;</span>
-<span class="fc" id="L759">        beta3 = initialBeta3;</span>
+<span class="fc" id="L761">        beta1 = initialBeta1;</span>
+<span class="fc" id="L762">        beta2 = -initialBeta2;</span>
+        //no need to set: beta3 = initialBeta3 as it already has that value
         
-<span class="fc" id="L761">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
-<span class="fc" id="L762">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
-<span class="fc" id="L763">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
-<span class="fc" id="L764">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
-<span class="fc" id="L765">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
-<span class="fc" id="L766">        v = tmp1;</span>
-<span class="fc" id="L767">        controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L765">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
+<span class="fc" id="L766">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
+<span class="fc" id="L767">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
+<span class="fc" id="L768">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
+<span class="fc" id="L769">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
+        //no need to set v = tmp1, because it already has this value
+<span class="fc" id="L771">        controlCameraPoints = controlPointsFromV(v);</span>
         
-<span class="fc" id="L769">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L773">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L771">        mSolutions.add(solution);    </span>
+<span class="fc" id="L775">        mSolutions.add(solution);    </span>
 
 
-<span class="fc" id="L774">        beta1 = -initialBeta1;</span>
-<span class="fc" id="L775">        beta2 = -initialBeta2;</span>
-<span class="fc" id="L776">        beta3 = initialBeta3;</span>
+<span class="fc" id="L778">        beta1 = -initialBeta1;</span>
+<span class="fc" id="L779">        beta2 = -initialBeta2;</span>
+        //no need to set beta3 = initialBeta3, as it already has that value
         
-<span class="fc" id="L778">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
-<span class="fc" id="L779">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
-<span class="fc" id="L780">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
-<span class="fc" id="L781">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
-<span class="fc" id="L782">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
-<span class="fc" id="L783">        v = tmp1;</span>
-<span class="fc" id="L784">        controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L782">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
+<span class="fc" id="L783">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
+<span class="fc" id="L784">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
+<span class="fc" id="L785">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
+<span class="fc" id="L786">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
+        //no need to set v = tmp1, because it already has this value
+<span class="fc" id="L788">        controlCameraPoints = controlPointsFromV(v);</span>
         
-<span class="fc" id="L786">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L790">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L788">        mSolutions.add(solution);    </span>
+<span class="fc" id="L792">        mSolutions.add(solution);    </span>
         
         
-<span class="fc" id="L791">        beta1 = initialBeta1;</span>
-<span class="fc" id="L792">        beta2 = initialBeta2;</span>
-<span class="fc" id="L793">        beta3 = -initialBeta3;</span>
+<span class="fc" id="L795">        beta1 = initialBeta1;</span>
+<span class="fc" id="L796">        beta2 = initialBeta2;</span>
+<span class="fc" id="L797">        beta3 = -initialBeta3;</span>
         
-<span class="fc" id="L795">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
-<span class="fc" id="L796">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
-<span class="fc" id="L797">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
-<span class="fc" id="L798">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
-<span class="fc" id="L799">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
-<span class="fc" id="L800">        v = tmp1;</span>
-<span class="fc" id="L801">        controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L799">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
+<span class="fc" id="L800">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
+<span class="fc" id="L801">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
+<span class="fc" id="L802">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
+<span class="fc" id="L803">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
+        //no need to set v = tmp1, because it already has this value
+<span class="fc" id="L805">        controlCameraPoints = controlPointsFromV(v);</span>
         
-<span class="fc" id="L803">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L807">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L805">        mSolutions.add(solution);    </span>
+<span class="fc" id="L809">        mSolutions.add(solution);    </span>
         
         
-<span class="fc" id="L808">        beta1 = -initialBeta1;</span>
-<span class="fc" id="L809">        beta2 = initialBeta2;</span>
-<span class="fc" id="L810">        beta3 = -initialBeta3;</span>
+<span class="fc" id="L812">        beta1 = -initialBeta1;</span>
+        //no need to set beta2 = initialBeta2, because it already has this value
+<span class="fc" id="L814">        beta3 = -initialBeta3;</span>
         
-<span class="fc" id="L812">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
-<span class="fc" id="L813">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
-<span class="fc" id="L814">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
-<span class="fc" id="L815">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
-<span class="fc" id="L816">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
-<span class="fc" id="L817">        v = tmp1;</span>
-<span class="fc" id="L818">        controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L816">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
+<span class="fc" id="L817">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
+<span class="fc" id="L818">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
+<span class="fc" id="L819">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
+<span class="fc" id="L820">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
+        //no need to set v = tmp1, because it already has this value
+<span class="fc" id="L822">        controlCameraPoints = controlPointsFromV(v);</span>
         
-<span class="fc" id="L820">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L824">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L822">        mSolutions.add(solution);      </span>
+<span class="fc" id="L826">        mSolutions.add(solution);      </span>
         
         
-<span class="fc" id="L825">        beta1 = initialBeta1;</span>
-<span class="fc" id="L826">        beta2 = -initialBeta2;</span>
-<span class="fc" id="L827">        beta3 = -initialBeta3;</span>
+<span class="fc" id="L829">        beta1 = initialBeta1;</span>
+<span class="fc" id="L830">        beta2 = -initialBeta2;</span>
+<span class="fc" id="L831">        beta3 = -initialBeta3;</span>
         
-<span class="fc" id="L829">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
-<span class="fc" id="L830">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
-<span class="fc" id="L831">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
-<span class="fc" id="L832">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
-<span class="fc" id="L833">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
-<span class="fc" id="L834">        v = tmp1;</span>
-<span class="fc" id="L835">        controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L833">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
+<span class="fc" id="L834">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
+<span class="fc" id="L835">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
+<span class="fc" id="L836">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
+<span class="fc" id="L837">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
+        //no need to set v = tmp1, because it already has this value
+<span class="fc" id="L839">        controlCameraPoints = controlPointsFromV(v);</span>
         
-<span class="fc" id="L837">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L841">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L839">        mSolutions.add(solution);</span>
+<span class="fc" id="L843">        mSolutions.add(solution);</span>
         
         
-<span class="fc" id="L842">        beta1 = -initialBeta1;</span>
-<span class="fc" id="L843">        beta2 = -initialBeta2;</span>
-<span class="fc" id="L844">        beta3 = -initialBeta3;</span>
+<span class="fc" id="L846">        beta1 = -initialBeta1;</span>
+<span class="fc" id="L847">        beta2 = -initialBeta2;</span>
+<span class="fc" id="L848">        beta3 = -initialBeta3;</span>
         
-<span class="fc" id="L846">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
-<span class="fc" id="L847">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
-<span class="fc" id="L848">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
-<span class="fc" id="L849">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
-<span class="fc" id="L850">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
-<span class="fc" id="L851">        v = tmp1;</span>
-<span class="fc" id="L852">        controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L850">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
+<span class="fc" id="L851">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
+<span class="fc" id="L852">        ArrayUtils.multiplyByScalar(vc, beta3, tmp3);</span>
+<span class="fc" id="L853">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
+<span class="fc" id="L854">        ArrayUtils.sum(tmp1, tmp3, tmp1);</span>
+        //no need to set v = tmp1, because it already has this value
+<span class="fc" id="L856">        controlCameraPoints = controlPointsFromV(v);</span>
         
-<span class="fc" id="L854">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L858">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L856">        mSolutions.add(solution);        </span>
-<span class="fc" id="L857">    }</span>
+<span class="fc" id="L860">        mSolutions.add(solution);        </span>
+<span class="fc" id="L861">    }</span>
 
     /**
      * Tests solution 2 for general point configuration.
@@ -907,17 +911,17 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         //terms of the equation can be built by calling method 
         //#rhos(List&lt;Point3D&gt;) in this class
         
-<span class="fc" id="L910">        double[] va = mNullspace.get(0);</span>
-<span class="fc" id="L911">        double[] vb = mNullspace.get(1);</span>
+<span class="fc" id="L914">        double[] va = mNullspace.get(0);</span>
+<span class="fc" id="L915">        double[] vb = mNullspace.get(1);</span>
         
-<span class="fc" id="L913">        List&lt;Point3D&gt; controlCameraPointsA = controlPointsFromV(va);</span>
-<span class="fc" id="L914">        List&lt;Point3D&gt; controlCameraPointsB = controlPointsFromV(vb);</span>
+<span class="fc" id="L917">        List&lt;Point3D&gt; controlCameraPointsA = controlPointsFromV(va);</span>
+<span class="fc" id="L918">        List&lt;Point3D&gt; controlCameraPointsB = controlPointsFromV(vb);</span>
         
-<span class="fc" id="L916">        Matrix c = constraintMatrixSolution2(controlCameraPointsA, </span>
+<span class="fc" id="L920">        Matrix c = constraintMatrixSolution2(controlCameraPointsA, </span>
                 controlCameraPointsB);
-<span class="fc" id="L918">        double[] rhos = rhos(mControlWorldPoints);</span>
+<span class="fc" id="L922">        double[] rhos = rhos(mControlWorldPoints);</span>
         
-<span class="fc" id="L920">        double[] a = Utils.solve(c, rhos);</span>
+<span class="fc" id="L924">        double[] a = Utils.solve(c, rhos);</span>
         
         //obtained a values are related to betas with the following expressions
         //due to linearization:
@@ -925,79 +929,80 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         //alpha2 = beta1*beta2
         //alpha3 = beta2^2
         
-        double beta1, beta2;
-<span class="fc bfc" id="L929" title="All 2 branches covered.">        if (a[0] &lt; 0.0) {</span>
-<span class="fc" id="L930">            beta1 = Math.sqrt(-a[0]);</span>
-<span class="fc bfc" id="L931" title="All 2 branches covered.">            beta2 = a[2] &lt; 0.0 ? Math.sqrt(-a[2]) : 0.0;</span>
+        double beta1;
+        double beta2;
+<span class="fc bfc" id="L934" title="All 2 branches covered.">        if (a[0] &lt; 0.0) {</span>
+<span class="fc" id="L935">            beta1 = Math.sqrt(-a[0]);</span>
+<span class="fc bfc" id="L936" title="All 2 branches covered.">            beta2 = a[2] &lt; 0.0 ? Math.sqrt(-a[2]) : 0.0;</span>
         } else {
-<span class="fc" id="L933">            beta1 = Math.sqrt(a[0]);</span>
-<span class="fc bfc" id="L934" title="All 2 branches covered.">            beta2 = a[2] &gt; 0.0 ? Math.sqrt(a[2]) : 0.0;</span>
+<span class="fc" id="L938">            beta1 = Math.sqrt(a[0]);</span>
+<span class="fc bfc" id="L939" title="All 2 branches covered.">            beta2 = a[2] &gt; 0.0 ? Math.sqrt(a[2]) : 0.0;</span>
         }
        
         //fix sign of betas
-<span class="fc bfc" id="L938" title="All 2 branches covered.">        if (a[1] &lt; 0.0) {</span>
-<span class="fc" id="L939">            beta1 = -beta1;</span>
+<span class="fc bfc" id="L943" title="All 2 branches covered.">        if (a[1] &lt; 0.0) {</span>
+<span class="fc" id="L944">            beta1 = -beta1;</span>
         }
         
-<span class="fc" id="L942">        double initialBeta1 = beta1;</span>
-<span class="fc" id="L943">        double initialBeta2 = beta2;</span>
+<span class="fc" id="L947">        double initialBeta1 = beta1;</span>
+<span class="fc" id="L948">        double initialBeta2 = beta2;</span>
          
         
         //compute linear combination of va and vb as v = beta1*va + beta2*vb
-<span class="fc" id="L947">        double[] tmp1 = ArrayUtils.multiplyByScalarAndReturnNew(va, beta1);</span>
-<span class="fc" id="L948">        double[] tmp2 = ArrayUtils.multiplyByScalarAndReturnNew(vb, beta2);</span>
-<span class="fc" id="L949">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
-<span class="fc" id="L950">        double[] v = tmp1;</span>
-<span class="fc" id="L951">        List&lt;Point3D&gt; controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L952">        double[] tmp1 = ArrayUtils.multiplyByScalarAndReturnNew(va, beta1);</span>
+<span class="fc" id="L953">        double[] tmp2 = ArrayUtils.multiplyByScalarAndReturnNew(vb, beta2);</span>
+<span class="fc" id="L954">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
+<span class="fc" id="L955">        double[] v = tmp1;</span>
+<span class="fc" id="L956">        List&lt;Point3D&gt; controlCameraPoints = controlPointsFromV(v);</span>
         
-<span class="fc" id="L953">        Solution solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L958">        Solution solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L955">        mSolutions.add(solution); </span>
+<span class="fc" id="L960">        mSolutions.add(solution); </span>
         
         //because solutions are square roots, beta1 and beta2 can have different
         //signs, so we add solutions for each combination so that the one with
         //the smallest reprojection error will be picked
-<span class="fc" id="L960">        beta1 = -initialBeta1;</span>
-<span class="fc" id="L961">        beta2 = -initialBeta2;</span>
+<span class="fc" id="L965">        beta1 = -initialBeta1;</span>
+<span class="fc" id="L966">        beta2 = -initialBeta2;</span>
         
-<span class="fc" id="L963">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
-<span class="fc" id="L964">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
-<span class="fc" id="L965">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
-<span class="fc" id="L966">        v = tmp1;</span>
-<span class="fc" id="L967">        controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L968">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
+<span class="fc" id="L969">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
+<span class="fc" id="L970">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
+        //no need to set v = tmp1, as it already has this value
+<span class="fc" id="L972">        controlCameraPoints = controlPointsFromV(v);</span>
         
-<span class="fc" id="L969">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L974">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L971">        mSolutions.add(solution);</span>
+<span class="fc" id="L976">        mSolutions.add(solution);</span>
         
         
-<span class="fc" id="L974">        beta1 = initialBeta1;</span>
-<span class="fc" id="L975">        beta2 = -initialBeta2;</span>
+<span class="fc" id="L979">        beta1 = initialBeta1;</span>
+<span class="fc" id="L980">        beta2 = -initialBeta2;</span>
         
-<span class="fc" id="L977">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
-<span class="fc" id="L978">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
-<span class="fc" id="L979">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
-<span class="fc" id="L980">        v = tmp1;</span>
-<span class="fc" id="L981">        controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L982">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
+<span class="fc" id="L983">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
+<span class="fc" id="L984">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
+        //no need to set v = tmp1, as it already has this value
+<span class="fc" id="L986">        controlCameraPoints = controlPointsFromV(v);</span>
         
-<span class="fc" id="L983">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L988">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L985">        mSolutions.add(solution);</span>
+<span class="fc" id="L990">        mSolutions.add(solution);</span>
 
         
-<span class="fc" id="L988">        beta1 = -initialBeta1;</span>
-<span class="fc" id="L989">        beta2 = initialBeta2;</span>
+<span class="fc" id="L993">        beta1 = -initialBeta1;</span>
+<span class="fc" id="L994">        beta2 = initialBeta2;</span>
         
-<span class="fc" id="L991">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
-<span class="fc" id="L992">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
-<span class="fc" id="L993">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
-<span class="fc" id="L994">        v = tmp1;</span>
-<span class="fc" id="L995">        controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L996">        ArrayUtils.multiplyByScalar(va, beta1, tmp1);</span>
+<span class="fc" id="L997">        ArrayUtils.multiplyByScalar(vb, beta2, tmp2);</span>
+<span class="fc" id="L998">        ArrayUtils.sum(tmp1, tmp2, tmp1);</span>
+        //no need to set v = tmp1, as it already has this value
+<span class="fc" id="L1000">        controlCameraPoints = controlPointsFromV(v);</span>
         
-<span class="fc" id="L997">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L1002">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L999">        mSolutions.add(solution); </span>
-<span class="fc" id="L1000">    }</span>
+<span class="fc" id="L1004">        mSolutions.add(solution); </span>
+<span class="fc" id="L1005">    }</span>
     
     /**
      * Fills constraint matrix to solve betas when using control points from the
@@ -1016,28 +1021,28 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             List&lt;Point3D&gt; controlCameraPointsB,
             List&lt;Point3D&gt; controlCameraPointsC) throws AlgebraException {
         
-<span class="fc" id="L1019">        int numControl = controlCameraPointsA.size();        </span>
-<span class="fc" id="L1020">        int numEquations = numEquations(numControl);                </span>
+<span class="fc" id="L1024">        int numControl = controlCameraPointsA.size();        </span>
+<span class="fc" id="L1025">        int numEquations = numEquations(numControl);                </span>
         
-<span class="fc" id="L1022">        Matrix c = new Matrix(numEquations, 6);</span>
-<span class="fc" id="L1023">        int row = 0;</span>
-<span class="fc bfc" id="L1024" title="All 2 branches covered.">        for (int i = 0; i &lt; numControl; i++) {</span>
-<span class="fc" id="L1025">            Point3D vai = controlCameraPointsA.get(i);</span>
-<span class="fc" id="L1026">            Point3D vbi = controlCameraPointsB.get(i);</span>
-<span class="fc" id="L1027">            Point3D vci = controlCameraPointsC.get(i);</span>
+<span class="fc" id="L1027">        Matrix c = new Matrix(numEquations, 6);</span>
+<span class="fc" id="L1028">        int row = 0;</span>
+<span class="fc bfc" id="L1029" title="All 2 branches covered.">        for (int i = 0; i &lt; numControl; i++) {</span>
+<span class="fc" id="L1030">            Point3D vai = controlCameraPointsA.get(i);</span>
+<span class="fc" id="L1031">            Point3D vbi = controlCameraPointsB.get(i);</span>
+<span class="fc" id="L1032">            Point3D vci = controlCameraPointsC.get(i);</span>
             
-<span class="fc bfc" id="L1029" title="All 2 branches covered.">            for (int j = i + 1; j &lt; numControl; j++) {</span>
-<span class="fc" id="L1030">                Point3D vaj = controlCameraPointsA.get(j);</span>
-<span class="fc" id="L1031">                Point3D vbj = controlCameraPointsB.get(j);</span>
-<span class="fc" id="L1032">                Point3D vcj = controlCameraPointsC.get(j);</span>
+<span class="fc bfc" id="L1034" title="All 2 branches covered.">            for (int j = i + 1; j &lt; numControl; j++) {</span>
+<span class="fc" id="L1035">                Point3D vaj = controlCameraPointsA.get(j);</span>
+<span class="fc" id="L1036">                Point3D vbj = controlCameraPointsB.get(j);</span>
+<span class="fc" id="L1037">                Point3D vcj = controlCameraPointsC.get(j);</span>
                 
-<span class="fc" id="L1034">                fillRowConstraintMatrixSolution3(row, c, vai, vaj, vbi, vbj,</span>
+<span class="fc" id="L1039">                fillRowConstraintMatrixSolution3(row, c, vai, vaj, vbi, vbj,</span>
                         vci, vcj);
-<span class="fc" id="L1036">                row++;</span>
+<span class="fc" id="L1041">                row++;</span>
             }
         }
         
-<span class="fc" id="L1040">        return c;        </span>
+<span class="fc" id="L1045">        return c;        </span>
     }
     
     /**
@@ -1055,25 +1060,25 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             List&lt;Point3D&gt; controlCameraPointsA,
             List&lt;Point3D&gt; controlCameraPointsB) throws AlgebraException {
         
-<span class="fc" id="L1058">        int numControl = controlCameraPointsA.size();        </span>
-<span class="fc" id="L1059">        int numEquations = numEquations(numControl);                </span>
+<span class="fc" id="L1063">        int numControl = controlCameraPointsA.size();        </span>
+<span class="fc" id="L1064">        int numEquations = numEquations(numControl);                </span>
         
-<span class="fc" id="L1061">        Matrix c = new Matrix(numEquations, 3);</span>
-<span class="fc" id="L1062">        int row = 0;</span>
-<span class="fc bfc" id="L1063" title="All 2 branches covered.">        for (int i = 0; i &lt; numControl; i++) {</span>
-<span class="fc" id="L1064">            Point3D vai = controlCameraPointsA.get(i);</span>
-<span class="fc" id="L1065">            Point3D vbi = controlCameraPointsB.get(i);</span>
+<span class="fc" id="L1066">        Matrix c = new Matrix(numEquations, 3);</span>
+<span class="fc" id="L1067">        int row = 0;</span>
+<span class="fc bfc" id="L1068" title="All 2 branches covered.">        for (int i = 0; i &lt; numControl; i++) {</span>
+<span class="fc" id="L1069">            Point3D vai = controlCameraPointsA.get(i);</span>
+<span class="fc" id="L1070">            Point3D vbi = controlCameraPointsB.get(i);</span>
             
-<span class="fc bfc" id="L1067" title="All 2 branches covered.">            for (int j = i + 1; j &lt; numControl; j++) {</span>
-<span class="fc" id="L1068">                Point3D vaj = controlCameraPointsA.get(j);</span>
-<span class="fc" id="L1069">                Point3D vbj = controlCameraPointsB.get(j);</span>
+<span class="fc bfc" id="L1072" title="All 2 branches covered.">            for (int j = i + 1; j &lt; numControl; j++) {</span>
+<span class="fc" id="L1073">                Point3D vaj = controlCameraPointsA.get(j);</span>
+<span class="fc" id="L1074">                Point3D vbj = controlCameraPointsB.get(j);</span>
                 
-<span class="fc" id="L1071">                fillRowConstraintMatrixSolution2(row, c, vai, vaj, vbi, vbj);</span>
-<span class="fc" id="L1072">                row++;</span>
+<span class="fc" id="L1076">                fillRowConstraintMatrixSolution2(row, c, vai, vaj, vbi, vbj);</span>
+<span class="fc" id="L1077">                row++;</span>
             }
         }
         
-<span class="fc" id="L1076">        return c;</span>
+<span class="fc" id="L1081">        return c;</span>
     }
     
     /**
@@ -1097,54 +1102,54 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             Point3D vai, Point3D vaj, Point3D vbi, Point3D vbj, Point3D vci,
             Point3D vcj) {
         
-<span class="fc" id="L1100">        double vaix = vai.getInhomX();</span>
-<span class="fc" id="L1101">        double vaiy = vai.getInhomY();</span>
-<span class="fc" id="L1102">        double vaiz = vai.getInhomZ();</span>
+<span class="fc" id="L1105">        double vaix = vai.getInhomX();</span>
+<span class="fc" id="L1106">        double vaiy = vai.getInhomY();</span>
+<span class="fc" id="L1107">        double vaiz = vai.getInhomZ();</span>
         
-<span class="fc" id="L1104">        double vajx = vaj.getInhomX();</span>
-<span class="fc" id="L1105">        double vajy = vaj.getInhomY();</span>
-<span class="fc" id="L1106">        double vajz = vaj.getInhomZ();</span>
+<span class="fc" id="L1109">        double vajx = vaj.getInhomX();</span>
+<span class="fc" id="L1110">        double vajy = vaj.getInhomY();</span>
+<span class="fc" id="L1111">        double vajz = vaj.getInhomZ();</span>
         
-<span class="fc" id="L1108">        double vbix = vbi.getInhomX();</span>
-<span class="fc" id="L1109">        double vbiy = vbi.getInhomY();</span>
-<span class="fc" id="L1110">        double vbiz = vbi.getInhomZ();</span>
+<span class="fc" id="L1113">        double vbix = vbi.getInhomX();</span>
+<span class="fc" id="L1114">        double vbiy = vbi.getInhomY();</span>
+<span class="fc" id="L1115">        double vbiz = vbi.getInhomZ();</span>
         
-<span class="fc" id="L1112">        double vbjx = vbj.getInhomX();</span>
-<span class="fc" id="L1113">        double vbjy = vbj.getInhomY();</span>
-<span class="fc" id="L1114">        double vbjz = vbj.getInhomZ();</span>
+<span class="fc" id="L1117">        double vbjx = vbj.getInhomX();</span>
+<span class="fc" id="L1118">        double vbjy = vbj.getInhomY();</span>
+<span class="fc" id="L1119">        double vbjz = vbj.getInhomZ();</span>
         
-<span class="fc" id="L1116">        double vcix = vci.getInhomX();</span>
-<span class="fc" id="L1117">        double vciy = vci.getInhomY();</span>
-<span class="fc" id="L1118">        double vciz = vci.getInhomZ();</span>
+<span class="fc" id="L1121">        double vcix = vci.getInhomX();</span>
+<span class="fc" id="L1122">        double vciy = vci.getInhomY();</span>
+<span class="fc" id="L1123">        double vciz = vci.getInhomZ();</span>
         
-<span class="fc" id="L1120">        double vcjx = vcj.getInhomX();</span>
-<span class="fc" id="L1121">        double vcjy = vcj.getInhomY();</span>
-<span class="fc" id="L1122">        double vcjz = vcj.getInhomZ();</span>
+<span class="fc" id="L1125">        double vcjx = vcj.getInhomX();</span>
+<span class="fc" id="L1126">        double vcjy = vcj.getInhomY();</span>
+<span class="fc" id="L1127">        double vcjz = vcj.getInhomZ();</span>
         
         //1st column
-<span class="fc" id="L1125">        c.setElementAt(row, 0, Math.pow(vaix - vajx, 2.0) + </span>
-<span class="fc" id="L1126">                Math.pow(vaiy - vajy, 2.0) + Math.pow(vaiz - vajz, 2.0));</span>
+<span class="fc" id="L1130">        c.setElementAt(row, 0, Math.pow(vaix - vajx, 2.0) + </span>
+<span class="fc" id="L1131">                Math.pow(vaiy - vajy, 2.0) + Math.pow(vaiz - vajz, 2.0));</span>
         
         //2nd column
-<span class="fc" id="L1129">        c.setElementAt(row, 1, 2.0 * ((vaix - vajx) * (vbix - vbjx) + </span>
+<span class="fc" id="L1134">        c.setElementAt(row, 1, 2.0 * ((vaix - vajx) * (vbix - vbjx) + </span>
                 (vaiy - vajy) * (vbiy - vbjy) + (vaiz - vajz) * (vbiz - vbjz)));
         
         //3rd column
-<span class="fc" id="L1133">        c.setElementAt(row, 2, 2.0 * ((vaix - vajx) * (vcix - vcjx) +</span>
+<span class="fc" id="L1138">        c.setElementAt(row, 2, 2.0 * ((vaix - vajx) * (vcix - vcjx) +</span>
                 (vaiy - vajy) * (vciy - vcjy) + (vaiz - vajz) * (vciz - vcjz)));
         
         //4th column
-<span class="fc" id="L1137">        c.setElementAt(row, 3, Math.pow(vbix - vbjx, 2.0) + </span>
-<span class="fc" id="L1138">                Math.pow(vbiy - vbjy, 2.0) + Math.pow(vbiz - vbjz, 2.0));</span>
+<span class="fc" id="L1142">        c.setElementAt(row, 3, Math.pow(vbix - vbjx, 2.0) + </span>
+<span class="fc" id="L1143">                Math.pow(vbiy - vbjy, 2.0) + Math.pow(vbiz - vbjz, 2.0));</span>
         
         //5th column
-<span class="fc" id="L1141">        c.setElementAt(row, 4, 2.0 * ((vbix - vbjx) * (vcix - vcjx) + </span>
+<span class="fc" id="L1146">        c.setElementAt(row, 4, 2.0 * ((vbix - vbjx) * (vcix - vcjx) + </span>
                 (vbiy - vbjy) * (vciy - vcjy) + (vbiz - vbjz) * (vciz - vcjz)));
         
         //6th column
-<span class="fc" id="L1145">        c.setElementAt(row, 5, Math.pow(vcix - vcjx, 2.0) + </span>
-<span class="fc" id="L1146">                Math.pow(vciy - vcjy, 2.0) + Math.pow(vciz - vcjz, 2.0));</span>
-<span class="fc" id="L1147">    }</span>
+<span class="fc" id="L1150">        c.setElementAt(row, 5, Math.pow(vcix - vcjx, 2.0) + </span>
+<span class="fc" id="L1151">                Math.pow(vciy - vcjy, 2.0) + Math.pow(vciz - vcjz, 2.0));</span>
+<span class="fc" id="L1152">    }</span>
     
     /**
      * Fills a row of constraint matrix for solution 2.
@@ -1162,34 +1167,34 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     private static void fillRowConstraintMatrixSolution2(int row, Matrix c, 
             Point3D vai, Point3D vaj, Point3D vbi, Point3D vbj) {
         
-<span class="fc" id="L1165">        double vaix = vai.getInhomX();</span>
-<span class="fc" id="L1166">        double vaiy = vai.getInhomY();</span>
-<span class="fc" id="L1167">        double vaiz = vai.getInhomZ();</span>
+<span class="fc" id="L1170">        double vaix = vai.getInhomX();</span>
+<span class="fc" id="L1171">        double vaiy = vai.getInhomY();</span>
+<span class="fc" id="L1172">        double vaiz = vai.getInhomZ();</span>
         
-<span class="fc" id="L1169">        double vajx = vaj.getInhomX();</span>
-<span class="fc" id="L1170">        double vajy = vaj.getInhomY();</span>
-<span class="fc" id="L1171">        double vajz = vaj.getInhomZ();</span>
+<span class="fc" id="L1174">        double vajx = vaj.getInhomX();</span>
+<span class="fc" id="L1175">        double vajy = vaj.getInhomY();</span>
+<span class="fc" id="L1176">        double vajz = vaj.getInhomZ();</span>
         
-<span class="fc" id="L1173">        double vbix = vbi.getInhomX();</span>
-<span class="fc" id="L1174">        double vbiy = vbi.getInhomY();</span>
-<span class="fc" id="L1175">        double vbiz = vbi.getInhomZ();</span>
+<span class="fc" id="L1178">        double vbix = vbi.getInhomX();</span>
+<span class="fc" id="L1179">        double vbiy = vbi.getInhomY();</span>
+<span class="fc" id="L1180">        double vbiz = vbi.getInhomZ();</span>
         
-<span class="fc" id="L1177">        double vbjx = vbj.getInhomX();</span>
-<span class="fc" id="L1178">        double vbjy = vbj.getInhomY();</span>
-<span class="fc" id="L1179">        double vbjz = vbj.getInhomZ();</span>
+<span class="fc" id="L1182">        double vbjx = vbj.getInhomX();</span>
+<span class="fc" id="L1183">        double vbjy = vbj.getInhomY();</span>
+<span class="fc" id="L1184">        double vbjz = vbj.getInhomZ();</span>
         
         //1st column
-<span class="fc" id="L1182">        c.setElementAt(row, 0, Math.pow(vaix - vajx, 2.0) + </span>
-<span class="fc" id="L1183">                Math.pow(vaiy - vajy, 2.0) + Math.pow(vaiz - vajz, 2.0));</span>
+<span class="fc" id="L1187">        c.setElementAt(row, 0, Math.pow(vaix - vajx, 2.0) + </span>
+<span class="fc" id="L1188">                Math.pow(vaiy - vajy, 2.0) + Math.pow(vaiz - vajz, 2.0));</span>
         
         //2nd column
-<span class="fc" id="L1186">        c.setElementAt(row, 1, 2.0 * ((vaix - vajx) * (vbix - vbjx) + </span>
+<span class="fc" id="L1191">        c.setElementAt(row, 1, 2.0 * ((vaix - vajx) * (vbix - vbjx) + </span>
                 (vaiy - vajy) * (vbiy - vbjy) + (vaiz - vajz) * (vbiz - vbjz)));
         
         //3rd column
-<span class="fc" id="L1190">        c.setElementAt(row, 2, Math.pow(vbix - vbjx, 2.0) + </span>
-<span class="fc" id="L1191">                Math.pow(vbiy - vbjy, 2.0) + Math.pow(vbiz - vbjz, 2.0));        </span>
-<span class="fc" id="L1192">    }</span>
+<span class="fc" id="L1195">        c.setElementAt(row, 2, Math.pow(vbix - vbjx, 2.0) + </span>
+<span class="fc" id="L1196">                Math.pow(vbiy - vbjy, 2.0) + Math.pow(vbiz - vbjz, 2.0));        </span>
+<span class="fc" id="L1197">    }</span>
                 
     /**
      * Tests solution 1 for general point configuration.
@@ -1204,8 +1209,8 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             NotReadyException, CoincidentPointsException {
         //pick last column of nullspace, contains control points in camera
         //coordinates up to scale (including sign change)        
-<span class="fc" id="L1207">        double[] v = mNullspace.get(0);    </span>
-<span class="fc" id="L1208">        List&lt;Point3D&gt; controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L1212">        double[] v = mNullspace.get(0);    </span>
+<span class="fc" id="L1213">        List&lt;Point3D&gt; controlCameraPoints = controlPointsFromV(v);</span>
                 
         //similarly to solution2 and solution3, we could find the scale by
         //imposing the restriction: ||beta*vi - beta*vj||^2 = ||ci - cj||^2, i,j 1...4
@@ -1226,19 +1231,19 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         //is used, which is capable to determine the scale relating input and
         //output points, and thus, solving the linear system of equations is not
         //required in this case.
-<span class="fc" id="L1229">        Solution solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L1234">        Solution solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L1231">        mSolutions.add(solution);</span>
+<span class="fc" id="L1236">        mSolutions.add(solution);</span>
         
         //because v is a solution up to scale, we provide a solution with 
         //opposite sign
-<span class="fc" id="L1235">        v = ArrayUtils.multiplyByScalarAndReturnNew(v, -1.0);</span>
-<span class="fc" id="L1236">        controlCameraPoints = controlPointsFromV(v);</span>
+<span class="fc" id="L1240">        v = ArrayUtils.multiplyByScalarAndReturnNew(v, -1.0);</span>
+<span class="fc" id="L1241">        controlCameraPoints = controlPointsFromV(v);</span>
         
-<span class="fc" id="L1238">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
+<span class="fc" id="L1243">        solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                 controlCameraPoints);        
-<span class="fc" id="L1240">        mSolutions.add(solution);        </span>
-<span class="fc" id="L1241">    }</span>
+<span class="fc" id="L1245">        mSolutions.add(solution);        </span>
+<span class="fc" id="L1246">    }</span>
         
     /**
      * Computes a possible solution with camera, transformation, reprojection 
@@ -1253,30 +1258,30 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
             List&lt;Point3D&gt; controlCameraPoints) throws LockedException, 
             NotReadyException, CoincidentPointsException {
                 
-<span class="fc" id="L1256">        MetricTransformation3D worldToCameraTransformation = </span>
-<span class="fc" id="L1257">                    worldToCameraTransformationMetric(controlCameraPoints);</span>
+<span class="fc" id="L1261">        MetricTransformation3D worldToCameraTransformation = </span>
+<span class="fc" id="L1262">                    worldToCameraTransformationMetric(controlCameraPoints);</span>
         
-<span class="fc" id="L1259">        Rotation3D rotation = worldToCameraTransformation.getRotation();</span>
-<span class="fc" id="L1260">        double[] t = worldToCameraTransformation.getTranslation();</span>
-<span class="fc" id="L1261">        double scale = worldToCameraTransformation.getScale();  </span>
+<span class="fc" id="L1264">        Rotation3D rotation = worldToCameraTransformation.getRotation();</span>
+<span class="fc" id="L1265">        double[] t = worldToCameraTransformation.getTranslation();</span>
+<span class="fc" id="L1266">        double scale = worldToCameraTransformation.getScale();  </span>
         
         //Camera center is C = -1/s*R'*t
-<span class="fc" id="L1264">        InhomogeneousPoint3D center = new InhomogeneousPoint3D(</span>
+<span class="fc" id="L1269">        InhomogeneousPoint3D center = new InhomogeneousPoint3D(</span>
                 -t[0] / scale, -t[1] / scale, -t[2] / scale);
-<span class="fc" id="L1266">        Rotation3D invRotation = rotation.inverseRotationAndReturnNew();</span>
-<span class="fc" id="L1267">        invRotation.rotate(center, center);</span>
+<span class="fc" id="L1271">        Rotation3D invRotation = rotation.inverseRotationAndReturnNew();</span>
+<span class="fc" id="L1272">        invRotation.rotate(center, center);</span>
         
-<span class="fc" id="L1269">        PinholeCamera camera = new PinholeCamera(mIntrinsic, rotation, center);</span>
+<span class="fc" id="L1274">        PinholeCamera camera = new PinholeCamera(mIntrinsic, rotation, center);</span>
         
-<span class="fc" id="L1271">        Solution solution = new Solution();</span>
-<span class="fc" id="L1272">        solution.controlCameraPoints = controlCameraPoints;</span>
-<span class="fc" id="L1273">        solution.worldToCameraTransformation = worldToCameraTransformation;</span>
-<span class="fc" id="L1274">        solution.camera = camera;</span>
+<span class="fc" id="L1276">        Solution solution = new Solution();</span>
+<span class="fc" id="L1277">        solution.controlCameraPoints = controlCameraPoints;</span>
+<span class="fc" id="L1278">        solution.worldToCameraTransformation = worldToCameraTransformation;</span>
+<span class="fc" id="L1279">        solution.camera = camera;</span>
         
         //compute projection error
-<span class="fc" id="L1277">        solution.reprojectionError = reprojectionError(camera);</span>
+<span class="fc" id="L1282">        solution.reprojectionError = reprojectionError(camera);</span>
 
-<span class="fc" id="L1279">        return solution;</span>
+<span class="fc" id="L1284">        return solution;</span>
     }        
         
     /**
@@ -1292,10 +1297,10 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
     private MetricTransformation3D worldToCameraTransformationMetric(
             List&lt;Point3D&gt; controlCameraPoints) throws LockedException, 
             NotReadyException, CoincidentPointsException {
-<span class="fc" id="L1295">        MetricTransformation3DEstimator estimator = </span>
+<span class="fc" id="L1300">        MetricTransformation3DEstimator estimator = </span>
                 new MetricTransformation3DEstimator(mControlWorldPoints, 
                         controlCameraPoints, mIsPlanar);                
-<span class="fc" id="L1298">        return estimator.estimate();        </span>
+<span class="fc" id="L1303">        return estimator.estimate();        </span>
     }
     
     /**
@@ -1304,11 +1309,11 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return number of constraint equations.
      */
     private static int numEquations(int numControl) {
-<span class="fc" id="L1307">        int numEquations = 0;</span>
-<span class="fc bfc" id="L1308" title="All 2 branches covered.">        for (int i = 1; i &lt; numControl; i++) {</span>
-<span class="fc" id="L1309">            numEquations += i;</span>
+<span class="fc" id="L1312">        int numEquations = 0;</span>
+<span class="fc bfc" id="L1313" title="All 2 branches covered.">        for (int i = 1; i &lt; numControl; i++) {</span>
+<span class="fc" id="L1314">            numEquations += i;</span>
         }
-<span class="fc" id="L1311">        return numEquations;        </span>
+<span class="fc" id="L1316">        return numEquations;        </span>
     }
     
     /**
@@ -1317,26 +1322,26 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return right term.
      */
     private static double[] rhos(List&lt;Point3D&gt; controlWorldPoints) {
-<span class="fc" id="L1320">        int numControl = controlWorldPoints.size();        </span>
-<span class="fc" id="L1321">        int numEquations = numEquations(numControl);        </span>
-<span class="fc" id="L1322">        double[] rhos = new double[numEquations];</span>
+<span class="fc" id="L1325">        int numControl = controlWorldPoints.size();        </span>
+<span class="fc" id="L1326">        int numEquations = numEquations(numControl);        </span>
+<span class="fc" id="L1327">        double[] rhos = new double[numEquations];</span>
         
         //squared distance from control world i to control world j
         double dcijSqr;
-<span class="fc" id="L1326">        int pos = 0;</span>
-<span class="fc bfc" id="L1327" title="All 2 branches covered.">        for (int i = 0; i &lt; numControl; i++) {</span>
-<span class="fc" id="L1328">            Point3D ci = controlWorldPoints.get(i);</span>
+<span class="fc" id="L1331">        int pos = 0;</span>
+<span class="fc bfc" id="L1332" title="All 2 branches covered.">        for (int i = 0; i &lt; numControl; i++) {</span>
+<span class="fc" id="L1333">            Point3D ci = controlWorldPoints.get(i);</span>
             
-<span class="fc bfc" id="L1330" title="All 2 branches covered.">            for(int j = i + 1; j &lt; numControl; j++) {</span>
-<span class="fc" id="L1331">                Point3D cj = controlWorldPoints.get(j);</span>
+<span class="fc bfc" id="L1335" title="All 2 branches covered.">            for(int j = i + 1; j &lt; numControl; j++) {</span>
+<span class="fc" id="L1336">                Point3D cj = controlWorldPoints.get(j);</span>
                 
-<span class="fc" id="L1333">                dcijSqr = Math.pow(ci.distanceTo(cj), 2.0);</span>
-<span class="fc" id="L1334">                rhos[pos] = dcijSqr;</span>
-<span class="fc" id="L1335">                pos++;</span>
+<span class="fc" id="L1338">                dcijSqr = Math.pow(ci.distanceTo(cj), 2.0);</span>
+<span class="fc" id="L1339">                rhos[pos] = dcijSqr;</span>
+<span class="fc" id="L1340">                pos++;</span>
             }
         }
         
-<span class="fc" id="L1339">        return rhos;</span>
+<span class="fc" id="L1344">        return rhos;</span>
     }
         
     /**
@@ -1345,18 +1350,19 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return reprojection error.
      */
     private double reprojectionError(PinholeCamera camera) {
-<span class="fc" id="L1348">        int n = mPoints2D.size();</span>
+<span class="fc" id="L1353">        int n = mPoints2D.size();</span>
         
         Point3D point3D;
-<span class="fc" id="L1351">        Point2D projected = Point2D.create(), point2D;</span>
-<span class="fc" id="L1352">        double error = 0.0;</span>
-<span class="fc bfc" id="L1353" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L1354">            point3D = mPoints3D.get(i);</span>
-<span class="fc" id="L1355">            point2D = mPoints2D.get(i);</span>
-<span class="fc" id="L1356">            camera.project(point3D, projected);</span>
-<span class="fc" id="L1357">            error += projected.distanceTo(point2D);</span>
+<span class="fc" id="L1356">        Point2D projected = Point2D.create();</span>
+        Point2D point2D;
+<span class="fc" id="L1358">        double error = 0.0;</span>
+<span class="fc bfc" id="L1359" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L1360">            point3D = mPoints3D.get(i);</span>
+<span class="fc" id="L1361">            point2D = mPoints2D.get(i);</span>
+<span class="fc" id="L1362">            camera.project(point3D, projected);</span>
+<span class="fc" id="L1363">            error += projected.distanceTo(point2D);</span>
         }
-<span class="fc" id="L1359">        return error;</span>
+<span class="fc" id="L1365">        return error;</span>
     }
     
     /**
@@ -1368,17 +1374,17 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @return control points.
      */
     private List&lt;Point3D&gt; controlPointsFromV(double[] v) {
-<span class="fc" id="L1371">        int numControl = mControlWorldPoints.size();</span>
-<span class="fc" id="L1372">        List&lt;Point3D&gt; points = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L1377">        int numControl = mControlWorldPoints.size();</span>
+<span class="fc" id="L1378">        List&lt;Point3D&gt; points = new ArrayList&lt;&gt;();</span>
         
         InhomogeneousPoint3D p;
-<span class="fc bfc" id="L1375" title="All 2 branches covered.">        for (int j = 0; j &lt; numControl; j++) {</span>
-<span class="fc" id="L1376">            int k = j * 3;</span>
-<span class="fc" id="L1377">            p = new InhomogeneousPoint3D(v[k], v[k + 1], v[k + 2]);</span>
-<span class="fc" id="L1378">            points.add(p);</span>
+<span class="fc bfc" id="L1381" title="All 2 branches covered.">        for (int j = 0; j &lt; numControl; j++) {</span>
+<span class="fc" id="L1382">            int k = j * 3;</span>
+<span class="fc" id="L1383">            p = new InhomogeneousPoint3D(v[k], v[k + 1], v[k + 2]);</span>
+<span class="fc" id="L1384">            points.add(p);</span>
         }
         
-<span class="fc" id="L1381">        return points;</span>
+<span class="fc" id="L1387">        return points;</span>
     }
     
     /**
@@ -1388,18 +1394,18 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * unstabilities.
      */
     private void solveNullspace() throws AlgebraException {        
-<span class="fc" id="L1391">        int rows = mM.getRows();</span>
-<span class="fc" id="L1392">        int cols = mM.getColumns();</span>
-<span class="fc" id="L1393">        int numControl = cols / </span>
+<span class="fc" id="L1397">        int rows = mM.getRows();</span>
+<span class="fc" id="L1398">        int cols = mM.getColumns();</span>
+<span class="fc" id="L1399">        int numControl = cols / </span>
                 Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH;
         
         //normalize rows of m to increase numerical accuracy
-<span class="fc bfc" id="L1397" title="All 2 branches covered.">        for (int i = 0; i &lt; rows; i++) {</span>
-<span class="fc" id="L1398">            normalizeRow(mM, i);</span>
+<span class="fc bfc" id="L1403" title="All 2 branches covered.">        for (int i = 0; i &lt; rows; i++) {</span>
+<span class="fc" id="L1404">            normalizeRow(mM, i);</span>
         }
         
-<span class="fc" id="L1401">        SingularValueDecomposer decomposer = new SingularValueDecomposer(mM);</span>
-<span class="fc" id="L1402">        decomposer.decompose();</span>
+<span class="fc" id="L1407">        SingularValueDecomposer decomposer = new SingularValueDecomposer(mM);</span>
+<span class="fc" id="L1408">        decomposer.decompose();</span>
         
         //Singular values are always in descending order, hence null space is in 
         //the last columns of v.
@@ -1408,7 +1414,7 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         //coordinates.
         //A solution for the linear system M*x = 0 is obtained as a linear
         //combination of the columns of v forming the nullspace.
-<span class="fc" id="L1411">        Matrix v = decomposer.getV();               </span>
+<span class="fc" id="L1417">        Matrix v = decomposer.getV();               </span>
         
         //alghouth nullity of M could be determined after SVD, it is assumed
         //instead that nullspace could be located in any of the latter columns 
@@ -1417,17 +1423,17 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         //for planar configuration we pick the last 3.
      
         //extract null points from the null space
-<span class="fc" id="L1420">        mNullspace = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L1421">        int colsMinusOne = cols - 1;</span>
+<span class="fc" id="L1426">        mNullspace = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L1427">        int colsMinusOne = cols - 1;</span>
         double[] vCol;
-<span class="fc bfc" id="L1423" title="All 2 branches covered.">        for (int i = 0; i &lt; numControl; i++) {</span>
-<span class="fc" id="L1424">            int column = colsMinusOne - i;</span>
+<span class="fc bfc" id="L1429" title="All 2 branches covered.">        for (int i = 0; i &lt; numControl; i++) {</span>
+<span class="fc" id="L1430">            int column = colsMinusOne - i;</span>
 
             //each picked column of v contains a possible solution
-<span class="fc" id="L1427">            vCol = v.getSubmatrixAsArray(0, column, colsMinusOne, column);</span>
-<span class="fc" id="L1428">            mNullspace.add(vCol);</span>
+<span class="fc" id="L1433">            vCol = v.getSubmatrixAsArray(0, column, colsMinusOne, column);</span>
+<span class="fc" id="L1434">            mNullspace.add(vCol);</span>
         }
-<span class="fc" id="L1430">    }</span>
+<span class="fc" id="L1436">    }</span>
     
     /**
      * Normalizes provided row of m.
@@ -1435,18 +1441,18 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @param row row to be normalized.
      */
     private static void normalizeRow(Matrix m, int row) {
-<span class="fc" id="L1438">        int cols = m.getColumns();</span>
+<span class="fc" id="L1444">        int cols = m.getColumns();</span>
         
-<span class="fc" id="L1440">        double norm = 0.0;</span>
-<span class="fc bfc" id="L1441" title="All 2 branches covered.">        for (int i = 0; i &lt; cols; i++) {</span>
-<span class="fc" id="L1442">            norm += Math.pow(m.getElementAt(row, i), 2.0);</span>
+<span class="fc" id="L1446">        double norm = 0.0;</span>
+<span class="fc bfc" id="L1447" title="All 2 branches covered.">        for (int i = 0; i &lt; cols; i++) {</span>
+<span class="fc" id="L1448">            norm += Math.pow(m.getElementAt(row, i), 2.0);</span>
         }
-<span class="fc" id="L1444">        norm = Math.sqrt(norm);</span>
+<span class="fc" id="L1450">        norm = Math.sqrt(norm);</span>
         
-<span class="fc bfc" id="L1446" title="All 2 branches covered.">        for (int i = 0; i &lt; cols; i++) {</span>
-<span class="fc" id="L1447">            m.setElementAt(row, i, m.getElementAt(row, i) / norm);</span>
+<span class="fc bfc" id="L1452" title="All 2 branches covered.">        for (int i = 0; i &lt; cols; i++) {</span>
+<span class="fc" id="L1453">            m.setElementAt(row, i, m.getElementAt(row, i) / norm);</span>
         }
-<span class="fc" id="L1449">    }</span>
+<span class="fc" id="L1455">    }</span>
         
     /**
      * In order to find control points in camera coordinates, an homogeneous 
@@ -1464,49 +1470,49 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws AlgebraException if numerical unstabilities occur.
      */
     private void buildM() throws AlgebraException {
-<span class="fc" id="L1467">        int n = mPoints2D.size();</span>
-<span class="fc" id="L1468">        int numControlPoints = mAlphas.getColumns();</span>
+<span class="fc" id="L1473">        int n = mPoints2D.size();</span>
+<span class="fc" id="L1474">        int numControlPoints = mAlphas.getColumns();</span>
         
-<span class="fc" id="L1470">        mM = new Matrix(2 * n, 3 * numControlPoints);</span>
+<span class="fc" id="L1476">        mM = new Matrix(2 * n, 3 * numControlPoints);</span>
         
         int row;
         int col;
         double alpha;
         
-<span class="fc" id="L1476">        double horizontalFocalLength = mIntrinsic.getHorizontalFocalLength();</span>
-<span class="fc" id="L1477">        double verticalFocalLength = mIntrinsic.getVerticalFocalLength();</span>
-<span class="fc" id="L1478">        double skewness = mIntrinsic.getSkewness();</span>
-<span class="fc" id="L1479">        double horizontalPrincipalPoint = </span>
-<span class="fc" id="L1480">                mIntrinsic.getHorizontalPrincipalPoint();</span>
-<span class="fc" id="L1481">        double verticalPrincipalPoint = mIntrinsic.getVerticalPrincipalPoint();</span>
+<span class="fc" id="L1482">        double horizontalFocalLength = mIntrinsic.getHorizontalFocalLength();</span>
+<span class="fc" id="L1483">        double verticalFocalLength = mIntrinsic.getVerticalFocalLength();</span>
+<span class="fc" id="L1484">        double skewness = mIntrinsic.getSkewness();</span>
+<span class="fc" id="L1485">        double horizontalPrincipalPoint = </span>
+<span class="fc" id="L1486">                mIntrinsic.getHorizontalPrincipalPoint();</span>
+<span class="fc" id="L1487">        double verticalPrincipalPoint = mIntrinsic.getVerticalPrincipalPoint();</span>
         
         Point2D p;
         double pX;
         double pY;
-<span class="fc bfc" id="L1486" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L1487">            p = mPoints2D.get(i);</span>
-<span class="fc" id="L1488">            pX = p.getInhomX();</span>
-<span class="fc" id="L1489">            pY = p.getInhomY();</span>
+<span class="fc bfc" id="L1492" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L1493">            p = mPoints2D.get(i);</span>
+<span class="fc" id="L1494">            pX = p.getInhomX();</span>
+<span class="fc" id="L1495">            pY = p.getInhomY();</span>
             
-<span class="fc" id="L1491">            row = i * 2;</span>
+<span class="fc" id="L1497">            row = i * 2;</span>
             
-<span class="fc bfc" id="L1493" title="All 2 branches covered.">            for (int j = 0; j &lt; numControlPoints; j++) {</span>
-<span class="fc" id="L1494">                col = j * 3;</span>
+<span class="fc bfc" id="L1499" title="All 2 branches covered.">            for (int j = 0; j &lt; numControlPoints; j++) {</span>
+<span class="fc" id="L1500">                col = j * 3;</span>
                 
-<span class="fc" id="L1496">                alpha = mAlphas.getElementAt(i, j);</span>
+<span class="fc" id="L1502">                alpha = mAlphas.getElementAt(i, j);</span>
                 
-<span class="fc" id="L1498">                mM.setElementAt(row, col, alpha * horizontalFocalLength);</span>
-<span class="fc" id="L1499">                mM.setElementAt(row, col + 1, alpha * skewness);</span>
-<span class="fc" id="L1500">                mM.setElementAt(row, col + 2, </span>
+<span class="fc" id="L1504">                mM.setElementAt(row, col, alpha * horizontalFocalLength);</span>
+<span class="fc" id="L1505">                mM.setElementAt(row, col + 1, alpha * skewness);</span>
+<span class="fc" id="L1506">                mM.setElementAt(row, col + 2, </span>
                         alpha * (horizontalPrincipalPoint - pX));
                 
-<span class="fc" id="L1503">                mM.setElementAt(row + 1, col, 0.0);</span>
-<span class="fc" id="L1504">                mM.setElementAt(row + 1, col + 1, alpha * verticalFocalLength);</span>
-<span class="fc" id="L1505">                mM.setElementAt(row + 1, col + 2, </span>
+<span class="fc" id="L1509">                mM.setElementAt(row + 1, col, 0.0);</span>
+<span class="fc" id="L1510">                mM.setElementAt(row + 1, col + 1, alpha * verticalFocalLength);</span>
+<span class="fc" id="L1511">                mM.setElementAt(row + 1, col + 2, </span>
                         alpha * (verticalPrincipalPoint - pY));                
             }
         }                
-<span class="fc" id="L1509">    }</span>
+<span class="fc" id="L1515">    }</span>
             
     /**
      * Computes the coordinates of each provided world point in terms of 
@@ -1564,65 +1570,65 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
         //In the planar case we have only 3 control points, and the last one
         //(c3) is the centroid.
         
-<span class="fc" id="L1567">        int numControl = mControlWorldPoints.size();</span>
-<span class="fc" id="L1568">        int numDimensions = numControl - 1;</span>
-<span class="fc" id="L1569">        int numControlMinusTwo = numControl - 2;</span>
-<span class="fc" id="L1570">        Matrix c = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, </span>
+<span class="fc" id="L1573">        int numControl = mControlWorldPoints.size();</span>
+<span class="fc" id="L1574">        int numDimensions = numControl - 1;</span>
+<span class="fc" id="L1575">        int numControlMinusTwo = numControl - 2;</span>
+<span class="fc" id="L1576">        Matrix c = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, </span>
                 numDimensions);
         
         //the last control point is the centroid (or mean point)
-<span class="fc" id="L1574">        Point3D mean = mControlWorldPoints.get(numDimensions);</span>
-<span class="fc" id="L1575">        double meanX = mean.getInhomX();</span>
-<span class="fc" id="L1576">        double meanY = mean.getInhomY();</span>
-<span class="fc" id="L1577">        double meanZ = mean.getInhomZ();</span>
+<span class="fc" id="L1580">        Point3D mean = mControlWorldPoints.get(numDimensions);</span>
+<span class="fc" id="L1581">        double meanX = mean.getInhomX();</span>
+<span class="fc" id="L1582">        double meanY = mean.getInhomY();</span>
+<span class="fc" id="L1583">        double meanZ = mean.getInhomZ();</span>
         
         Point3D controlPoint;
-<span class="fc bfc" id="L1580" title="All 2 branches covered.">        for (int i = 0; i &lt; numDimensions; i++) {</span>
-<span class="fc" id="L1581">            controlPoint = mControlWorldPoints.get(i);</span>
-<span class="fc" id="L1582">            c.setElementAt(0, i, controlPoint.getInhomX() - meanX);</span>
-<span class="fc" id="L1583">            c.setElementAt(1, i, controlPoint.getInhomY() - meanY);</span>
-<span class="fc" id="L1584">            c.setElementAt(2, i, controlPoint.getInhomZ() - meanZ);            </span>
+<span class="fc bfc" id="L1586" title="All 2 branches covered.">        for (int i = 0; i &lt; numDimensions; i++) {</span>
+<span class="fc" id="L1587">            controlPoint = mControlWorldPoints.get(i);</span>
+<span class="fc" id="L1588">            c.setElementAt(0, i, controlPoint.getInhomX() - meanX);</span>
+<span class="fc" id="L1589">            c.setElementAt(1, i, controlPoint.getInhomY() - meanY);</span>
+<span class="fc" id="L1590">            c.setElementAt(2, i, controlPoint.getInhomZ() - meanZ);            </span>
         }
         
         //to find  reduced alphas, we need to inverse the reduced C matrix and
         //multiply it by [p - centroid], where centroid can be c4 or c3 in 
         //planar case. 
         
-<span class="fc" id="L1591">        Matrix invC = Utils.inverse(c);</span>
+<span class="fc" id="L1597">        Matrix invC = Utils.inverse(c);</span>
         
         //x is p - centroid, where p is each 3D world point
-<span class="fc" id="L1594">        int n = mPoints3D.size();</span>
-<span class="fc" id="L1595">        Matrix reducedPoint = new Matrix(</span>
+<span class="fc" id="L1600">        int n = mPoints3D.size();</span>
+<span class="fc" id="L1601">        Matrix reducedPoint = new Matrix(</span>
                 Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,1);
-<span class="fc" id="L1597">        Matrix reducedAlpha = new Matrix(numDimensions, 1);</span>
+<span class="fc" id="L1603">        Matrix reducedAlpha = new Matrix(numDimensions, 1);</span>
         double[] buffer;
         Point3D worldPoint;
-<span class="fc" id="L1600">        mAlphas = new Matrix(n, numControl);</span>
-<span class="fc bfc" id="L1601" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
-<span class="fc" id="L1602">            worldPoint = mPoints3D.get(i);</span>
-<span class="fc" id="L1603">            reducedPoint.setElementAtIndex(0, worldPoint.getInhomX() - meanX);</span>
-<span class="fc" id="L1604">            reducedPoint.setElementAtIndex(1, worldPoint.getInhomY() - meanY);</span>
-<span class="fc" id="L1605">            reducedPoint.setElementAtIndex(2, worldPoint.getInhomZ() - meanZ);</span>
+<span class="fc" id="L1606">        mAlphas = new Matrix(n, numControl);</span>
+<span class="fc bfc" id="L1607" title="All 2 branches covered.">        for (int i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L1608">            worldPoint = mPoints3D.get(i);</span>
+<span class="fc" id="L1609">            reducedPoint.setElementAtIndex(0, worldPoint.getInhomX() - meanX);</span>
+<span class="fc" id="L1610">            reducedPoint.setElementAtIndex(1, worldPoint.getInhomY() - meanY);</span>
+<span class="fc" id="L1611">            reducedPoint.setElementAtIndex(2, worldPoint.getInhomZ() - meanZ);</span>
             
-<span class="fc" id="L1607">            invC.multiply(reducedPoint, reducedAlpha);</span>
-<span class="fc" id="L1608">            buffer = reducedAlpha.getBuffer();</span>
+<span class="fc" id="L1613">            invC.multiply(reducedPoint, reducedAlpha);</span>
+<span class="fc" id="L1614">            buffer = reducedAlpha.getBuffer();</span>
             
             //copy reducedAlpha into the former components of i-th row of alphas
-<span class="fc" id="L1611">            mAlphas.setSubmatrix(i, 0, i, numControlMinusTwo, buffer);</span>
+<span class="fc" id="L1617">            mAlphas.setSubmatrix(i, 0, i, numControlMinusTwo, buffer);</span>
             
             //The last component of each alpha for each point is computed so 
             //that their sum is equal to one            
-<span class="fc bfc" id="L1615" title="All 2 branches covered.">            if (numControl == GENERAL_NUM_CONTROL_POINTS) {</span>
+<span class="fc bfc" id="L1621" title="All 2 branches covered.">            if (numControl == GENERAL_NUM_CONTROL_POINTS) {</span>
                 //general configuration
-<span class="fc" id="L1617">                mAlphas.setElementAt(i, numDimensions, </span>
+<span class="fc" id="L1623">                mAlphas.setElementAt(i, numDimensions, </span>
                         1.0 - buffer[0] - buffer[1] - buffer[2]);
             } else {
                 //planar configuration
-<span class="fc" id="L1621">                mAlphas.setElementAt(i, numDimensions, </span>
+<span class="fc" id="L1627">                mAlphas.setElementAt(i, numDimensions, </span>
                         1.0 - buffer[0] - buffer[1]);
             }
         }
-<span class="fc" id="L1625">    }</span>
+<span class="fc" id="L1631">    }</span>
     
     
     /**
@@ -1649,97 +1655,97 @@ public class EPnPPointCorrespondencePinholeCameraEstimator extends
      */
     private void computeWorldControlPointsAndPointConfiguration() 
             throws AlgebraException {        
-<span class="fc" id="L1652">        Point3D centroid = Point3D.centroid(mPoints3D);</span>
+<span class="fc" id="L1658">        Point3D centroid = Point3D.centroid(mPoints3D);</span>
         
         //covariance matrix elements, summed up here for speed
-<span class="fc" id="L1655">        double c11 = 0.0;</span>
-<span class="fc" id="L1656">        double c12 = 0.0;</span>
-<span class="fc" id="L1657">        double c13 = 0.0;</span>
-<span class="fc" id="L1658">        double c22 = 0.0;</span>
-<span class="fc" id="L1659">        double c23 = 0.0;</span>
-<span class="fc" id="L1660">        double c33 = 0.0;</span>
+<span class="fc" id="L1661">        double c11 = 0.0;</span>
+<span class="fc" id="L1662">        double c12 = 0.0;</span>
+<span class="fc" id="L1663">        double c13 = 0.0;</span>
+<span class="fc" id="L1664">        double c22 = 0.0;</span>
+<span class="fc" id="L1665">        double c23 = 0.0;</span>
+<span class="fc" id="L1666">        double c33 = 0.0;</span>
         double dx;
         double dy;
         double dz;
-<span class="fc" id="L1664">        int n = mPoints3D.size();</span>
-<span class="fc bfc" id="L1665" title="All 2 branches covered.">        for (Point3D point : mPoints3D) {</span>
-<span class="fc" id="L1666">            dx = point.getInhomX() - centroid.getInhomX();</span>
-<span class="fc" id="L1667">            dy = point.getInhomY() - centroid.getInhomY();</span>
-<span class="fc" id="L1668">            dz = point.getInhomZ() - centroid.getInhomZ();</span>
+<span class="fc" id="L1670">        int n = mPoints3D.size();</span>
+<span class="fc bfc" id="L1671" title="All 2 branches covered.">        for (Point3D point : mPoints3D) {</span>
+<span class="fc" id="L1672">            dx = point.getInhomX() - centroid.getInhomX();</span>
+<span class="fc" id="L1673">            dy = point.getInhomY() - centroid.getInhomY();</span>
+<span class="fc" id="L1674">            dz = point.getInhomZ() - centroid.getInhomZ();</span>
             
-<span class="fc" id="L1670">            c11 += dx * dx;</span>
-<span class="fc" id="L1671">            c12 += dx * dy;</span>
-<span class="fc" id="L1672">            c13 += dx * dz;</span>
+<span class="fc" id="L1676">            c11 += dx * dx;</span>
+<span class="fc" id="L1677">            c12 += dx * dy;</span>
+<span class="fc" id="L1678">            c13 += dx * dz;</span>
             
-<span class="fc" id="L1674">            c22 += dy * dy;</span>
-<span class="fc" id="L1675">            c23 += dy * dz;</span>
+<span class="fc" id="L1680">            c22 += dy * dy;</span>
+<span class="fc" id="L1681">            c23 += dy * dz;</span>
             
-<span class="fc" id="L1677">            c33 += dz * dz;</span>
-<span class="fc" id="L1678">        }</span>
-<span class="fc" id="L1679">        c11 /= n;</span>
-<span class="fc" id="L1680">        c12 /= n;</span>
-<span class="fc" id="L1681">        c13 /= n;</span>
-<span class="fc" id="L1682">        c22 /= n;</span>
-<span class="fc" id="L1683">        c23 /= n;</span>
-<span class="fc" id="L1684">        c33 /= n;</span>
+<span class="fc" id="L1683">            c33 += dz * dz;</span>
+<span class="fc" id="L1684">        }</span>
+<span class="fc" id="L1685">        c11 /= n;</span>
+<span class="fc" id="L1686">        c12 /= n;</span>
+<span class="fc" id="L1687">        c13 /= n;</span>
+<span class="fc" id="L1688">        c22 /= n;</span>
+<span class="fc" id="L1689">        c23 /= n;</span>
+<span class="fc" id="L1690">        c33 /= n;</span>
         
-<span class="fc" id="L1686">        Matrix covar = new Matrix(3, 3);</span>
-<span class="fc" id="L1687">        covar.setElementAt(0, 0, c11);</span>
-<span class="fc" id="L1688">        covar.setElementAt(1, 0, c12);</span>
-<span class="fc" id="L1689">        covar.setElementAt(2, 0, c13);</span>
+<span class="fc" id="L1692">        Matrix covar = new Matrix(3, 3);</span>
+<span class="fc" id="L1693">        covar.setElementAt(0, 0, c11);</span>
+<span class="fc" id="L1694">        covar.setElementAt(1, 0, c12);</span>
+<span class="fc" id="L1695">        covar.setElementAt(2, 0, c13);</span>
         
-<span class="fc" id="L1691">        covar.setElementAt(0, 1, c12);</span>
-<span class="fc" id="L1692">        covar.setElementAt(1, 1, c22);</span>
-<span class="fc" id="L1693">        covar.setElementAt(2, 1, c23);</span>
+<span class="fc" id="L1697">        covar.setElementAt(0, 1, c12);</span>
+<span class="fc" id="L1698">        covar.setElementAt(1, 1, c22);</span>
+<span class="fc" id="L1699">        covar.setElementAt(2, 1, c23);</span>
         
-<span class="fc" id="L1695">        covar.setElementAt(0, 2, c13);</span>
-<span class="fc" id="L1696">        covar.setElementAt(1, 2, c23);</span>
-<span class="fc" id="L1697">        covar.setElementAt(2, 2, c33);</span>
+<span class="fc" id="L1701">        covar.setElementAt(0, 2, c13);</span>
+<span class="fc" id="L1702">        covar.setElementAt(1, 2, c23);</span>
+<span class="fc" id="L1703">        covar.setElementAt(2, 2, c33);</span>
         
-<span class="fc" id="L1699">        SingularValueDecomposer decomposer = new SingularValueDecomposer(covar);</span>
-<span class="fc" id="L1700">        decomposer.decompose();</span>
+<span class="fc" id="L1705">        SingularValueDecomposer decomposer = new SingularValueDecomposer(covar);</span>
+<span class="fc" id="L1706">        decomposer.decompose();</span>
         
-<span class="fc" id="L1702">        double[] singularValues = decomposer.getSingularValues();</span>
-<span class="fc" id="L1703">        Matrix v = decomposer.getV();</span>
+<span class="fc" id="L1708">        double[] singularValues = decomposer.getSingularValues();</span>
+<span class="fc" id="L1709">        Matrix v = decomposer.getV();</span>
 
         //planar check
         int numControl;
-<span class="pc bpc" id="L1707" title="1 of 2 branches missed.">        if (!mPlanarConfigurationAllowed ||</span>
-<span class="fc" id="L1708">                Math.abs(singularValues[0]) &lt; </span>
-<span class="fc bfc" id="L1709" title="All 2 branches covered.">                Math.abs(singularValues[2]) * mPlanarThreshold) {</span>
+<span class="pc bpc" id="L1713" title="1 of 2 branches missed.">        if (!mPlanarConfigurationAllowed ||</span>
+<span class="fc" id="L1714">                Math.abs(singularValues[0]) &lt; </span>
+<span class="fc bfc" id="L1715" title="All 2 branches covered.">                Math.abs(singularValues[2]) * mPlanarThreshold) {</span>
             //general onfiguration
-<span class="fc" id="L1711">            numControl = GENERAL_NUM_CONTROL_POINTS;</span>
-<span class="fc" id="L1712">            mIsPlanar = false;</span>
+<span class="fc" id="L1717">            numControl = GENERAL_NUM_CONTROL_POINTS;</span>
+<span class="fc" id="L1718">            mIsPlanar = false;</span>
         } else {
             //planar configuration (only if allowed)
-<span class="fc" id="L1715">            numControl = PLANAR_NUM_CONTROL_POINTS;</span>
-<span class="fc" id="L1716">            mIsPlanar = true;</span>
+<span class="fc" id="L1721">            numControl = PLANAR_NUM_CONTROL_POINTS;</span>
+<span class="fc" id="L1722">            mIsPlanar = true;</span>
         }
         
-<span class="fc" id="L1719">        mControlWorldPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L1725">        mControlWorldPoints = new ArrayList&lt;&gt;();</span>
                 
-<span class="fc" id="L1721">        double centroidX = centroid.getInhomX();</span>
-<span class="fc" id="L1722">        double centroidY = centroid.getInhomY();</span>
-<span class="fc" id="L1723">        double centroidZ = centroid.getInhomZ();</span>
+<span class="fc" id="L1727">        double centroidX = centroid.getInhomX();</span>
+<span class="fc" id="L1728">        double centroidY = centroid.getInhomY();</span>
+<span class="fc" id="L1729">        double centroidZ = centroid.getInhomZ();</span>
         
-<span class="fc" id="L1725">        int numDimensions = numControl - 1;</span>
-<span class="fc" id="L1726">        double k = Math.sqrt(singularValues[0] / n);</span>
+<span class="fc" id="L1731">        int numDimensions = numControl - 1;</span>
+<span class="fc" id="L1732">        double k = Math.sqrt(singularValues[0] / n);</span>
         double vx;
         double vy;
         double vz;
-<span class="fc bfc" id="L1730" title="All 2 branches covered.">        for (int i = 0; i &lt; numDimensions; i++) {</span>
-<span class="fc" id="L1731">            vx = v.getElementAt(0, i) * k;</span>
-<span class="fc" id="L1732">            vy = v.getElementAt(1, i) * k;</span>
-<span class="fc" id="L1733">            vz = v.getElementAt(2, i) * k;</span>
+<span class="fc bfc" id="L1736" title="All 2 branches covered.">        for (int i = 0; i &lt; numDimensions; i++) {</span>
+<span class="fc" id="L1737">            vx = v.getElementAt(0, i) * k;</span>
+<span class="fc" id="L1738">            vy = v.getElementAt(1, i) * k;</span>
+<span class="fc" id="L1739">            vz = v.getElementAt(2, i) * k;</span>
             
-<span class="fc" id="L1735">            mControlWorldPoints.add(new InhomogeneousPoint3D(centroidX + vx, </span>
+<span class="fc" id="L1741">            mControlWorldPoints.add(new InhomogeneousPoint3D(centroidX + vx, </span>
                     centroidY + vy, centroidZ + vz));
         }
                 
         //add centroid (it will be used for the metric transformation 
         //estimation)
-<span class="fc" id="L1741">        mControlWorldPoints.add(centroid);          </span>
-<span class="fc" id="L1742">    }    </span>
+<span class="fc" id="L1747">        mControlWorldPoints.add(centroid);          </span>
+<span class="fc" id="L1748">    }    </span>
     
     /**
      * A possible solution.

@@ -399,8 +399,8 @@ public class MetricTransformation3DEstimator {
 <span class="fc" id="L399">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
 <span class="fc" id="L400">            decomposer.decompose();</span>
             
-<span class="fc bfc" id="L402" title="All 4 branches covered.">            if (!mWeakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {</span>
-<span class="fc" id="L403">                throw new CoincidentPointsException();</span>
+<span class="pc bpc" id="L402" title="1 of 4 branches missed.">            if (!mWeakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {</span>
+<span class="nc" id="L403">                throw new CoincidentPointsException();</span>
             }
             
 <span class="fc" id="L406">            Matrix u = decomposer.getU();</span>
@@ -447,8 +447,8 @@ public class MetricTransformation3DEstimator {
 <span class="fc" id="L447">                mListener.onEstimateEnd(this);</span>
             }
             
-<span class="fc" id="L450">        } catch (CoincidentPointsException e) {</span>
-<span class="fc" id="L451">            throw e;</span>
+<span class="nc" id="L450">        } catch (CoincidentPointsException e) {</span>
+<span class="nc" id="L451">            throw e;</span>
 <span class="nc" id="L452">        } catch (AlgebraException | InvalidRotationMatrixException e) {</span>
 <span class="nc" id="L453">            throw new CoincidentPointsException(e);</span>
         } finally {
