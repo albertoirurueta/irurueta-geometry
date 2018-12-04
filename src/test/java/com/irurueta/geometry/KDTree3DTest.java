@@ -414,7 +414,7 @@ public class KDTree3DTest {
     @Test
     public void testNNearest2() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numberPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        int numberPoints = randomizer.nextInt(MIN_POINTS + 1, MAX_POINTS);
 
         int numberNearest = randomizer.nextInt(MIN_POINTS, numberPoints);
 
@@ -533,7 +533,7 @@ public class KDTree3DTest {
     @Test
     public void testNNearest4() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numberPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        int numberPoints = randomizer.nextInt(MIN_POINTS + 1, MAX_POINTS);
 
         int numberNearest = randomizer.nextInt(MIN_POINTS, numberPoints);
 
@@ -649,7 +649,7 @@ public class KDTree3DTest {
     @Test
     public void testNNearest6() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numberPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        int numberPoints = randomizer.nextInt(MIN_POINTS + 1, MAX_POINTS);
 
         int numberNearest = randomizer.nextInt(MIN_POINTS, numberPoints);
 
@@ -765,7 +765,7 @@ public class KDTree3DTest {
     @Test
     public void testNNearest8() {
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int numberPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        int numberPoints = randomizer.nextInt(MIN_POINTS + 1, MAX_POINTS);
 
         int numberNearest = randomizer.nextInt(MIN_POINTS, numberPoints);
 
