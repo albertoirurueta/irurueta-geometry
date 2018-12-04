@@ -633,7 +633,7 @@ public class Quadric extends BaseQuadric implements Serializable {
         //Plane parameters
         double aP = plane.getA();
         double bP = plane.getB();
-        double cP = plane.getC(),
+        double cP = plane.getC();
         double dP = plane.getD();
         
         //we solve the following system of equations:
