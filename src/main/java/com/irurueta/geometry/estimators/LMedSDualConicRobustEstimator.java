@@ -82,8 +82,7 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      * @throws IllegalArgumentException if provided list of lines don't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public LMedSDualConicRobustEstimator(List<Line2D> lines) 
-            throws IllegalArgumentException {
+    public LMedSDualConicRobustEstimator(List<Line2D> lines) {
         super(lines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -109,7 +108,7 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      */
     public LMedSDualConicRobustEstimator(
             DualConicRobustEstimatorListener listener, 
-            List<Line2D> lines) throws IllegalArgumentException {
+            List<Line2D> lines) {
         super(listener, lines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }    
@@ -158,7 +157,7 @@ public class LMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      * estimation is already in progress.
      */
     public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

@@ -87,7 +87,7 @@ public class EuclideanTransformation3DEstimator {
      * the same size or their size is smaller than 4.
      */
     public EuclideanTransformation3DEstimator(List<Point3D> inputPoints,
-            List<Point3D> outputPoints) throws IllegalArgumentException {
+            List<Point3D> outputPoints) {
         internalSetPoints(inputPoints, outputPoints);
     }
     
@@ -112,8 +112,7 @@ public class EuclideanTransformation3DEstimator {
      */
     public EuclideanTransformation3DEstimator(
             EuclideanTransformation3DEstimatorListener listener, 
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         mListener = listener;
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -135,8 +134,7 @@ public class EuclideanTransformation3DEstimator {
      * the same size or their size is smaller than 4.
      */
     public EuclideanTransformation3DEstimator(List<Point3D> inputPoints,
-            List<Point3D> outputPoints, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            List<Point3D> outputPoints, boolean weakMinimumSizeAllowed) {
         mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -167,8 +165,7 @@ public class EuclideanTransformation3DEstimator {
     public EuclideanTransformation3DEstimator(
             EuclideanTransformation3DEstimatorListener listener, 
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
         mListener = listener;
         internalSetPoints(inputPoints, outputPoints);
@@ -218,8 +215,7 @@ public class EuclideanTransformation3DEstimator {
      * already in progress.
      */
     public void setPoints(List<Point3D> inputPoints, 
-            List<Point3D> outputPoints) throws IllegalArgumentException, 
-            LockedException {
+            List<Point3D> outputPoints) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -366,7 +362,8 @@ public class EuclideanTransformation3DEstimator {
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
         
             int n = mInputPoints.size();
-            Point3D inputPoint, outputPoint;
+            Point3D inputPoint;
+            Point3D outputPoint;
             Matrix col = new Matrix(
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
             Matrix row = new Matrix(1, 
@@ -450,7 +447,9 @@ public class EuclideanTransformation3DEstimator {
      */
     private static Matrix computeCentroid(List<Point3D> points) 
             throws AlgebraException {        
-        double x = 0.0, y = 0.0, z = 0.0;
+        double x = 0.0;
+        double y = 0.0;
+        double z = 0.0;
         double n = points.size();
         for (Point3D p : points) {
             x += p.getInhomX() / n;
@@ -478,7 +477,7 @@ public class EuclideanTransformation3DEstimator {
      * the same size or their size is smaller than #getMinimumPoints.
      */
     private void internalSetPoints(List<Point3D> inputPoints,
-            List<Point3D> outputPoints) throws IllegalArgumentException {
+            List<Point3D> outputPoints) {
         if (inputPoints.size() < getMinimumPoints()) {
             throw new IllegalArgumentException();
         }

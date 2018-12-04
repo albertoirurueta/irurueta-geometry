@@ -82,8 +82,7 @@ public class LMedSDualQuadricRobustEstimator extends DualQuadricRobustEstimator{
      * @throws IllegalArgumentException if provided list of planes don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public LMedSDualQuadricRobustEstimator(List<Plane> planes) 
-            throws IllegalArgumentException {
+    public LMedSDualQuadricRobustEstimator(List<Plane> planes) {
         super(planes);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -110,7 +109,7 @@ public class LMedSDualQuadricRobustEstimator extends DualQuadricRobustEstimator{
      */
     public LMedSDualQuadricRobustEstimator(
             DualQuadricRobustEstimatorListener listener,
-            List<Plane> planes) throws IllegalArgumentException {
+            List<Plane> planes) {
         super(listener, planes);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -159,7 +158,7 @@ public class LMedSDualQuadricRobustEstimator extends DualQuadricRobustEstimator{
      * estimation is already in progress.
      */
     public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

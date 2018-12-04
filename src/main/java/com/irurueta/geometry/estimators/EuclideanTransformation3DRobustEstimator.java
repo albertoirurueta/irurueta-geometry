@@ -224,7 +224,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public EuclideanTransformation3DRobustEstimator(List<Point3D> inputPoints,
-            List<Point3D> outputPoints) throws IllegalArgumentException {
+            List<Point3D> outputPoints) {
         this();
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -246,8 +246,7 @@ public abstract class EuclideanTransformation3DRobustEstimator {
      */
     public EuclideanTransformation3DRobustEstimator(
             EuclideanTransformation3DRobustEstimatorListener listener,
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         this(listener);
         internalSetPoints(inputPoints, outputPoints);
     }
