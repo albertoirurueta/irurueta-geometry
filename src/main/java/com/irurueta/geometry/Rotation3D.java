@@ -546,7 +546,7 @@ public abstract class Rotation3D {
     }
 
     /**
-     * Determines if two Rotation2D instances are equal up to provided threshold
+     * Determines if two Rotation3D instances are equal up to provided threshold
      * or not (i.e. have the same rotation).
      * @param other other rotation to compare.
      * @param threshold threshold to determine if they are equal.
@@ -595,9 +595,23 @@ public abstract class Rotation3D {
             return Math.abs(thisAngle + otherAngle) <= threshold;
         }
     }
+
+    /**
+     * Determines if two Rotation3D instances are equal or not (i.e. have the
+     * same rotation).
+     * @param other other object to compare.
+     * @return true if they are equal, false otherwise.
+     */
+    public boolean equals(Rotation3D other) {
+        try {
+            return equals(other, DEFAULT_COMPARISON_THRESHOLD);
+        } catch (RotationException e) {
+            return false;
+        }
+    }
     
     /**
-     * Determines if two Rotation2D instances are equal or not (i.e. have the
+     * Determines if two Rotation3D instances are equal or not (i.e. have the
      * same rotation).
      * @param obj other object to compare.
      * @return true if they are equal, false otherwise.
@@ -610,14 +624,9 @@ public abstract class Rotation3D {
         if (!(obj instanceof Rotation3D)) {
             return false;
         }
-        
-        Rotation3D other = (Rotation3D)obj;
-        try {
-            return equals(other, DEFAULT_COMPARISON_THRESHOLD);
-        } catch (RotationException e) {
-            return false;
-        }
-    }    
+
+        return equals((Rotation3D)obj);
+    }
 
     /**
      * Hash code to compare instances.

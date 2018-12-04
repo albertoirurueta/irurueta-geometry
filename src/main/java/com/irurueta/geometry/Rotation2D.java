@@ -582,6 +582,16 @@ public class Rotation2D implements Serializable {
         
         return Math.abs(other.theta - theta) <= threshold;
     }
+
+    /**
+     * Determines if two Rotation2D instances are equal or not (i.e. have the
+     * same rotation).
+     * @param other other object to compare.
+     * @return true if they are equal, false otherwise.
+     */
+    public boolean equals(Rotation2D other) {
+        return equals(other, DEFAULT_COMPARISON_THRESHOLD);
+    }
     
     /**
      * Determines if two Rotation2D instances are equal or not (i.e. have the
@@ -597,9 +607,8 @@ public class Rotation2D implements Serializable {
         if (!(obj instanceof Rotation2D)) {
             return false;
         }
-        
-        Rotation2D other = (Rotation2D)obj;
-        return equals(other, DEFAULT_COMPARISON_THRESHOLD);
+
+        return equals((Rotation2D)obj);
     }
 
     /**

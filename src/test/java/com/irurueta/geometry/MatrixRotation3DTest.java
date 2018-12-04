@@ -1276,40 +1276,54 @@ public class MatrixRotation3DTest {
     
     @Test
     public void testToAxisRotation() throws AlgebraException {
-        UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        
-        //Find any 3 orthogonal vectors, 1st will be axis of rotation, and
-        //the remaining two will lie on the rotation plane and will be used
-        //to test theta angle
-            
-        //To find 3 orthogonal vectors, we use V matrix of a singular
-        //decomposition of any Nx3 matrix
-        Matrix a = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, 
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
-            
-        decomposer.decompose();
-            
-        Matrix vMatrix = decomposer.getV();
-            
-        //axis of rotation
-        double [] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
-        
-        MatrixRotation3D rotation = new MatrixRotation3D(axis, theta);
-        
-        //to axis rotation
-        AxisRotation3D axisRotation1 = new AxisRotation3D();
-        rotation.toAxisRotation(axisRotation1);
-        AxisRotation3D axisRotation2 = rotation.toAxisRotation();
-        
-        //check correctness
-        //noinspection all
-        assertEquals(rotation, axisRotation1);
-        //noinspection all
-        assertEquals(rotation, axisRotation2);        
+        int numValid = 0;
+        for (int t = 0; t < TIMES; t++) {
+            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+
+            //Find any 3 orthogonal vectors, 1st will be axis of rotation, and
+            //the remaining two will lie on the rotation plane and will be used
+            //to test theta angle
+
+            //To find 3 orthogonal vectors, we use V matrix of a singular
+            //decomposition of any Nx3 matrix
+            Matrix a = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
+                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
+
+            decomposer.decompose();
+
+            Matrix vMatrix = decomposer.getV();
+
+            //axis of rotation
+            double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
+                    2, 0);
+
+            MatrixRotation3D rotation = new MatrixRotation3D(axis, theta);
+
+            //to axis rotation
+            AxisRotation3D axisRotation1 = new AxisRotation3D();
+            rotation.toAxisRotation(axisRotation1);
+            AxisRotation3D axisRotation2 = rotation.toAxisRotation();
+
+            //check correctness
+            if (!rotation.equals(axisRotation1)) {
+                continue;
+            }
+            //noinspection all
+            assertEquals(rotation, axisRotation1);
+            if (!rotation.equals(axisRotation2)) {
+                continue;
+            }
+            //noinspection all
+            assertEquals(rotation, axisRotation2);
+
+            numValid++;
+            break;
+        }
+
+        assertTrue(numValid > 0);
     }
     
     @Test
