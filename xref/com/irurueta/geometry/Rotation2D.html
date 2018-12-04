@@ -590,38 +590,47 @@
 <a class="jxr_linenumber" name="L582" href="#L582">582</a>         
 <a class="jxr_linenumber" name="L583" href="#L583">583</a>         <strong class="jxr_keyword">return</strong> Math.abs(other.theta - theta) &lt;= threshold;
 <a class="jxr_linenumber" name="L584" href="#L584">584</a>     }
-<a class="jxr_linenumber" name="L585" href="#L585">585</a>     
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 
 <a class="jxr_linenumber" name="L586" href="#L586">586</a>     <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">     * Determines if two Rotation2D instances are equal or not (i.e. have the</em>
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">     * same rotation).</em>
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">     * @param obj other object to compare.</em>
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">     * @param other other object to compare.</em>
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> <em class="jxr_javadoccomment">     * @return true if they are equal, false otherwise.</em>
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L592" href="#L592">592</a>     @Override
-<a class="jxr_linenumber" name="L593" href="#L593">593</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object obj) {
-<a class="jxr_linenumber" name="L594" href="#L594">594</a>         <strong class="jxr_keyword">if</strong> (obj == <strong class="jxr_keyword">this</strong>) {
-<a class="jxr_linenumber" name="L595" href="#L595">595</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L596" href="#L596">596</a>         }
-<a class="jxr_linenumber" name="L597" href="#L597">597</a>         <strong class="jxr_keyword">if</strong> (!(obj instanceof Rotation2D)) {
-<a class="jxr_linenumber" name="L598" href="#L598">598</a>             <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L599" href="#L599">599</a>         }
-<a class="jxr_linenumber" name="L600" href="#L600">600</a>         
-<a class="jxr_linenumber" name="L601" href="#L601">601</a>         <a href="../../../com/irurueta/geometry/Rotation2D.html">Rotation2D</a> other = (Rotation2D)obj;
-<a class="jxr_linenumber" name="L602" href="#L602">602</a>         <strong class="jxr_keyword">return</strong> equals(other, DEFAULT_COMPARISON_THRESHOLD);
-<a class="jxr_linenumber" name="L603" href="#L603">603</a>     }
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 
-<a class="jxr_linenumber" name="L605" href="#L605">605</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> <em class="jxr_javadoccomment">     * Hash code to compare instances.</em>
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> <em class="jxr_javadoccomment">     * @return hash code to compare instances.</em>
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L609" href="#L609">609</a>     @Override
-<a class="jxr_linenumber" name="L610" href="#L610">610</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
-<a class="jxr_linenumber" name="L611" href="#L611">611</a>         <strong class="jxr_keyword">int</strong> hash = 3;
-<a class="jxr_linenumber" name="L612" href="#L612">612</a>         hash = 67 * hash + (<strong class="jxr_keyword">int</strong>) (Double.doubleToLongBits(<strong class="jxr_keyword">this</strong>.theta) ^ 
-<a class="jxr_linenumber" name="L613" href="#L613">613</a>                 (Double.doubleToLongBits(<strong class="jxr_keyword">this</strong>.theta) &gt;&gt;&gt; 32));
-<a class="jxr_linenumber" name="L614" href="#L614">614</a>         <strong class="jxr_keyword">return</strong> hash;
-<a class="jxr_linenumber" name="L615" href="#L615">615</a>     }
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> }
+<a class="jxr_linenumber" name="L592" href="#L592">592</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(<a href="../../../com/irurueta/geometry/Rotation2D.html">Rotation2D</a> other) {
+<a class="jxr_linenumber" name="L593" href="#L593">593</a>         <strong class="jxr_keyword">return</strong> equals(other, DEFAULT_COMPARISON_THRESHOLD);
+<a class="jxr_linenumber" name="L594" href="#L594">594</a>     }
+<a class="jxr_linenumber" name="L595" href="#L595">595</a>     
+<a class="jxr_linenumber" name="L596" href="#L596">596</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">     * Determines if two Rotation2D instances are equal or not (i.e. have the</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> <em class="jxr_javadoccomment">     * same rotation).</em>
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> <em class="jxr_javadoccomment">     * @param obj other object to compare.</em>
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> <em class="jxr_javadoccomment">     * @return true if they are equal, false otherwise.</em>
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L602" href="#L602">602</a>     @Override
+<a class="jxr_linenumber" name="L603" href="#L603">603</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object obj) {
+<a class="jxr_linenumber" name="L604" href="#L604">604</a>         <strong class="jxr_keyword">if</strong> (obj == <strong class="jxr_keyword">this</strong>) {
+<a class="jxr_linenumber" name="L605" href="#L605">605</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L606" href="#L606">606</a>         }
+<a class="jxr_linenumber" name="L607" href="#L607">607</a>         <strong class="jxr_keyword">if</strong> (!(obj instanceof Rotation2D)) {
+<a class="jxr_linenumber" name="L608" href="#L608">608</a>             <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L609" href="#L609">609</a>         }
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 
+<a class="jxr_linenumber" name="L611" href="#L611">611</a>         <strong class="jxr_keyword">return</strong> equals((Rotation2D)obj);
+<a class="jxr_linenumber" name="L612" href="#L612">612</a>     }
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 
+<a class="jxr_linenumber" name="L614" href="#L614">614</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> <em class="jxr_javadoccomment">     * Hash code to compare instances.</em>
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> <em class="jxr_javadoccomment">     * @return hash code to compare instances.</em>
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L618" href="#L618">618</a>     @Override
+<a class="jxr_linenumber" name="L619" href="#L619">619</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
+<a class="jxr_linenumber" name="L620" href="#L620">620</a>         <strong class="jxr_keyword">int</strong> hash = 3;
+<a class="jxr_linenumber" name="L621" href="#L621">621</a>         hash = 67 * hash + (<strong class="jxr_keyword">int</strong>) (Double.doubleToLongBits(<strong class="jxr_keyword">this</strong>.theta) ^ 
+<a class="jxr_linenumber" name="L622" href="#L622">622</a>                 (Double.doubleToLongBits(<strong class="jxr_keyword">this</strong>.theta) &gt;&gt;&gt; 32));
+<a class="jxr_linenumber" name="L623" href="#L623">623</a>         <strong class="jxr_keyword">return</strong> hash;
+<a class="jxr_linenumber" name="L624" href="#L624">624</a>     }
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>

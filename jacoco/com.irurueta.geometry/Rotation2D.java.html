@@ -582,6 +582,16 @@ public class Rotation2D implements Serializable {
         
 <span class="fc bfc" id="L583" title="All 2 branches covered.">        return Math.abs(other.theta - theta) &lt;= threshold;</span>
     }
+
+    /**
+     * Determines if two Rotation2D instances are equal or not (i.e. have the
+     * same rotation).
+     * @param other other object to compare.
+     * @return true if they are equal, false otherwise.
+     */
+    public boolean equals(Rotation2D other) {
+<span class="fc" id="L593">        return equals(other, DEFAULT_COMPARISON_THRESHOLD);</span>
+    }
     
     /**
      * Determines if two Rotation2D instances are equal or not (i.e. have the
@@ -591,15 +601,14 @@ public class Rotation2D implements Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-<span class="fc bfc" id="L594" title="All 2 branches covered.">        if (obj == this) {</span>
-<span class="fc" id="L595">            return true;</span>
+<span class="fc bfc" id="L604" title="All 2 branches covered.">        if (obj == this) {</span>
+<span class="fc" id="L605">            return true;</span>
         }
-<span class="pc bpc" id="L597" title="1 of 2 branches missed.">        if (!(obj instanceof Rotation2D)) {</span>
-<span class="nc" id="L598">            return false;</span>
+<span class="pc bpc" id="L607" title="1 of 2 branches missed.">        if (!(obj instanceof Rotation2D)) {</span>
+<span class="nc" id="L608">            return false;</span>
         }
-        
-<span class="fc" id="L601">        Rotation2D other = (Rotation2D)obj;</span>
-<span class="fc" id="L602">        return equals(other, DEFAULT_COMPARISON_THRESHOLD);</span>
+
+<span class="fc" id="L611">        return equals((Rotation2D)obj);</span>
     }
 
     /**
@@ -608,10 +617,10 @@ public class Rotation2D implements Serializable {
      */
     @Override
     public int hashCode() {
-<span class="fc" id="L611">        int hash = 3;</span>
-<span class="fc" id="L612">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.theta) ^ </span>
-<span class="fc" id="L613">                (Double.doubleToLongBits(this.theta) &gt;&gt;&gt; 32));</span>
-<span class="fc" id="L614">        return hash;</span>
+<span class="fc" id="L620">        int hash = 3;</span>
+<span class="fc" id="L621">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.theta) ^ </span>
+<span class="fc" id="L622">                (Double.doubleToLongBits(this.theta) &gt;&gt;&gt; 32));</span>
+<span class="fc" id="L623">        return hash;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

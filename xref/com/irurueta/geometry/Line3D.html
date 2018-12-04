@@ -179,10 +179,10 @@
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>         
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>             <em class="jxr_comment">//last two columns of V contains director vectors of plane1 and </em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>             <em class="jxr_comment">//plane2</em>
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>             Matrix V = decomposer.getV();
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>             Matrix v = decomposer.getV();
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>         
-<a class="jxr_linenumber" name="L176" href="#L176">176</a>             <strong class="jxr_keyword">double</strong>[] directorVector1 = V.getSubmatrixAsArray(0, 1, 2, 1);
-<a class="jxr_linenumber" name="L177" href="#L177">177</a>             <strong class="jxr_keyword">double</strong>[] directorVector2 = V.getSubmatrixAsArray(0, 2, 2, 2);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>             <strong class="jxr_keyword">double</strong>[] directorVector1 = v.getSubmatrixAsArray(0, 1, 2, 1);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>             <strong class="jxr_keyword">double</strong>[] directorVector2 = v.getSubmatrixAsArray(0, 2, 2, 2);
 <a class="jxr_linenumber" name="L178" href="#L178">178</a>         
 <a class="jxr_linenumber" name="L179" href="#L179">179</a>             mPlane1 = <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/Plane.html">Plane</a>(point1, directorVector1);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a>             mPlane2 = <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/Plane.html">Plane</a>(point1, directorVector2);

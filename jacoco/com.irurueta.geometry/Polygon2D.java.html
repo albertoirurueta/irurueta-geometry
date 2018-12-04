@@ -263,7 +263,7 @@ public class Polygon2D implements Serializable {
      * failed.
      */
     public boolean isInside(Point2D point, double threshold)
-            throws IllegalArgumentException, TriangulatorException {
+            throws TriangulatorException {
 <span class="fc bfc" id="L267" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
 <span class="fc" id="L268">            throw new IllegalArgumentException();</span>
         }
@@ -296,15 +296,16 @@ public class Polygon2D implements Serializable {
      */
     public void center(Point2D result) {
         //compute average location of all vertices
-<span class="fc" id="L299">        double inhomX = 0.0, inhomY = 0.0;</span>
-<span class="fc" id="L300">        int total = mVertices.size();</span>
+<span class="fc" id="L299">        double inhomX = 0.0;</span>
+<span class="fc" id="L300">        double inhomY = 0.0;</span>
+<span class="fc" id="L301">        int total = mVertices.size();</span>
         
-<span class="fc bfc" id="L302" title="All 2 branches covered.">        for (Point2D point : mVertices) {</span>
-<span class="fc" id="L303">            inhomX += point.getInhomX() / (double)total;</span>
-<span class="fc" id="L304">            inhomY += point.getInhomY() / (double)total;</span>
-<span class="fc" id="L305">        }</span>
-<span class="fc" id="L306">        result.setInhomogeneousCoordinates(inhomX, inhomY);</span>
-<span class="fc" id="L307">    }</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">        for (Point2D point : mVertices) {</span>
+<span class="fc" id="L304">            inhomX += point.getInhomX() / (double)total;</span>
+<span class="fc" id="L305">            inhomY += point.getInhomY() / (double)total;</span>
+<span class="fc" id="L306">        }</span>
+<span class="fc" id="L307">        result.setInhomogeneousCoordinates(inhomX, inhomY);</span>
+<span class="fc" id="L308">    }</span>
              
     /**
      * Determines whether provided point is locus of the borders defined by
@@ -318,8 +319,7 @@ public class Polygon2D implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Point2D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean isLocus(Point2D point, double threshold) {
 <span class="fc bfc" id="L323" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
 <span class="fc" id="L324">            throw new IllegalArgumentException();</span>
         }
@@ -364,81 +364,82 @@ public class Polygon2D implements Serializable {
 <span class="fc" id="L364">        Point2D prevPoint = iterator.next();</span>
 <span class="fc" id="L365">        prevPoint.normalize(); //to increase accuracy</span>
         Point2D curPoint;
-<span class="fc" id="L367">        double bestDist = Double.MAX_VALUE, dist;</span>
-<span class="fc" id="L368">        boolean found = false;</span>
-<span class="fc" id="L369">        Line2D line = new Line2D();</span>
-<span class="fc" id="L370">        Point2D pointInLine = Point2D.create();</span>
+<span class="fc" id="L367">        double bestDist = Double.MAX_VALUE;</span>
+        double dist;
+<span class="fc" id="L369">        boolean found = false;</span>
+<span class="fc" id="L370">        Line2D line = new Line2D();</span>
+<span class="fc" id="L371">        Point2D pointInLine = Point2D.create();</span>
         
-<span class="fc bfc" id="L372" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
-<span class="fc" id="L373">            curPoint = iterator.next();</span>
-<span class="fc" id="L374">            curPoint.normalize(); //to increase accuracy</span>
+<span class="fc bfc" id="L373" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L374">            curPoint = iterator.next();</span>
+<span class="fc" id="L375">            curPoint.normalize(); //to increase accuracy</span>
             
             //check if point lies in the segment of the boundary of this polygon
-<span class="fc bfc" id="L377" title="All 2 branches covered.">            if (point.isBetween(curPoint, prevPoint)) {</span>
-<span class="fc" id="L378">                return 0.0;</span>
+<span class="fc bfc" id="L378" title="All 2 branches covered.">            if (point.isBetween(curPoint, prevPoint)) {</span>
+<span class="fc" id="L379">                return 0.0;</span>
             }
             
-<span class="fc" id="L381">            line.setParametersFromPairOfPoints(curPoint, prevPoint);</span>
-<span class="fc" id="L382">            line.normalize(); //to increase accuracy</span>
+<span class="fc" id="L382">            line.setParametersFromPairOfPoints(curPoint, prevPoint);</span>
+<span class="fc" id="L383">            line.normalize(); //to increase accuracy</span>
             
             //find closest point to line
-<span class="fc" id="L385">            line.closestPoint(point, pointInLine);</span>
-<span class="fc" id="L386">            pointInLine.normalize(); //to increase accuracy</span>
+<span class="fc" id="L386">            line.closestPoint(point, pointInLine);</span>
+<span class="fc" id="L387">            pointInLine.normalize(); //to increase accuracy</span>
             
-<span class="fc bfc" id="L388" title="All 2 branches covered.">            if (pointInLine.isBetween(curPoint, prevPoint)) {</span>
+<span class="fc bfc" id="L389" title="All 2 branches covered.">            if (pointInLine.isBetween(curPoint, prevPoint)) {</span>
                 //closest point lies within segment of polygon boundary, so we
                 //keep distance
-<span class="fc" id="L391">                dist = point.distanceTo(pointInLine);</span>
-<span class="fc bfc" id="L392" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
+<span class="fc" id="L392">                dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L393" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
                     //a better point has been found
-<span class="fc" id="L394">                    bestDist = dist;</span>
-<span class="fc" id="L395">                    found = true;</span>
+<span class="fc" id="L395">                    bestDist = dist;</span>
+<span class="fc" id="L396">                    found = true;</span>
                 }
             }
             
-<span class="fc" id="L399">            prevPoint = curPoint;</span>
+<span class="fc" id="L400">            prevPoint = curPoint;</span>
         }
         
         //try last vertex with first
         //check if point lies in the segment of the boundary of this polygon
-<span class="fc" id="L404">        Point2D first = mVertices.get(0);</span>
-<span class="fc bfc" id="L405" title="All 2 branches covered.">        if (point.isBetween(prevPoint, first)) {</span>
-<span class="fc" id="L406">            return 0.0;</span>
+<span class="fc" id="L405">        Point2D first = mVertices.get(0);</span>
+<span class="fc bfc" id="L406" title="All 2 branches covered.">        if (point.isBetween(prevPoint, first)) {</span>
+<span class="fc" id="L407">            return 0.0;</span>
         }
             
-<span class="fc" id="L409">        line.setParametersFromPairOfPoints(prevPoint, first);</span>
-<span class="fc" id="L410">        line.normalize(); //to increase accuracy</span>
+<span class="fc" id="L410">        line.setParametersFromPairOfPoints(prevPoint, first);</span>
+<span class="fc" id="L411">        line.normalize(); //to increase accuracy</span>
             
         //find closest point to line
-<span class="fc" id="L413">        line.closestPoint(point, pointInLine);</span>
-<span class="fc" id="L414">        pointInLine.normalize(); //to increase accuracy</span>
+<span class="fc" id="L414">        line.closestPoint(point, pointInLine);</span>
+<span class="fc" id="L415">        pointInLine.normalize(); //to increase accuracy</span>
             
-<span class="fc bfc" id="L416" title="All 2 branches covered.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
+<span class="fc bfc" id="L417" title="All 2 branches covered.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
             //closest point lies within segment of polygon boundary, so we
             //keep distance
-<span class="fc" id="L419">            dist = point.distanceTo(pointInLine);</span>
-<span class="fc bfc" id="L420" title="All 2 branches covered.">            if (dist &lt; bestDist) {</span>
+<span class="fc" id="L420">            dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L421" title="All 2 branches covered.">            if (dist &lt; bestDist) {</span>
                 //a better point has been found
-<span class="fc" id="L422">                bestDist = dist;</span>
-<span class="fc" id="L423">                found = true;</span>
+<span class="fc" id="L423">                bestDist = dist;</span>
+<span class="fc" id="L424">                found = true;</span>
             }
         }        
         
-<span class="pc bpc" id="L427" title="1 of 2 branches missed.">        if (!found) {</span>
+<span class="pc bpc" id="L428" title="1 of 2 branches missed.">        if (!found) {</span>
             //no closest point was found on a segment belonging to polygon 
             //boundary so we search for the closest vertex
-<span class="nc" id="L430">            iterator = mVertices.iterator();</span>
-<span class="nc bnc" id="L431" title="All 2 branches missed.">            while (iterator.hasNext()) {</span>
+<span class="nc" id="L431">            iterator = mVertices.iterator();</span>
+<span class="nc bnc" id="L432" title="All 2 branches missed.">            while (iterator.hasNext()) {</span>
                 //a better vertex has been found
-<span class="nc" id="L433">                curPoint = iterator.next();</span>
-<span class="nc" id="L434">                dist = point.distanceTo(curPoint);</span>
-<span class="nc bnc" id="L435" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
-<span class="nc" id="L436">                    bestDist = dist;</span>
+<span class="nc" id="L434">                curPoint = iterator.next();</span>
+<span class="nc" id="L435">                dist = point.distanceTo(curPoint);</span>
+<span class="nc bnc" id="L436" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
+<span class="nc" id="L437">                    bestDist = dist;</span>
                 }
             }
         }
         
-<span class="fc" id="L441">        return bestDist;</span>
+<span class="fc" id="L442">        return bestDist;</span>
     }
     
     /**
@@ -448,9 +449,9 @@ public class Polygon2D implements Serializable {
      * @return Closest point being locus of this polygon.
      */
     public Point2D getClosestPoint(Point2D point) {
-<span class="fc" id="L451">        Point2D result = Point2D.create();</span>
-<span class="fc" id="L452">        closestPoint(point, result);</span>
-<span class="fc" id="L453">        return result;        </span>
+<span class="fc" id="L452">        Point2D result = Point2D.create();</span>
+<span class="fc" id="L453">        closestPoint(point, result);</span>
+<span class="fc" id="L454">        return result;        </span>
     }
     
     /**
@@ -461,90 +462,91 @@ public class Polygon2D implements Serializable {
      */
     public void closestPoint(Point2D point, Point2D result) {
         //iterate over all vertices and compute their distance
-<span class="fc" id="L464">        Iterator&lt;Point2D&gt; iterator = mVertices.iterator();</span>
-<span class="fc" id="L465">        Point2D prevPoint = iterator.next();</span>
-<span class="fc" id="L466">        prevPoint.normalize(); //to increase accuracy</span>
+<span class="fc" id="L465">        Iterator&lt;Point2D&gt; iterator = mVertices.iterator();</span>
+<span class="fc" id="L466">        Point2D prevPoint = iterator.next();</span>
+<span class="fc" id="L467">        prevPoint.normalize(); //to increase accuracy</span>
         Point2D curPoint;
-<span class="fc" id="L468">        double bestDist = Double.MAX_VALUE, dist;</span>
-<span class="fc" id="L469">        boolean found = false;</span>
-<span class="fc" id="L470">        Line2D line = new Line2D();</span>
-<span class="fc" id="L471">        Point2D pointInLine = Point2D.create();</span>
+<span class="fc" id="L469">        double bestDist = Double.MAX_VALUE;</span>
+        double dist;
+<span class="fc" id="L471">        boolean found = false;</span>
+<span class="fc" id="L472">        Line2D line = new Line2D();</span>
+<span class="fc" id="L473">        Point2D pointInLine = Point2D.create();</span>
         
-<span class="fc bfc" id="L473" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
-<span class="fc" id="L474">            curPoint = iterator.next();</span>
-<span class="fc" id="L475">            curPoint.normalize(); //to increase accuracy</span>
+<span class="fc bfc" id="L475" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L476">            curPoint = iterator.next();</span>
+<span class="fc" id="L477">            curPoint.normalize(); //to increase accuracy</span>
             
             //check if point lies in the segment of the boundary of this polygon
-<span class="fc bfc" id="L478" title="All 2 branches covered.">            if (point.isBetween(curPoint, prevPoint)) {</span>
-<span class="fc" id="L479">                result.setCoordinates(point);</span>
-<span class="fc" id="L480">                return;</span>
+<span class="fc bfc" id="L480" title="All 2 branches covered.">            if (point.isBetween(curPoint, prevPoint)) {</span>
+<span class="fc" id="L481">                result.setCoordinates(point);</span>
+<span class="fc" id="L482">                return;</span>
             }
             
-<span class="fc" id="L483">            line.setParametersFromPairOfPoints(curPoint, prevPoint);</span>
-<span class="fc" id="L484">            line.normalize(); //to increase accuracy</span>
+<span class="fc" id="L485">            line.setParametersFromPairOfPoints(curPoint, prevPoint);</span>
+<span class="fc" id="L486">            line.normalize(); //to increase accuracy</span>
             
             //find closest point to line
-<span class="fc" id="L487">            line.closestPoint(point, pointInLine);</span>
-<span class="fc" id="L488">            pointInLine.normalize(); //to increase accuracy</span>
+<span class="fc" id="L489">            line.closestPoint(point, pointInLine);</span>
+<span class="fc" id="L490">            pointInLine.normalize(); //to increase accuracy</span>
             
-<span class="fc bfc" id="L490" title="All 2 branches covered.">            if (pointInLine.isBetween(curPoint, prevPoint)) {</span>
+<span class="fc bfc" id="L492" title="All 2 branches covered.">            if (pointInLine.isBetween(curPoint, prevPoint)) {</span>
                 //closest point lies within segment of polygon boundary, so we
                 //keep distance and point
-<span class="fc" id="L493">                dist = point.distanceTo(pointInLine);</span>
-<span class="fc bfc" id="L494" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
+<span class="fc" id="L495">                dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L496" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
                     //a better point has been found
-<span class="fc" id="L496">                    bestDist = dist; </span>
-<span class="fc" id="L497">                    result.setCoordinates(pointInLine);</span>
-<span class="fc" id="L498">                    found = true;</span>
+<span class="fc" id="L498">                    bestDist = dist; </span>
+<span class="fc" id="L499">                    result.setCoordinates(pointInLine);</span>
+<span class="fc" id="L500">                    found = true;</span>
                 }
             }
             
-<span class="fc" id="L502">            prevPoint = curPoint;</span>
+<span class="fc" id="L504">            prevPoint = curPoint;</span>
         }
         
         //try last vertex with first
         //check if point lies in the segment of the boundary of this polygon
-<span class="fc" id="L507">        Point2D first = mVertices.get(0);</span>
-<span class="fc bfc" id="L508" title="All 2 branches covered.">        if (point.isBetween(prevPoint, first)) {</span>
-<span class="fc" id="L509">            result.setCoordinates(point);</span>
-<span class="fc" id="L510">            return;</span>
+<span class="fc" id="L509">        Point2D first = mVertices.get(0);</span>
+<span class="fc bfc" id="L510" title="All 2 branches covered.">        if (point.isBetween(prevPoint, first)) {</span>
+<span class="fc" id="L511">            result.setCoordinates(point);</span>
+<span class="fc" id="L512">            return;</span>
         }
             
-<span class="fc" id="L513">        line.setParametersFromPairOfPoints(prevPoint, first);</span>
-<span class="fc" id="L514">        line.normalize(); //to increase accuracy</span>
+<span class="fc" id="L515">        line.setParametersFromPairOfPoints(prevPoint, first);</span>
+<span class="fc" id="L516">        line.normalize(); //to increase accuracy</span>
             
         //find closest point to line
-<span class="fc" id="L517">        line.closestPoint(point, pointInLine);</span>
-<span class="fc" id="L518">        pointInLine.normalize(); //to increase accuracy</span>
+<span class="fc" id="L519">        line.closestPoint(point, pointInLine);</span>
+<span class="fc" id="L520">        pointInLine.normalize(); //to increase accuracy</span>
             
-<span class="fc bfc" id="L520" title="All 2 branches covered.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
+<span class="fc bfc" id="L522" title="All 2 branches covered.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
             //closest point lies within segment of polygon boundary, so we
             //keep distance
-<span class="fc" id="L523">            dist = point.distanceTo(pointInLine);</span>
-<span class="fc bfc" id="L524" title="All 2 branches covered.">            if (dist &lt; bestDist) {</span>
+<span class="fc" id="L525">            dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L526" title="All 2 branches covered.">            if (dist &lt; bestDist) {</span>
                 //a better point has been found
-<span class="fc" id="L526">                bestDist = dist;</span>
-<span class="fc" id="L527">                result.setCoordinates(pointInLine);</span>
-<span class="fc" id="L528">                found = true;</span>
+<span class="fc" id="L528">                bestDist = dist;</span>
+<span class="fc" id="L529">                result.setCoordinates(pointInLine);</span>
+<span class="fc" id="L530">                found = true;</span>
             }
         }        
         
         
-<span class="pc bpc" id="L533" title="1 of 2 branches missed.">        if (!found) {</span>
+<span class="pc bpc" id="L535" title="1 of 2 branches missed.">        if (!found) {</span>
             //no closest point was found on a segment belonging to polygon 
             //boundary so we search for the closest vertex
-<span class="nc" id="L536">            iterator = mVertices.iterator();</span>
-<span class="nc bnc" id="L537" title="All 2 branches missed.">            while (iterator.hasNext()) {</span>
-<span class="nc" id="L538">                curPoint = iterator.next();</span>
-<span class="nc" id="L539">                dist = point.distanceTo(curPoint);</span>
-<span class="nc bnc" id="L540" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
+<span class="nc" id="L538">            iterator = mVertices.iterator();</span>
+<span class="nc bnc" id="L539" title="All 2 branches missed.">            while (iterator.hasNext()) {</span>
+<span class="nc" id="L540">                curPoint = iterator.next();</span>
+<span class="nc" id="L541">                dist = point.distanceTo(curPoint);</span>
+<span class="nc bnc" id="L542" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
                     //a better vertex has been found
-<span class="nc" id="L542">                    bestDist = dist;</span>
-<span class="nc" id="L543">                    result.setCoordinates(curPoint);</span>
+<span class="nc" id="L544">                    bestDist = dist;</span>
+<span class="nc" id="L545">                    result.setCoordinates(curPoint);</span>
                 }
             }
         }
-<span class="fc" id="L547">    }</span>
+<span class="fc" id="L549">    }</span>
     
     /**
      * Triangulates this polygon using this polygon's triangulator method.
@@ -557,12 +559,12 @@ public class Polygon2D implements Serializable {
      * @see #setTriangulatorMethod(TriangulatorMethod)
      */
     public void triangulate() throws TriangulatorException {
-<span class="pc bpc" id="L560" title="1 of 2 branches missed.">        if (!mTriangulated) {</span>
-<span class="fc" id="L561">            Triangulator2D triangulator = Triangulator2D.create(</span>
+<span class="pc bpc" id="L562" title="1 of 2 branches missed.">        if (!mTriangulated) {</span>
+<span class="fc" id="L563">            Triangulator2D triangulator = Triangulator2D.create(</span>
                     mTriangulatorMethod);
-<span class="fc" id="L563">            mTriangles = triangulator.triangulate(mVertices);</span>
-<span class="fc" id="L564">            mTriangulated = true;</span>
+<span class="fc" id="L565">            mTriangles = triangulator.triangulate(mVertices);</span>
+<span class="fc" id="L566">            mTriangulated = true;</span>
         }        
-<span class="fc" id="L566">    }</span>
+<span class="fc" id="L568">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -172,41 +172,43 @@ public class Polygon3D implements Serializable {
 <span class="fc" id="L172">        Point3D prevPoint = iterator.next(); //because there are at least 3 </span>
                                             //vertices
         Point3D curPoint;
-<span class="fc" id="L175">        double avgX = 0.0, avgY = 0.0, avgZ = 0.0;</span>
-<span class="fc bfc" id="L176" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
-<span class="fc" id="L177">            curPoint = iterator.next();</span>
+<span class="fc" id="L175">        double avgX = 0.0;</span>
+<span class="fc" id="L176">        double avgY = 0.0;</span>
+<span class="fc" id="L177">        double avgZ = 0.0;</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L179">            curPoint = iterator.next();</span>
             
-<span class="fc" id="L179">            double inhomX1 = prevPoint.getInhomX();</span>
-<span class="fc" id="L180">            double inhomY1 = prevPoint.getInhomY();</span>
-<span class="fc" id="L181">            double inhomZ1 = prevPoint.getInhomZ();</span>
+<span class="fc" id="L181">            double inhomX1 = prevPoint.getInhomX();</span>
+<span class="fc" id="L182">            double inhomY1 = prevPoint.getInhomY();</span>
+<span class="fc" id="L183">            double inhomZ1 = prevPoint.getInhomZ();</span>
         
-<span class="fc" id="L183">            double inhomX2 = curPoint.getInhomX();</span>
-<span class="fc" id="L184">            double inhomY2 = curPoint.getInhomY();</span>
-<span class="fc" id="L185">            double inhomZ2 = curPoint.getInhomZ();</span>
+<span class="fc" id="L185">            double inhomX2 = curPoint.getInhomX();</span>
+<span class="fc" id="L186">            double inhomY2 = curPoint.getInhomY();</span>
+<span class="fc" id="L187">            double inhomZ2 = curPoint.getInhomZ();</span>
         
 
             //compute cross product of ab = (prevPoint - origin) and 
             //ac = (curPoint - origin)
-<span class="fc" id="L190">            double abX = inhomX1 - inhomX0;</span>
-<span class="fc" id="L191">            double abY = inhomY1 - inhomY0;</span>
-<span class="fc" id="L192">            double abZ = inhomZ1 - inhomZ0;</span>
+<span class="fc" id="L192">            double abX = inhomX1 - inhomX0;</span>
+<span class="fc" id="L193">            double abY = inhomY1 - inhomY0;</span>
+<span class="fc" id="L194">            double abZ = inhomZ1 - inhomZ0;</span>
         
-<span class="fc" id="L194">            double acX = inhomX2 - inhomX0;</span>
-<span class="fc" id="L195">            double acY = inhomY2 - inhomY0;</span>
-<span class="fc" id="L196">            double acZ = inhomZ2 - inhomZ0;</span>
+<span class="fc" id="L196">            double acX = inhomX2 - inhomX0;</span>
+<span class="fc" id="L197">            double acY = inhomY2 - inhomY0;</span>
+<span class="fc" id="L198">            double acZ = inhomZ2 - inhomZ0;</span>
         
-<span class="fc" id="L198">            double crossX = abY * acZ - abZ * acY;</span>
-<span class="fc" id="L199">            double crossY = abZ * acX - abX * acZ;</span>
-<span class="fc" id="L200">            double crossZ = abX * acY - abY * acX;</span>
+<span class="fc" id="L200">            double crossX = abY * acZ - abZ * acY;</span>
+<span class="fc" id="L201">            double crossY = abZ * acX - abX * acZ;</span>
+<span class="fc" id="L202">            double crossZ = abX * acY - abY * acX;</span>
 
-<span class="fc" id="L202">            avgX += crossX;</span>
-<span class="fc" id="L203">            avgY += crossY;</span>
-<span class="fc" id="L204">            avgZ += crossZ;</span>
+<span class="fc" id="L204">            avgX += crossX;</span>
+<span class="fc" id="L205">            avgY += crossY;</span>
+<span class="fc" id="L206">            avgZ += crossZ;</span>
                         
-<span class="fc" id="L206">            prevPoint = curPoint;</span>
-<span class="fc" id="L207">        }</span>
+<span class="fc" id="L208">            prevPoint = curPoint;</span>
+<span class="fc" id="L209">        }</span>
         
-<span class="fc" id="L209">        return 0.5 * Math.sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ);</span>
+<span class="fc" id="L211">        return 0.5 * Math.sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ);</span>
     }
         
     /**
@@ -217,18 +219,18 @@ public class Polygon3D implements Serializable {
      */
     public double getPerimeter() {
         //iterate over all vertices and compute their distance
-<span class="fc" id="L220">        Iterator&lt;Point3D&gt; iterator = mVertices.iterator();</span>
-<span class="fc" id="L221">        Point3D prevPoint = iterator.next();</span>
+<span class="fc" id="L222">        Iterator&lt;Point3D&gt; iterator = mVertices.iterator();</span>
+<span class="fc" id="L223">        Point3D prevPoint = iterator.next();</span>
         Point3D point;
-<span class="fc" id="L223">        double perimeter = 0.0;</span>
-<span class="fc bfc" id="L224" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
-<span class="fc" id="L225">            point = iterator.next();</span>
-<span class="fc" id="L226">            perimeter += prevPoint.distanceTo(point);</span>
-<span class="fc" id="L227">            prevPoint = point;</span>
+<span class="fc" id="L225">        double perimeter = 0.0;</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L227">            point = iterator.next();</span>
+<span class="fc" id="L228">            perimeter += prevPoint.distanceTo(point);</span>
+<span class="fc" id="L229">            prevPoint = point;</span>
         }
         //get distance from last point with first one
-<span class="fc" id="L230">        perimeter += prevPoint.distanceTo(mVertices.get(0));</span>
-<span class="fc" id="L231">        return perimeter;</span>
+<span class="fc" id="L232">        perimeter += prevPoint.distanceTo(mVertices.get(0));</span>
+<span class="fc" id="L233">        return perimeter;</span>
     }
     
     /**
@@ -244,7 +246,7 @@ public class Polygon3D implements Serializable {
      * failed.
      */
     public boolean isInside(Point3D point) throws TriangulatorException {
-<span class="fc" id="L247">        return isInside(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L249">        return isInside(point, DEFAULT_THRESHOLD);</span>
     }
 
     /**
@@ -263,17 +265,17 @@ public class Polygon3D implements Serializable {
      * failed.
      */
     public boolean isInside(Point3D point, double threshold)
-            throws IllegalArgumentException, TriangulatorException {
-<span class="fc bfc" id="L267" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L268">            throw new IllegalArgumentException();</span>
+            throws TriangulatorException {
+<span class="fc bfc" id="L269" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L270">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc bfc" id="L271" title="All 2 branches covered.">        for (Triangle3D triangle : getTriangles()) {</span>
-<span class="fc bfc" id="L272" title="All 2 branches covered.">            if (triangle.isInside(point, threshold)) {</span>
-<span class="fc" id="L273">                return true;</span>
+<span class="fc bfc" id="L273" title="All 2 branches covered.">        for (Triangle3D triangle : getTriangles()) {</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">            if (triangle.isInside(point, threshold)) {</span>
+<span class="fc" id="L275">                return true;</span>
             }
-<span class="fc" id="L275">        }</span>
-<span class="fc" id="L276">        return false;</span>
+<span class="fc" id="L277">        }</span>
+<span class="fc" id="L278">        return false;</span>
     }
     
     /**
@@ -283,9 +285,9 @@ public class Polygon3D implements Serializable {
      * @return Center of this polygon.
      */
     public Point3D getCenter() {
-<span class="fc" id="L286">        Point3D result = Point3D.create();</span>
-<span class="fc" id="L287">        center(result);</span>
-<span class="fc" id="L288">        return result;        </span>
+<span class="fc" id="L288">        Point3D result = Point3D.create();</span>
+<span class="fc" id="L289">        center(result);</span>
+<span class="fc" id="L290">        return result;        </span>
     }
     
     /**
@@ -296,16 +298,18 @@ public class Polygon3D implements Serializable {
      */
     public void center(Point3D result) {
         //compute average location of all vertices
-<span class="fc" id="L299">        double inhomX = 0.0, inhomY = 0.0, inhomZ = 0.0;</span>
-<span class="fc" id="L300">        int total = mVertices.size();</span>
+<span class="fc" id="L301">        double inhomX = 0.0;</span>
+<span class="fc" id="L302">        double inhomY = 0.0;</span>
+<span class="fc" id="L303">        double inhomZ = 0.0;</span>
+<span class="fc" id="L304">        int total = mVertices.size();</span>
         
-<span class="fc bfc" id="L302" title="All 2 branches covered.">        for (Point3D point : mVertices) {</span>
-<span class="fc" id="L303">            inhomX += point.getInhomX() / (double)total;</span>
-<span class="fc" id="L304">            inhomY += point.getInhomY() / (double)total;</span>
-<span class="fc" id="L305">            inhomZ += point.getInhomZ() / (double)total;</span>
-<span class="fc" id="L306">        }</span>
-<span class="fc" id="L307">        result.setInhomogeneousCoordinates(inhomX, inhomY, inhomZ);</span>
-<span class="fc" id="L308">    }</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">        for (Point3D point : mVertices) {</span>
+<span class="fc" id="L307">            inhomX += point.getInhomX() / (double)total;</span>
+<span class="fc" id="L308">            inhomY += point.getInhomY() / (double)total;</span>
+<span class="fc" id="L309">            inhomZ += point.getInhomZ() / (double)total;</span>
+<span class="fc" id="L310">        }</span>
+<span class="fc" id="L311">        result.setInhomogeneousCoordinates(inhomX, inhomY, inhomZ);</span>
+<span class="fc" id="L312">    }</span>
              
     /**
      * Determines whether provided point is locus of the borders defined by
@@ -319,32 +323,31 @@ public class Polygon3D implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Point3D point, double threshold) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L324" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L325">            throw new IllegalArgumentException();</span>
+    public boolean isLocus(Point3D point, double threshold) {
+<span class="fc bfc" id="L327" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L328">            throw new IllegalArgumentException();</span>
         }
         
         //normalize point to increase accuracy
-<span class="fc" id="L329">        point.normalize();</span>
+<span class="fc" id="L332">        point.normalize();</span>
         
-<span class="fc" id="L331">        Iterator&lt;Point3D&gt; iterator = mVertices.iterator();</span>
-<span class="fc" id="L332">        Point3D prevPoint = iterator.next(); //it's ok because there are at </span>
+<span class="fc" id="L334">        Iterator&lt;Point3D&gt; iterator = mVertices.iterator();</span>
+<span class="fc" id="L335">        Point3D prevPoint = iterator.next(); //it's ok because there are at </span>
                                             //least 3 vertices
-<span class="fc" id="L334">        prevPoint.normalize(); //normalize to increase accuracy</span>
+<span class="fc" id="L337">        prevPoint.normalize(); //normalize to increase accuracy</span>
         
         Point3D curPoint;
-<span class="fc bfc" id="L337" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
-<span class="fc" id="L338">            curPoint = iterator.next();</span>
-<span class="fc" id="L339">            curPoint.normalize(); //normalize to increase accuracy</span>
-<span class="fc bfc" id="L340" title="All 2 branches covered.">            if (point.isBetween(prevPoint, curPoint, threshold)) {</span>
-<span class="fc" id="L341">                return true;</span>
+<span class="fc bfc" id="L340" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L341">            curPoint = iterator.next();</span>
+<span class="fc" id="L342">            curPoint.normalize(); //normalize to increase accuracy</span>
+<span class="fc bfc" id="L343" title="All 2 branches covered.">            if (point.isBetween(prevPoint, curPoint, threshold)) {</span>
+<span class="fc" id="L344">                return true;</span>
             }
-<span class="fc" id="L343">            prevPoint = curPoint;</span>
+<span class="fc" id="L346">            prevPoint = curPoint;</span>
         }
         
         //check last point with first
-<span class="fc" id="L347">        return point.isBetween(prevPoint, mVertices.get(0), threshold);</span>
+<span class="fc" id="L350">        return point.isBetween(prevPoint, mVertices.get(0), threshold);</span>
     } 
     
     /**
@@ -356,7 +359,7 @@ public class Polygon3D implements Serializable {
      * otherwise.
      */
     public boolean isLocus(Point3D point) {
-<span class="fc" id="L359">        return isLocus(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L362">        return isLocus(point, DEFAULT_THRESHOLD);</span>
     }  
     
     /**
@@ -370,95 +373,96 @@ public class Polygon3D implements Serializable {
     public double getShortestDistance(Point3D point) 
             throws CoincidentPointsException {
         //iterate over all vertices and compute their distance
-<span class="fc" id="L373">        Iterator&lt;Point3D&gt; iterator = mVertices.iterator();</span>
-<span class="fc" id="L374">        Point3D prevPoint = iterator.next();</span>
-<span class="fc" id="L375">        prevPoint.normalize(); //to increase accuracy</span>
+<span class="fc" id="L376">        Iterator&lt;Point3D&gt; iterator = mVertices.iterator();</span>
+<span class="fc" id="L377">        Point3D prevPoint = iterator.next();</span>
+<span class="fc" id="L378">        prevPoint.normalize(); //to increase accuracy</span>
         Point3D curPoint;
-<span class="fc" id="L377">        double bestDist = Double.MAX_VALUE, dist;</span>
-<span class="fc" id="L378">        boolean found = false;</span>
-<span class="fc" id="L379">        Line3D line = null;</span>
-<span class="fc" id="L380">        Point3D pointInLine = Point3D.create();</span>
+<span class="fc" id="L380">        double bestDist = Double.MAX_VALUE;</span>
+        double dist;
+<span class="fc" id="L382">        boolean found = false;</span>
+<span class="fc" id="L383">        Line3D line = null;</span>
+<span class="fc" id="L384">        Point3D pointInLine = Point3D.create();</span>
         
-<span class="fc bfc" id="L382" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
-<span class="fc" id="L383">            curPoint = iterator.next();</span>
-<span class="fc" id="L384">            curPoint.normalize(); //to increase accuracy</span>
+<span class="fc bfc" id="L386" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L387">            curPoint = iterator.next();</span>
+<span class="fc" id="L388">            curPoint.normalize(); //to increase accuracy</span>
             
             //check if point lies in the segment of the boundary of this polygon
-<span class="fc bfc" id="L387" title="All 2 branches covered.">            if (point.isBetween(curPoint, prevPoint)) {</span>
-<span class="fc" id="L388">                return 0.0;</span>
+<span class="fc bfc" id="L391" title="All 2 branches covered.">            if (point.isBetween(curPoint, prevPoint)) {</span>
+<span class="fc" id="L392">                return 0.0;</span>
             }
             
-<span class="fc bfc" id="L391" title="All 2 branches covered.">            if (line == null) {</span>
-<span class="fc" id="L392">                line = new Line3D(curPoint, prevPoint);</span>
+<span class="fc bfc" id="L395" title="All 2 branches covered.">            if (line == null) {</span>
+<span class="fc" id="L396">                line = new Line3D(curPoint, prevPoint);</span>
             } else {
-<span class="fc" id="L394">                line.setPlanesFromPoints(curPoint, prevPoint);</span>
+<span class="fc" id="L398">                line.setPlanesFromPoints(curPoint, prevPoint);</span>
             }
-<span class="fc" id="L396">            line.normalize(); //to increase accuracy</span>
+<span class="fc" id="L400">            line.normalize(); //to increase accuracy</span>
             
             //find closest point to line
-<span class="fc" id="L399">            line.closestPoint(point, pointInLine);</span>
-<span class="fc" id="L400">            pointInLine.normalize(); //to increase accuracy</span>
+<span class="fc" id="L403">            line.closestPoint(point, pointInLine);</span>
+<span class="fc" id="L404">            pointInLine.normalize(); //to increase accuracy</span>
             
-<span class="fc bfc" id="L402" title="All 2 branches covered.">            if (pointInLine.isBetween(curPoint, prevPoint)) {</span>
+<span class="fc bfc" id="L406" title="All 2 branches covered.">            if (pointInLine.isBetween(curPoint, prevPoint)) {</span>
                 //closest point lies within segment of polygon boundary, so we
                 //keep distance
-<span class="fc" id="L405">                dist = point.distanceTo(pointInLine);</span>
-<span class="fc bfc" id="L406" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
+<span class="fc" id="L409">                dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L410" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
                     //a better point has been found
-<span class="fc" id="L408">                    bestDist = dist;</span>
-<span class="fc" id="L409">                    found = true;</span>
+<span class="fc" id="L412">                    bestDist = dist;</span>
+<span class="fc" id="L413">                    found = true;</span>
                 }
             }
             
-<span class="fc" id="L413">            prevPoint = curPoint;</span>
+<span class="fc" id="L417">            prevPoint = curPoint;</span>
         }
         
         //try last vertex with first
         //check if point lies in the segment of the boundary of this polygon
-<span class="fc" id="L418">        Point3D first = mVertices.get(0);</span>
-<span class="fc bfc" id="L419" title="All 2 branches covered.">        if (point.isBetween(prevPoint, first)) {</span>
-<span class="fc" id="L420">            return 0.0;</span>
+<span class="fc" id="L422">        Point3D first = mVertices.get(0);</span>
+<span class="fc bfc" id="L423" title="All 2 branches covered.">        if (point.isBetween(prevPoint, first)) {</span>
+<span class="fc" id="L424">            return 0.0;</span>
         }
             
-<span class="pc bpc" id="L423" title="1 of 2 branches missed.">        if (line == null) {</span>
-<span class="nc" id="L424">            line = new Line3D(prevPoint, first);</span>
+<span class="pc bpc" id="L427" title="1 of 2 branches missed.">        if (line == null) {</span>
+<span class="nc" id="L428">            line = new Line3D(prevPoint, first);</span>
         } else {
-<span class="fc" id="L426">            line.setPlanesFromPoints(prevPoint, first);</span>
+<span class="fc" id="L430">            line.setPlanesFromPoints(prevPoint, first);</span>
         }
-<span class="fc" id="L428">        line.normalize(); //to increase accuracy</span>
+<span class="fc" id="L432">        line.normalize(); //to increase accuracy</span>
             
         //find closest point to line
-<span class="fc" id="L431">        line.closestPoint(point, pointInLine);</span>
-<span class="fc" id="L432">        pointInLine.normalize(); //to increase accuracy</span>
+<span class="fc" id="L435">        line.closestPoint(point, pointInLine);</span>
+<span class="fc" id="L436">        pointInLine.normalize(); //to increase accuracy</span>
             
-<span class="fc bfc" id="L434" title="All 2 branches covered.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
+<span class="fc bfc" id="L438" title="All 2 branches covered.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
             //closest point lies within segment of polygon boundary, so we
             //keep distance
-<span class="fc" id="L437">            dist = point.distanceTo(pointInLine);</span>
-<span class="fc bfc" id="L438" title="All 2 branches covered.">            if (dist &lt; bestDist) {</span>
+<span class="fc" id="L441">            dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L442" title="All 2 branches covered.">            if (dist &lt; bestDist) {</span>
                 //a better point has been found
-<span class="fc" id="L440">                bestDist = dist;</span>
-<span class="fc" id="L441">                found = true;</span>
+<span class="fc" id="L444">                bestDist = dist;</span>
+<span class="fc" id="L445">                found = true;</span>
             }
         }
         
         
         
-<span class="pc bpc" id="L447" title="1 of 2 branches missed.">        if (!found) {</span>
+<span class="pc bpc" id="L451" title="1 of 2 branches missed.">        if (!found) {</span>
             //no closest point was found on a segment belonging to polygon 
             //boundary so we search for the closest vertex
-<span class="nc" id="L450">            iterator = mVertices.iterator();</span>
-<span class="nc bnc" id="L451" title="All 2 branches missed.">            while (iterator.hasNext()) {</span>
+<span class="nc" id="L454">            iterator = mVertices.iterator();</span>
+<span class="nc bnc" id="L455" title="All 2 branches missed.">            while (iterator.hasNext()) {</span>
                 //a better vertex has been found
-<span class="nc" id="L453">                curPoint = iterator.next();</span>
-<span class="nc" id="L454">                dist = point.distanceTo(curPoint);</span>
-<span class="nc bnc" id="L455" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
-<span class="nc" id="L456">                    bestDist = dist;</span>
+<span class="nc" id="L457">                curPoint = iterator.next();</span>
+<span class="nc" id="L458">                dist = point.distanceTo(curPoint);</span>
+<span class="nc bnc" id="L459" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
+<span class="nc" id="L460">                    bestDist = dist;</span>
                 }
             }
         }
         
-<span class="fc" id="L461">        return bestDist;</span>
+<span class="fc" id="L465">        return bestDist;</span>
     }
     
     /**
@@ -471,9 +475,9 @@ public class Polygon3D implements Serializable {
      */
     public Point3D getClosestPoint(Point3D point) 
             throws CoincidentPointsException {
-<span class="fc" id="L474">        Point3D result = Point3D.create();</span>
-<span class="fc" id="L475">        closestPoint(point, result);</span>
-<span class="fc" id="L476">        return result;        </span>
+<span class="fc" id="L478">        Point3D result = Point3D.create();</span>
+<span class="fc" id="L479">        closestPoint(point, result);</span>
+<span class="fc" id="L480">        return result;        </span>
     }
     
     /**
@@ -487,99 +491,100 @@ public class Polygon3D implements Serializable {
     public void closestPoint(Point3D point, Point3D result) 
             throws CoincidentPointsException {
         //iterate over all vertices and compute their distance
-<span class="fc" id="L490">        Iterator&lt;Point3D&gt; iterator = mVertices.iterator();</span>
-<span class="fc" id="L491">        Point3D prevPoint = iterator.next();</span>
-<span class="fc" id="L492">        prevPoint.normalize(); //to increase accuracy</span>
+<span class="fc" id="L494">        Iterator&lt;Point3D&gt; iterator = mVertices.iterator();</span>
+<span class="fc" id="L495">        Point3D prevPoint = iterator.next();</span>
+<span class="fc" id="L496">        prevPoint.normalize(); //to increase accuracy</span>
         
         Point3D curPoint;
-<span class="fc" id="L495">        double bestDist = Double.MAX_VALUE, dist;</span>
-<span class="fc" id="L496">        boolean found = false;</span>
-<span class="fc" id="L497">        Line3D line = null;</span>
-<span class="fc" id="L498">        Point3D pointInLine = Point3D.create();</span>
+<span class="fc" id="L499">        double bestDist = Double.MAX_VALUE;</span>
+        double dist;
+<span class="fc" id="L501">        boolean found = false;</span>
+<span class="fc" id="L502">        Line3D line = null;</span>
+<span class="fc" id="L503">        Point3D pointInLine = Point3D.create();</span>
         
-<span class="fc bfc" id="L500" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
-<span class="fc" id="L501">            curPoint = iterator.next();</span>
-<span class="fc" id="L502">            curPoint.normalize(); //to increase accuracy</span>
+<span class="fc bfc" id="L505" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L506">            curPoint = iterator.next();</span>
+<span class="fc" id="L507">            curPoint.normalize(); //to increase accuracy</span>
             
             //check if point lies in the segment of the boundary of this polygon
-<span class="fc bfc" id="L505" title="All 2 branches covered.">            if (point.isBetween(curPoint, prevPoint)) {</span>
-<span class="fc" id="L506">                result.setCoordinates(point);</span>
-<span class="fc" id="L507">                return;</span>
+<span class="fc bfc" id="L510" title="All 2 branches covered.">            if (point.isBetween(curPoint, prevPoint)) {</span>
+<span class="fc" id="L511">                result.setCoordinates(point);</span>
+<span class="fc" id="L512">                return;</span>
             }
             
-<span class="fc bfc" id="L510" title="All 2 branches covered.">            if (line == null) {</span>
-<span class="fc" id="L511">                line = new Line3D(curPoint, prevPoint);</span>
+<span class="fc bfc" id="L515" title="All 2 branches covered.">            if (line == null) {</span>
+<span class="fc" id="L516">                line = new Line3D(curPoint, prevPoint);</span>
             } else {
-<span class="fc" id="L513">                line.setPlanesFromPoints(curPoint, prevPoint);</span>
+<span class="fc" id="L518">                line.setPlanesFromPoints(curPoint, prevPoint);</span>
             }
-<span class="fc" id="L515">            line.normalize(); //to increase accuracy</span>
+<span class="fc" id="L520">            line.normalize(); //to increase accuracy</span>
             
             //find closest point to line
-<span class="fc" id="L518">            line.closestPoint(point, pointInLine);</span>
-<span class="fc" id="L519">            pointInLine.normalize(); //to increase accuracy</span>
+<span class="fc" id="L523">            line.closestPoint(point, pointInLine);</span>
+<span class="fc" id="L524">            pointInLine.normalize(); //to increase accuracy</span>
             
-<span class="fc bfc" id="L521" title="All 2 branches covered.">            if (pointInLine.isBetween(curPoint, prevPoint)) {</span>
+<span class="fc bfc" id="L526" title="All 2 branches covered.">            if (pointInLine.isBetween(curPoint, prevPoint)) {</span>
                 //closest point lies within segment of polygon boundary, so we
                 //keep distance and point
-<span class="fc" id="L524">                dist = point.distanceTo(pointInLine);</span>
-<span class="fc bfc" id="L525" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
+<span class="fc" id="L529">                dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L530" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
                     //a better point has been found
-<span class="fc" id="L527">                    bestDist = dist; </span>
-<span class="fc" id="L528">                    result.setCoordinates(pointInLine);</span>
-<span class="fc" id="L529">                    found = true;</span>
+<span class="fc" id="L532">                    bestDist = dist; </span>
+<span class="fc" id="L533">                    result.setCoordinates(pointInLine);</span>
+<span class="fc" id="L534">                    found = true;</span>
                 }
             }
             
-<span class="fc" id="L533">            prevPoint = curPoint;</span>
+<span class="fc" id="L538">            prevPoint = curPoint;</span>
         }
         
         //try last vertex with first
         //check if point lies in the segment of the boundary of this polygon
-<span class="fc" id="L538">        Point3D first = mVertices.get(0);</span>
-<span class="fc bfc" id="L539" title="All 2 branches covered.">        if (point.isBetween(prevPoint, first)) {</span>
-<span class="fc" id="L540">            result.setCoordinates(point);</span>
-<span class="fc" id="L541">            return;</span>
+<span class="fc" id="L543">        Point3D first = mVertices.get(0);</span>
+<span class="fc bfc" id="L544" title="All 2 branches covered.">        if (point.isBetween(prevPoint, first)) {</span>
+<span class="fc" id="L545">            result.setCoordinates(point);</span>
+<span class="fc" id="L546">            return;</span>
         }
             
-<span class="pc bpc" id="L544" title="1 of 2 branches missed.">        if (line == null) {</span>
-<span class="nc" id="L545">            line = new Line3D(prevPoint, first);</span>
+<span class="pc bpc" id="L549" title="1 of 2 branches missed.">        if (line == null) {</span>
+<span class="nc" id="L550">            line = new Line3D(prevPoint, first);</span>
         } else {
-<span class="fc" id="L547">            line.setPlanesFromPoints(prevPoint, first);</span>
+<span class="fc" id="L552">            line.setPlanesFromPoints(prevPoint, first);</span>
         }
-<span class="fc" id="L549">        line.normalize(); //to increase accuracy</span>
+<span class="fc" id="L554">        line.normalize(); //to increase accuracy</span>
             
         //find closest point to line
-<span class="fc" id="L552">        line.closestPoint(point, pointInLine);</span>
-<span class="fc" id="L553">        pointInLine.normalize(); //to increase accuracy</span>
+<span class="fc" id="L557">        line.closestPoint(point, pointInLine);</span>
+<span class="fc" id="L558">        pointInLine.normalize(); //to increase accuracy</span>
             
-<span class="fc bfc" id="L555" title="All 2 branches covered.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
+<span class="fc bfc" id="L560" title="All 2 branches covered.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
             //closest point lies within segment of polygon boundary, so we
             //keep distance
-<span class="fc" id="L558">            dist = point.distanceTo(pointInLine);</span>
-<span class="fc bfc" id="L559" title="All 2 branches covered.">            if (dist &lt; bestDist) {</span>
+<span class="fc" id="L563">            dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L564" title="All 2 branches covered.">            if (dist &lt; bestDist) {</span>
                 //a better point has been found
-<span class="fc" id="L561">                bestDist = dist;</span>
-<span class="fc" id="L562">                result.setCoordinates(pointInLine);</span>
-<span class="fc" id="L563">                found = true;</span>
+<span class="fc" id="L566">                bestDist = dist;</span>
+<span class="fc" id="L567">                result.setCoordinates(pointInLine);</span>
+<span class="fc" id="L568">                found = true;</span>
             }
         }        
         
         
-<span class="pc bpc" id="L568" title="1 of 2 branches missed.">        if (!found) {</span>
+<span class="pc bpc" id="L573" title="1 of 2 branches missed.">        if (!found) {</span>
             //no closest point was found on a segment belonging to polygon 
             //boundary so we search for the closest vertex
-<span class="nc" id="L571">            iterator = mVertices.iterator();</span>
-<span class="nc bnc" id="L572" title="All 2 branches missed.">            while (iterator.hasNext()) {</span>
-<span class="nc" id="L573">                curPoint = iterator.next();</span>
-<span class="nc" id="L574">                dist = point.distanceTo(curPoint);</span>
-<span class="nc bnc" id="L575" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
+<span class="nc" id="L576">            iterator = mVertices.iterator();</span>
+<span class="nc bnc" id="L577" title="All 2 branches missed.">            while (iterator.hasNext()) {</span>
+<span class="nc" id="L578">                curPoint = iterator.next();</span>
+<span class="nc" id="L579">                dist = point.distanceTo(curPoint);</span>
+<span class="nc bnc" id="L580" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
                     //a better vertex has been found
-<span class="nc" id="L577">                    bestDist = dist;</span>
-<span class="nc" id="L578">                    result.setCoordinates(curPoint);</span>
+<span class="nc" id="L582">                    bestDist = dist;</span>
+<span class="nc" id="L583">                    result.setCoordinates(curPoint);</span>
                 }
             }
         }
-<span class="fc" id="L582">    }</span>
+<span class="fc" id="L587">    }</span>
     
     /**
      * Triangulates this polygon using this polygon's triangulator method.
@@ -592,13 +597,13 @@ public class Polygon3D implements Serializable {
      * @see #setTriangulatorMethod(TriangulatorMethod)
      */
     public void triangulate() throws TriangulatorException {
-<span class="pc bpc" id="L595" title="1 of 2 branches missed.">        if (!mTriangulated) {</span>
-<span class="fc" id="L596">            Triangulator3D triangulator = Triangulator3D.create(</span>
+<span class="pc bpc" id="L600" title="1 of 2 branches missed.">        if (!mTriangulated) {</span>
+<span class="fc" id="L601">            Triangulator3D triangulator = Triangulator3D.create(</span>
                     mTriangulatorMethod);
-<span class="fc" id="L598">            mTriangles = triangulator.triangulate(mVertices);</span>
-<span class="fc" id="L599">            mTriangulated = true;</span>
+<span class="fc" id="L603">            mTriangles = triangulator.triangulate(mVertices);</span>
+<span class="fc" id="L604">            mTriangulated = true;</span>
         }
-<span class="fc" id="L601">    }</span>
+<span class="fc" id="L606">    }</span>
     
     /**
      * Computes the average orientation of a 3D polygon as an array 
@@ -624,75 +629,77 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */
     public static void orientation(List&lt;Point3D&gt; vertices, double[] result,
-            double threshold) throws IllegalArgumentException, 
-            CoincidentPointsException {
-<span class="fc" id="L629">        int numVertices = vertices.size();</span>
-<span class="pc bpc" id="L630" title="1 of 2 branches missed.">        if (numVertices &lt; MIN_VERTICES) {</span>
-<span class="nc" id="L631">            throw new IllegalArgumentException();</span>
+            double threshold) throws CoincidentPointsException {
+<span class="fc" id="L633">        int numVertices = vertices.size();</span>
+<span class="pc bpc" id="L634" title="1 of 2 branches missed.">        if (numVertices &lt; MIN_VERTICES) {</span>
+<span class="nc" id="L635">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L633" title="All 2 branches covered.">        if (result.length != INHOM_COORDS) {</span>
-<span class="fc" id="L634">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L637" title="All 2 branches covered.">        if (result.length != INHOM_COORDS) {</span>
+<span class="fc" id="L638">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L636" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L637">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L640" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L641">            throw new IllegalArgumentException();</span>
         }
         
         
-<span class="fc" id="L641">        double avgX = 0.0, avgY = 0.0, avgZ = 0.0;</span>
+<span class="fc" id="L645">        double avgX = 0.0;</span>
+<span class="fc" id="L646">        double avgY = 0.0;</span>
+<span class="fc" id="L647">        double avgZ = 0.0;</span>
         
-<span class="fc" id="L643">        Iterator&lt;Point3D&gt; iterator = vertices.iterator();</span>
-<span class="fc" id="L644">        Point3D prevPoint = iterator.next();</span>
-<span class="fc" id="L645">        Point3D origin = prevPoint, curPoint;</span>
-<span class="fc" id="L646">        double inhomX0 = origin.getInhomX();</span>
-<span class="fc" id="L647">        double inhomY0 = origin.getInhomY();</span>
-<span class="fc" id="L648">        double inhomZ0 = origin.getInhomZ();</span>
+<span class="fc" id="L649">        Iterator&lt;Point3D&gt; iterator = vertices.iterator();</span>
+<span class="fc" id="L650">        Point3D prevPoint = iterator.next();</span>
+<span class="fc" id="L651">        Point3D origin = prevPoint;</span>
+        Point3D curPoint;
+<span class="fc" id="L653">        double inhomX0 = origin.getInhomX();</span>
+<span class="fc" id="L654">        double inhomY0 = origin.getInhomY();</span>
+<span class="fc" id="L655">        double inhomZ0 = origin.getInhomZ();</span>
         
         
-<span class="fc bfc" id="L651" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
-<span class="fc" id="L652">            curPoint = iterator.next();</span>
-<span class="fc" id="L653">            double inhomX1 = prevPoint.getInhomX();</span>
-<span class="fc" id="L654">            double inhomY1 = prevPoint.getInhomY();</span>
-<span class="fc" id="L655">            double inhomZ1 = prevPoint.getInhomZ();</span>
+<span class="fc bfc" id="L658" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L659">            curPoint = iterator.next();</span>
+<span class="fc" id="L660">            double inhomX1 = prevPoint.getInhomX();</span>
+<span class="fc" id="L661">            double inhomY1 = prevPoint.getInhomY();</span>
+<span class="fc" id="L662">            double inhomZ1 = prevPoint.getInhomZ();</span>
             
-<span class="fc" id="L657">            double inhomX2 = curPoint.getInhomX();</span>
-<span class="fc" id="L658">            double inhomY2 = curPoint.getInhomY();</span>
-<span class="fc" id="L659">            double inhomZ2 = curPoint.getInhomZ();</span>
+<span class="fc" id="L664">            double inhomX2 = curPoint.getInhomX();</span>
+<span class="fc" id="L665">            double inhomY2 = curPoint.getInhomY();</span>
+<span class="fc" id="L666">            double inhomZ2 = curPoint.getInhomZ();</span>
             
             //compute cross product of ab = (vertex1 - origin) and ac = (vertex2
             //- origin)
-<span class="fc" id="L663">            double abX = inhomX1 - inhomX0;</span>
-<span class="fc" id="L664">            double abY = inhomY1 - inhomY0;</span>
-<span class="fc" id="L665">            double abZ = inhomZ1 - inhomZ0;</span>
+<span class="fc" id="L670">            double abX = inhomX1 - inhomX0;</span>
+<span class="fc" id="L671">            double abY = inhomY1 - inhomY0;</span>
+<span class="fc" id="L672">            double abZ = inhomZ1 - inhomZ0;</span>
         
-<span class="fc" id="L667">            double acX = inhomX2 - inhomX0;</span>
-<span class="fc" id="L668">            double acY = inhomY2 - inhomY0;</span>
-<span class="fc" id="L669">            double acZ = inhomZ2 - inhomZ0;</span>
+<span class="fc" id="L674">            double acX = inhomX2 - inhomX0;</span>
+<span class="fc" id="L675">            double acY = inhomY2 - inhomY0;</span>
+<span class="fc" id="L676">            double acZ = inhomZ2 - inhomZ0;</span>
         
-<span class="fc" id="L671">            double crossX = abY * acZ - abZ * acY;</span>
-<span class="fc" id="L672">            double crossY = abZ * acX - abX * acZ;</span>
-<span class="fc" id="L673">            double crossZ = abX * acY - abY * acX;</span>
+<span class="fc" id="L678">            double crossX = abY * acZ - abZ * acY;</span>
+<span class="fc" id="L679">            double crossY = abZ * acX - abX * acZ;</span>
+<span class="fc" id="L680">            double crossZ = abX * acY - abY * acX;</span>
             
-<span class="fc" id="L675">            avgX += crossX;</span>
-<span class="fc" id="L676">            avgY += crossY;</span>
-<span class="fc" id="L677">            avgZ += crossZ;</span>
+<span class="fc" id="L682">            avgX += crossX;</span>
+<span class="fc" id="L683">            avgY += crossY;</span>
+<span class="fc" id="L684">            avgZ += crossZ;</span>
             
-<span class="fc" id="L679">            prevPoint = curPoint;</span>
-<span class="fc" id="L680">        }</span>
+<span class="fc" id="L686">            prevPoint = curPoint;</span>
+<span class="fc" id="L687">        }</span>
 
-<span class="fc" id="L682">        double norm = Math.sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ);</span>
+<span class="fc" id="L689">        double norm = Math.sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ);</span>
         
-<span class="fc bfc" id="L684" title="All 2 branches covered.">        if (norm &lt; threshold) {</span>
-<span class="fc" id="L685">            throw new CoincidentPointsException();</span>
+<span class="fc bfc" id="L691" title="All 2 branches covered.">        if (norm &lt; threshold) {</span>
+<span class="fc" id="L692">            throw new CoincidentPointsException();</span>
         }
         
-<span class="fc" id="L688">        avgX /= norm;</span>
-<span class="fc" id="L689">        avgY /= norm;</span>
-<span class="fc" id="L690">        avgZ /= norm;</span>
+<span class="fc" id="L695">        avgX /= norm;</span>
+<span class="fc" id="L696">        avgY /= norm;</span>
+<span class="fc" id="L697">        avgZ /= norm;</span>
         
-<span class="fc" id="L692">        result[0] = avgX;</span>
-<span class="fc" id="L693">        result[1] = avgY;</span>
-<span class="fc" id="L694">        result[2] = avgZ;        </span>
-<span class="fc" id="L695">    }</span>
+<span class="fc" id="L699">        result[0] = avgX;</span>
+<span class="fc" id="L700">        result[1] = avgY;</span>
+<span class="fc" id="L701">        result[2] = avgZ;        </span>
+<span class="fc" id="L702">    }</span>
     
     /**
      * Computes the average orientation of a 3D polygon as an array 
@@ -712,9 +719,9 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */    
     public static void orientation(List&lt;Point3D&gt; vertices, double[] result) 
-            throws IllegalArgumentException, CoincidentPointsException {
-<span class="fc" id="L716">        orientation(vertices, result, DEFAULT_THRESHOLD);</span>
-<span class="fc" id="L717">    }    </span>
+            throws CoincidentPointsException {
+<span class="fc" id="L723">        orientation(vertices, result, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L724">    }    </span>
     
     /**
      * Returns the average orientation of a 3D polygon as an array containing 
@@ -740,10 +747,10 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */    
     public static double[] orientation(List&lt;Point3D&gt; vertices, double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
-<span class="fc" id="L744">        double[] out = new double[INHOM_COORDS];</span>
-<span class="fc" id="L745">        orientation(vertices, out, threshold);</span>
-<span class="fc" id="L746">        return out;</span>
+            throws CoincidentPointsException {
+<span class="fc" id="L751">        double[] out = new double[INHOM_COORDS];</span>
+<span class="fc" id="L752">        orientation(vertices, out, threshold);</span>
+<span class="fc" id="L753">        return out;</span>
     }
     
     /**
@@ -763,8 +770,8 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */        
     public static double[] orientation(List&lt;Point3D&gt; vertices) 
-            throws IllegalArgumentException, CoincidentPointsException {
-<span class="fc" id="L767">        return orientation(vertices, DEFAULT_THRESHOLD);</span>
+            throws CoincidentPointsException {
+<span class="fc" id="L774">        return orientation(vertices, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -790,10 +797,9 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */    
     public static void orientation(Polygon3D polygon, double[] result, 
-            double threshold) throws IllegalArgumentException, 
-            CoincidentPointsException {
-<span class="fc" id="L795">        orientation(polygon.getVertices(), result, threshold);</span>
-<span class="fc" id="L796">    }</span>
+            double threshold) throws CoincidentPointsException {
+<span class="fc" id="L801">        orientation(polygon.getVertices(), result, threshold);</span>
+<span class="fc" id="L802">    }</span>
 
     /**
      * Computes the average orientation of provided 3D polygon as an array 
@@ -812,9 +818,9 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */        
     public static void orientation(Polygon3D polygon, double[] result) 
-            throws IllegalArgumentException, CoincidentPointsException {
-<span class="fc" id="L816">        orientation(polygon, result, DEFAULT_THRESHOLD);</span>
-<span class="fc" id="L817">    }    </span>
+            throws CoincidentPointsException {
+<span class="fc" id="L822">        orientation(polygon, result, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L823">    }    </span>
     
     /**
      * Returns the average orientation of provided 3D polygon as an array 
@@ -839,8 +845,8 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */        
     public static double[] orientation(Polygon3D polygon, double threshold)
-            throws IllegalArgumentException, CoincidentPointsException {
-<span class="fc" id="L843">        return orientation(polygon.getVertices(), threshold);</span>
+            throws CoincidentPointsException {
+<span class="fc" id="L849">        return orientation(polygon.getVertices(), threshold);</span>
     }
     
     /**
@@ -859,7 +865,7 @@ public class Polygon3D implements Serializable {
      */            
     public static double[] orientation(Polygon3D polygon)
             throws CoincidentPointsException {
-<span class="fc" id="L862">        return orientation(polygon, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L868">        return orientation(polygon, DEFAULT_THRESHOLD);</span>
     }    
     
     /**
@@ -884,9 +890,9 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */        
     public void orientation(double[] result, double threshold)
-            throws IllegalArgumentException, CoincidentPointsException {
-<span class="fc" id="L888">        orientation(mVertices, result, threshold);</span>
-<span class="fc" id="L889">    }</span>
+            throws CoincidentPointsException {
+<span class="fc" id="L894">        orientation(mVertices, result, threshold);</span>
+<span class="fc" id="L895">    }</span>
     
     /**
      * Computes the average orientation of provided 3D polygon as an array 
@@ -903,10 +909,9 @@ public class Polygon3D implements Serializable {
      * that consecutive vertices of the polygon are too close (i.e. coincident)
      * or when there are polygon degeneracies or numerical instabilities.
      */        
-    public void orientation(double[] result) throws IllegalArgumentException, 
-            CoincidentPointsException {
-<span class="fc" id="L908">        orientation(result, DEFAULT_THRESHOLD);</span>
-<span class="fc" id="L909">    }</span>
+    public void orientation(double[] result) throws CoincidentPointsException {
+<span class="fc" id="L913">        orientation(result, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L914">    }</span>
     
     /**
      * Returns the average orientation of provided 3D polygon as an array 
@@ -930,8 +935,8 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */        
     public double[] getOrientation(double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
-<span class="fc" id="L934">        return orientation(mVertices, threshold);</span>
+            throws CoincidentPointsException {
+<span class="fc" id="L939">        return orientation(mVertices, threshold);</span>
     }
 
     /**
@@ -948,7 +953,7 @@ public class Polygon3D implements Serializable {
      * or when there are polygon degeneracies or numerical instabilities.
      */            
     public double[] getOrientation() throws CoincidentPointsException {
-<span class="fc" id="L951">        return getOrientation(DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L956">        return getOrientation(DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -970,9 +975,9 @@ public class Polygon3D implements Serializable {
      */
     public static double getAngleBetweenPolygons(Polygon3D polygon1, 
             Polygon3D polygon2, double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
-<span class="fc" id="L974">        return getAngleBetweenPolygons(polygon1.getVertices(), </span>
-<span class="fc" id="L975">                polygon2.getVertices(), threshold);</span>
+            throws CoincidentPointsException {
+<span class="fc" id="L979">        return getAngleBetweenPolygons(polygon1.getVertices(), </span>
+<span class="fc" id="L980">                polygon2.getVertices(), threshold);</span>
     }
 
     /**
@@ -991,7 +996,7 @@ public class Polygon3D implements Serializable {
      */    
     public static double getAngleBetweenPolygons(Polygon3D polygon1, 
             Polygon3D polygon2) throws CoincidentPointsException {
-<span class="fc" id="L994">        return getAngleBetweenPolygons(polygon1, polygon2, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L999">        return getAngleBetweenPolygons(polygon1, polygon2, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -1016,9 +1021,9 @@ public class Polygon3D implements Serializable {
      */    
     public static double getAngleBetweenPolygons(List&lt;Point3D&gt; vertices1,
             List&lt;Point3D&gt; vertices2, double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
-<span class="fc" id="L1020">        return getAngleBetweenOrientations(Polygon3D.orientation(vertices1, </span>
-<span class="fc" id="L1021">                threshold), Polygon3D.orientation(vertices2, threshold));</span>
+            throws CoincidentPointsException {
+<span class="fc" id="L1025">        return getAngleBetweenOrientations(Polygon3D.orientation(vertices1, </span>
+<span class="fc" id="L1026">                threshold), Polygon3D.orientation(vertices2, threshold));</span>
     }
 
     /**
@@ -1039,9 +1044,8 @@ public class Polygon3D implements Serializable {
      * @see #orientation(Polygon3D, double[])
      */        
     public static double getAngleBetweenPolygons(List&lt;Point3D&gt; vertices1,
-            List&lt;Point3D&gt; vertices2) throws IllegalArgumentException, 
-            CoincidentPointsException {
-<span class="fc" id="L1044">        return getAngleBetweenPolygons(vertices1, vertices2, DEFAULT_THRESHOLD);</span>
+            List&lt;Point3D&gt; vertices2) throws CoincidentPointsException {
+<span class="fc" id="L1048">        return getAngleBetweenPolygons(vertices1, vertices2, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -1056,26 +1060,26 @@ public class Polygon3D implements Serializable {
      * do not have length 3.
      */
     private static double getAngleBetweenOrientations(double[] orientation1, 
-            double[] orientation2) throws IllegalArgumentException {
-<span class="pc bpc" id="L1060" title="2 of 4 branches missed.">        if (orientation1.length != INHOM_COORDS ||</span>
+            double[] orientation2) {
+<span class="pc bpc" id="L1064" title="2 of 4 branches missed.">        if (orientation1.length != INHOM_COORDS ||</span>
                 orientation2.length != INHOM_COORDS) {
-<span class="nc" id="L1062">            throw new IllegalArgumentException();</span>
+<span class="nc" id="L1066">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L1065">        double x1 = orientation1[0];</span>
-<span class="fc" id="L1066">        double y1 = orientation1[1];</span>
-<span class="fc" id="L1067">        double z1 = orientation1[2];</span>
+<span class="fc" id="L1069">        double x1 = orientation1[0];</span>
+<span class="fc" id="L1070">        double y1 = orientation1[1];</span>
+<span class="fc" id="L1071">        double z1 = orientation1[2];</span>
         
-<span class="fc" id="L1069">        double x2 = orientation2[0];</span>
-<span class="fc" id="L1070">        double y2 = orientation2[1];</span>
-<span class="fc" id="L1071">        double z2 = orientation2[2];</span>
+<span class="fc" id="L1073">        double x2 = orientation2[0];</span>
+<span class="fc" id="L1074">        double y2 = orientation2[1];</span>
+<span class="fc" id="L1075">        double z2 = orientation2[2];</span>
         
-<span class="fc" id="L1073">        double norm1 = Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);</span>
-<span class="fc" id="L1074">        double norm2 = Math.sqrt(x2 * x2 + y2 * y2 + z2 * z2);</span>
+<span class="fc" id="L1077">        double norm1 = Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);</span>
+<span class="fc" id="L1078">        double norm2 = Math.sqrt(x2 * x2 + y2 * y2 + z2 * z2);</span>
         
-<span class="fc" id="L1076">        double dotProduct = (x1 * x2 + y1 * y2 + z1 * z2) / (norm1 * norm2);</span>
+<span class="fc" id="L1080">        double dotProduct = (x1 * x2 + y1 * y2 + z1 * z2) / (norm1 * norm2);</span>
         
-<span class="fc" id="L1078">        return Math.acos(dotProduct);        </span>
+<span class="fc" id="L1082">        return Math.acos(dotProduct);        </span>
     }        
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

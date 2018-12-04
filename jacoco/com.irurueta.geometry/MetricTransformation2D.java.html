@@ -372,8 +372,10 @@ public class MetricTransformation2D extends EuclideanTransformation2D
             
 <span class="fc" id="L373">            outputTransformation.scale = this.scale * inputTransformation.scale;</span>
         
-<span class="pc" id="L375">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L376">    }   </span>
+<span class="nc" id="L375">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L377">        }</span>
+<span class="fc" id="L378">    }   </span>
     
     /**
      * Estimates this transformation internal parameters by using 3
@@ -395,24 +397,24 @@ public class MetricTransformation2D extends EuclideanTransformation2D
             Point2D inputPoint2, Point2D inputPoint3, Point2D outputPoint1,
             Point2D outputPoint2, Point2D outputPoint3)
             throws CoincidentPointsException {
-<span class="fc" id="L398">        List&lt;Point2D&gt; inputPoints = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L399">        inputPoints.add(inputPoint1);</span>
-<span class="fc" id="L400">        inputPoints.add(inputPoint2);</span>
-<span class="fc" id="L401">        inputPoints.add(inputPoint3);</span>
+<span class="fc" id="L400">        List&lt;Point2D&gt; inputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L401">        inputPoints.add(inputPoint1);</span>
+<span class="fc" id="L402">        inputPoints.add(inputPoint2);</span>
+<span class="fc" id="L403">        inputPoints.add(inputPoint3);</span>
         
-<span class="fc" id="L403">        List&lt;Point2D&gt; outputPoints = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L404">        outputPoints.add(outputPoint1);</span>
-<span class="fc" id="L405">        outputPoints.add(outputPoint2);</span>
-<span class="fc" id="L406">        outputPoints.add(outputPoint3);</span>
+<span class="fc" id="L405">        List&lt;Point2D&gt; outputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L406">        outputPoints.add(outputPoint1);</span>
+<span class="fc" id="L407">        outputPoints.add(outputPoint2);</span>
+<span class="fc" id="L408">        outputPoints.add(outputPoint3);</span>
 
-<span class="fc" id="L408">        MetricTransformation2DEstimator estimator =</span>
+<span class="fc" id="L410">        MetricTransformation2DEstimator estimator =</span>
                 new MetricTransformation2DEstimator(inputPoints, outputPoints);
         
         try {
-<span class="fc" id="L412">            estimator.estimate(this);</span>
-<span class="nc" id="L413">        } catch (LockedException | NotReadyException ignore) {</span>
+<span class="fc" id="L414">            estimator.estimate(this);</span>
+<span class="nc" id="L415">        } catch (LockedException | NotReadyException ignore) {</span>
             //never thrown
-<span class="fc" id="L415">        }</span>
-<span class="fc" id="L416">    }</span>
+<span class="fc" id="L417">        }</span>
+<span class="fc" id="L418">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

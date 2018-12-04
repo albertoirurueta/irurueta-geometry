@@ -380,49 +380,51 @@
 <a class="jxr_linenumber" name="L372" href="#L372">372</a>             
 <a class="jxr_linenumber" name="L373" href="#L373">373</a>             outputTransformation.scale = <strong class="jxr_keyword">this</strong>.scale * inputTransformation.scale;
 <a class="jxr_linenumber" name="L374" href="#L374">374</a>         
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) { }
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>     }   
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>     
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">     * Estimates this transformation internal parameters by using 3</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">     * corresponding original and transformed points.</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">     * @param inputPoint1 1st input point.</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">     * @param inputPoint2 2nd input point.</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">     * @param inputPoint3 3rd input point.</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">     * @param outputPoint1 1st transformed point corresponding to 1st input </em>
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">     * point.</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">     * @param outputPoint2 2nd transformed point corresponding to 2nd input</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>             <em class="jxr_comment">//never happens</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>         }
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>     }   
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>     
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">     * Estimates this transformation internal parameters by using 3</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">     * corresponding original and transformed points.</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">     * @param inputPoint1 1st input point.</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">     * @param inputPoint2 2nd input point.</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">     * @param inputPoint3 3rd input point.</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">     * @param outputPoint1 1st transformed point corresponding to 1st input </em>
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">     * point.</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">     * @param outputPoint3 3rd transformed point corresponding to 3rd input</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">     * @param outputPoint2 2nd transformed point corresponding to 2nd input</em>
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">     * point.</em>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">     * @throws CoincidentPointsException raised if transformation cannot be</em>
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">     * estimated for some reason (point configuration degeneracy, duplicate</em>
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">     * points or numerical instabilities).</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L394" href="#L394">394</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetTransformationFromPoints(<a href="../../../com/irurueta/geometry/Point2D.html">Point2D</a> inputPoint1,
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>             <a href="../../../com/irurueta/geometry/Point2D.html">Point2D</a> inputPoint2, <a href="../../../com/irurueta/geometry/Point2D.html">Point2D</a> inputPoint3, <a href="../../../com/irurueta/geometry/Point2D.html">Point2D</a> outputPoint1,
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>             <a href="../../../com/irurueta/geometry/Point2D.html">Point2D</a> outputPoint2, <a href="../../../com/irurueta/geometry/Point2D.html">Point2D</a> outputPoint3)
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>             <strong class="jxr_keyword">throws</strong> <a href="../../../com/irurueta/geometry/CoincidentPointsException.html">CoincidentPointsException</a> {
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>         List&lt;Point2D&gt; inputPoints = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>         inputPoints.add(inputPoint1);
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>         inputPoints.add(inputPoint2);
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>         inputPoints.add(inputPoint3);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>         
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>         List&lt;Point2D&gt; outputPoints = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>         outputPoints.add(outputPoint1);
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>         outputPoints.add(outputPoint2);
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>         outputPoints.add(outputPoint3);
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>         <a href="../../../com/irurueta/geometry/estimators/MetricTransformation2DEstimator.html">MetricTransformation2DEstimator</a> estimator =
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/estimators/MetricTransformation2DEstimator.html">MetricTransformation2DEstimator</a>(inputPoints, outputPoints);
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>         
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>             estimator.estimate(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>         } <strong class="jxr_keyword">catch</strong> (LockedException | NotReadyException ignore) {
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>             <em class="jxr_comment">//never thrown</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>         }
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>     }
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> }
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">     * @param outputPoint3 3rd transformed point corresponding to 3rd input</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">     * point.</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">     * @throws CoincidentPointsException raised if transformation cannot be</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">     * estimated for some reason (point configuration degeneracy, duplicate</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">     * points or numerical instabilities).</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetTransformationFromPoints(<a href="../../../com/irurueta/geometry/Point2D.html">Point2D</a> inputPoint1,
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>             <a href="../../../com/irurueta/geometry/Point2D.html">Point2D</a> inputPoint2, <a href="../../../com/irurueta/geometry/Point2D.html">Point2D</a> inputPoint3, <a href="../../../com/irurueta/geometry/Point2D.html">Point2D</a> outputPoint1,
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>             <a href="../../../com/irurueta/geometry/Point2D.html">Point2D</a> outputPoint2, <a href="../../../com/irurueta/geometry/Point2D.html">Point2D</a> outputPoint3)
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>             <strong class="jxr_keyword">throws</strong> <a href="../../../com/irurueta/geometry/CoincidentPointsException.html">CoincidentPointsException</a> {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>         List&lt;Point2D&gt; inputPoints = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>         inputPoints.add(inputPoint1);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>         inputPoints.add(inputPoint2);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>         inputPoints.add(inputPoint3);
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>         
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>         List&lt;Point2D&gt; outputPoints = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>         outputPoints.add(outputPoint1);
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>         outputPoints.add(outputPoint2);
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>         outputPoints.add(outputPoint3);
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>         <a href="../../../com/irurueta/geometry/estimators/MetricTransformation2DEstimator.html">MetricTransformation2DEstimator</a> estimator =
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/estimators/MetricTransformation2DEstimator.html">MetricTransformation2DEstimator</a>(inputPoints, outputPoints);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>         
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>             estimator.estimate(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>         } <strong class="jxr_keyword">catch</strong> (LockedException | NotReadyException ignore) {
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>             <em class="jxr_comment">//never thrown</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>         }
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>     }
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>

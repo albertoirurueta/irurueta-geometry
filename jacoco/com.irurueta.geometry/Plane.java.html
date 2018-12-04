@@ -121,7 +121,7 @@ public class Plane implements Serializable {
      * @param array Array containing plane parameters.
      * @throws IllegalArgumentException Raised if length of array is not 4.
      */
-<span class="fc" id="L124">    public Plane(double[] array) throws IllegalArgumentException {</span>
+<span class="fc" id="L124">    public Plane(double[] array) {</span>
 <span class="fc" id="L125">        setParameters(array);</span>
 <span class="fc" id="L126">    }</span>
     
@@ -152,7 +152,7 @@ public class Plane implements Serializable {
      * @throws ParallelVectorsException Raised if provided vectors are parallel.
      */
     public Plane(Point3D point, double[] vectorA, double[] vectorB)
-<span class="fc" id="L155">            throws IllegalArgumentException, ParallelVectorsException {</span>
+<span class="fc" id="L155">            throws ParallelVectorsException {</span>
 <span class="fc" id="L156">        setParametersFrom1PointAnd2Vectors(point, vectorA, vectorB);</span>
 <span class="fc" id="L157">    }</span>
     
@@ -163,17 +163,16 @@ public class Plane implements Serializable {
      * @param vector Director vector.
      * @throws IllegalArgumentException Raised if vector length is not 3.
      */    
-    public Plane(Point3D point, double[] vector) 
-<span class="fc" id="L167">            throws IllegalArgumentException {</span>
-<span class="fc" id="L168">        setParametersFromPointAndDirectorVector(point, vector);</span>
-<span class="fc" id="L169">    }</span>
+<span class="fc" id="L166">    public Plane(Point3D point, double[] vector) {</span>
+<span class="fc" id="L167">        setParametersFromPointAndDirectorVector(point, vector);</span>
+<span class="fc" id="L168">    }</span>
     
     /**
      * Returns parameter A of this plane.
      * @return Parameter A of this plane.
      */
     public double getA() {
-<span class="fc" id="L176">        return mA;</span>
+<span class="fc" id="L175">        return mA;</span>
     }
     
     /**
@@ -181,7 +180,7 @@ public class Plane implements Serializable {
      * @return Parameter B of this plane.
      */
     public double getB() {
-<span class="fc" id="L184">        return mB;</span>
+<span class="fc" id="L183">        return mB;</span>
     }
     
     /**
@@ -189,7 +188,7 @@ public class Plane implements Serializable {
      * @return Parameter C of this plane.
      */
     public double getC() {
-<span class="fc" id="L192">        return mC;</span>
+<span class="fc" id="L191">        return mC;</span>
     }
     
     /**
@@ -197,7 +196,7 @@ public class Plane implements Serializable {
      * @return Parameter D of this plane.
      */
     public double getD() {
-<span class="fc" id="L200">        return mD;</span>
+<span class="fc" id="L199">        return mD;</span>
     }
         
     /**
@@ -208,12 +207,12 @@ public class Plane implements Serializable {
      * @param d Parameter D of this plane.
      */
     public final void setParameters(double a, double b, double c, double d) {
-<span class="fc" id="L211">        mA = a;</span>
-<span class="fc" id="L212">        mB = b;</span>
-<span class="fc" id="L213">        mC = c;</span>
-<span class="fc" id="L214">        mD = d;</span>
-<span class="fc" id="L215">        mNormalized = false;</span>
-<span class="fc" id="L216">    }</span>
+<span class="fc" id="L210">        mA = a;</span>
+<span class="fc" id="L211">        mB = b;</span>
+<span class="fc" id="L212">        mC = c;</span>
+<span class="fc" id="L213">        mD = d;</span>
+<span class="fc" id="L214">        mNormalized = false;</span>
+<span class="fc" id="L215">    }</span>
     
     /**
      * Sets parameters of this plane.
@@ -221,18 +220,17 @@ public class Plane implements Serializable {
      * @throws IllegalArgumentException Raised if provided array does not
      * have length equal to 4.
      */    
-    public final void setParameters(double[] array) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L226" title="All 2 branches covered.">        if (array.length != PLANE_NUMBER_PARAMS) {</span>
-<span class="fc" id="L227">            throw new IllegalArgumentException();</span>
+    public final void setParameters(double[] array) {
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        if (array.length != PLANE_NUMBER_PARAMS) {</span>
+<span class="fc" id="L225">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L230">        mA = array[0];</span>
-<span class="fc" id="L231">        mB = array[1];</span>
-<span class="fc" id="L232">        mC = array[2];</span>
-<span class="fc" id="L233">        mD = array[3];</span>
-<span class="fc" id="L234">        mNormalized = false;</span>
-<span class="fc" id="L235">    }</span>
+<span class="fc" id="L228">        mA = array[0];</span>
+<span class="fc" id="L229">        mB = array[1];</span>
+<span class="fc" id="L230">        mC = array[2];</span>
+<span class="fc" id="L231">        mD = array[3];</span>
+<span class="fc" id="L232">        mNormalized = false;</span>
+<span class="fc" id="L233">    }</span>
     
     /**
      * Computes and sets plane parameters using provided 3D points.
@@ -247,60 +245,60 @@ public class Plane implements Serializable {
             Point3D pointB, Point3D pointC) throws ColinearPointsException {
         
         //normalize points to increase accuracy
-<span class="fc" id="L250">        pointA.normalize();</span>
-<span class="fc" id="L251">        pointB.normalize();</span>
-<span class="fc" id="L252">        pointC.normalize();</span>
+<span class="fc" id="L248">        pointA.normalize();</span>
+<span class="fc" id="L249">        pointB.normalize();</span>
+<span class="fc" id="L250">        pointC.normalize();</span>
         
         //we use 3 points to find one plane
         try {
             //set homogeneous coordinates of each point on each row of the 
             //matrix
-<span class="fc" id="L258">            Matrix m = new Matrix(3, PLANE_NUMBER_PARAMS);</span>
+<span class="fc" id="L256">            Matrix m = new Matrix(3, PLANE_NUMBER_PARAMS);</span>
             
-<span class="fc" id="L260">            m.setElementAt(0, 0, pointA.getHomX());</span>
-<span class="fc" id="L261">            m.setElementAt(0, 1, pointA.getHomY());</span>
-<span class="fc" id="L262">            m.setElementAt(0, 2, pointA.getHomZ());</span>
-<span class="fc" id="L263">            m.setElementAt(0, 3, pointA.getHomW());</span>
+<span class="fc" id="L258">            m.setElementAt(0, 0, pointA.getHomX());</span>
+<span class="fc" id="L259">            m.setElementAt(0, 1, pointA.getHomY());</span>
+<span class="fc" id="L260">            m.setElementAt(0, 2, pointA.getHomZ());</span>
+<span class="fc" id="L261">            m.setElementAt(0, 3, pointA.getHomW());</span>
             
-<span class="fc" id="L265">            m.setElementAt(1, 0, pointB.getHomX());</span>
-<span class="fc" id="L266">            m.setElementAt(1, 1, pointB.getHomY());</span>
-<span class="fc" id="L267">            m.setElementAt(1, 2, pointB.getHomZ());</span>
-<span class="fc" id="L268">            m.setElementAt(1, 3, pointB.getHomW());</span>
+<span class="fc" id="L263">            m.setElementAt(1, 0, pointB.getHomX());</span>
+<span class="fc" id="L264">            m.setElementAt(1, 1, pointB.getHomY());</span>
+<span class="fc" id="L265">            m.setElementAt(1, 2, pointB.getHomZ());</span>
+<span class="fc" id="L266">            m.setElementAt(1, 3, pointB.getHomW());</span>
 
-<span class="fc" id="L270">            m.setElementAt(2, 0, pointC.getHomX());</span>
-<span class="fc" id="L271">            m.setElementAt(2, 1, pointC.getHomY());</span>
-<span class="fc" id="L272">            m.setElementAt(2, 2, pointC.getHomZ());</span>
-<span class="fc" id="L273">            m.setElementAt(2, 3, pointC.getHomW());</span>
+<span class="fc" id="L268">            m.setElementAt(2, 0, pointC.getHomX());</span>
+<span class="fc" id="L269">            m.setElementAt(2, 1, pointC.getHomY());</span>
+<span class="fc" id="L270">            m.setElementAt(2, 2, pointC.getHomZ());</span>
+<span class="fc" id="L271">            m.setElementAt(2, 3, pointC.getHomW());</span>
             
-<span class="fc" id="L275">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
-<span class="fc" id="L276">            decomposer.decompose();</span>
+<span class="fc" id="L273">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L274">            decomposer.decompose();</span>
 
-<span class="fc bfc" id="L278" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 3) {</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 3) {</span>
                 //points where colinear, and so the null-space of those 3 points
                 //has dimension greater than one (a pencil of planes instead
                 //of just one plane can be defined)
-<span class="fc" id="L282">                throw new ColinearPointsException();</span>
+<span class="fc" id="L280">                throw new ColinearPointsException();</span>
             }
             
             //V is a 4x4 orthonormal matrix
-<span class="fc" id="L286">            Matrix mV = decomposer.getV();</span>
+<span class="fc" id="L284">            Matrix mV = decomposer.getV();</span>
             
             //last column of V will contain the right null-space of m, which is
             //the plane where provided points belong to.
-<span class="fc" id="L290">            mA = mV.getElementAt(0, 3);</span>
-<span class="fc" id="L291">            mB = mV.getElementAt(1, 3);</span>
-<span class="fc" id="L292">            mC = mV.getElementAt(2, 3);</span>
-<span class="fc" id="L293">            mD = mV.getElementAt(3, 3);</span>
+<span class="fc" id="L288">            mA = mV.getElementAt(0, 3);</span>
+<span class="fc" id="L289">            mB = mV.getElementAt(1, 3);</span>
+<span class="fc" id="L290">            mC = mV.getElementAt(2, 3);</span>
+<span class="fc" id="L291">            mD = mV.getElementAt(3, 3);</span>
             
             //Because V is orthonormal, its columns have norm equal to 1 and 
             //there is no need to normalize this plane to increase accuracy
-<span class="fc" id="L297">            mNormalized = true;</span>
+<span class="fc" id="L295">            mNormalized = true;</span>
             
-<span class="nc" id="L299">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L297">        } catch (AlgebraException e) {</span>
             //should only fail if decomposition fails for numerical reasons
-<span class="nc" id="L301">            throw new ColinearPointsException(e);</span>
-<span class="fc" id="L302">        }</span>
-<span class="fc" id="L303">    }</span>
+<span class="nc" id="L299">            throw new ColinearPointsException(e);</span>
+<span class="fc" id="L300">        }</span>
+<span class="fc" id="L301">    }</span>
     
     /**
      * Determines if provided points are colinear or have a degenerate 
@@ -314,40 +312,40 @@ public class Plane implements Serializable {
     public static boolean areColinearPoints(Point3D pointA, Point3D pointB, 
             Point3D pointC) {
         //normalize points to increase accuracy
-<span class="fc" id="L317">        pointA.normalize();</span>
-<span class="fc" id="L318">        pointB.normalize();</span>
-<span class="fc" id="L319">        pointC.normalize();</span>
+<span class="fc" id="L315">        pointA.normalize();</span>
+<span class="fc" id="L316">        pointB.normalize();</span>
+<span class="fc" id="L317">        pointC.normalize();</span>
         
         //we use 3 points to find one plane
         try {
             //set homogeneous coordinates of each point on each row of the 
             //matrix
-<span class="fc" id="L325">            Matrix m = new Matrix(3, PLANE_NUMBER_PARAMS);</span>
+<span class="fc" id="L323">            Matrix m = new Matrix(3, PLANE_NUMBER_PARAMS);</span>
             
-<span class="fc" id="L327">            m.setElementAt(0, 0, pointA.getHomX());</span>
-<span class="fc" id="L328">            m.setElementAt(0, 1, pointA.getHomY());</span>
-<span class="fc" id="L329">            m.setElementAt(0, 2, pointA.getHomZ());</span>
-<span class="fc" id="L330">            m.setElementAt(0, 3, pointA.getHomW());</span>
+<span class="fc" id="L325">            m.setElementAt(0, 0, pointA.getHomX());</span>
+<span class="fc" id="L326">            m.setElementAt(0, 1, pointA.getHomY());</span>
+<span class="fc" id="L327">            m.setElementAt(0, 2, pointA.getHomZ());</span>
+<span class="fc" id="L328">            m.setElementAt(0, 3, pointA.getHomW());</span>
             
-<span class="fc" id="L332">            m.setElementAt(1, 0, pointB.getHomX());</span>
-<span class="fc" id="L333">            m.setElementAt(1, 1, pointB.getHomY());</span>
-<span class="fc" id="L334">            m.setElementAt(1, 2, pointB.getHomZ());</span>
-<span class="fc" id="L335">            m.setElementAt(1, 3, pointB.getHomW());</span>
+<span class="fc" id="L330">            m.setElementAt(1, 0, pointB.getHomX());</span>
+<span class="fc" id="L331">            m.setElementAt(1, 1, pointB.getHomY());</span>
+<span class="fc" id="L332">            m.setElementAt(1, 2, pointB.getHomZ());</span>
+<span class="fc" id="L333">            m.setElementAt(1, 3, pointB.getHomW());</span>
 
-<span class="fc" id="L337">            m.setElementAt(2, 0, pointC.getHomX());</span>
-<span class="fc" id="L338">            m.setElementAt(2, 1, pointC.getHomY());</span>
-<span class="fc" id="L339">            m.setElementAt(2, 2, pointC.getHomZ());</span>
-<span class="fc" id="L340">            m.setElementAt(2, 3, pointC.getHomW());</span>
+<span class="fc" id="L335">            m.setElementAt(2, 0, pointC.getHomX());</span>
+<span class="fc" id="L336">            m.setElementAt(2, 1, pointC.getHomY());</span>
+<span class="fc" id="L337">            m.setElementAt(2, 2, pointC.getHomZ());</span>
+<span class="fc" id="L338">            m.setElementAt(2, 3, pointC.getHomW());</span>
             
-<span class="fc" id="L342">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
-<span class="fc" id="L343">            decomposer.decompose();</span>
+<span class="fc" id="L340">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L341">            decomposer.decompose();</span>
 
             //if points were colinear, their null-space has dimension greater 
             //than one (a pencil of planes instead of just one plane can be 
             //defined)
-<span class="fc bfc" id="L348" title="All 2 branches covered.">            return (decomposer.getRank() &lt; 3);</span>
-<span class="nc" id="L349">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L350">            return true;</span>
+<span class="fc bfc" id="L346" title="All 2 branches covered.">            return (decomposer.getRank() &lt; 3);</span>
+<span class="nc" id="L347">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L348">            return true;</span>
         }        
     }
     
@@ -356,36 +354,36 @@ public class Plane implements Serializable {
      * @param a Parameter A.
      */
     public void setA(double a) {
-<span class="fc" id="L359">        mA = a;</span>
-<span class="fc" id="L360">        mNormalized = false;</span>
-<span class="fc" id="L361">    }</span>
+<span class="fc" id="L357">        mA = a;</span>
+<span class="fc" id="L358">        mNormalized = false;</span>
+<span class="fc" id="L359">    }</span>
     
     /**
      * Sets parameter B of this plane.
      * @param b Parameter B.
      */
     public void setB(double b) {
-<span class="fc" id="L368">        mB = b;</span>
-<span class="fc" id="L369">        mNormalized = false;</span>
-<span class="fc" id="L370">    }</span>
+<span class="fc" id="L366">        mB = b;</span>
+<span class="fc" id="L367">        mNormalized = false;</span>
+<span class="fc" id="L368">    }</span>
     
     /**
      * Sets parameter C of this plane.
      * @param c Parameter C.
      */
     public void setC(double c) {
-<span class="fc" id="L377">        mC = c;</span>
-<span class="fc" id="L378">        mNormalized = false;</span>
-<span class="fc" id="L379">    }</span>
+<span class="fc" id="L375">        mC = c;</span>
+<span class="fc" id="L376">        mNormalized = false;</span>
+<span class="fc" id="L377">    }</span>
     
     /**
      * Sets parameter D of this plane.
      * @param d Parameter D.
      */
     public void setD(double d) {
-<span class="fc" id="L386">        mD = d;</span>
-<span class="fc" id="L387">        mNormalized = false;</span>
-<span class="fc" id="L388">    }</span>
+<span class="fc" id="L384">        mD = d;</span>
+<span class="fc" id="L385">        mNormalized = false;</span>
+<span class="fc" id="L386">    }</span>
     
     /**
      * Sets the parameters of a plane from one point and two vectors.
@@ -396,32 +394,31 @@ public class Plane implements Serializable {
      * @throws ParallelVectorsException Raised if provided vectors are parallel.
      */
     public final void setParametersFrom1PointAnd2Vectors(Point3D point,
-            double[] vectorA, double[] vectorB) throws IllegalArgumentException,
-            ParallelVectorsException {
+            double[] vectorA, double[] vectorB) throws ParallelVectorsException {
         
-<span class="fc bfc" id="L402" title="All 4 branches covered.">        if (vectorA.length != INHOM_VECTOR_SIZE ||</span>
+<span class="fc bfc" id="L399" title="All 4 branches covered.">        if (vectorA.length != INHOM_VECTOR_SIZE ||</span>
                 vectorB.length != INHOM_VECTOR_SIZE) {
-<span class="fc" id="L404">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L401">            throw new IllegalArgumentException();</span>
         }
         
         //normalize vectors to increase accuracy (we make a copy to avoid 
         //changing provied arrays)
-<span class="fc" id="L409">        double norm = com.irurueta.algebra.Utils.normF(vectorA);</span>
-<span class="fc" id="L410">        double[] vA = ArrayUtils.multiplyByScalarAndReturnNew(vectorA, </span>
+<span class="fc" id="L406">        double norm = com.irurueta.algebra.Utils.normF(vectorA);</span>
+<span class="fc" id="L407">        double[] vA = ArrayUtils.multiplyByScalarAndReturnNew(vectorA, </span>
                 1.0 / norm);
-<span class="fc" id="L412">        norm = com.irurueta.algebra.Utils.normF(vectorB);</span>
-<span class="fc" id="L413">        double[] vB = ArrayUtils.multiplyByScalarAndReturnNew(vectorB, </span>
+<span class="fc" id="L409">        norm = com.irurueta.algebra.Utils.normF(vectorB);</span>
+<span class="fc" id="L410">        double[] vB = ArrayUtils.multiplyByScalarAndReturnNew(vectorB, </span>
                 1.0 / norm);
         
         try {
-<span class="fc" id="L417">            double[] cross = com.irurueta.algebra.Utils.crossProduct(vA, vB);</span>
+<span class="fc" id="L414">            double[] cross = com.irurueta.algebra.Utils.crossProduct(vA, vB);</span>
             
             //check if resulting vector from cross product is too small (vectors
             //are almost parallel, and machine precision might worsen things)
-<span class="fc bfc" id="L421" title="All 2 branches covered.">            if (Math.abs(cross[0]) &lt; DEFAULT_ERROR_THRESHOLD &amp;&amp;</span>
-<span class="pc bpc" id="L422" title="1 of 2 branches missed.">                    Math.abs(cross[1]) &lt; DEFAULT_ERROR_THRESHOLD &amp;&amp;</span>
-<span class="pc bpc" id="L423" title="1 of 2 branches missed.">                    Math.abs(cross[2]) &lt; DEFAULT_ERROR_THRESHOLD) {</span>
-<span class="fc" id="L424">                throw new ParallelVectorsException();</span>
+<span class="fc bfc" id="L418" title="All 2 branches covered.">            if (Math.abs(cross[0]) &lt; DEFAULT_ERROR_THRESHOLD &amp;&amp;</span>
+<span class="pc bpc" id="L419" title="1 of 2 branches missed.">                    Math.abs(cross[1]) &lt; DEFAULT_ERROR_THRESHOLD &amp;&amp;</span>
+<span class="pc bpc" id="L420" title="1 of 2 branches missed.">                    Math.abs(cross[2]) &lt; DEFAULT_ERROR_THRESHOLD) {</span>
+<span class="fc" id="L421">                throw new ParallelVectorsException();</span>
             }
             
             //the point and the two vectors will define a plane computing the
@@ -432,11 +429,11 @@ public class Plane implements Serializable {
             //a*xp + b*xy + c*xz + d*wp = 0
             //and solving
             //d = -(a*xp + b*xy + c*xz) / wp -&gt; the plane is fully defined
-<span class="fc" id="L435">            setParametersFromPointAndDirectorVector(point, cross);</span>
-<span class="nc" id="L436">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L437">            throw new ParallelVectorsException(e);</span>
-<span class="fc" id="L438">        }</span>
-<span class="fc" id="L439">    }</span>
+<span class="fc" id="L432">            setParametersFromPointAndDirectorVector(point, cross);</span>
+<span class="nc" id="L433">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L434">            throw new ParallelVectorsException(e);</span>
+<span class="fc" id="L435">        }</span>
+<span class="fc" id="L436">    }</span>
     
     /**
      * Sets parameters of a plane from one point and its director vector.
@@ -445,24 +442,24 @@ public class Plane implements Serializable {
      * @throws IllegalArgumentException Raised if vector length is not 3.
      */
     public final void setParametersFromPointAndDirectorVector(Point3D point,
-            double[] vector) throws IllegalArgumentException {
+            double[] vector) {
         
-<span class="fc bfc" id="L450" title="All 2 branches covered.">        if (vector.length != INHOM_VECTOR_SIZE) {</span>
-<span class="fc" id="L451">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L447" title="All 2 branches covered.">        if (vector.length != INHOM_VECTOR_SIZE) {</span>
+<span class="fc" id="L448">            throw new IllegalArgumentException();</span>
         }
         
         //normalize point to increase accuracy
-<span class="fc" id="L455">        point.normalize();</span>
+<span class="fc" id="L452">        point.normalize();</span>
         
-<span class="fc" id="L457">        mA = vector[0];</span>
-<span class="fc" id="L458">        mB = vector[1];</span>
-<span class="fc" id="L459">        mC = vector[2];</span>
+<span class="fc" id="L454">        mA = vector[0];</span>
+<span class="fc" id="L455">        mB = vector[1];</span>
+<span class="fc" id="L456">        mC = vector[2];</span>
         
-<span class="fc" id="L461">        mD = -(mA * point.getHomX() + mB * point.getHomY() + </span>
-<span class="fc" id="L462">                mC * point.getHomZ()) / point.getHomW();</span>
+<span class="fc" id="L458">        mD = -(mA * point.getHomX() + mB * point.getHomY() + </span>
+<span class="fc" id="L459">                mC * point.getHomZ()) / point.getHomW();</span>
         
-<span class="fc" id="L464">        mNormalized = false;</span>
-<span class="fc" id="L465">    }</span>
+<span class="fc" id="L461">        mNormalized = false;</span>
+<span class="fc" id="L462">    }</span>
     
     /**
      * Check if provided point is locus (lays into) of the plane.
@@ -470,7 +467,7 @@ public class Plane implements Serializable {
      * @return True if point is locus of this plane, false otherwise.
      */
     public boolean isLocus(Point3D point) {
-<span class="fc" id="L473">        return isLocus(point, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L470">        return isLocus(point, DEFAULT_LOCUS_THRESHOLD);</span>
     }
     
     /**
@@ -481,23 +478,22 @@ public class Plane implements Serializable {
      * @return True if point is locus of this plane, false otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public boolean isLocus(Point3D point, double threshold) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L486" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L487">            throw new IllegalArgumentException();</span>
+    public boolean isLocus(Point3D point, double threshold) {
+<span class="fc bfc" id="L482" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L483">            throw new IllegalArgumentException();</span>
         }
         
         //make dot product of homogeneous coordinates with plane
         //m = [x, y, z, w], P = [a, b, c, d], then
         //x * a + y * b + z * c + w * d must be very small to be locus
         
-<span class="fc" id="L494">        point.normalize();</span>
-<span class="fc" id="L495">        normalize();</span>
+<span class="fc" id="L490">        point.normalize();</span>
+<span class="fc" id="L491">        normalize();</span>
         
-<span class="fc" id="L497">        double dotProd = point.getHomX() * mA + point.getHomY() * mB +</span>
-<span class="fc" id="L498">                point.getHomZ() * mC + point.getHomW() * mD;</span>
+<span class="fc" id="L493">        double dotProd = point.getHomX() * mA + point.getHomY() * mB +</span>
+<span class="fc" id="L494">                point.getHomZ() * mC + point.getHomW() * mD;</span>
         
-<span class="fc bfc" id="L500" title="All 2 branches covered.">        return Math.abs(dotProd) &lt; threshold;</span>
+<span class="fc bfc" id="L496" title="All 2 branches covered.">        return Math.abs(dotProd) &lt; threshold;</span>
     }
     
     /**
@@ -508,16 +504,16 @@ public class Plane implements Serializable {
      * @return Distance between this line and provided point.
      */    
     public double signedDistance(Point3D point) {
-<span class="fc" id="L511">        point.normalize();</span>
-<span class="fc" id="L512">        normalize();</span>
+<span class="fc" id="L507">        point.normalize();</span>
+<span class="fc" id="L508">        normalize();</span>
         
         //numerator is the dot product of point and line
-<span class="fc" id="L515">        double num = point.getHomX() * mA + point.getHomY() * mB + </span>
-<span class="fc" id="L516">                point.getHomZ() * mC + point.getHomW() * mD;</span>
+<span class="fc" id="L511">        double num = point.getHomX() * mA + point.getHomY() * mB + </span>
+<span class="fc" id="L512">                point.getHomZ() * mC + point.getHomW() * mD;</span>
         
-<span class="fc" id="L518">        double den = Math.sqrt(mA * mA + mB * mB + mC * mC) * point.getHomW();</span>
+<span class="fc" id="L514">        double den = Math.sqrt(mA * mA + mB * mB + mC * mC) * point.getHomW();</span>
         
-<span class="fc" id="L520">        return num / den;</span>
+<span class="fc" id="L516">        return num / den;</span>
     }
     
     /**
@@ -529,7 +525,7 @@ public class Plane implements Serializable {
      * @return Closest point.
      */
     public Point3D getClosestPoint(Point3D point) {
-<span class="fc" id="L532">        return getClosestPoint(point, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L528">        return getClosestPoint(point, DEFAULT_LOCUS_THRESHOLD);</span>
     }
 
     /**
@@ -543,11 +539,10 @@ public class Plane implements Serializable {
      * @return Closest point.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */    
-    public Point3D getClosestPoint(Point3D point, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L548">        Point3D result = Point3D.create();</span>
-<span class="fc" id="L549">        closestPoint(point, result, threshold);</span>
-<span class="fc" id="L550">        return result;</span>
+    public Point3D getClosestPoint(Point3D point, double threshold) {
+<span class="fc" id="L543">        Point3D result = Point3D.create();</span>
+<span class="fc" id="L544">        closestPoint(point, result, threshold);</span>
+<span class="fc" id="L545">        return result;</span>
     }
     
     /**
@@ -559,8 +554,8 @@ public class Plane implements Serializable {
      * @param result Instance where the closest point will be stored.
      */
     public void closestPoint(Point3D point, Point3D result) {
-<span class="fc" id="L562">        closestPoint(point, result, DEFAULT_LOCUS_THRESHOLD);</span>
-<span class="fc" id="L563">    }</span>
+<span class="fc" id="L557">        closestPoint(point, result, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L558">    }</span>
 
     /**
      * Computes the point belonging to this plane closest to provided point, 
@@ -573,44 +568,43 @@ public class Plane implements Serializable {
      * this plane.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */    
-    public void closestPoint(Point3D point, Point3D result, double threshold)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L578" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L579">            throw new IllegalArgumentException();</span>
+    public void closestPoint(Point3D point, Point3D result, double threshold) {
+<span class="fc bfc" id="L572" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L573">            throw new IllegalArgumentException();</span>
         }
         
         //normalize point to increase accuracy
-<span class="fc" id="L583">        point.normalize();</span>
+<span class="fc" id="L577">        point.normalize();</span>
         
-<span class="fc bfc" id="L585" title="All 2 branches covered.">        if (isLocus(point, threshold)) {</span>
+<span class="fc bfc" id="L579" title="All 2 branches covered.">        if (isLocus(point, threshold)) {</span>
             //if point belongs to line, then it is returned as result
-<span class="fc" id="L587">            result.setCoordinates(point);</span>
-<span class="fc" id="L588">            return;</span>
+<span class="fc" id="L581">            result.setCoordinates(point);</span>
+<span class="fc" id="L582">            return;</span>
         }
         
        //move point in director vector direction until it belongs to this plane
         //(point.getInhomX() + mA * amount) * mA + (point.getInhomY() + 
         //mB * amount) * mB + (point.getInhomZ + mC * amount) * mC + mD = 0
         
-<span class="fc" id="L595">        double amount = -(point.getHomX() * mA + point.getHomY() * mB + </span>
-<span class="fc" id="L596">                point.getHomZ() * mC + point.getHomW() * mD) / </span>
-<span class="fc" id="L597">                (point.getHomW() * (mA * mA + mB * mB + mC * mC));</span>
-<span class="fc" id="L598">        result.setHomogeneousCoordinates(</span>
-<span class="fc" id="L599">                point.getHomX() + mA * amount * point.getHomW(), </span>
-<span class="fc" id="L600">                point.getHomY() + mB * amount * point.getHomW(),</span>
-<span class="fc" id="L601">                point.getHomZ() + mC * amount * point.getHomW(),</span>
-<span class="fc" id="L602">                point.getHomW());</span>
-<span class="fc" id="L603">        result.normalize();        </span>
-<span class="fc" id="L604">    }    </span>
+<span class="fc" id="L589">        double amount = -(point.getHomX() * mA + point.getHomY() * mB + </span>
+<span class="fc" id="L590">                point.getHomZ() * mC + point.getHomW() * mD) / </span>
+<span class="fc" id="L591">                (point.getHomW() * (mA * mA + mB * mB + mC * mC));</span>
+<span class="fc" id="L592">        result.setHomogeneousCoordinates(</span>
+<span class="fc" id="L593">                point.getHomX() + mA * amount * point.getHomW(), </span>
+<span class="fc" id="L594">                point.getHomY() + mB * amount * point.getHomW(),</span>
+<span class="fc" id="L595">                point.getHomZ() + mC * amount * point.getHomW(),</span>
+<span class="fc" id="L596">                point.getHomW());</span>
+<span class="fc" id="L597">        result.normalize();        </span>
+<span class="fc" id="L598">    }    </span>
     
     /**
      * Returns parameters of this plane as an array containing [a, b, c, d].
      * @return Array containing all the parameters that describe this plane.
      */
     public double[] asArray() {
-<span class="fc" id="L611">        double[] array = new double[PLANE_NUMBER_PARAMS];</span>
-<span class="fc" id="L612">        asArray(array);</span>
-<span class="fc" id="L613">        return array;</span>
+<span class="fc" id="L605">        double[] array = new double[PLANE_NUMBER_PARAMS];</span>
+<span class="fc" id="L606">        asArray(array);</span>
+<span class="fc" id="L607">        return array;</span>
     }
     
     /**
@@ -619,35 +613,35 @@ public class Plane implements Serializable {
      * @throws IllegalArgumentException Raised if provided array doesn't have
      * length 4.
      */
-    public void asArray(double[] array) throws IllegalArgumentException {
-<span class="fc bfc" id="L623" title="All 2 branches covered.">        if (array.length != PLANE_NUMBER_PARAMS) {</span>
-<span class="fc" id="L624">            throw new IllegalArgumentException();</span>
+    public void asArray(double[] array) {
+<span class="fc bfc" id="L617" title="All 2 branches covered.">        if (array.length != PLANE_NUMBER_PARAMS) {</span>
+<span class="fc" id="L618">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L627">        array[0] = mA;</span>
-<span class="fc" id="L628">        array[1] = mB;</span>
-<span class="fc" id="L629">        array[2] = mC;    </span>
-<span class="fc" id="L630">        array[3] = mD;</span>
-<span class="fc" id="L631">    }</span>
+<span class="fc" id="L621">        array[0] = mA;</span>
+<span class="fc" id="L622">        array[1] = mB;</span>
+<span class="fc" id="L623">        array[2] = mC;    </span>
+<span class="fc" id="L624">        array[3] = mD;</span>
+<span class="fc" id="L625">    }</span>
     
     /**
      * Normalizes the parameters of this line to increase the accuracy of some
      * computations.
      */
     public void normalize() {
-<span class="fc bfc" id="L638" title="All 2 branches covered.">        if (!mNormalized) {</span>
-<span class="fc" id="L639">            double norm = Math.sqrt(mA * mA + mB * mB + mC * mC + mD * mD);</span>
+<span class="fc bfc" id="L632" title="All 2 branches covered.">        if (!mNormalized) {</span>
+<span class="fc" id="L633">            double norm = Math.sqrt(mA * mA + mB * mB + mC * mC + mD * mD);</span>
             
-<span class="fc bfc" id="L641" title="All 2 branches covered.">            if (norm &gt; PRECISION) {</span>
-<span class="fc" id="L642">                mA /= norm;</span>
-<span class="fc" id="L643">                mB /= norm;</span>
-<span class="fc" id="L644">                mC /= norm;</span>
-<span class="fc" id="L645">                mD /= norm;</span>
+<span class="fc bfc" id="L635" title="All 2 branches covered.">            if (norm &gt; PRECISION) {</span>
+<span class="fc" id="L636">                mA /= norm;</span>
+<span class="fc" id="L637">                mB /= norm;</span>
+<span class="fc" id="L638">                mC /= norm;</span>
+<span class="fc" id="L639">                mD /= norm;</span>
             
-<span class="fc" id="L647">                mNormalized = true;</span>
+<span class="fc" id="L641">                mNormalized = true;</span>
             }
         }
-<span class="fc" id="L650">    }</span>
+<span class="fc" id="L644">    }</span>
     
     /**
      * Returns boolean indicating whether this plane has already been 
@@ -655,7 +649,7 @@ public class Plane implements Serializable {
      * @return True if this plane is normalized, false otherwise.
      */
     public boolean isNormalized() {
-<span class="fc" id="L658">        return mNormalized;</span>
+<span class="fc" id="L652">        return mNormalized;</span>
     }
     
     /**
@@ -663,9 +657,9 @@ public class Plane implements Serializable {
      * @return Director vector of this plane.
      */
     public double[] getDirectorVector() {
-<span class="fc" id="L666">        double[] out = new double[INHOM_VECTOR_SIZE];</span>
-<span class="fc" id="L667">        directorVector(out);</span>
-<span class="fc" id="L668">        return out;</span>
+<span class="fc" id="L660">        double[] out = new double[INHOM_VECTOR_SIZE];</span>
+<span class="fc" id="L661">        directorVector(out);</span>
+<span class="fc" id="L662">        return out;</span>
     }
     
     /**
@@ -675,16 +669,15 @@ public class Plane implements Serializable {
      * @throws IllegalArgumentException Raised if provided array does not have
      * length 3.
      */
-    public void directorVector(double[] directorVector) 
-            throws IllegalArgumentException {
-<span class="pc bpc" id="L680" title="1 of 2 branches missed.">        if (directorVector.length != INHOM_VECTOR_SIZE) {</span>
-<span class="nc" id="L681">            throw new IllegalArgumentException();</span>
+    public void directorVector(double[] directorVector) {
+<span class="pc bpc" id="L673" title="1 of 2 branches missed.">        if (directorVector.length != INHOM_VECTOR_SIZE) {</span>
+<span class="nc" id="L674">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L684">        directorVector[0] = mA;</span>
-<span class="fc" id="L685">        directorVector[1] = mB;</span>
-<span class="fc" id="L686">        directorVector[2] = mC;</span>
-<span class="fc" id="L687">    }</span>
+<span class="fc" id="L677">        directorVector[0] = mA;</span>
+<span class="fc" id="L678">        directorVector[1] = mB;</span>
+<span class="fc" id="L679">        directorVector[2] = mC;</span>
+<span class="fc" id="L680">    }</span>
 
     /**
      * Computes and returns the intersection point between this plane and the 
@@ -697,9 +690,9 @@ public class Plane implements Serializable {
      */
     public Point3D getIntersection(Plane otherPlane1, Plane otherPlane2) 
             throws NoIntersectionException {
-<span class="fc" id="L700">        Point3D result = Point3D.create();</span>
-<span class="fc" id="L701">        intersection(otherPlane1, otherPlane2, result);</span>
-<span class="fc" id="L702">        return result;</span>
+<span class="fc" id="L693">        Point3D result = Point3D.create();</span>
+<span class="fc" id="L694">        intersection(otherPlane1, otherPlane2, result);</span>
+<span class="fc" id="L695">        return result;</span>
     }
     
     /**
@@ -715,52 +708,52 @@ public class Plane implements Serializable {
             Point3D result) throws NoIntersectionException {
         
         //normalize planes to increase accuracy
-<span class="fc" id="L718">        normalize();</span>
-<span class="fc" id="L719">        otherPlane1.normalize();</span>
-<span class="fc" id="L720">        otherPlane2.normalize();</span>
+<span class="fc" id="L711">        normalize();</span>
+<span class="fc" id="L712">        otherPlane1.normalize();</span>
+<span class="fc" id="L713">        otherPlane2.normalize();</span>
         
         //set matrix where each row contains the parameters of the plane
         try {
-<span class="fc" id="L724">            Matrix m = new Matrix(3, 4);</span>
-<span class="fc" id="L725">            m.setElementAt(0, 0, mA);</span>
-<span class="fc" id="L726">            m.setElementAt(0, 1, mB);</span>
-<span class="fc" id="L727">            m.setElementAt(0, 2, mC);</span>
-<span class="fc" id="L728">            m.setElementAt(0, 3, mD);</span>
+<span class="fc" id="L717">            Matrix m = new Matrix(3, 4);</span>
+<span class="fc" id="L718">            m.setElementAt(0, 0, mA);</span>
+<span class="fc" id="L719">            m.setElementAt(0, 1, mB);</span>
+<span class="fc" id="L720">            m.setElementAt(0, 2, mC);</span>
+<span class="fc" id="L721">            m.setElementAt(0, 3, mD);</span>
         
-<span class="fc" id="L730">            m.setElementAt(1, 0, otherPlane1.getA());</span>
-<span class="fc" id="L731">            m.setElementAt(1, 1, otherPlane1.getB());</span>
-<span class="fc" id="L732">            m.setElementAt(1, 2, otherPlane1.getC());</span>
-<span class="fc" id="L733">            m.setElementAt(1, 3, otherPlane1.getD());</span>
+<span class="fc" id="L723">            m.setElementAt(1, 0, otherPlane1.getA());</span>
+<span class="fc" id="L724">            m.setElementAt(1, 1, otherPlane1.getB());</span>
+<span class="fc" id="L725">            m.setElementAt(1, 2, otherPlane1.getC());</span>
+<span class="fc" id="L726">            m.setElementAt(1, 3, otherPlane1.getD());</span>
 
-<span class="fc" id="L735">            m.setElementAt(2, 0, otherPlane2.getA());</span>
-<span class="fc" id="L736">            m.setElementAt(2, 1, otherPlane2.getB());</span>
-<span class="fc" id="L737">            m.setElementAt(2, 2, otherPlane2.getC());</span>
-<span class="fc" id="L738">            m.setElementAt(2, 3, otherPlane2.getD());</span>
+<span class="fc" id="L728">            m.setElementAt(2, 0, otherPlane2.getA());</span>
+<span class="fc" id="L729">            m.setElementAt(2, 1, otherPlane2.getB());</span>
+<span class="fc" id="L730">            m.setElementAt(2, 2, otherPlane2.getC());</span>
+<span class="fc" id="L731">            m.setElementAt(2, 3, otherPlane2.getD());</span>
             
             //If planes are not parallel, then matrix has rank 3, and its right 
             //null-space is equal to their intersection.
-<span class="fc" id="L742">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
-<span class="fc" id="L743">            decomposer.decompose();</span>
+<span class="fc" id="L735">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L736">            decomposer.decompose();</span>
         
             //planes are parallel
-<span class="fc bfc" id="L746" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 3) {</span>
-<span class="fc" id="L747">                throw new NoIntersectionException();</span>
+<span class="fc bfc" id="L739" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 3) {</span>
+<span class="fc" id="L740">                throw new NoIntersectionException();</span>
             }
         
-<span class="fc" id="L750">            Matrix V = decomposer.getV();</span>
+<span class="fc" id="L743">            Matrix v = decomposer.getV();</span>
         
             //last column of V contains the right nullspace of m, which is the
             //intersection of lines expressed in homogeneous coordinates.
             //because column is already normalized by SVD decomposition, point
             //will also be normalized
-<span class="fc" id="L756">            result.setHomogeneousCoordinates(V.getElementAt(0, 3), </span>
-<span class="fc" id="L757">                    V.getElementAt(1, 3), V.getElementAt(2, 3), </span>
-<span class="fc" id="L758">                    V.getElementAt(3, 3));</span>
-<span class="nc" id="L759">        } catch (AlgebraException e) {</span>
+<span class="fc" id="L749">            result.setHomogeneousCoordinates(v.getElementAt(0, 3),</span>
+<span class="fc" id="L750">                    v.getElementAt(1, 3), v.getElementAt(2, 3),</span>
+<span class="fc" id="L751">                    v.getElementAt(3, 3));</span>
+<span class="nc" id="L752">        } catch (AlgebraException e) {</span>
             //lines are numerically unstable
-<span class="nc" id="L761">            throw new NoIntersectionException(e);</span>
-<span class="fc" id="L762">        }</span>
-<span class="fc" id="L763">    }</span>
+<span class="nc" id="L754">            throw new NoIntersectionException(e);</span>
+<span class="fc" id="L755">        }</span>
+<span class="fc" id="L756">    }</span>
     
     /**
      * Computes the dot product between the parameters A, B, C, D of this plane
@@ -770,9 +763,9 @@ public class Plane implements Serializable {
      * @return dot product value.
      */
     public double dotProduct(Plane plane) {
-<span class="fc" id="L773">        normalize();</span>
-<span class="fc" id="L774">        plane.normalize();</span>
-<span class="fc" id="L775">        return mA * plane.mA + mB * plane.mB + mC * plane.mC + mD * plane.mD;</span>
+<span class="fc" id="L766">        normalize();</span>
+<span class="fc" id="L767">        plane.normalize();</span>
+<span class="fc" id="L768">        return mA * plane.mA + mB * plane.mB + mC * plane.mC + mD * plane.mD;</span>
     }
     
     /**
@@ -787,17 +780,16 @@ public class Plane implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException if threshold is negative.
      */
-    public boolean equals(Plane plane, double threshold)
-            throws IllegalArgumentException {
+    public boolean equals(Plane plane, double threshold) {
         
-<span class="fc bfc" id="L793" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L794">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L785" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L786">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L797">        normalize();</span>
-<span class="fc" id="L798">        plane.normalize();</span>
+<span class="fc" id="L789">        normalize();</span>
+<span class="fc" id="L790">        plane.normalize();</span>
         
-<span class="fc bfc" id="L800" title="All 2 branches covered.">        return (1.0 - Math.abs(dotProduct(plane))) &lt;= threshold;</span>
+<span class="fc bfc" id="L792" title="All 2 branches covered.">        return (1.0 - Math.abs(dotProduct(plane))) &lt;= threshold;</span>
     }
     
     /**
@@ -808,7 +800,7 @@ public class Plane implements Serializable {
      * otherwise.
      */    
     public boolean equals(Plane plane) {
-<span class="fc" id="L811">        return equals(plane, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="fc" id="L803">        return equals(plane, DEFAULT_COMPARISON_THRESHOLD);</span>
     }
     
     /**
@@ -818,15 +810,15 @@ public class Plane implements Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-<span class="pc bpc" id="L821" title="1 of 2 branches missed.">        if (!(obj instanceof Plane)) {</span>
-<span class="nc" id="L822">            return false;</span>
+<span class="pc bpc" id="L813" title="1 of 2 branches missed.">        if (!(obj instanceof Plane)) {</span>
+<span class="nc" id="L814">            return false;</span>
         }
-<span class="fc bfc" id="L824" title="All 2 branches covered.">        if (obj == this) {</span>
-<span class="fc" id="L825">            return true;</span>
+<span class="fc bfc" id="L816" title="All 2 branches covered.">        if (obj == this) {</span>
+<span class="fc" id="L817">            return true;</span>
         }
         
-<span class="fc" id="L828">        Plane plane = (Plane)obj;</span>
-<span class="fc" id="L829">        return equals(plane);</span>
+<span class="fc" id="L820">        Plane plane = (Plane)obj;</span>
+<span class="fc" id="L821">        return equals(plane);</span>
     }
 
     /**
@@ -836,17 +828,17 @@ public class Plane implements Serializable {
      */    
     @Override
     public int hashCode() {
-<span class="nc" id="L839">        int hash = 7;</span>
-<span class="nc" id="L840">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mA) ^ </span>
-<span class="nc" id="L841">                (Double.doubleToLongBits(this.mA) &gt;&gt;&gt; 32));</span>
-<span class="nc" id="L842">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mB) ^ </span>
-<span class="nc" id="L843">                (Double.doubleToLongBits(this.mB) &gt;&gt;&gt; 32));</span>
-<span class="nc" id="L844">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mC) ^ </span>
-<span class="nc" id="L845">                (Double.doubleToLongBits(this.mC) &gt;&gt;&gt; 32));</span>
-<span class="nc" id="L846">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mD) ^ </span>
-<span class="nc" id="L847">                (Double.doubleToLongBits(this.mD) &gt;&gt;&gt; 32));</span>
-<span class="nc bnc" id="L848" title="All 2 branches missed.">        hash = 67 * hash + (this.mNormalized ? 1 : 0);</span>
-<span class="nc" id="L849">        return hash;</span>
+<span class="nc" id="L831">        int hash = 7;</span>
+<span class="nc" id="L832">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mA) ^ </span>
+<span class="nc" id="L833">                (Double.doubleToLongBits(this.mA) &gt;&gt;&gt; 32));</span>
+<span class="nc" id="L834">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mB) ^ </span>
+<span class="nc" id="L835">                (Double.doubleToLongBits(this.mB) &gt;&gt;&gt; 32));</span>
+<span class="nc" id="L836">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mC) ^ </span>
+<span class="nc" id="L837">                (Double.doubleToLongBits(this.mC) &gt;&gt;&gt; 32));</span>
+<span class="nc" id="L838">        hash = 67 * hash + (int) (Double.doubleToLongBits(this.mD) ^ </span>
+<span class="nc" id="L839">                (Double.doubleToLongBits(this.mD) &gt;&gt;&gt; 32));</span>
+<span class="nc bnc" id="L840" title="All 2 branches missed.">        hash = 67 * hash + (this.mNormalized ? 1 : 0);</span>
+<span class="nc" id="L841">        return hash;</span>
     }
     
     /**
@@ -856,9 +848,9 @@ public class Plane implements Serializable {
      * @return a new instance of a plane located at the canonical infinity.
      */
     public static Plane createCanonicalPlaneAtInfinity() {
-<span class="fc" id="L859">        Plane p = new Plane();</span>
-<span class="fc" id="L860">        setAsCanonicalPlaneAtInfinity(p);</span>
-<span class="fc" id="L861">        return p;</span>
+<span class="fc" id="L851">        Plane p = new Plane();</span>
+<span class="fc" id="L852">        setAsCanonicalPlaneAtInfinity(p);</span>
+<span class="fc" id="L853">        return p;</span>
     }
     
     /**
@@ -868,9 +860,9 @@ public class Plane implements Serializable {
      * @param plane plane to be set at infinity.
      */
     public static void setAsCanonicalPlaneAtInfinity(Plane plane) {
-<span class="fc" id="L871">        plane.mA = plane.mB = plane.mC = 0.0;</span>
-<span class="fc" id="L872">        plane.mD = 1.0;</span>
-<span class="fc" id="L873">        plane.mNormalized = true;</span>
-<span class="fc" id="L874">    }</span>
+<span class="fc" id="L863">        plane.mA = plane.mB = plane.mC = 0.0;</span>
+<span class="fc" id="L864">        plane.mD = 1.0;</span>
+<span class="fc" id="L865">        plane.mNormalized = true;</span>
+<span class="fc" id="L866">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

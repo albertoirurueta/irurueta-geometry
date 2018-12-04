@@ -66,7 +66,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * @throws IllegalArgumentException Raised when the size of the array is not
      * 2.
      */
-    public InhomogeneousPoint3D(double[] v) throws IllegalArgumentException {
+    public InhomogeneousPoint3D(double[] v) {
 <span class="fc" id="L70">        super();</span>
 <span class="fc" id="L71">        setCoordinates(v);</span>
 <span class="fc" id="L72">    }</span>
@@ -162,16 +162,15 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * valid size.
      */
     @Override
-    public final void setCoordinates(double[] v) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L167" title="All 2 branches covered.">        if (v.length != POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {</span>
-<span class="fc" id="L168">            throw new IllegalArgumentException();</span>
+    public final void setCoordinates(double[] v) {
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (v.length != POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {</span>
+<span class="fc" id="L167">            throw new IllegalArgumentException();</span>
         } else {
-<span class="fc" id="L170">            mX = v[0];</span>
-<span class="fc" id="L171">            mY = v[1];</span>
-<span class="fc" id="L172">            mZ = v[2];</span>
+<span class="fc" id="L169">            mX = v[0];</span>
+<span class="fc" id="L170">            mY = v[1];</span>
+<span class="fc" id="L171">            mZ = v[2];</span>
         }
-<span class="fc" id="L174">    }</span>
+<span class="fc" id="L173">    }</span>
     
     /**
      * Sets coordinates of this instance using the coordinates of provided 3D
@@ -180,23 +179,23 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public final void setCoordinates(Point3D point) {
-<span class="fc bfc" id="L183" title="All 2 branches covered.">        switch (point.getType()) {</span>
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        switch (point.getType()) {</span>
             case INHOMOGENEOUS_COORDINATES:
-<span class="fc" id="L185">                InhomogeneousPoint3D inhomPoint = (InhomogeneousPoint3D)point;</span>
-<span class="fc" id="L186">                mX = inhomPoint.getX();</span>
-<span class="fc" id="L187">                mY = inhomPoint.getY();</span>
-<span class="fc" id="L188">                mZ = inhomPoint.getZ();</span>
-<span class="fc" id="L189">                break;</span>
+<span class="fc" id="L184">                InhomogeneousPoint3D inhomPoint = (InhomogeneousPoint3D)point;</span>
+<span class="fc" id="L185">                mX = inhomPoint.getX();</span>
+<span class="fc" id="L186">                mY = inhomPoint.getY();</span>
+<span class="fc" id="L187">                mZ = inhomPoint.getZ();</span>
+<span class="fc" id="L188">                break;</span>
 
             case HOMOGENEOUS_COORDINATES:
             default:
-<span class="fc" id="L193">                HomogeneousPoint3D homPoint = (HomogeneousPoint3D)point;</span>
-<span class="fc" id="L194">                mX = homPoint.getInhomX();</span>
-<span class="fc" id="L195">                mY = homPoint.getInhomY();</span>
-<span class="fc" id="L196">                mZ = homPoint.getInhomZ();</span>
+<span class="fc" id="L192">                HomogeneousPoint3D homPoint = (HomogeneousPoint3D)point;</span>
+<span class="fc" id="L193">                mX = homPoint.getInhomX();</span>
+<span class="fc" id="L194">                mY = homPoint.getInhomY();</span>
+<span class="fc" id="L195">                mZ = homPoint.getInhomZ();</span>
                 break;
         }
-<span class="fc" id="L199">    }</span>
+<span class="fc" id="L198">    }</span>
     
     /**
      * Returns X homogeneous coordinate of this 3D point.
@@ -204,7 +203,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getHomX() {
-<span class="fc" id="L207">        return mX;</span>
+<span class="fc" id="L206">        return getX();</span>
     }
 
     /**
@@ -213,7 +212,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getHomY() {
-<span class="fc" id="L216">        return mY;</span>
+<span class="fc" id="L215">        return getY();</span>
     }
 
     /**
@@ -222,7 +221,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getHomZ() {
-<span class="fc" id="L225">        return mZ;</span>
+<span class="fc" id="L224">        return getZ();</span>
     }
     
     /**
@@ -231,7 +230,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getHomW() {
-<span class="fc" id="L234">        return 1.0;</span>
+<span class="fc" id="L233">        return 1.0;</span>
     }
     
     /**
@@ -246,10 +245,10 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
     public void setHomogeneousCoordinates(double homX, double homY, 
             double homZ, double homW) {
 
-<span class="fc" id="L249">        mX = homX / homW;</span>
-<span class="fc" id="L250">        mY = homY / homW;</span>
-<span class="fc" id="L251">        mZ = homZ / homW;</span>
-<span class="fc" id="L252">    }</span>
+<span class="fc" id="L248">        mX = homX / homW;</span>
+<span class="fc" id="L249">        mY = homY / homW;</span>
+<span class="fc" id="L250">        mZ = homZ / homW;</span>
+<span class="fc" id="L251">    }</span>
     
     /**
      * Returns X inhomogeneous coordinate of this 3D point.
@@ -257,7 +256,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getInhomX() {
-<span class="fc" id="L260">        return mX;</span>
+<span class="fc" id="L259">        return getX();</span>
     }
 
     /**
@@ -266,8 +265,8 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public void setInhomX(double inhomX) {
-<span class="fc" id="L269">        mX = inhomX;</span>
-<span class="fc" id="L270">    }</span>
+<span class="fc" id="L268">        mX = inhomX;</span>
+<span class="fc" id="L269">    }</span>
 
     /**
      * Returns Y inhomogeneous coordinate of this 3D point.
@@ -275,7 +274,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getInhomY() {
-<span class="fc" id="L278">        return mY;</span>
+<span class="fc" id="L277">        return getY();</span>
     }
 
     /**
@@ -284,8 +283,8 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public void setInhomY(double inhomY) {
-<span class="fc" id="L287">        mY = inhomY;</span>
-<span class="fc" id="L288">    }</span>
+<span class="fc" id="L286">        mY = inhomY;</span>
+<span class="fc" id="L287">    }</span>
 
     /**
      * Returns Z inhomogeneous coordinate of this 3D point.
@@ -293,7 +292,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public double getInhomZ() {
-<span class="fc" id="L296">        return mZ;</span>
+<span class="fc" id="L295">        return getZ();</span>
     }
 
     /**
@@ -302,8 +301,8 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public void setInhomZ(double inhomZ) {
-<span class="fc" id="L305">        mZ = inhomZ;</span>
-<span class="fc" id="L306">    }</span>
+<span class="fc" id="L304">        mZ = inhomZ;</span>
+<span class="fc" id="L305">    }</span>
 
     /**
      * Sets coordinates of this 3D point instance using provided inhomogeneous
@@ -315,8 +314,8 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
     @Override
     public void setInhomogeneousCoordinates(double inhomX, double inhomY,
         double inhomZ) {
-<span class="fc" id="L318">        setCoordinates(inhomX, inhomY, inhomZ);</span>
-<span class="fc" id="L319">    }</span>
+<span class="fc" id="L317">        setCoordinates(inhomX, inhomY, inhomZ);</span>
+<span class="fc" id="L318">    }</span>
 
     /**
      * Checks if provided object equals current 2D point.
@@ -325,15 +324,15 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-<span class="pc bpc" id="L328" title="1 of 2 branches missed.">        if (!(obj instanceof Point3D)) {</span>
-<span class="nc" id="L329">            return false;</span>
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">        if (!(obj instanceof Point3D)) {</span>
+<span class="nc" id="L328">            return false;</span>
         }
-<span class="fc bfc" id="L331" title="All 2 branches covered.">        if (obj == this) {</span>
-<span class="fc" id="L332">            return true;</span>
+<span class="fc bfc" id="L330" title="All 2 branches covered.">        if (obj == this) {</span>
+<span class="fc" id="L331">            return true;</span>
         }
         
-<span class="fc" id="L335">        Point3D point = (Point3D)obj;</span>
-<span class="fc" id="L336">        return equals(point);</span>
+<span class="fc" id="L334">        Point3D point = (Point3D)obj;</span>
+<span class="fc" id="L335">        return equals(point);</span>
     }
 
     /**
@@ -342,7 +341,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public int hashCode() {
-<span class="nc" id="L345">        return Objects.hash(mX, mY, mZ);</span>
+<span class="nc" id="L344">        return Objects.hash(mX, mY, mZ);</span>
     }
     
     /**
@@ -358,15 +357,14 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */    
     @Override
-    public boolean equals(Point3D point, double threshold) 
-            throws IllegalArgumentException {
+    public boolean equals(Point3D point, double threshold) {
         
-<span class="fc bfc" id="L364" title="All 2 branches covered.">        switch (point.getType()) {</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">        switch (point.getType()) {</span>
             case INHOMOGENEOUS_COORDINATES:
-<span class="fc" id="L366">                return equals((InhomogeneousPoint3D)point, threshold);</span>
+<span class="fc" id="L364">                return equals((InhomogeneousPoint3D)point, threshold);</span>
             case HOMOGENEOUS_COORDINATES:
             default:
-<span class="fc" id="L369">                return equals((HomogeneousPoint3D)point, threshold);</span>
+<span class="fc" id="L367">                return equals((HomogeneousPoint3D)point, threshold);</span>
         }
     }
 
@@ -382,18 +380,17 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public boolean equals(HomogeneousPoint3D point, double threshold)
-        throws IllegalArgumentException {
+    public boolean equals(HomogeneousPoint3D point, double threshold) {
         
-<span class="fc bfc" id="L388" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L389">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L385" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L386">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc bfc" id="L392" title="All 2 branches covered.">        boolean dX = Math.abs((point.getX() / point.getW()) - mX) &lt;= threshold;</span>
-<span class="fc bfc" id="L393" title="All 2 branches covered.">        boolean dY = Math.abs((point.getY() / point.getW()) - mY) &lt;= threshold;</span>
-<span class="fc bfc" id="L394" title="All 2 branches covered.">        boolean dZ = Math.abs((point.getZ() / point.getW()) - mZ) &lt;= threshold;</span>
+<span class="fc bfc" id="L389" title="All 2 branches covered.">        boolean dX = Math.abs((point.getX() / point.getW()) - mX) &lt;= threshold;</span>
+<span class="fc bfc" id="L390" title="All 2 branches covered.">        boolean dY = Math.abs((point.getY() / point.getW()) - mY) &lt;= threshold;</span>
+<span class="fc bfc" id="L391" title="All 2 branches covered.">        boolean dZ = Math.abs((point.getZ() / point.getW()) - mZ) &lt;= threshold;</span>
 
-<span class="pc bpc" id="L396" title="1 of 6 branches missed.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
+<span class="pc bpc" id="L393" title="1 of 6 branches missed.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
     }
 
     /**
@@ -404,7 +401,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * otherwise
      */    
     public boolean equals(HomogeneousPoint3D point) {
-<span class="nc" id="L407">       return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="nc" id="L404">       return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
     }
     
     /**
@@ -419,18 +416,17 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */    
-    public boolean equals(InhomogeneousPoint3D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean equals(InhomogeneousPoint3D point, double threshold) {
         
-<span class="fc bfc" id="L425" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L426">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L421" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L422">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc bfc" id="L429" title="All 2 branches covered.">        boolean dX = Math.abs(point.getX() - mX) &lt;= threshold;</span>
-<span class="fc bfc" id="L430" title="All 2 branches covered.">        boolean dY = Math.abs(point.getY() - mY) &lt;= threshold;</span>
-<span class="fc bfc" id="L431" title="All 2 branches covered.">        boolean dZ = Math.abs(point.getZ() - mZ) &lt;= threshold;</span>
+<span class="fc bfc" id="L425" title="All 2 branches covered.">        boolean dX = Math.abs(point.getX() - mX) &lt;= threshold;</span>
+<span class="fc bfc" id="L426" title="All 2 branches covered.">        boolean dY = Math.abs(point.getY() - mY) &lt;= threshold;</span>
+<span class="fc bfc" id="L427" title="All 2 branches covered.">        boolean dZ = Math.abs(point.getZ() - mZ) &lt;= threshold;</span>
         
-<span class="fc bfc" id="L433" title="All 6 branches covered.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
+<span class="fc bfc" id="L429" title="All 6 branches covered.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
     }
 
     /**
@@ -441,7 +437,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * otherwise.
      */        
     public boolean equals(InhomogeneousPoint3D point) {
-<span class="nc" id="L444">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="nc" id="L440">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
     }
     
     /**
@@ -450,9 +446,9 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */        
     @Override
     public boolean isAtInfinity() {
-<span class="fc bfc" id="L453" title="All 4 branches covered.">        return (Double.isInfinite(mX) || Double.isNaN(mX) || </span>
-<span class="fc bfc" id="L454" title="All 4 branches covered.">                Double.isInfinite(mY) || Double.isNaN(mY) ||</span>
-<span class="fc bfc" id="L455" title="All 4 branches covered.">                Double.isInfinite(mZ) || Double.isNaN(mZ));</span>
+<span class="fc bfc" id="L449" title="All 4 branches covered.">        return (Double.isInfinite(mX) || Double.isNaN(mX) || </span>
+<span class="fc bfc" id="L450" title="All 4 branches covered.">                Double.isInfinite(mY) || Double.isNaN(mY) ||</span>
+<span class="fc bfc" id="L451" title="All 4 branches covered.">                Double.isInfinite(mZ) || Double.isNaN(mZ));</span>
     }
     
     /**
@@ -461,7 +457,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */    
     @Override
     public CoordinatesType getType() {
-<span class="fc" id="L464">        return CoordinatesType.INHOMOGENEOUS_COORDINATES;</span>
+<span class="fc" id="L460">        return CoordinatesType.INHOMOGENEOUS_COORDINATES;</span>
     }
     
     /**
@@ -470,7 +466,7 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * @return Converts and returns this point as an homogeneous 3D point.
      */
     public HomogeneousPoint3D toHomogeneous() {
-<span class="fc" id="L473">        return new HomogeneousPoint3D(mX, mY, mZ, 1.0);</span>
+<span class="fc" id="L469">        return new HomogeneousPoint3D(mX, mY, mZ, 1.0);</span>
     }
     
     /**
@@ -479,9 +475,9 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      */    
     @Override
     public double[] asArray() {
-<span class="fc" id="L482">        double[] out = new double[POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];</span>
-<span class="fc" id="L483">        asArray(out);</span>
-<span class="fc" id="L484">        return out;</span>
+<span class="fc" id="L478">        double[] out = new double[POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];</span>
+<span class="fc" id="L479">        asArray(out);</span>
+<span class="fc" id="L480">        return out;</span>
     }     
     
     /**
@@ -490,12 +486,12 @@ public class InhomogeneousPoint3D extends Point3D implements Serializable {
      * @throws IllegalArgumentException Raised if length of array is not 2.
      */
     @Override
-    public void asArray(double[] array) throws IllegalArgumentException {
-<span class="pc bpc" id="L494" title="1 of 2 branches missed.">        if(array.length != POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) </span>
-<span class="nc" id="L495">            throw new IllegalArgumentException();</span>
-<span class="fc" id="L496">        array[0] = mX;</span>
-<span class="fc" id="L497">        array[1] = mY;</span>
-<span class="fc" id="L498">        array[2] = mZ;</span>
-<span class="fc" id="L499">    }    </span>
+    public void asArray(double[] array) {
+<span class="pc bpc" id="L490" title="1 of 2 branches missed.">        if(array.length != POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) </span>
+<span class="nc" id="L491">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L492">        array[0] = mX;</span>
+<span class="fc" id="L493">        array[1] = mY;</span>
+<span class="fc" id="L494">        array[2] = mZ;</span>
+<span class="fc" id="L495">    }    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

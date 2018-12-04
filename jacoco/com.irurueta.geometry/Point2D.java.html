@@ -69,7 +69,7 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      * not valid.
      */
     public static Point2D create(CoordinatesType coordinatesType,
-            double[] v) throws IllegalArgumentException {
+            double[] v) {
 <span class="fc bfc" id="L73" title="All 2 branches covered.">        switch (coordinatesType) {</span>
             case INHOMOGENEOUS_COORDINATES:
 <span class="fc" id="L75">                return new InhomogeneousPoint2D(v);</span>
@@ -90,7 +90,7 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      * @throws IllegalArgumentException Raised if the size of provided array
      * is not valid.
      */
-    public static Point2D create(double[] v) throws IllegalArgumentException {
+    public static Point2D create(double[] v) {
 <span class="fc" id="L94">        return create(DEFAULT_COORDINATES_TYPE, v);</span>
     }
     
@@ -130,8 +130,7 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      * @param array Array where coordinates will be stored.
      * @throws IllegalArgumentException Raised if length of array is not valid.
      */
-    public abstract void asArray(double[] array) 
-            throws IllegalArgumentException;
+    public abstract void asArray(double[] array);
     
     /**
      * Sets the coordinates of a 2d point using an array containing its
@@ -140,8 +139,7 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      * @throws IllegalArgumentException Raised if provided array does not have
      * a valid size.
      */
-    public abstract void setCoordinates(double[] v) 
-            throws IllegalArgumentException;
+    public abstract void setCoordinates(double[] v);
     
     /**
      * Sets coordinates of this instance using the coordinates of provided 2D 
@@ -221,8 +219,7 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      * otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public abstract boolean equals(Point2D point, double threshold)
-            throws IllegalArgumentException;
+    public abstract boolean equals(Point2D point, double threshold);
     
     /**
      * Checks if the 2d point described by this class equals the input Point2d
@@ -232,7 +229,7 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      * otherwise.
      */    
     public boolean equals(Point2D point) {
-<span class="fc" id="L235">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="fc" id="L232">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
     }
 
     /**
@@ -242,15 +239,15 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      */
     @Override
     public boolean equals(Object obj) {
-<span class="nc bnc" id="L245" title="All 2 branches missed.">        if (!(obj instanceof Point2D)) {</span>
-<span class="nc" id="L246">            return false;</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        if (!(obj instanceof Point2D)) {</span>
+<span class="nc" id="L243">            return false;</span>
         }
-<span class="nc bnc" id="L248" title="All 2 branches missed.">        if (obj == this) {</span>
-<span class="nc" id="L249">            return true;</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">        if (obj == this) {</span>
+<span class="nc" id="L246">            return true;</span>
         }
         
-<span class="nc" id="L252">        Point2D point = (Point2D)obj;</span>
-<span class="nc" id="L253">        return equals(point);</span>
+<span class="nc" id="L249">        Point2D point = (Point2D)obj;</span>
+<span class="nc" id="L250">        return equals(point);</span>
     }
     
     /**
@@ -260,7 +257,7 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      */
     @Override
     public int hashCode() {
-<span class="nc" id="L263">        return 3;</span>
+<span class="nc" id="L260">        return 3;</span>
     }
     
     /**
@@ -280,7 +277,7 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      * 2d points, otherwise it has no effect.
      * This method is meant to be overridden.
      */
-<span class="fc" id="L283">    public void normalize() { }</span>
+<span class="fc" id="L280">    public void normalize() { }</span>
     
     /**
      * Returns boolean indicating whether this point has already been 
@@ -290,7 +287,7 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      * @return True if normalized, false otherwise.
      */
     public boolean isNormalized() {
-<span class="nc" id="L293">        return true;</span>
+<span class="nc" id="L290">        return true;</span>
     }
 
     /**
@@ -299,7 +296,7 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      */
     @Override
     public int getDimensions() {
-<span class="fc" id="L302">        return POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH;</span>
+<span class="fc" id="L299">        return POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH;</span>
     }
 
     /**
@@ -309,17 +306,17 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      * @throws IllegalArgumentException if provided dimension value is negative or exceeds number of dimensions.
      */
     @Override
-    public double getInhomogeneousCoordinate(int dim) throws IllegalArgumentException {
-<span class="fc bfc" id="L313" title="All 4 branches covered.">        if (dim &lt; 0 || dim &gt;= getDimensions()) {</span>
-<span class="fc" id="L314">            throw new IllegalArgumentException();</span>
+    public double getInhomogeneousCoordinate(int dim) {
+<span class="fc bfc" id="L310" title="All 4 branches covered.">        if (dim &lt; 0 || dim &gt;= getDimensions()) {</span>
+<span class="fc" id="L311">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc bfc" id="L317" title="All 2 branches covered.">        switch (dim) {</span>
+<span class="fc bfc" id="L314" title="All 2 branches covered.">        switch (dim) {</span>
             case 0:
-<span class="fc" id="L319">                return getInhomX();</span>
+<span class="fc" id="L316">                return getInhomX();</span>
             case 1:
             default:
-<span class="fc" id="L322">                return getInhomY();</span>
+<span class="fc" id="L319">                return getInhomY();</span>
         }
     }
 
@@ -330,20 +327,18 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      * @throws IllegalArgumentException if provided dimension value is negative or exceeds number of dimensions.
      */
     @Override
-    public void setInhomogeneousCoordinate(int dim, double value) throws IllegalArgumentException {
-<span class="fc bfc" id="L334" title="All 4 branches covered.">        if (dim &lt; 0 || dim &gt;= getDimensions()) {</span>
-<span class="fc" id="L335">            throw new IllegalArgumentException();</span>
-        }
-
-<span class="pc bpc" id="L338" title="1 of 3 branches missed.">        switch (dim) {</span>
+    public void setInhomogeneousCoordinate(int dim, double value) {
+<span class="fc bfc" id="L331" title="All 3 branches covered.">        switch (dim) {</span>
             case 0:
-<span class="fc" id="L340">                setInhomX(value);</span>
-<span class="fc" id="L341">                break;</span>
+<span class="fc" id="L333">                setInhomX(value);</span>
+<span class="fc" id="L334">                break;</span>
             case 1:
-<span class="fc" id="L343">                setInhomY(value);</span>
-                break;
+<span class="fc" id="L336">                setInhomY(value);</span>
+<span class="fc" id="L337">                break;</span>
+            default:
+<span class="fc" id="L339">                throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L346">    }</span>
+<span class="fc" id="L341">    }</span>
 
     /**
      * Returns euclidian distance between this point and provided point.
@@ -352,7 +347,7 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      */
     @Override
     public double distanceTo(Point2D point) {
-<span class="fc" id="L355">        return Math.sqrt(sqrDistanceTo(point));</span>
+<span class="fc" id="L350">        return Math.sqrt(sqrDistanceTo(point));</span>
     }
 
     /**
@@ -362,10 +357,10 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      */
     @Override
     public double sqrDistanceTo(Point2D point) {
-<span class="fc" id="L365">        double diffX = getInhomX() - point.getInhomX();</span>
-<span class="fc" id="L366">        double diffY = getInhomY() - point.getInhomY();</span>
+<span class="fc" id="L360">        double diffX = getInhomX() - point.getInhomX();</span>
+<span class="fc" id="L361">        double diffY = getInhomY() - point.getInhomY();</span>
 
-<span class="fc" id="L368">        return diffX * diffX + diffY * diffY;</span>
+<span class="fc" id="L363">        return diffX * diffX + diffY * diffY;</span>
     }
 
     
@@ -377,22 +372,22 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      */    
     public double dotProduct(Point2D point) {
         
-<span class="fc" id="L380">        double thisHomX = getHomX();</span>
-<span class="fc" id="L381">        double thisHomY = getHomY();</span>
-<span class="fc" id="L382">        double thisHomW = getHomW();</span>
-<span class="fc" id="L383">        double otherHomX = point.getHomX();</span>
-<span class="fc" id="L384">        double otherHomY = point.getHomY();</span>
-<span class="fc" id="L385">        double otherHomW = point.getHomW();</span>
+<span class="fc" id="L375">        double thisHomX = getHomX();</span>
+<span class="fc" id="L376">        double thisHomY = getHomY();</span>
+<span class="fc" id="L377">        double thisHomW = getHomW();</span>
+<span class="fc" id="L378">        double otherHomX = point.getHomX();</span>
+<span class="fc" id="L379">        double otherHomY = point.getHomY();</span>
+<span class="fc" id="L380">        double otherHomW = point.getHomW();</span>
         
-<span class="fc" id="L387">        double thisNormSqr = thisHomX * thisHomX + thisHomY * thisHomY +</span>
+<span class="fc" id="L382">        double thisNormSqr = thisHomX * thisHomX + thisHomY * thisHomY +</span>
                 thisHomW * thisHomW;
-<span class="fc" id="L389">        double otherNormSqr = otherHomX * otherHomX + otherHomY * otherHomY +</span>
+<span class="fc" id="L384">        double otherNormSqr = otherHomX * otherHomX + otherHomY * otherHomY +</span>
                 otherHomW * otherHomW;
-<span class="fc" id="L391">        double denom = Math.sqrt(thisNormSqr * otherNormSqr);</span>
-<span class="fc" id="L392">        double num = thisHomX * otherHomX + thisHomY * otherHomY +</span>
+<span class="fc" id="L386">        double denom = Math.sqrt(thisNormSqr * otherNormSqr);</span>
+<span class="fc" id="L387">        double num = thisHomX * otherHomX + thisHomY * otherHomY +</span>
                 thisHomW * otherHomW;
         
-<span class="fc" id="L395">        return num / denom;</span>
+<span class="fc" id="L390">        return num / denom;</span>
     }    
     
     /**
@@ -403,7 +398,7 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      * @return True if point is between point1 and point2, false otherwise.
      */
     public boolean isBetween(Point2D point1, Point2D point2) {
-<span class="fc" id="L406">        return isBetween(point1, point2, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="fc" id="L401">        return isBetween(point1, point2, DEFAULT_COMPARISON_THRESHOLD);</span>
     }
 
     /**
@@ -414,16 +409,15 @@ public abstract class Point2D implements Serializable, Point&lt;Point2D&gt; {
      * @param threshold Threshold to determine if point is between.
      * @return True if point is between point1 and point2, false otherwise.
      */    
-    public boolean isBetween(Point2D point1, Point2D point2, double threshold)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L419" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L420">            throw new IllegalArgumentException();</span>
+    public boolean isBetween(Point2D point1, Point2D point2, double threshold) {
+<span class="fc bfc" id="L413" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L414">            throw new IllegalArgumentException();</span>
         }
         //If this point is between point1 and point2 then,
         //dist(point1,this) + dist(point2, this) == dist(point1,point2) except
         //for some small difference due to machine precision
-<span class="fc bfc" id="L425" title="All 2 branches covered.">        return Math.abs(distanceTo(point1) + distanceTo(point2) - </span>
-<span class="fc" id="L426">                point1.distanceTo(point2)) &lt;= threshold;</span>
+<span class="fc bfc" id="L419" title="All 2 branches covered.">        return Math.abs(distanceTo(point1) + distanceTo(point2) - </span>
+<span class="fc" id="L420">                point1.distanceTo(point2)) &lt;= threshold;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

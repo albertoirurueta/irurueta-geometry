@@ -60,11 +60,10 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      * @param rotation a 3D rotation.
      * @throws NullPointerException raised if provided rotation is null.
      */
-    public MetricTransformation3D(Rotation3D rotation)
-            throws NullPointerException {
-<span class="fc" id="L65">        super(rotation);</span>
-<span class="fc" id="L66">        scale = DEFAULT_SCALE;</span>
-<span class="fc" id="L67">    }</span>
+    public MetricTransformation3D(Rotation3D rotation) {
+<span class="fc" id="L64">        super(rotation);</span>
+<span class="fc" id="L65">        scale = DEFAULT_SCALE;</span>
+<span class="fc" id="L66">    }</span>
     
     /**
      * Creates transformation with provided 3D translation.
@@ -74,11 +73,10 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      * @throws IllegalArgumentException raised if length of array is not equal 
      * to NUM_TRANSLATION_COORDS.
      */
-    public MetricTransformation3D(double[] translation)
-            throws NullPointerException, IllegalArgumentException {
-<span class="fc" id="L79">        super(translation);</span>
-<span class="fc" id="L80">        scale = DEFAULT_SCALE;</span>
-<span class="fc" id="L81">    }</span>
+    public MetricTransformation3D(double[] translation) {
+<span class="fc" id="L77">        super(translation);</span>
+<span class="fc" id="L78">        scale = DEFAULT_SCALE;</span>
+<span class="fc" id="L79">    }</span>
     
     /**
      * Creates transformation with provided scale value.
@@ -87,9 +85,9 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      * objects.
      */
     public MetricTransformation3D(double scale) {
-<span class="fc" id="L90">        super();</span>
-<span class="fc" id="L91">        this.scale = scale;</span>
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L88">        super();</span>
+<span class="fc" id="L89">        this.scale = scale;</span>
+<span class="fc" id="L90">    }</span>
     
     /**
      * Creates transformation with provided rotation, translation and scale 
@@ -106,11 +104,10 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      * to NUM_TRANSLATION_COORDS.
      */
     public MetricTransformation3D(Rotation3D rotation, double[] translation,
-            double scale) throws NullPointerException, 
-            IllegalArgumentException {
-<span class="fc" id="L111">        super(rotation, translation);</span>
-<span class="fc" id="L112">        this.scale = scale;</span>
-<span class="fc" id="L113">    }</span>
+            double scale) {
+<span class="fc" id="L108">        super(rotation, translation);</span>
+<span class="fc" id="L109">        this.scale = scale;</span>
+<span class="fc" id="L110">    }</span>
     
     /**
      * Creates transformation by estimating its internal values using provided 4
@@ -134,11 +131,11 @@ public class MetricTransformation3D extends EuclideanTransformation3D
     public MetricTransformation3D(Point3D inputPoint1, Point3D inputPoint2,
             Point3D inputPoint3, Point3D inputPoint4, Point3D outputPoint1,
             Point3D outputPoint2, Point3D outputPoint3, Point3D outputPoint4) 
-<span class="fc" id="L137">            throws CoincidentPointsException {</span>
-<span class="fc" id="L138">        internalSetTransformationFromPoints(inputPoint1, inputPoint2, </span>
+<span class="fc" id="L134">            throws CoincidentPointsException {</span>
+<span class="fc" id="L135">        internalSetTransformationFromPoints(inputPoint1, inputPoint2, </span>
                 inputPoint3, inputPoint4, outputPoint1, outputPoint2, 
                 outputPoint3, outputPoint4);
-<span class="fc" id="L141">    }</span>
+<span class="fc" id="L138">    }</span>
     
     /**
      * Returns scale of this transformation.
@@ -148,7 +145,7 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      * @return scale.
      */
     public double getScale() {
-<span class="fc" id="L151">        return scale;</span>
+<span class="fc" id="L148">        return scale;</span>
     }
     
     /**
@@ -159,8 +156,8 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      * will be reversed.
      */
     public void setScale(double scale) {
-<span class="fc" id="L162">        this.scale = scale;</span>
-<span class="fc" id="L163">    }</span>
+<span class="fc" id="L159">        this.scale = scale;</span>
+<span class="fc" id="L160">    }</span>
     
     /**
      * Represents this transformation as a 4x4 matrix and stores the result in
@@ -170,28 +167,28 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      * matrix.
      */
     @Override
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
-<span class="pc bpc" id="L174" title="1 of 4 branches missed.">        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {</span>
-<span class="fc" id="L175">            throw new IllegalArgumentException();</span>
+    public void asMatrix(Matrix m) {
+<span class="pc bpc" id="L171" title="1 of 4 branches missed.">        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {</span>
+<span class="fc" id="L172">            throw new IllegalArgumentException();</span>
         }
         
         //set rotation        
-<span class="fc" id="L179">        Matrix rot = getRotation().asInhomogeneousMatrix();</span>
-<span class="fc" id="L180">        rot.multiplyByScalar(scale);</span>
+<span class="fc" id="L176">        Matrix rot = getRotation().asInhomogeneousMatrix();</span>
+<span class="fc" id="L177">        rot.multiplyByScalar(scale);</span>
         
-<span class="fc" id="L182">        m.setSubmatrix(0, 0, </span>
+<span class="fc" id="L179">        m.setSubmatrix(0, 0, </span>
                 Rotation3D.INHOM_COORDS - 1, 
                 Rotation3D.INHOM_COORDS - 1, rot);
 
-<span class="fc" id="L186">        double[] translation = getTranslation();</span>
+<span class="fc" id="L183">        double[] translation = getTranslation();</span>
         
         //set translation
-<span class="fc" id="L189">        m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
+<span class="fc" id="L186">        m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
                 HOM_COORDS - 1, translation);
         
         //set last element
-<span class="fc" id="L193">        m.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);        </span>
-<span class="fc" id="L194">    }</span>
+<span class="fc" id="L190">        m.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);        </span>
+<span class="fc" id="L191">    }</span>
     
     /**
      * Transforms input point using this transformation and stores the result in
@@ -201,24 +198,24 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      */
     @Override
     public void transform(Point3D inputPoint, Point3D outputPoint) {
-<span class="fc" id="L204">        inputPoint.normalize();</span>
-<span class="fc" id="L205">        getRotation().rotate(inputPoint, outputPoint);</span>
+<span class="fc" id="L201">        inputPoint.normalize();</span>
+<span class="fc" id="L202">        getRotation().rotate(inputPoint, outputPoint);</span>
         
-<span class="fc" id="L207">        double[] translation = getTranslation();</span>
+<span class="fc" id="L204">        double[] translation = getTranslation();</span>
         
-<span class="fc" id="L209">        outputPoint.setInhomogeneousCoordinates(</span>
-<span class="fc" id="L210">                scale * outputPoint.getInhomX() + translation[0], </span>
-<span class="fc" id="L211">                scale * outputPoint.getInhomY() + translation[1], </span>
-<span class="fc" id="L212">                scale * outputPoint.getInhomZ() + translation[2]);</span>
-<span class="fc" id="L213">    }</span>
+<span class="fc" id="L206">        outputPoint.setInhomogeneousCoordinates(</span>
+<span class="fc" id="L207">                scale * outputPoint.getInhomX() + translation[0], </span>
+<span class="fc" id="L208">                scale * outputPoint.getInhomY() + translation[1], </span>
+<span class="fc" id="L209">                scale * outputPoint.getInhomZ() + translation[2]);</span>
+<span class="fc" id="L210">    }</span>
 
     /**
      * Inverses this transformation.
      */
     @Override
     public void inverse() {
-<span class="fc" id="L220">        inverse(this);</span>
-<span class="fc" id="L221">    }</span>
+<span class="fc" id="L217">        inverse(this);</span>
+<span class="fc" id="L218">    }</span>
     
     /**
      * Computes the inverse of this transformation and returns the result as a
@@ -227,9 +224,9 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      */
     @Override
     public Transformation3D inverseAndReturnNew() {
-<span class="fc" id="L230">        MetricTransformation3D result = new MetricTransformation3D();</span>
-<span class="fc" id="L231">        inverse(result);</span>
-<span class="fc" id="L232">        return result;</span>
+<span class="fc" id="L227">        MetricTransformation3D result = new MetricTransformation3D();</span>
+<span class="fc" id="L228">        inverse(result);</span>
+<span class="fc" id="L229">        return result;</span>
     }    
     
     /**
@@ -242,12 +239,12 @@ public class MetricTransformation3D extends EuclideanTransformation3D
         //Then inverse transformation is: (1/s)*R* x' = (1/s) * R' * s * R * x +
         //(1/s) * R'*t = x + (1/s) * R'*t
         //--&gt; x = (1/s) * R'*x' - (1/s) * R'*t
-<span class="fc" id="L245">        super.inverse(result);</span>
-<span class="fc" id="L246">        double[] translation = result.getTranslation();</span>
-<span class="fc" id="L247">        double invScale = 1.0 / scale;</span>
-<span class="fc" id="L248">        ArrayUtils.multiplyByScalar(translation, invScale, translation);</span>
-<span class="fc" id="L249">        result.scale = invScale;</span>
-<span class="fc" id="L250">    }</span>
+<span class="fc" id="L242">        super.inverse(result);</span>
+<span class="fc" id="L243">        double[] translation = result.getTranslation();</span>
+<span class="fc" id="L244">        double invScale = 1.0 / scale;</span>
+<span class="fc" id="L245">        ArrayUtils.multiplyByScalar(translation, invScale, translation);</span>
+<span class="fc" id="L246">        result.scale = invScale;</span>
+<span class="fc" id="L247">    }</span>
     
     /**
      * Converts this transformation into a metric transformation.
@@ -257,7 +254,7 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      */
     @Override
     public MetricTransformation3D toMetric() {
-<span class="fc" id="L260">        return new MetricTransformation3D(getRotation(), getTranslation(), </span>
+<span class="fc" id="L257">        return new MetricTransformation3D(getRotation(), getTranslation(), </span>
                 scale);
     }
     
@@ -266,8 +263,8 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      * @return this transformation converted into an affine transformation.
      */
     public AffineTransformation3D toAffine() {
-<span class="fc" id="L269">        return new AffineTransformation3D(scale, getRotation(), </span>
-<span class="fc" id="L270">                getTranslation());</span>
+<span class="fc" id="L266">        return new AffineTransformation3D(scale, getRotation(), </span>
+<span class="fc" id="L267">                getTranslation());</span>
     }    
     
     /**
@@ -278,8 +275,8 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      */
     @Override
     public void combine(EuclideanTransformation3D transformation) {
-<span class="fc" id="L281">        combine(transformation.toMetric(), this);</span>
-<span class="fc" id="L282">    }</span>
+<span class="fc" id="L278">        combine(transformation.toMetric(), this);</span>
+<span class="fc" id="L279">    }</span>
     
     /**
      * Combines this transformation with provided transformation and returns
@@ -294,9 +291,9 @@ public class MetricTransformation3D extends EuclideanTransformation3D
     public MetricTransformation3D combineAndReturnNew(
             EuclideanTransformation3D transformation) {
         
-<span class="fc" id="L297">        MetricTransformation3D result = new MetricTransformation3D();</span>
-<span class="fc" id="L298">        combine(transformation.toMetric(), result);</span>
-<span class="fc" id="L299">        return result;</span>
+<span class="fc" id="L294">        MetricTransformation3D result = new MetricTransformation3D();</span>
+<span class="fc" id="L295">        combine(transformation.toMetric(), result);</span>
+<span class="fc" id="L296">        return result;</span>
     }
     
     /**
@@ -306,8 +303,8 @@ public class MetricTransformation3D extends EuclideanTransformation3D
      * @param transformation transformation to be combined with.
      */
     public void combine(MetricTransformation3D transformation) {
-<span class="fc" id="L309">        combine(transformation, this);</span>
-<span class="fc" id="L310">    }</span>
+<span class="fc" id="L306">        combine(transformation, this);</span>
+<span class="fc" id="L307">    }</span>
     
     /**
      * Combines this transformation with provided transformation and returns
@@ -321,9 +318,9 @@ public class MetricTransformation3D extends EuclideanTransformation3D
     public MetricTransformation3D combineAndReturnNew(
             MetricTransformation3D transformation) {
         
-<span class="fc" id="L324">        MetricTransformation3D result = new MetricTransformation3D();</span>
-<span class="fc" id="L325">        combine(transformation, result);</span>
-<span class="fc" id="L326">        return result;</span>
+<span class="fc" id="L321">        MetricTransformation3D result = new MetricTransformation3D();</span>
+<span class="fc" id="L322">        combine(transformation, result);</span>
+<span class="fc" id="L323">        return result;</span>
     }
     
     /**
@@ -350,10 +347,10 @@ public class MetricTransformation3D extends EuclideanTransformation3D
             Point3D inputPoint2, Point3D inputPoint3, Point3D inputPoint4,
             Point3D outputPoint1, Point3D outputPoint2, Point3D outputPoint3,
             Point3D outputPoint4) throws CoincidentPointsException {
-<span class="fc" id="L353">        internalSetTransformationFromPoints(inputPoint1, inputPoint2, </span>
+<span class="fc" id="L350">        internalSetTransformationFromPoints(inputPoint1, inputPoint2, </span>
                 inputPoint3, inputPoint4, outputPoint1, outputPoint2, 
                 outputPoint3, outputPoint4);
-<span class="fc" id="L356">    }</span>
+<span class="fc" id="L353">    }</span>
     
     /**
      * Combines this transformation with provided input transformation and 
@@ -371,23 +368,25 @@ public class MetricTransformation3D extends EuclideanTransformation3D
         
         try {
             //we do translation first, because this.rotation might change later
-<span class="fc" id="L374">            Matrix R1 = getRotation().asInhomogeneousMatrix();</span>
-<span class="fc" id="L375">            Matrix t2 = Matrix.newFromArray(inputTransformation.getTranslation(), </span>
+<span class="fc" id="L371">            Matrix r1 = getRotation().asInhomogeneousMatrix();</span>
+<span class="fc" id="L372">            Matrix t2 = Matrix.newFromArray(inputTransformation.getTranslation(), </span>
                     true);
-<span class="fc" id="L377">            R1.multiply(t2); //this is R1 * t2</span>
-<span class="fc" id="L378">            R1.multiplyByScalar(this.scale);</span>
+<span class="fc" id="L374">            r1.multiply(t2); //this is R1 * t2</span>
+<span class="fc" id="L375">            r1.multiplyByScalar(this.scale);</span>
                   
-<span class="fc" id="L380">            ArrayUtils.sum(R1.toArray(), this.getTranslation(),  </span>
-<span class="fc" id="L381">                    outputTransformation.getTranslation());</span>
+<span class="fc" id="L377">            ArrayUtils.sum(r1.toArray(), this.getTranslation(),</span>
+<span class="fc" id="L378">                    outputTransformation.getTranslation());</span>
             
-<span class="fc" id="L383">            outputTransformation.setRotation(</span>
-<span class="fc" id="L384">                    this.getRotation().combineAndReturnNew(</span>
-<span class="fc" id="L385">                    inputTransformation.getRotation()));</span>
+<span class="fc" id="L380">            outputTransformation.setRotation(</span>
+<span class="fc" id="L381">                    this.getRotation().combineAndReturnNew(</span>
+<span class="fc" id="L382">                    inputTransformation.getRotation()));</span>
             
-<span class="fc" id="L387">            outputTransformation.scale = this.scale * inputTransformation.scale;</span>
+<span class="fc" id="L384">            outputTransformation.scale = this.scale * inputTransformation.scale;</span>
         
-<span class="pc" id="L389">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L390">    }</span>
+<span class="nc" id="L386">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L388">        }</span>
+<span class="fc" id="L389">    }</span>
     
     /**
      * Estimates this transformation internal parameters by using 4 
@@ -412,27 +411,27 @@ public class MetricTransformation3D extends EuclideanTransformation3D
             Point3D inputPoint2, Point3D inputPoint3, Point3D inputPoint4,
             Point3D outputPoint1, Point3D outputPoint2, Point3D outputPoint3,
             Point3D outputPoint4) throws CoincidentPointsException {
-<span class="fc" id="L415">        List&lt;Point3D&gt; inputPoints = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L416">        inputPoints.add(inputPoint1);</span>
-<span class="fc" id="L417">        inputPoints.add(inputPoint2);</span>
-<span class="fc" id="L418">        inputPoints.add(inputPoint3);</span>
-<span class="fc" id="L419">        inputPoints.add(inputPoint4);</span>
+<span class="fc" id="L414">        List&lt;Point3D&gt; inputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L415">        inputPoints.add(inputPoint1);</span>
+<span class="fc" id="L416">        inputPoints.add(inputPoint2);</span>
+<span class="fc" id="L417">        inputPoints.add(inputPoint3);</span>
+<span class="fc" id="L418">        inputPoints.add(inputPoint4);</span>
         
-<span class="fc" id="L421">        List&lt;Point3D&gt; outputPoints = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L422">        outputPoints.add(outputPoint1);</span>
-<span class="fc" id="L423">        outputPoints.add(outputPoint2);</span>
-<span class="fc" id="L424">        outputPoints.add(outputPoint3);</span>
-<span class="fc" id="L425">        outputPoints.add(outputPoint4);</span>
+<span class="fc" id="L420">        List&lt;Point3D&gt; outputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L421">        outputPoints.add(outputPoint1);</span>
+<span class="fc" id="L422">        outputPoints.add(outputPoint2);</span>
+<span class="fc" id="L423">        outputPoints.add(outputPoint3);</span>
+<span class="fc" id="L424">        outputPoints.add(outputPoint4);</span>
         
-<span class="fc" id="L427">        MetricTransformation3DEstimator estimator =</span>
+<span class="fc" id="L426">        MetricTransformation3DEstimator estimator =</span>
                 new MetricTransformation3DEstimator(inputPoints,
                 outputPoints);
         
         try {
-<span class="fc" id="L432">            estimator.estimate(this);</span>
-<span class="nc" id="L433">        } catch (LockedException | NotReadyException ignore) {</span>
+<span class="fc" id="L431">            estimator.estimate(this);</span>
+<span class="nc" id="L432">        } catch (LockedException | NotReadyException ignore) {</span>
             //never thrown
-<span class="fc" id="L435">        }        </span>
-<span class="fc" id="L436">    }    </span>
+<span class="fc" id="L434">        }        </span>
+<span class="fc" id="L435">    }    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

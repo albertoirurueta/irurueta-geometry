@@ -138,8 +138,10 @@ public class PinholeCamera extends Camera implements Serializable {
         try {
 <span class="fc" id="L139">            mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, </span>
                     PINHOLE_CAMERA_MATRIX_COLS);
-<span class="pc" id="L141">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L142">    }</span>
+<span class="nc" id="L141">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L143">        }</span>
+<span class="fc" id="L144">    }</span>
     
     /**
      * Constructor.
@@ -148,16 +150,16 @@ public class PinholeCamera extends Camera implements Serializable {
      * @throws WrongSizeException If provided matrix is not 3x4.
      */
     public PinholeCamera(Matrix internalMatrix) throws WrongSizeException {
-<span class="fc" id="L151">        super();</span>
-<span class="fc" id="L152">        mNormalized = false;</span>
-<span class="fc" id="L153">        mCameraSignFixed = false;</span>
+<span class="fc" id="L153">        super();</span>
+<span class="fc" id="L154">        mNormalized = false;</span>
+<span class="fc" id="L155">        mCameraSignFixed = false;</span>
         
-<span class="fc" id="L155">        mIntrinsicParameters = null;</span>
-<span class="fc" id="L156">        mCameraRotation = null;</span>
-<span class="fc" id="L157">        mCameraCenter = null;</span>
+<span class="fc" id="L157">        mIntrinsicParameters = null;</span>
+<span class="fc" id="L158">        mCameraRotation = null;</span>
+<span class="fc" id="L159">        mCameraCenter = null;</span>
         
-<span class="fc" id="L159">        setInternalMatrix(internalMatrix);</span>
-<span class="fc" id="L160">    }</span>
+<span class="fc" id="L161">        setInternalMatrix(internalMatrix);</span>
+<span class="fc" id="L162">    }</span>
     
     /**
      * Constructor.
@@ -169,21 +171,23 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public PinholeCamera(PinholeCameraIntrinsicParameters intrinsicParameters,
             Rotation3D rotation, Point2D originImageCoordinates) {
-<span class="fc" id="L172">        super();</span>
-<span class="fc" id="L173">        mNormalized = false;</span>
-<span class="fc" id="L174">        mCameraSignFixed = false;</span>
+<span class="fc" id="L174">        super();</span>
+<span class="fc" id="L175">        mNormalized = false;</span>
+<span class="fc" id="L176">        mCameraSignFixed = false;</span>
         
-<span class="fc" id="L176">        mIntrinsicParameters = null;</span>
-<span class="fc" id="L177">        mCameraRotation = null;</span>
-<span class="fc" id="L178">        mCameraCenter = null;</span>
+<span class="fc" id="L178">        mIntrinsicParameters = null;</span>
+<span class="fc" id="L179">        mCameraRotation = null;</span>
+<span class="fc" id="L180">        mCameraCenter = null;</span>
         try {
-<span class="fc" id="L180">            mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, </span>
+<span class="fc" id="L182">            mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, </span>
                     PINHOLE_CAMERA_MATRIX_COLS);
-<span class="pc" id="L182">        } catch (WrongSizeException ignore) { } //this will never happen</span>
+<span class="nc" id="L184">        } catch (WrongSizeException ignore) {</span>
+            //this will never happen
+<span class="fc" id="L186">        }</span>
         
-<span class="fc" id="L184">        setIntrinsicAndExtrinsicParameters(intrinsicParameters, rotation,</span>
+<span class="fc" id="L188">        setIntrinsicAndExtrinsicParameters(intrinsicParameters, rotation,</span>
                 originImageCoordinates);
-<span class="fc" id="L186">    }</span>
+<span class="fc" id="L190">    }</span>
     
     /**
      * Constructor.
@@ -195,21 +199,23 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public PinholeCamera(PinholeCameraIntrinsicParameters intrinsicParameters,
             Rotation3D rotation, Point3D cameraCenter) {
-<span class="fc" id="L198">        super();</span>
-<span class="fc" id="L199">        mNormalized = false;</span>
-<span class="fc" id="L200">        mCameraSignFixed = false;</span>
+<span class="fc" id="L202">        super();</span>
+<span class="fc" id="L203">        mNormalized = false;</span>
+<span class="fc" id="L204">        mCameraSignFixed = false;</span>
         
-<span class="fc" id="L202">        mIntrinsicParameters = null;</span>
-<span class="fc" id="L203">        mCameraRotation = null;</span>
-<span class="fc" id="L204">        mCameraCenter = null;</span>
+<span class="fc" id="L206">        mIntrinsicParameters = null;</span>
+<span class="fc" id="L207">        mCameraRotation = null;</span>
+<span class="fc" id="L208">        mCameraCenter = null;</span>
         try {
-<span class="fc" id="L206">            mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, </span>
+<span class="fc" id="L210">            mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, </span>
                     PINHOLE_CAMERA_MATRIX_COLS);
-<span class="pc" id="L208">        } catch (WrongSizeException ignore) { } //this will never happen</span>
+<span class="nc" id="L212">        } catch (WrongSizeException ignore) {</span>
+            //this will never happen
+<span class="fc" id="L214">        }</span>
         
-<span class="fc" id="L210">        setIntrinsicAndExtrinsicParameters(intrinsicParameters, rotation, </span>
+<span class="fc" id="L216">        setIntrinsicAndExtrinsicParameters(intrinsicParameters, rotation, </span>
                 cameraCenter);
-<span class="fc" id="L212">    }</span>
+<span class="fc" id="L218">    }</span>
     
     /**
      * Creates an instance of a pinhole camera by estimating its parameters from
@@ -240,23 +246,25 @@ public class PinholeCamera extends Camera implements Serializable {
             Point3D point3D5, Point3D point3D6, Point2D point2D1, 
             Point2D point2D2, Point2D point2D3, Point2D point2D4, 
             Point2D point2D5, Point2D point2D6) throws CameraException {
-<span class="fc" id="L243">        super();</span>
-<span class="fc" id="L244">        mNormalized = false;</span>
-<span class="fc" id="L245">        mCameraSignFixed = false;</span>
+<span class="fc" id="L249">        super();</span>
+<span class="fc" id="L250">        mNormalized = false;</span>
+<span class="fc" id="L251">        mCameraSignFixed = false;</span>
         
-<span class="fc" id="L247">        mIntrinsicParameters = null;</span>
-<span class="fc" id="L248">        mCameraRotation = null;</span>
-<span class="fc" id="L249">        mCameraCenter = null;</span>
+<span class="fc" id="L253">        mIntrinsicParameters = null;</span>
+<span class="fc" id="L254">        mCameraRotation = null;</span>
+<span class="fc" id="L255">        mCameraCenter = null;</span>
         
         try {
-<span class="fc" id="L252">            mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, </span>
+<span class="fc" id="L258">            mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, </span>
                     PINHOLE_CAMERA_MATRIX_COLS);
-<span class="pc" id="L254">        } catch (WrongSizeException ignore) { }</span>
+<span class="nc" id="L260">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L262">        }</span>
 
-<span class="fc" id="L256">        setFromPointCorrespondences(point3D1, point3D2, point3D3, point3D4, </span>
+<span class="fc" id="L264">        setFromPointCorrespondences(point3D1, point3D2, point3D3, point3D4, </span>
                 point3D5, point3D6, point2D1, point2D2, point2D3, point2D4, 
                 point2D5, point2D6);
-<span class="fc" id="L259">    }</span>
+<span class="fc" id="L267">    }</span>
     
     /**
      * Creates an instance of a pinhole camera by estimating its parameters from
@@ -275,22 +283,24 @@ public class PinholeCamera extends Camera implements Serializable {
     public PinholeCamera(Plane plane1, Plane plane2, Plane plane3, Plane plane4, 
             Line2D line1, Line2D line2, Line2D line3, Line2D line4) 
             throws CameraException {
-<span class="fc" id="L278">        super();</span>
-<span class="fc" id="L279">        mNormalized = false;</span>
-<span class="fc" id="L280">        mCameraSignFixed = false;</span>
+<span class="fc" id="L286">        super();</span>
+<span class="fc" id="L287">        mNormalized = false;</span>
+<span class="fc" id="L288">        mCameraSignFixed = false;</span>
         
-<span class="fc" id="L282">        mIntrinsicParameters = null;</span>
-<span class="fc" id="L283">        mCameraRotation = null;</span>
-<span class="fc" id="L284">        mCameraCenter = null;</span>
+<span class="fc" id="L290">        mIntrinsicParameters = null;</span>
+<span class="fc" id="L291">        mCameraRotation = null;</span>
+<span class="fc" id="L292">        mCameraCenter = null;</span>
         
         try {
-<span class="fc" id="L287">            mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, </span>
+<span class="fc" id="L295">            mInternalMatrix = Matrix.identity(PINHOLE_CAMERA_MATRIX_ROWS, </span>
                     PINHOLE_CAMERA_MATRIX_COLS);
-<span class="pc" id="L289">        } catch (WrongSizeException ignore) { }</span>
+<span class="nc" id="L297">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L299">        }</span>
 
-<span class="fc" id="L291">        setFromLineAndPlaneCorrespondences(plane1, plane2, plane3, plane4, </span>
+<span class="fc" id="L301">        setFromLineAndPlaneCorrespondences(plane1, plane2, plane3, plane4, </span>
                 line1, line2, line3, line4);
-<span class="fc" id="L293">    }</span>
+<span class="fc" id="L303">    }</span>
     
         
     /**
@@ -301,29 +311,31 @@ public class PinholeCamera extends Camera implements Serializable {
     @Override
     public void project(Point3D inputPoint, Point2D result) {
         //convert input point to homogeneous and normalize to increase accuracy
-<span class="fc" id="L304">        HomogeneousPoint3D point3D = new HomogeneousPoint3D(inputPoint);</span>
-<span class="fc" id="L305">        point3D.normalize();</span>
+<span class="fc" id="L314">        HomogeneousPoint3D point3D = new HomogeneousPoint3D(inputPoint);</span>
+<span class="fc" id="L315">        point3D.normalize();</span>
         //normalize this camera to increase accuracy
-<span class="fc" id="L307">        normalize();</span>
+<span class="fc" id="L317">        normalize();</span>
         
         try {
             //copy point3D coordinates in a matrix
-<span class="fc" id="L311">            Matrix M = new Matrix(</span>
+<span class="fc" id="L321">            Matrix m3D = new Matrix(</span>
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
-<span class="fc" id="L313">            M.setElementAtIndex(0, point3D.getHomX());</span>
-<span class="fc" id="L314">            M.setElementAtIndex(1, point3D.getHomY());</span>
-<span class="fc" id="L315">            M.setElementAtIndex(2, point3D.getHomZ());</span>
-<span class="fc" id="L316">            M.setElementAtIndex(3, point3D.getHomW());</span>
+<span class="fc" id="L323">            m3D.setElementAtIndex(0, point3D.getHomX());</span>
+<span class="fc" id="L324">            m3D.setElementAtIndex(1, point3D.getHomY());</span>
+<span class="fc" id="L325">            m3D.setElementAtIndex(2, point3D.getHomZ());</span>
+<span class="fc" id="L326">            m3D.setElementAtIndex(3, point3D.getHomW());</span>
             
             //make product of 3D point column matrix with pinhole camera
             //internal matrix
-<span class="fc" id="L320">            Matrix m = mInternalMatrix.multiplyAndReturnNew(M);</span>
+<span class="fc" id="L330">            Matrix m = mInternalMatrix.multiplyAndReturnNew(m3D);</span>
             
-<span class="fc" id="L322">            result.setHomogeneousCoordinates(m.getElementAtIndex(0), </span>
-<span class="fc" id="L323">                    m.getElementAtIndex(1), m.getElementAtIndex(2));</span>
-<span class="fc" id="L324">            result.normalize(); //to increase accuracy</span>
-<span class="pc" id="L325">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L326">    }</span>
+<span class="fc" id="L332">            result.setHomogeneousCoordinates(m.getElementAtIndex(0), </span>
+<span class="fc" id="L333">                    m.getElementAtIndex(1), m.getElementAtIndex(2));</span>
+<span class="fc" id="L334">            result.normalize(); //to increase accuracy</span>
+<span class="nc" id="L335">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L337">        }</span>
+<span class="fc" id="L338">    }</span>
 
     /**
      * Backprojects a line into a plane and stores the result into provided
@@ -336,26 +348,28 @@ public class PinholeCamera extends Camera implements Serializable {
     public void backProject(Line2D line, Plane result) {
         
         //normalize input line and camera to increase accuracy
-<span class="fc" id="L339">        line.normalize();</span>
-<span class="fc" id="L340">        normalize();</span>
+<span class="fc" id="L351">        line.normalize();</span>
+<span class="fc" id="L352">        normalize();</span>
         
         try {
-<span class="fc" id="L343">            Matrix l = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);</span>
-<span class="fc" id="L344">            l.setElementAtIndex(0, line.getA());</span>
-<span class="fc" id="L345">            l.setElementAtIndex(1, line.getB());</span>
-<span class="fc" id="L346">            l.setElementAtIndex(2, line.getC());</span>
+<span class="fc" id="L355">            Matrix l = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);</span>
+<span class="fc" id="L356">            l.setElementAtIndex(0, line.getA());</span>
+<span class="fc" id="L357">            l.setElementAtIndex(1, line.getB());</span>
+<span class="fc" id="L358">            l.setElementAtIndex(2, line.getC());</span>
             
             //Compute transposed of pinhole camera matrix
-<span class="fc" id="L349">            Matrix m = mInternalMatrix.transposeAndReturnNew();</span>
-<span class="fc" id="L350">            m.multiply(l); //PLANE = P^T * l</span>
+<span class="fc" id="L361">            Matrix m = mInternalMatrix.transposeAndReturnNew();</span>
+<span class="fc" id="L362">            m.multiply(l); //PLANE = P^T * l</span>
             
             //set coordinates on plane
-<span class="fc" id="L353">            result.setParameters(m.getElementAtIndex(0), </span>
-<span class="fc" id="L354">                    m.getElementAtIndex(1), m.getElementAtIndex(2), </span>
-<span class="fc" id="L355">                    m.getElementAtIndex(3));</span>
-<span class="fc" id="L356">            result.normalize(); //to increase accuracy</span>
-<span class="pc" id="L357">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L358">    }</span>
+<span class="fc" id="L365">            result.setParameters(m.getElementAtIndex(0), </span>
+<span class="fc" id="L366">                    m.getElementAtIndex(1), m.getElementAtIndex(2), </span>
+<span class="fc" id="L367">                    m.getElementAtIndex(3));</span>
+<span class="fc" id="L368">            result.normalize(); //to increase accuracy</span>
+<span class="nc" id="L369">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L371">        }</span>
+<span class="fc" id="L372">    }</span>
 
     /**
      * Backprojects provided 2D point into a 3D point and stores the result into
@@ -375,39 +389,39 @@ public class PinholeCamera extends Camera implements Serializable {
     public void backProject(Point2D point, Point3D result) 
             throws CameraException {
         //convert to homogeneous and normalize to increase accuracy
-<span class="fc" id="L378">        Point2D p = new HomogeneousPoint2D(point);</span>
-<span class="fc" id="L379">        p.normalize();</span>
+<span class="fc" id="L392">        Point2D p = new HomogeneousPoint2D(point);</span>
+<span class="fc" id="L393">        p.normalize();</span>
         //normalize camera to increase accuracy
-<span class="fc" id="L381">        normalize();</span>
+<span class="fc" id="L395">        normalize();</span>
         
         try {
-<span class="fc" id="L384">            Matrix m = new Matrix(</span>
+<span class="fc" id="L398">            Matrix m = new Matrix(</span>
                     Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
-<span class="fc" id="L386">            m.setElementAtIndex(0, p.getHomX());</span>
-<span class="fc" id="L387">            m.setElementAtIndex(1, p.getHomY());</span>
-<span class="fc" id="L388">            m.setElementAtIndex(2, p.getHomW());</span>
+<span class="fc" id="L400">            m.setElementAtIndex(0, p.getHomX());</span>
+<span class="fc" id="L401">            m.setElementAtIndex(1, p.getHomY());</span>
+<span class="fc" id="L402">            m.setElementAtIndex(2, p.getHomW());</span>
             
             //Compute pseudo-inverse of internal matrix
-<span class="fc" id="L391">            Matrix pseudoInverseInternalMatrix = Utils.pseudoInverse(</span>
+<span class="fc" id="L405">            Matrix pseudoInverseInternalMatrix = Utils.pseudoInverse(</span>
                     mInternalMatrix);
             
             //normalize pseudo-inverse
-<span class="fc" id="L395">            double norm = Utils.normF(pseudoInverseInternalMatrix);</span>
-<span class="fc" id="L396">            pseudoInverseInternalMatrix.multiplyByScalar(1.0 / norm);</span>
+<span class="fc" id="L409">            double norm = Utils.normF(pseudoInverseInternalMatrix);</span>
+<span class="fc" id="L410">            pseudoInverseInternalMatrix.multiplyByScalar(1.0 / norm);</span>
             
             //backprojected point (ray of light) is the product of pseudo-
             //inverse of internal matrix with image point matrix
-<span class="fc" id="L400">            pseudoInverseInternalMatrix.multiply(m);</span>
+<span class="fc" id="L414">            pseudoInverseInternalMatrix.multiply(m);</span>
             
-<span class="fc" id="L402">            result.setHomogeneousCoordinates(</span>
-<span class="fc" id="L403">                    pseudoInverseInternalMatrix.getElementAtIndex(0), </span>
-<span class="fc" id="L404">                    pseudoInverseInternalMatrix.getElementAtIndex(1),</span>
-<span class="fc" id="L405">                    pseudoInverseInternalMatrix.getElementAtIndex(2),</span>
-<span class="fc" id="L406">                    pseudoInverseInternalMatrix.getElementAtIndex(3));</span>
-<span class="nc" id="L407">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L408">            throw new CameraException(e);</span>
-<span class="fc" id="L409">        }</span>
-<span class="fc" id="L410">    }</span>
+<span class="fc" id="L416">            result.setHomogeneousCoordinates(</span>
+<span class="fc" id="L417">                    pseudoInverseInternalMatrix.getElementAtIndex(0), </span>
+<span class="fc" id="L418">                    pseudoInverseInternalMatrix.getElementAtIndex(1),</span>
+<span class="fc" id="L419">                    pseudoInverseInternalMatrix.getElementAtIndex(2),</span>
+<span class="fc" id="L420">                    pseudoInverseInternalMatrix.getElementAtIndex(3));</span>
+<span class="nc" id="L421">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L422">            throw new CameraException(e);</span>
+<span class="fc" id="L423">        }</span>
+<span class="fc" id="L424">    }</span>
 
     /**
      * Backprojects a 2D conic into a 3D quadric and stores the result into
@@ -422,20 +436,22 @@ public class PinholeCamera extends Camera implements Serializable {
         //Q = P^T * C * P
         
         //normalize conic and camera to increase accuracy
-<span class="fc" id="L425">        conic.normalize();</span>
-<span class="fc" id="L426">        normalize();</span>
+<span class="fc" id="L439">        conic.normalize();</span>
+<span class="fc" id="L440">        normalize();</span>
         
         //get transposed internal matrix
-<span class="fc" id="L429">        Matrix m = mInternalMatrix.transposeAndReturnNew();</span>
+<span class="fc" id="L443">        Matrix m = mInternalMatrix.transposeAndReturnNew();</span>
         try {
             //multiply by conic
-<span class="fc" id="L432">            m.multiply(conic.asMatrix());</span>
+<span class="fc" id="L446">            m.multiply(conic.asMatrix());</span>
             //and then by internal matrix
-<span class="fc" id="L434">            m.multiply(mInternalMatrix);</span>
+<span class="fc" id="L448">            m.multiply(mInternalMatrix);</span>
             //resulting matrix m is the internal matrix of a quadric
-<span class="fc" id="L436">            result.setParameters(m);</span>
-<span class="pc" id="L437">        } catch (WrongSizeException | NonSymmetricMatrixException ignore) { }</span>
-<span class="fc" id="L438">    }</span>
+<span class="fc" id="L450">            result.setParameters(m);</span>
+<span class="nc" id="L451">        } catch (WrongSizeException | NonSymmetricMatrixException ignore) {</span>
+            //never happens
+<span class="fc" id="L453">        }</span>
+<span class="fc" id="L454">    }</span>
 
     /**
      * Projects a 3D dual quadric into a 2D dual conic and stores the result
@@ -448,17 +464,17 @@ public class PinholeCamera extends Camera implements Serializable {
     public void project(DualQuadric dualQuadric, DualConic result) {
         //We need to compute:
         //C^-1 = P * Q^-1 * P^T
-<span class="fc" id="L451">        dualQuadric.normalize();</span>
-<span class="fc" id="L452">        normalize();</span>
+<span class="fc" id="L467">        dualQuadric.normalize();</span>
+<span class="fc" id="L468">        normalize();</span>
         
         try {
-<span class="fc" id="L455">            Matrix m = mInternalMatrix.multiplyAndReturnNew(</span>
-<span class="fc" id="L456">                    dualQuadric.asMatrix());</span>
-<span class="fc" id="L457">            m.multiply(mInternalMatrix.transposeAndReturnNew());</span>
+<span class="fc" id="L471">            Matrix m = mInternalMatrix.multiplyAndReturnNew(</span>
+<span class="fc" id="L472">                    dualQuadric.asMatrix());</span>
+<span class="fc" id="L473">            m.multiply(mInternalMatrix.transposeAndReturnNew());</span>
             //resulting matrix m is the internal matrix of a dual conic
-<span class="fc" id="L459">            result.setParameters(m);</span>
-<span class="pc" id="L460">        } catch (WrongSizeException | NonSymmetricMatrixException ignore) { }</span>
-<span class="fc" id="L461">    }</span>
+<span class="fc" id="L475">            result.setParameters(m);</span>
+<span class="pc" id="L476">        } catch (WrongSizeException | NonSymmetricMatrixException ignore) { }</span>
+<span class="fc" id="L477">    }</span>
 
     /**
      * Returns the type of this camera, which is always PINHOLE_CAMERA for
@@ -467,7 +483,7 @@ public class PinholeCamera extends Camera implements Serializable {
      */    
     @Override
     public CameraType getType() {
-<span class="fc" id="L470">        return CameraType.PINHOLE_CAMERA;</span>
+<span class="fc" id="L486">        return CameraType.PINHOLE_CAMERA;</span>
     }
     
     /**
@@ -476,8 +492,8 @@ public class PinholeCamera extends Camera implements Serializable {
      * @throws CameraException thrown if camera matrix is degenerate.
      */
     public void decompose() throws CameraException {
-<span class="fc" id="L479">        decompose(DEFAULT_DECOMPOSE_INTRINSICS_AND_ROTATION);</span>
-<span class="fc" id="L480">    }</span>
+<span class="fc" id="L495">        decompose(DEFAULT_DECOMPOSE_INTRINSICS_AND_ROTATION);</span>
+<span class="fc" id="L496">    }</span>
     
     /**
      * Decomposes current camera matrix to determine its camera center. 
@@ -489,9 +505,9 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public void decompose(boolean decomposeIntrinsicsAndRotation) 
             throws CameraException {
-<span class="fc" id="L492">        decompose(decomposeIntrinsicsAndRotation, </span>
+<span class="fc" id="L508">        decompose(decomposeIntrinsicsAndRotation, </span>
                 DEFAULT_DECOMPOSE_CAMERA_CENTER);
-<span class="fc" id="L494">    }</span>
+<span class="fc" id="L510">    }</span>
     
     /**
      * Decomposes current camera matrix.
@@ -505,22 +521,22 @@ public class PinholeCamera extends Camera implements Serializable {
     public void decompose(boolean decomposeIntrinsicsAndRotation,
             boolean decomposeCameraCenter) throws CameraException {
         //clean up previous intrinsics, rotation and camera center
-<span class="fc" id="L508">        mIntrinsicParameters = null;</span>
-<span class="fc" id="L509">        mCameraRotation = null;</span>
-<span class="fc" id="L510">        mCameraCenter = null;</span>
-<span class="fc bfc" id="L511" title="All 2 branches covered.">        if (decomposeIntrinsicsAndRotation) {</span>
+<span class="fc" id="L524">        mIntrinsicParameters = null;</span>
+<span class="fc" id="L525">        mCameraRotation = null;</span>
+<span class="fc" id="L526">        mCameraCenter = null;</span>
+<span class="fc bfc" id="L527" title="All 2 branches covered.">        if (decomposeIntrinsicsAndRotation) {</span>
             //compute new intrinsics and rotation
-<span class="fc" id="L513">            computeIntrinsicsAndRotation();</span>
+<span class="fc" id="L529">            computeIntrinsicsAndRotation();</span>
         }
-<span class="fc bfc" id="L515" title="All 2 branches covered.">        if (decomposeCameraCenter) {</span>
+<span class="fc bfc" id="L531" title="All 2 branches covered.">        if (decomposeCameraCenter) {</span>
             //compute camera center
-<span class="pc bpc" id="L517" title="1 of 2 branches missed.">            if (mCameraCenter == null) {</span>
-<span class="fc" id="L518">                mCameraCenter = Point3D.create(</span>
+<span class="pc bpc" id="L533" title="1 of 2 branches missed.">            if (mCameraCenter == null) {</span>
+<span class="fc" id="L534">                mCameraCenter = Point3D.create(</span>
                         CoordinatesType.HOMOGENEOUS_COORDINATES);
             }
-<span class="fc" id="L521">            computeCameraCenterSVD(mCameraCenter);</span>
+<span class="fc" id="L537">            computeCameraCenterSVD(mCameraCenter);</span>
         }
-<span class="fc" id="L523">    }</span>
+<span class="fc" id="L539">    }</span>
     
     /**
      * Normalizes camera matrix.
@@ -531,25 +547,25 @@ public class PinholeCamera extends Camera implements Serializable {
      * to be used for normalization have norm equal to zero in such case.
      */
     public void normalize() {
-<span class="fc bfc" id="L534" title="All 2 branches covered.">        if (!mNormalized) {</span>
+<span class="fc bfc" id="L550" title="All 2 branches covered.">        if (!mNormalized) {</span>
             //normalize camera matrix using norm of P31, P32 and P33, which is
             //equal to a row of rotation, which in a canonical sense should have
             //unitary norm
-<span class="fc" id="L538">            double p20 = mInternalMatrix.getElementAt(2, 0);</span>
-<span class="fc" id="L539">            double p21 = mInternalMatrix.getElementAt(2, 1);</span>
-<span class="fc" id="L540">            double p22 = mInternalMatrix.getElementAt(2, 2);</span>
-<span class="fc" id="L541">            double norm = Math.sqrt(p20 * p20 + p21 * p21 + p22 * p22);</span>
-<span class="pc bpc" id="L542" title="1 of 2 branches missed.">            if (Math.abs(norm) &gt; EPS) {</span>
+<span class="fc" id="L554">            double p20 = mInternalMatrix.getElementAt(2, 0);</span>
+<span class="fc" id="L555">            double p21 = mInternalMatrix.getElementAt(2, 1);</span>
+<span class="fc" id="L556">            double p22 = mInternalMatrix.getElementAt(2, 2);</span>
+<span class="fc" id="L557">            double norm = Math.sqrt(p20 * p20 + p21 * p21 + p22 * p22);</span>
+<span class="pc bpc" id="L558" title="1 of 2 branches missed.">            if (Math.abs(norm) &gt; EPS) {</span>
                 //only normalize if camera is not affine!
-<span class="fc" id="L544">                mInternalMatrix.multiplyByScalar(1.0 / norm);</span>
+<span class="fc" id="L560">                mInternalMatrix.multiplyByScalar(1.0 / norm);</span>
             } else {
                 //camera is affine, so we use whole matrix norm
-<span class="nc" id="L547">                norm = Utils.normF(mInternalMatrix);</span>
-<span class="nc" id="L548">                mInternalMatrix.multiplyByScalar(1.0 / norm);</span>
+<span class="nc" id="L563">                norm = Utils.normF(mInternalMatrix);</span>
+<span class="nc" id="L564">                mInternalMatrix.multiplyByScalar(1.0 / norm);</span>
             }
-<span class="fc" id="L550">            mNormalized = true;</span>
+<span class="fc" id="L566">            mNormalized = true;</span>
         }
-<span class="fc" id="L552">    }</span>
+<span class="fc" id="L568">    }</span>
     
     /**
      * Indicates if camera matrix has already been normalized.
@@ -558,7 +574,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * @return true if camera is normalized, false otherwise
      */
     public boolean isNormalized() {
-<span class="fc" id="L561">        return mNormalized;</span>
+<span class="fc" id="L577">        return mNormalized;</span>
     }
     
     /**
@@ -569,16 +585,16 @@ public class PinholeCamera extends Camera implements Serializable {
      * @throws CameraException thrown if there are numerical instabilities.
      */
     public void fixCameraSign() throws CameraException {
-<span class="pc bpc" id="L572" title="1 of 2 branches missed.">        if (isCameraSignFixed()) {</span>
-<span class="nc" id="L573">            return;</span>
+<span class="pc bpc" id="L588" title="1 of 2 branches missed.">        if (isCameraSignFixed()) {</span>
+<span class="nc" id="L589">            return;</span>
         }
         
         //use sign of determinant to fix pinhole camera matrix sign
-<span class="fc" id="L577">        double cameraSign = getCameraSign();</span>
+<span class="fc" id="L593">        double cameraSign = getCameraSign();</span>
         
-<span class="fc" id="L579">        mInternalMatrix.multiplyByScalar(cameraSign);</span>
-<span class="fc" id="L580">        mCameraSignFixed = true;</span>
-<span class="fc" id="L581">    }</span>
+<span class="fc" id="L595">        mInternalMatrix.multiplyByScalar(cameraSign);</span>
+<span class="fc" id="L596">        mCameraSignFixed = true;</span>
+<span class="fc" id="L597">    }</span>
     
     /**
      * Indicates if camera sign has been fixed.
@@ -589,7 +605,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * @return true if camera sign has been fixed, false otherwise.
      */
     public boolean isCameraSignFixed() {
-<span class="fc" id="L592">        return mCameraSignFixed;</span>
+<span class="fc" id="L608">        return mCameraSignFixed;</span>
     }
     
     /**
@@ -599,11 +615,11 @@ public class PinholeCamera extends Camera implements Serializable {
      * @throws NotAvailableException if camera rotation is not available yet.
      */
     public Rotation3D getCameraRotation() throws NotAvailableException {
-<span class="fc bfc" id="L602" title="All 2 branches covered.">        if (!isCameraRotationAvailable()) {</span>
-<span class="fc" id="L603">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L618" title="All 2 branches covered.">        if (!isCameraRotationAvailable()) {</span>
+<span class="fc" id="L619">            throw new NotAvailableException();</span>
         }
 
-<span class="fc" id="L606">        return mCameraRotation;</span>
+<span class="fc" id="L622">        return mCameraRotation;</span>
     }
     
     /**
@@ -617,11 +633,11 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public PinholeCameraIntrinsicParameters getIntrinsicParameters()
             throws NotAvailableException {
-<span class="fc bfc" id="L620" title="All 2 branches covered.">        if (!areIntrinsicParametersAvailable()) {</span>
-<span class="fc" id="L621">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L636" title="All 2 branches covered.">        if (!areIntrinsicParametersAvailable()) {</span>
+<span class="fc" id="L637">            throw new NotAvailableException();</span>
         }
 
-<span class="fc" id="L624">        return mIntrinsicParameters;</span>
+<span class="fc" id="L640">        return mIntrinsicParameters;</span>
     }
     
     /**
@@ -629,7 +645,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * @return a copy of the internal camera matrix.
      */
     public Matrix getInternalMatrix() {
-<span class="fc" id="L632">        return mInternalMatrix.clone();</span>
+<span class="fc" id="L648">        return mInternalMatrix.clone();</span>
     }
     
     /**
@@ -640,18 +656,18 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public final void setInternalMatrix(Matrix internalMatrix) 
             throws WrongSizeException {
-<span class="fc bfc" id="L643" title="All 2 branches covered.">        if (internalMatrix.getRows() != PINHOLE_CAMERA_MATRIX_ROWS ||</span>
-<span class="pc bpc" id="L644" title="1 of 2 branches missed.">                internalMatrix.getColumns() != PINHOLE_CAMERA_MATRIX_COLS) {</span>
-<span class="fc" id="L645">            throw new WrongSizeException();</span>
+<span class="fc bfc" id="L659" title="All 2 branches covered.">        if (internalMatrix.getRows() != PINHOLE_CAMERA_MATRIX_ROWS ||</span>
+<span class="pc bpc" id="L660" title="1 of 2 branches missed.">                internalMatrix.getColumns() != PINHOLE_CAMERA_MATRIX_COLS) {</span>
+<span class="fc" id="L661">            throw new WrongSizeException();</span>
         }
         
-<span class="fc" id="L648">        mInternalMatrix = internalMatrix;</span>
-<span class="fc" id="L649">        mCameraSignFixed = false;</span>
-<span class="fc" id="L650">        mIntrinsicParameters = null;</span>
-<span class="fc" id="L651">        mCameraRotation = null;</span>
-<span class="fc" id="L652">        mCameraCenter = null;</span>
-<span class="fc" id="L653">        mNormalized = false;</span>
-<span class="fc" id="L654">    }</span>
+<span class="fc" id="L664">        mInternalMatrix = internalMatrix;</span>
+<span class="fc" id="L665">        mCameraSignFixed = false;</span>
+<span class="fc" id="L666">        mIntrinsicParameters = null;</span>
+<span class="fc" id="L667">        mCameraRotation = null;</span>
+<span class="fc" id="L668">        mCameraCenter = null;</span>
+<span class="fc" id="L669">        mNormalized = false;</span>
+<span class="fc" id="L670">    }</span>
 
     /**
      * Indicates if camera intrinsic parameters are available for retrieval.
@@ -662,7 +678,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * otherwise.
      */
     public boolean areIntrinsicParametersAvailable() {
-<span class="fc bfc" id="L665" title="All 2 branches covered.">        return mIntrinsicParameters != null;</span>
+<span class="fc bfc" id="L681" title="All 2 branches covered.">        return mIntrinsicParameters != null;</span>
     }
     
     /**
@@ -673,7 +689,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * @return true if camera rotation is available, false otherwise.
      */
     public boolean isCameraRotationAvailable() {
-<span class="fc bfc" id="L676" title="All 2 branches covered.">        return mCameraRotation != null;</span>
+<span class="fc bfc" id="L692" title="All 2 branches covered.">        return mCameraRotation != null;</span>
     }
     
     /**
@@ -686,31 +702,32 @@ public class PinholeCamera extends Camera implements Serializable {
     public void setCameraRotation(Rotation3D cameraRotation) 
             throws CameraException {
         try {
-            Matrix K, R;
-<span class="fc bfc" id="L690" title="All 2 branches covered.">            if (!areIntrinsicParametersAvailable()) {</span>
+<span class="fc bfc" id="L705" title="All 2 branches covered.">            if (!areIntrinsicParametersAvailable()) {</span>
                 //Find intrinsic parameters
-<span class="fc" id="L692">                computeIntrinsicsAndRotation();</span>
+<span class="fc" id="L707">                computeIntrinsicsAndRotation();</span>
             }
-        
-<span class="fc" id="L695">            K = mIntrinsicParameters.getInternalMatrix();</span>
-<span class="fc" id="L696">            R = cameraRotation.asInhomogeneousMatrix();</span>
+
+<span class="fc" id="L710">            Matrix k = mIntrinsicParameters.getInternalMatrix();</span>
+<span class="fc" id="L711">            Matrix r = cameraRotation.asInhomogeneousMatrix();</span>
         
             //compute new left 3x3 submatrix of pinhole camera matrix
-<span class="fc" id="L699">            Matrix Mp = K.multiplyAndReturnNew(R);</span>
+<span class="fc" id="L714">            Matrix mp = k.multiplyAndReturnNew(r);</span>
         
             //set new rotation
-<span class="fc" id="L702">            mCameraRotation = cameraRotation;</span>
+<span class="fc" id="L717">            mCameraRotation = cameraRotation;</span>
         
             //set new rotation on left 3x3 submatrix of internal pinhole camera
             //matrix
-<span class="fc" id="L706">            mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1, </span>
-                    PINHOLE_CAMERA_MATRIX_ROWS - 1, Mp);
+<span class="fc" id="L721">            mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1, </span>
+                    PINHOLE_CAMERA_MATRIX_ROWS - 1, mp);
         
             //reset camera sign fixed
-<span class="fc" id="L710">            mCameraSignFixed = false;</span>
-<span class="fc" id="L711">            mNormalized = false;</span>
-<span class="pc" id="L712">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L713">    }</span>
+<span class="fc" id="L725">            mCameraSignFixed = false;</span>
+<span class="fc" id="L726">            mNormalized = false;</span>
+<span class="nc" id="L727">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L729">        }</span>
+<span class="fc" id="L730">    }</span>
     
     /**
      * Combines current camera rotation with provided rotation.
@@ -718,16 +735,16 @@ public class PinholeCamera extends Camera implements Serializable {
      * @throws CameraException if there are numerical instabilities.
      */
     public void rotate(Rotation3D cameraRotation) throws CameraException {
-<span class="pc bpc" id="L721" title="1 of 2 branches missed.">        if (!isCameraRotationAvailable()) {</span>
+<span class="pc bpc" id="L738" title="1 of 2 branches missed.">        if (!isCameraRotationAvailable()) {</span>
             //compute new intrinsics and rotation
-<span class="nc" id="L723">            computeIntrinsicsAndRotation();</span>
+<span class="nc" id="L740">            computeIntrinsicsAndRotation();</span>
         }
         
         //compute new rotation matrix and set it
-<span class="fc" id="L727">        mCameraRotation.combine(cameraRotation);</span>
+<span class="fc" id="L744">        mCameraRotation.combine(cameraRotation);</span>
         //set new camera rotation
-<span class="fc" id="L729">        setCameraRotation(mCameraRotation);</span>
-<span class="fc" id="L730">    }</span>
+<span class="fc" id="L746">        setCameraRotation(mCameraRotation);</span>
+<span class="fc" id="L747">    }</span>
     
     /**
      * Modifies camera so that it points to provided point while keeping the
@@ -739,88 +756,89 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public void pointAt(Point3D point) throws CameraException {
         try {
-<span class="pc bpc" id="L742" title="1 of 2 branches missed.">            if (!isCameraCenterAvailable()) {</span>
+<span class="pc bpc" id="L759" title="1 of 2 branches missed.">            if (!isCameraCenterAvailable()) {</span>
                 //compute camera center
-<span class="nc bnc" id="L744" title="All 2 branches missed.">                if (mCameraCenter == null) {</span>
-<span class="nc" id="L745">                    mCameraCenter = Point3D.create(</span>
+<span class="nc bnc" id="L761" title="All 2 branches missed.">                if (mCameraCenter == null) {</span>
+<span class="nc" id="L762">                    mCameraCenter = Point3D.create(</span>
                             CoordinatesType.HOMOGENEOUS_COORDINATES);                
                 }
-<span class="nc" id="L748">                computeCameraCenterSVD(mCameraCenter);</span>
+<span class="nc" id="L765">                computeCameraCenterSVD(mCameraCenter);</span>
             }
-<span class="pc bpc" id="L750" title="1 of 2 branches missed.">            if (!areIntrinsicParametersAvailable()) {</span>
+<span class="pc bpc" id="L767" title="1 of 2 branches missed.">            if (!areIntrinsicParametersAvailable()) {</span>
                 //Find intrinsics
-<span class="nc" id="L752">                computeIntrinsicsAndRotation();</span>
+<span class="nc" id="L769">                computeIntrinsicsAndRotation();</span>
             }
         
             //difference vector between 3D point and camera center using
             //inhomogeneous coordinates. This vector after normalization should
             //be the new principal vector
-<span class="fc" id="L758">            Matrix mDiff = new Matrix(1, PINHOLE_CAMERA_MATRIX_ROWS);</span>
-<span class="fc" id="L759">            mDiff.setElementAtIndex(0, </span>
-<span class="fc" id="L760">                    point.getInhomX() - mCameraCenter.getInhomX());</span>
-<span class="fc" id="L761">            mDiff.setElementAtIndex(1, </span>
-<span class="fc" id="L762">                    point.getInhomY() - mCameraCenter.getInhomY());</span>
-<span class="fc" id="L763">            mDiff.setElementAtIndex(2, </span>
-<span class="fc" id="L764">                    point.getInhomZ() - mCameraCenter.getInhomZ());</span>
+<span class="fc" id="L775">            Matrix mDiff = new Matrix(1, PINHOLE_CAMERA_MATRIX_ROWS);</span>
+<span class="fc" id="L776">            mDiff.setElementAtIndex(0, </span>
+<span class="fc" id="L777">                    point.getInhomX() - mCameraCenter.getInhomX());</span>
+<span class="fc" id="L778">            mDiff.setElementAtIndex(1, </span>
+<span class="fc" id="L779">                    point.getInhomY() - mCameraCenter.getInhomY());</span>
+<span class="fc" id="L780">            mDiff.setElementAtIndex(2, </span>
+<span class="fc" id="L781">                    point.getInhomZ() - mCameraCenter.getInhomZ());</span>
             
-<span class="fc" id="L766">            double norm = Utils.normF(mDiff);</span>
-<span class="fc" id="L767">            mDiff.multiplyByScalar(1.0 / norm);</span>
+<span class="fc" id="L783">            double norm = Utils.normF(mDiff);</span>
+<span class="fc" id="L784">            mDiff.multiplyByScalar(1.0 / norm);</span>
             
             //mDiff has to be the lower row of rotation matrix, we need to find
             //the remaining rows as two orthonormal vectors respect to this one,
             //hence we use SVD of mDiff
-<span class="fc" id="L772">            SingularValueDecomposer decomposer =</span>
+<span class="fc" id="L789">            SingularValueDecomposer decomposer =</span>
                     new SingularValueDecomposer(mDiff);
-<span class="fc" id="L774">            decomposer.decompose();</span>
+<span class="fc" id="L791">            decomposer.decompose();</span>
             
-<span class="fc" id="L776">            Matrix V = decomposer.getV();</span>
+<span class="fc" id="L793">            Matrix v = decomposer.getV();</span>
             
             //set new rotation matrix by setting mDiff (which is 1st column of
             //V) on the last row of rotation matrix
-<span class="fc" id="L780">            Matrix R = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS,</span>
+<span class="fc" id="L797">            Matrix r = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS,</span>
                     PINHOLE_CAMERA_MATRIX_ROWS);
-<span class="fc" id="L782">            R.setElementAt(2, 0, V.getElementAt(0, 0));</span>
-<span class="fc" id="L783">            R.setElementAt(2, 1, V.getElementAt(1, 0));</span>
-<span class="fc" id="L784">            R.setElementAt(2, 2, V.getElementAt(2, 0));</span>
+<span class="fc" id="L799">            r.setElementAt(2, 0, v.getElementAt(0, 0));</span>
+<span class="fc" id="L800">            r.setElementAt(2, 1, v.getElementAt(1, 0));</span>
+<span class="fc" id="L801">            r.setElementAt(2, 2, v.getElementAt(2, 0));</span>
             
-<span class="fc" id="L786">            R.setElementAt(1, 0, V.getElementAt(0, 1));</span>
-<span class="fc" id="L787">            R.setElementAt(1, 1, V.getElementAt(1, 1));</span>
-<span class="fc" id="L788">            R.setElementAt(1, 2, V.getElementAt(2, 1));</span>
+<span class="fc" id="L803">            r.setElementAt(1, 0, v.getElementAt(0, 1));</span>
+<span class="fc" id="L804">            r.setElementAt(1, 1, v.getElementAt(1, 1));</span>
+<span class="fc" id="L805">            r.setElementAt(1, 2, v.getElementAt(2, 1));</span>
             
-<span class="fc" id="L790">            R.setElementAt(0, 0, V.getElementAt(0, 2));</span>
-<span class="fc" id="L791">            R.setElementAt(0, 1, V.getElementAt(1, 2));</span>
-<span class="fc" id="L792">            R.setElementAt(0, 2, V.getElementAt(2, 2));</span>
+<span class="fc" id="L807">            r.setElementAt(0, 0, v.getElementAt(0, 2));</span>
+<span class="fc" id="L808">            r.setElementAt(0, 1, v.getElementAt(1, 2));</span>
+<span class="fc" id="L809">            r.setElementAt(0, 2, v.getElementAt(2, 2));</span>
             
             //set new rotation
-<span class="fc" id="L795">            Rotation3D rotation = new MatrixRotation3D(R);</span>
-<span class="fc" id="L796">            setCameraRotation(rotation);</span>
+<span class="fc" id="L812">            Rotation3D rotation = new MatrixRotation3D(r);</span>
+<span class="fc" id="L813">            setCameraRotation(rotation);</span>
             
             //because left 3x3 sub-matrix has been modified, then last column of
             //internal matrix has to be modified to ensure that camera center 
             //does not change
-<span class="fc" id="L801">            Matrix Mp = mInternalMatrix.getSubmatrix(0, 0, 2, 2);</span>
-<span class="fc" id="L802">            Matrix center = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS, 1);</span>
-<span class="fc" id="L803">            center.setElementAtIndex(0, mCameraCenter.getInhomX());</span>
-<span class="fc" id="L804">            center.setElementAtIndex(1, mCameraCenter.getInhomY());</span>
-<span class="fc" id="L805">            center.setElementAtIndex(2, mCameraCenter.getInhomZ());</span>
+<span class="fc" id="L818">            Matrix mp = mInternalMatrix.getSubmatrix(0, 0, 2, 2);</span>
+<span class="fc" id="L819">            Matrix center = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS, 1);</span>
+<span class="fc" id="L820">            center.setElementAtIndex(0, mCameraCenter.getInhomX());</span>
+<span class="fc" id="L821">            center.setElementAtIndex(1, mCameraCenter.getInhomY());</span>
+<span class="fc" id="L822">            center.setElementAtIndex(2, mCameraCenter.getInhomZ());</span>
 
             //MP will be p4 (last column)
-<span class="fc" id="L808">            Mp.multiply(center);</span>
-<span class="fc" id="L809">            Mp.multiplyByScalar(-1.0);</span>
+<span class="fc" id="L825">            mp.multiply(center);</span>
+<span class="fc" id="L826">            mp.multiplyByScalar(-1.0);</span>
             
             //set last column of pinhole camera matrix
-<span class="fc" id="L812">            mInternalMatrix.setSubmatrix(0, PINHOLE_CAMERA_MATRIX_COLS - 1, </span>
+<span class="fc" id="L829">            mInternalMatrix.setSubmatrix(0, PINHOLE_CAMERA_MATRIX_COLS - 1, </span>
                     PINHOLE_CAMERA_MATRIX_ROWS - 1, 
-                    PINHOLE_CAMERA_MATRIX_COLS - 1, Mp);
+                    PINHOLE_CAMERA_MATRIX_COLS - 1, mp);
             
             //because we do not check sign of new director vector, we reset
             //camera sign so that it is checked afterwards when needed
-<span class="fc" id="L818">            mCameraSignFixed = false;</span>
-<span class="nc" id="L819">        } catch (WrongSizeException ignore) {</span>
-<span class="nc" id="L820">        } catch (AlgebraException | InvalidRotationMatrixException e) {</span>
-<span class="nc" id="L821">            throw new CameraException(e);</span>
-<span class="pc" id="L822">        }</span>
-<span class="fc" id="L823">    }</span>
+<span class="fc" id="L835">            mCameraSignFixed = false;</span>
+<span class="nc" id="L836">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="nc" id="L838">        } catch (AlgebraException | InvalidRotationMatrixException e) {</span>
+<span class="nc" id="L839">            throw new CameraException(e);</span>
+<span class="pc" id="L840">        }</span>
+<span class="fc" id="L841">    }</span>
     
     /**
      * Sets camera instrinsic parameters.
@@ -833,30 +851,30 @@ public class PinholeCamera extends Camera implements Serializable {
             PinholeCameraIntrinsicParameters intrinsicParameters) 
             throws CameraException {
         
-        Matrix K, R;
-<span class="fc bfc" id="L837" title="All 2 branches covered.">        if (!isCameraRotationAvailable()) {</span>
+<span class="fc bfc" id="L854" title="All 2 branches covered.">        if (!isCameraRotationAvailable()) {</span>
             //Find rotation
-<span class="fc" id="L839">            computeIntrinsicsAndRotation();</span>
+<span class="fc" id="L856">            computeIntrinsicsAndRotation();</span>
         }
         
         //get K and R matrices
-<span class="fc" id="L843">        K = intrinsicParameters.getInternalMatrix();</span>
-<span class="fc" id="L844">        R = mCameraRotation.asInhomogeneousMatrix();</span>
+<span class="fc" id="L860">        Matrix k = intrinsicParameters.getInternalMatrix();</span>
+<span class="fc" id="L861">        Matrix r = mCameraRotation.asInhomogeneousMatrix();</span>
         
         //compute now left 3x3 submatrix of pinhole camera matrix
-<span class="fc" id="L847">        Matrix M = K;</span>
         try {
-<span class="fc" id="L849">            M.multiply(R);</span>
-<span class="pc" id="L850">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L851">        mIntrinsicParameters = intrinsicParameters;</span>
+<span class="fc" id="L865">            k.multiply(r);</span>
+<span class="nc" id="L866">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L868">        }</span>
+<span class="fc" id="L869">        mIntrinsicParameters = intrinsicParameters;</span>
         
         //set new intrinsic parameters on left 3x3 submatrix of internal
         //pinhole camera matrix
-<span class="fc" id="L855">        mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1, </span>
-                PINHOLE_CAMERA_MATRIX_ROWS - 1, M);
-<span class="fc" id="L857">        mCameraSignFixed = false;</span>
-<span class="fc" id="L858">        mNormalized = false;</span>
-<span class="fc" id="L859">    }</span>
+<span class="fc" id="L873">        mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1, </span>
+                PINHOLE_CAMERA_MATRIX_ROWS - 1, k);
+<span class="fc" id="L875">        mCameraSignFixed = false;</span>
+<span class="fc" id="L876">        mNormalized = false;</span>
+<span class="fc" id="L877">    }</span>
     
     /**
      * Returns a 3D point indicating camera center (i.e. location) if center
@@ -868,11 +886,11 @@ public class PinholeCamera extends Camera implements Serializable {
      * retrieval.
      */
     public Point3D getCameraCenter() throws NotAvailableException {
-<span class="pc bpc" id="L871" title="1 of 2 branches missed.">        if (!isCameraCenterAvailable()) {</span>
-<span class="nc" id="L872">            throw new NotAvailableException();</span>
+<span class="pc bpc" id="L889" title="1 of 2 branches missed.">        if (!isCameraCenterAvailable()) {</span>
+<span class="nc" id="L890">            throw new NotAvailableException();</span>
         }
         
-<span class="fc" id="L875">        return mCameraCenter;</span>
+<span class="fc" id="L893">        return mCameraCenter;</span>
     }
     
     /**
@@ -881,7 +899,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * @return true if camera center is available, false otherwise.
      */
     public boolean isCameraCenterAvailable() {
-<span class="fc bfc" id="L884" title="All 2 branches covered.">        return mCameraCenter != null;</span>
+<span class="fc bfc" id="L902" title="All 2 branches covered.">        return mCameraCenter != null;</span>
     }
     
     /**
@@ -891,29 +909,31 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public void setCameraCenter(Point3D cameraCenter) {
         try {
-<span class="fc" id="L894">            normalize();</span>
+<span class="fc" id="L912">            normalize();</span>
             //new last column is the product of left 3x3 pinhole camera 
             //submatrix by the inhomogeneous coordinates of new camera center
-<span class="fc" id="L897">            Matrix Mp = mInternalMatrix.getSubmatrix(0, 0, 2, 2);</span>
-<span class="fc" id="L898">            Matrix center = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS, 1);</span>
-<span class="fc" id="L899">            center.setElementAtIndex(0, cameraCenter.getInhomX());</span>
-<span class="fc" id="L900">            center.setElementAtIndex(1, cameraCenter.getInhomY());</span>
-<span class="fc" id="L901">            center.setElementAtIndex(2, cameraCenter.getInhomZ());</span>
+<span class="fc" id="L915">            Matrix mp = mInternalMatrix.getSubmatrix(0, 0, 2, 2);</span>
+<span class="fc" id="L916">            Matrix center = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS, 1);</span>
+<span class="fc" id="L917">            center.setElementAtIndex(0, cameraCenter.getInhomX());</span>
+<span class="fc" id="L918">            center.setElementAtIndex(1, cameraCenter.getInhomY());</span>
+<span class="fc" id="L919">            center.setElementAtIndex(2, cameraCenter.getInhomZ());</span>
 
             //Mp will be p4 (4th column)
-<span class="fc" id="L904">            Mp.multiply(center);</span>
-<span class="fc" id="L905">            Mp.multiplyByScalar(-1.0);</span>
+<span class="fc" id="L922">            mp.multiply(center);</span>
+<span class="fc" id="L923">            mp.multiplyByScalar(-1.0);</span>
         
             //set camera center
-<span class="fc" id="L908">            mCameraCenter = cameraCenter;</span>
+<span class="fc" id="L926">            mCameraCenter = cameraCenter;</span>
         
             //set last column of pinhole camera matrix
-<span class="fc" id="L911">            mInternalMatrix.setSubmatrix(0, PINHOLE_CAMERA_MATRIX_COLS - 1, </span>
+<span class="fc" id="L929">            mInternalMatrix.setSubmatrix(0, PINHOLE_CAMERA_MATRIX_COLS - 1, </span>
                     PINHOLE_CAMERA_MATRIX_ROWS - 1, 
-                    PINHOLE_CAMERA_MATRIX_COLS - 1, Mp);
-<span class="fc" id="L914">            mNormalized = false;</span>
-<span class="pc" id="L915">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L916">    }</span>
+                    PINHOLE_CAMERA_MATRIX_COLS - 1, mp);
+<span class="fc" id="L932">            mNormalized = false;</span>
+<span class="nc" id="L933">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L935">        }</span>
+<span class="fc" id="L936">    }</span>
     
     /**
      * Sets camera intrinsic parameters and camera 3D rotation.
@@ -926,28 +946,30 @@ public class PinholeCamera extends Camera implements Serializable {
             PinholeCameraIntrinsicParameters intrinsicParameters,
             Rotation3D rotation) {
         try {
-<span class="fc" id="L929">            normalize();</span>
+<span class="fc" id="L949">            normalize();</span>
         
             //K and R are obtained
-<span class="fc" id="L932">            Matrix K = intrinsicParameters.getInternalMatrix();</span>
-<span class="fc" id="L933">            Matrix R = rotation.asInhomogeneousMatrix();</span>
+<span class="fc" id="L952">            Matrix k = intrinsicParameters.getInternalMatrix();</span>
+<span class="fc" id="L953">            Matrix r = rotation.asInhomogeneousMatrix();</span>
         
             //compute new left 3x3 submatrix of pinhole camera matrix (also known as Mp)
-<span class="fc" id="L936">            K.multiply(R);</span>
+<span class="fc" id="L956">            k.multiply(r);</span>
         
             //set new intrinsic parameters
-<span class="fc" id="L939">            mIntrinsicParameters = intrinsicParameters;</span>
+<span class="fc" id="L959">            mIntrinsicParameters = intrinsicParameters;</span>
         
             //set new rotation
-<span class="fc" id="L942">            mCameraRotation = rotation;</span>
+<span class="fc" id="L962">            mCameraRotation = rotation;</span>
         
             //set new left 3x3 submatrix of internal pinhole camera matrix
-<span class="fc" id="L945">            mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1, </span>
-                    PINHOLE_CAMERA_MATRIX_ROWS - 1, K);
-<span class="fc" id="L947">            mCameraSignFixed = false;</span>
-<span class="fc" id="L948">            mNormalized = false;</span>
-<span class="pc" id="L949">        } catch (WrongSizeException ignore) { } //this will never happen</span>
-<span class="fc" id="L950">    }</span>
+<span class="fc" id="L965">            mInternalMatrix.setSubmatrix(0, 0, PINHOLE_CAMERA_MATRIX_ROWS - 1, </span>
+                    PINHOLE_CAMERA_MATRIX_ROWS - 1, k);
+<span class="fc" id="L967">            mCameraSignFixed = false;</span>
+<span class="fc" id="L968">            mNormalized = false;</span>
+<span class="nc" id="L969">        } catch (WrongSizeException ignore) {</span>
+            //this will never happen
+<span class="fc" id="L971">        }</span>
+<span class="fc" id="L972">    }</span>
     
     /**
      * Sets both intrinsic and extrinsic camera parameters.
@@ -963,9 +985,9 @@ public class PinholeCamera extends Camera implements Serializable {
     public final void setIntrinsicAndExtrinsicParameters(
             PinholeCameraIntrinsicParameters intrinsicParameters,
             Rotation3D rotation, Point2D originImagecoordinates) {
-<span class="fc" id="L966">        setIntrinsicParametersAndRotation(intrinsicParameters, rotation);</span>
-<span class="fc" id="L967">        setImageOfWorldOrigin(originImagecoordinates);</span>
-<span class="fc" id="L968">    }</span>
+<span class="fc" id="L988">        setIntrinsicParametersAndRotation(intrinsicParameters, rotation);</span>
+<span class="fc" id="L989">        setImageOfWorldOrigin(originImagecoordinates);</span>
+<span class="fc" id="L990">    }</span>
     
     /**
      * Sets both intrinsic and extrinsic camera parameters.
@@ -980,9 +1002,9 @@ public class PinholeCamera extends Camera implements Serializable {
     public final void setIntrinsicAndExtrinsicParameters(
             PinholeCameraIntrinsicParameters intrinsicParameters,
             Rotation3D rotation, Point3D cameraCenter) {
-<span class="fc" id="L983">        setIntrinsicParametersAndRotation(intrinsicParameters, rotation);</span>
-<span class="fc" id="L984">        setCameraCenter(cameraCenter);</span>
-<span class="fc" id="L985">    }</span>
+<span class="fc" id="L1005">        setIntrinsicParametersAndRotation(intrinsicParameters, rotation);</span>
+<span class="fc" id="L1006">        setCameraCenter(cameraCenter);</span>
+<span class="fc" id="L1007">    }</span>
     
     /**
      * Returns the projected 2D coordinates of the x axis, which corresponds to
@@ -990,9 +1012,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * @return vanishing point of x axis.
      */
     public Point2D getXAxisVanishingPoint() {
-<span class="fc" id="L993">        Point2D result = Point2D.create();</span>
-<span class="fc" id="L994">        xAxisVanishingPoint(result);</span>
-<span class="fc" id="L995">        return result;</span>
+<span class="fc" id="L1015">        Point2D result = Point2D.create();</span>
+<span class="fc" id="L1016">        xAxisVanishingPoint(result);</span>
+<span class="fc" id="L1017">        return result;</span>
     }
     
     /**
@@ -1003,10 +1025,10 @@ public class PinholeCamera extends Camera implements Serializable {
     public void xAxisVanishingPoint(Point2D result) {
         
         //use first camera matrix column to set 2D point
-<span class="fc" id="L1006">        result.setHomogeneousCoordinates(mInternalMatrix.getElementAt(0, 0), </span>
-<span class="fc" id="L1007">                mInternalMatrix.getElementAt(1, 0), </span>
-<span class="fc" id="L1008">                mInternalMatrix.getElementAt(2, 0));</span>
-<span class="fc" id="L1009">    }</span>
+<span class="fc" id="L1028">        result.setHomogeneousCoordinates(mInternalMatrix.getElementAt(0, 0), </span>
+<span class="fc" id="L1029">                mInternalMatrix.getElementAt(1, 0), </span>
+<span class="fc" id="L1030">                mInternalMatrix.getElementAt(2, 0));</span>
+<span class="fc" id="L1031">    }</span>
     
     /**
      * Returns the projected 2D coordinates of the y axis, which corresponds to
@@ -1014,9 +1036,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * @return vanishing point of y axis.
      */
     public Point2D getYAxisVanishingPoint() {
-<span class="fc" id="L1017">        Point2D result = Point2D.create();</span>
-<span class="fc" id="L1018">        yAxisVanishingPoint(result);</span>
-<span class="fc" id="L1019">        return result;</span>
+<span class="fc" id="L1039">        Point2D result = Point2D.create();</span>
+<span class="fc" id="L1040">        yAxisVanishingPoint(result);</span>
+<span class="fc" id="L1041">        return result;</span>
     }
     
     /**
@@ -1027,10 +1049,10 @@ public class PinholeCamera extends Camera implements Serializable {
     public void yAxisVanishingPoint(Point2D result) {
         
         //use second camera matrix column to set 2D point
-<span class="fc" id="L1030">        result.setHomogeneousCoordinates(mInternalMatrix.getElementAt(0, 1), </span>
-<span class="fc" id="L1031">                mInternalMatrix.getElementAt(1, 1), </span>
-<span class="fc" id="L1032">                mInternalMatrix.getElementAt(2, 1));</span>
-<span class="fc" id="L1033">    }</span>
+<span class="fc" id="L1052">        result.setHomogeneousCoordinates(mInternalMatrix.getElementAt(0, 1), </span>
+<span class="fc" id="L1053">                mInternalMatrix.getElementAt(1, 1), </span>
+<span class="fc" id="L1054">                mInternalMatrix.getElementAt(2, 1));</span>
+<span class="fc" id="L1055">    }</span>
     
     /**
      * Returns the projected 2D coordinates of the z axis, which corresponds to
@@ -1038,9 +1060,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * @return vanishing point of z axis.
      */
     public Point2D getZAxisVanishingPoint() {
-<span class="fc" id="L1041">        Point2D result = Point2D.create();</span>
-<span class="fc" id="L1042">        zAxisVanishingPoint(result);</span>
-<span class="fc" id="L1043">        return result;</span>
+<span class="fc" id="L1063">        Point2D result = Point2D.create();</span>
+<span class="fc" id="L1064">        zAxisVanishingPoint(result);</span>
+<span class="fc" id="L1065">        return result;</span>
     }
     
     /**
@@ -1051,19 +1073,19 @@ public class PinholeCamera extends Camera implements Serializable {
     public void zAxisVanishingPoint(Point2D result) {
         
         //use third camera matrix column to set 2D point
-<span class="fc" id="L1054">        result.setHomogeneousCoordinates(mInternalMatrix.getElementAt(0, 2), </span>
-<span class="fc" id="L1055">                mInternalMatrix.getElementAt(1, 2), </span>
-<span class="fc" id="L1056">                mInternalMatrix.getElementAt(2, 2));</span>
-<span class="fc" id="L1057">    }</span>
+<span class="fc" id="L1076">        result.setHomogeneousCoordinates(mInternalMatrix.getElementAt(0, 2), </span>
+<span class="fc" id="L1077">                mInternalMatrix.getElementAt(1, 2), </span>
+<span class="fc" id="L1078">                mInternalMatrix.getElementAt(2, 2));</span>
+<span class="fc" id="L1079">    }</span>
     
     /**
      * Returns the projected 2D coordinates of the world origin (0, 0, 0).
      * @return projected point of world origin.
      */
     public Point2D getImageOfWorldOrigin() {
-<span class="fc" id="L1064">        Point2D result = Point2D.create();</span>
-<span class="fc" id="L1065">        imageOfWorldOrigin(result);</span>
-<span class="fc" id="L1066">        return result;</span>
+<span class="fc" id="L1086">        Point2D result = Point2D.create();</span>
+<span class="fc" id="L1087">        imageOfWorldOrigin(result);</span>
+<span class="fc" id="L1088">        return result;</span>
     }
     
     /**
@@ -1074,10 +1096,10 @@ public class PinholeCamera extends Camera implements Serializable {
     public void imageOfWorldOrigin(Point2D result) {
         
         //use fourth camera matrix column to set 2D point
-<span class="fc" id="L1077">        result.setHomogeneousCoordinates(mInternalMatrix.getElementAt(0, 3), </span>
-<span class="fc" id="L1078">                mInternalMatrix.getElementAt(1, 3), </span>
-<span class="fc" id="L1079">                mInternalMatrix.getElementAt(2, 3));        </span>
-<span class="fc" id="L1080">    }</span>
+<span class="fc" id="L1099">        result.setHomogeneousCoordinates(mInternalMatrix.getElementAt(0, 3), </span>
+<span class="fc" id="L1100">                mInternalMatrix.getElementAt(1, 3), </span>
+<span class="fc" id="L1101">                mInternalMatrix.getElementAt(2, 3));        </span>
+<span class="fc" id="L1102">    }</span>
     
     /**
      * Sets the projected 2D coordinates of the x axis, which corresponds to its
@@ -1085,20 +1107,20 @@ public class PinholeCamera extends Camera implements Serializable {
      * @param xAxisVanishingPoint vanishing point of x axis to be set.
      */
     public void setXAxisVanishingPoint(Point2D xAxisVanishingPoint) {
-<span class="fc" id="L1088">        xAxisVanishingPoint.normalize(); //to increase accuracy</span>
+<span class="fc" id="L1110">        xAxisVanishingPoint.normalize(); //to increase accuracy</span>
         
-<span class="fc" id="L1090">        double homX = xAxisVanishingPoint.getHomX();</span>
-<span class="fc" id="L1091">        double homY = xAxisVanishingPoint.getHomY();</span>
-<span class="fc" id="L1092">        double homW = xAxisVanishingPoint.getHomW();</span>
+<span class="fc" id="L1112">        double homX = xAxisVanishingPoint.getHomX();</span>
+<span class="fc" id="L1113">        double homY = xAxisVanishingPoint.getHomY();</span>
+<span class="fc" id="L1114">        double homW = xAxisVanishingPoint.getHomW();</span>
         
-<span class="fc" id="L1094">        mInternalMatrix.setElementAt(0, 0, homX);</span>
-<span class="fc" id="L1095">        mInternalMatrix.setElementAt(1, 0, homY);</span>
-<span class="fc" id="L1096">        mInternalMatrix.setElementAt(2, 0, homW);</span>
+<span class="fc" id="L1116">        mInternalMatrix.setElementAt(0, 0, homX);</span>
+<span class="fc" id="L1117">        mInternalMatrix.setElementAt(1, 0, homY);</span>
+<span class="fc" id="L1118">        mInternalMatrix.setElementAt(2, 0, homW);</span>
         
         //set camera sign fixed and normalized
-<span class="fc" id="L1099">        mCameraSignFixed = false;</span>
-<span class="fc" id="L1100">        mNormalized = false;</span>
-<span class="fc" id="L1101">    }</span>
+<span class="fc" id="L1121">        mCameraSignFixed = false;</span>
+<span class="fc" id="L1122">        mNormalized = false;</span>
+<span class="fc" id="L1123">    }</span>
     
     /**
      * Sets the projected 2D coordinates of the y axis, which corresponds to its
@@ -1106,20 +1128,20 @@ public class PinholeCamera extends Camera implements Serializable {
      * @param yAxisVanishingPoint vanishing point of y axis to be set.
      */
     public void setYAxisVanishingPoint(Point2D yAxisVanishingPoint) {
-<span class="fc" id="L1109">        yAxisVanishingPoint.normalize(); //to increase accuracy</span>
+<span class="fc" id="L1131">        yAxisVanishingPoint.normalize(); //to increase accuracy</span>
 
-<span class="fc" id="L1111">        double homX = yAxisVanishingPoint.getHomX();</span>
-<span class="fc" id="L1112">        double homY = yAxisVanishingPoint.getHomY();</span>
-<span class="fc" id="L1113">        double homW = yAxisVanishingPoint.getHomW();</span>
+<span class="fc" id="L1133">        double homX = yAxisVanishingPoint.getHomX();</span>
+<span class="fc" id="L1134">        double homY = yAxisVanishingPoint.getHomY();</span>
+<span class="fc" id="L1135">        double homW = yAxisVanishingPoint.getHomW();</span>
         
-<span class="fc" id="L1115">        mInternalMatrix.setElementAt(0, 1, homX);</span>
-<span class="fc" id="L1116">        mInternalMatrix.setElementAt(1, 1, homY);</span>
-<span class="fc" id="L1117">        mInternalMatrix.setElementAt(2, 1, homW);</span>
+<span class="fc" id="L1137">        mInternalMatrix.setElementAt(0, 1, homX);</span>
+<span class="fc" id="L1138">        mInternalMatrix.setElementAt(1, 1, homY);</span>
+<span class="fc" id="L1139">        mInternalMatrix.setElementAt(2, 1, homW);</span>
         
         //set camera sign fixed and normalized
-<span class="fc" id="L1120">        mCameraSignFixed = false;</span>
-<span class="fc" id="L1121">        mNormalized = false;        </span>
-<span class="fc" id="L1122">    }</span>
+<span class="fc" id="L1142">        mCameraSignFixed = false;</span>
+<span class="fc" id="L1143">        mNormalized = false;        </span>
+<span class="fc" id="L1144">    }</span>
     
     /**
      * Sets the projected 2D coordinates of the z axis, which corresponds to its
@@ -1127,39 +1149,39 @@ public class PinholeCamera extends Camera implements Serializable {
      * @param zAxisVanishingPoint vanishing point of z axis to be set.
      */
     public void setZAxisVanishingPoint(Point2D zAxisVanishingPoint) {
-<span class="fc" id="L1130">        zAxisVanishingPoint.normalize(); //to increase accuracy</span>
+<span class="fc" id="L1152">        zAxisVanishingPoint.normalize(); //to increase accuracy</span>
         
-<span class="fc" id="L1132">        double homX = zAxisVanishingPoint.getHomX();</span>
-<span class="fc" id="L1133">        double homY = zAxisVanishingPoint.getHomY();</span>
-<span class="fc" id="L1134">        double homW = zAxisVanishingPoint.getHomW();</span>
+<span class="fc" id="L1154">        double homX = zAxisVanishingPoint.getHomX();</span>
+<span class="fc" id="L1155">        double homY = zAxisVanishingPoint.getHomY();</span>
+<span class="fc" id="L1156">        double homW = zAxisVanishingPoint.getHomW();</span>
         
-<span class="fc" id="L1136">        mInternalMatrix.setElementAt(0, 2, homX);</span>
-<span class="fc" id="L1137">        mInternalMatrix.setElementAt(1, 2, homY);</span>
-<span class="fc" id="L1138">        mInternalMatrix.setElementAt(2, 2, homW);</span>
+<span class="fc" id="L1158">        mInternalMatrix.setElementAt(0, 2, homX);</span>
+<span class="fc" id="L1159">        mInternalMatrix.setElementAt(1, 2, homY);</span>
+<span class="fc" id="L1160">        mInternalMatrix.setElementAt(2, 2, homW);</span>
         
         //set camera sign fixed and normalized
-<span class="fc" id="L1141">        mCameraSignFixed = false;</span>
-<span class="fc" id="L1142">        mNormalized = false;</span>
-<span class="fc" id="L1143">    }</span>
+<span class="fc" id="L1163">        mCameraSignFixed = false;</span>
+<span class="fc" id="L1164">        mNormalized = false;</span>
+<span class="fc" id="L1165">    }</span>
     
     /**
      * Sets the projected 2D coordinates of the world origin (0, 0, 0).
      * @param imageOfWorldOrigin projected world origin to be set.
      */
     public void setImageOfWorldOrigin(Point2D imageOfWorldOrigin) {
-<span class="fc" id="L1150">        imageOfWorldOrigin.normalize(); //to increase accuracy</span>
+<span class="fc" id="L1172">        imageOfWorldOrigin.normalize(); //to increase accuracy</span>
 
-<span class="fc" id="L1152">        double homX = imageOfWorldOrigin.getHomX();</span>
-<span class="fc" id="L1153">        double homY = imageOfWorldOrigin.getHomY();</span>
-<span class="fc" id="L1154">        double homW = imageOfWorldOrigin.getHomW();</span>
+<span class="fc" id="L1174">        double homX = imageOfWorldOrigin.getHomX();</span>
+<span class="fc" id="L1175">        double homY = imageOfWorldOrigin.getHomY();</span>
+<span class="fc" id="L1176">        double homW = imageOfWorldOrigin.getHomW();</span>
         
-<span class="fc" id="L1156">        mInternalMatrix.setElementAt(0, 3, homX);</span>
-<span class="fc" id="L1157">        mInternalMatrix.setElementAt(1, 3, homY);</span>
-<span class="fc" id="L1158">        mInternalMatrix.setElementAt(2, 3, homW);</span>
+<span class="fc" id="L1178">        mInternalMatrix.setElementAt(0, 3, homX);</span>
+<span class="fc" id="L1179">        mInternalMatrix.setElementAt(1, 3, homY);</span>
+<span class="fc" id="L1180">        mInternalMatrix.setElementAt(2, 3, homW);</span>
         
         //set normalized (no need to reset camera sign)
-<span class="fc" id="L1161">        mNormalized = false;        </span>
-<span class="fc" id="L1162">    }</span>
+<span class="fc" id="L1183">        mNormalized = false;        </span>
+<span class="fc" id="L1184">    }</span>
     
     /**
      * Returns plane formed by x and z retinal axes. x axis is taken respect the 
@@ -1168,9 +1190,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * @return horizontal plane respect camera retinal plane.
      */
     public Plane getHorizontalAxisPlane() {
-<span class="fc" id="L1171">        Plane result = new Plane();</span>
-<span class="fc" id="L1172">        horizontalAxisPlane(result);</span>
-<span class="fc" id="L1173">        return result;</span>
+<span class="fc" id="L1193">        Plane result = new Plane();</span>
+<span class="fc" id="L1194">        horizontalAxisPlane(result);</span>
+<span class="fc" id="L1195">        return result;</span>
     }
     
     /**
@@ -1182,11 +1204,11 @@ public class PinholeCamera extends Camera implements Serializable {
     public void horizontalAxisPlane(Plane result) {
         
         //use second row of camera matrix to set plane
-<span class="fc" id="L1185">        result.setParameters(mInternalMatrix.getElementAt(1, 0), </span>
-<span class="fc" id="L1186">                mInternalMatrix.getElementAt(1, 1), </span>
-<span class="fc" id="L1187">                mInternalMatrix.getElementAt(1, 2), </span>
-<span class="fc" id="L1188">                mInternalMatrix.getElementAt(1, 3));</span>
-<span class="fc" id="L1189">    }</span>
+<span class="fc" id="L1207">        result.setParameters(mInternalMatrix.getElementAt(1, 0), </span>
+<span class="fc" id="L1208">                mInternalMatrix.getElementAt(1, 1), </span>
+<span class="fc" id="L1209">                mInternalMatrix.getElementAt(1, 2), </span>
+<span class="fc" id="L1210">                mInternalMatrix.getElementAt(1, 3));</span>
+<span class="fc" id="L1211">    }</span>
     
     /**
      * Returns plane formed by y and z retinal axes. y axis is taken respect the 
@@ -1195,9 +1217,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * @return vertical plane respect camera retinal plane.
      */
     public Plane getVerticalAxisPlane() {
-<span class="fc" id="L1198">        Plane result = new Plane();</span>
-<span class="fc" id="L1199">        verticalAxisPlane(result);</span>
-<span class="fc" id="L1200">        return result;</span>
+<span class="fc" id="L1220">        Plane result = new Plane();</span>
+<span class="fc" id="L1221">        verticalAxisPlane(result);</span>
+<span class="fc" id="L1222">        return result;</span>
     }
     
     /**
@@ -1208,11 +1230,11 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public void verticalAxisPlane(Plane result) {
         //use first row of camera matrix to set plane
-<span class="fc" id="L1211">        result.setParameters(mInternalMatrix.getElementAt(0, 0), </span>
-<span class="fc" id="L1212">                mInternalMatrix.getElementAt(0, 1), </span>
-<span class="fc" id="L1213">                mInternalMatrix.getElementAt(0, 2), </span>
-<span class="fc" id="L1214">                mInternalMatrix.getElementAt(0, 3));</span>
-<span class="fc" id="L1215">    }</span>
+<span class="fc" id="L1233">        result.setParameters(mInternalMatrix.getElementAt(0, 0), </span>
+<span class="fc" id="L1234">                mInternalMatrix.getElementAt(0, 1), </span>
+<span class="fc" id="L1235">                mInternalMatrix.getElementAt(0, 2), </span>
+<span class="fc" id="L1236">                mInternalMatrix.getElementAt(0, 3));</span>
+<span class="fc" id="L1237">    }</span>
     
     /**
      * Returns a plane equivalent to the retinal plane (i.e. the plane where 3D 
@@ -1222,9 +1244,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * @return a plane equivalent to the retinal plane.
      */
     public Plane getPrincipalPlane() {
-<span class="fc" id="L1225">        Plane result = new Plane();</span>
-<span class="fc" id="L1226">        principalPlane(result);</span>
-<span class="fc" id="L1227">        return result;</span>
+<span class="fc" id="L1247">        Plane result = new Plane();</span>
+<span class="fc" id="L1248">        principalPlane(result);</span>
+<span class="fc" id="L1249">        return result;</span>
     }
     
     /**
@@ -1236,11 +1258,11 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public void principalPlane(Plane result) {
         //use third row of camera matrix to set plane
-<span class="fc" id="L1239">        result.setParameters(mInternalMatrix.getElementAt(2, 0), </span>
-<span class="fc" id="L1240">                mInternalMatrix.getElementAt(2, 1), </span>
-<span class="fc" id="L1241">                mInternalMatrix.getElementAt(2, 2), </span>
-<span class="fc" id="L1242">                mInternalMatrix.getElementAt(2, 3));</span>
-<span class="fc" id="L1243">    }</span>
+<span class="fc" id="L1261">        result.setParameters(mInternalMatrix.getElementAt(2, 0), </span>
+<span class="fc" id="L1262">                mInternalMatrix.getElementAt(2, 1), </span>
+<span class="fc" id="L1263">                mInternalMatrix.getElementAt(2, 2), </span>
+<span class="fc" id="L1264">                mInternalMatrix.getElementAt(2, 3));</span>
+<span class="fc" id="L1265">    }</span>
 
     /**
      * Sets plane formed by x and z retinal plane. x axis is taken respect the
@@ -1250,22 +1272,22 @@ public class PinholeCamera extends Camera implements Serializable {
      * to be set.
      */
     public void setHorizontalAxisPlane(Plane horizontalAxisPlane) {
-<span class="fc" id="L1253">        horizontalAxisPlane.normalize(); //to increase accuracy</span>
+<span class="fc" id="L1275">        horizontalAxisPlane.normalize(); //to increase accuracy</span>
         
-<span class="fc" id="L1255">        double a = horizontalAxisPlane.getA();</span>
-<span class="fc" id="L1256">        double b = horizontalAxisPlane.getB();</span>
-<span class="fc" id="L1257">        double c = horizontalAxisPlane.getC();</span>
-<span class="fc" id="L1258">        double d = horizontalAxisPlane.getD();</span>
+<span class="fc" id="L1277">        double a = horizontalAxisPlane.getA();</span>
+<span class="fc" id="L1278">        double b = horizontalAxisPlane.getB();</span>
+<span class="fc" id="L1279">        double c = horizontalAxisPlane.getC();</span>
+<span class="fc" id="L1280">        double d = horizontalAxisPlane.getD();</span>
         
-<span class="fc" id="L1260">        mInternalMatrix.setElementAt(1, 0, a);</span>
-<span class="fc" id="L1261">        mInternalMatrix.setElementAt(1, 1, b);</span>
-<span class="fc" id="L1262">        mInternalMatrix.setElementAt(1, 2, c);</span>
-<span class="fc" id="L1263">        mInternalMatrix.setElementAt(1, 3, d);</span>
+<span class="fc" id="L1282">        mInternalMatrix.setElementAt(1, 0, a);</span>
+<span class="fc" id="L1283">        mInternalMatrix.setElementAt(1, 1, b);</span>
+<span class="fc" id="L1284">        mInternalMatrix.setElementAt(1, 2, c);</span>
+<span class="fc" id="L1285">        mInternalMatrix.setElementAt(1, 3, d);</span>
         
         //set camera sign fixed and normalized
-<span class="fc" id="L1266">        mCameraSignFixed = false;</span>
-<span class="fc" id="L1267">        mNormalized = false;</span>
-<span class="fc" id="L1268">    }</span>
+<span class="fc" id="L1288">        mCameraSignFixed = false;</span>
+<span class="fc" id="L1289">        mNormalized = false;</span>
+<span class="fc" id="L1290">    }</span>
 
     /**
      * Sets plane formed by y and z retinal plane. y axis is taken respect the
@@ -1275,22 +1297,22 @@ public class PinholeCamera extends Camera implements Serializable {
      * be set.
      */
     public void setVerticalAxisPlane(Plane verticalAxisPlane) {
-<span class="fc" id="L1278">        verticalAxisPlane.normalize(); //to increase accuracy</span>
+<span class="fc" id="L1300">        verticalAxisPlane.normalize(); //to increase accuracy</span>
         
-<span class="fc" id="L1280">        double a = verticalAxisPlane.getA();</span>
-<span class="fc" id="L1281">        double b = verticalAxisPlane.getB();</span>
-<span class="fc" id="L1282">        double c = verticalAxisPlane.getC();</span>
-<span class="fc" id="L1283">        double d = verticalAxisPlane.getD();</span>
+<span class="fc" id="L1302">        double a = verticalAxisPlane.getA();</span>
+<span class="fc" id="L1303">        double b = verticalAxisPlane.getB();</span>
+<span class="fc" id="L1304">        double c = verticalAxisPlane.getC();</span>
+<span class="fc" id="L1305">        double d = verticalAxisPlane.getD();</span>
         
-<span class="fc" id="L1285">        mInternalMatrix.setElementAt(0, 0, a);</span>
-<span class="fc" id="L1286">        mInternalMatrix.setElementAt(0, 1, b);</span>
-<span class="fc" id="L1287">        mInternalMatrix.setElementAt(0, 2, c);</span>
-<span class="fc" id="L1288">        mInternalMatrix.setElementAt(0, 3, d);</span>
+<span class="fc" id="L1307">        mInternalMatrix.setElementAt(0, 0, a);</span>
+<span class="fc" id="L1308">        mInternalMatrix.setElementAt(0, 1, b);</span>
+<span class="fc" id="L1309">        mInternalMatrix.setElementAt(0, 2, c);</span>
+<span class="fc" id="L1310">        mInternalMatrix.setElementAt(0, 3, d);</span>
         
         //set camera sign fixed and normalized
-<span class="fc" id="L1291">        mCameraSignFixed = false;</span>
-<span class="fc" id="L1292">        mNormalized = false;</span>
-<span class="fc" id="L1293">    }</span>
+<span class="fc" id="L1313">        mCameraSignFixed = false;</span>
+<span class="fc" id="L1314">        mNormalized = false;</span>
+<span class="fc" id="L1315">    }</span>
 
     /**
      * Sets plane equivalent to the retinal plane (i.e. the plane where 3D 
@@ -1300,22 +1322,22 @@ public class PinholeCamera extends Camera implements Serializable {
      * @param principalPlane principal plane to be set.
      */
     public void setPrincipalPlane(Plane principalPlane) {
-<span class="fc" id="L1303">        principalPlane.normalize(); //to increase accuracy</span>
+<span class="fc" id="L1325">        principalPlane.normalize(); //to increase accuracy</span>
         
-<span class="fc" id="L1305">        double a = principalPlane.getA();</span>
-<span class="fc" id="L1306">        double b = principalPlane.getB();</span>
-<span class="fc" id="L1307">        double c = principalPlane.getC();</span>
-<span class="fc" id="L1308">        double d = principalPlane.getD();</span>
+<span class="fc" id="L1327">        double a = principalPlane.getA();</span>
+<span class="fc" id="L1328">        double b = principalPlane.getB();</span>
+<span class="fc" id="L1329">        double c = principalPlane.getC();</span>
+<span class="fc" id="L1330">        double d = principalPlane.getD();</span>
         
-<span class="fc" id="L1310">        mInternalMatrix.setElementAt(2, 0, a);</span>
-<span class="fc" id="L1311">        mInternalMatrix.setElementAt(2, 1, b);</span>
-<span class="fc" id="L1312">        mInternalMatrix.setElementAt(2, 2, c);</span>
-<span class="fc" id="L1313">        mInternalMatrix.setElementAt(2, 3, d);</span>
+<span class="fc" id="L1332">        mInternalMatrix.setElementAt(2, 0, a);</span>
+<span class="fc" id="L1333">        mInternalMatrix.setElementAt(2, 1, b);</span>
+<span class="fc" id="L1334">        mInternalMatrix.setElementAt(2, 2, c);</span>
+<span class="fc" id="L1335">        mInternalMatrix.setElementAt(2, 3, d);</span>
         
         //set camera sign fixed and normalized
-<span class="fc" id="L1316">        mCameraSignFixed = false;</span>
-<span class="fc" id="L1317">        mNormalized = false;</span>
-<span class="fc" id="L1318">    }</span>
+<span class="fc" id="L1338">        mCameraSignFixed = false;</span>
+<span class="fc" id="L1339">        mNormalized = false;</span>
+<span class="fc" id="L1340">    }</span>
     
     /**
      * Returns a 2D point indicating where the camera center (or the principal
@@ -1325,9 +1347,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * @return the principal point laying on the retinal plane
      */
     public Point2D getPrincipalPoint() {
-<span class="fc" id="L1328">        Point2D result = Point2D.create();</span>
-<span class="fc" id="L1329">        principalPoint(result);</span>
-<span class="fc" id="L1330">        return result;</span>
+<span class="fc" id="L1350">        Point2D result = Point2D.create();</span>
+<span class="fc" id="L1351">        principalPoint(result);</span>
+<span class="fc" id="L1352">        return result;</span>
     }
     
     /**
@@ -1342,20 +1364,22 @@ public class PinholeCamera extends Camera implements Serializable {
         try {
             //the principal point is retrieved as the product of the 3x3 
             //top-left submatrix of the internal camera with its second row
-<span class="fc" id="L1345">            Matrix mMp = mInternalMatrix.getSubmatrix(0, 0, </span>
+<span class="fc" id="L1367">            Matrix mMp = mInternalMatrix.getSubmatrix(0, 0, </span>
                     PINHOLE_CAMERA_MATRIX_ROWS - 1, 
                     PINHOLE_CAMERA_MATRIX_ROWS - 1);
-<span class="fc" id="L1348">            Matrix m = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS, 1);</span>
-<span class="fc" id="L1349">            m.setElementAtIndex(0, mMp.getElementAt(2, 0));</span>
-<span class="fc" id="L1350">            m.setElementAtIndex(1, mMp.getElementAt(2, 1));</span>
-<span class="fc" id="L1351">            m.setElementAtIndex(2, mMp.getElementAt(2, 2));</span>
+<span class="fc" id="L1370">            Matrix m = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS, 1);</span>
+<span class="fc" id="L1371">            m.setElementAtIndex(0, mMp.getElementAt(2, 0));</span>
+<span class="fc" id="L1372">            m.setElementAtIndex(1, mMp.getElementAt(2, 1));</span>
+<span class="fc" id="L1373">            m.setElementAtIndex(2, mMp.getElementAt(2, 2));</span>
         
-<span class="fc" id="L1353">            mMp.multiply(m);</span>
+<span class="fc" id="L1375">            mMp.multiply(m);</span>
             
-<span class="fc" id="L1355">            result.setHomogeneousCoordinates(mMp.getElementAtIndex(0), </span>
-<span class="fc" id="L1356">                    mMp.getElementAtIndex(1), mMp.getElementAtIndex(2));</span>
-<span class="pc" id="L1357">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L1358">    }</span>
+<span class="fc" id="L1377">            result.setHomogeneousCoordinates(mMp.getElementAtIndex(0), </span>
+<span class="fc" id="L1378">                    mMp.getElementAtIndex(1), mMp.getElementAtIndex(2));</span>
+<span class="nc" id="L1379">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L1381">        }</span>
+<span class="fc" id="L1382">    }</span>
     
     /**
      * Returns the principal axis as an array consisting of the x,y,z 
@@ -1366,9 +1390,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * parameters.
      */
     public double[] getPrincipalAxisArray() throws CameraException {
-<span class="fc" id="L1369">        double[] result = new double[PINHOLE_CAMERA_MATRIX_ROWS];</span>
-<span class="fc" id="L1370">        principalAxisArray(result);</span>
-<span class="fc" id="L1371">        return result;</span>
+<span class="fc" id="L1393">        double[] result = new double[PINHOLE_CAMERA_MATRIX_ROWS];</span>
+<span class="fc" id="L1394">        principalAxisArray(result);</span>
+<span class="fc" id="L1395">        return result;</span>
     }
     
     /**
@@ -1380,31 +1404,32 @@ public class PinholeCamera extends Camera implements Serializable {
      * @throws CameraException if there is numerical instability in camera 
      * parameters.
      */
-    public void principalAxisArray(double[] result) 
-            throws IllegalArgumentException, CameraException {
-<span class="pc bpc" id="L1385" title="1 of 2 branches missed.">        if (result.length != PINHOLE_CAMERA_MATRIX_ROWS) {</span>
-<span class="nc" id="L1386">            throw new IllegalArgumentException();</span>
+    public void principalAxisArray(double[] result) throws CameraException {
+<span class="pc bpc" id="L1408" title="1 of 2 branches missed.">        if (result.length != PINHOLE_CAMERA_MATRIX_ROWS) {</span>
+<span class="nc" id="L1409">            throw new IllegalArgumentException();</span>
         }
         
         try {
             //get first 3 elements of last row of camera matrix, which contains
             //director vector of principal plane
-<span class="fc" id="L1392">            mInternalMatrix.getSubmatrixAsArray(PINHOLE_CAMERA_MATRIX_ROWS - 1, </span>
+<span class="fc" id="L1415">            mInternalMatrix.getSubmatrixAsArray(PINHOLE_CAMERA_MATRIX_ROWS - 1, </span>
                     0, PINHOLE_CAMERA_MATRIX_ROWS - 1, 
                     PINHOLE_CAMERA_MATRIX_ROWS - 1, result);
         
-<span class="pc bpc" id="L1396" title="1 of 2 branches missed.">            if (!isCameraSignFixed()) {</span>
-<span class="fc" id="L1397">                double cameraSign = getCameraSign();</span>
+<span class="pc bpc" id="L1419" title="1 of 2 branches missed.">            if (!isCameraSignFixed()) {</span>
+<span class="fc" id="L1420">                double cameraSign = getCameraSign();</span>
             
                 //fix sign of director vector
-<span class="fc" id="L1400">                ArrayUtils.multiplyByScalar(result, cameraSign, result);</span>
+<span class="fc" id="L1423">                ArrayUtils.multiplyByScalar(result, cameraSign, result);</span>
             }
         
             //normalize director vector
-<span class="fc" id="L1404">            double norm = Utils.normF(result);</span>
-<span class="fc" id="L1405">            ArrayUtils.multiplyByScalar(result, 1.0 / norm, result);</span>
-<span class="pc" id="L1406">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L1407">    }</span>
+<span class="fc" id="L1427">            double norm = Utils.normF(result);</span>
+<span class="fc" id="L1428">            ArrayUtils.multiplyByScalar(result, 1.0 / norm, result);</span>
+<span class="nc" id="L1429">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L1431">        }</span>
+<span class="fc" id="L1432">    }</span>
     
     /**
      * Returns camera sign of this camera.
@@ -1422,7 +1447,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * @throws CameraException if there is numerical instability.
      */
     public double getCameraSign() throws CameraException {
-<span class="fc" id="L1425">        return getCameraSign(SIGN_THRESHOLD);</span>
+<span class="fc" id="L1450">        return getCameraSign(SIGN_THRESHOLD);</span>
     }
     
     /**
@@ -1445,17 +1470,17 @@ public class PinholeCamera extends Camera implements Serializable {
     public double getCameraSign(double threshold) throws CameraException {
         try {
             //pick left 3x3 top-left sub-matrix
-<span class="fc" id="L1448">            Matrix mMp = mInternalMatrix.getSubmatrix(0, 0, </span>
+<span class="fc" id="L1473">            Matrix mMp = mInternalMatrix.getSubmatrix(0, 0, </span>
                     PINHOLE_CAMERA_MATRIX_ROWS - 1, 
                     PINHOLE_CAMERA_MATRIX_ROWS - 1);
         
             //compute its determinant
-<span class="fc" id="L1453">            double det = Utils.det(mMp);</span>
+<span class="fc" id="L1478">            double det = Utils.det(mMp);</span>
             
             //get sign of determinant to determine pinhole camera matrix sign        
-<span class="fc bfc" id="L1456" title="All 2 branches covered.">            return (det &gt; threshold) ? 1.0 : -1.0;</span>
-<span class="nc" id="L1457">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L1458">            throw new CameraException(e);</span>
+<span class="fc bfc" id="L1481" title="All 2 branches covered.">            return (det &gt; threshold) ? 1.0 : -1.0;</span>
+<span class="nc" id="L1482">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L1483">            throw new CameraException(e);</span>
         }
     }
     
@@ -1468,22 +1493,22 @@ public class PinholeCamera extends Camera implements Serializable {
      * @throws CameraException if there is numerical instability.
      */
     public double getDepth(Point3D point) throws CameraException {
-<span class="pc bpc" id="L1471" title="1 of 2 branches missed.">        if (!isCameraCenterAvailable()) {</span>
+<span class="pc bpc" id="L1496" title="1 of 2 branches missed.">        if (!isCameraCenterAvailable()) {</span>
             //compute camera center
-<span class="nc" id="L1473">            mCameraCenter = computeCameraCenterSVD();</span>
+<span class="nc" id="L1498">            mCameraCenter = computeCameraCenterSVD();</span>
         }
         
         //because when computing principal axis vector it is normalized, we can
         //compute depth of world points respect to camera just as the dot
         //product between world points minus camera center and principal axis
         //vector using inhomogeneous coordinates
-<span class="fc" id="L1480">        double[] principalAxis = getPrincipalAxisArray();</span>
-<span class="fc" id="L1481">        double[] diff = new double[INHOM_COORDS];</span>
-<span class="fc" id="L1482">        diff[0] = point.getInhomX() - mCameraCenter.getInhomX();</span>
-<span class="fc" id="L1483">        diff[1] = point.getInhomY() - mCameraCenter.getInhomY();</span>
-<span class="fc" id="L1484">        diff[2] = point.getInhomZ() - mCameraCenter.getInhomZ();</span>
+<span class="fc" id="L1505">        double[] principalAxis = getPrincipalAxisArray();</span>
+<span class="fc" id="L1506">        double[] diff = new double[INHOM_COORDS];</span>
+<span class="fc" id="L1507">        diff[0] = point.getInhomX() - mCameraCenter.getInhomX();</span>
+<span class="fc" id="L1508">        diff[1] = point.getInhomY() - mCameraCenter.getInhomY();</span>
+<span class="fc" id="L1509">        diff[2] = point.getInhomZ() - mCameraCenter.getInhomZ();</span>
         
-<span class="fc" id="L1486">        return ArrayUtils.dotProduct(principalAxis, diff);</span>
+<span class="fc" id="L1511">        return ArrayUtils.dotProduct(principalAxis, diff);</span>
     }
     
     /**
@@ -1495,9 +1520,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * @throws CameraException if there is numerical instability.
      */
     public List&lt;Double&gt; getDepths(List&lt;Point3D&gt; points) throws CameraException {
-<span class="fc" id="L1498">        List&lt;Double&gt; depths = new ArrayList&lt;&gt;(points.size());</span>
-<span class="fc" id="L1499">        depths(points, depths);</span>
-<span class="fc" id="L1500">        return depths;</span>
+<span class="fc" id="L1523">        List&lt;Double&gt; depths = new ArrayList&lt;&gt;(points.size());</span>
+<span class="fc" id="L1524">        depths(points, depths);</span>
+<span class="fc" id="L1525">        return depths;</span>
     }
     
     /**
@@ -1511,11 +1536,11 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public void depths(List&lt;Point3D&gt; points, List&lt;Double&gt; result) 
             throws CameraException {
-<span class="fc" id="L1514">        result.clear();</span>
-<span class="fc bfc" id="L1515" title="All 2 branches covered.">        for (Point3D point : points) {</span>
-<span class="fc" id="L1516">            result.add(getDepth(point));</span>
-<span class="fc" id="L1517">        }</span>
-<span class="fc" id="L1518">    }</span>
+<span class="fc" id="L1539">        result.clear();</span>
+<span class="fc bfc" id="L1540" title="All 2 branches covered.">        for (Point3D point : points) {</span>
+<span class="fc" id="L1541">            result.add(getDepth(point));</span>
+<span class="fc" id="L1542">        }</span>
+<span class="fc" id="L1543">    }</span>
     
     /**
      * Computes the cheirality of a point.
@@ -1532,28 +1557,26 @@ public class PinholeCamera extends Camera implements Serializable {
     public double getCheirality(Point3D point) throws CameraException {
         
         //normalize input point and camera to increase accuracy
-<span class="fc" id="L1535">        point.normalize();</span>
-<span class="fc" id="L1536">        normalize();</span>
+<span class="fc" id="L1560">        point.normalize();</span>
+<span class="fc" id="L1561">        normalize();</span>
         
         //pick last homogeneous component of 3D and 2D points
-<span class="fc" id="L1539">        double hom3DW = point.getHomW();</span>
+<span class="fc" id="L1564">        double hom3DW = point.getHomW();</span>
         
         //W component of projected point can be computed as the dot product
         //between homogeneous 3D point and last row of pinhole camera matrix
-<span class="fc" id="L1543">        double hom2DW = point.getHomX() * mInternalMatrix.getElementAt(2, 0) +</span>
-<span class="fc" id="L1544">                point.getHomY() * mInternalMatrix.getElementAt(2, 1) +</span>
-<span class="fc" id="L1545">                point.getHomZ() * mInternalMatrix.getElementAt(2, 2) +</span>
-<span class="fc" id="L1546">                point.getHomW() * mInternalMatrix.getElementAt(2, 3);</span>
-                
-        //double hom2DW = projectedPoint.getHomW();
+<span class="fc" id="L1568">        double hom2DW = point.getHomX() * mInternalMatrix.getElementAt(2, 0) +</span>
+<span class="fc" id="L1569">                point.getHomY() * mInternalMatrix.getElementAt(2, 1) +</span>
+<span class="fc" id="L1570">                point.getHomZ() * mInternalMatrix.getElementAt(2, 2) +</span>
+<span class="fc" id="L1571">                point.getHomW() * mInternalMatrix.getElementAt(2, 3);</span>
         
-<span class="fc" id="L1550">        double cheiral = hom3DW * hom2DW;</span>
+<span class="fc" id="L1573">        double cheiral = hom3DW * hom2DW;</span>
         
-<span class="pc bpc" id="L1552" title="1 of 2 branches missed.">        if (!isCameraSignFixed()) {</span>
-<span class="fc" id="L1553">            cheiral *= getCameraSign();</span>
+<span class="pc bpc" id="L1575" title="1 of 2 branches missed.">        if (!isCameraSignFixed()) {</span>
+<span class="fc" id="L1576">            cheiral *= getCameraSign();</span>
         }
 
-<span class="fc" id="L1556">        return cheiral;</span>
+<span class="fc" id="L1579">        return cheiral;</span>
     }
     
     /**
@@ -1569,9 +1592,9 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public List&lt;Double&gt; getCheiralities(List&lt;Point3D&gt; points) 
             throws CameraException {
-<span class="fc" id="L1572">        List&lt;Double&gt; cheiralities = new ArrayList&lt;&gt;(points.size());</span>
-<span class="fc" id="L1573">        cheiralities(points, cheiralities);</span>
-<span class="fc" id="L1574">        return cheiralities;</span>
+<span class="fc" id="L1595">        List&lt;Double&gt; cheiralities = new ArrayList&lt;&gt;(points.size());</span>
+<span class="fc" id="L1596">        cheiralities(points, cheiralities);</span>
+<span class="fc" id="L1597">        return cheiralities;</span>
     }
     
     /**
@@ -1588,11 +1611,11 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public void cheiralities(List&lt;Point3D&gt; points, List&lt;Double&gt; result) 
             throws CameraException {
-<span class="fc" id="L1591">        result.clear();</span>
-<span class="fc bfc" id="L1592" title="All 2 branches covered.">        for(Point3D point : points){</span>
-<span class="fc" id="L1593">            result.add(getCheirality(point));</span>
-<span class="fc" id="L1594">        }</span>
-<span class="fc" id="L1595">    }</span>
+<span class="fc" id="L1614">        result.clear();</span>
+<span class="fc bfc" id="L1615" title="All 2 branches covered.">        for(Point3D point : points){</span>
+<span class="fc" id="L1616">            result.add(getCheirality(point));</span>
+<span class="fc" id="L1617">        }</span>
+<span class="fc" id="L1618">    }</span>
     
     /**
      * Determines if a given point is located in front of the camera.
@@ -1601,7 +1624,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * @throws CameraException if there is numerical instability.
      */
     public boolean isPointInFrontOfCamera(Point3D point) throws CameraException {
-<span class="fc" id="L1604">        return isPointInFrontOfCamera(point, FRONT_THRESHOLD);</span>
+<span class="fc" id="L1627">        return isPointInFrontOfCamera(point, FRONT_THRESHOLD);</span>
     }
     
     /**
@@ -1615,7 +1638,7 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public boolean isPointInFrontOfCamera(Point3D point, double threshold) 
             throws CameraException {
-<span class="fc bfc" id="L1618" title="All 2 branches covered.">        return getCheirality(point) &gt; threshold;</span>
+<span class="fc bfc" id="L1641" title="All 2 branches covered.">        return getCheirality(point) &gt; threshold;</span>
     }
     
     /**
@@ -1630,9 +1653,9 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public List&lt;Boolean&gt; arePointsInFrontOfCamera(List&lt;Point3D&gt; points, 
             double threshold) throws CameraException {
-<span class="fc" id="L1633">        List&lt;Boolean&gt; result = new ArrayList&lt;&gt;(points.size());</span>
-<span class="fc" id="L1634">        arePointsInFrontOfCamera(points, result, threshold);</span>
-<span class="fc" id="L1635">        return result;</span>
+<span class="fc" id="L1656">        List&lt;Boolean&gt; result = new ArrayList&lt;&gt;(points.size());</span>
+<span class="fc" id="L1657">        arePointsInFrontOfCamera(points, result, threshold);</span>
+<span class="fc" id="L1658">        return result;</span>
     }
     
     /**
@@ -1645,7 +1668,7 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public List&lt;Boolean&gt; arePointsInFrontOfCamera(List&lt;Point3D&gt; points)
             throws CameraException {
-<span class="fc" id="L1648">        return arePointsInFrontOfCamera(points, FRONT_THRESHOLD);</span>
+<span class="fc" id="L1671">        return arePointsInFrontOfCamera(points, FRONT_THRESHOLD);</span>
     }
     
     /**
@@ -1659,12 +1682,12 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public void arePointsInFrontOfCamera(List&lt;Point3D&gt; points, 
             List&lt;Boolean&gt; result, double threshold) throws CameraException {
-<span class="fc" id="L1662">        result.clear();</span>
-<span class="fc bfc" id="L1663" title="All 2 branches covered.">        for (Point3D point : points) {</span>
-<span class="fc" id="L1664">            result.add(PinholeCamera.this.isPointInFrontOfCamera(point, </span>
+<span class="fc" id="L1685">        result.clear();</span>
+<span class="fc bfc" id="L1686" title="All 2 branches covered.">        for (Point3D point : points) {</span>
+<span class="fc" id="L1687">            result.add(PinholeCamera.this.isPointInFrontOfCamera(point, </span>
                     threshold));
-<span class="fc" id="L1666">        }</span>
-<span class="fc" id="L1667">    }</span>
+<span class="fc" id="L1689">        }</span>
+<span class="fc" id="L1690">    }</span>
     
     /**
      * COmputes list indicating if corresponding provided points are located in
@@ -1675,8 +1698,8 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public void arePointsInFrontOfCamera(List&lt;Point3D&gt; points, 
             List&lt;Boolean&gt; result) throws CameraException {
-<span class="fc" id="L1678">        arePointsInFrontOfCamera(points, result, FRONT_THRESHOLD);</span>
-<span class="fc" id="L1679">    }</span>
+<span class="fc" id="L1701">        arePointsInFrontOfCamera(points, result, FRONT_THRESHOLD);</span>
+<span class="fc" id="L1702">    }</span>
     
     /**
      * Creates an instance of PinholeCamera. Created instance is a canonical
@@ -1685,7 +1708,7 @@ public class PinholeCamera extends Camera implements Serializable {
      * @return a canonical pinhole camera.
      */
     public static PinholeCamera createCanonicalCamera() {
-<span class="fc" id="L1688">        return new PinholeCamera();</span>
+<span class="fc" id="L1711">        return new PinholeCamera();</span>
     }
     
     /**
@@ -1696,73 +1719,75 @@ public class PinholeCamera extends Camera implements Serializable {
     private void computeIntrinsicsAndRotation() throws CameraException {
         try {
             //normalize camera to increase accuracy
-<span class="fc" id="L1699">            normalize();</span>
+<span class="fc" id="L1722">            normalize();</span>
         
-<span class="fc" id="L1701">            Matrix mMp = mInternalMatrix.getSubmatrix(0, 0, </span>
+<span class="fc" id="L1724">            Matrix mMp = mInternalMatrix.getSubmatrix(0, 0, </span>
                     PINHOLE_CAMERA_MATRIX_ROWS - 1, 
                     PINHOLE_CAMERA_MATRIX_ROWS - 1);
         
             //Use RQ decomposition to obtain intrinsic parameters as R ensuring 
             //that elements on the diagonal are positive and eement (3, 3) is 1, 
             //and Q is an orthogonal matrix
-<span class="fc" id="L1708">            RQDecomposer decomposer = new RQDecomposer(mMp);</span>
-<span class="fc" id="L1709">            decomposer.decompose();</span>
+<span class="fc" id="L1731">            RQDecomposer decomposer = new RQDecomposer(mMp);</span>
+<span class="fc" id="L1732">            decomposer.decompose();</span>
         
             //Intrinsic parameters
-<span class="fc" id="L1712">            Matrix R = decomposer.getR();</span>
-<span class="fc" id="L1713">            Matrix Q = decomposer.getQ();</span>
+<span class="fc" id="L1735">            Matrix r = decomposer.getR();</span>
+<span class="fc" id="L1736">            Matrix q = decomposer.getQ();</span>
             
             //norm to normalize R
-<span class="fc" id="L1716">            double norm = R.getElementAt(2, 2);</span>
+<span class="fc" id="L1739">            double norm = r.getElementAt(2, 2);</span>
         
             //ensure that norm is not too small
-<span class="pc bpc" id="L1719" title="1 of 2 branches missed.">            if (Math.abs(norm) &lt; EPS) {</span>
-<span class="nc bnc" id="L1720" title="All 2 branches missed.">                norm = (norm &gt; 0.0 ? 1.0 : -1.0);</span>
+<span class="pc bpc" id="L1742" title="1 of 2 branches missed.">            if (Math.abs(norm) &lt; EPS) {</span>
+<span class="nc bnc" id="L1743" title="All 2 branches missed.">                norm = (norm &gt; 0.0 ? 1.0 : -1.0);</span>
             }
         
-<span class="fc" id="L1723">            double invNorm = 1.0 / norm;</span>
+<span class="fc" id="L1746">            double invNorm = 1.0 / norm;</span>
         
             //build diagonal matrix to normalize R and obtain K
-<span class="fc" id="L1726">            double[] vDiag = new double[PINHOLE_CAMERA_MATRIX_ROWS];</span>
-<span class="fc" id="L1727">            double[] vDiag2 = new double[PINHOLE_CAMERA_MATRIX_ROWS];</span>
+<span class="fc" id="L1749">            double[] vDiag = new double[PINHOLE_CAMERA_MATRIX_ROWS];</span>
+<span class="fc" id="L1750">            double[] vDiag2 = new double[PINHOLE_CAMERA_MATRIX_ROWS];</span>
         
-<span class="pc bpc" id="L1729" title="1 of 2 branches missed.">            if (invNorm * R.getElementAt(0, 0) &gt; 0.0) {</span>
-<span class="fc" id="L1730">                vDiag[0] = invNorm;</span>
-<span class="fc" id="L1731">                vDiag2[0] = norm;</span>
+<span class="fc bfc" id="L1752" title="All 2 branches covered.">            if (invNorm * r.getElementAt(0, 0) &gt; 0.0) {</span>
+<span class="fc" id="L1753">                vDiag[0] = invNorm;</span>
+<span class="fc" id="L1754">                vDiag2[0] = norm;</span>
             } else {
-<span class="nc" id="L1733">                vDiag[0] = -invNorm;</span>
-<span class="nc" id="L1734">                vDiag2[0] = -norm;</span>
+<span class="fc" id="L1756">                vDiag[0] = -invNorm;</span>
+<span class="fc" id="L1757">                vDiag2[0] = -norm;</span>
             }
-<span class="pc bpc" id="L1736" title="1 of 2 branches missed.">            if (invNorm * R.getElementAt(1, 1) &gt; 0.0) {</span>
-<span class="fc" id="L1737">                vDiag[1] = invNorm;</span>
-<span class="fc" id="L1738">                vDiag2[1] = norm;</span>
+<span class="pc bpc" id="L1759" title="1 of 2 branches missed.">            if (invNorm * r.getElementAt(1, 1) &gt; 0.0) {</span>
+<span class="fc" id="L1760">                vDiag[1] = invNorm;</span>
+<span class="fc" id="L1761">                vDiag2[1] = norm;</span>
             } else {
-<span class="nc" id="L1740">                vDiag[1] = -invNorm;</span>
-<span class="nc" id="L1741">                vDiag2[1] = -norm;</span>
+<span class="nc" id="L1763">                vDiag[1] = -invNorm;</span>
+<span class="nc" id="L1764">                vDiag2[1] = -norm;</span>
             }
         
-<span class="fc" id="L1744">            vDiag[2] = invNorm;</span>
-<span class="fc" id="L1745">            vDiag2[2] = norm;</span>
+<span class="fc" id="L1767">            vDiag[2] = invNorm;</span>
+<span class="fc" id="L1768">            vDiag2[2] = norm;</span>
         
-<span class="fc" id="L1747">            Matrix mDiag = Matrix.diagonal(vDiag);</span>
-<span class="fc" id="L1748">            Matrix mDiag2 = Matrix.diagonal(vDiag2);</span>
+<span class="fc" id="L1770">            Matrix mDiag = Matrix.diagonal(vDiag);</span>
+<span class="fc" id="L1771">            Matrix mDiag2 = Matrix.diagonal(vDiag2);</span>
 
-<span class="fc" id="L1750">            R.multiply(mDiag);</span>
+<span class="fc" id="L1773">            r.multiply(mDiag);</span>
 
-<span class="fc" id="L1752">            mDiag2.multiply(Q);</span>
+<span class="fc" id="L1775">            mDiag2.multiply(q);</span>
         
             //thresholds should not be a problem and so we disable the change of
             //throwing any exception by setting infinity threshold (and ignoring
             //GeometryException)
-<span class="fc" id="L1757">            mIntrinsicParameters = new PinholeCameraIntrinsicParameters(</span>
-                    R, Double.POSITIVE_INFINITY);
+<span class="fc" id="L1780">            mIntrinsicParameters = new PinholeCameraIntrinsicParameters(</span>
+                    r, Double.POSITIVE_INFINITY);
         
-<span class="fc" id="L1760">            mCameraRotation = new MatrixRotation3D(mDiag2,</span>
+<span class="fc" id="L1783">            mCameraRotation = new MatrixRotation3D(mDiag2,</span>
                     Double.POSITIVE_INFINITY);
-<span class="nc" id="L1762">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L1763">            throw new CameraException(e);</span>
-<span class="pc" id="L1764">        } catch (GeometryException ignore) { }</span>
-<span class="fc" id="L1765">    }</span>
+<span class="nc" id="L1785">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L1786">            throw new CameraException(e);</span>
+<span class="fc" id="L1787">        } catch (GeometryException ignore) {</span>
+            //never happens
+<span class="fc" id="L1789">        }</span>
+<span class="fc" id="L1790">    }</span>
     
     /**
      * Computes camera center using singular value decomposition. This method
@@ -1773,9 +1798,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * @throws CameraException if there is numerical instability.
      */
     public Point3D computeCameraCenterSVD() throws CameraException {
-<span class="fc" id="L1776">        Point3D result = Point3D.create();</span>
-<span class="fc" id="L1777">        computeCameraCenterSVD(result);</span>
-<span class="fc" id="L1778">        return result;</span>
+<span class="fc" id="L1801">        Point3D result = Point3D.create();</span>
+<span class="fc" id="L1802">        computeCameraCenterSVD(result);</span>
+<span class="fc" id="L1803">        return result;</span>
     }
     
     /**
@@ -1788,27 +1813,27 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public void computeCameraCenterSVD(Point3D result) throws CameraException {
         try {
-<span class="fc" id="L1791">            normalize(); //to increase accuracy</span>
+<span class="fc" id="L1816">            normalize(); //to increase accuracy</span>
             
             //camera center is the null-space of camera matrix
-<span class="fc" id="L1794">            SingularValueDecomposer decomposer = new SingularValueDecomposer(</span>
+<span class="fc" id="L1819">            SingularValueDecomposer decomposer = new SingularValueDecomposer(</span>
                     mInternalMatrix);
         
-<span class="fc" id="L1797">            decomposer.decompose();</span>
+<span class="fc" id="L1822">            decomposer.decompose();</span>
         
             //because camera matrix is at most rank 3, the camera center is the
             //last column of decomposed matrix V
-<span class="fc" id="L1801">            Matrix V = decomposer.getV();</span>
+<span class="fc" id="L1826">            Matrix v = decomposer.getV();</span>
         
-<span class="fc" id="L1803">            result.setHomogeneousCoordinates(</span>
-<span class="fc" id="L1804">                    V.getElementAt(0, PINHOLE_CAMERA_MATRIX_COLS - 1), </span>
-<span class="fc" id="L1805">                    V.getElementAt(1, PINHOLE_CAMERA_MATRIX_COLS - 1), </span>
-<span class="fc" id="L1806">                    V.getElementAt(2, PINHOLE_CAMERA_MATRIX_COLS - 1), </span>
-<span class="fc" id="L1807">                    V.getElementAt(3, PINHOLE_CAMERA_MATRIX_COLS - 1));</span>
-<span class="nc" id="L1808">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L1809">            throw new CameraException(e);</span>
-<span class="fc" id="L1810">        }</span>
-<span class="fc" id="L1811">    }</span>
+<span class="fc" id="L1828">            result.setHomogeneousCoordinates(</span>
+<span class="fc" id="L1829">                    v.getElementAt(0, PINHOLE_CAMERA_MATRIX_COLS - 1),</span>
+<span class="fc" id="L1830">                    v.getElementAt(1, PINHOLE_CAMERA_MATRIX_COLS - 1),</span>
+<span class="fc" id="L1831">                    v.getElementAt(2, PINHOLE_CAMERA_MATRIX_COLS - 1),</span>
+<span class="fc" id="L1832">                    v.getElementAt(3, PINHOLE_CAMERA_MATRIX_COLS - 1));</span>
+<span class="nc" id="L1833">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L1834">            throw new CameraException(e);</span>
+<span class="fc" id="L1835">        }</span>
+<span class="fc" id="L1836">    }</span>
     
     /**
      * Computes camera center using determinants of camera matrix minors. This
@@ -1819,9 +1844,9 @@ public class PinholeCamera extends Camera implements Serializable {
      * @throws CameraException if there is numerical instabilities.
      */
     public Point3D computeCameraCenterDet() throws CameraException {
-<span class="fc" id="L1822">        Point3D result = Point3D.create();</span>
-<span class="fc" id="L1823">        computeCameraCenterDet(result);</span>
-<span class="fc" id="L1824">        return result;</span>
+<span class="fc" id="L1847">        Point3D result = Point3D.create();</span>
+<span class="fc" id="L1848">        computeCameraCenterDet(result);</span>
+<span class="fc" id="L1849">        return result;</span>
     }
     
     /**
@@ -1835,78 +1860,78 @@ public class PinholeCamera extends Camera implements Serializable {
     public void computeCameraCenterDet(Point3D result) throws CameraException {
         
         try {
-<span class="fc" id="L1838">            normalize(); //to increase accuracy</span>
+<span class="fc" id="L1863">            normalize(); //to increase accuracy</span>
             
-<span class="fc" id="L1840">            Matrix m = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS, </span>
+<span class="fc" id="L1865">            Matrix m = new Matrix(PINHOLE_CAMERA_MATRIX_ROWS, </span>
                     PINHOLE_CAMERA_MATRIX_ROWS);
             
             //build minor using columns 2, 3 and 4
-<span class="fc" id="L1844">            m.setElementAt(0, 0, mInternalMatrix.getElementAt(0, 1));</span>
-<span class="fc" id="L1845">            m.setElementAt(1, 0, mInternalMatrix.getElementAt(1, 1));</span>
-<span class="fc" id="L1846">            m.setElementAt(2, 0, mInternalMatrix.getElementAt(2, 1));</span>
+<span class="fc" id="L1869">            m.setElementAt(0, 0, mInternalMatrix.getElementAt(0, 1));</span>
+<span class="fc" id="L1870">            m.setElementAt(1, 0, mInternalMatrix.getElementAt(1, 1));</span>
+<span class="fc" id="L1871">            m.setElementAt(2, 0, mInternalMatrix.getElementAt(2, 1));</span>
             
-<span class="fc" id="L1848">            m.setElementAt(0, 1, mInternalMatrix.getElementAt(0, 2));</span>
-<span class="fc" id="L1849">            m.setElementAt(1, 1, mInternalMatrix.getElementAt(1, 2));</span>
-<span class="fc" id="L1850">            m.setElementAt(2, 1, mInternalMatrix.getElementAt(2, 2));</span>
+<span class="fc" id="L1873">            m.setElementAt(0, 1, mInternalMatrix.getElementAt(0, 2));</span>
+<span class="fc" id="L1874">            m.setElementAt(1, 1, mInternalMatrix.getElementAt(1, 2));</span>
+<span class="fc" id="L1875">            m.setElementAt(2, 1, mInternalMatrix.getElementAt(2, 2));</span>
             
-<span class="fc" id="L1852">            m.setElementAt(0, 2, mInternalMatrix.getElementAt(0, 3));</span>
-<span class="fc" id="L1853">            m.setElementAt(1, 2, mInternalMatrix.getElementAt(1, 3));</span>
-<span class="fc" id="L1854">            m.setElementAt(2, 2, mInternalMatrix.getElementAt(2, 3));</span>
+<span class="fc" id="L1877">            m.setElementAt(0, 2, mInternalMatrix.getElementAt(0, 3));</span>
+<span class="fc" id="L1878">            m.setElementAt(1, 2, mInternalMatrix.getElementAt(1, 3));</span>
+<span class="fc" id="L1879">            m.setElementAt(2, 2, mInternalMatrix.getElementAt(2, 3));</span>
             
-<span class="fc" id="L1856">            double x = Utils.det(m);</span>
+<span class="fc" id="L1881">            double x = Utils.det(m);</span>
             
             //build minor using columns 1, 3 and 4
-<span class="fc" id="L1859">            m.setElementAt(0, 0, mInternalMatrix.getElementAt(0, 0));</span>
-<span class="fc" id="L1860">            m.setElementAt(1, 0, mInternalMatrix.getElementAt(1, 0));</span>
-<span class="fc" id="L1861">            m.setElementAt(2, 0, mInternalMatrix.getElementAt(2, 0));</span>
+<span class="fc" id="L1884">            m.setElementAt(0, 0, mInternalMatrix.getElementAt(0, 0));</span>
+<span class="fc" id="L1885">            m.setElementAt(1, 0, mInternalMatrix.getElementAt(1, 0));</span>
+<span class="fc" id="L1886">            m.setElementAt(2, 0, mInternalMatrix.getElementAt(2, 0));</span>
             
-<span class="fc" id="L1863">            m.setElementAt(0, 1, mInternalMatrix.getElementAt(0, 2));</span>
-<span class="fc" id="L1864">            m.setElementAt(1, 1, mInternalMatrix.getElementAt(1, 2));</span>
-<span class="fc" id="L1865">            m.setElementAt(2, 1, mInternalMatrix.getElementAt(2, 2));</span>
+<span class="fc" id="L1888">            m.setElementAt(0, 1, mInternalMatrix.getElementAt(0, 2));</span>
+<span class="fc" id="L1889">            m.setElementAt(1, 1, mInternalMatrix.getElementAt(1, 2));</span>
+<span class="fc" id="L1890">            m.setElementAt(2, 1, mInternalMatrix.getElementAt(2, 2));</span>
             
-<span class="fc" id="L1867">            m.setElementAt(0, 2, mInternalMatrix.getElementAt(0, 3));</span>
-<span class="fc" id="L1868">            m.setElementAt(1, 2, mInternalMatrix.getElementAt(1, 3));</span>
-<span class="fc" id="L1869">            m.setElementAt(2, 2, mInternalMatrix.getElementAt(2, 3));</span>
+<span class="fc" id="L1892">            m.setElementAt(0, 2, mInternalMatrix.getElementAt(0, 3));</span>
+<span class="fc" id="L1893">            m.setElementAt(1, 2, mInternalMatrix.getElementAt(1, 3));</span>
+<span class="fc" id="L1894">            m.setElementAt(2, 2, mInternalMatrix.getElementAt(2, 3));</span>
             
-<span class="fc" id="L1871">            double y = -Utils.det(m);</span>
+<span class="fc" id="L1896">            double y = -Utils.det(m);</span>
             
             //build minor using columns 1, 2 and 4
-<span class="fc" id="L1874">            m.setElementAt(0, 0, mInternalMatrix.getElementAt(0, 0));</span>
-<span class="fc" id="L1875">            m.setElementAt(1, 0, mInternalMatrix.getElementAt(1, 0));</span>
-<span class="fc" id="L1876">            m.setElementAt(2, 0, mInternalMatrix.getElementAt(2, 0));</span>
+<span class="fc" id="L1899">            m.setElementAt(0, 0, mInternalMatrix.getElementAt(0, 0));</span>
+<span class="fc" id="L1900">            m.setElementAt(1, 0, mInternalMatrix.getElementAt(1, 0));</span>
+<span class="fc" id="L1901">            m.setElementAt(2, 0, mInternalMatrix.getElementAt(2, 0));</span>
             
-<span class="fc" id="L1878">            m.setElementAt(0, 1, mInternalMatrix.getElementAt(0, 1));</span>
-<span class="fc" id="L1879">            m.setElementAt(1, 1, mInternalMatrix.getElementAt(1, 1));</span>
-<span class="fc" id="L1880">            m.setElementAt(2, 1, mInternalMatrix.getElementAt(2, 1));</span>
+<span class="fc" id="L1903">            m.setElementAt(0, 1, mInternalMatrix.getElementAt(0, 1));</span>
+<span class="fc" id="L1904">            m.setElementAt(1, 1, mInternalMatrix.getElementAt(1, 1));</span>
+<span class="fc" id="L1905">            m.setElementAt(2, 1, mInternalMatrix.getElementAt(2, 1));</span>
             
-<span class="fc" id="L1882">            m.setElementAt(0, 2, mInternalMatrix.getElementAt(0, 3));</span>
-<span class="fc" id="L1883">            m.setElementAt(1, 2, mInternalMatrix.getElementAt(1, 3));</span>
-<span class="fc" id="L1884">            m.setElementAt(2, 2, mInternalMatrix.getElementAt(2, 3));</span>
+<span class="fc" id="L1907">            m.setElementAt(0, 2, mInternalMatrix.getElementAt(0, 3));</span>
+<span class="fc" id="L1908">            m.setElementAt(1, 2, mInternalMatrix.getElementAt(1, 3));</span>
+<span class="fc" id="L1909">            m.setElementAt(2, 2, mInternalMatrix.getElementAt(2, 3));</span>
             
-<span class="fc" id="L1886">            double z = Utils.det(m);</span>
+<span class="fc" id="L1911">            double z = Utils.det(m);</span>
             
             //build minor using columns 1, 2 and 3
-<span class="fc" id="L1889">            m.setElementAt(0, 0, mInternalMatrix.getElementAt(0, 0));</span>
-<span class="fc" id="L1890">            m.setElementAt(1, 0, mInternalMatrix.getElementAt(1, 0));</span>
-<span class="fc" id="L1891">            m.setElementAt(2, 0, mInternalMatrix.getElementAt(2, 0));</span>
+<span class="fc" id="L1914">            m.setElementAt(0, 0, mInternalMatrix.getElementAt(0, 0));</span>
+<span class="fc" id="L1915">            m.setElementAt(1, 0, mInternalMatrix.getElementAt(1, 0));</span>
+<span class="fc" id="L1916">            m.setElementAt(2, 0, mInternalMatrix.getElementAt(2, 0));</span>
             
-<span class="fc" id="L1893">            m.setElementAt(0, 1, mInternalMatrix.getElementAt(0, 1));</span>
-<span class="fc" id="L1894">            m.setElementAt(1, 1, mInternalMatrix.getElementAt(1, 1));</span>
-<span class="fc" id="L1895">            m.setElementAt(2, 1, mInternalMatrix.getElementAt(2, 1));</span>
+<span class="fc" id="L1918">            m.setElementAt(0, 1, mInternalMatrix.getElementAt(0, 1));</span>
+<span class="fc" id="L1919">            m.setElementAt(1, 1, mInternalMatrix.getElementAt(1, 1));</span>
+<span class="fc" id="L1920">            m.setElementAt(2, 1, mInternalMatrix.getElementAt(2, 1));</span>
             
-<span class="fc" id="L1897">            m.setElementAt(0, 2, mInternalMatrix.getElementAt(0, 2));</span>
-<span class="fc" id="L1898">            m.setElementAt(1, 2, mInternalMatrix.getElementAt(1, 2));</span>
-<span class="fc" id="L1899">            m.setElementAt(2, 2, mInternalMatrix.getElementAt(2, 2));</span>
+<span class="fc" id="L1922">            m.setElementAt(0, 2, mInternalMatrix.getElementAt(0, 2));</span>
+<span class="fc" id="L1923">            m.setElementAt(1, 2, mInternalMatrix.getElementAt(1, 2));</span>
+<span class="fc" id="L1924">            m.setElementAt(2, 2, mInternalMatrix.getElementAt(2, 2));</span>
             
-<span class="fc" id="L1901">            double w = -Utils.det(m);</span>
+<span class="fc" id="L1926">            double w = -Utils.det(m);</span>
             
-<span class="fc" id="L1903">            result.setHomogeneousCoordinates(x, y, z, w);</span>
-<span class="fc" id="L1904">            result.normalize();</span>
+<span class="fc" id="L1928">            result.setHomogeneousCoordinates(x, y, z, w);</span>
+<span class="fc" id="L1929">            result.normalize();</span>
             
-<span class="nc" id="L1906">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L1907">            throw new CameraException(e);</span>
-<span class="fc" id="L1908">        }</span>
-<span class="fc" id="L1909">    }</span>
+<span class="nc" id="L1931">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L1932">            throw new CameraException(e);</span>
+<span class="fc" id="L1933">        }</span>
+<span class="fc" id="L1934">    }</span>
     
     /**
      * Computes camera center. This method is better suited when camera is 
@@ -1920,9 +1945,9 @@ public class PinholeCamera extends Camera implements Serializable {
      */
     public Point3D computeCameraCenterFiniteCamera() 
             throws CameraException {
-<span class="fc" id="L1923">        Point3D result = Point3D.create();</span>
-<span class="fc" id="L1924">        computeCameraCenterFiniteCamera(result);</span>
-<span class="fc" id="L1925">        return result;</span>
+<span class="fc" id="L1948">        Point3D result = Point3D.create();</span>
+<span class="fc" id="L1949">        computeCameraCenterFiniteCamera(result);</span>
+<span class="fc" id="L1950">        return result;</span>
     }
 
     /**
@@ -1938,32 +1963,32 @@ public class PinholeCamera extends Camera implements Serializable {
             throws CameraException {
         
         try {
-<span class="fc" id="L1941">            normalize(); //to increase accuracy</span>
+<span class="fc" id="L1966">            normalize(); //to increase accuracy</span>
             
             //get top-left 3x3 submatrix
-<span class="fc" id="L1944">            Matrix mMp = mInternalMatrix.getSubmatrix(0, 0, </span>
+<span class="fc" id="L1969">            Matrix mMp = mInternalMatrix.getSubmatrix(0, 0, </span>
                     PINHOLE_CAMERA_MATRIX_ROWS - 1, 
                     PINHOLE_CAMERA_MATRIX_ROWS - 1);
         
             //make inverse
-<span class="fc" id="L1949">            Matrix mInvMp = Utils.inverse(mMp);</span>
+<span class="fc" id="L1974">            Matrix mInvMp = Utils.inverse(mMp);</span>
         
             //pick 4th column of camera matrix
-<span class="fc" id="L1952">            Matrix mP4 = mInternalMatrix.getSubmatrix(0, </span>
+<span class="fc" id="L1977">            Matrix mP4 = mInternalMatrix.getSubmatrix(0, </span>
                     PINHOLE_CAMERA_MATRIX_COLS - 1, 
                     PINHOLE_CAMERA_MATRIX_ROWS - 1, 
                     PINHOLE_CAMERA_MATRIX_COLS - 1);
         
             //get inhomogeneous coordinates of camera center
-<span class="fc" id="L1958">            mInvMp.multiply(mP4);</span>
+<span class="fc" id="L1983">            mInvMp.multiply(mP4);</span>
         
-<span class="fc" id="L1960">            result.setInhomogeneousCoordinates(-mInvMp.getElementAtIndex(0),</span>
-<span class="fc" id="L1961">                    -mInvMp.getElementAtIndex(1), -mInvMp.getElementAtIndex(2));</span>
-<span class="fc" id="L1962">            result.normalize();</span>
-<span class="nc" id="L1963">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L1964">            throw new CameraException(e);</span>
-<span class="fc" id="L1965">        }</span>
-<span class="fc" id="L1966">    }</span>
+<span class="fc" id="L1985">            result.setInhomogeneousCoordinates(-mInvMp.getElementAtIndex(0),</span>
+<span class="fc" id="L1986">                    -mInvMp.getElementAtIndex(1), -mInvMp.getElementAtIndex(2));</span>
+<span class="fc" id="L1987">            result.normalize();</span>
+<span class="nc" id="L1988">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L1989">            throw new CameraException(e);</span>
+<span class="fc" id="L1990">        }</span>
+<span class="fc" id="L1991">    }</span>
     
     /**
      * Estimates this camera parameters from 2D-3D point correspondences.
@@ -1994,39 +2019,39 @@ public class PinholeCamera extends Camera implements Serializable {
             Point2D point2D2, Point2D point2D3, Point2D point2D4, 
             Point2D point2D5, Point2D point2D6) throws CameraException {
         
-<span class="fc" id="L1997">        List&lt;Point3D&gt; points3D = new ArrayList&lt;&gt;(</span>
+<span class="fc" id="L2022">        List&lt;Point3D&gt; points3D = new ArrayList&lt;&gt;(</span>
                 DLTPointCorrespondencePinholeCameraEstimator.
                 MIN_NUMBER_OF_POINT_CORRESPONDENCES);
-<span class="fc" id="L2000">        List&lt;Point2D&gt; points2D = new ArrayList&lt;&gt;(</span>
+<span class="fc" id="L2025">        List&lt;Point2D&gt; points2D = new ArrayList&lt;&gt;(</span>
                 DLTPointCorrespondencePinholeCameraEstimator.
                 MIN_NUMBER_OF_POINT_CORRESPONDENCES);
 
-<span class="fc" id="L2004">        points3D.add(point3D1);</span>
-<span class="fc" id="L2005">        points3D.add(point3D2);</span>
-<span class="fc" id="L2006">        points3D.add(point3D3);</span>
-<span class="fc" id="L2007">        points3D.add(point3D4);</span>
-<span class="fc" id="L2008">        points3D.add(point3D5);</span>
-<span class="fc" id="L2009">        points3D.add(point3D6);</span>
+<span class="fc" id="L2029">        points3D.add(point3D1);</span>
+<span class="fc" id="L2030">        points3D.add(point3D2);</span>
+<span class="fc" id="L2031">        points3D.add(point3D3);</span>
+<span class="fc" id="L2032">        points3D.add(point3D4);</span>
+<span class="fc" id="L2033">        points3D.add(point3D5);</span>
+<span class="fc" id="L2034">        points3D.add(point3D6);</span>
         
-<span class="fc" id="L2011">        points2D.add(point2D1);</span>
-<span class="fc" id="L2012">        points2D.add(point2D2);</span>
-<span class="fc" id="L2013">        points2D.add(point2D3);</span>
-<span class="fc" id="L2014">        points2D.add(point2D4);</span>
-<span class="fc" id="L2015">        points2D.add(point2D5);</span>
-<span class="fc" id="L2016">        points2D.add(point2D6);</span>
+<span class="fc" id="L2036">        points2D.add(point2D1);</span>
+<span class="fc" id="L2037">        points2D.add(point2D2);</span>
+<span class="fc" id="L2038">        points2D.add(point2D3);</span>
+<span class="fc" id="L2039">        points2D.add(point2D4);</span>
+<span class="fc" id="L2040">        points2D.add(point2D5);</span>
+<span class="fc" id="L2041">        points2D.add(point2D6);</span>
         
         try {
-<span class="fc" id="L2019">            DLTPointCorrespondencePinholeCameraEstimator estimator = </span>
+<span class="fc" id="L2044">            DLTPointCorrespondencePinholeCameraEstimator estimator = </span>
                 new DLTPointCorrespondencePinholeCameraEstimator(points3D, 
                 points2D);
-<span class="fc" id="L2022">            estimator.setLMSESolutionAllowed(false);</span>
-<span class="fc" id="L2023">            PinholeCamera camera = estimator.estimate();</span>
+<span class="fc" id="L2047">            estimator.setLMSESolutionAllowed(false);</span>
+<span class="fc" id="L2048">            PinholeCamera camera = estimator.estimate();</span>
         
-<span class="fc" id="L2025">            setInternalMatrix(camera.mInternalMatrix);</span>
-<span class="fc" id="L2026">        } catch (Throwable t) {</span>
-<span class="fc" id="L2027">            throw new CameraException(t);</span>
-<span class="fc" id="L2028">        }</span>
-<span class="fc" id="L2029">    }</span>
+<span class="fc" id="L2050">            setInternalMatrix(camera.mInternalMatrix);</span>
+<span class="fc" id="L2051">        } catch (WrongSizeException | GeometryException e) {</span>
+<span class="fc" id="L2052">            throw new CameraException(e);</span>
+<span class="fc" id="L2053">        }</span>
+<span class="fc" id="L2054">    }</span>
     
     /**
      * Estimates this camera parameters from line/plane correspondences.
@@ -2045,34 +2070,34 @@ public class PinholeCamera extends Camera implements Serializable {
             Plane plane2, Plane plane3, Plane plane4, Line2D line1, 
             Line2D line2, Line2D line3, Line2D line4) throws CameraException {
         
-<span class="fc" id="L2048">        List&lt;Plane&gt; planes = new ArrayList&lt;&gt;(</span>
+<span class="fc" id="L2073">        List&lt;Plane&gt; planes = new ArrayList&lt;&gt;(</span>
                 DLTLinePlaneCorrespondencePinholeCameraEstimator.
                 MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES);
-<span class="fc" id="L2051">        List&lt;Line2D&gt; lines2D = new ArrayList&lt;&gt;(</span>
+<span class="fc" id="L2076">        List&lt;Line2D&gt; lines2D = new ArrayList&lt;&gt;(</span>
                 DLTLinePlaneCorrespondencePinholeCameraEstimator.
                 MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES);
 
-<span class="fc" id="L2055">        planes.add(plane1);</span>
-<span class="fc" id="L2056">        planes.add(plane2);</span>
-<span class="fc" id="L2057">        planes.add(plane3);</span>
-<span class="fc" id="L2058">        planes.add(plane4);</span>
+<span class="fc" id="L2080">        planes.add(plane1);</span>
+<span class="fc" id="L2081">        planes.add(plane2);</span>
+<span class="fc" id="L2082">        planes.add(plane3);</span>
+<span class="fc" id="L2083">        planes.add(plane4);</span>
         
-<span class="fc" id="L2060">        lines2D.add(line1);</span>
-<span class="fc" id="L2061">        lines2D.add(line2);</span>
-<span class="fc" id="L2062">        lines2D.add(line3);</span>
-<span class="fc" id="L2063">        lines2D.add(line4);</span>
+<span class="fc" id="L2085">        lines2D.add(line1);</span>
+<span class="fc" id="L2086">        lines2D.add(line2);</span>
+<span class="fc" id="L2087">        lines2D.add(line3);</span>
+<span class="fc" id="L2088">        lines2D.add(line4);</span>
                 
         try {
-<span class="fc" id="L2066">            DLTLinePlaneCorrespondencePinholeCameraEstimator estimator = </span>
+<span class="fc" id="L2091">            DLTLinePlaneCorrespondencePinholeCameraEstimator estimator = </span>
                 new DLTLinePlaneCorrespondencePinholeCameraEstimator(planes, 
                 lines2D);
-<span class="fc" id="L2069">            estimator.setLMSESolutionAllowed(false);</span>
-<span class="fc" id="L2070">            PinholeCamera camera = estimator.estimate();</span>
+<span class="fc" id="L2094">            estimator.setLMSESolutionAllowed(false);</span>
+<span class="fc" id="L2095">            PinholeCamera camera = estimator.estimate();</span>
         
-<span class="fc" id="L2072">            setInternalMatrix(camera.mInternalMatrix);</span>
-<span class="fc" id="L2073">        } catch (Throwable t) {</span>
-<span class="fc" id="L2074">            throw new CameraException(t);</span>
-<span class="fc" id="L2075">        }        </span>
-<span class="fc" id="L2076">    }</span>
+<span class="fc" id="L2097">            setInternalMatrix(camera.mInternalMatrix);</span>
+<span class="fc" id="L2098">        } catch (WrongSizeException | GeometryException e) {</span>
+<span class="fc" id="L2099">            throw new CameraException(e);</span>
+<span class="fc" id="L2100">        }        </span>
+<span class="fc" id="L2101">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

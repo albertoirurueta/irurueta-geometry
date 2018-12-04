@@ -1284,80 +1284,94 @@
 <a class="jxr_linenumber" name="L1276" href="#L1276">1276</a>     
 <a class="jxr_linenumber" name="L1277" href="#L1277">1277</a>     @Test
 <a class="jxr_linenumber" name="L1278" href="#L1278">1278</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testToAxisRotation() <strong class="jxr_keyword">throws</strong> AlgebraException {
-<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a>         UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
-<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a>         <strong class="jxr_keyword">double</strong> theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
-<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a>                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-<a class="jxr_linenumber" name="L1282" href="#L1282">1282</a>         
-<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a>         <em class="jxr_comment">//Find any 3 orthogonal vectors, 1st will be axis of rotation, and</em>
-<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a>         <em class="jxr_comment">//the remaining two will lie on the rotation plane and will be used</em>
-<a class="jxr_linenumber" name="L1285" href="#L1285">1285</a>         <em class="jxr_comment">//to test theta angle</em>
-<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a>             
-<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a>         <em class="jxr_comment">//To find 3 orthogonal vectors, we use V matrix of a singular</em>
-<a class="jxr_linenumber" name="L1288" href="#L1288">1288</a>         <em class="jxr_comment">//decomposition of any Nx3 matrix</em>
-<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a>         Matrix a = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, 
-<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a>                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a>         SingularValueDecomposer decomposer = <strong class="jxr_keyword">new</strong> SingularValueDecomposer(a);
-<a class="jxr_linenumber" name="L1292" href="#L1292">1292</a>             
-<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a>         decomposer.decompose();
-<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a>             
-<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a>         Matrix vMatrix = decomposer.getV();
-<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a>             
-<a class="jxr_linenumber" name="L1297" href="#L1297">1297</a>         <em class="jxr_comment">//axis of rotation</em>
-<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a>         <strong class="jxr_keyword">double</strong> [] axis = vMatrix.getSubmatrixAsArray(0, 0,
-<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a>                 2, 0);
-<a class="jxr_linenumber" name="L1300" href="#L1300">1300</a>         
-<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a>         MatrixRotation3D rotation = <strong class="jxr_keyword">new</strong> MatrixRotation3D(axis, theta);
-<a class="jxr_linenumber" name="L1302" href="#L1302">1302</a>         
-<a class="jxr_linenumber" name="L1303" href="#L1303">1303</a>         <em class="jxr_comment">//to axis rotation</em>
-<a class="jxr_linenumber" name="L1304" href="#L1304">1304</a>         AxisRotation3D axisRotation1 = <strong class="jxr_keyword">new</strong> AxisRotation3D();
-<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a>         rotation.toAxisRotation(axisRotation1);
-<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a>         AxisRotation3D axisRotation2 = rotation.toAxisRotation();
-<a class="jxr_linenumber" name="L1307" href="#L1307">1307</a>         
-<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a>         <em class="jxr_comment">//check correctness</em>
-<a class="jxr_linenumber" name="L1309" href="#L1309">1309</a>         <em class="jxr_comment">//noinspection all</em>
-<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a>         assertEquals(rotation, axisRotation1);
-<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a>         <em class="jxr_comment">//noinspection all</em>
-<a class="jxr_linenumber" name="L1312" href="#L1312">1312</a>         assertEquals(rotation, axisRotation2);        
-<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a>     }
-<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a>     
-<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a>     @Test
-<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testToQuaternion() <strong class="jxr_keyword">throws</strong> AlgebraException {
-<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a>         UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
-<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a>         <strong class="jxr_keyword">double</strong> theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
-<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a>                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-<a class="jxr_linenumber" name="L1320" href="#L1320">1320</a>         
-<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a>         <em class="jxr_comment">//Find any 3 orthogonal vectors, 1st will be axis of rotation, and</em>
-<a class="jxr_linenumber" name="L1322" href="#L1322">1322</a>         <em class="jxr_comment">//the remaining two will lie on the rotation plane and will be used</em>
-<a class="jxr_linenumber" name="L1323" href="#L1323">1323</a>         <em class="jxr_comment">//to test theta angle</em>
-<a class="jxr_linenumber" name="L1324" href="#L1324">1324</a>             
-<a class="jxr_linenumber" name="L1325" href="#L1325">1325</a>         <em class="jxr_comment">//To find 3 orthogonal vectors, we use V matrix of a singular</em>
-<a class="jxr_linenumber" name="L1326" href="#L1326">1326</a>         <em class="jxr_comment">//decomposition of any Nx3 matrix</em>
-<a class="jxr_linenumber" name="L1327" href="#L1327">1327</a>         Matrix a = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, 
-<a class="jxr_linenumber" name="L1328" href="#L1328">1328</a>                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-<a class="jxr_linenumber" name="L1329" href="#L1329">1329</a>         SingularValueDecomposer decomposer = <strong class="jxr_keyword">new</strong> SingularValueDecomposer(a);
-<a class="jxr_linenumber" name="L1330" href="#L1330">1330</a>             
-<a class="jxr_linenumber" name="L1331" href="#L1331">1331</a>         decomposer.decompose();
-<a class="jxr_linenumber" name="L1332" href="#L1332">1332</a>             
-<a class="jxr_linenumber" name="L1333" href="#L1333">1333</a>         Matrix vMatrix = decomposer.getV();
-<a class="jxr_linenumber" name="L1334" href="#L1334">1334</a>             
-<a class="jxr_linenumber" name="L1335" href="#L1335">1335</a>         <em class="jxr_comment">//axis of rotation</em>
-<a class="jxr_linenumber" name="L1336" href="#L1336">1336</a>         <strong class="jxr_keyword">double</strong> [] axis = vMatrix.getSubmatrixAsArray(0, 0,
-<a class="jxr_linenumber" name="L1337" href="#L1337">1337</a>                 2, 0);
-<a class="jxr_linenumber" name="L1338" href="#L1338">1338</a>         
-<a class="jxr_linenumber" name="L1339" href="#L1339">1339</a>         MatrixRotation3D rotation = <strong class="jxr_keyword">new</strong> MatrixRotation3D(axis, theta);
-<a class="jxr_linenumber" name="L1340" href="#L1340">1340</a>                 
-<a class="jxr_linenumber" name="L1341" href="#L1341">1341</a>         <em class="jxr_comment">//to quaternion</em>
-<a class="jxr_linenumber" name="L1342" href="#L1342">1342</a>         Quaternion quaternion1 = <strong class="jxr_keyword">new</strong> Quaternion();
-<a class="jxr_linenumber" name="L1343" href="#L1343">1343</a>         rotation.toQuaternion(quaternion1);
-<a class="jxr_linenumber" name="L1344" href="#L1344">1344</a>         Quaternion quaternion2 = rotation.toQuaternion();
-<a class="jxr_linenumber" name="L1345" href="#L1345">1345</a>         
-<a class="jxr_linenumber" name="L1346" href="#L1346">1346</a>         <em class="jxr_comment">//check correctness</em>
-<a class="jxr_linenumber" name="L1347" href="#L1347">1347</a>         <em class="jxr_comment">//noinspection all</em>
-<a class="jxr_linenumber" name="L1348" href="#L1348">1348</a>         assertEquals(rotation, quaternion1);
-<a class="jxr_linenumber" name="L1349" href="#L1349">1349</a>         <em class="jxr_comment">//noinspection all</em>
-<a class="jxr_linenumber" name="L1350" href="#L1350">1350</a>         assertEquals(rotation, quaternion2);
-<a class="jxr_linenumber" name="L1351" href="#L1351">1351</a>     }        
-<a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> }
+<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a>         <strong class="jxr_keyword">int</strong> numValid = 0;
+<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> t = 0; t &lt; TIMES; t++) {
+<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a>             UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
+<a class="jxr_linenumber" name="L1282" href="#L1282">1282</a>             <strong class="jxr_keyword">double</strong> theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a>                     MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 
+<a class="jxr_linenumber" name="L1285" href="#L1285">1285</a>             <em class="jxr_comment">//Find any 3 orthogonal vectors, 1st will be axis of rotation, and</em>
+<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a>             <em class="jxr_comment">//the remaining two will lie on the rotation plane and will be used</em>
+<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a>             <em class="jxr_comment">//to test theta angle</em>
+<a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> 
+<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a>             <em class="jxr_comment">//To find 3 orthogonal vectors, we use V matrix of a singular</em>
+<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a>             <em class="jxr_comment">//decomposition of any Nx3 matrix</em>
+<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a>             Matrix a = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
+<a class="jxr_linenumber" name="L1292" href="#L1292">1292</a>                     MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a>             SingularValueDecomposer decomposer = <strong class="jxr_keyword">new</strong> SingularValueDecomposer(a);
+<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 
+<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a>             decomposer.decompose();
+<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 
+<a class="jxr_linenumber" name="L1297" href="#L1297">1297</a>             Matrix vMatrix = decomposer.getV();
+<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 
+<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a>             <em class="jxr_comment">//axis of rotation</em>
+<a class="jxr_linenumber" name="L1300" href="#L1300">1300</a>             <strong class="jxr_keyword">double</strong>[] axis = vMatrix.getSubmatrixAsArray(0, 0,
+<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a>                     2, 0);
+<a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 
+<a class="jxr_linenumber" name="L1303" href="#L1303">1303</a>             MatrixRotation3D rotation = <strong class="jxr_keyword">new</strong> MatrixRotation3D(axis, theta);
+<a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 
+<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a>             <em class="jxr_comment">//to axis rotation</em>
+<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a>             AxisRotation3D axisRotation1 = <strong class="jxr_keyword">new</strong> AxisRotation3D();
+<a class="jxr_linenumber" name="L1307" href="#L1307">1307</a>             rotation.toAxisRotation(axisRotation1);
+<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a>             AxisRotation3D axisRotation2 = rotation.toAxisRotation();
+<a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 
+<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a>             <em class="jxr_comment">//check correctness</em>
+<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a>             <strong class="jxr_keyword">if</strong> (!rotation.equals(axisRotation1)) {
+<a class="jxr_linenumber" name="L1312" href="#L1312">1312</a>                 <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a>             }
+<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a>             <em class="jxr_comment">//noinspection all</em>
+<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a>             assertEquals(rotation, axisRotation1);
+<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a>             <strong class="jxr_keyword">if</strong> (!rotation.equals(axisRotation2)) {
+<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a>                 <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a>             }
+<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a>             <em class="jxr_comment">//noinspection all</em>
+<a class="jxr_linenumber" name="L1320" href="#L1320">1320</a>             assertEquals(rotation, axisRotation2);
+<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 
+<a class="jxr_linenumber" name="L1322" href="#L1322">1322</a>             numValid++;
+<a class="jxr_linenumber" name="L1323" href="#L1323">1323</a>             <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L1324" href="#L1324">1324</a>         }
+<a class="jxr_linenumber" name="L1325" href="#L1325">1325</a> 
+<a class="jxr_linenumber" name="L1326" href="#L1326">1326</a>         assertTrue(numValid &gt; 0);
+<a class="jxr_linenumber" name="L1327" href="#L1327">1327</a>     }
+<a class="jxr_linenumber" name="L1328" href="#L1328">1328</a>     
+<a class="jxr_linenumber" name="L1329" href="#L1329">1329</a>     @Test
+<a class="jxr_linenumber" name="L1330" href="#L1330">1330</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testToQuaternion() <strong class="jxr_keyword">throws</strong> AlgebraException {
+<a class="jxr_linenumber" name="L1331" href="#L1331">1331</a>         UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
+<a class="jxr_linenumber" name="L1332" href="#L1332">1332</a>         <strong class="jxr_keyword">double</strong> theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, 
+<a class="jxr_linenumber" name="L1333" href="#L1333">1333</a>                 MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+<a class="jxr_linenumber" name="L1334" href="#L1334">1334</a>         
+<a class="jxr_linenumber" name="L1335" href="#L1335">1335</a>         <em class="jxr_comment">//Find any 3 orthogonal vectors, 1st will be axis of rotation, and</em>
+<a class="jxr_linenumber" name="L1336" href="#L1336">1336</a>         <em class="jxr_comment">//the remaining two will lie on the rotation plane and will be used</em>
+<a class="jxr_linenumber" name="L1337" href="#L1337">1337</a>         <em class="jxr_comment">//to test theta angle</em>
+<a class="jxr_linenumber" name="L1338" href="#L1338">1338</a>             
+<a class="jxr_linenumber" name="L1339" href="#L1339">1339</a>         <em class="jxr_comment">//To find 3 orthogonal vectors, we use V matrix of a singular</em>
+<a class="jxr_linenumber" name="L1340" href="#L1340">1340</a>         <em class="jxr_comment">//decomposition of any Nx3 matrix</em>
+<a class="jxr_linenumber" name="L1341" href="#L1341">1341</a>         Matrix a = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, 
+<a class="jxr_linenumber" name="L1342" href="#L1342">1342</a>                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+<a class="jxr_linenumber" name="L1343" href="#L1343">1343</a>         SingularValueDecomposer decomposer = <strong class="jxr_keyword">new</strong> SingularValueDecomposer(a);
+<a class="jxr_linenumber" name="L1344" href="#L1344">1344</a>             
+<a class="jxr_linenumber" name="L1345" href="#L1345">1345</a>         decomposer.decompose();
+<a class="jxr_linenumber" name="L1346" href="#L1346">1346</a>             
+<a class="jxr_linenumber" name="L1347" href="#L1347">1347</a>         Matrix vMatrix = decomposer.getV();
+<a class="jxr_linenumber" name="L1348" href="#L1348">1348</a>             
+<a class="jxr_linenumber" name="L1349" href="#L1349">1349</a>         <em class="jxr_comment">//axis of rotation</em>
+<a class="jxr_linenumber" name="L1350" href="#L1350">1350</a>         <strong class="jxr_keyword">double</strong> [] axis = vMatrix.getSubmatrixAsArray(0, 0,
+<a class="jxr_linenumber" name="L1351" href="#L1351">1351</a>                 2, 0);
+<a class="jxr_linenumber" name="L1352" href="#L1352">1352</a>         
+<a class="jxr_linenumber" name="L1353" href="#L1353">1353</a>         MatrixRotation3D rotation = <strong class="jxr_keyword">new</strong> MatrixRotation3D(axis, theta);
+<a class="jxr_linenumber" name="L1354" href="#L1354">1354</a>                 
+<a class="jxr_linenumber" name="L1355" href="#L1355">1355</a>         <em class="jxr_comment">//to quaternion</em>
+<a class="jxr_linenumber" name="L1356" href="#L1356">1356</a>         Quaternion quaternion1 = <strong class="jxr_keyword">new</strong> Quaternion();
+<a class="jxr_linenumber" name="L1357" href="#L1357">1357</a>         rotation.toQuaternion(quaternion1);
+<a class="jxr_linenumber" name="L1358" href="#L1358">1358</a>         Quaternion quaternion2 = rotation.toQuaternion();
+<a class="jxr_linenumber" name="L1359" href="#L1359">1359</a>         
+<a class="jxr_linenumber" name="L1360" href="#L1360">1360</a>         <em class="jxr_comment">//check correctness</em>
+<a class="jxr_linenumber" name="L1361" href="#L1361">1361</a>         <em class="jxr_comment">//noinspection all</em>
+<a class="jxr_linenumber" name="L1362" href="#L1362">1362</a>         assertEquals(rotation, quaternion1);
+<a class="jxr_linenumber" name="L1363" href="#L1363">1363</a>         <em class="jxr_comment">//noinspection all</em>
+<a class="jxr_linenumber" name="L1364" href="#L1364">1364</a>         assertEquals(rotation, quaternion2);
+<a class="jxr_linenumber" name="L1365" href="#L1365">1365</a>     }        
+<a class="jxr_linenumber" name="L1366" href="#L1366">1366</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>
