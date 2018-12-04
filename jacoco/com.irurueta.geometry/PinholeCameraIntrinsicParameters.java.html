@@ -64,17 +64,19 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
         try {
 <span class="fc" id="L65">            mInternalMatrix = Matrix.identity(INTRINSIC_MATRIX_ROWS, </span>
                     INTRINSIC_MATRIX_COLS);
-<span class="pc" id="L67">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L68">    }</span>
+<span class="nc" id="L67">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L69">        }</span>
+<span class="fc" id="L70">    }</span>
     
     /**
      * Creates a copy of provided intrinsic parameters.
      * @param params Intrinsic parameters to be copied.
      */
     public PinholeCameraIntrinsicParameters(
-<span class="fc" id="L75">            PinholeCameraIntrinsicParameters params) {</span>
-<span class="fc" id="L76">        mInternalMatrix = params.mInternalMatrix.clone();</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L77">            PinholeCameraIntrinsicParameters params) {</span>
+<span class="fc" id="L78">        mInternalMatrix = params.mInternalMatrix.clone();</span>
+<span class="fc" id="L79">    }</span>
     
     /**
      * Creates a new instance of camera intrinsic parameters using provided
@@ -87,9 +89,9 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * provided matrix is not 3x3 or upper triangular.
      */
     public PinholeCameraIntrinsicParameters(Matrix internalMatrix)
-<span class="fc" id="L90">            throws InvalidPinholeCameraIntrinsicParametersException {</span>
-<span class="fc" id="L91">        setInternalMatrix(internalMatrix);</span>
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L92">            throws InvalidPinholeCameraIntrinsicParametersException {</span>
+<span class="fc" id="L93">        setInternalMatrix(internalMatrix);</span>
+<span class="fc" id="L94">    }</span>
     
     /**
      * Creates a new instance of camera intrinsic parameters using provided
@@ -107,10 +109,9 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      */
     public PinholeCameraIntrinsicParameters(Matrix internalMatrix, 
             double threshold) 
-            throws InvalidPinholeCameraIntrinsicParametersException,
-<span class="fc" id="L111">            IllegalArgumentException {</span>
-<span class="fc" id="L112">        setInternalMatrix(internalMatrix, threshold);</span>
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L112">            throws InvalidPinholeCameraIntrinsicParametersException {</span>
+<span class="fc" id="L113">        setInternalMatrix(internalMatrix, threshold);</span>
+<span class="fc" id="L114">    }</span>
         
     /**
      * Creates a new instance of camera intrinsic parameters using provided
@@ -140,28 +141,30 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      */
     public PinholeCameraIntrinsicParameters(double horizontalFocalLength,
             double verticalFocalLength, double horizontalPrincipalPoint,
-<span class="fc" id="L143">            double verticalPrincipalPoint, double skewness) {</span>
+<span class="fc" id="L144">            double verticalPrincipalPoint, double skewness) {</span>
         
         //create instance initialized to the identity
         try {
-<span class="fc" id="L147">            mInternalMatrix = Matrix.identity(INTRINSIC_MATRIX_ROWS, </span>
+<span class="fc" id="L148">            mInternalMatrix = Matrix.identity(INTRINSIC_MATRIX_ROWS, </span>
                     INTRINSIC_MATRIX_COLS);                        
-<span class="pc" id="L149">        } catch (WrongSizeException ignore) { }</span>
+<span class="nc" id="L150">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L152">        }</span>
         
         //set parameters
-<span class="fc" id="L152">        setHorizontalFocalLength(horizontalFocalLength);</span>
-<span class="fc" id="L153">        setVerticalFocalLength(verticalFocalLength);</span>
-<span class="fc" id="L154">        setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
-<span class="fc" id="L155">        setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
-<span class="fc" id="L156">        setSkewness(skewness);</span>
-<span class="fc" id="L157">    }</span>
+<span class="fc" id="L155">        setHorizontalFocalLength(horizontalFocalLength);</span>
+<span class="fc" id="L156">        setVerticalFocalLength(verticalFocalLength);</span>
+<span class="fc" id="L157">        setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
+<span class="fc" id="L158">        setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
+<span class="fc" id="L159">        setSkewness(skewness);</span>
+<span class="fc" id="L160">    }</span>
     
     /**
      * Returns a copy of the internal matrix defining this instance parameters
      * @return A copy of the internal matrix of this instance.
      */
     public Matrix getInternalMatrix() {
-<span class="fc" id="L164">        return mInternalMatrix.clone();</span>
+<span class="fc" id="L167">        return mInternalMatrix.clone();</span>
     }
     
     /**
@@ -175,8 +178,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      */
     public final void setInternalMatrix(Matrix internalMatrix)
             throws InvalidPinholeCameraIntrinsicParametersException {
-<span class="fc" id="L178">        setInternalMatrix(internalMatrix, DEFAULT_VALID_THRESHOLD);</span>
-<span class="fc" id="L179">    }</span>
+<span class="fc" id="L181">        setInternalMatrix(internalMatrix, DEFAULT_VALID_THRESHOLD);</span>
+<span class="fc" id="L182">    }</span>
     
     /**
      * Sets the internal matrix of this instance using provided threshold to
@@ -194,22 +197,21 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      */
     public final void setInternalMatrix(Matrix internalMatrix,
             double threshold)
-            throws InvalidPinholeCameraIntrinsicParametersException,
-            IllegalArgumentException{
+            throws InvalidPinholeCameraIntrinsicParametersException {
         
         //normalizes provided matrix to ensure that lelemen 3,3 is 1
-<span class="fc" id="L201">        normalize(internalMatrix);</span>
+<span class="fc" id="L203">        normalize(internalMatrix);</span>
         
         //check that provided matrix is upper-triangular and that lower right
         //element is 1.0 (using provided threshold as a measure of error
         //tolerance)
-<span class="fc" id="L206">        boolean valid = isValidMatrix(internalMatrix, threshold);</span>
-<span class="fc bfc" id="L207" title="All 2 branches covered.">        if (!valid) {</span>
-<span class="fc" id="L208">            throw new InvalidPinholeCameraIntrinsicParametersException();</span>
+<span class="fc" id="L208">        boolean valid = isValidMatrix(internalMatrix, threshold);</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">        if (!valid) {</span>
+<span class="fc" id="L210">            throw new InvalidPinholeCameraIntrinsicParametersException();</span>
         }
         
-<span class="fc" id="L211">        mInternalMatrix = internalMatrix;</span>
-<span class="fc" id="L212">    }</span>
+<span class="fc" id="L213">        mInternalMatrix = internalMatrix;</span>
+<span class="fc" id="L214">    }</span>
     
     /**
      * Computes the inverse of internal matrix and returns the result.
@@ -218,14 +220,14 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @return inverse of internal matrix.
      */
     public Matrix getInverseInternalMatrix() {
-<span class="fc" id="L221">        Matrix result = null;</span>
+<span class="fc" id="L223">        Matrix result = null;</span>
         try {
-<span class="fc" id="L223">            result = new Matrix(INTRINSIC_MATRIX_ROWS, </span>
+<span class="fc" id="L225">            result = new Matrix(INTRINSIC_MATRIX_ROWS, </span>
                     INTRINSIC_MATRIX_COLS);
-<span class="fc" id="L225">            getInverseInternalMatrix(result);            </span>
-<span class="pc" id="L226">        } catch (WrongSizeException ignore) { /* never happens */ }</span>
+<span class="fc" id="L227">            getInverseInternalMatrix(result);            </span>
+<span class="pc" id="L228">        } catch (WrongSizeException ignore) { /* never happens */ }</span>
         
-<span class="fc" id="L228">        return result;</span>
+<span class="fc" id="L230">        return result;</span>
     }
     
     /**
@@ -236,22 +238,22 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @param result instance where result will be stored.
      */
     public void getInverseInternalMatrix(Matrix result) {
-<span class="fc" id="L239">        double horizontalFocalLength = getHorizontalFocalLength();</span>
-<span class="fc" id="L240">        double verticalFocalLength = getVerticalFocalLength();</span>
-<span class="fc" id="L241">        double skewness = getSkewness();</span>
-<span class="fc" id="L242">        double horizontalPrincipalPoint = getHorizontalPrincipalPoint();</span>
-<span class="fc" id="L243">        double verticalPrincipalPoint = getVerticalPrincipalPoint();</span>
+<span class="fc" id="L241">        double horizontalFocalLength = getHorizontalFocalLength();</span>
+<span class="fc" id="L242">        double verticalFocalLength = getVerticalFocalLength();</span>
+<span class="fc" id="L243">        double skewness = getSkewness();</span>
+<span class="fc" id="L244">        double horizontalPrincipalPoint = getHorizontalPrincipalPoint();</span>
+<span class="fc" id="L245">        double verticalPrincipalPoint = getVerticalPrincipalPoint();</span>
         
-<span class="fc" id="L245">        result.setElementAt(0, 0, 1.0 / horizontalFocalLength);</span>
-<span class="fc" id="L246">        result.setElementAt(0, 1, -skewness / </span>
+<span class="fc" id="L247">        result.setElementAt(0, 0, 1.0 / horizontalFocalLength);</span>
+<span class="fc" id="L248">        result.setElementAt(0, 1, -skewness / </span>
                 (horizontalFocalLength * verticalFocalLength));
-<span class="fc" id="L248">        result.setElementAt(1, 1, 1.0 / verticalFocalLength);</span>
-<span class="fc" id="L249">        result.setElementAt(0, 2, (skewness * verticalPrincipalPoint - </span>
+<span class="fc" id="L250">        result.setElementAt(1, 1, 1.0 / verticalFocalLength);</span>
+<span class="fc" id="L251">        result.setElementAt(0, 2, (skewness * verticalPrincipalPoint - </span>
                 verticalFocalLength * horizontalPrincipalPoint) /
                 (horizontalFocalLength * verticalFocalLength));
-<span class="fc" id="L252">        result.setElementAt(1, 2, -verticalPrincipalPoint/ verticalFocalLength);</span>
-<span class="fc" id="L253">        result.setElementAt(2, 2, 1.0);        </span>
-<span class="fc" id="L254">    }</span>
+<span class="fc" id="L254">        result.setElementAt(1, 2, -verticalPrincipalPoint/ verticalFocalLength);</span>
+<span class="fc" id="L255">        result.setElementAt(2, 2, 1.0);        </span>
+<span class="fc" id="L256">    }</span>
     
     /**
      * Returns the horizontal focal length of a camera. 
@@ -263,7 +265,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @return Horizontal focal length.
      */
     public double getHorizontalFocalLength() {
-<span class="fc" id="L266">        return mInternalMatrix.getElementAt(0, 0);</span>
+<span class="fc" id="L268">        return mInternalMatrix.getElementAt(0, 0);</span>
     }
     
     /**
@@ -276,8 +278,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @param horizontalFocalLength Horizontal focal length to be set.
      */
     public final void setHorizontalFocalLength(double horizontalFocalLength) {
-<span class="fc" id="L279">        mInternalMatrix.setElementAt(0, 0, horizontalFocalLength);</span>
-<span class="fc" id="L280">    }</span>
+<span class="fc" id="L281">        mInternalMatrix.setElementAt(0, 0, horizontalFocalLength);</span>
+<span class="fc" id="L282">    }</span>
     
     /**
      * Returns the vertical focal length of a camera.
@@ -289,7 +291,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @return Vertical focal length.
      */
     public double getVerticalFocalLength() {
-<span class="fc" id="L292">        return mInternalMatrix.getElementAt(1, 1);</span>
+<span class="fc" id="L294">        return mInternalMatrix.getElementAt(1, 1);</span>
     }
     
     /**
@@ -302,8 +304,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @param verticalFocalLength Vertical focal length to be set.
      */    
     public final void setVerticalFocalLength(double verticalFocalLength) {
-<span class="fc" id="L305">        mInternalMatrix.setElementAt(1, 1, verticalFocalLength);</span>
-<span class="fc" id="L306">    }</span>
+<span class="fc" id="L307">        mInternalMatrix.setElementAt(1, 1, verticalFocalLength);</span>
+<span class="fc" id="L308">    }</span>
     
     /**
      * Returns aspect ratio.
@@ -315,8 +317,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @return Aspect ratio.
      */
     public double getAspectRatio() {
-<span class="fc" id="L318">        return mInternalMatrix.getElementAt(1, 1) / </span>
-<span class="fc" id="L319">                mInternalMatrix.getElementAt(0, 0);</span>
+<span class="fc" id="L320">        return mInternalMatrix.getElementAt(1, 1) / </span>
+<span class="fc" id="L321">                mInternalMatrix.getElementAt(0, 0);</span>
     }
     
     /**
@@ -328,9 +330,9 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @param aspectRatio Aspect ratio to be set.
      */
     public void setAspectRatioKeepingHorizontalFocalLength(double aspectRatio) {
-<span class="fc" id="L331">        mInternalMatrix.setElementAt(1, 1, </span>
-<span class="fc" id="L332">                aspectRatio * mInternalMatrix.getElementAt(0, 0));</span>
-<span class="fc" id="L333">    }</span>
+<span class="fc" id="L333">        mInternalMatrix.setElementAt(1, 1, </span>
+<span class="fc" id="L334">                aspectRatio * mInternalMatrix.getElementAt(0, 0));</span>
+<span class="fc" id="L335">    }</span>
     
     /**
      * Sets provided aspect ratio but keeping current vertical focal length
@@ -341,9 +343,9 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @param aspectRatio Aspect ratio to be set.
      */
     public void setAspectRatioKeepingVerticalFocalLength(double aspectRatio) {
-<span class="fc" id="L344">        mInternalMatrix.setElementAt(0, 0, </span>
-<span class="fc" id="L345">                mInternalMatrix.getElementAt(1, 1) / aspectRatio);</span>
-<span class="fc" id="L346">    }</span>
+<span class="fc" id="L346">        mInternalMatrix.setElementAt(0, 0, </span>
+<span class="fc" id="L347">                mInternalMatrix.getElementAt(1, 1) / aspectRatio);</span>
+<span class="fc" id="L348">    }</span>
     
     /**
      * Returns horizontal principal point.
@@ -357,7 +359,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @return Horizontal principal point.
      */
     public double getHorizontalPrincipalPoint() {
-<span class="fc" id="L360">        return mInternalMatrix.getElementAt(0, 2);</span>
+<span class="fc" id="L362">        return mInternalMatrix.getElementAt(0, 2);</span>
     }
     
     /**
@@ -373,8 +375,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      */
     public final void setHorizontalPrincipalPoint(
             double horizontalPrincipalPoint) {
-<span class="fc" id="L376">        mInternalMatrix.setElementAt(0, 2, horizontalPrincipalPoint);</span>
-<span class="fc" id="L377">    }</span>
+<span class="fc" id="L378">        mInternalMatrix.setElementAt(0, 2, horizontalPrincipalPoint);</span>
+<span class="fc" id="L379">    }</span>
     
     /**
      * Returns vertical principal point.
@@ -388,7 +390,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @return Vertical principal point.
      */    
     public double getVerticalPrincipalPoint() {
-<span class="fc" id="L391">        return mInternalMatrix.getElementAt(1, 2);</span>
+<span class="fc" id="L393">        return mInternalMatrix.getElementAt(1, 2);</span>
     }
     
     /**
@@ -403,8 +405,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @param verticalPrincipalPoint Vertical principal point to be set.
      */    
     public final void setVerticalPrincipalPoint(double verticalPrincipalPoint) {
-<span class="fc" id="L406">        mInternalMatrix.setElementAt(1, 2, verticalPrincipalPoint);</span>
-<span class="fc" id="L407">    }</span>
+<span class="fc" id="L408">        mInternalMatrix.setElementAt(1, 2, verticalPrincipalPoint);</span>
+<span class="fc" id="L409">    }</span>
     
     /**
      * Returns skewness of axes on the retinal plane. This usually zero or a 
@@ -413,7 +415,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @return Skewness of axes.
      */
     public double getSkewness() {
-<span class="fc" id="L416">        return mInternalMatrix.getElementAt(0, 1);</span>
+<span class="fc" id="L418">        return mInternalMatrix.getElementAt(0, 1);</span>
     }
     
     /**
@@ -423,8 +425,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @param skewness Skewness of axes to be set.
      */
     public final void setSkewness(double skewness) {
-<span class="fc" id="L426">        mInternalMatrix.setElementAt(0, 1, skewness);</span>
-<span class="fc" id="L427">    }</span>
+<span class="fc" id="L428">        mInternalMatrix.setElementAt(0, 1, skewness);</span>
+<span class="fc" id="L429">    }</span>
     
     /**
      * Returns skewness angle in radians of retinal x-y axes associated to 
@@ -435,8 +437,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @return Skewness angle in radians.
      */
     public double getSkewnessAngle() {
-<span class="fc" id="L438">        return Math.atan2(mInternalMatrix.getElementAt(0, 1), </span>
-<span class="fc" id="L439">                mInternalMatrix.getElementAt(1, 1));</span>
+<span class="fc" id="L440">        return Math.atan2(mInternalMatrix.getElementAt(0, 1), </span>
+<span class="fc" id="L441">                mInternalMatrix.getElementAt(1, 1));</span>
     }
     
     /**
@@ -448,9 +450,9 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @param skewnessAngle Skewness angle in radians to be set.
      */
     public void setSkewnessAngle(double skewnessAngle) {
-<span class="fc" id="L451">        mInternalMatrix.setElementAt(0, 1, mInternalMatrix.getElementAt(1, 1) * </span>
-<span class="fc" id="L452">                Math.tan(skewnessAngle));</span>
-<span class="fc" id="L453">    }</span>
+<span class="fc" id="L453">        mInternalMatrix.setElementAt(0, 1, mInternalMatrix.getElementAt(1, 1) * </span>
+<span class="fc" id="L454">                Math.tan(skewnessAngle));</span>
+<span class="fc" id="L455">    }</span>
         
     /**
      * Creates a canonical intrinsic parameters instance which has no effect on 
@@ -459,7 +461,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      */
     public static PinholeCameraIntrinsicParameters 
             createCanonicalIntrinsicParameters() {
-<span class="fc" id="L462">        return new PinholeCameraIntrinsicParameters();</span>
+<span class="fc" id="L464">        return new PinholeCameraIntrinsicParameters();</span>
     }
 
     /**
@@ -473,19 +475,18 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * negative.
      */
     public static PinholeCameraIntrinsicParameters 
-            createTypicalIntrinsicParameters(int imageWidth, int imageHeight) 
-            throws IllegalArgumentException {
+            createTypicalIntrinsicParameters(int imageWidth, int imageHeight) {
         //throw exception if width or height is negative
-<span class="pc bpc" id="L479" title="2 of 4 branches missed.">        if (imageWidth &lt; 0 || imageHeight &lt; 0) {</span>
-<span class="nc" id="L480">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L480" title="2 of 4 branches missed.">        if (imageWidth &lt; 0 || imageHeight &lt; 0) {</span>
+<span class="nc" id="L481">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L483">        double focalLength = (imageWidth + imageHeight) / 2.0;</span>
-<span class="fc" id="L484">        double horizontalPrincipalPoint = (double)imageWidth / 2.0;</span>
-<span class="fc" id="L485">        double verticalPrincipalPoint = (double)imageHeight / 2.0;</span>
-<span class="fc" id="L486">        double skewness = 0.0;</span>
+<span class="fc" id="L484">        double focalLength = (imageWidth + imageHeight) / 2.0;</span>
+<span class="fc" id="L485">        double horizontalPrincipalPoint = (double)imageWidth / 2.0;</span>
+<span class="fc" id="L486">        double verticalPrincipalPoint = (double)imageHeight / 2.0;</span>
+<span class="fc" id="L487">        double skewness = 0.0;</span>
 
-<span class="fc" id="L488">        return new PinholeCameraIntrinsicParameters(focalLength, focalLength, </span>
+<span class="fc" id="L489">        return new PinholeCameraIntrinsicParameters(focalLength, focalLength, </span>
                 horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
     }
     
@@ -498,7 +499,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @return True if provided matrix is valid, false otherwise.
      */
     public static boolean isValidMatrix(Matrix m) {
-<span class="fc" id="L501">        return isValidMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
+<span class="fc" id="L502">        return isValidMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
     }
     
     /**
@@ -512,8 +513,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
      * @return True if provided matrix is valid, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public static boolean isValidMatrix(Matrix m, double threshold)
-        throws IllegalArgumentException {
+    public static boolean isValidMatrix(Matrix m, double threshold) {
         
 <span class="fc bfc" id="L518" title="All 2 branches covered.">        if (threshold &lt; 0) {</span>
 <span class="fc" id="L519">            throw new IllegalArgumentException();</span>
@@ -537,7 +537,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable{
         }
         
         //check that lower right element is 1.0
-<span class="fc bfc" id="L540" title="All 2 branches covered.">        return !(Math.abs(m.getElementAt(2, 2)) - 1.0 &gt; threshold);</span>
+<span class="fc bfc" id="L540" title="All 2 branches covered.">        return Math.abs(m.getElementAt(2, 2)) - 1.0 &lt;= threshold;</span>
     }    
     
     /**

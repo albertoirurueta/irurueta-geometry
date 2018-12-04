@@ -3559,8 +3559,8 @@ public class Rectangle implements Serializable {
 <span class="fc" id="L3559">            double largest = -Double.MAX_VALUE;</span>
 <span class="pc bpc" id="L3560" title="1 of 2 branches missed.">            if(leftDist &gt; largest) largest = leftDist;</span>
 <span class="fc bfc" id="L3561" title="All 2 branches covered.">            if(topDist &gt; largest) largest = topDist;</span>
-<span class="fc bfc" id="L3562" title="All 2 branches covered.">            if(rightDist &gt; largest) largest = rightDist;</span>
-<span class="pc bpc" id="L3563" title="1 of 2 branches missed.">            if(bottomDist &gt; largest) largest = bottomDist;</span>
+<span class="pc bpc" id="L3562" title="1 of 2 branches missed.">            if(rightDist &gt; largest) largest = rightDist;</span>
+<span class="fc bfc" id="L3563" title="All 2 branches covered.">            if(bottomDist &gt; largest) largest = bottomDist;</span>
             
 <span class="fc" id="L3565">            return largest;</span>
         }
@@ -4262,12 +4262,12 @@ public class Rectangle implements Serializable {
 <span class="fc" id="L4262">            double bottomDist = getDistanceToBottomSide(x, y, left2, top2, </span>
                     right2, bottom2);
             
-<span class="pc bpc" id="L4265" title="2 of 6 branches missed.">            if (leftDist &lt; topDist &amp;&amp; leftDist &lt; rightDist &amp;&amp;</span>
+<span class="pc bpc" id="L4265" title="3 of 6 branches missed.">            if (leftDist &lt; topDist &amp;&amp; leftDist &lt; rightDist &amp;&amp;</span>
                     leftDist &lt; bottomDist) {
                 //pick left side
-<span class="fc" id="L4268">                result.setInhomogeneousCoordinates(left2, y);</span>
+<span class="nc" id="L4268">                result.setInhomogeneousCoordinates(left2, y);</span>
                 
-<span class="pc bpc" id="L4270" title="4 of 6 branches missed.">            } else if (topDist &lt; leftDist &amp;&amp; topDist &lt; rightDist &amp;&amp;</span>
+<span class="pc bpc" id="L4270" title="3 of 6 branches missed.">            } else if (topDist &lt; leftDist &amp;&amp; topDist &lt; rightDist &amp;&amp;</span>
                     topDist &lt; bottomDist) {
                 //pick top side
 <span class="nc" id="L4273">                result.setInhomogeneousCoordinates(x, top2);</span>
@@ -5227,9 +5227,8 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */        
     public static boolean isLocusToRightSide(Point2D point, Point2D center,
-            double width, double height, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L5232">        return isLocusToRightSide(point.getInhomX(), point.getInhomY(), center,</span>
+            double width, double height, double threshold) {
+<span class="fc" id="L5231">        return isLocusToRightSide(point.getInhomX(), point.getInhomY(), center,</span>
                 width, height, threshold);
     }
     
@@ -5244,9 +5243,8 @@ public class Rectangle implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */        
-    public boolean isLocusToRightSide(double x, double y, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L5249">        return isLocusToRightSide(x, y, mTopLeft, mBottomRight, threshold);</span>
+    public boolean isLocusToRightSide(double x, double y, double threshold) {
+<span class="fc" id="L5247">        return isLocusToRightSide(x, y, mTopLeft, mBottomRight, threshold);</span>
     }
     
     /**
@@ -5259,9 +5257,8 @@ public class Rectangle implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */        
-    public boolean isLocusToRightSide(Point2D point, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L5264">        return isLocusToRightSide(point, mTopLeft, mBottomRight, threshold);</span>
+    public boolean isLocusToRightSide(Point2D point, double threshold) {
+<span class="fc" id="L5261">        return isLocusToRightSide(point, mTopLeft, mBottomRight, threshold);</span>
     }
     
     /**
@@ -5279,7 +5276,7 @@ public class Rectangle implements Serializable {
      */        
     public static boolean isLocusToRightSide(double x, double y, double left,
             double top, double right, double bottom) {
-<span class="fc" id="L5282">        return isLocusToRightSide(x, y, left, top, right, bottom, </span>
+<span class="fc" id="L5279">        return isLocusToRightSide(x, y, left, top, right, bottom, </span>
                 DEFAULT_THRESHOLD);
     }
     
@@ -5296,7 +5293,7 @@ public class Rectangle implements Serializable {
      */        
     public static boolean isLocusToRightSide(Point2D point, double left,
             double top, double right, double bottom) {
-<span class="fc" id="L5299">        return isLocusToRightSide(point, left, top, right, bottom, </span>
+<span class="fc" id="L5296">        return isLocusToRightSide(point, left, top, right, bottom, </span>
                 DEFAULT_THRESHOLD);
     }
     
@@ -5313,7 +5310,7 @@ public class Rectangle implements Serializable {
      */        
     public static boolean isLocusToRightSide(double x, double y, 
             Point2D topLeft, Point2D bottomRight) {
-<span class="fc" id="L5316">        return isLocusToRightSide(x, y, topLeft, bottomRight, </span>
+<span class="fc" id="L5313">        return isLocusToRightSide(x, y, topLeft, bottomRight, </span>
                 DEFAULT_THRESHOLD);
     }
     
@@ -5328,7 +5325,7 @@ public class Rectangle implements Serializable {
      */        
     public static boolean isLocusToRightSide(Point2D point, Point2D topLeft,
             Point2D bottomRight) {
-<span class="fc" id="L5331">        return isLocusToRightSide(point, topLeft, bottomRight, </span>
+<span class="fc" id="L5328">        return isLocusToRightSide(point, topLeft, bottomRight, </span>
                 DEFAULT_THRESHOLD);
     }
     
@@ -5346,7 +5343,7 @@ public class Rectangle implements Serializable {
      */        
     public static boolean isLocusToRightSide(double x, double y, Point2D center,
             double width, double height) {
-<span class="fc" id="L5349">        return isLocusToRightSide(x, y, center, width, height, </span>
+<span class="fc" id="L5346">        return isLocusToRightSide(x, y, center, width, height, </span>
                 DEFAULT_THRESHOLD);
     }
     
@@ -5362,7 +5359,7 @@ public class Rectangle implements Serializable {
      */        
     public static boolean isLocusToRightSide(Point2D point, Point2D center,
             double width, double height) {
-<span class="fc" id="L5365">        return isLocusToRightSide(point, center, width, height, </span>
+<span class="fc" id="L5362">        return isLocusToRightSide(point, center, width, height, </span>
                 DEFAULT_THRESHOLD);
     }
     
@@ -5375,7 +5372,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */        
     public boolean isLocusToRightSide(double x, double y) {
-<span class="fc" id="L5378">        return isLocusToRightSide(x, y, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L5375">        return isLocusToRightSide(x, y, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -5386,7 +5383,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */        
     public boolean isLocusToRightSide(Point2D point) {
-<span class="fc" id="L5389">        return isLocusToRightSide(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L5386">        return isLocusToRightSide(point, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -5406,13 +5403,12 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */        
     public static boolean isLocusToBottomSide(double x, double y, double left,
-            double top, double right, double bottom, double threshold)
-            throws IllegalArgumentException {
-<span class="pc bpc" id="L5411" title="1 of 2 branches missed.">        if (threshold &lt; 0.0) {</span>
-<span class="nc" id="L5412">            throw new IllegalArgumentException(&quot;threshold must be positive&quot;);</span>
+            double top, double right, double bottom, double threshold) {
+<span class="pc bpc" id="L5407" title="1 of 2 branches missed.">        if (threshold &lt; 0.0) {</span>
+<span class="nc" id="L5408">            throw new IllegalArgumentException(&quot;threshold must be positive&quot;);</span>
         }
         
-<span class="fc bfc" id="L5415" title="All 2 branches covered.">        return getDistanceToBottomSide(x, y, left, top, right, bottom) </span>
+<span class="fc bfc" id="L5411" title="All 2 branches covered.">        return getDistanceToBottomSide(x, y, left, top, right, bottom) </span>
                 &lt;= threshold;
     }
     
@@ -5432,9 +5428,8 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
     public static boolean isLocusToBottomSide(Point2D point, double left,
-            double top, double right, double bottom, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L5437">        return isLocusToBottomSide(point.getInhomX(), point.getInhomY(), left,</span>
+            double top, double right, double bottom, double threshold) {
+<span class="fc" id="L5432">        return isLocusToBottomSide(point.getInhomX(), point.getInhomY(), left,</span>
                 top, right, bottom, threshold);
     }
     
@@ -5454,11 +5449,10 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
     public static boolean isLocusToBottomSide(double x, double y,
-            Point2D topLeft, Point2D bottomRight, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L5459">        return isLocusToBottomSide(x, y, topLeft.getInhomX(), </span>
-<span class="fc" id="L5460">                topLeft.getInhomY(), bottomRight.getInhomX(), </span>
-<span class="fc" id="L5461">                bottomRight.getInhomY(), threshold);</span>
+            Point2D topLeft, Point2D bottomRight, double threshold) {
+<span class="fc" id="L5453">        return isLocusToBottomSide(x, y, topLeft.getInhomX(), </span>
+<span class="fc" id="L5454">                topLeft.getInhomY(), bottomRight.getInhomX(), </span>
+<span class="fc" id="L5455">                bottomRight.getInhomY(), threshold);</span>
     }
     
     /**
@@ -5475,9 +5469,8 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
     public static boolean isLocusToBottomSide(Point2D point, Point2D topLeft,
-            Point2D bottomRight, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L5480">        return isLocusToBottomSide(point.getInhomX(), point.getInhomY(), </span>
+            Point2D bottomRight, double threshold) {
+<span class="fc" id="L5473">        return isLocusToBottomSide(point.getInhomX(), point.getInhomY(), </span>
                 topLeft, bottomRight, threshold);
     }
     
@@ -5497,13 +5490,12 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
     public static boolean isLocusToBottomSide(double x, double y, 
-            Point2D center, double width, double height, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L5502">        double halfWidth = width/2.0;</span>
-<span class="fc" id="L5503">        double halfHeight = height/2.0;</span>
-<span class="fc" id="L5504">        double centerX = center.getInhomX();</span>
-<span class="fc" id="L5505">        double centerY = center.getInhomY();</span>
-<span class="fc" id="L5506">        return isLocusToBottomSide(x, y, centerX - halfWidth, </span>
+            Point2D center, double width, double height, double threshold) {
+<span class="fc" id="L5494">        double halfWidth = width/2.0;</span>
+<span class="fc" id="L5495">        double halfHeight = height/2.0;</span>
+<span class="fc" id="L5496">        double centerX = center.getInhomX();</span>
+<span class="fc" id="L5497">        double centerY = center.getInhomY();</span>
+<span class="fc" id="L5498">        return isLocusToBottomSide(x, y, centerX - halfWidth, </span>
                 centerY - halfHeight, centerX + halfWidth,
                 centerY + halfHeight, threshold);        
     }
@@ -5523,9 +5515,8 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
     public static boolean isLocusToBottomSide(Point2D point, Point2D center,
-            double width, double height, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L5528">        return isLocusToBottomSide(point.getInhomX(), point.getInhomY(), center,</span>
+            double width, double height, double threshold) {
+<span class="fc" id="L5519">        return isLocusToBottomSide(point.getInhomX(), point.getInhomY(), center,</span>
                 width, height, threshold);
     }
     
@@ -5540,9 +5531,8 @@ public class Rectangle implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
-    public boolean isLocusToBottomSide(double x, double y, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L5545">        return isLocusToBottomSide(x, y, mTopLeft, mBottomRight, threshold);</span>
+    public boolean isLocusToBottomSide(double x, double y, double threshold) {
+<span class="fc" id="L5535">        return isLocusToBottomSide(x, y, mTopLeft, mBottomRight, threshold);</span>
     }
     
     /**
@@ -5555,9 +5545,8 @@ public class Rectangle implements Serializable {
      * otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */            
-    public boolean isLocusToBottomSide(Point2D point, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L5560">        return isLocusToBottomSide(point, mTopLeft, mBottomRight, threshold);</span>
+    public boolean isLocusToBottomSide(Point2D point, double threshold) {
+<span class="fc" id="L5549">        return isLocusToBottomSide(point, mTopLeft, mBottomRight, threshold);</span>
     }
     
     /**
@@ -5575,7 +5564,7 @@ public class Rectangle implements Serializable {
      */            
     public static boolean isLocusToBottomSide(double x, double y, double left,
             double top, double right, double bottom) {
-<span class="fc" id="L5578">        return isLocusToBottomSide(x, y, left, top, right, bottom, </span>
+<span class="fc" id="L5567">        return isLocusToBottomSide(x, y, left, top, right, bottom, </span>
                 DEFAULT_THRESHOLD);
     }
     
@@ -5592,7 +5581,7 @@ public class Rectangle implements Serializable {
      */            
     public static boolean isLocusToBottomSide(Point2D point, double left, 
             double top, double right, double bottom) {
-<span class="fc" id="L5595">        return isLocusToBottomSide(point, left, top, right, bottom, </span>
+<span class="fc" id="L5584">        return isLocusToBottomSide(point, left, top, right, bottom, </span>
                 DEFAULT_THRESHOLD);
     }
     
@@ -5609,7 +5598,7 @@ public class Rectangle implements Serializable {
      */            
     public static boolean isLocusToBottomSide(double x, double y, 
             Point2D topLeft, Point2D bottomRight) {
-<span class="fc" id="L5612">        return isLocusToBottomSide(x, y, topLeft, bottomRight, </span>
+<span class="fc" id="L5601">        return isLocusToBottomSide(x, y, topLeft, bottomRight, </span>
                 DEFAULT_THRESHOLD);
     }
     
@@ -5624,7 +5613,7 @@ public class Rectangle implements Serializable {
      */            
     public static boolean isLocusToBottomSide(Point2D point, Point2D topLeft,
             Point2D bottomRight) {
-<span class="fc" id="L5627">        return isLocusToBottomSide(point, topLeft, bottomRight, </span>
+<span class="fc" id="L5616">        return isLocusToBottomSide(point, topLeft, bottomRight, </span>
                 DEFAULT_THRESHOLD);
     }
     
@@ -5642,7 +5631,7 @@ public class Rectangle implements Serializable {
      */            
     public static boolean isLocusToBottomSide(double x, double y, 
             Point2D center, double width, double height) {
-<span class="fc" id="L5645">        return isLocusToBottomSide(x, y, center, width, height, </span>
+<span class="fc" id="L5634">        return isLocusToBottomSide(x, y, center, width, height, </span>
                 DEFAULT_THRESHOLD);
     }
     
@@ -5658,7 +5647,7 @@ public class Rectangle implements Serializable {
      */            
     public static boolean isLocusToBottomSide(Point2D point, Point2D center,
             double width, double height) {
-<span class="fc" id="L5661">        return isLocusToBottomSide(point, center, width, height, </span>
+<span class="fc" id="L5650">        return isLocusToBottomSide(point, center, width, height, </span>
                 DEFAULT_THRESHOLD);
     }
     
@@ -5671,7 +5660,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */            
     public boolean isLocusToBottomSide(double x, double y) {
-<span class="fc" id="L5674">        return isLocusToBottomSide(x, y, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L5663">        return isLocusToBottomSide(x, y, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -5682,7 +5671,7 @@ public class Rectangle implements Serializable {
      * otherwise.
      */            
     public boolean isLocusToBottomSide(Point2D point) {
-<span class="fc" id="L5685">        return isLocusToBottomSide(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L5674">        return isLocusToBottomSide(point, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -5701,16 +5690,15 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public static boolean isLocus(double x, double y, double left, double top,
-            double right, double bottom, double threshold)
-            throws IllegalArgumentException {
-<span class="pc bpc" id="L5706" title="1 of 2 branches missed.">        if (threshold &lt; 0.0) {</span>
-<span class="nc" id="L5707">            throw new IllegalArgumentException(&quot;threshold must be positive&quot;);</span>
+            double right, double bottom, double threshold) {
+<span class="pc bpc" id="L5694" title="1 of 2 branches missed.">        if (threshold &lt; 0.0) {</span>
+<span class="nc" id="L5695">            throw new IllegalArgumentException(&quot;threshold must be positive&quot;);</span>
         }
         
-<span class="fc bfc" id="L5710" title="All 2 branches covered.">        return isLocusToLeftSide(x, y, left, top, right, bottom, threshold) ||</span>
-<span class="fc bfc" id="L5711" title="All 2 branches covered.">                isLocusToTopSide(x, y, left, top, right, bottom, threshold) ||</span>
-<span class="fc bfc" id="L5712" title="All 2 branches covered.">                isLocusToRightSide(x, y, left, top, right, bottom, threshold) ||</span>
-<span class="fc bfc" id="L5713" title="All 2 branches covered.">                isLocusToBottomSide(x, y, left, top, right, bottom, threshold);</span>
+<span class="fc bfc" id="L5698" title="All 2 branches covered.">        return isLocusToLeftSide(x, y, left, top, right, bottom, threshold) ||</span>
+<span class="fc bfc" id="L5699" title="All 2 branches covered.">                isLocusToTopSide(x, y, left, top, right, bottom, threshold) ||</span>
+<span class="fc bfc" id="L5700" title="All 2 branches covered.">                isLocusToRightSide(x, y, left, top, right, bottom, threshold) ||</span>
+<span class="fc bfc" id="L5701" title="All 2 branches covered.">                isLocusToBottomSide(x, y, left, top, right, bottom, threshold);</span>
     }
     
     /**
@@ -5728,12 +5716,11 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public static boolean isLocus(Point2D point, double left, double top, 
-            double right, double bottom, double threshold)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L5733" title="All 2 branches covered.">        return isLocusToLeftSide(point, left, top, right, bottom, threshold) ||</span>
-<span class="fc bfc" id="L5734" title="All 2 branches covered.">                isLocusToTopSide(point, left, top, right, bottom, threshold) ||</span>
-<span class="fc bfc" id="L5735" title="All 2 branches covered.">                isLocusToRightSide(point, left, top, right, bottom, threshold) ||</span>
-<span class="fc bfc" id="L5736" title="All 2 branches covered.">                isLocusToBottomSide(point, left, top, right, bottom, threshold);</span>
+            double right, double bottom, double threshold) {
+<span class="fc bfc" id="L5720" title="All 2 branches covered.">        return isLocusToLeftSide(point, left, top, right, bottom, threshold) ||</span>
+<span class="fc bfc" id="L5721" title="All 2 branches covered.">                isLocusToTopSide(point, left, top, right, bottom, threshold) ||</span>
+<span class="fc bfc" id="L5722" title="All 2 branches covered.">                isLocusToRightSide(point, left, top, right, bottom, threshold) ||</span>
+<span class="fc bfc" id="L5723" title="All 2 branches covered.">                isLocusToBottomSide(point, left, top, right, bottom, threshold);</span>
     }
     
     /**
@@ -5750,12 +5737,11 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public static boolean isLocus(double x, double y, Point2D topLeft, 
-            Point2D bottomRight, double threshold)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L5755" title="All 2 branches covered.">        return isLocusToLeftSide(x, y, topLeft, bottomRight, threshold) ||</span>
-<span class="fc bfc" id="L5756" title="All 2 branches covered.">                isLocusToTopSide(x, y, topLeft, bottomRight, threshold) ||</span>
-<span class="fc bfc" id="L5757" title="All 2 branches covered.">                isLocusToRightSide(x, y, topLeft, bottomRight, threshold) ||</span>
-<span class="fc bfc" id="L5758" title="All 2 branches covered.">                isLocusToBottomSide(x, y, topLeft, bottomRight, threshold);</span>
+            Point2D bottomRight, double threshold) {
+<span class="fc bfc" id="L5741" title="All 2 branches covered.">        return isLocusToLeftSide(x, y, topLeft, bottomRight, threshold) ||</span>
+<span class="fc bfc" id="L5742" title="All 2 branches covered.">                isLocusToTopSide(x, y, topLeft, bottomRight, threshold) ||</span>
+<span class="fc bfc" id="L5743" title="All 2 branches covered.">                isLocusToRightSide(x, y, topLeft, bottomRight, threshold) ||</span>
+<span class="fc bfc" id="L5744" title="All 2 branches covered.">                isLocusToBottomSide(x, y, topLeft, bottomRight, threshold);</span>
     }
     
     /**
@@ -5771,12 +5757,11 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public static boolean isLocus(Point2D point, Point2D topLeft, 
-            Point2D bottomRight, double threshold)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L5776" title="All 2 branches covered.">        return isLocusToLeftSide(point, topLeft, bottomRight, threshold) ||</span>
-<span class="fc bfc" id="L5777" title="All 2 branches covered.">                isLocusToTopSide(point, topLeft, bottomRight, threshold) ||</span>
-<span class="fc bfc" id="L5778" title="All 2 branches covered.">                isLocusToRightSide(point, topLeft, bottomRight, threshold) ||</span>
-<span class="fc bfc" id="L5779" title="All 2 branches covered.">                isLocusToBottomSide(point, topLeft, bottomRight, threshold);</span>
+            Point2D bottomRight, double threshold) {
+<span class="fc bfc" id="L5761" title="All 2 branches covered.">        return isLocusToLeftSide(point, topLeft, bottomRight, threshold) ||</span>
+<span class="fc bfc" id="L5762" title="All 2 branches covered.">                isLocusToTopSide(point, topLeft, bottomRight, threshold) ||</span>
+<span class="fc bfc" id="L5763" title="All 2 branches covered.">                isLocusToRightSide(point, topLeft, bottomRight, threshold) ||</span>
+<span class="fc bfc" id="L5764" title="All 2 branches covered.">                isLocusToBottomSide(point, topLeft, bottomRight, threshold);</span>
     }
     
     /**
@@ -5793,12 +5778,11 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public static boolean isLocus(double x, double y, Point2D center, 
-            double width, double height, double threshold)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L5798" title="All 2 branches covered.">        return isLocusToLeftSide(x, y, center, width, height, threshold) ||</span>
-<span class="fc bfc" id="L5799" title="All 2 branches covered.">                isLocusToTopSide(x, y, center, width, height, threshold) ||</span>
-<span class="fc bfc" id="L5800" title="All 2 branches covered.">                isLocusToRightSide(x, y, center, width, height, threshold) ||</span>
-<span class="fc bfc" id="L5801" title="All 2 branches covered.">                isLocusToBottomSide(x, y, center, width, height, threshold);</span>
+            double width, double height, double threshold) {
+<span class="fc bfc" id="L5782" title="All 2 branches covered.">        return isLocusToLeftSide(x, y, center, width, height, threshold) ||</span>
+<span class="fc bfc" id="L5783" title="All 2 branches covered.">                isLocusToTopSide(x, y, center, width, height, threshold) ||</span>
+<span class="fc bfc" id="L5784" title="All 2 branches covered.">                isLocusToRightSide(x, y, center, width, height, threshold) ||</span>
+<span class="fc bfc" id="L5785" title="All 2 branches covered.">                isLocusToBottomSide(x, y, center, width, height, threshold);</span>
     }
     
     /**
@@ -5814,12 +5798,11 @@ public class Rectangle implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public static boolean isLocus(Point2D point, Point2D center, double width,
-            double height, double threshold)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L5819" title="All 2 branches covered.">        return isLocusToLeftSide(point, center, width, height, threshold) ||</span>
-<span class="fc bfc" id="L5820" title="All 2 branches covered.">                isLocusToTopSide(point, center, width, height, threshold) ||</span>
-<span class="fc bfc" id="L5821" title="All 2 branches covered.">                isLocusToRightSide(point, center, width, height, threshold) ||</span>
-<span class="fc bfc" id="L5822" title="All 2 branches covered.">                isLocusToBottomSide(point, center, width, height, threshold);</span>
+            double height, double threshold) {
+<span class="fc bfc" id="L5802" title="All 2 branches covered.">        return isLocusToLeftSide(point, center, width, height, threshold) ||</span>
+<span class="fc bfc" id="L5803" title="All 2 branches covered.">                isLocusToTopSide(point, center, width, height, threshold) ||</span>
+<span class="fc bfc" id="L5804" title="All 2 branches covered.">                isLocusToRightSide(point, center, width, height, threshold) ||</span>
+<span class="fc bfc" id="L5805" title="All 2 branches covered.">                isLocusToBottomSide(point, center, width, height, threshold);</span>
     }
 
     /**
@@ -5832,9 +5815,8 @@ public class Rectangle implements Serializable {
      * @return true if point is locus of rectangle, false otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public boolean isLocus(double x, double y, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L5837">        return isLocus(x, y, mTopLeft, mBottomRight, threshold);</span>
+    public boolean isLocus(double x, double y, double threshold) {
+<span class="fc" id="L5819">        return isLocus(x, y, mTopLeft, mBottomRight, threshold);</span>
     }
     
     /**
@@ -5846,9 +5828,8 @@ public class Rectangle implements Serializable {
      * @return true if point is locus of rectangle, false otherwise.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public boolean isLocus(Point2D point, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L5851">        return isLocus(point, mTopLeft, mBottomRight, threshold);</span>
+    public boolean isLocus(Point2D point, double threshold) {
+<span class="fc" id="L5832">        return isLocus(point, mTopLeft, mBottomRight, threshold);</span>
     }
 
     /**
@@ -5865,7 +5846,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocus(double x, double y, double left, double top,
             double right, double bottom) {
-<span class="fc" id="L5868">        return isLocus(x, y, left, top, right, bottom, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L5849">        return isLocus(x, y, left, top, right, bottom, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -5880,7 +5861,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocus(Point2D point, double left, double top,
             double right, double bottom) {
-<span class="fc" id="L5883">        return isLocus(point, left, top, right, bottom, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L5864">        return isLocus(point, left, top, right, bottom, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -5894,7 +5875,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocus(double x, double y, Point2D topLeft, 
             Point2D bottomRight) {
-<span class="fc" id="L5897">        return isLocus(x, y, topLeft, bottomRight, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L5878">        return isLocus(x, y, topLeft, bottomRight, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -5907,7 +5888,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocus(Point2D point, Point2D topLeft, 
             Point2D bottomRight) {
-<span class="fc" id="L5910">        return isLocus(point, topLeft, bottomRight, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L5891">        return isLocus(point, topLeft, bottomRight, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -5922,7 +5903,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocus(double x, double y, Point2D center, 
             double width, double height) {
-<span class="fc" id="L5925">        return isLocus(x, y, center, width, height, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L5906">        return isLocus(x, y, center, width, height, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -5936,7 +5917,7 @@ public class Rectangle implements Serializable {
      */
     public static boolean isLocus(Point2D point, Point2D center, double width,
             double height) {
-<span class="fc" id="L5939">        return isLocus(point, center, width, height, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L5920">        return isLocus(point, center, width, height, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -5947,7 +5928,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus of rectangle, false otherwise.
      */
     public boolean isLocus(double x, double y) {
-<span class="fc" id="L5950">        return isLocus(x, y, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L5931">        return isLocus(x, y, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -5957,7 +5938,7 @@ public class Rectangle implements Serializable {
      * @return true if point is locus of rectangle, false otherwise.
      */
     public boolean isLocus(Point2D point) {
-<span class="fc" id="L5960">        return isLocus(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L5941">        return isLocus(point, DEFAULT_THRESHOLD);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

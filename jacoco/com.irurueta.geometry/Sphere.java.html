@@ -72,10 +72,9 @@ public class Sphere implements Serializable {
      * @param radius Radius of sphere.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public Sphere(Point3D center, double radius) 
-<span class="fc" id="L76">            throws IllegalArgumentException {</span>
-<span class="fc" id="L77">        setCenterAndRadius(center, radius);</span>
-<span class="fc" id="L78">    }</span>
+<span class="fc" id="L75">    public Sphere(Point3D center, double radius) {</span>
+<span class="fc" id="L76">        setCenterAndRadius(center, radius);</span>
+<span class="fc" id="L77">    }</span>
     
     /**
      * Constructor.
@@ -90,9 +89,9 @@ public class Sphere implements Serializable {
      * four points in its locus.
      */
     public Sphere(Point3D point1, Point3D point2, Point3D point3, 
-<span class="fc" id="L93">            Point3D point4) throws CoplanarPointsException {</span>
-<span class="fc" id="L94">        setParametersFromPoints(point1, point2, point3, point4);</span>
-<span class="fc" id="L95">    }</span>
+<span class="fc" id="L92">            Point3D point4) throws CoplanarPointsException {</span>
+<span class="fc" id="L93">        setParametersFromPoints(point1, point2, point3, point4);</span>
+<span class="fc" id="L94">    }</span>
     
     /**
      * Constructor.
@@ -100,16 +99,16 @@ public class Sphere implements Serializable {
      * @param quadric a quadric to create a sphere from.
      * @throws IllegalArgumentException if provided quadric is not a sphere.
      */
-<span class="fc" id="L103">    public Sphere(Quadric quadric) throws IllegalArgumentException {</span>
-<span class="fc" id="L104">        setFromQuadric(quadric);</span>
-<span class="fc" id="L105">    }</span>
+<span class="fc" id="L102">    public Sphere(Quadric quadric) {</span>
+<span class="fc" id="L103">        setFromQuadric(quadric);</span>
+<span class="fc" id="L104">    }</span>
     
     /**
      * Returns center of sphere.
      * @return Center of sphere.
      */
     public Point3D getCenter() {
-<span class="fc" id="L112">        return mCenter;</span>
+<span class="fc" id="L111">        return mCenter;</span>
     }
     
     /**
@@ -117,20 +116,20 @@ public class Sphere implements Serializable {
      * @param center Center of sphere.
      * @throws NullPointerException Raised if provided center is null.
      */
-    public void setCenter(Point3D center) throws NullPointerException {
-<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (center == null) {</span>
-<span class="fc" id="L122">            throw new NullPointerException();</span>
+    public void setCenter(Point3D center) {
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (center == null) {</span>
+<span class="fc" id="L121">            throw new NullPointerException();</span>
         }
         
-<span class="fc" id="L125">        mCenter = center;</span>
-<span class="fc" id="L126">    }</span>
+<span class="fc" id="L124">        mCenter = center;</span>
+<span class="fc" id="L125">    }</span>
     
     /**
      * Returns radius of sphere.
      * @return Radius of sphere.
      */
     public double getRadius() {
-<span class="fc" id="L133">        return mRadius;</span>
+<span class="fc" id="L132">        return mRadius;</span>
     }
     
     /**
@@ -138,13 +137,13 @@ public class Sphere implements Serializable {
      * @param radius Radius of sphere.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public void setRadius(double radius) throws IllegalArgumentException {
-<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (radius &lt; MIN_RADIUS) {</span>
-<span class="fc" id="L143">            throw new IllegalArgumentException();</span>
+    public void setRadius(double radius) {
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        if (radius &lt; MIN_RADIUS) {</span>
+<span class="fc" id="L142">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L146">        mRadius = radius;</span>
-<span class="fc" id="L147">    }</span>
+<span class="fc" id="L145">        mRadius = radius;</span>
+<span class="fc" id="L146">    }</span>
     
     /**
      * Sets center and radius of this sphere.
@@ -153,11 +152,10 @@ public class Sphere implements Serializable {
      * @throws IllegalArgumentException Raised if provided radius is negative.
      * @throws NullPointerException Raised if provided center is null.
      */
-    public final void setCenterAndRadius(Point3D center, double radius)
-            throws IllegalArgumentException, NullPointerException {
-<span class="fc" id="L158">        setRadius(radius);        </span>
-<span class="fc" id="L159">        setCenter(center);</span>
-<span class="fc" id="L160">    }</span>
+    public final void setCenterAndRadius(Point3D center, double radius) {
+<span class="fc" id="L156">        setRadius(radius);        </span>
+<span class="fc" id="L157">        setCenter(center);</span>
+<span class="fc" id="L158">    }</span>
     
     /**
      * Sets parameters of a sphere by using four points that must belong to its
@@ -175,95 +173,95 @@ public class Sphere implements Serializable {
             Point3D point3, Point3D point4) throws CoplanarPointsException {
         
         //normalize points to increase accuracy
-<span class="fc" id="L178">        point1.normalize();</span>
-<span class="fc" id="L179">        point2.normalize();</span>
-<span class="fc" id="L180">        point3.normalize();</span>
-<span class="fc" id="L181">        point4.normalize();</span>
+<span class="fc" id="L176">        point1.normalize();</span>
+<span class="fc" id="L177">        point2.normalize();</span>
+<span class="fc" id="L178">        point3.normalize();</span>
+<span class="fc" id="L179">        point4.normalize();</span>
         
         try {
-<span class="fc" id="L184">            Matrix m = new Matrix(4, 4);</span>
-<span class="fc" id="L185">            double[] b = new double[4];</span>
+<span class="fc" id="L182">            Matrix m = new Matrix(4, 4);</span>
+<span class="fc" id="L183">            double[] b = new double[4];</span>
             
             //1st point
-<span class="fc" id="L188">            double x = point1.getHomX();</span>
-<span class="fc" id="L189">            double y = point1.getHomY();</span>
-<span class="fc" id="L190">            double z = point1.getHomZ();</span>
-<span class="fc" id="L191">            double w = point1.getHomW();</span>
-<span class="fc" id="L192">            m.setElementAt(0, 0, 2.0 * x * w);</span>
-<span class="fc" id="L193">            m.setElementAt(0, 1, 2.0 * y * w);</span>
-<span class="fc" id="L194">            m.setElementAt(0, 2, 2.0 * z * w);</span>
-<span class="fc" id="L195">            m.setElementAt(0, 3, w * w);</span>
-<span class="fc" id="L196">            b[0] = -x * x - y * y - z * z;</span>
+<span class="fc" id="L186">            double x = point1.getHomX();</span>
+<span class="fc" id="L187">            double y = point1.getHomY();</span>
+<span class="fc" id="L188">            double z = point1.getHomZ();</span>
+<span class="fc" id="L189">            double w = point1.getHomW();</span>
+<span class="fc" id="L190">            m.setElementAt(0, 0, 2.0 * x * w);</span>
+<span class="fc" id="L191">            m.setElementAt(0, 1, 2.0 * y * w);</span>
+<span class="fc" id="L192">            m.setElementAt(0, 2, 2.0 * z * w);</span>
+<span class="fc" id="L193">            m.setElementAt(0, 3, w * w);</span>
+<span class="fc" id="L194">            b[0] = -x * x - y * y - z * z;</span>
             
             //2nd point
-<span class="fc" id="L199">            x = point2.getHomX();</span>
-<span class="fc" id="L200">            y = point2.getHomY();</span>
-<span class="fc" id="L201">            z = point2.getHomZ();</span>
-<span class="fc" id="L202">            w = point2.getHomW();</span>
-<span class="fc" id="L203">            m.setElementAt(1, 0, 2.0 * x * w);</span>
-<span class="fc" id="L204">            m.setElementAt(1, 1, 2.0 * y * w);</span>
-<span class="fc" id="L205">            m.setElementAt(1, 2, 2.0 * z * w);</span>
-<span class="fc" id="L206">            m.setElementAt(1, 3, w * w);</span>
-<span class="fc" id="L207">            b[1] = -x * x - y * y - z * z;   </span>
+<span class="fc" id="L197">            x = point2.getHomX();</span>
+<span class="fc" id="L198">            y = point2.getHomY();</span>
+<span class="fc" id="L199">            z = point2.getHomZ();</span>
+<span class="fc" id="L200">            w = point2.getHomW();</span>
+<span class="fc" id="L201">            m.setElementAt(1, 0, 2.0 * x * w);</span>
+<span class="fc" id="L202">            m.setElementAt(1, 1, 2.0 * y * w);</span>
+<span class="fc" id="L203">            m.setElementAt(1, 2, 2.0 * z * w);</span>
+<span class="fc" id="L204">            m.setElementAt(1, 3, w * w);</span>
+<span class="fc" id="L205">            b[1] = -x * x - y * y - z * z;   </span>
             
             //3rd point
-<span class="fc" id="L210">            x = point3.getHomX();</span>
-<span class="fc" id="L211">            y = point3.getHomY();</span>
-<span class="fc" id="L212">            z = point3.getHomZ();</span>
-<span class="fc" id="L213">            w = point3.getHomW();</span>
-<span class="fc" id="L214">            m.setElementAt(2, 0, 2.0 * x * w);</span>
-<span class="fc" id="L215">            m.setElementAt(2, 1, 2.0 * y * w);</span>
-<span class="fc" id="L216">            m.setElementAt(2, 2, 2.0 * z * w);</span>
-<span class="fc" id="L217">            m.setElementAt(2, 3, w * w);</span>
-<span class="fc" id="L218">            b[2] = -x * x - y * y - z * z;  </span>
+<span class="fc" id="L208">            x = point3.getHomX();</span>
+<span class="fc" id="L209">            y = point3.getHomY();</span>
+<span class="fc" id="L210">            z = point3.getHomZ();</span>
+<span class="fc" id="L211">            w = point3.getHomW();</span>
+<span class="fc" id="L212">            m.setElementAt(2, 0, 2.0 * x * w);</span>
+<span class="fc" id="L213">            m.setElementAt(2, 1, 2.0 * y * w);</span>
+<span class="fc" id="L214">            m.setElementAt(2, 2, 2.0 * z * w);</span>
+<span class="fc" id="L215">            m.setElementAt(2, 3, w * w);</span>
+<span class="fc" id="L216">            b[2] = -x * x - y * y - z * z;  </span>
             
             //4th point
-<span class="fc" id="L221">            x = point4.getHomX();</span>
-<span class="fc" id="L222">            y = point4.getHomY();</span>
-<span class="fc" id="L223">            z = point4.getHomZ();</span>
-<span class="fc" id="L224">            w = point4.getHomW();</span>
-<span class="fc" id="L225">            m.setElementAt(3, 0, 2.0 * x * w);</span>
-<span class="fc" id="L226">            m.setElementAt(3, 1, 2.0 * y * w);</span>
-<span class="fc" id="L227">            m.setElementAt(3, 2, 2.0 * z * w);</span>
-<span class="fc" id="L228">            m.setElementAt(3, 3, w * w);</span>
-<span class="fc" id="L229">            b[3] = -x * x - y * y - z * z;   </span>
+<span class="fc" id="L219">            x = point4.getHomX();</span>
+<span class="fc" id="L220">            y = point4.getHomY();</span>
+<span class="fc" id="L221">            z = point4.getHomZ();</span>
+<span class="fc" id="L222">            w = point4.getHomW();</span>
+<span class="fc" id="L223">            m.setElementAt(3, 0, 2.0 * x * w);</span>
+<span class="fc" id="L224">            m.setElementAt(3, 1, 2.0 * y * w);</span>
+<span class="fc" id="L225">            m.setElementAt(3, 2, 2.0 * z * w);</span>
+<span class="fc" id="L226">            m.setElementAt(3, 3, w * w);</span>
+<span class="fc" id="L227">            b[3] = -x * x - y * y - z * z;   </span>
             
             //normalize each row to increase accuracy
-<span class="fc" id="L232">            double[] row = new double[4];</span>
+<span class="fc" id="L230">            double[] row = new double[4];</span>
             double rowNorm;
             
-<span class="fc bfc" id="L235" title="All 2 branches covered.">            for (int j = 0; j &lt; 4; j++) {</span>
-<span class="fc" id="L236">                m.getSubmatrixAsArray(j, 0, j, 3, row);</span>
-<span class="fc" id="L237">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
-<span class="fc bfc" id="L238" title="All 2 branches covered.">                for (int i = 0; i &lt; 4; i++ ) {</span>
-<span class="fc" id="L239">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">            for (int j = 0; j &lt; 4; j++) {</span>
+<span class="fc" id="L234">                m.getSubmatrixAsArray(j, 0, j, 3, row);</span>
+<span class="fc" id="L235">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
+<span class="fc bfc" id="L236" title="All 2 branches covered.">                for (int i = 0; i &lt; 4; i++ ) {</span>
+<span class="fc" id="L237">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
                 }
-<span class="fc" id="L241">                b[j] /= rowNorm;</span>
+<span class="fc" id="L239">                b[j] /= rowNorm;</span>
             }
             
-<span class="fc" id="L244">            double[] params = com.irurueta.algebra.Utils.solve(m, b);</span>
+<span class="fc" id="L242">            double[] params = com.irurueta.algebra.Utils.solve(m, b);</span>
             
-<span class="fc" id="L246">            double g = params[0]; //g = -cx</span>
-<span class="fc" id="L247">            double h = params[1]; //h = -cy</span>
-<span class="fc" id="L248">            double i = params[2]; //i = -cz</span>
-<span class="fc" id="L249">            double j = params[3]; //j = cx^2 + cy^2 + cz^2 - R^2</span>
+<span class="fc" id="L244">            double g = params[0]; //g = -cx</span>
+<span class="fc" id="L245">            double h = params[1]; //h = -cy</span>
+<span class="fc" id="L246">            double i = params[2]; //i = -cz</span>
+<span class="fc" id="L247">            double j = params[3]; //j = cx^2 + cy^2 + cz^2 - R^2</span>
             
             //compute center
-<span class="fc" id="L252">            double inhomCx = -g;</span>
-<span class="fc" id="L253">            double inhomCy = -h;</span>
-<span class="fc" id="L254">            double inhomCz = -i;</span>
-<span class="fc" id="L255">            Point3D center = new InhomogeneousPoint3D(inhomCx, inhomCy, </span>
+<span class="fc" id="L250">            double inhomCx = -g;</span>
+<span class="fc" id="L251">            double inhomCy = -h;</span>
+<span class="fc" id="L252">            double inhomCz = -i;</span>
+<span class="fc" id="L253">            Point3D center = new InhomogeneousPoint3D(inhomCx, inhomCy, </span>
                     inhomCz);
             
             //compute radius
-<span class="fc" id="L259">            double radius = Math.sqrt(inhomCx * inhomCx + inhomCy * inhomCy + </span>
+<span class="fc" id="L257">            double radius = Math.sqrt(inhomCx * inhomCx + inhomCy * inhomCy + </span>
                     inhomCz * inhomCz - j);
             
-<span class="fc" id="L262">            setCenterAndRadius(center, radius);</span>
-<span class="fc" id="L263">        } catch (AlgebraException e) {</span>
-<span class="fc" id="L264">            throw new CoplanarPointsException(e);</span>
-<span class="fc" id="L265">        }</span>
-<span class="fc" id="L266">    }</span>
+<span class="fc" id="L260">            setCenterAndRadius(center, radius);</span>
+<span class="fc" id="L261">        } catch (AlgebraException e) {</span>
+<span class="fc" id="L262">            throw new CoplanarPointsException(e);</span>
+<span class="fc" id="L263">        }</span>
+<span class="fc" id="L264">    }</span>
     
     /**
      * Returns volume of a sphere having provided radius.
@@ -271,11 +269,11 @@ public class Sphere implements Serializable {
      * @return Volume of a sphere having provided radius.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public static double volume(double radius) throws IllegalArgumentException {
-<span class="pc bpc" id="L275" title="1 of 2 branches missed.">        if (radius &lt; MIN_RADIUS) {</span>
-<span class="nc" id="L276">            throw new IllegalArgumentException();</span>
+    public static double volume(double radius) {
+<span class="pc bpc" id="L273" title="1 of 2 branches missed.">        if (radius &lt; MIN_RADIUS) {</span>
+<span class="nc" id="L274">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L278">        return 4.0 / 3.0 * Math.PI * radius * radius * radius;</span>
+<span class="fc" id="L276">        return 4.0 / 3.0 * Math.PI * radius * radius * radius;</span>
     }
     
     /**
@@ -283,7 +281,7 @@ public class Sphere implements Serializable {
      * @return Volume of this sphere.
      */
     public double getVolume() {
-<span class="fc" id="L286">        return volume(mRadius);</span>
+<span class="fc" id="L284">        return volume(mRadius);</span>
     }
     
     /**
@@ -292,12 +290,11 @@ public class Sphere implements Serializable {
      * @return Surface of a sphere having provided radius.
      * @throws IllegalArgumentException Raised if provided radius is negative.
      */
-    public static double surface(double radius) 
-            throws IllegalArgumentException {
-<span class="pc bpc" id="L297" title="1 of 2 branches missed.">        if (radius &lt; MIN_RADIUS) {</span>
-<span class="nc" id="L298">            throw new IllegalArgumentException();</span>
+    public static double surface(double radius) {
+<span class="pc bpc" id="L294" title="1 of 2 branches missed.">        if (radius &lt; MIN_RADIUS) {</span>
+<span class="nc" id="L295">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L300">        return 4.0 * Math.PI * radius * radius;</span>
+<span class="fc" id="L297">        return 4.0 * Math.PI * radius * radius;</span>
     }
     
     /**
@@ -305,7 +302,7 @@ public class Sphere implements Serializable {
      * @return Surface of this sphere.
      */
     public double getSurface() {
-<span class="fc" id="L308">        return surface(mRadius);</span>
+<span class="fc" id="L305">        return surface(mRadius);</span>
     }
     
     /**
@@ -321,7 +318,7 @@ public class Sphere implements Serializable {
      * otherwise.
      */
     public boolean isInside(Point3D point, double threshold) {
-<span class="fc bfc" id="L324" title="All 2 branches covered.">        return point.distanceTo(mCenter) - threshold &lt;= mRadius;</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">        return point.distanceTo(mCenter) - threshold &lt;= mRadius;</span>
     }
     
     /**
@@ -331,7 +328,7 @@ public class Sphere implements Serializable {
      * otherwise.
      */    
     public boolean isInside(Point3D point) {
-<span class="fc" id="L334">        return isInside(point, 0.0);</span>
+<span class="fc" id="L331">        return isInside(point, 0.0);</span>
     }
             
     /**
@@ -343,7 +340,7 @@ public class Sphere implements Serializable {
      * @return Distance from point to sphere boundary.
      */
     public double getSignedDistance(Point3D point) {
-<span class="fc" id="L346">        return signedDistance(this, point);</span>
+<span class="fc" id="L343">        return signedDistance(this, point);</span>
     }
     
     /**
@@ -356,7 +353,7 @@ public class Sphere implements Serializable {
      * @return Distance from point to provided sphere boundary.
      */    
     public static double signedDistance(Sphere sphere, Point3D point) {
-<span class="fc" id="L359">        return point.distanceTo(sphere.getCenter()) - sphere.getRadius();</span>
+<span class="fc" id="L356">        return point.distanceTo(sphere.getCenter()) - sphere.getRadius();</span>
     }    
     
     /**
@@ -366,7 +363,7 @@ public class Sphere implements Serializable {
      * @return Distance from point to sphere boundary.
      */    
     public double getDistance(Point3D point) {
-<span class="fc" id="L369">        return Math.abs(getSignedDistance(point));</span>
+<span class="fc" id="L366">        return Math.abs(getSignedDistance(point));</span>
     }
     
     /**
@@ -377,7 +374,7 @@ public class Sphere implements Serializable {
      * @return Distance from point to provided sphere boundary.
      */    
     public static double distance(Sphere sphere, Point3D point) {
-<span class="fc" id="L380">        return Math.abs(signedDistance(sphere, point));</span>
+<span class="fc" id="L377">        return Math.abs(signedDistance(sphere, point));</span>
     }
     
     /**
@@ -390,9 +387,9 @@ public class Sphere implements Serializable {
      */    
     public Point3D getClosestPoint(Point3D point) 
             throws UndefinedPointException {
-<span class="fc" id="L393">        Point3D result = Point3D.create();</span>
-<span class="fc" id="L394">        closestPoint(point, result);</span>
-<span class="fc" id="L395">        return result;</span>
+<span class="fc" id="L390">        Point3D result = Point3D.create();</span>
+<span class="fc" id="L391">        closestPoint(point, result);</span>
+<span class="fc" id="L392">        return result;</span>
     }
     
     /**
@@ -406,28 +403,28 @@ public class Sphere implements Serializable {
     public void closestPoint(Point3D point, Point3D result) 
             throws UndefinedPointException {
         
-<span class="fc" id="L409">        double directionX = point.getInhomX() - mCenter.getInhomX();</span>
-<span class="fc" id="L410">        double directionY = point.getInhomY() - mCenter.getInhomY();</span>
-<span class="fc" id="L411">        double directionZ = point.getInhomZ() - mCenter.getInhomZ();</span>
+<span class="fc" id="L406">        double directionX = point.getInhomX() - mCenter.getInhomX();</span>
+<span class="fc" id="L407">        double directionY = point.getInhomY() - mCenter.getInhomY();</span>
+<span class="fc" id="L408">        double directionZ = point.getInhomZ() - mCenter.getInhomZ();</span>
         //normalize direction and multiply by radius to set result as locus of
         //circle
-<span class="fc" id="L414">        double norm = Math.sqrt(directionX * directionX + </span>
+<span class="fc" id="L411">        double norm = Math.sqrt(directionX * directionX + </span>
                 directionY * directionY + directionZ * directionZ);
         
         //check if point is at center or very close to center, in that case the
         //closest point cannot be found (would be all points of a circle)
-<span class="fc bfc" id="L419" title="All 2 branches covered.">        if (norm &lt; EPS) {</span>
-<span class="fc" id="L420">            throw new UndefinedPointException();</span>
+<span class="fc bfc" id="L416" title="All 2 branches covered.">        if (norm &lt; EPS) {</span>
+<span class="fc" id="L417">            throw new UndefinedPointException();</span>
         }
         
-<span class="fc" id="L423">        directionX *= mRadius / norm;</span>
-<span class="fc" id="L424">        directionY *= mRadius / norm;</span>
-<span class="fc" id="L425">        directionZ *= mRadius / norm;</span>
+<span class="fc" id="L420">        directionX *= mRadius / norm;</span>
+<span class="fc" id="L421">        directionY *= mRadius / norm;</span>
+<span class="fc" id="L422">        directionZ *= mRadius / norm;</span>
         
-<span class="fc" id="L427">        result.setInhomogeneousCoordinates(mCenter.getInhomX() + directionX, </span>
-<span class="fc" id="L428">                mCenter.getInhomY() + directionY,</span>
-<span class="fc" id="L429">                mCenter.getInhomZ() + directionZ);        </span>
-<span class="fc" id="L430">    }</span>
+<span class="fc" id="L424">        result.setInhomogeneousCoordinates(mCenter.getInhomX() + directionX, </span>
+<span class="fc" id="L425">                mCenter.getInhomY() + directionY,</span>
+<span class="fc" id="L426">                mCenter.getInhomZ() + directionZ);        </span>
+<span class="fc" id="L427">    }</span>
     
     /**
      * Determines whether provided point lies at sphere boundary or not up to
@@ -438,13 +435,12 @@ public class Sphere implements Serializable {
      * @return True if point lies at sphere boundary, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */    
-    public boolean isLocus(Point3D point, double threshold) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L443" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L444">            throw new IllegalArgumentException();</span>
+    public boolean isLocus(Point3D point, double threshold) {
+<span class="fc bfc" id="L439" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L440">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc bfc" id="L447" title="All 2 branches covered.">        return Math.abs(point.distanceTo(mCenter) - mRadius) &lt;= threshold;        </span>
+<span class="fc bfc" id="L443" title="All 2 branches covered.">        return Math.abs(point.distanceTo(mCenter) - mRadius) &lt;= threshold;        </span>
     }    
     
     /**
@@ -453,7 +449,7 @@ public class Sphere implements Serializable {
      * @return True if point lies at sphere boundary, false otherwise.
      */    
     public boolean isLocus(Point3D point) {
-<span class="fc" id="L456">        return isLocus(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L452">        return isLocus(point, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -466,7 +462,7 @@ public class Sphere implements Serializable {
      * up to DEFAULT_THRESHOLD.
      */
     public Plane getTangentPlaneAt(Point3D point) throws NotLocusException {
-<span class="fc" id="L469">        return getTangentPlaneAt(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L465">        return getTangentPlaneAt(point, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -481,10 +477,10 @@ public class Sphere implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public Plane getTangentPlaneAt(Point3D point, double threshold)
-            throws NotLocusException, IllegalArgumentException {
-<span class="fc" id="L485">        Plane plane = new Plane();</span>
-<span class="fc" id="L486">        tangentPlaneAt(point, plane, threshold);</span>
-<span class="fc" id="L487">        return plane;</span>
+            throws NotLocusException {
+<span class="fc" id="L481">        Plane plane = new Plane();</span>
+<span class="fc" id="L482">        tangentPlaneAt(point, plane, threshold);</span>
+<span class="fc" id="L483">        return plane;</span>
     }
     
     /**
@@ -498,14 +494,14 @@ public class Sphere implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negative.
      */
     public void tangentPlaneAt(Point3D point, Plane plane, double threshold)
-            throws NotLocusException, IllegalArgumentException {
+            throws NotLocusException {
         
-<span class="pc bpc" id="L503" title="1 of 2 branches missed.">        if (!isLocus(point, threshold)) {</span>
-<span class="nc" id="L504">            throw new NotLocusException();</span>
+<span class="pc bpc" id="L499" title="1 of 2 branches missed.">        if (!isLocus(point, threshold)) {</span>
+<span class="nc" id="L500">            throw new NotLocusException();</span>
         }
         
-<span class="fc" id="L507">        point.normalize();</span>
-<span class="fc" id="L508">        mCenter.normalize();</span>
+<span class="fc" id="L503">        point.normalize();</span>
+<span class="fc" id="L504">        mCenter.normalize();</span>
         
         //Q =   [a      d       f       g]
         //      [d      b       e       h]
@@ -525,25 +521,25 @@ public class Sphere implements Serializable {
         //Hence plane is P = Q * p, where Q is the sphere quadric and p is
         //a point in the locus of the sphere
         
-<span class="fc" id="L528">        double homX = point.getHomX();</span>
-<span class="fc" id="L529">        double homY = point.getHomY();</span>
-<span class="fc" id="L530">        double homZ = point.getHomZ();</span>
-<span class="fc" id="L531">        double homW = point.getHomW();</span>
-<span class="fc" id="L532">        double cx = mCenter.getInhomX();</span>
-<span class="fc" id="L533">        double cy = mCenter.getInhomY();</span>
-<span class="fc" id="L534">        double cz = mCenter.getInhomZ();</span>
-<span class="fc" id="L535">        double quadricG = -cx;</span>
-<span class="fc" id="L536">        double quadricH = -cy;</span>
-<span class="fc" id="L537">        double quadricI = -cz;</span>
-<span class="fc" id="L538">        double quadricJ = cx * cx + cy * cy + cz * cz - mRadius * mRadius;</span>
+<span class="fc" id="L524">        double homX = point.getHomX();</span>
+<span class="fc" id="L525">        double homY = point.getHomY();</span>
+<span class="fc" id="L526">        double homZ = point.getHomZ();</span>
+<span class="fc" id="L527">        double homW = point.getHomW();</span>
+<span class="fc" id="L528">        double cx = mCenter.getInhomX();</span>
+<span class="fc" id="L529">        double cy = mCenter.getInhomY();</span>
+<span class="fc" id="L530">        double cz = mCenter.getInhomZ();</span>
+<span class="fc" id="L531">        double quadricG = -cx;</span>
+<span class="fc" id="L532">        double quadricH = -cy;</span>
+<span class="fc" id="L533">        double quadricI = -cz;</span>
+<span class="fc" id="L534">        double quadricJ = cx * cx + cy * cy + cz * cz - mRadius * mRadius;</span>
         
-<span class="fc" id="L540">        double planeA = homX + quadricG * homW;</span>
-<span class="fc" id="L541">        double planeB = homY + quadricH * homW;</span>
-<span class="fc" id="L542">        double planeC = homZ + quadricI * homW;</span>
-<span class="fc" id="L543">        double planeD = quadricG * homX + quadricH * homY + quadricI * homZ +</span>
+<span class="fc" id="L536">        double planeA = homX + quadricG * homW;</span>
+<span class="fc" id="L537">        double planeB = homY + quadricH * homW;</span>
+<span class="fc" id="L538">        double planeC = homZ + quadricI * homW;</span>
+<span class="fc" id="L539">        double planeD = quadricG * homX + quadricH * homY + quadricI * homZ +</span>
                 quadricJ * homW;
-<span class="fc" id="L545">        plane.setParameters(planeA, planeB, planeC, planeD);</span>
-<span class="fc" id="L546">    }</span>
+<span class="fc" id="L541">        plane.setParameters(planeA, planeB, planeC, planeD);</span>
+<span class="fc" id="L542">    }</span>
     
     /**
      * Converts this sphere into a quadric.
@@ -551,24 +547,24 @@ public class Sphere implements Serializable {
      * @return A quadric representing this circle.
      */
     public Quadric toQuadric() {
-<span class="fc" id="L554">        mCenter.normalize();</span>
+<span class="fc" id="L550">        mCenter.normalize();</span>
         //use inhomogeneous center coordinates
-<span class="fc" id="L556">        double cx = mCenter.getInhomX();</span>
-<span class="fc" id="L557">        double cy = mCenter.getInhomY();</span>
-<span class="fc" id="L558">        double cz = mCenter.getInhomZ();</span>
+<span class="fc" id="L552">        double cx = mCenter.getInhomX();</span>
+<span class="fc" id="L553">        double cy = mCenter.getInhomY();</span>
+<span class="fc" id="L554">        double cz = mCenter.getInhomZ();</span>
         
-<span class="fc" id="L560">        double a = 1.0;</span>
-<span class="fc" id="L561">        double b = 1.0;</span>
-<span class="fc" id="L562">        double c = 1.0;</span>
-<span class="fc" id="L563">        double d = 0.0;</span>
-<span class="fc" id="L564">        double e = 0.0;</span>
-<span class="fc" id="L565">        double f = 0.0;</span>
-<span class="fc" id="L566">        double g = -cx;</span>
-<span class="fc" id="L567">        double h = -cy;</span>
-<span class="fc" id="L568">        double i = -cz;</span>
-<span class="fc" id="L569">        double j = cx * cx + cy * cy + cz * cz - mRadius * mRadius;</span>
+<span class="fc" id="L556">        double a = 1.0;</span>
+<span class="fc" id="L557">        double b = 1.0;</span>
+<span class="fc" id="L558">        double c = 1.0;</span>
+<span class="fc" id="L559">        double d = 0.0;</span>
+<span class="fc" id="L560">        double e = 0.0;</span>
+<span class="fc" id="L561">        double f = 0.0;</span>
+<span class="fc" id="L562">        double g = -cx;</span>
+<span class="fc" id="L563">        double h = -cy;</span>
+<span class="fc" id="L564">        double i = -cz;</span>
+<span class="fc" id="L565">        double j = cx * cx + cy * cy + cz * cz - mRadius * mRadius;</span>
         
-<span class="fc" id="L571">        return new Quadric(a, b, c, d, e, f, g, h, i, j);</span>
+<span class="fc" id="L567">        return new Quadric(a, b, c, d, e, f, g, h, i, j);</span>
     }
     
     /**
@@ -577,37 +573,36 @@ public class Sphere implements Serializable {
      * @param quadric quadric to set parameters from.
      * @throws IllegalArgumentException if provided quadric is not a sphere.
      */
-    public final void setFromQuadric(Quadric quadric) 
-            throws IllegalArgumentException {
-<span class="pc bpc" id="L582" title="1 of 2 branches missed.">        boolean isSphere = quadric.getA() == quadric.getB() &amp;&amp; </span>
-<span class="pc bpc" id="L583" title="1 of 4 branches missed.">                quadric.getB() == quadric.getC() &amp;&amp; quadric.getA() != 0.0 &amp;&amp;</span>
-<span class="pc bpc" id="L584" title="2 of 4 branches missed.">                quadric.getD() == 0.0 &amp;&amp; quadric.getE() == 0.0 &amp;&amp; </span>
-<span class="pc bpc" id="L585" title="1 of 2 branches missed.">                quadric.getF() == 0.0;</span>
+    public final void setFromQuadric(Quadric quadric) {
+<span class="pc bpc" id="L577" title="1 of 2 branches missed.">        boolean isSphere = quadric.getA() == quadric.getB() &amp;&amp; </span>
+<span class="pc bpc" id="L578" title="1 of 4 branches missed.">                quadric.getB() == quadric.getC() &amp;&amp; quadric.getA() != 0.0 &amp;&amp;</span>
+<span class="pc bpc" id="L579" title="2 of 4 branches missed.">                quadric.getD() == 0.0 &amp;&amp; quadric.getE() == 0.0 &amp;&amp; </span>
+<span class="pc bpc" id="L580" title="1 of 2 branches missed.">                quadric.getF() == 0.0;</span>
         
-<span class="fc bfc" id="L587" title="All 2 branches covered.">        if (!isSphere) {</span>
-<span class="fc" id="L588">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L582" title="All 2 branches covered.">        if (!isSphere) {</span>
+<span class="fc" id="L583">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L591">        quadric.normalize();</span>
+<span class="fc" id="L586">        quadric.normalize();</span>
         
-<span class="fc" id="L593">        double a = quadric.getA();</span>
+<span class="fc" id="L588">        double a = quadric.getA();</span>
         //normalize parameters so that
         //a = b = c = 1.0
         //d = e = f = 0.0
         //g = -cx, h = -cy, i = -cz
         //j = cx^2 + cy^2 + cz^2 - r^2
-<span class="fc" id="L599">        double normG = quadric.getG() / a;</span>
-<span class="fc" id="L600">        double normH = quadric.getH() / a;</span>
-<span class="fc" id="L601">        double normI = quadric.getI() / a;</span>
-<span class="fc" id="L602">        double normJ = quadric.getJ() / a;</span>
+<span class="fc" id="L594">        double normG = quadric.getG() / a;</span>
+<span class="fc" id="L595">        double normH = quadric.getH() / a;</span>
+<span class="fc" id="L596">        double normI = quadric.getI() / a;</span>
+<span class="fc" id="L597">        double normJ = quadric.getJ() / a;</span>
         
-<span class="fc" id="L604">        double cx = -normG;</span>
-<span class="fc" id="L605">        double cy = -normH;</span>
-<span class="fc" id="L606">        double cz = -normI;</span>
-<span class="fc" id="L607">        double radius = Math.sqrt(cx * cx + cy * cy + cz * cz - normJ);</span>
+<span class="fc" id="L599">        double cx = -normG;</span>
+<span class="fc" id="L600">        double cy = -normH;</span>
+<span class="fc" id="L601">        double cz = -normI;</span>
+<span class="fc" id="L602">        double radius = Math.sqrt(cx * cx + cy * cy + cz * cz - normJ);</span>
         
-<span class="fc" id="L609">        mCenter = new InhomogeneousPoint3D(cx, cy, cz);</span>
-<span class="fc" id="L610">        mRadius = radius;</span>
-<span class="fc" id="L611">    }</span>
+<span class="fc" id="L604">        mCenter = new InhomogeneousPoint3D(cx, cy, cz);</span>
+<span class="fc" id="L605">        mRadius = radius;</span>
+<span class="fc" id="L606">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

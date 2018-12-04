@@ -446,8 +446,8 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
 <span class="fc" id="L446">	    double epsilon = 0.01; // margin to allow for rounding errors</span>
 <span class="fc" id="L447">	    double epsilon2 = 0.1; // margin to distinguish between 0 and 180 degrees</span>
 
-<span class="fc bfc" id="L449" title="All 2 branches covered.">        if ((Math.abs(m.getElementAt(0, 1) - m.getElementAt(1, 0)) &lt; epsilon)</span>
-<span class="pc bpc" id="L450" title="1 of 2 branches missed.">	        &amp;&amp; (Math.abs(m.getElementAt(0, 2) - m.getElementAt(2, 0)) &lt; epsilon)</span>
+<span class="pc bpc" id="L449" title="1 of 2 branches missed.">        if ((Math.abs(m.getElementAt(0, 1) - m.getElementAt(1, 0)) &lt; epsilon)</span>
+<span class="nc bnc" id="L450" title="All 2 branches missed.">	        &amp;&amp; (Math.abs(m.getElementAt(0, 2) - m.getElementAt(2, 0)) &lt; epsilon)</span>
 <span class="nc bnc" id="L451" title="All 2 branches missed.">	        &amp;&amp; (Math.abs(m.getElementAt(1, 2) - m.getElementAt(2, 1)) &lt; epsilon)) {</span>
 		        // singularity found
 		        // first check for identity matrix which must have +1 for all terms

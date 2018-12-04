@@ -210,10 +210,9 @@ public class Line3D implements Serializable {
      * @return True if provided point belongs to this 3D line, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Point3D point, double threshold)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L215" title="All 2 branches covered.">        return mPlane1.isLocus(point, threshold) &amp;&amp; </span>
-<span class="pc bpc" id="L216" title="1 of 2 branches missed.">                mPlane2.isLocus(point, threshold);</span>
+    public boolean isLocus(Point3D point, double threshold) {
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        return mPlane1.isLocus(point, threshold) &amp;&amp; </span>
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">                mPlane2.isLocus(point, threshold);</span>
     }
     
     /**
@@ -222,7 +221,7 @@ public class Line3D implements Serializable {
      * @return True if provided point belongs to this 3D line, false otherwise.
      */
     public boolean isLocus(Point3D point) {
-<span class="fc" id="L225">        return isLocus(point, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L224">        return isLocus(point, DEFAULT_LOCUS_THRESHOLD);</span>
     }   
     
     /**
@@ -233,8 +232,8 @@ public class Line3D implements Serializable {
      * @return Shortest distance of provided point to this 3D line.
      */
     public double getDistance(Point3D point) {
-<span class="fc" id="L236">        Point3D closestPoint = getClosestPoint(point);</span>
-<span class="fc" id="L237">        return point.distanceTo(closestPoint);</span>
+<span class="fc" id="L235">        Point3D closestPoint = getClosestPoint(point);</span>
+<span class="fc" id="L236">        return point.distanceTo(closestPoint);</span>
     }
     
     /**
@@ -243,7 +242,7 @@ public class Line3D implements Serializable {
      * @return Closest point belonging to this 3D line respect provided point.
      */
     public Point3D getClosestPoint(Point3D point) {
-<span class="fc" id="L246">        return getClosestPoint(point, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L245">        return getClosestPoint(point, DEFAULT_LOCUS_THRESHOLD);</span>
     }
     
     /**
@@ -254,11 +253,10 @@ public class Line3D implements Serializable {
      * @return Closest point belonging to this 3D line respect provided point.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public Point3D getClosestPoint(Point3D point, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L259">        Point3D result = Point3D.create();</span>
-<span class="fc" id="L260">        closestPoint(point, result, threshold);</span>
-<span class="fc" id="L261">        return result;</span>
+    public Point3D getClosestPoint(Point3D point, double threshold) {
+<span class="fc" id="L257">        Point3D result = Point3D.create();</span>
+<span class="fc" id="L258">        closestPoint(point, result, threshold);</span>
+<span class="fc" id="L259">        return result;</span>
     }
     
     /**
@@ -268,8 +266,8 @@ public class Line3D implements Serializable {
      * @param result Instance where computed point will be stored.
      */
     public void closestPoint(Point3D point, Point3D result) {
-<span class="fc" id="L271">        closestPoint(point, result, DEFAULT_LOCUS_THRESHOLD);</span>
-<span class="fc" id="L272">    }</span>
+<span class="fc" id="L269">        closestPoint(point, result, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L270">    }</span>
     
     /**
      * Computes closest point belonging to this 3D line respect provided point
@@ -279,14 +277,13 @@ public class Line3D implements Serializable {
      * @param threshold Threshold to determine closest point.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public void closestPoint(Point3D point, Point3D result, double threshold)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L284" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L285">            throw new IllegalArgumentException();</span>
+    public void closestPoint(Point3D point, Point3D result, double threshold) {
+<span class="fc bfc" id="L281" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L282">            throw new IllegalArgumentException();</span>
         }
         
         //normalize to increase accuracy
-<span class="fc" id="L289">        point.normalize();</span>
+<span class="fc" id="L286">        point.normalize();</span>
         
         //compute director vector perpendicular to director vectors of plane1 
         //and plane2, and use it along provided point to set a 3rd plane.
@@ -296,19 +293,21 @@ public class Line3D implements Serializable {
         
         //This is a plane having as director vector this line 3D and passing 
         //through provided point
-<span class="fc" id="L299">        Plane p = new Plane(point, getDirection());</span>
+<span class="fc" id="L296">        Plane p = new Plane(point, getDirection());</span>
         try {
-<span class="fc" id="L301">            intersection(p, result);</span>
-<span class="pc" id="L302">        } catch (NoIntersectionException ignore) { }</span>
-<span class="fc" id="L303">    }</span>
+<span class="fc" id="L298">            intersection(p, result);</span>
+<span class="nc" id="L299">        } catch (NoIntersectionException ignore) {</span>
+            //never happens
+<span class="fc" id="L301">        }</span>
+<span class="fc" id="L302">    }</span>
     
     /**
      * Normalize the planes forming this 3D line.
      */
     public void normalize() {
-<span class="fc" id="L309">        mPlane1.normalize();</span>
-<span class="fc" id="L310">        mPlane2.normalize();</span>
-<span class="fc" id="L311">    }</span>
+<span class="fc" id="L308">        mPlane1.normalize();</span>
+<span class="fc" id="L309">        mPlane2.normalize();</span>
+<span class="fc" id="L310">    }</span>
     
     /**
      * Determines whether the planes forming this 3D line are normalized or not.
@@ -316,7 +315,7 @@ public class Line3D implements Serializable {
      * otherwise.
      */
     public boolean isNormalized() {
-<span class="pc bpc" id="L319" title="1 of 4 branches missed.">        return mPlane1.isNormalized() &amp;&amp; mPlane2.isNormalized();</span>
+<span class="pc bpc" id="L318" title="1 of 4 branches missed.">        return mPlane1.isNormalized() &amp;&amp; mPlane2.isNormalized();</span>
     }
     
     /**
@@ -326,10 +325,10 @@ public class Line3D implements Serializable {
      */
     public double[] getDirection() {
         try {
-<span class="fc" id="L329">            return Utils.crossProduct(mPlane1.getDirectorVector(), </span>
-<span class="fc" id="L330">                    mPlane2.getDirectorVector());</span>
-<span class="nc" id="L331">        } catch (AlgebraException ignore) {</span>
-<span class="nc" id="L332">            return null;</span>
+<span class="fc" id="L328">            return Utils.crossProduct(mPlane1.getDirectorVector(), </span>
+<span class="fc" id="L329">                    mPlane2.getDirectorVector());</span>
+<span class="nc" id="L330">        } catch (AlgebraException ignore) {</span>
+<span class="nc" id="L331">            return null;</span>
         }
     }
     
@@ -341,9 +340,9 @@ public class Line3D implements Serializable {
      * intersect this 3D line.
      */
     public Point3D getIntersection(Plane plane) throws NoIntersectionException {
-<span class="fc" id="L344">        Point3D result = Point3D.create();</span>
-<span class="fc" id="L345">        intersection(plane, result);</span>
-<span class="fc" id="L346">        return result;</span>
+<span class="fc" id="L343">        Point3D result = Point3D.create();</span>
+<span class="fc" id="L344">        intersection(plane, result);</span>
+<span class="fc" id="L345">        return result;</span>
     }
     
     /**
@@ -357,7 +356,7 @@ public class Line3D implements Serializable {
     public void intersection(Plane plane, Point3D result) 
             throws NoIntersectionException {
         //use plane1, plane2 and provided plane to find an intersection
-<span class="fc" id="L360">        plane.intersection(mPlane1, mPlane2, result);</span>
-<span class="fc" id="L361">    }</span>
+<span class="fc" id="L359">        plane.intersection(mPlane1, mPlane2, result);</span>
+<span class="fc" id="L360">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

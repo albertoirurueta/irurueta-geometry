@@ -74,26 +74,28 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
         try {
 <span class="fc" id="L75">            internalMatrix = Matrix.identity(ROTATION3D_INHOM_MATRIX_ROWS, </span>
                     ROTATION3D_INHOM_MATRIX_ROWS);
-<span class="pc" id="L77">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L78">    }</span>
+<span class="nc" id="L77">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L79">        }</span>
+<span class="fc" id="L80">    }</span>
     
     /**
      * Copy constructor.
      * Copies provided rotation into this instance.
      * @param rotation Instance to be copied.
      */
-<span class="fc" id="L85">    public MatrixRotation3D(MatrixRotation3D rotation) {</span>
-<span class="fc" id="L86">        internalMatrix = rotation.internalMatrix.clone();</span>
-<span class="fc" id="L87">    }</span>
+<span class="fc" id="L87">    public MatrixRotation3D(MatrixRotation3D rotation) {</span>
+<span class="fc" id="L88">        internalMatrix = rotation.internalMatrix.clone();</span>
+<span class="fc" id="L89">    }</span>
     
     /**
      * Copy constructor.
      * Copies and converts provided rotation into this instance.
      * @param rotation Instance to be copied.
      */
-<span class="fc" id="L94">    public MatrixRotation3D(Rotation3D rotation) {</span>
-<span class="fc" id="L95">        internalMatrix = rotation.asInhomogeneousMatrix();</span>
-<span class="fc" id="L96">    }</span>
+<span class="fc" id="L96">    public MatrixRotation3D(Rotation3D rotation) {</span>
+<span class="fc" id="L97">        internalMatrix = rotation.asInhomogeneousMatrix();</span>
+<span class="fc" id="L98">    }</span>
     
     /**
      * Constructor.
@@ -108,9 +110,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * valid (its size is wrong or it is not orthonormal).
      * {@link #isValidRotationMatrix(Matrix)}.
      */
-<span class="fc" id="L111">    public MatrixRotation3D(Matrix m) throws InvalidRotationMatrixException {</span>
-<span class="fc" id="L112">        fromMatrix(m);</span>
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L113">    public MatrixRotation3D(Matrix m) throws InvalidRotationMatrixException {</span>
+<span class="fc" id="L114">        fromMatrix(m);</span>
+<span class="fc" id="L115">    }</span>
     
     /**
      * Constructor.
@@ -127,9 +129,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * {@link #isValidRotationMatrix(Matrix)}.
      */
     public MatrixRotation3D(Matrix m, double threshold) 
-<span class="fc" id="L130">            throws InvalidRotationMatrixException, IllegalArgumentException {</span>
-<span class="fc" id="L131">        fromMatrix(m, threshold);</span>
-<span class="fc" id="L132">    }</span>
+<span class="fc" id="L132">            throws InvalidRotationMatrixException {</span>
+<span class="fc" id="L133">        fromMatrix(m, threshold);</span>
+<span class="fc" id="L134">    }</span>
     
     /**
      * Constructor.
@@ -139,9 +141,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @param gammaEuler Gamma Euler angle expressed in radians.
      */
     public MatrixRotation3D(double alphaEuler, double betaEuler, 
-<span class="fc" id="L142">            double gammaEuler) {</span>
-<span class="fc" id="L143">        setEulerAngles(alphaEuler, betaEuler, gammaEuler);</span>
-<span class="fc" id="L144">    }</span>
+<span class="fc" id="L144">            double gammaEuler) {</span>
+<span class="fc" id="L145">        setEulerAngles(alphaEuler, betaEuler, gammaEuler);</span>
+<span class="fc" id="L146">    }</span>
     
     /**
      * Constructor.
@@ -154,10 +156,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided axis does not have
      * length 3.
      */
-    public MatrixRotation3D(double[] axis, double theta) 
-<span class="fc" id="L158">            throws IllegalArgumentException {</span>
-<span class="fc" id="L159">        setAxisAndRotation(axis, theta);</span>
-<span class="fc" id="L160">    }</span>
+<span class="fc" id="L159">    public MatrixRotation3D(double[] axis, double theta) {</span>
+<span class="fc" id="L160">        setAxisAndRotation(axis, theta);</span>
+<span class="fc" id="L161">    }</span>
     
     /**
      * Constructor.
@@ -171,9 +172,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @param theta Angle of rotation respect the axis expressed in radians.
      */
     public MatrixRotation3D(double axisX, double axisY, double axisZ, 
-<span class="fc" id="L174">            double theta) {</span>
-<span class="fc" id="L175">        setAxisAndRotation(axisX, axisY, axisZ, theta);</span>
-<span class="fc" id="L176">    }</span>
+<span class="fc" id="L175">            double theta) {</span>
+<span class="fc" id="L176">        setAxisAndRotation(axisX, axisY, axisZ, theta);</span>
+<span class="fc" id="L177">    }</span>
     
     /**
      * Returns type of this rotation.
@@ -181,7 +182,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public Rotation3DType getType() {
-<span class="fc" id="L184">        return Rotation3DType.MATRIX_ROTATION3D;</span>
+<span class="fc" id="L185">        return Rotation3DType.MATRIX_ROTATION3D;</span>
     }    
     
     /**
@@ -192,7 +193,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @return Internal matrix containing rotation of this instance.
      */
     public Matrix getInternalMatrix() {
-<span class="fc" id="L195">        return internalMatrix.clone();</span>
+<span class="fc" id="L196">        return internalMatrix.clone();</span>
     }
     
     /**
@@ -204,8 +205,8 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */
     public final void setInternalMatrix(Matrix internalMatrix) 
             throws InvalidRotationMatrixException {
-<span class="nc" id="L207">        setInternalMatrix(internalMatrix, DEFAULT_VALID_THRESHOLD);</span>
-<span class="nc" id="L208">    }</span>
+<span class="nc" id="L208">        setInternalMatrix(internalMatrix, DEFAULT_VALID_THRESHOLD);</span>
+<span class="nc" id="L209">    }</span>
     
     /**
      * Sets the internal matrix of this rotation. Provided matrix must be 3x3
@@ -220,25 +221,25 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * negative.
      */
     public final void setInternalMatrix(Matrix m, double threshold)
-            throws InvalidRotationMatrixException, IllegalArgumentException {
-<span class="pc bpc" id="L224" title="1 of 2 branches missed.">        if (m.getRows() != ROTATION3D_INHOM_MATRIX_ROWS ||</span>
-<span class="pc bpc" id="L225" title="1 of 2 branches missed.">                m.getColumns() != ROTATION3D_INHOM_MATRIX_COLS) {</span>
-<span class="nc" id="L226">            throw new InvalidRotationMatrixException();</span>
+            throws InvalidRotationMatrixException {
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">        if (m.getRows() != ROTATION3D_INHOM_MATRIX_ROWS ||</span>
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">                m.getColumns() != ROTATION3D_INHOM_MATRIX_COLS) {</span>
+<span class="nc" id="L227">            throw new InvalidRotationMatrixException();</span>
         }
-<span class="fc bfc" id="L228" title="All 2 branches covered.">        if (!isValidRotationMatrix(m, threshold)) {</span>
-<span class="fc" id="L229">            throw new InvalidRotationMatrixException();</span>
+<span class="fc bfc" id="L229" title="All 2 branches covered.">        if (!isValidRotationMatrix(m, threshold)) {</span>
+<span class="fc" id="L230">            throw new InvalidRotationMatrixException();</span>
         }
         
-<span class="fc" id="L232">        internalMatrix = m;</span>
-<span class="fc" id="L233">    }</span>
+<span class="fc" id="L233">        internalMatrix = m;</span>
+<span class="fc" id="L234">    }</span>
     
     /**
      * Returns alpha euler angle within the range -pi and pi.
      * @return Alpha euler angle expressed in radians.
      */
     public double getAlphaEulerAngle() {
-<span class="fc" id="L240">        return Math.atan2(-internalMatrix.getElementAt(2, 0), </span>
-<span class="fc" id="L241">                internalMatrix.getElementAt(2, 2));</span>
+<span class="fc" id="L241">        return Math.atan2(-internalMatrix.getElementAt(2, 0), </span>
+<span class="fc" id="L242">                internalMatrix.getElementAt(2, 2));</span>
     }
     
     /**
@@ -246,7 +247,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @return Beta euler angle expressed in radians.
      */
     public double getBetaEulerAngle() {
-<span class="fc" id="L249">        return Math.asin(internalMatrix.getElementAt(2, 1));</span>
+<span class="fc" id="L250">        return Math.asin(internalMatrix.getElementAt(2, 1));</span>
     }
     
     /**
@@ -254,8 +255,8 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @return Gamma euler angle expressed in radians.
      */
     public double getGammaEulerAngle() {
-<span class="fc" id="L257">        return Math.atan2(-internalMatrix.getElementAt(0, 1), </span>
-<span class="fc" id="L258">                internalMatrix.getElementAt(1, 1));</span>
+<span class="fc" id="L258">        return Math.atan2(-internalMatrix.getElementAt(0, 1), </span>
+<span class="fc" id="L259">                internalMatrix.getElementAt(1, 1));</span>
     }
     
     /**
@@ -267,39 +268,41 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     public final void setEulerAngles(double alphaEuler, double betaEuler, 
             double gammaEuler) {
         
-<span class="fc" id="L270">        double sinAlpha = Math.sin(alphaEuler);</span>
-<span class="fc" id="L271">        double cosAlpha = Math.cos(alphaEuler);</span>
+<span class="fc" id="L271">        double sinAlpha = Math.sin(alphaEuler);</span>
+<span class="fc" id="L272">        double cosAlpha = Math.cos(alphaEuler);</span>
         
-<span class="fc" id="L273">        double sinBeta = Math.sin(betaEuler);</span>
-<span class="fc" id="L274">        double cosBeta = Math.cos(betaEuler);</span>
+<span class="fc" id="L274">        double sinBeta = Math.sin(betaEuler);</span>
+<span class="fc" id="L275">        double cosBeta = Math.cos(betaEuler);</span>
         
-<span class="fc" id="L276">        double sinGamma = Math.sin(gammaEuler);</span>
-<span class="fc" id="L277">        double cosGamma = Math.cos(gammaEuler);</span>
+<span class="fc" id="L277">        double sinGamma = Math.sin(gammaEuler);</span>
+<span class="fc" id="L278">        double cosGamma = Math.cos(gammaEuler);</span>
         
         //reuse internal matrix if possible
-<span class="fc bfc" id="L280" title="All 2 branches covered.">        if (internalMatrix == null) {</span>
-            try {
-<span class="fc" id="L282">                internalMatrix = new Matrix(ROTATION3D_INHOM_MATRIX_ROWS,</span>
+        try {
+<span class="fc bfc" id="L282" title="All 2 branches covered.">            if (internalMatrix == null) {</span>
+<span class="fc" id="L283">                internalMatrix = new Matrix(ROTATION3D_INHOM_MATRIX_ROWS,</span>
                         ROTATION3D_INHOM_MATRIX_COLS);
-<span class="pc" id="L284">            } catch (WrongSizeException ignore) { }</span>
-        }
-        
-<span class="fc" id="L287">        internalMatrix.setElementAt(0, 0, cosAlpha * cosGamma - </span>
-                sinAlpha * sinBeta * sinGamma);
-<span class="fc" id="L289">        internalMatrix.setElementAt(1, 0, cosAlpha * sinGamma + </span>
-                sinAlpha * sinBeta * cosGamma);
-<span class="fc" id="L291">        internalMatrix.setElementAt(2, 0, -sinAlpha * cosBeta);</span>
-        
-<span class="fc" id="L293">        internalMatrix.setElementAt(0, 1, -cosBeta * sinGamma);</span>
-<span class="fc" id="L294">        internalMatrix.setElementAt(1, 1, cosBeta * cosGamma);</span>
-<span class="fc" id="L295">        internalMatrix.setElementAt(2, 1, sinBeta);</span>
-        
-<span class="fc" id="L297">        internalMatrix.setElementAt(0, 2, sinAlpha * cosGamma + </span>
-                cosAlpha * sinBeta * sinGamma);
-<span class="fc" id="L299">        internalMatrix.setElementAt(1, 2, sinAlpha * sinGamma - </span>
-                cosAlpha * sinBeta * cosGamma);
-<span class="fc" id="L301">        internalMatrix.setElementAt(2, 2, cosAlpha * cosBeta);</span>
-<span class="fc" id="L302">    }</span>
+            }
+
+<span class="fc" id="L287">            internalMatrix.setElementAt(0, 0, cosAlpha * cosGamma -</span>
+                    sinAlpha * sinBeta * sinGamma);
+<span class="fc" id="L289">            internalMatrix.setElementAt(1, 0, cosAlpha * sinGamma +</span>
+                    sinAlpha * sinBeta * cosGamma);
+<span class="fc" id="L291">            internalMatrix.setElementAt(2, 0, -sinAlpha * cosBeta);</span>
+
+<span class="fc" id="L293">            internalMatrix.setElementAt(0, 1, -cosBeta * sinGamma);</span>
+<span class="fc" id="L294">            internalMatrix.setElementAt(1, 1, cosBeta * cosGamma);</span>
+<span class="fc" id="L295">            internalMatrix.setElementAt(2, 1, sinBeta);</span>
+
+<span class="fc" id="L297">            internalMatrix.setElementAt(0, 2, sinAlpha * cosGamma +</span>
+                    cosAlpha * sinBeta * sinGamma);
+<span class="fc" id="L299">            internalMatrix.setElementAt(1, 2, sinAlpha * sinGamma -</span>
+                    cosAlpha * sinBeta * cosGamma);
+<span class="fc" id="L301">            internalMatrix.setElementAt(2, 2, cosAlpha * cosBeta);</span>
+<span class="nc" id="L302">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L304">        }</span>
+<span class="fc" id="L305">    }</span>
     
     /**
      * Returns roll angle around x axis expressed in radians for the 1st 
@@ -313,7 +316,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
      */
     public double getRollAngle() {
-<span class="fc" id="L316">        return getRollAngle(getPitchAngle());</span>
+<span class="fc" id="L319">        return getRollAngle(getPitchAngle());</span>
     }
     
     /**
@@ -328,7 +331,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
      */
     public double getRollAngle2() {
-<span class="nc" id="L331">        return getRollAngle(getPitchAngle2());</span>
+<span class="nc" id="L334">        return getRollAngle(getPitchAngle2());</span>
     }
     
     /**
@@ -339,20 +342,20 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @return roll angle around x axis.
      */
     private double getRollAngle(double pitch) {
-<span class="pc bpc" id="L342" title="1 of 2 branches missed.">        if (!hasGimbalLock()) {</span>
-<span class="fc" id="L343">            double cosPitch = Math.cos(pitch);</span>
-<span class="fc" id="L344">            return Math.atan2(internalMatrix.getElementAt(2, 1) / cosPitch, </span>
-<span class="fc" id="L345">                internalMatrix.getElementAt(2, 2) / cosPitch);        </span>
+<span class="pc bpc" id="L345" title="1 of 2 branches missed.">        if (!hasGimbalLock()) {</span>
+<span class="fc" id="L346">            double cosPitch = Math.cos(pitch);</span>
+<span class="fc" id="L347">            return Math.atan2(internalMatrix.getElementAt(2, 1) / cosPitch, </span>
+<span class="fc" id="L348">                internalMatrix.getElementAt(2, 2) / cosPitch);        </span>
         } else {
             //gimbal lock (pitch is close to +-90 degrees)
-<span class="nc bnc" id="L348" title="All 2 branches missed.">            if (internalMatrix.getElementAt(2, 0) &lt; 0.0) {</span>
+<span class="nc bnc" id="L351" title="All 2 branches missed.">            if (internalMatrix.getElementAt(2, 0) &lt; 0.0) {</span>
                 //pitch is +90 degrees
-<span class="nc" id="L350">                return Math.atan2(internalMatrix.getElementAt(0, 1), </span>
-<span class="nc" id="L351">                        internalMatrix.getElementAt(0, 2));</span>
+<span class="nc" id="L353">                return Math.atan2(internalMatrix.getElementAt(0, 1), </span>
+<span class="nc" id="L354">                        internalMatrix.getElementAt(0, 2));</span>
             } else {
                 //pitch is -90 degrees
-<span class="nc" id="L354">                return Math.atan2(-internalMatrix.getElementAt(0, 1),</span>
-<span class="nc" id="L355">                        -internalMatrix.getElementAt(0, 2));</span>
+<span class="nc" id="L357">                return Math.atan2(-internalMatrix.getElementAt(0, 1),</span>
+<span class="nc" id="L358">                        -internalMatrix.getElementAt(0, 2));</span>
             }
         }                
     }
@@ -369,7 +372,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
      */
     public double getPitchAngle() {
-<span class="fc" id="L372">        return -Math.asin(internalMatrix.getElementAt(2, 0));</span>
+<span class="fc" id="L375">        return -Math.asin(internalMatrix.getElementAt(2, 0));</span>
     }
     
     /**
@@ -386,10 +389,10 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
      */
     public double getPitchAngle2() {
-<span class="nc bnc" id="L389" title="All 2 branches missed.">        if (!hasGimbalLock()) {</span>
-<span class="nc" id="L390">            return Math.PI - getPitchAngle();</span>
+<span class="nc bnc" id="L392" title="All 2 branches missed.">        if (!hasGimbalLock()) {</span>
+<span class="nc" id="L393">            return Math.PI - getPitchAngle();</span>
         } else {
-<span class="nc" id="L392">            return getPitchAngle();</span>
+<span class="nc" id="L395">            return getPitchAngle();</span>
         }
     }
     
@@ -408,7 +411,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
      */
     public double getYawAngle() {
-<span class="fc" id="L411">        return getYawAngle(getPitchAngle());</span>
+<span class="fc" id="L414">        return getYawAngle(getPitchAngle());</span>
     }
     
     /**
@@ -426,7 +429,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
      */
     public double getYawAngle2() {
-<span class="nc" id="L429">        return getYawAngle(getPitchAngle2());</span>
+<span class="nc" id="L432">        return getYawAngle(getPitchAngle2());</span>
     }
     
     /**
@@ -437,13 +440,13 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @return yaw angle around x axis.
      */
     private double getYawAngle(double pitch) {
-<span class="pc bpc" id="L440" title="1 of 2 branches missed.">        if (!hasGimbalLock()) {</span>
-<span class="fc" id="L441">            double cosPitch = Math.cos(pitch);</span>
-<span class="fc" id="L442">            return Math.atan2(internalMatrix.getElementAt(1, 0) / cosPitch, </span>
-<span class="fc" id="L443">                    internalMatrix.getElementAt(0, 0) / cosPitch);</span>
+<span class="pc bpc" id="L443" title="1 of 2 branches missed.">        if (!hasGimbalLock()) {</span>
+<span class="fc" id="L444">            double cosPitch = Math.cos(pitch);</span>
+<span class="fc" id="L445">            return Math.atan2(internalMatrix.getElementAt(1, 0) / cosPitch, </span>
+<span class="fc" id="L446">                    internalMatrix.getElementAt(0, 0) / cosPitch);</span>
         } else {
             //gimbal lock (pitch is close to +-90 degrees)
-<span class="nc" id="L446">            return 0.0; //can be anything.</span>
+<span class="nc" id="L449">            return 0.0; //can be anything.</span>
         }        
     }
     
@@ -455,7 +458,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
      */
     public boolean hasGimbalLock() {
-<span class="fc bfc" id="L458" title="All 2 branches covered.">        return Math.abs(Math.abs(internalMatrix.getElementAt(2, 0)) - 1.0) &lt; </span>
+<span class="fc bfc" id="L461" title="All 2 branches covered.">        return Math.abs(Math.abs(internalMatrix.getElementAt(2, 0)) - 1.0) &lt; </span>
                 GIMBAL_THRESHOLD;
     }        
     
@@ -468,35 +471,37 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;e2R.m at https://github.com/joansola/slamtb&lt;/a&gt;
      */
     public void setRollPitchYaw(double roll, double pitch, double yaw) {
-<span class="fc" id="L471">        double sr = Math.sin(roll);</span>
-<span class="fc" id="L472">        double cr = Math.cos(roll);</span>
+<span class="fc" id="L474">        double sr = Math.sin(roll);</span>
+<span class="fc" id="L475">        double cr = Math.cos(roll);</span>
         
-<span class="fc" id="L474">        double sp = Math.sin(pitch);</span>
-<span class="fc" id="L475">        double cp = Math.cos(pitch);</span>
+<span class="fc" id="L477">        double sp = Math.sin(pitch);</span>
+<span class="fc" id="L478">        double cp = Math.cos(pitch);</span>
         
-<span class="fc" id="L477">        double sy = Math.sin(yaw);</span>
-<span class="fc" id="L478">        double cy = Math.cos(yaw);</span>
-                
-        //reuse internal matrix if possible
-<span class="pc bpc" id="L481" title="1 of 2 branches missed.">        if (internalMatrix == null) {</span>
-            try {
-<span class="nc" id="L483">                internalMatrix = new Matrix(ROTATION3D_INHOM_MATRIX_ROWS,</span>
+<span class="fc" id="L480">        double sy = Math.sin(yaw);</span>
+<span class="fc" id="L481">        double cy = Math.cos(yaw);</span>
+
+        try {
+            //reuse internal matrix if possible
+<span class="pc bpc" id="L485" title="1 of 2 branches missed.">            if (internalMatrix == null) {</span>
+<span class="nc" id="L486">                internalMatrix = new Matrix(ROTATION3D_INHOM_MATRIX_ROWS,</span>
                         ROTATION3D_INHOM_MATRIX_COLS);
-<span class="nc" id="L485">            } catch (WrongSizeException ignore) { }</span>
-        }
-        
-<span class="fc" id="L488">        internalMatrix.setElementAt(0, 0, cp * cy);</span>
-<span class="fc" id="L489">        internalMatrix.setElementAt(1, 0, cp * sy);</span>
-<span class="fc" id="L490">        internalMatrix.setElementAt(2, 0, -sp);</span>
-        
-<span class="fc" id="L492">        internalMatrix.setElementAt(0, 1, -cr * sy + sr * sp * cy);</span>
-<span class="fc" id="L493">        internalMatrix.setElementAt(1, 1, cr * cy + sr * sp * sy);</span>
-<span class="fc" id="L494">        internalMatrix.setElementAt(2, 1, sr * cp);</span>
-        
-<span class="fc" id="L496">        internalMatrix.setElementAt(0, 2, sr * sy + cr * sp * cy);</span>
-<span class="fc" id="L497">        internalMatrix.setElementAt(1, 2, -sr * cy + cr * sp * sy);</span>
-<span class="fc" id="L498">        internalMatrix.setElementAt(2, 2, cr * cp);</span>
-<span class="fc" id="L499">    }</span>
+            }
+
+<span class="fc" id="L490">            internalMatrix.setElementAt(0, 0, cp * cy);</span>
+<span class="fc" id="L491">            internalMatrix.setElementAt(1, 0, cp * sy);</span>
+<span class="fc" id="L492">            internalMatrix.setElementAt(2, 0, -sp);</span>
+
+<span class="fc" id="L494">            internalMatrix.setElementAt(0, 1, -cr * sy + sr * sp * cy);</span>
+<span class="fc" id="L495">            internalMatrix.setElementAt(1, 1, cr * cy + sr * sp * sy);</span>
+<span class="fc" id="L496">            internalMatrix.setElementAt(2, 1, sr * cp);</span>
+
+<span class="fc" id="L498">            internalMatrix.setElementAt(0, 2, sr * sy + cr * sp * cy);</span>
+<span class="fc" id="L499">            internalMatrix.setElementAt(1, 2, -sr * cy + cr * sp * sy);</span>
+<span class="fc" id="L500">            internalMatrix.setElementAt(2, 2, cr * cp);</span>
+<span class="nc" id="L501">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L503">        }</span>
+<span class="fc" id="L504">    }</span>
         
     /**
      * Sets the axis and rotation of this instance.
@@ -512,42 +517,44 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     @Override
     public final void setAxisAndRotation(double axisX, double axisY, 
             double axisZ, double theta) {
-<span class="fc" id="L515">        double axisX2 = axisX * axisX;</span>
-<span class="fc" id="L516">        double axisY2 = axisY * axisY;</span>
-<span class="fc" id="L517">        double axisZ2 = axisZ * axisZ;</span>
+<span class="fc" id="L520">        double axisX2 = axisX * axisX;</span>
+<span class="fc" id="L521">        double axisY2 = axisY * axisY;</span>
+<span class="fc" id="L522">        double axisZ2 = axisZ * axisZ;</span>
         
-<span class="fc" id="L519">        double axisXY = axisX * axisY;</span>
-<span class="fc" id="L520">        double axisXZ = axisX * axisZ;</span>
-<span class="fc" id="L521">        double axisYZ = axisY * axisZ;</span>
+<span class="fc" id="L524">        double axisXY = axisX * axisY;</span>
+<span class="fc" id="L525">        double axisXZ = axisX * axisZ;</span>
+<span class="fc" id="L526">        double axisYZ = axisY * axisZ;</span>
         
-<span class="fc" id="L523">        double sinTheta = Math.sin(theta);</span>
-<span class="fc" id="L524">        double cosTheta = Math.cos(theta);</span>
-        
-<span class="fc bfc" id="L526" title="All 2 branches covered.">        if (internalMatrix == null) {</span>
-            try {
-<span class="fc" id="L528">                internalMatrix = new Matrix(ROTATION3D_INHOM_MATRIX_ROWS,</span>
+<span class="fc" id="L528">        double sinTheta = Math.sin(theta);</span>
+<span class="fc" id="L529">        double cosTheta = Math.cos(theta);</span>
+
+        try {
+<span class="fc bfc" id="L532" title="All 2 branches covered.">            if (internalMatrix == null) {</span>
+<span class="fc" id="L533">                internalMatrix = new Matrix(ROTATION3D_INHOM_MATRIX_ROWS,</span>
                         ROTATION3D_INHOM_MATRIX_COLS);
-<span class="pc" id="L530">            } catch (WrongSizeException ignore) { }</span>
-        }
-        
-<span class="fc" id="L533">        internalMatrix.setElementAt(0, 0, axisX2 + (1.0 - axisX2) * cosTheta);</span>
-<span class="fc" id="L534">        internalMatrix.setElementAt(1, 0, axisXY * (1.0 - cosTheta) + </span>
-                axisZ * sinTheta);
-<span class="fc" id="L536">        internalMatrix.setElementAt(2, 0, axisXZ * (1.0 - cosTheta) - </span>
-                axisY * sinTheta);
-        
-<span class="fc" id="L539">        internalMatrix.setElementAt(0, 1, axisXY * (1.0 - cosTheta) -</span>
-                axisZ * sinTheta);
-<span class="fc" id="L541">        internalMatrix.setElementAt(1, 1, axisY2 + (1.0 - axisY2) * cosTheta);</span>
-<span class="fc" id="L542">        internalMatrix.setElementAt(2, 1, axisYZ * (1.0 - cosTheta) +</span>
-                axisX * sinTheta);
-        
-<span class="fc" id="L545">        internalMatrix.setElementAt(0, 2, axisXZ * (1.0 - cosTheta) +</span>
-                axisY * sinTheta);
-<span class="fc" id="L547">        internalMatrix.setElementAt(1, 2, axisYZ * (1.0 - cosTheta) -</span>
-                axisX * sinTheta);
-<span class="fc" id="L549">        internalMatrix.setElementAt(2, 2, axisZ2 + (1.0 - axisZ2) * cosTheta);        </span>
-<span class="fc" id="L550">    }</span>
+            }
+
+<span class="fc" id="L537">            internalMatrix.setElementAt(0, 0, axisX2 + (1.0 - axisX2) * cosTheta);</span>
+<span class="fc" id="L538">            internalMatrix.setElementAt(1, 0, axisXY * (1.0 - cosTheta) +</span>
+                    axisZ * sinTheta);
+<span class="fc" id="L540">            internalMatrix.setElementAt(2, 0, axisXZ * (1.0 - cosTheta) -</span>
+                    axisY * sinTheta);
+
+<span class="fc" id="L543">            internalMatrix.setElementAt(0, 1, axisXY * (1.0 - cosTheta) -</span>
+                    axisZ * sinTheta);
+<span class="fc" id="L545">            internalMatrix.setElementAt(1, 1, axisY2 + (1.0 - axisY2) * cosTheta);</span>
+<span class="fc" id="L546">            internalMatrix.setElementAt(2, 1, axisYZ * (1.0 - cosTheta) +</span>
+                    axisX * sinTheta);
+
+<span class="fc" id="L549">            internalMatrix.setElementAt(0, 2, axisXZ * (1.0 - cosTheta) +</span>
+                    axisY * sinTheta);
+<span class="fc" id="L551">            internalMatrix.setElementAt(1, 2, axisYZ * (1.0 - cosTheta) -</span>
+                    axisX * sinTheta);
+<span class="fc" id="L553">            internalMatrix.setElementAt(2, 2, axisZ2 + (1.0 - axisZ2) * cosTheta);</span>
+<span class="nc" id="L554">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L556">        }</span>
+<span class="fc" id="L557">    }</span>
         
     /**
      * Returns rotation axis corresponding to this instance.
@@ -560,10 +567,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * determinant equal to 1), this exception will rarely happen.
      */
     @Override
-    public void rotationAxis(double[] axis) throws IllegalArgumentException,
-            RotationException {
-<span class="pc bpc" id="L565" title="1 of 2 branches missed.">        if (axis.length != ROTATION3D_INHOM_MATRIX_ROWS) {</span>
-<span class="nc" id="L566">            throw new IllegalArgumentException();</span>
+    public void rotationAxis(double[] axis) throws RotationException {
+<span class="pc bpc" id="L571" title="1 of 2 branches missed.">        if (axis.length != ROTATION3D_INHOM_MATRIX_ROWS) {</span>
+<span class="nc" id="L572">            throw new IllegalArgumentException();</span>
         }
 
         try {
@@ -571,27 +577,27 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
             //left unchanged after rotation. Hence:
             //R*v = I*v --&gt; (R - I)*v = 0, consequently rotation axis is the
             //null-space of R-I
-<span class="fc" id="L574">            Matrix identity = Matrix.identity(ROTATION3D_INHOM_MATRIX_ROWS, </span>
+<span class="fc" id="L580">            Matrix identity = Matrix.identity(ROTATION3D_INHOM_MATRIX_ROWS, </span>
                     ROTATION3D_INHOM_MATRIX_COLS);
             //line below: identity = internalMatrix - identity
-<span class="fc" id="L577">            internalMatrix.subtract(identity, identity);</span>
+<span class="fc" id="L583">            internalMatrix.subtract(identity, identity);</span>
             //internalMatrix - identity
         
-<span class="fc" id="L580">            SingularValueDecomposer decomposer = new SingularValueDecomposer(</span>
+<span class="fc" id="L586">            SingularValueDecomposer decomposer = new SingularValueDecomposer(</span>
                     identity);
         
-<span class="fc" id="L583">            decomposer.decompose();</span>
+<span class="fc" id="L589">            decomposer.decompose();</span>
         
-<span class="fc" id="L585">            Matrix v = decomposer.getV();</span>
+<span class="fc" id="L591">            Matrix v = decomposer.getV();</span>
         
             //last column of V contains axis values
-<span class="fc" id="L588">            axis[0] = v.getElementAt(0, 2);</span>
-<span class="fc" id="L589">            axis[1] = v.getElementAt(1, 2);</span>
-<span class="fc" id="L590">            axis[2] = v.getElementAt(2, 2);</span>
-<span class="nc" id="L591">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L592">            throw new RotationException(e);</span>
-<span class="fc" id="L593">        }        </span>
-<span class="fc" id="L594">    }</span>
+<span class="fc" id="L594">            axis[0] = v.getElementAt(0, 2);</span>
+<span class="fc" id="L595">            axis[1] = v.getElementAt(1, 2);</span>
+<span class="fc" id="L596">            axis[2] = v.getElementAt(2, 2);</span>
+<span class="nc" id="L597">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L598">            throw new RotationException(e);</span>
+<span class="fc" id="L599">        }        </span>
+<span class="fc" id="L600">    }</span>
     
     /**
      * Returns rotation amount or angle in radians around the rotation axis
@@ -605,77 +611,77 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     public double getRotationAngle() throws RotationException {
         
         //obtain rotation axis
-<span class="fc" id="L608">        double[] axis = getRotationAxis();</span>
+<span class="fc" id="L614">        double[] axis = getRotationAxis();</span>
         
         try {
-<span class="fc" id="L611">            Matrix axisMatrix = new Matrix(1, ROTATION3D_INHOM_MATRIX_COLS);</span>
-<span class="fc" id="L612">            axisMatrix.setSubmatrix(0, 0, 0,</span>
+<span class="fc" id="L617">            Matrix axisMatrix = new Matrix(1, ROTATION3D_INHOM_MATRIX_COLS);</span>
+<span class="fc" id="L618">            axisMatrix.setSubmatrix(0, 0, 0,</span>
                     ROTATION3D_INHOM_MATRIX_COLS - 1, axis);
         
-<span class="fc" id="L615">            SingularValueDecomposer decomposer = </span>
+<span class="fc" id="L621">            SingularValueDecomposer decomposer = </span>
                     new SingularValueDecomposer(axisMatrix);
-<span class="fc" id="L617">            decomposer.decompose();</span>
+<span class="fc" id="L623">            decomposer.decompose();</span>
         
-<span class="fc" id="L619">            Matrix v = decomposer.getV();</span>
+<span class="fc" id="L625">            Matrix v = decomposer.getV();</span>
         
             //because axisMatrix has rank 1, its null-space will contain a
             //two-dimensional space (two vectors) perpendicular to axisMatrix
-<span class="fc" id="L623">            Matrix perpendicular = v.getSubmatrix(0, 2, 2, 2);</span>
-<span class="fc" id="L624">            double normPerpendicular = Utils.normF(perpendicular);</span>
+<span class="fc" id="L629">            Matrix perpendicular = v.getSubmatrix(0, 2, 2, 2);</span>
+<span class="fc" id="L630">            double normPerpendicular = Utils.normF(perpendicular);</span>
         
             //use internal matrix to rotate perpendicular vector
-<span class="fc" id="L627">            Matrix rotated = internalMatrix.multiplyAndReturnNew(perpendicular);</span>
-<span class="fc" id="L628">            double normRotated = Utils.normF(rotated);</span>
+<span class="fc" id="L633">            Matrix rotated = internalMatrix.multiplyAndReturnNew(perpendicular);</span>
+<span class="fc" id="L634">            double normRotated = Utils.normF(rotated);</span>
         
             //normalize vectors
-<span class="fc" id="L631">            perpendicular.multiplyByScalar(1.0 / normPerpendicular);</span>
-<span class="fc" id="L632">            rotated.multiplyByScalar(1.0 / normRotated);</span>
+<span class="fc" id="L637">            perpendicular.multiplyByScalar(1.0 / normPerpendicular);</span>
+<span class="fc" id="L638">            rotated.multiplyByScalar(1.0 / normRotated);</span>
         
             //their dot product is the cosine of their angle
             //(we transpose rotated matrix to compute dot product)
-<span class="fc" id="L636">            rotated.transpose();</span>
-<span class="fc" id="L637">            rotated.multiply(perpendicular);</span>
-<span class="fc" id="L638">            double dotProduct = rotated.getElementAtIndex(0);</span>
+<span class="fc" id="L642">            rotated.transpose();</span>
+<span class="fc" id="L643">            rotated.multiply(perpendicular);</span>
+<span class="fc" id="L644">            double dotProduct = rotated.getElementAtIndex(0);</span>
         
-<span class="fc" id="L640">            double theta = Math.acos(dotProduct);</span>
+<span class="fc" id="L646">            double theta = Math.acos(dotProduct);</span>
         
             //we need to determine sign of theta, for that reason we instantiate 
             //two camera rotations with theta and -theta using the same rotation 
             //axis and check for the rotation matrix that produces less error
-<span class="fc" id="L645">            MatrixRotation3D rotation1 = new MatrixRotation3D(axis, theta);</span>
-<span class="fc" id="L646">            MatrixRotation3D rotation2 = new MatrixRotation3D(axis, -theta);</span>
+<span class="fc" id="L651">            MatrixRotation3D rotation1 = new MatrixRotation3D(axis, theta);</span>
+<span class="fc" id="L652">            MatrixRotation3D rotation2 = new MatrixRotation3D(axis, -theta);</span>
         
-<span class="fc" id="L648">            Matrix rotationMatrix1 = rotation1.internalMatrix;</span>
-<span class="fc" id="L649">            Matrix rotationMatrix2 = rotation2.internalMatrix;</span>
+<span class="fc" id="L654">            Matrix rotationMatrix1 = rotation1.internalMatrix;</span>
+<span class="fc" id="L655">            Matrix rotationMatrix2 = rotation2.internalMatrix;</span>
         
             //normalize rotation matrices for their comparison
-<span class="fc" id="L652">            double norm1 = Utils.normF(rotationMatrix1);</span>
-<span class="fc" id="L653">            double norm2 = Utils.normF(rotationMatrix2);</span>
-<span class="fc" id="L654">            rotationMatrix1.multiplyByScalar(1.0 / norm1);</span>
-<span class="fc" id="L655">            rotationMatrix2.multiplyByScalar(1.0 / norm2);</span>
+<span class="fc" id="L658">            double norm1 = Utils.normF(rotationMatrix1);</span>
+<span class="fc" id="L659">            double norm2 = Utils.normF(rotationMatrix2);</span>
+<span class="fc" id="L660">            rotationMatrix1.multiplyByScalar(1.0 / norm1);</span>
+<span class="fc" id="L661">            rotationMatrix2.multiplyByScalar(1.0 / norm2);</span>
         
             //normalize current internal matrix for its comparison
-<span class="fc" id="L658">            double internalNorm = Utils.normF(internalMatrix);</span>
-<span class="fc" id="L659">            Matrix internal = internalMatrix.multiplyByScalarAndReturnNew(</span>
+<span class="fc" id="L664">            double internalNorm = Utils.normF(internalMatrix);</span>
+<span class="fc" id="L665">            Matrix internal = internalMatrix.multiplyByScalarAndReturnNew(</span>
                     1.0 / internalNorm);
         
             //compare matrices
-<span class="fc" id="L663">            rotationMatrix1.subtract(internal);</span>
-<span class="fc" id="L664">            rotationMatrix2.subtract(internal);</span>
+<span class="fc" id="L669">            rotationMatrix1.subtract(internal);</span>
+<span class="fc" id="L670">            rotationMatrix2.subtract(internal);</span>
         
             //now rotation matrices 1 and 2 contain the difference
 
-<span class="fc" id="L668">            double normDiff1 = Utils.normF(rotationMatrix1);</span>
-<span class="fc" id="L669">            double normDiff2 = Utils.normF(rotationMatrix2);</span>
+<span class="fc" id="L674">            double normDiff1 = Utils.normF(rotationMatrix1);</span>
+<span class="fc" id="L675">            double normDiff2 = Utils.normF(rotationMatrix2);</span>
         
             //pich the rotation matrix that produces less error
-<span class="fc bfc" id="L672" title="All 2 branches covered.">            if (normDiff1 &lt; normDiff2) {</span>
-<span class="fc" id="L673">                return theta; //positive theta</span>
+<span class="fc bfc" id="L678" title="All 2 branches covered.">            if (normDiff1 &lt; normDiff2) {</span>
+<span class="fc" id="L679">                return theta; //positive theta</span>
             } else {
-<span class="fc" id="L675">                return -theta; //negative theta</span>
+<span class="fc" id="L681">                return -theta; //negative theta</span>
             }
-<span class="nc" id="L677">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L678">            throw new RotationException(e);</span>
+<span class="nc" id="L683">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L684">            throw new RotationException(e);</span>
         }
     }        
         
@@ -687,9 +693,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public MatrixRotation3D inverseRotationAndReturnNew() {
-<span class="fc" id="L690">        MatrixRotation3D result = new MatrixRotation3D();</span>
-<span class="fc" id="L691">        inverseRotation(result);</span>
-<span class="fc" id="L692">        return result;</span>
+<span class="fc" id="L696">        MatrixRotation3D result = new MatrixRotation3D();</span>
+<span class="fc" id="L697">        inverseRotation(result);</span>
+<span class="fc" id="L698">        return result;</span>
     }
     
     /**
@@ -700,9 +706,11 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */
     public void inverseRotation(MatrixRotation3D result) {
         try {
-<span class="fc" id="L703">            result.internalMatrix = Utils.inverse(internalMatrix);</span>
-<span class="pc" id="L704">        } catch (AlgebraException ignore){ } //matrix should always be invertible</span>
-<span class="fc" id="L705">    }</span>
+<span class="fc" id="L709">            result.internalMatrix = Utils.inverse(internalMatrix);</span>
+<span class="nc" id="L710">        } catch (AlgebraException ignore) {</span>
+            //matrix should always be invertible
+<span class="fc" id="L712">        }</span>
+<span class="fc" id="L713">    }</span>
     
     /**
      * Sets into provided MatrixRotation3D instance a rotation inverse to this 
@@ -712,24 +720,26 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */    
     @Override
     public void inverseRotation(Rotation3D result) {
-<span class="nc bnc" id="L715" title="All 2 branches missed.">        if (result instanceof MatrixRotation3D) {</span>
-<span class="nc" id="L716">            inverseRotation((MatrixRotation3D)result);</span>
-<span class="nc bnc" id="L717" title="All 2 branches missed.">        } else if (result instanceof AxisRotation3D) {</span>
-<span class="nc" id="L718">            MatrixRotation3D rot = new MatrixRotation3D();</span>
-<span class="nc" id="L719">            inverseRotation(rot);</span>
+<span class="nc bnc" id="L723" title="All 2 branches missed.">        if (result instanceof MatrixRotation3D) {</span>
+<span class="nc" id="L724">            inverseRotation((MatrixRotation3D)result);</span>
+<span class="nc bnc" id="L725" title="All 2 branches missed.">        } else if (result instanceof AxisRotation3D) {</span>
+<span class="nc" id="L726">            MatrixRotation3D rot = new MatrixRotation3D();</span>
+<span class="nc" id="L727">            inverseRotation(rot);</span>
             try {
-<span class="nc" id="L721">                result.fromMatrix(rot.asInhomogeneousMatrix());</span>
-<span class="nc" id="L722">            } catch (InvalidRotationMatrixException ignore) { }</span>
+<span class="nc" id="L729">                result.fromMatrix(rot.asInhomogeneousMatrix());</span>
+<span class="nc" id="L730">            } catch (InvalidRotationMatrixException ignore) {</span>
+                //never happens
+<span class="nc" id="L732">            }</span>
         }
-<span class="nc" id="L724">    }    </span>
+<span class="nc" id="L734">    }    </span>
     
     /**
      * Reverses the rotation of this instance.
      */
     @Override
     public void inverseRotation() {
-<span class="fc" id="L731">        inverseRotation(this);</span>
-<span class="fc" id="L732">    }</span>
+<span class="fc" id="L741">        inverseRotation(this);</span>
+<span class="fc" id="L742">    }</span>
     
     
     /**
@@ -740,7 +750,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public Matrix asInhomogeneousMatrix() {
-<span class="fc" id="L743">        return getInternalMatrix();</span>
+<span class="fc" id="L753">        return getInternalMatrix();</span>
     }       
     
     /**
@@ -751,15 +761,14 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * have size 3x3.
      */
     @Override
-    public void asInhomogeneousMatrix(Matrix result) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L756" title="All 2 branches covered.">        if (result.getRows() != ROTATION3D_INHOM_MATRIX_ROWS ||</span>
-<span class="pc bpc" id="L757" title="1 of 2 branches missed.">                result.getColumns() != ROTATION3D_INHOM_MATRIX_COLS) {</span>
-<span class="fc" id="L758">            throw new IllegalArgumentException();</span>
+    public void asInhomogeneousMatrix(Matrix result) {
+<span class="fc bfc" id="L765" title="All 2 branches covered.">        if (result.getRows() != ROTATION3D_INHOM_MATRIX_ROWS ||</span>
+<span class="pc bpc" id="L766" title="1 of 2 branches missed.">                result.getColumns() != ROTATION3D_INHOM_MATRIX_COLS) {</span>
+<span class="fc" id="L767">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L761">        result.copyFrom(internalMatrix);</span>
-<span class="fc" id="L762">    }</span>
+<span class="fc" id="L770">        result.copyFrom(internalMatrix);</span>
+<span class="fc" id="L771">    }</span>
     
     /**
      * Returns this 3D rotation instance expressed as a 4x4 homogeneous matrix.
@@ -767,16 +776,18 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */    
     @Override
     public Matrix asHomogeneousMatrix() {
-<span class="fc" id="L770">        Matrix result = null;</span>
+<span class="fc" id="L779">        Matrix result = null;</span>
         try {
-<span class="fc" id="L772">            result = Matrix.identity(ROTATION3D_HOM_MATRIX_ROWS, </span>
+<span class="fc" id="L781">            result = Matrix.identity(ROTATION3D_HOM_MATRIX_ROWS, </span>
                     ROTATION3D_HOM_MATRIX_COLS);
             //sets into 3x3 top-left submatrix the internal matrix of this
             //instance, the remaining part will continue to be the identity
-<span class="fc" id="L776">            result.setSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1, </span>
+<span class="fc" id="L785">            result.setSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1, </span>
                     ROTATION3D_INHOM_MATRIX_COLS - 1, internalMatrix);
-<span class="pc" id="L778">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L779">        return result;</span>
+<span class="nc" id="L787">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L789">        }</span>
+<span class="fc" id="L790">        return result;</span>
     }
 
     /**
@@ -787,21 +798,20 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * have size 4x4.
      */
     @Override
-    public void asHomogeneousMatrix(Matrix result) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L792" title="All 2 branches covered.">        if (result.getRows() != ROTATION3D_HOM_MATRIX_ROWS ||</span>
-<span class="pc bpc" id="L793" title="1 of 2 branches missed.">                result.getColumns() != ROTATION3D_HOM_MATRIX_COLS) {</span>
-<span class="fc" id="L794">            throw new IllegalArgumentException();</span>
+    public void asHomogeneousMatrix(Matrix result) {
+<span class="fc bfc" id="L802" title="All 2 branches covered.">        if (result.getRows() != ROTATION3D_HOM_MATRIX_ROWS ||</span>
+<span class="pc bpc" id="L803" title="1 of 2 branches missed.">                result.getColumns() != ROTATION3D_HOM_MATRIX_COLS) {</span>
+<span class="fc" id="L804">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L797">        result.initialize(0.0);</span>
+<span class="fc" id="L807">        result.initialize(0.0);</span>
         //sets into 3x3 top-left submatrix the internal matrix of this instance
-<span class="fc" id="L799">        result.setSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1, </span>
+<span class="fc" id="L809">        result.setSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1, </span>
                 ROTATION3D_INHOM_MATRIX_COLS - 1, internalMatrix);
         //set las element to 1.0 (to be like the identity
-<span class="fc" id="L802">        result.setElementAt(ROTATION3D_HOM_MATRIX_ROWS - 1, </span>
+<span class="fc" id="L812">        result.setElementAt(ROTATION3D_HOM_MATRIX_ROWS - 1, </span>
                 ROTATION3D_HOM_MATRIX_COLS - 1, 1.0);
-<span class="fc" id="L804">    }</span>
+<span class="fc" id="L814">    }</span>
         
     /**
      * Sets amount of rotation from provided inhomogeneous rotation matrix.
@@ -818,9 +828,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */    
     @Override
     public void fromInhomogeneousMatrix(Matrix m, double threshold)
-            throws InvalidRotationMatrixException, IllegalArgumentException {
-<span class="fc" id="L822">        setInternalMatrix(m, threshold);</span>
-<span class="fc" id="L823">    }</span>
+            throws InvalidRotationMatrixException {
+<span class="fc" id="L832">        setInternalMatrix(m, threshold);</span>
+<span class="fc" id="L833">    }</span>
         
     /**
      * Sets amount of rotation from provided homogeneous rotation matrix.
@@ -839,26 +849,26 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     @Override
     public void fromHomogeneousMatrix(Matrix m, double threshold)
             throws InvalidRotationMatrixException {
-<span class="fc bfc" id="L842" title="All 2 branches covered.">        if (m.getRows() != ROTATION3D_HOM_MATRIX_ROWS ||</span>
-<span class="pc bpc" id="L843" title="1 of 2 branches missed.">                m.getColumns() != ROTATION3D_HOM_MATRIX_COLS) {</span>
-<span class="fc" id="L844">            throw new InvalidRotationMatrixException();</span>
+<span class="fc bfc" id="L852" title="All 2 branches covered.">        if (m.getRows() != ROTATION3D_HOM_MATRIX_ROWS ||</span>
+<span class="pc bpc" id="L853" title="1 of 2 branches missed.">                m.getColumns() != ROTATION3D_HOM_MATRIX_COLS) {</span>
+<span class="fc" id="L854">            throw new InvalidRotationMatrixException();</span>
         }
-<span class="pc bpc" id="L846" title="1 of 2 branches missed.">        if (!isValidRotationMatrix(m, threshold)) {</span>
-<span class="nc" id="L847">            throw new InvalidRotationMatrixException();</span>
+<span class="pc bpc" id="L856" title="1 of 2 branches missed.">        if (!isValidRotationMatrix(m, threshold)) {</span>
+<span class="nc" id="L857">            throw new InvalidRotationMatrixException();</span>
         }
-<span class="pc bpc" id="L849" title="1 of 2 branches missed.">        if (Math.abs(m.getElementAt(3, 0)) &gt; threshold ||</span>
-<span class="pc bpc" id="L850" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 1)) &gt; threshold ||</span>
-<span class="pc bpc" id="L851" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 2)) &gt; threshold ||</span>
-<span class="pc bpc" id="L852" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(0, 3)) &gt; threshold ||</span>
-<span class="pc bpc" id="L853" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(1, 3)) &gt; threshold ||</span>
-<span class="pc bpc" id="L854" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(2, 3)) &gt; threshold ||</span>
-<span class="fc bfc" id="L855" title="All 2 branches covered.">                Math.abs(m.getElementAt(3, 3) - 1.0) &gt; threshold) {</span>
-<span class="fc" id="L856">            throw new InvalidRotationMatrixException();</span>
+<span class="pc bpc" id="L859" title="1 of 2 branches missed.">        if (Math.abs(m.getElementAt(3, 0)) &gt; threshold ||</span>
+<span class="pc bpc" id="L860" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 1)) &gt; threshold ||</span>
+<span class="pc bpc" id="L861" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 2)) &gt; threshold ||</span>
+<span class="pc bpc" id="L862" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(0, 3)) &gt; threshold ||</span>
+<span class="pc bpc" id="L863" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(1, 3)) &gt; threshold ||</span>
+<span class="pc bpc" id="L864" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(2, 3)) &gt; threshold ||</span>
+<span class="fc bfc" id="L865" title="All 2 branches covered.">                Math.abs(m.getElementAt(3, 3) - 1.0) &gt; threshold) {</span>
+<span class="fc" id="L866">            throw new InvalidRotationMatrixException();</span>
         }
         
-<span class="fc" id="L859">        internalMatrix = m.getSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1, </span>
+<span class="fc" id="L869">        internalMatrix = m.getSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1, </span>
                 ROTATION3D_INHOM_MATRIX_COLS - 1);
-<span class="fc" id="L861">    }</span>
+<span class="fc" id="L871">    }</span>
         
     /**
      * Rotates a 3D point using the origin of coordinates as the axis of 
@@ -871,24 +881,26 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     @Override
     public void rotate(Point3D inputPoint, Point3D resultPoint) {
         try {
-<span class="fc" id="L874">            Matrix R = asHomogeneousMatrix();</span>
-<span class="fc" id="L875">            Matrix p = new Matrix(</span>
+<span class="fc" id="L884">            Matrix r = asHomogeneousMatrix();</span>
+<span class="fc" id="L885">            Matrix p = new Matrix(</span>
                 Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             
-<span class="fc" id="L878">            inputPoint.normalize(); //to increase accuracy</span>
-<span class="fc" id="L879">            p.setElementAt(0, 0, inputPoint.getHomX());</span>
-<span class="fc" id="L880">            p.setElementAt(1, 0, inputPoint.getHomY());</span>
-<span class="fc" id="L881">            p.setElementAt(2, 0, inputPoint.getHomZ());</span>
-<span class="fc" id="L882">            p.setElementAt(3, 0, inputPoint.getHomW());</span>
+<span class="fc" id="L888">            inputPoint.normalize(); //to increase accuracy</span>
+<span class="fc" id="L889">            p.setElementAt(0, 0, inputPoint.getHomX());</span>
+<span class="fc" id="L890">            p.setElementAt(1, 0, inputPoint.getHomY());</span>
+<span class="fc" id="L891">            p.setElementAt(2, 0, inputPoint.getHomZ());</span>
+<span class="fc" id="L892">            p.setElementAt(3, 0, inputPoint.getHomW());</span>
             
             //Rotated point below is R * p
-<span class="fc" id="L885">            R.multiply(p);</span>
+<span class="fc" id="L895">            r.multiply(p);</span>
             
-<span class="fc" id="L887">            resultPoint.setHomogeneousCoordinates(R.getElementAt(0, 0), </span>
-<span class="fc" id="L888">                    R.getElementAt(1, 0), R.getElementAt(2, 0), </span>
-<span class="fc" id="L889">                    R.getElementAt(3, 0));</span>
-<span class="pc" id="L890">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L891">    }</span>
+<span class="fc" id="L897">            resultPoint.setHomogeneousCoordinates(r.getElementAt(0, 0),</span>
+<span class="fc" id="L898">                    r.getElementAt(1, 0), r.getElementAt(2, 0),</span>
+<span class="fc" id="L899">                    r.getElementAt(3, 0));</span>
+<span class="nc" id="L900">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L902">        }</span>
+<span class="fc" id="L903">    }</span>
                             
     /**
      * Combines provided rotation with this rotation and returns the result as
@@ -899,9 +911,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * instance.
      */    
     public MatrixRotation3D combineAndReturnNew(MatrixRotation3D rotation) {
-<span class="fc" id="L902">        MatrixRotation3D result = new MatrixRotation3D();</span>
-<span class="fc" id="L903">        combine(this, rotation, result);</span>
-<span class="fc" id="L904">        return result;</span>
+<span class="fc" id="L914">        MatrixRotation3D result = new MatrixRotation3D();</span>
+<span class="fc" id="L915">        combine(this, rotation, result);</span>
+<span class="fc" id="L916">        return result;</span>
     }
     
     /**
@@ -914,10 +926,10 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */        
     @Override
     public Rotation3D combineAndReturnNew(Rotation3D rotation) {
-<span class="nc bnc" id="L917" title="All 2 branches missed.">        if (rotation instanceof MatrixRotation3D) {</span>
-<span class="nc" id="L918">            return combineAndReturnNew((MatrixRotation3D)rotation);</span>
+<span class="nc bnc" id="L929" title="All 2 branches missed.">        if (rotation instanceof MatrixRotation3D) {</span>
+<span class="nc" id="L930">            return combineAndReturnNew((MatrixRotation3D)rotation);</span>
         } else {
-<span class="nc" id="L920">            return combineAndReturnNew(new MatrixRotation3D(rotation));</span>
+<span class="nc" id="L932">            return combineAndReturnNew(new MatrixRotation3D(rotation));</span>
         }
     }    
     
@@ -927,8 +939,8 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      * @param rotation Input rotation to be combined.
      */    
     public void combine(MatrixRotation3D rotation) {
-<span class="fc" id="L930">        combine(this, rotation, this);</span>
-<span class="fc" id="L931">    }</span>
+<span class="fc" id="L942">        combine(this, rotation, this);</span>
+<span class="fc" id="L943">    }</span>
     
     /**
      * Combines provided rotation into this rotation resulting in the 
@@ -937,12 +949,12 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */        
     @Override
     public void combine(Rotation3D rotation) {
-<span class="fc bfc" id="L940" title="All 2 branches covered.">        if (rotation instanceof MatrixRotation3D) {</span>
-<span class="fc" id="L941">            combine((MatrixRotation3D)rotation);</span>
+<span class="fc bfc" id="L952" title="All 2 branches covered.">        if (rotation instanceof MatrixRotation3D) {</span>
+<span class="fc" id="L953">            combine((MatrixRotation3D)rotation);</span>
         } else {
-<span class="fc" id="L943">            combine(new MatrixRotation3D(rotation));</span>
+<span class="fc" id="L955">            combine(new MatrixRotation3D(rotation));</span>
         }
-<span class="fc" id="L945">    }    </span>
+<span class="fc" id="L957">    }    </span>
    
     /**
      * Combines the rotation of instances rot1 and rot1 into provided result
@@ -957,10 +969,12 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
             MatrixRotation3D result) {
         
         try {
-<span class="fc" id="L960">            result.internalMatrix = rot1.internalMatrix.multiplyAndReturnNew(</span>
+<span class="fc" id="L972">            result.internalMatrix = rot1.internalMatrix.multiplyAndReturnNew(</span>
                     rot2.internalMatrix);
-<span class="pc" id="L962">        } catch (WrongSizeException ignore) { }</span>
-<span class="fc" id="L963">    }</span>
+<span class="nc" id="L974">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L976">        }</span>
+<span class="fc" id="L977">    }</span>
     
     /**
      * Sets values of this rotation from a 3D matrix rotation.
@@ -968,8 +982,8 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public void fromRotation(MatrixRotation3D rot) {
-<span class="fc" id="L971">        rot.internalMatrix.copyTo(internalMatrix);</span>
-<span class="fc" id="L972">    }</span>
+<span class="fc" id="L985">        rot.internalMatrix.copyTo(internalMatrix);</span>
+<span class="fc" id="L986">    }</span>
         
     /**
      * Sets values of this rotation from a quaternion.
@@ -977,8 +991,8 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public void fromRotation(Quaternion q) {
-<span class="fc" id="L980">        q.toMatrixRotation(internalMatrix);</span>
-<span class="fc" id="L981">    }</span>
+<span class="fc" id="L994">        q.toMatrixRotation(internalMatrix);</span>
+<span class="fc" id="L995">    }</span>
 
     /**
      * Converts this 3D rotation into a matrix rotation storing the result
@@ -987,8 +1001,8 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public void toMatrixRotation(MatrixRotation3D result) {
-<span class="fc" id="L990">        internalMatrix.copyTo(result.internalMatrix);</span>
-<span class="fc" id="L991">    }    </span>
+<span class="fc" id="L1004">        internalMatrix.copyTo(result.internalMatrix);</span>
+<span class="fc" id="L1005">    }    </span>
     
     /**
      * Converts this 3D rotation into an axis rotation storing the result into
@@ -998,9 +1012,9 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
     @Override
     public void toAxisRotation(AxisRotation3D result) {
         try {
-<span class="fc" id="L1001">            result.fromInhomogeneousMatrix(internalMatrix);</span>
-<span class="pc" id="L1002">        } catch (InvalidRotationMatrixException ignore) { /* never thrown */ }</span>
-<span class="fc" id="L1003">    }</span>
+<span class="fc" id="L1015">            result.fromInhomogeneousMatrix(internalMatrix);</span>
+<span class="pc" id="L1016">        } catch (InvalidRotationMatrixException ignore) { /* never thrown */ }</span>
+<span class="fc" id="L1017">    }</span>
     
     /**
      * Converts this 3D rotation into a quaterion storing the result into 
@@ -1009,7 +1023,7 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
      */
     @Override
     public void toQuaternion(Quaternion result) {
-<span class="fc" id="L1012">        Quaternion.matrixRotationToQuaternion(internalMatrix, result);</span>
-<span class="fc" id="L1013">    }</span>
+<span class="fc" id="L1026">        Quaternion.matrixRotationToQuaternion(internalMatrix, result);</span>
+<span class="fc" id="L1027">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

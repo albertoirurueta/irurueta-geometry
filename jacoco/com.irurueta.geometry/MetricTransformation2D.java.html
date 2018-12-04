@@ -60,11 +60,10 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * @param rotation a 2D rotation.
      * @throws NullPointerException raised if provided rotation is null.
      */
-    public MetricTransformation2D(Rotation2D rotation)
-            throws NullPointerException {
-<span class="fc" id="L65">        super(rotation);</span>
-<span class="fc" id="L66">        scale = DEFAULT_SCALE;</span>
-<span class="fc" id="L67">    }</span>
+    public MetricTransformation2D(Rotation2D rotation) {
+<span class="fc" id="L64">        super(rotation);</span>
+<span class="fc" id="L65">        scale = DEFAULT_SCALE;</span>
+<span class="fc" id="L66">    }</span>
         
     /**
      * Creates transformation with provided 2D translation.
@@ -74,11 +73,10 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * @throws IllegalArgumentException raised if length of array is not equal
      * to NUM_TRANSLATION_COORDS.
      */
-    public MetricTransformation2D(double[] translation) 
-            throws NullPointerException, IllegalArgumentException {
-<span class="fc" id="L79">        super(translation);</span>
-<span class="fc" id="L80">        scale = DEFAULT_SCALE;</span>
-<span class="fc" id="L81">    }</span>
+    public MetricTransformation2D(double[] translation) {
+<span class="fc" id="L77">        super(translation);</span>
+<span class="fc" id="L78">        scale = DEFAULT_SCALE;</span>
+<span class="fc" id="L79">    }</span>
     
     /**
      * Creates transformation with provided scale value.
@@ -87,9 +85,9 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * objects.
      */
     public MetricTransformation2D(double scale) {
-<span class="fc" id="L90">        super();</span>
-<span class="fc" id="L91">        this.scale = scale;</span>
-<span class="fc" id="L92">    }    </span>
+<span class="fc" id="L88">        super();</span>
+<span class="fc" id="L89">        this.scale = scale;</span>
+<span class="fc" id="L90">    }    </span>
 
     /**
      * Creates transformation with provided rotation, translation and scale 
@@ -106,11 +104,10 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * to NUM_TRANSLATION_COORDS.
      */
     public MetricTransformation2D(Rotation2D rotation, double[] translation,
-            double scale) throws NullPointerException, 
-            IllegalArgumentException {
-<span class="fc" id="L111">        super(rotation, translation);</span>
-<span class="fc" id="L112">        this.scale = scale;</span>
-<span class="fc" id="L113">    }</span>
+            double scale) {
+<span class="fc" id="L108">        super(rotation, translation);</span>
+<span class="fc" id="L109">        this.scale = scale;</span>
+<span class="fc" id="L110">    }</span>
     
     /**
      * Creates transformation by estimating its internal values using provided 3
@@ -125,10 +122,10 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      */
     public MetricTransformation2D(Point2D inputPoint1, Point2D inputPoint2,
             Point2D inputPoint3, Point2D outputPoint1, Point2D outputPoint2,
-<span class="fc" id="L128">            Point2D outputPoint3) throws CoincidentPointsException {</span>
-<span class="fc" id="L129">        internalSetTransformationFromPoints(inputPoint1, inputPoint2, </span>
+<span class="fc" id="L125">            Point2D outputPoint3) throws CoincidentPointsException {</span>
+<span class="fc" id="L126">        internalSetTransformationFromPoints(inputPoint1, inputPoint2, </span>
                 inputPoint3, outputPoint1, outputPoint2, outputPoint3);
-<span class="fc" id="L131">    }</span>
+<span class="fc" id="L128">    }</span>
     
     /**
      * Returns scale of this transformation.
@@ -138,7 +135,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * @return scale.
      */
     public double getScale() {
-<span class="fc" id="L141">        return scale;</span>
+<span class="fc" id="L138">        return scale;</span>
     }
     
     /**
@@ -149,8 +146,8 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * will be reversed.
      */
     public void setScale(double scale) {
-<span class="fc" id="L152">        this.scale = scale;</span>
-<span class="fc" id="L153">    }</span>
+<span class="fc" id="L149">        this.scale = scale;</span>
+<span class="fc" id="L150">    }</span>
     
     /**
      * Represents this transformation as a 3x3 matrix and stores the result in
@@ -160,28 +157,28 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * matrix.
      */
     @Override
-    public void asMatrix(Matrix m) throws IllegalArgumentException {
-<span class="pc bpc" id="L164" title="1 of 4 branches missed.">        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {</span>
-<span class="fc" id="L165">            throw new IllegalArgumentException();</span>
+    public void asMatrix(Matrix m) {
+<span class="pc bpc" id="L161" title="1 of 4 branches missed.">        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {</span>
+<span class="fc" id="L162">            throw new IllegalArgumentException();</span>
         }
         
         //set rotation        
-<span class="fc" id="L169">        Matrix rot = getRotation().asInhomogeneousMatrix();</span>
-<span class="fc" id="L170">        rot.multiplyByScalar(scale);</span>
+<span class="fc" id="L166">        Matrix rot = getRotation().asInhomogeneousMatrix();</span>
+<span class="fc" id="L167">        rot.multiplyByScalar(scale);</span>
         
-<span class="fc" id="L172">        m.setSubmatrix(0, 0, </span>
+<span class="fc" id="L169">        m.setSubmatrix(0, 0, </span>
                 Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS - 1, 
                 Rotation2D.ROTATION2D_INHOM_MATRIX_COLS - 1, rot);
 
-<span class="fc" id="L176">        double[] translation = getTranslation();</span>
+<span class="fc" id="L173">        double[] translation = getTranslation();</span>
         
         //set translation
-<span class="fc" id="L179">        m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
+<span class="fc" id="L176">        m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
                 HOM_COORDS - 1, translation);     
         
         //set last element
-<span class="fc" id="L183">        m.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);</span>
-<span class="fc" id="L184">    }</span>
+<span class="fc" id="L180">        m.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);</span>
+<span class="fc" id="L181">    }</span>
     
     /**
      * Transforms input point using this transformation and stores the result in
@@ -192,23 +189,23 @@ public class MetricTransformation2D extends EuclideanTransformation2D
     @Override
     public void transform(Point2D inputPoint, Point2D outputPoint) {
         
-<span class="fc" id="L195">        inputPoint.normalize();</span>
-<span class="fc" id="L196">        getRotation().rotate(inputPoint, outputPoint);</span>
+<span class="fc" id="L192">        inputPoint.normalize();</span>
+<span class="fc" id="L193">        getRotation().rotate(inputPoint, outputPoint);</span>
         
-<span class="fc" id="L198">        double[] translation = getTranslation();</span>
+<span class="fc" id="L195">        double[] translation = getTranslation();</span>
         
-<span class="fc" id="L200">        outputPoint.setInhomogeneousCoordinates(</span>
-<span class="fc" id="L201">                scale * outputPoint.getInhomX() + translation[0], </span>
-<span class="fc" id="L202">                scale * outputPoint.getInhomY() + translation[1]);</span>
-<span class="fc" id="L203">    }   </span>
+<span class="fc" id="L197">        outputPoint.setInhomogeneousCoordinates(</span>
+<span class="fc" id="L198">                scale * outputPoint.getInhomX() + translation[0], </span>
+<span class="fc" id="L199">                scale * outputPoint.getInhomY() + translation[1]);</span>
+<span class="fc" id="L200">    }   </span>
     
     /**
      * Inverses this transformation.
      */
     @Override
     public void inverse() {
-<span class="fc" id="L210">        inverse(this);</span>
-<span class="fc" id="L211">    }</span>
+<span class="fc" id="L207">        inverse(this);</span>
+<span class="fc" id="L208">    }</span>
     
     /**
      * Computes the inverse of this transformation and returns the result as a
@@ -217,9 +214,9 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      */
     @Override
     public Transformation2D inverseAndReturnNew() {
-<span class="fc" id="L220">        MetricTransformation2D result = new MetricTransformation2D();</span>
-<span class="fc" id="L221">        inverse(result);</span>
-<span class="fc" id="L222">        return result;</span>
+<span class="fc" id="L217">        MetricTransformation2D result = new MetricTransformation2D();</span>
+<span class="fc" id="L218">        inverse(result);</span>
+<span class="fc" id="L219">        return result;</span>
     }    
     
     /**
@@ -232,12 +229,12 @@ public class MetricTransformation2D extends EuclideanTransformation2D
         //Then inverse transformation is: (1/s)*R* x' = (1/s) * R' * s * R * x +
         //(1/s) * R'*t = x + (1/s) * R'*t
         //--&gt; x = (1/s) * R'*x' - (1/s) * R'*t
-<span class="fc" id="L235">        super.inverse(result);</span>
-<span class="fc" id="L236">        double[] translation = result.getTranslation();</span>
-<span class="fc" id="L237">        double invScale = 1.0 / scale;</span>
-<span class="fc" id="L238">        ArrayUtils.multiplyByScalar(translation, invScale, translation);</span>
-<span class="fc" id="L239">        result.scale = invScale;</span>
-<span class="fc" id="L240">    }</span>
+<span class="fc" id="L232">        super.inverse(result);</span>
+<span class="fc" id="L233">        double[] translation = result.getTranslation();</span>
+<span class="fc" id="L234">        double invScale = 1.0 / scale;</span>
+<span class="fc" id="L235">        ArrayUtils.multiplyByScalar(translation, invScale, translation);</span>
+<span class="fc" id="L236">        result.scale = invScale;</span>
+<span class="fc" id="L237">    }</span>
     
     /**
      * Converts this transformation into a metric transformation.
@@ -247,7 +244,7 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      */
     @Override
     public MetricTransformation2D toMetric() {
-<span class="fc" id="L250">        return new MetricTransformation2D(getRotation(), getTranslation(), </span>
+<span class="fc" id="L247">        return new MetricTransformation2D(getRotation(), getTranslation(), </span>
                 scale);
     }
     
@@ -256,8 +253,8 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * @return this transformation converted into an affine transformation.
      */
     public AffineTransformation2D toAffine() {
-<span class="fc" id="L259">        return new AffineTransformation2D(scale, getRotation(), </span>
-<span class="fc" id="L260">                getTranslation());</span>
+<span class="fc" id="L256">        return new AffineTransformation2D(scale, getRotation(), </span>
+<span class="fc" id="L257">                getTranslation());</span>
     }
     
     /**
@@ -268,8 +265,8 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      */
     @Override
     public void combine(EuclideanTransformation2D transformation) {
-<span class="fc" id="L271">        combine(transformation.toMetric(), this);</span>
-<span class="fc" id="L272">    }</span>
+<span class="fc" id="L268">        combine(transformation.toMetric(), this);</span>
+<span class="fc" id="L269">    }</span>
     
     /**
      * Combines this transformation with provided transformation and returns
@@ -284,9 +281,9 @@ public class MetricTransformation2D extends EuclideanTransformation2D
     public MetricTransformation2D combineAndReturnNew(
             EuclideanTransformation2D transformation) {
         
-<span class="fc" id="L287">        MetricTransformation2D result = new MetricTransformation2D();</span>
-<span class="fc" id="L288">        combine(transformation.toMetric(), result);</span>
-<span class="fc" id="L289">        return result;</span>
+<span class="fc" id="L284">        MetricTransformation2D result = new MetricTransformation2D();</span>
+<span class="fc" id="L285">        combine(transformation.toMetric(), result);</span>
+<span class="fc" id="L286">        return result;</span>
     }
     
     /**
@@ -296,8 +293,8 @@ public class MetricTransformation2D extends EuclideanTransformation2D
      * @param transformation transformation to be combined with.
      */
     public void combine(MetricTransformation2D transformation) {
-<span class="fc" id="L299">        combine(transformation, this);</span>
-<span class="fc" id="L300">    }</span>
+<span class="fc" id="L296">        combine(transformation, this);</span>
+<span class="fc" id="L297">    }</span>
     
     /**
      * Combines this transformation with provided transformation and returns
@@ -311,9 +308,9 @@ public class MetricTransformation2D extends EuclideanTransformation2D
     public MetricTransformation2D combineAndReturnNew(
             MetricTransformation2D transformation) {
         
-<span class="fc" id="L314">        MetricTransformation2D result = new MetricTransformation2D();</span>
-<span class="fc" id="L315">        combine(transformation, result);</span>
-<span class="fc" id="L316">        return result;</span>
+<span class="fc" id="L311">        MetricTransformation2D result = new MetricTransformation2D();</span>
+<span class="fc" id="L312">        combine(transformation, result);</span>
+<span class="fc" id="L313">        return result;</span>
     }
     
     /**
@@ -337,9 +334,9 @@ public class MetricTransformation2D extends EuclideanTransformation2D
             Point2D inputPoint2, Point2D inputPoint3, Point2D outputPoint1,
             Point2D outputPoint2, Point2D outputPoint3)
             throws CoincidentPointsException {
-<span class="fc" id="L340">        internalSetTransformationFromPoints(inputPoint1, inputPoint2, </span>
+<span class="fc" id="L337">        internalSetTransformationFromPoints(inputPoint1, inputPoint2, </span>
                 inputPoint3, outputPoint1, outputPoint2, outputPoint3);
-<span class="fc" id="L342">    }    </span>
+<span class="fc" id="L339">    }    </span>
     
     /**
      * Combines this transformation with provided input transformation and 
@@ -357,25 +354,25 @@ public class MetricTransformation2D extends EuclideanTransformation2D
         
         try {
             //we do translation first, because this.rotation might change later
-<span class="fc" id="L360">            Matrix R1 = getRotation().asInhomogeneousMatrix();</span>
-<span class="fc" id="L361">            Matrix t2 = Matrix.newFromArray(inputTransformation.getTranslation(), </span>
+<span class="fc" id="L357">            Matrix r1 = getRotation().asInhomogeneousMatrix();</span>
+<span class="fc" id="L358">            Matrix t2 = Matrix.newFromArray(inputTransformation.getTranslation(), </span>
                     true);
-<span class="fc" id="L363">            R1.multiply(t2); //this is R1 * t2</span>
-<span class="fc" id="L364">            R1.multiplyByScalar(this.scale);</span>
+<span class="fc" id="L360">            r1.multiply(t2); //this is R1 * t2</span>
+<span class="fc" id="L361">            r1.multiplyByScalar(this.scale);</span>
                   
-<span class="fc" id="L366">            ArrayUtils.sum(R1.toArray(), this.getTranslation(),  </span>
-<span class="fc" id="L367">                    outputTransformation.getTranslation());</span>
+<span class="fc" id="L363">            ArrayUtils.sum(r1.toArray(), this.getTranslation(),</span>
+<span class="fc" id="L364">                    outputTransformation.getTranslation());</span>
             
-<span class="fc" id="L369">            outputTransformation.setRotation(</span>
-<span class="fc" id="L370">                    this.getRotation().combineAndReturnNew(</span>
-<span class="fc" id="L371">                    inputTransformation.getRotation()));</span>
+<span class="fc" id="L366">            outputTransformation.setRotation(</span>
+<span class="fc" id="L367">                    this.getRotation().combineAndReturnNew(</span>
+<span class="fc" id="L368">                    inputTransformation.getRotation()));</span>
             
-<span class="fc" id="L373">            outputTransformation.scale = this.scale * inputTransformation.scale;</span>
+<span class="fc" id="L370">            outputTransformation.scale = this.scale * inputTransformation.scale;</span>
         
-<span class="nc" id="L375">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L372">        } catch (WrongSizeException ignore) {</span>
             //never happens
-<span class="fc" id="L377">        }</span>
-<span class="fc" id="L378">    }   </span>
+<span class="fc" id="L374">        }</span>
+<span class="fc" id="L375">    }   </span>
     
     /**
      * Estimates this transformation internal parameters by using 3
@@ -397,24 +394,24 @@ public class MetricTransformation2D extends EuclideanTransformation2D
             Point2D inputPoint2, Point2D inputPoint3, Point2D outputPoint1,
             Point2D outputPoint2, Point2D outputPoint3)
             throws CoincidentPointsException {
-<span class="fc" id="L400">        List&lt;Point2D&gt; inputPoints = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L401">        inputPoints.add(inputPoint1);</span>
-<span class="fc" id="L402">        inputPoints.add(inputPoint2);</span>
-<span class="fc" id="L403">        inputPoints.add(inputPoint3);</span>
+<span class="fc" id="L397">        List&lt;Point2D&gt; inputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L398">        inputPoints.add(inputPoint1);</span>
+<span class="fc" id="L399">        inputPoints.add(inputPoint2);</span>
+<span class="fc" id="L400">        inputPoints.add(inputPoint3);</span>
         
-<span class="fc" id="L405">        List&lt;Point2D&gt; outputPoints = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L406">        outputPoints.add(outputPoint1);</span>
-<span class="fc" id="L407">        outputPoints.add(outputPoint2);</span>
-<span class="fc" id="L408">        outputPoints.add(outputPoint3);</span>
+<span class="fc" id="L402">        List&lt;Point2D&gt; outputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L403">        outputPoints.add(outputPoint1);</span>
+<span class="fc" id="L404">        outputPoints.add(outputPoint2);</span>
+<span class="fc" id="L405">        outputPoints.add(outputPoint3);</span>
 
-<span class="fc" id="L410">        MetricTransformation2DEstimator estimator =</span>
+<span class="fc" id="L407">        MetricTransformation2DEstimator estimator =</span>
                 new MetricTransformation2DEstimator(inputPoints, outputPoints);
         
         try {
-<span class="fc" id="L414">            estimator.estimate(this);</span>
-<span class="nc" id="L415">        } catch (LockedException | NotReadyException ignore) {</span>
+<span class="fc" id="L411">            estimator.estimate(this);</span>
+<span class="nc" id="L412">        } catch (LockedException | NotReadyException ignore) {</span>
             //never thrown
-<span class="fc" id="L417">        }</span>
-<span class="fc" id="L418">    }</span>
+<span class="fc" id="L414">        }</span>
+<span class="fc" id="L415">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

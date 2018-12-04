@@ -639,9 +639,8 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromLines(
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc" id="L644">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L643">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 inputLines, outputLines, qualityScores, method);
     }
             
@@ -665,9 +664,8 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromLines(
             AffineTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc" id="L670">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L668">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 listener, inputLines, outputLines, qualityScores, method);
     }
                 
@@ -683,9 +681,8 @@ public abstract class AffineTransformation2DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE
      */
     public static AffineTransformation2DRobustEstimator createFromLines(
-            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines)
-            throws IllegalArgumentException {
-<span class="fc" id="L688">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L685">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 inputLines, outputLines);
     }
             
@@ -704,9 +701,8 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromLines(
             AffineTransformation2DRobustEstimatorListener listener,
-            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines)
-            throws IllegalArgumentException {
-<span class="fc" id="L709">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L705">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 listener, inputLines, outputLines);
     }
                         
@@ -725,8 +721,8 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromLines(
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L729">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            double[] qualityScores) {
+<span class="fc" id="L725">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 inputLines, outputLines, qualityScores);
     }
                         
@@ -748,8 +744,8 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromLines(
             AffineTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L752">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            double[] qualityScores) {
+<span class="fc" id="L748">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 listener, inputLines, outputLines, qualityScores);
     } 
     

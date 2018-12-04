@@ -73,7 +73,7 @@ com.irurueta:irurueta-geometry
 <th>Missing Classes</th></tr>
 <tr class="b">
 <td>550</td>
-<td>159</td>
+<td>155</td>
 <td>0</td>
 <td>36</td></tr></table></div>
 <div class="section">
@@ -110,20 +110,14 @@ com.irurueta:irurueta-geometry
 <td><a href="#com.irurueta.geometry.EuclideanTransformation3D">com.irurueta.geometry.EuclideanTransformation3D</a></td>
 <td>4</td></tr>
 <tr class="a">
-<td><a href="#com.irurueta.geometry.MatrixRotation3D">com.irurueta.geometry.MatrixRotation3D</a></td>
-<td>3</td></tr>
-<tr class="b">
 <td><a href="#com.irurueta.geometry.PinholeCameraIntrinsicParameters">com.irurueta.geometry.PinholeCameraIntrinsicParameters</a></td>
 <td>1</td></tr>
-<tr class="a">
+<tr class="b">
 <td><a href="#com.irurueta.geometry.Quaternion">com.irurueta.geometry.Quaternion</a></td>
 <td>3</td></tr>
-<tr class="b">
+<tr class="a">
 <td><a href="#com.irurueta.geometry.Rotation2D">com.irurueta.geometry.Rotation2D</a></td>
 <td>2</td></tr>
-<tr class="a">
-<td><a href="#com.irurueta.geometry.Rotation3D">com.irurueta.geometry.Rotation3D</a></td>
-<td>1</td></tr>
 <tr class="b">
 <td><a href="#com.irurueta.geometry.estimators.EPnPPointCorrespondencePinholeCameraEstimator">com.irurueta.geometry.estimators.EPnPPointCorrespondencePinholeCameraEstimator</a></td>
 <td>2</td></tr>
@@ -726,33 +720,6 @@ com.irurueta:irurueta-geometry
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
 <td><a href="./xref/com/irurueta/geometry/EuclideanTransformation3D.html#L200">200</a></td>
-<td>Medium</td></tr></table></div><a name="com.irurueta.geometry.MatrixRotation3D"></a>
-<div class="section">
-<h3><a name="com.irurueta.geometry.MatrixRotation3D"></a>com.irurueta.geometry.MatrixRotation3D</h3>
-<table border="0" class="bodyTable">
-<tr class="b">
-<th>Bug</th>
-<th>Category</th>
-<th>Details</th>
-<th>Line</th>
-<th>Priority</th></tr>
-<tr class="a">
-<td>Possible null pointer dereference of MatrixRotation3D.internalMatrix in com.irurueta.geometry.MatrixRotation3D.setAxisAndRotation(double, double, double, double) on exception path</td>
-<td>CORRECTNESS</td>
-<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#NP_NULL_ON_SOME_PATH_EXCEPTION">NP_NULL_ON_SOME_PATH_EXCEPTION</a></td>
-<td><a href="./xref/com/irurueta/geometry/MatrixRotation3D.html#L533">533</a></td>
-<td>Medium</td></tr>
-<tr class="b">
-<td>Possible null pointer dereference of MatrixRotation3D.internalMatrix in com.irurueta.geometry.MatrixRotation3D.setEulerAngles(double, double, double) on exception path</td>
-<td>CORRECTNESS</td>
-<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#NP_NULL_ON_SOME_PATH_EXCEPTION">NP_NULL_ON_SOME_PATH_EXCEPTION</a></td>
-<td><a href="./xref/com/irurueta/geometry/MatrixRotation3D.html#L287">287</a></td>
-<td>Medium</td></tr>
-<tr class="a">
-<td>Possible null pointer dereference of MatrixRotation3D.internalMatrix in com.irurueta.geometry.MatrixRotation3D.setRollPitchYaw(double, double, double) on exception path</td>
-<td>CORRECTNESS</td>
-<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#NP_NULL_ON_SOME_PATH_EXCEPTION">NP_NULL_ON_SOME_PATH_EXCEPTION</a></td>
-<td><a href="./xref/com/irurueta/geometry/MatrixRotation3D.html#L488">488</a></td>
 <td>Medium</td></tr></table></div><a name="com.irurueta.geometry.PinholeCameraIntrinsicParameters"></a>
 <div class="section">
 <h3><a name="com.irurueta.geometry.PinholeCameraIntrinsicParameters"></a>com.irurueta.geometry.PinholeCameraIntrinsicParameters</h3>
@@ -782,19 +749,19 @@ com.irurueta:irurueta-geometry
 <td>com.irurueta.geometry.Quaternion defines clone() but doesn't implement Cloneable</td>
 <td>BAD_PRACTICE</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#CN_IMPLEMENTS_CLONE_BUT_NOT_CLONEABLE">CN_IMPLEMENTS_CLONE_BUT_NOT_CLONEABLE</a></td>
-<td><a href="./xref/com/irurueta/geometry/Quaternion.html#L297">297</a></td>
+<td><a href="./xref/com/irurueta/geometry/Quaternion.html#L295">295</a></td>
 <td>High</td></tr>
 <tr class="b">
 <td>Null passed for non-null parameter of quaternionMatrix(Matrix) in com.irurueta.geometry.Quaternion.toQuaternionMatrix()</td>
 <td>CORRECTNESS</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#NP_NULL_PARAM_DEREF">NP_NULL_PARAM_DEREF</a></td>
-<td><a href="./xref/com/irurueta/geometry/Quaternion.html#L1107">1107</a></td>
+<td><a href="./xref/com/irurueta/geometry/Quaternion.html#L1092">1092</a></td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>Null passed for non-null parameter of quaternionMatrixN(Matrix) in com.irurueta.geometry.Quaternion.toQuaternionMatrixN()</td>
 <td>CORRECTNESS</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#NP_NULL_PARAM_DEREF">NP_NULL_PARAM_DEREF</a></td>
-<td><a href="./xref/com/irurueta/geometry/Quaternion.html#L1213">1213</a></td>
+<td><a href="./xref/com/irurueta/geometry/Quaternion.html#L1196">1196</a></td>
 <td>Medium</td></tr></table></div><a name="com.irurueta.geometry.Rotation2D"></a>
 <div class="section">
 <h3><a name="com.irurueta.geometry.Rotation2D"></a>com.irurueta.geometry.Rotation2D</h3>
@@ -809,29 +776,14 @@ com.irurueta:irurueta-geometry
 <td>Null passed for non-null parameter of asHomogeneousMatrix(Matrix) in com.irurueta.geometry.Rotation2D.asHomogeneousMatrix()</td>
 <td>CORRECTNESS</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#NP_NULL_PARAM_DEREF">NP_NULL_PARAM_DEREF</a></td>
-<td><a href="./xref/com/irurueta/geometry/Rotation2D.html#L229">229</a></td>
+<td><a href="./xref/com/irurueta/geometry/Rotation2D.html#L232">232</a></td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>Null passed for non-null parameter of asInhomogeneousMatrix(Matrix) in com.irurueta.geometry.Rotation2D.asInhomogeneousMatrix()</td>
 <td>CORRECTNESS</td>
 <td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#NP_NULL_PARAM_DEREF">NP_NULL_PARAM_DEREF</a></td>
-<td><a href="./xref/com/irurueta/geometry/Rotation2D.html#L192">192</a></td>
-<td>Medium</td></tr></table></div><a name="com.irurueta.geometry.Rotation3D"></a>
-<div class="section">
-<h3><a name="com.irurueta.geometry.Rotation3D"></a>com.irurueta.geometry.Rotation3D</h3>
-<table border="0" class="bodyTable">
-<tr class="a">
-<th>Bug</th>
-<th>Category</th>
-<th>Details</th>
-<th>Line</th>
-<th>Priority</th></tr>
-<tr class="b">
-<td>com.irurueta.geometry.Rotation3D.DEFAULT_TYPE isn't final but should be</td>
-<td>MALICIOUS_CODE</td>
-<td><a class="externalLink" href="http://findbugs.sourceforge.net/bugDescriptions.html#MS_SHOULD_BE_FINAL">MS_SHOULD_BE_FINAL</a></td>
-<td><a href="./xref/com/irurueta/geometry/Rotation3D.html#L52">52</a></td>
-<td>High</td></tr></table></div><a name="com.irurueta.geometry.estimators.EPnPPointCorrespondencePinholeCameraEstimator"></a>
+<td><a href="./xref/com/irurueta/geometry/Rotation2D.html#L194">194</a></td>
+<td>Medium</td></tr></table></div><a name="com.irurueta.geometry.estimators.EPnPPointCorrespondencePinholeCameraEstimator"></a>
 <div class="section">
 <h3><a name="com.irurueta.geometry.estimators.EPnPPointCorrespondencePinholeCameraEstimator"></a>com.irurueta.geometry.estimators.EPnPPointCorrespondencePinholeCameraEstimator</h3>
 <table border="0" class="bodyTable">

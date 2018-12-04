@@ -349,7 +349,7 @@ public abstract class Point3D implements Serializable, Point&lt;Point3D&gt; {
      * @throws IllegalArgumentException if provided dimension value is negative or exceeds number of dimensions.
      */
     @Override
-    public void setInhomogeneousCoordinate(int dim, double value) throws IllegalArgumentException {
+    public void setInhomogeneousCoordinate(int dim, double value) {
 <span class="fc bfc" id="L353" title="All 4 branches covered.">        switch (dim) {</span>
             case 0:
 <span class="fc" id="L355">                setInhomX(value);</span>

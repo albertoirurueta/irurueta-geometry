@@ -63,10 +63,9 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @throws NonSymmetricMatrixException Raised when the quadric matrix is not
      * symmetric.
      */
-    public Quadric(Matrix m) throws IllegalArgumentException,
-            NonSymmetricMatrixException {
-<span class="fc" id="L68">        super(m);</span>
-<span class="fc" id="L69">    }</span>
+    public Quadric(Matrix m) throws NonSymmetricMatrixException {
+<span class="fc" id="L67">        super(m);</span>
+<span class="fc" id="L68">    }</span>
     
     /**
      * Creates quadric where provided points are contained (are locus).
@@ -84,10 +83,10 @@ public class Quadric extends BaseQuadric implements Serializable {
      */
     public Quadric(Point3D point1, Point3D point2, Point3D point3, 
             Point3D point4, Point3D point5, Point3D point6, Point3D point7,
-<span class="fc" id="L87">            Point3D point8, Point3D point9) throws CoincidentPointsException {</span>
-<span class="fc" id="L88">        setParametersFromPoints(point1, point2, point3, point4, point5, point6,</span>
+<span class="fc" id="L86">            Point3D point8, Point3D point9) throws CoincidentPointsException {</span>
+<span class="fc" id="L87">        setParametersFromPoints(point1, point2, point3, point4, point5, point6,</span>
                 point7, point8, point9);
-<span class="fc" id="L90">    }</span>
+<span class="fc" id="L89">    }</span>
     
     /**
      * Checks if the given point is locus (lies within) this quadric.
@@ -99,30 +98,29 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @return True if the point lies within this quadric, false otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public boolean isLocus(Point3D point, double threshold)
-            throws IllegalArgumentException {
+    public boolean isLocus(Point3D point, double threshold) {
         
-<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="nc" id="L106">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="nc" id="L104">            throw new IllegalArgumentException();</span>
         }
         
         try {
-<span class="fc" id="L110">            normalize();</span>
-<span class="fc" id="L111">            Matrix Q = asMatrix();</span>
-<span class="fc" id="L112">            Matrix homPoint = new Matrix(</span>
+<span class="fc" id="L108">            normalize();</span>
+<span class="fc" id="L109">            Matrix q = asMatrix();</span>
+<span class="fc" id="L110">            Matrix homPoint = new Matrix(</span>
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
-<span class="fc" id="L114">            point.normalize();</span>
-<span class="fc" id="L115">            homPoint.setElementAt(0, 0, point.getHomX());</span>
-<span class="fc" id="L116">            homPoint.setElementAt(1, 0, point.getHomY());</span>
-<span class="fc" id="L117">            homPoint.setElementAt(2, 0, point.getHomZ());</span>
-<span class="fc" id="L118">            homPoint.setElementAt(3, 0, point.getHomW());</span>
-<span class="fc" id="L119">            Matrix locusMatrix = homPoint.transposeAndReturnNew();</span>
-<span class="fc" id="L120">            locusMatrix.multiply(Q);</span>
-<span class="fc" id="L121">            locusMatrix.multiply(homPoint);</span>
+<span class="fc" id="L112">            point.normalize();</span>
+<span class="fc" id="L113">            homPoint.setElementAt(0, 0, point.getHomX());</span>
+<span class="fc" id="L114">            homPoint.setElementAt(1, 0, point.getHomY());</span>
+<span class="fc" id="L115">            homPoint.setElementAt(2, 0, point.getHomZ());</span>
+<span class="fc" id="L116">            homPoint.setElementAt(3, 0, point.getHomW());</span>
+<span class="fc" id="L117">            Matrix locusMatrix = homPoint.transposeAndReturnNew();</span>
+<span class="fc" id="L118">            locusMatrix.multiply(q);</span>
+<span class="fc" id="L119">            locusMatrix.multiply(homPoint);</span>
             
-<span class="fc bfc" id="L123" title="All 2 branches covered.">            return Math.abs(locusMatrix.getElementAt(0, 0)) &lt; threshold;</span>
-<span class="nc" id="L124">        } catch (WrongSizeException ignore) {</span>
-<span class="nc" id="L125">            return false;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">            return Math.abs(locusMatrix.getElementAt(0, 0)) &lt; threshold;</span>
+<span class="nc" id="L122">        } catch (WrongSizeException e) {</span>
+<span class="nc" id="L123">            return false;</span>
         }
     }
     
@@ -133,7 +131,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @see #isLocus(Point3D, double)
      */
     public boolean isLocus(Point3D point) {
-<span class="fc" id="L136">        return isLocus(point, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L134">        return isLocus(point, DEFAULT_LOCUS_THRESHOLD);</span>
     }
     
     /**
@@ -146,45 +144,45 @@ public class Quadric extends BaseQuadric implements Serializable {
     public double angleBetweenPoints(Point3D pointA, Point3D pointB) {
         try {
             //retrieve quadric as matrix
-<span class="fc" id="L149">            Matrix Q = asMatrix();</span>
-<span class="fc" id="L150">            Matrix transHomPointA = new Matrix(1, </span>
+<span class="fc" id="L147">            Matrix q = asMatrix();</span>
+<span class="fc" id="L148">            Matrix transHomPointA = new Matrix(1, </span>
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
-<span class="fc" id="L152">            pointA.normalize();</span>
-<span class="fc" id="L153">            transHomPointA.setElementAt(0, 0, pointA.getHomX());</span>
-<span class="fc" id="L154">            transHomPointA.setElementAt(0, 1, pointA.getHomY());</span>
-<span class="fc" id="L155">            transHomPointA.setElementAt(0, 2, pointA.getHomZ());</span>
-<span class="fc" id="L156">            transHomPointA.setElementAt(0, 3, pointA.getHomW());</span>
+<span class="fc" id="L150">            pointA.normalize();</span>
+<span class="fc" id="L151">            transHomPointA.setElementAt(0, 0, pointA.getHomX());</span>
+<span class="fc" id="L152">            transHomPointA.setElementAt(0, 1, pointA.getHomY());</span>
+<span class="fc" id="L153">            transHomPointA.setElementAt(0, 2, pointA.getHomZ());</span>
+<span class="fc" id="L154">            transHomPointA.setElementAt(0, 3, pointA.getHomW());</span>
             
-<span class="fc" id="L158">            Matrix tmp = transHomPointA.multiplyAndReturnNew(Q);</span>
-<span class="fc" id="L159">            tmp.multiply(transHomPointA.transposeAndReturnNew()); //This is</span>
+<span class="fc" id="L156">            Matrix tmp = transHomPointA.multiplyAndReturnNew(q);</span>
+<span class="fc" id="L157">            tmp.multiply(transHomPointA.transposeAndReturnNew()); //This is</span>
                                                 //homPointA' * Q * homPointA
             
-<span class="fc" id="L162">            double normA = tmp.getElementAt(0, 0);</span>
+<span class="fc" id="L160">            double normA = tmp.getElementAt(0, 0);</span>
             
-<span class="fc" id="L164">            Matrix homPointB = new Matrix(</span>
+<span class="fc" id="L162">            Matrix homPointB = new Matrix(</span>
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
-<span class="fc" id="L166">            pointB.normalize();</span>
-<span class="fc" id="L167">            homPointB.setElementAt(0, 0, pointB.getHomX());</span>
-<span class="fc" id="L168">            homPointB.setElementAt(1, 0, pointB.getHomY());</span>
-<span class="fc" id="L169">            homPointB.setElementAt(2, 0, pointB.getHomZ());</span>
-<span class="fc" id="L170">            homPointB.setElementAt(3, 0, pointB.getHomW());</span>
+<span class="fc" id="L164">            pointB.normalize();</span>
+<span class="fc" id="L165">            homPointB.setElementAt(0, 0, pointB.getHomX());</span>
+<span class="fc" id="L166">            homPointB.setElementAt(1, 0, pointB.getHomY());</span>
+<span class="fc" id="L167">            homPointB.setElementAt(2, 0, pointB.getHomZ());</span>
+<span class="fc" id="L168">            homPointB.setElementAt(3, 0, pointB.getHomW());</span>
             
-<span class="fc" id="L172">            homPointB.transpose(tmp);</span>
-<span class="fc" id="L173">            tmp.multiply(Q);</span>
-<span class="fc" id="L174">            tmp.multiply(homPointB);</span>
+<span class="fc" id="L170">            homPointB.transpose(tmp);</span>
+<span class="fc" id="L171">            tmp.multiply(q);</span>
+<span class="fc" id="L172">            tmp.multiply(homPointB);</span>
             
-<span class="fc" id="L176">            double normB = tmp.getElementAt(0, 0);</span>
+<span class="fc" id="L174">            double normB = tmp.getElementAt(0, 0);</span>
             
-<span class="fc" id="L178">            transHomPointA.multiply(Q);</span>
-<span class="fc" id="L179">            transHomPointA.multiply(homPointB);</span>
+<span class="fc" id="L176">            transHomPointA.multiply(q);</span>
+<span class="fc" id="L177">            transHomPointA.multiply(homPointB);</span>
             //This is homPointA' * Q * homPointB
             
-<span class="fc" id="L182">            double angleNumerator = transHomPointA.getElementAt(0, 0);</span>
+<span class="fc" id="L180">            double angleNumerator = transHomPointA.getElementAt(0, 0);</span>
             
-<span class="fc" id="L184">            double cosTheta = angleNumerator / Math.sqrt(normA * normB);</span>
-<span class="fc" id="L185">            return Math.acos(cosTheta);</span>
-<span class="nc" id="L186">        } catch (WrongSizeException ignore) {</span>
-<span class="nc" id="L187">            return 0.0; //This will never happen</span>
+<span class="fc" id="L182">            double cosTheta = angleNumerator / Math.sqrt(normA * normB);</span>
+<span class="fc" id="L183">            return Math.acos(cosTheta);</span>
+<span class="nc" id="L184">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L185">            return 0.0; //This will never happen</span>
         }
     }
     
@@ -203,37 +201,37 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean arePerpendicularPoints(Point3D pointA, Point3D pointB,
-            double threshold) throws IllegalArgumentException {
+            double threshold) {
         
         try {
             //retrieve quadric as matrix
-<span class="fc" id="L210">            Matrix transHomPointA = new Matrix(1, </span>
+<span class="fc" id="L208">            Matrix transHomPointA = new Matrix(1, </span>
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
-<span class="fc" id="L212">            pointA.normalize();</span>
-<span class="fc" id="L213">            transHomPointA.setElementAt(0, 0, pointA.getHomX());</span>
-<span class="fc" id="L214">            transHomPointA.setElementAt(0, 1, pointA.getHomY());</span>
-<span class="fc" id="L215">            transHomPointA.setElementAt(0, 2, pointA.getHomZ());</span>
-<span class="fc" id="L216">            transHomPointA.setElementAt(0, 3, pointA.getHomW());</span>
+<span class="fc" id="L210">            pointA.normalize();</span>
+<span class="fc" id="L211">            transHomPointA.setElementAt(0, 0, pointA.getHomX());</span>
+<span class="fc" id="L212">            transHomPointA.setElementAt(0, 1, pointA.getHomY());</span>
+<span class="fc" id="L213">            transHomPointA.setElementAt(0, 2, pointA.getHomZ());</span>
+<span class="fc" id="L214">            transHomPointA.setElementAt(0, 3, pointA.getHomW());</span>
             
-<span class="fc" id="L218">            Matrix homPointB = new Matrix(</span>
+<span class="fc" id="L216">            Matrix homPointB = new Matrix(</span>
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
-<span class="fc" id="L220">            pointB.normalize();</span>
-<span class="fc" id="L221">            homPointB.setElementAt(0, 0, pointB.getHomX());</span>
-<span class="fc" id="L222">            homPointB.setElementAt(1, 0, pointB.getHomY());</span>
-<span class="fc" id="L223">            homPointB.setElementAt(2, 0, pointB.getHomZ());</span>
-<span class="fc" id="L224">            homPointB.setElementAt(3, 0, pointB.getHomW());</span>
+<span class="fc" id="L218">            pointB.normalize();</span>
+<span class="fc" id="L219">            homPointB.setElementAt(0, 0, pointB.getHomX());</span>
+<span class="fc" id="L220">            homPointB.setElementAt(1, 0, pointB.getHomY());</span>
+<span class="fc" id="L221">            homPointB.setElementAt(2, 0, pointB.getHomZ());</span>
+<span class="fc" id="L222">            homPointB.setElementAt(3, 0, pointB.getHomW());</span>
             
-<span class="fc" id="L226">            normalize();</span>
-<span class="fc" id="L227">            Matrix Q = asMatrix();</span>
-<span class="fc" id="L228">            transHomPointA.multiply(Q);</span>
-<span class="fc" id="L229">            transHomPointA.multiply(homPointB);</span>
+<span class="fc" id="L224">            normalize();</span>
+<span class="fc" id="L225">            Matrix q = asMatrix();</span>
+<span class="fc" id="L226">            transHomPointA.multiply(q);</span>
+<span class="fc" id="L227">            transHomPointA.multiply(homPointB);</span>
                 //This is homPointA' * Q * homPointB
             
-<span class="fc" id="L232">            double perpend = transHomPointA.getElementAt(0, 0);</span>
+<span class="fc" id="L230">            double perpend = transHomPointA.getElementAt(0, 0);</span>
             
-<span class="fc bfc" id="L234" title="All 2 branches covered.">            return Math.abs(perpend) &lt; threshold;</span>
-<span class="nc" id="L235">        } catch (WrongSizeException ignore) {</span>
-<span class="nc" id="L236">            return false; //This will never happen</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">            return Math.abs(perpend) &lt; threshold;</span>
+<span class="nc" id="L233">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L234">            return false; //This will never happen</span>
         }
     }
     
@@ -246,7 +244,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @see #arePerpendicularPoints(Point3D, Point3D, double)
      */
     public boolean arePerpendicularPoints(Point3D pointA, Point3D pointB) {
-<span class="fc" id="L249">        return arePerpendicularPoints(pointA, pointB, </span>
+<span class="fc" id="L247">        return arePerpendicularPoints(pointA, pointB, </span>
                 DEFAULT_PERPENDICULAR_THRESHOLD);
     }
     
@@ -263,33 +261,33 @@ public class Quadric extends BaseQuadric implements Serializable {
     public void dualQuadric(DualQuadric dualQuadric) 
             throws DualQuadricNotAvailableException {
         
-<span class="fc" id="L266">        Matrix quadricMatrix = asMatrix();</span>
+<span class="fc" id="L264">        Matrix quadricMatrix = asMatrix();</span>
         try {
-<span class="fc" id="L268">            Matrix invMatrix = com.irurueta.algebra.Utils.inverse(quadricMatrix);</span>
+<span class="fc" id="L266">            Matrix invMatrix = com.irurueta.algebra.Utils.inverse(quadricMatrix);</span>
             
             //ensure that resulting matrix after inversion is symmetric
             //by computing the mean of off-diagonal elements
-<span class="fc" id="L272">            double a = invMatrix.getElementAt(0, 0);</span>
-<span class="fc" id="L273">            double b = invMatrix.getElementAt(1, 1);</span>
-<span class="fc" id="L274">            double c = invMatrix.getElementAt(2, 2);</span>
-<span class="fc" id="L275">            double d = 0.5 * (invMatrix.getElementAt(0, 1) + </span>
-<span class="fc" id="L276">                    invMatrix.getElementAt(1, 0));</span>
-<span class="fc" id="L277">            double e = 0.5 * (invMatrix.getElementAt(2, 1) +</span>
-<span class="fc" id="L278">                    invMatrix.getElementAt(1, 2));</span>
-<span class="fc" id="L279">            double f = 0.5 * (invMatrix.getElementAt(2, 0) +</span>
-<span class="fc" id="L280">                    invMatrix.getElementAt(0, 2));</span>
-<span class="fc" id="L281">            double g = 0.5 * (invMatrix.getElementAt(3, 0) +</span>
-<span class="fc" id="L282">                    invMatrix.getElementAt(0, 3));</span>
-<span class="fc" id="L283">            double h = 0.5 * (invMatrix.getElementAt(3, 1) +</span>
-<span class="fc" id="L284">                    invMatrix.getElementAt(1, 3));</span>
-<span class="fc" id="L285">            double i = 0.5 * (invMatrix.getElementAt(3, 2) +</span>
-<span class="fc" id="L286">                    invMatrix.getElementAt(2, 3));</span>
-<span class="fc" id="L287">            double j = invMatrix.getElementAt(3, 3);</span>
-<span class="fc" id="L288">            dualQuadric.setParameters(a, b, c, d, e, f, g, h, i, j);</span>
-<span class="nc" id="L289">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L290">            throw new DualQuadricNotAvailableException(e);</span>
-<span class="fc" id="L291">        }</span>
-<span class="fc" id="L292">    }</span>
+<span class="fc" id="L270">            double a = invMatrix.getElementAt(0, 0);</span>
+<span class="fc" id="L271">            double b = invMatrix.getElementAt(1, 1);</span>
+<span class="fc" id="L272">            double c = invMatrix.getElementAt(2, 2);</span>
+<span class="fc" id="L273">            double d = 0.5 * (invMatrix.getElementAt(0, 1) + </span>
+<span class="fc" id="L274">                    invMatrix.getElementAt(1, 0));</span>
+<span class="fc" id="L275">            double e = 0.5 * (invMatrix.getElementAt(2, 1) +</span>
+<span class="fc" id="L276">                    invMatrix.getElementAt(1, 2));</span>
+<span class="fc" id="L277">            double f = 0.5 * (invMatrix.getElementAt(2, 0) +</span>
+<span class="fc" id="L278">                    invMatrix.getElementAt(0, 2));</span>
+<span class="fc" id="L279">            double g = 0.5 * (invMatrix.getElementAt(3, 0) +</span>
+<span class="fc" id="L280">                    invMatrix.getElementAt(0, 3));</span>
+<span class="fc" id="L281">            double h = 0.5 * (invMatrix.getElementAt(3, 1) +</span>
+<span class="fc" id="L282">                    invMatrix.getElementAt(1, 3));</span>
+<span class="fc" id="L283">            double i = 0.5 * (invMatrix.getElementAt(3, 2) +</span>
+<span class="fc" id="L284">                    invMatrix.getElementAt(2, 3));</span>
+<span class="fc" id="L285">            double j = invMatrix.getElementAt(3, 3);</span>
+<span class="fc" id="L286">            dualQuadric.setParameters(a, b, c, d, e, f, g, h, i, j);</span>
+<span class="nc" id="L287">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L288">            throw new DualQuadricNotAvailableException(e);</span>
+<span class="fc" id="L289">        }</span>
+<span class="fc" id="L290">    }</span>
     
     /**
      * Computes the dual quadric of this quadric.
@@ -301,9 +299,9 @@ public class Quadric extends BaseQuadric implements Serializable {
      * be computed).
      */
     public DualQuadric getDualQuadric() throws DualQuadricNotAvailableException {
-<span class="fc" id="L304">        DualQuadric dualQuadric = new DualQuadric();</span>
-<span class="fc" id="L305">        dualQuadric(dualQuadric);</span>
-<span class="fc" id="L306">        return dualQuadric;</span>
+<span class="fc" id="L302">        DualQuadric dualQuadric = new DualQuadric();</span>
+<span class="fc" id="L303">        dualQuadric(dualQuadric);</span>
+<span class="fc" id="L304">        return dualQuadric;</span>
     }
     
     /**
@@ -327,15 +325,15 @@ public class Quadric extends BaseQuadric implements Serializable {
             throws CoincidentPointsException {
         
         //normalize points to increase accuracy
-<span class="fc" id="L330">        point1.normalize();</span>
-<span class="fc" id="L331">        point2.normalize();</span>
-<span class="fc" id="L332">        point3.normalize();</span>
-<span class="fc" id="L333">        point4.normalize();</span>
-<span class="fc" id="L334">        point5.normalize();</span>
-<span class="fc" id="L335">        point6.normalize();</span>
-<span class="fc" id="L336">        point7.normalize();</span>
-<span class="fc" id="L337">        point8.normalize();</span>
-<span class="fc" id="L338">        point9.normalize();</span>
+<span class="fc" id="L328">        point1.normalize();</span>
+<span class="fc" id="L329">        point2.normalize();</span>
+<span class="fc" id="L330">        point3.normalize();</span>
+<span class="fc" id="L331">        point4.normalize();</span>
+<span class="fc" id="L332">        point5.normalize();</span>
+<span class="fc" id="L333">        point6.normalize();</span>
+<span class="fc" id="L334">        point7.normalize();</span>
+<span class="fc" id="L335">        point8.normalize();</span>
+<span class="fc" id="L336">        point9.normalize();</span>
         
         try {
             //each point belonging to a quadric follows equation:
@@ -343,175 +341,175 @@ public class Quadric extends BaseQuadric implements Serializable {
             //x^2 + y^2 + z^2 + 2*x*y + 2*x*z + 2*y*z + 2*x*w + 2*y*w + 
             //2*z*w + w^2 = 0            
             
-<span class="fc" id="L346">            Matrix m = new Matrix(9, 10);</span>
-<span class="fc" id="L347">            double x = point1.getHomX();</span>
-<span class="fc" id="L348">            double y = point1.getHomY();</span>
-<span class="fc" id="L349">            double z = point1.getHomZ();</span>
-<span class="fc" id="L350">            double w = point1.getHomW();</span>
-<span class="fc" id="L351">            m.setElementAt(0, 0, x * x);</span>
-<span class="fc" id="L352">            m.setElementAt(0, 1, y * y);</span>
-<span class="fc" id="L353">            m.setElementAt(0, 2, z * z);</span>
-<span class="fc" id="L354">            m.setElementAt(0, 3, 2.0 * x * y);</span>
-<span class="fc" id="L355">            m.setElementAt(0, 4, 2.0 * x * z);</span>
-<span class="fc" id="L356">            m.setElementAt(0, 5, 2.0 * y * z);</span>
-<span class="fc" id="L357">            m.setElementAt(0, 6, 2.0 * x * w);</span>
-<span class="fc" id="L358">            m.setElementAt(0, 7, 2.0 * y * w);</span>
-<span class="fc" id="L359">            m.setElementAt(0, 8, 2.0 * z * w);</span>
-<span class="fc" id="L360">            m.setElementAt(0, 9, w * w);</span>
-<span class="fc" id="L361">            x = point2.getHomX();</span>
-<span class="fc" id="L362">            y = point2.getHomY();</span>
-<span class="fc" id="L363">            z = point2.getHomZ();</span>
-<span class="fc" id="L364">            w = point2.getHomW();</span>
-<span class="fc" id="L365">            m.setElementAt(1, 0, x * x);</span>
-<span class="fc" id="L366">            m.setElementAt(1, 1, y * y);</span>
-<span class="fc" id="L367">            m.setElementAt(1, 2, z * z);</span>
-<span class="fc" id="L368">            m.setElementAt(1, 3, 2.0 * x * y);</span>
-<span class="fc" id="L369">            m.setElementAt(1, 4, 2.0 * x * z);</span>
-<span class="fc" id="L370">            m.setElementAt(1, 5, 2.0 * y * z);</span>
-<span class="fc" id="L371">            m.setElementAt(1, 6, 2.0 * x * w);</span>
-<span class="fc" id="L372">            m.setElementAt(1, 7, 2.0 * y * w);</span>
-<span class="fc" id="L373">            m.setElementAt(1, 8, 2.0 * z * w);</span>
-<span class="fc" id="L374">            m.setElementAt(1, 9, w * w);</span>
-<span class="fc" id="L375">            x = point3.getHomX();</span>
-<span class="fc" id="L376">            y = point3.getHomY();</span>
-<span class="fc" id="L377">            z = point3.getHomZ();</span>
-<span class="fc" id="L378">            w = point3.getHomW();</span>
-<span class="fc" id="L379">            m.setElementAt(2, 0, x * x);</span>
-<span class="fc" id="L380">            m.setElementAt(2, 1, y * y);</span>
-<span class="fc" id="L381">            m.setElementAt(2, 2, z * z);</span>
-<span class="fc" id="L382">            m.setElementAt(2, 3, 2.0 * x * y);</span>
-<span class="fc" id="L383">            m.setElementAt(2, 4, 2.0 * x * z);</span>
-<span class="fc" id="L384">            m.setElementAt(2, 5, 2.0 * y * z);</span>
-<span class="fc" id="L385">            m.setElementAt(2, 6, 2.0 * x * w);</span>
-<span class="fc" id="L386">            m.setElementAt(2, 7, 2.0 * y * w);</span>
-<span class="fc" id="L387">            m.setElementAt(2, 8, 2.0 * z * w);</span>
-<span class="fc" id="L388">            m.setElementAt(2, 9, w * w);</span>
-<span class="fc" id="L389">            x = point4.getHomX();</span>
-<span class="fc" id="L390">            y = point4.getHomY();</span>
-<span class="fc" id="L391">            z = point4.getHomZ();</span>
-<span class="fc" id="L392">            w = point4.getHomW();</span>
-<span class="fc" id="L393">            m.setElementAt(3, 0, x * x);</span>
-<span class="fc" id="L394">            m.setElementAt(3, 1, y * y);</span>
-<span class="fc" id="L395">            m.setElementAt(3, 2, z * z);</span>
-<span class="fc" id="L396">            m.setElementAt(3, 3, 2.0 * x * y);</span>
-<span class="fc" id="L397">            m.setElementAt(3, 4, 2.0 * x * z);</span>
-<span class="fc" id="L398">            m.setElementAt(3, 5, 2.0 * y * z);</span>
-<span class="fc" id="L399">            m.setElementAt(3, 6, 2.0 * x * w);</span>
-<span class="fc" id="L400">            m.setElementAt(3, 7, 2.0 * y * w);</span>
-<span class="fc" id="L401">            m.setElementAt(3, 8, 2.0 * z * w);</span>
-<span class="fc" id="L402">            m.setElementAt(3, 9, w * w);</span>
-<span class="fc" id="L403">            x = point5.getHomX();</span>
-<span class="fc" id="L404">            y = point5.getHomY();</span>
-<span class="fc" id="L405">            z = point5.getHomZ();</span>
-<span class="fc" id="L406">            w = point5.getHomW();</span>
-<span class="fc" id="L407">            m.setElementAt(4, 0, x * x);</span>
-<span class="fc" id="L408">            m.setElementAt(4, 1, y * y);</span>
-<span class="fc" id="L409">            m.setElementAt(4, 2, z * z);</span>
-<span class="fc" id="L410">            m.setElementAt(4, 3, 2.0 * x * y);</span>
-<span class="fc" id="L411">            m.setElementAt(4, 4, 2.0 * x * z);</span>
-<span class="fc" id="L412">            m.setElementAt(4, 5, 2.0 * y * z);</span>
-<span class="fc" id="L413">            m.setElementAt(4, 6, 2.0 * x * w);</span>
-<span class="fc" id="L414">            m.setElementAt(4, 7, 2.0 * y * w);</span>
-<span class="fc" id="L415">            m.setElementAt(4, 8, 2.0 * z * w);</span>
-<span class="fc" id="L416">            m.setElementAt(4, 9, w * w);</span>
-<span class="fc" id="L417">            x = point6.getHomX();</span>
-<span class="fc" id="L418">            y = point6.getHomY();</span>
-<span class="fc" id="L419">            z = point6.getHomZ();</span>
-<span class="fc" id="L420">            w = point6.getHomW();</span>
-<span class="fc" id="L421">            m.setElementAt(5, 0, x * x);</span>
-<span class="fc" id="L422">            m.setElementAt(5, 1, y * y);</span>
-<span class="fc" id="L423">            m.setElementAt(5, 2, z * z);</span>
-<span class="fc" id="L424">            m.setElementAt(5, 3, 2.0 * x * y);</span>
-<span class="fc" id="L425">            m.setElementAt(5, 4, 2.0 * x * z);</span>
-<span class="fc" id="L426">            m.setElementAt(5, 5, 2.0 * y * z);</span>
-<span class="fc" id="L427">            m.setElementAt(5, 6, 2.0 * x * w);</span>
-<span class="fc" id="L428">            m.setElementAt(5, 7, 2.0 * y * w);</span>
-<span class="fc" id="L429">            m.setElementAt(5, 8, 2.0 * z * w);</span>
-<span class="fc" id="L430">            m.setElementAt(5, 9, w * w);</span>
-<span class="fc" id="L431">            x = point7.getHomX();</span>
-<span class="fc" id="L432">            y = point7.getHomY();</span>
-<span class="fc" id="L433">            z = point7.getHomZ();</span>
-<span class="fc" id="L434">            w = point7.getHomW();</span>
-<span class="fc" id="L435">            m.setElementAt(6, 0, x * x);</span>
-<span class="fc" id="L436">            m.setElementAt(6, 1, y * y);</span>
-<span class="fc" id="L437">            m.setElementAt(6, 2, z * z);</span>
-<span class="fc" id="L438">            m.setElementAt(6, 3, 2.0 * x * y);</span>
-<span class="fc" id="L439">            m.setElementAt(6, 4, 2.0 * x * z);</span>
-<span class="fc" id="L440">            m.setElementAt(6, 5, 2.0 * y * z);</span>
-<span class="fc" id="L441">            m.setElementAt(6, 6, 2.0 * x * w);</span>
-<span class="fc" id="L442">            m.setElementAt(6, 7, 2.0 * y * w);</span>
-<span class="fc" id="L443">            m.setElementAt(6, 8, 2.0 * z * w);</span>
-<span class="fc" id="L444">            m.setElementAt(6, 9, w * w);</span>
-<span class="fc" id="L445">            x = point8.getHomX();</span>
-<span class="fc" id="L446">            y = point8.getHomY();</span>
-<span class="fc" id="L447">            z = point8.getHomZ();</span>
-<span class="fc" id="L448">            w = point8.getHomW();</span>
-<span class="fc" id="L449">            m.setElementAt(7, 0, x * x);</span>
-<span class="fc" id="L450">            m.setElementAt(7, 1, y * y);</span>
-<span class="fc" id="L451">            m.setElementAt(7, 2, z * z);</span>
-<span class="fc" id="L452">            m.setElementAt(7, 3, 2.0 * x * y);</span>
-<span class="fc" id="L453">            m.setElementAt(7, 4, 2.0 * x * z);</span>
-<span class="fc" id="L454">            m.setElementAt(7, 5, 2.0 * y * z);</span>
-<span class="fc" id="L455">            m.setElementAt(7, 6, 2.0 * x * w);</span>
-<span class="fc" id="L456">            m.setElementAt(7, 7, 2.0 * y * w);</span>
-<span class="fc" id="L457">            m.setElementAt(7, 8, 2.0 * z * w);</span>
-<span class="fc" id="L458">            m.setElementAt(7, 9, w * w);</span>
-<span class="fc" id="L459">            x = point9.getHomX();</span>
-<span class="fc" id="L460">            y = point9.getHomY();</span>
-<span class="fc" id="L461">            z = point9.getHomZ();</span>
-<span class="fc" id="L462">            w = point9.getHomW();</span>
-<span class="fc" id="L463">            m.setElementAt(8, 0, x * x);</span>
-<span class="fc" id="L464">            m.setElementAt(8, 1, y * y);</span>
-<span class="fc" id="L465">            m.setElementAt(8, 2, z * z);</span>
-<span class="fc" id="L466">            m.setElementAt(8, 3, 2.0 * x * y);</span>
-<span class="fc" id="L467">            m.setElementAt(8, 4, 2.0 * x * z);</span>
-<span class="fc" id="L468">            m.setElementAt(8, 5, 2.0 * y * z);</span>
-<span class="fc" id="L469">            m.setElementAt(8, 6, 2.0 * x * w);</span>
-<span class="fc" id="L470">            m.setElementAt(8, 7, 2.0 * y * w);</span>
-<span class="fc" id="L471">            m.setElementAt(8, 8, 2.0 * z * w);</span>
-<span class="fc" id="L472">            m.setElementAt(8, 9, w * w);</span>
+<span class="fc" id="L344">            Matrix m = new Matrix(9, 10);</span>
+<span class="fc" id="L345">            double x = point1.getHomX();</span>
+<span class="fc" id="L346">            double y = point1.getHomY();</span>
+<span class="fc" id="L347">            double z = point1.getHomZ();</span>
+<span class="fc" id="L348">            double w = point1.getHomW();</span>
+<span class="fc" id="L349">            m.setElementAt(0, 0, x * x);</span>
+<span class="fc" id="L350">            m.setElementAt(0, 1, y * y);</span>
+<span class="fc" id="L351">            m.setElementAt(0, 2, z * z);</span>
+<span class="fc" id="L352">            m.setElementAt(0, 3, 2.0 * x * y);</span>
+<span class="fc" id="L353">            m.setElementAt(0, 4, 2.0 * x * z);</span>
+<span class="fc" id="L354">            m.setElementAt(0, 5, 2.0 * y * z);</span>
+<span class="fc" id="L355">            m.setElementAt(0, 6, 2.0 * x * w);</span>
+<span class="fc" id="L356">            m.setElementAt(0, 7, 2.0 * y * w);</span>
+<span class="fc" id="L357">            m.setElementAt(0, 8, 2.0 * z * w);</span>
+<span class="fc" id="L358">            m.setElementAt(0, 9, w * w);</span>
+<span class="fc" id="L359">            x = point2.getHomX();</span>
+<span class="fc" id="L360">            y = point2.getHomY();</span>
+<span class="fc" id="L361">            z = point2.getHomZ();</span>
+<span class="fc" id="L362">            w = point2.getHomW();</span>
+<span class="fc" id="L363">            m.setElementAt(1, 0, x * x);</span>
+<span class="fc" id="L364">            m.setElementAt(1, 1, y * y);</span>
+<span class="fc" id="L365">            m.setElementAt(1, 2, z * z);</span>
+<span class="fc" id="L366">            m.setElementAt(1, 3, 2.0 * x * y);</span>
+<span class="fc" id="L367">            m.setElementAt(1, 4, 2.0 * x * z);</span>
+<span class="fc" id="L368">            m.setElementAt(1, 5, 2.0 * y * z);</span>
+<span class="fc" id="L369">            m.setElementAt(1, 6, 2.0 * x * w);</span>
+<span class="fc" id="L370">            m.setElementAt(1, 7, 2.0 * y * w);</span>
+<span class="fc" id="L371">            m.setElementAt(1, 8, 2.0 * z * w);</span>
+<span class="fc" id="L372">            m.setElementAt(1, 9, w * w);</span>
+<span class="fc" id="L373">            x = point3.getHomX();</span>
+<span class="fc" id="L374">            y = point3.getHomY();</span>
+<span class="fc" id="L375">            z = point3.getHomZ();</span>
+<span class="fc" id="L376">            w = point3.getHomW();</span>
+<span class="fc" id="L377">            m.setElementAt(2, 0, x * x);</span>
+<span class="fc" id="L378">            m.setElementAt(2, 1, y * y);</span>
+<span class="fc" id="L379">            m.setElementAt(2, 2, z * z);</span>
+<span class="fc" id="L380">            m.setElementAt(2, 3, 2.0 * x * y);</span>
+<span class="fc" id="L381">            m.setElementAt(2, 4, 2.0 * x * z);</span>
+<span class="fc" id="L382">            m.setElementAt(2, 5, 2.0 * y * z);</span>
+<span class="fc" id="L383">            m.setElementAt(2, 6, 2.0 * x * w);</span>
+<span class="fc" id="L384">            m.setElementAt(2, 7, 2.0 * y * w);</span>
+<span class="fc" id="L385">            m.setElementAt(2, 8, 2.0 * z * w);</span>
+<span class="fc" id="L386">            m.setElementAt(2, 9, w * w);</span>
+<span class="fc" id="L387">            x = point4.getHomX();</span>
+<span class="fc" id="L388">            y = point4.getHomY();</span>
+<span class="fc" id="L389">            z = point4.getHomZ();</span>
+<span class="fc" id="L390">            w = point4.getHomW();</span>
+<span class="fc" id="L391">            m.setElementAt(3, 0, x * x);</span>
+<span class="fc" id="L392">            m.setElementAt(3, 1, y * y);</span>
+<span class="fc" id="L393">            m.setElementAt(3, 2, z * z);</span>
+<span class="fc" id="L394">            m.setElementAt(3, 3, 2.0 * x * y);</span>
+<span class="fc" id="L395">            m.setElementAt(3, 4, 2.0 * x * z);</span>
+<span class="fc" id="L396">            m.setElementAt(3, 5, 2.0 * y * z);</span>
+<span class="fc" id="L397">            m.setElementAt(3, 6, 2.0 * x * w);</span>
+<span class="fc" id="L398">            m.setElementAt(3, 7, 2.0 * y * w);</span>
+<span class="fc" id="L399">            m.setElementAt(3, 8, 2.0 * z * w);</span>
+<span class="fc" id="L400">            m.setElementAt(3, 9, w * w);</span>
+<span class="fc" id="L401">            x = point5.getHomX();</span>
+<span class="fc" id="L402">            y = point5.getHomY();</span>
+<span class="fc" id="L403">            z = point5.getHomZ();</span>
+<span class="fc" id="L404">            w = point5.getHomW();</span>
+<span class="fc" id="L405">            m.setElementAt(4, 0, x * x);</span>
+<span class="fc" id="L406">            m.setElementAt(4, 1, y * y);</span>
+<span class="fc" id="L407">            m.setElementAt(4, 2, z * z);</span>
+<span class="fc" id="L408">            m.setElementAt(4, 3, 2.0 * x * y);</span>
+<span class="fc" id="L409">            m.setElementAt(4, 4, 2.0 * x * z);</span>
+<span class="fc" id="L410">            m.setElementAt(4, 5, 2.0 * y * z);</span>
+<span class="fc" id="L411">            m.setElementAt(4, 6, 2.0 * x * w);</span>
+<span class="fc" id="L412">            m.setElementAt(4, 7, 2.0 * y * w);</span>
+<span class="fc" id="L413">            m.setElementAt(4, 8, 2.0 * z * w);</span>
+<span class="fc" id="L414">            m.setElementAt(4, 9, w * w);</span>
+<span class="fc" id="L415">            x = point6.getHomX();</span>
+<span class="fc" id="L416">            y = point6.getHomY();</span>
+<span class="fc" id="L417">            z = point6.getHomZ();</span>
+<span class="fc" id="L418">            w = point6.getHomW();</span>
+<span class="fc" id="L419">            m.setElementAt(5, 0, x * x);</span>
+<span class="fc" id="L420">            m.setElementAt(5, 1, y * y);</span>
+<span class="fc" id="L421">            m.setElementAt(5, 2, z * z);</span>
+<span class="fc" id="L422">            m.setElementAt(5, 3, 2.0 * x * y);</span>
+<span class="fc" id="L423">            m.setElementAt(5, 4, 2.0 * x * z);</span>
+<span class="fc" id="L424">            m.setElementAt(5, 5, 2.0 * y * z);</span>
+<span class="fc" id="L425">            m.setElementAt(5, 6, 2.0 * x * w);</span>
+<span class="fc" id="L426">            m.setElementAt(5, 7, 2.0 * y * w);</span>
+<span class="fc" id="L427">            m.setElementAt(5, 8, 2.0 * z * w);</span>
+<span class="fc" id="L428">            m.setElementAt(5, 9, w * w);</span>
+<span class="fc" id="L429">            x = point7.getHomX();</span>
+<span class="fc" id="L430">            y = point7.getHomY();</span>
+<span class="fc" id="L431">            z = point7.getHomZ();</span>
+<span class="fc" id="L432">            w = point7.getHomW();</span>
+<span class="fc" id="L433">            m.setElementAt(6, 0, x * x);</span>
+<span class="fc" id="L434">            m.setElementAt(6, 1, y * y);</span>
+<span class="fc" id="L435">            m.setElementAt(6, 2, z * z);</span>
+<span class="fc" id="L436">            m.setElementAt(6, 3, 2.0 * x * y);</span>
+<span class="fc" id="L437">            m.setElementAt(6, 4, 2.0 * x * z);</span>
+<span class="fc" id="L438">            m.setElementAt(6, 5, 2.0 * y * z);</span>
+<span class="fc" id="L439">            m.setElementAt(6, 6, 2.0 * x * w);</span>
+<span class="fc" id="L440">            m.setElementAt(6, 7, 2.0 * y * w);</span>
+<span class="fc" id="L441">            m.setElementAt(6, 8, 2.0 * z * w);</span>
+<span class="fc" id="L442">            m.setElementAt(6, 9, w * w);</span>
+<span class="fc" id="L443">            x = point8.getHomX();</span>
+<span class="fc" id="L444">            y = point8.getHomY();</span>
+<span class="fc" id="L445">            z = point8.getHomZ();</span>
+<span class="fc" id="L446">            w = point8.getHomW();</span>
+<span class="fc" id="L447">            m.setElementAt(7, 0, x * x);</span>
+<span class="fc" id="L448">            m.setElementAt(7, 1, y * y);</span>
+<span class="fc" id="L449">            m.setElementAt(7, 2, z * z);</span>
+<span class="fc" id="L450">            m.setElementAt(7, 3, 2.0 * x * y);</span>
+<span class="fc" id="L451">            m.setElementAt(7, 4, 2.0 * x * z);</span>
+<span class="fc" id="L452">            m.setElementAt(7, 5, 2.0 * y * z);</span>
+<span class="fc" id="L453">            m.setElementAt(7, 6, 2.0 * x * w);</span>
+<span class="fc" id="L454">            m.setElementAt(7, 7, 2.0 * y * w);</span>
+<span class="fc" id="L455">            m.setElementAt(7, 8, 2.0 * z * w);</span>
+<span class="fc" id="L456">            m.setElementAt(7, 9, w * w);</span>
+<span class="fc" id="L457">            x = point9.getHomX();</span>
+<span class="fc" id="L458">            y = point9.getHomY();</span>
+<span class="fc" id="L459">            z = point9.getHomZ();</span>
+<span class="fc" id="L460">            w = point9.getHomW();</span>
+<span class="fc" id="L461">            m.setElementAt(8, 0, x * x);</span>
+<span class="fc" id="L462">            m.setElementAt(8, 1, y * y);</span>
+<span class="fc" id="L463">            m.setElementAt(8, 2, z * z);</span>
+<span class="fc" id="L464">            m.setElementAt(8, 3, 2.0 * x * y);</span>
+<span class="fc" id="L465">            m.setElementAt(8, 4, 2.0 * x * z);</span>
+<span class="fc" id="L466">            m.setElementAt(8, 5, 2.0 * y * z);</span>
+<span class="fc" id="L467">            m.setElementAt(8, 6, 2.0 * x * w);</span>
+<span class="fc" id="L468">            m.setElementAt(8, 7, 2.0 * y * w);</span>
+<span class="fc" id="L469">            m.setElementAt(8, 8, 2.0 * z * w);</span>
+<span class="fc" id="L470">            m.setElementAt(8, 9, w * w);</span>
             
             //normalize each row to increase accuracy
-<span class="fc" id="L475">            double[] row = new double[10];</span>
+<span class="fc" id="L473">            double[] row = new double[10];</span>
             double rowNorm;
                         
-<span class="fc bfc" id="L478" title="All 2 branches covered.">            for (int j = 0; j &lt; 9; j++) {</span>
-<span class="fc" id="L479">                m.getSubmatrixAsArray(j, 0, j, 9, row);</span>
-<span class="fc" id="L480">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
-<span class="fc bfc" id="L481" title="All 2 branches covered.">                for (int i = 0; i &lt; 10; i++) {</span>
-<span class="fc" id="L482">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
+<span class="fc bfc" id="L476" title="All 2 branches covered.">            for (int j = 0; j &lt; 9; j++) {</span>
+<span class="fc" id="L477">                m.getSubmatrixAsArray(j, 0, j, 9, row);</span>
+<span class="fc" id="L478">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
+<span class="fc bfc" id="L479" title="All 2 branches covered.">                for (int i = 0; i &lt; 10; i++) {</span>
+<span class="fc" id="L480">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
                 }
             }     
             
-<span class="fc" id="L486">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
-<span class="fc" id="L487">            decomposer.decompose();</span>
+<span class="fc" id="L484">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L485">            decomposer.decompose();</span>
             
-<span class="fc bfc" id="L489" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 9) {</span>
-<span class="fc" id="L490">                throw new CoincidentPointsException();</span>
+<span class="fc bfc" id="L487" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 9) {</span>
+<span class="fc" id="L488">                throw new CoincidentPointsException();</span>
             }
             
             //the right null-space of m contains the parameters a, b, c, d, e ,f
             //of the conic
-<span class="fc" id="L495">            Matrix V = decomposer.getV();                        </span>
+<span class="fc" id="L493">            Matrix v = decomposer.getV();</span>
             
-<span class="fc" id="L497">            double a = V.getElementAt(0, 9);</span>
-<span class="fc" id="L498">            double b = V.getElementAt(1, 9);</span>
-<span class="fc" id="L499">            double c = V.getElementAt(2, 9);</span>
-<span class="fc" id="L500">            double d = V.getElementAt(3, 9);</span>
+<span class="fc" id="L495">            double a = v.getElementAt(0, 9);</span>
+<span class="fc" id="L496">            double b = v.getElementAt(1, 9);</span>
+<span class="fc" id="L497">            double c = v.getElementAt(2, 9);</span>
+<span class="fc" id="L498">            double d = v.getElementAt(3, 9);</span>
             
-<span class="fc" id="L502">            double f = V.getElementAt(4, 9);</span>
-<span class="fc" id="L503">            double e = V.getElementAt(5, 9);            </span>
+<span class="fc" id="L500">            double f = v.getElementAt(4, 9);</span>
+<span class="fc" id="L501">            double e = v.getElementAt(5, 9);</span>
             
-<span class="fc" id="L505">            double g = V.getElementAt(6, 9);</span>
-<span class="fc" id="L506">            double h = V.getElementAt(7, 9);</span>
-<span class="fc" id="L507">            double i = V.getElementAt(8, 9);</span>
-<span class="fc" id="L508">            double j = V.getElementAt(9, 9);            </span>
+<span class="fc" id="L503">            double g = v.getElementAt(6, 9);</span>
+<span class="fc" id="L504">            double h = v.getElementAt(7, 9);</span>
+<span class="fc" id="L505">            double i = v.getElementAt(8, 9);</span>
+<span class="fc" id="L506">            double j = v.getElementAt(9, 9);</span>
             
-<span class="fc" id="L510">            setParameters(a, b, c, d, e, f, g, h, i, j);            </span>
-<span class="nc" id="L511">        } catch (AlgebraException ex) {</span>
-<span class="nc" id="L512">            throw new CoincidentPointsException(ex);</span>
-<span class="fc" id="L513">        }</span>
-<span class="fc" id="L514">    }</span>
+<span class="fc" id="L508">            setParameters(a, b, c, d, e, f, g, h, i, j);            </span>
+<span class="nc" id="L509">        } catch (AlgebraException ex) {</span>
+<span class="nc" id="L510">            throw new CoincidentPointsException(ex);</span>
+<span class="fc" id="L511">        }</span>
+<span class="fc" id="L512">    }</span>
     
     /**
      * Returns a plane tangent to this quadric at provided point, as long as
@@ -521,7 +519,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @throws NotLocusException if provided point is not locus of this quadric.
      */
     public Plane getTangentPlaneAt(Point3D point) throws NotLocusException {
-<span class="fc" id="L524">        return getTangentPlaneAt(point, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L522">        return getTangentPlaneAt(point, DEFAULT_LOCUS_THRESHOLD);</span>
     }
     
     /**
@@ -535,9 +533,9 @@ public class Quadric extends BaseQuadric implements Serializable {
      */
     public Plane getTangentPlaneAt(Point3D point, double threshold) 
             throws NotLocusException {
-<span class="fc" id="L538">        Plane plane = new Plane();</span>
-<span class="fc" id="L539">        tangentPlaneAt(point, plane, threshold);</span>
-<span class="fc" id="L540">        return plane;</span>
+<span class="fc" id="L536">        Plane plane = new Plane();</span>
+<span class="fc" id="L537">        tangentPlaneAt(point, plane, threshold);</span>
+<span class="fc" id="L538">        return plane;</span>
     }
     
     /**
@@ -551,30 +549,32 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @throws IllegalArgumentException if provided threshold is negtive.
      */
     public void tangentPlaneAt(Point3D point, Plane plane, double threshold)
-            throws NotLocusException, IllegalArgumentException {
+            throws NotLocusException {
         
-<span class="pc bpc" id="L556" title="1 of 2 branches missed.">        if (!isLocus(point, threshold)) {</span>
-<span class="nc" id="L557">            throw new NotLocusException();</span>
+<span class="pc bpc" id="L554" title="1 of 2 branches missed.">        if (!isLocus(point, threshold)) {</span>
+<span class="nc" id="L555">            throw new NotLocusException();</span>
         }
         
-<span class="fc" id="L560">        point.normalize();</span>
-<span class="fc" id="L561">        normalize();</span>
+<span class="fc" id="L558">        point.normalize();</span>
+<span class="fc" id="L559">        normalize();</span>
         
-<span class="fc" id="L563">        Matrix Q = asMatrix();</span>
+<span class="fc" id="L561">        Matrix q = asMatrix();</span>
         
         try {
-<span class="fc" id="L566">            Matrix p = new Matrix(</span>
+<span class="fc" id="L564">            Matrix p = new Matrix(</span>
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
-<span class="fc" id="L568">            p.setElementAt(0, 0, point.getHomX());</span>
-<span class="fc" id="L569">            p.setElementAt(1, 0, point.getHomY());</span>
-<span class="fc" id="L570">            p.setElementAt(2, 0, point.getHomZ());</span>
-<span class="fc" id="L571">            p.setElementAt(3, 0, point.getHomW());</span>
+<span class="fc" id="L566">            p.setElementAt(0, 0, point.getHomX());</span>
+<span class="fc" id="L567">            p.setElementAt(1, 0, point.getHomY());</span>
+<span class="fc" id="L568">            p.setElementAt(2, 0, point.getHomZ());</span>
+<span class="fc" id="L569">            p.setElementAt(3, 0, point.getHomW());</span>
             
-<span class="fc" id="L573">            Q.multiply(p);</span>
-<span class="pc" id="L574">        } catch (WrongSizeException ignore) { }</span>
+<span class="fc" id="L571">            q.multiply(p);</span>
+<span class="nc" id="L572">        } catch (WrongSizeException ignore) {</span>
+            //never happens
+<span class="fc" id="L574">        }</span>
         
-<span class="fc" id="L576">        plane.setParameters(Q.getElementAt(0, 0), Q.getElementAt(1, 0), </span>
-<span class="fc" id="L577">                Q.getElementAt(2, 0), Q.getElementAt(3, 0));</span>
+<span class="fc" id="L576">        plane.setParameters(q.getElementAt(0, 0), q.getElementAt(1, 0),</span>
+<span class="fc" id="L577">                q.getElementAt(2, 0), q.getElementAt(3, 0));</span>
         //TODO: must be tested
 <span class="fc" id="L579">    }</span>
     
@@ -619,12 +619,22 @@ public class Quadric extends BaseQuadric implements Serializable {
         //A*x^2 + 2*B*x*y + C*y^2 + 2*D*x*w + 2*E*y*w + F*w^2 = 0
         
         //Quadric parameters
-<span class="fc" id="L622">        double aQ = getA(), bQ = getB(), cQ = getC(), dQ = getD(), eQ = getE(),</span>
-<span class="fc" id="L623">                fQ = getF(), gQ = getG(), hQ = getH(), iQ = getI(), jQ = getJ();</span>
+<span class="fc" id="L622">        double aQ = getA();</span>
+<span class="fc" id="L623">        double bQ = getB();</span>
+<span class="fc" id="L624">        double cQ = getC();</span>
+<span class="fc" id="L625">        double dQ = getD();</span>
+<span class="fc" id="L626">        double eQ = getE();</span>
+<span class="fc" id="L627">        double fQ = getF();</span>
+<span class="fc" id="L628">        double gQ = getG();</span>
+<span class="fc" id="L629">        double hQ = getH();</span>
+<span class="fc" id="L630">        double iQ = getI();</span>
+<span class="fc" id="L631">        double jQ = getJ();</span>
         
         //Plane parameters
-<span class="fc" id="L626">        double aP = plane.getA(), bP = plane.getB(), cP = plane.getC(),</span>
-<span class="fc" id="L627">                dP = plane.getD();</span>
+<span class="fc" id="L634">        double aP = plane.getA();</span>
+<span class="fc" id="L635">        double bP = plane.getB();</span>
+<span class="fc" id="L636">        double cP = plane.getC();</span>
+<span class="fc" id="L637">        double dP = plane.getD();</span>
         
         //we solve the following system of equations:
         //aQ*x^2 + bQ*y^2 + cQ*z^2 + 2*dQ*x*y + 2*eQ*y*z + 2*fQ*x*z + 2*gQ*x*w + 2*hQ*y*w + 2*iQ*z*w + jQ*w^2 = 0
@@ -682,21 +692,21 @@ public class Quadric extends BaseQuadric implements Serializable {
         //eC = hQ - bP*iQ/cP - eQ*dP/cP + cQ*bP*dP/cP^2
         //fC = jQ - 2*dP*iQ/cP + cQ*dP^2/cP^2
 
-<span class="fc" id="L685">        double aP2 = aP * aP;</span>
-<span class="fc" id="L686">        double bP2 = bP * bP;</span>
-<span class="fc" id="L687">        double cP2 = cP * cP;</span>
-<span class="fc" id="L688">        double dP2 = dP * dP;</span>
+<span class="fc" id="L695">        double aP2 = aP * aP;</span>
+<span class="fc" id="L696">        double bP2 = bP * bP;</span>
+<span class="fc" id="L697">        double cP2 = cP * cP;</span>
+<span class="fc" id="L698">        double dP2 = dP * dP;</span>
 
-<span class="fc" id="L690">        double aC = aQ - 2.0*aP*fQ/cP + cQ*aP2/cP2;</span>
-<span class="fc" id="L691">        double bC = dQ - bP*fQ/cP - eQ*aP/cP</span>
+<span class="fc" id="L700">        double aC = aQ - 2.0*aP*fQ/cP + cQ*aP2/cP2;</span>
+<span class="fc" id="L701">        double bC = dQ - bP*fQ/cP - eQ*aP/cP</span>
                  + aP*bP*cQ/cP2;
-<span class="fc" id="L693">        double cC = bQ - 2.0*bP*eQ/cP + cQ*bP2/cP2;</span>
-<span class="fc" id="L694">        double dC = gQ - dP*fQ/cP - aP*iQ/cP + cQ*aP*dP/cP2;</span>
-<span class="fc" id="L695">        double eC = hQ - bP*iQ/cP - eQ*dP/cP + cQ*bP*dP/cP2;</span>
-<span class="fc" id="L696">        double fC = jQ - 2.0*dP*iQ/cP + cQ*dP2/cP2;</span>
+<span class="fc" id="L703">        double cC = bQ - 2.0*bP*eQ/cP + cQ*bP2/cP2;</span>
+<span class="fc" id="L704">        double dC = gQ - dP*fQ/cP - aP*iQ/cP + cQ*aP*dP/cP2;</span>
+<span class="fc" id="L705">        double eC = hQ - bP*iQ/cP - eQ*dP/cP + cQ*bP*dP/cP2;</span>
+<span class="fc" id="L706">        double fC = jQ - 2.0*dP*iQ/cP + cQ*dP2/cP2;</span>
         
-<span class="fc" id="L698">        result.setParameters(aC, bC, cC, dC, eC, fC);</span>
-<span class="fc" id="L699">    }</span>
+<span class="fc" id="L708">        result.setParameters(aC, bC, cC, dC, eC, fC);</span>
+<span class="fc" id="L709">    }</span>
     
     /**
      * Intersects this quadric with provided plane.
@@ -704,9 +714,9 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @return conic resulting from the intersection.
      */
     public Conic intersectWith(Plane plane) {
-<span class="fc" id="L707">        Conic result = new Conic();</span>
-<span class="fc" id="L708">        intersectWith(plane, result);</span>
-<span class="fc" id="L709">        return result;</span>
+<span class="fc" id="L717">        Conic result = new Conic();</span>
+<span class="fc" id="L718">        intersectWith(plane, result);</span>
+<span class="fc" id="L719">        return result;</span>
     }
     
     //TODO: shorted distance of point to quadric
