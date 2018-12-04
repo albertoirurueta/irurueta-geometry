@@ -101,8 +101,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * correspondences).
      */
     public LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(points3D, points2D);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -124,8 +123,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener, 
-            List<Point3D> points3D, List<Point2D> points2D)
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(listener, points3D, points2D);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -169,7 +167,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException {
+            List<Point2D> points2D) {
         super(intrinsic, points3D, points2D);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -193,7 +191,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     public LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener, 
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException {
+            List<Point2D> points2D) {
         super(listener, intrinsic, points3D, points2D);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -241,8 +239,7 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

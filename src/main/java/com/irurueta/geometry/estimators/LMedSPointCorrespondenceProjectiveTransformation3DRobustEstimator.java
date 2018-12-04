@@ -93,8 +93,7 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */    
     public LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         super(inputPoints, outputPoints);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;        
     }
@@ -127,8 +126,7 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
      */    
     public LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener,
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         super(listener, inputPoints, outputPoints);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;        
     }
@@ -176,8 +174,7 @@ public class LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

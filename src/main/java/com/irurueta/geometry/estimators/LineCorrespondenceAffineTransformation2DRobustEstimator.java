@@ -76,8 +76,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LineCorrespondenceAffineTransformation2DRobustEstimator(
-            List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException {
+            List<Line2D> inputLines, List<Line2D> outputLines) {
         super();
         internalSetLines(inputLines, outputLines);
     }
@@ -109,8 +108,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public LineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
-            List<Line2D> inputLines, List<Line2D> outputLines)
-            throws IllegalArgumentException {
+            List<Line2D> inputLines, List<Line2D> outputLines) {
         super(listener);
         internalSetLines(inputLines, outputLines);
     }
@@ -158,8 +156,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * already in progress.
      */
     public final void setLines(List<Line2D> inputLines, 
-            List<Line2D> outputLines) throws IllegalArgumentException,
-            LockedException {
+            List<Line2D> outputLines) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -202,8 +199,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * @throws IllegalArgumentException if provided quality scores length is 
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException { }
+    public void setQualityScores(double[] qualityScores) throws LockedException { }
     
     /**
      * Creates an affine 2D transformation estimator based on 2D line
@@ -244,7 +240,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(List<Line2D> inputLines, List<Line2D> outputLines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
@@ -315,7 +311,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
@@ -381,8 +377,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(List<Line2D> inputLines, List<Line2D> outputLines,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
@@ -457,8 +452,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
@@ -501,8 +495,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
-            create(List<Line2D> inputLines, List<Line2D> outputLines)
-            throws IllegalArgumentException {
+            create(List<Line2D> inputLines, List<Line2D> outputLines) {
         return create(inputLines, outputLines, DEFAULT_ROBUST_METHOD);
     }
             
@@ -533,8 +526,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
-            List<Line2D> inputLines, List<Line2D> outputLines)
-            throws IllegalArgumentException {
+            List<Line2D> inputLines, List<Line2D> outputLines) {
         return create(listener, inputLines, outputLines, 
                 DEFAULT_ROBUST_METHOD);
     }
@@ -566,7 +558,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(List<Line2D> inputLines, List<Line2D> outputLines,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(inputLines, outputLines, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }
@@ -604,7 +596,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, inputLines, outputLines, qualityScores,
                 DEFAULT_ROBUST_METHOD);
     }
@@ -621,7 +613,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetLines(List<Line2D> inputLines, 
-            List<Line2D> outputLines) throws IllegalArgumentException {
+            List<Line2D> outputLines) {
         if (inputLines.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

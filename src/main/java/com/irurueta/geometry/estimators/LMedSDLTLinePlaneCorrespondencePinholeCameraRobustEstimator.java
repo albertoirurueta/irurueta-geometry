@@ -93,8 +93,7 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
      * size or their size is smaller than required minimum size (4 matches).
      */
     public LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            List<Plane> planes, List<Line2D> lines) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         super(planes, lines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -127,8 +126,7 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
      */
     public LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List<Plane> planes, List<Line2D> lines)
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         super(listener, planes, lines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -176,8 +174,7 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

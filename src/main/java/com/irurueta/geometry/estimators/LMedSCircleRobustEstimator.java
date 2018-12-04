@@ -83,8 +83,7 @@ public class LMedSCircleRobustEstimator extends CircleRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public LMedSCircleRobustEstimator(List<Point2D> points) 
-            throws IllegalArgumentException {
+    public LMedSCircleRobustEstimator(List<Point2D> points) {
         super(points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -109,7 +108,7 @@ public class LMedSCircleRobustEstimator extends CircleRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public LMedSCircleRobustEstimator(CircleRobustEstimatorListener listener,
-            List<Point2D> points) throws IllegalArgumentException {
+            List<Point2D> points) {
         super(listener, points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -157,8 +156,7 @@ public class LMedSCircleRobustEstimator extends CircleRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

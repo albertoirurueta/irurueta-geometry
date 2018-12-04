@@ -82,8 +82,7 @@ public class LMedSSphereRobustEstimator extends SphereRobustEstimator{
      * @throws IllegalArgumentException if provided list of points don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public LMedSSphereRobustEstimator(List<Point3D> points) 
-            throws IllegalArgumentException {
+    public LMedSSphereRobustEstimator(List<Point3D> points) {
         super(points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -108,7 +107,7 @@ public class LMedSSphereRobustEstimator extends SphereRobustEstimator{
      * a size greater or equal than MINIMUM_SIZE.
      */
     public LMedSSphereRobustEstimator(SphereRobustEstimatorListener listener,
-            List<Point3D> points) throws IllegalArgumentException {
+            List<Point3D> points) {
         super(listener, points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -156,8 +155,7 @@ public class LMedSSphereRobustEstimator extends SphereRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

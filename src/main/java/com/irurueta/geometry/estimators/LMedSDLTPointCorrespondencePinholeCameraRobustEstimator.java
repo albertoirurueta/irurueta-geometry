@@ -126,8 +126,7 @@ public class LMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List<Point3D> points3D, List<Point2D> points2D)
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(listener, points3D, points2D);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
