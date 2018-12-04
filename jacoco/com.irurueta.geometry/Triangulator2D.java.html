@@ -96,12 +96,13 @@ public abstract class Triangulator2D {
      * @param method A triangulator method.
      * @return A triangulator for 2D polygons.
      */
+    @SuppressWarnings(&quot;all&quot;)
     public static Triangulator2D create(TriangulatorMethod method){
-<span class="fc" id="L100">        switch (method) {</span>
+<span class="fc" id="L101">        switch (method) {</span>
             case VAN_GOGH_TRIANGULATOR:
             default:
-<span class="fc" id="L103">                return new VanGoghTriangulator2D();</span>
-        }        
+<span class="fc" id="L104">                return new VanGoghTriangulator2D();</span>
+        }
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

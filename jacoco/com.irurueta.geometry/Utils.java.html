@@ -18,7 +18,7 @@ package com.irurueta.geometry;
 /**
  * Helper class containing commonly used methods related to geometry.
  */
-<span class="nc" id="L21">public class Utils {</span>
+public class Utils {
     /**
      * Amount to add/subtract to an angle in degrees to make a half turn.
      */
@@ -30,6 +30,12 @@ package com.irurueta.geometry;
      */
     @SuppressWarnings(&quot;WeakerAccess&quot;)
     public static final double HALF_TURN_RADIANS = Math.PI;
+
+    /**
+     * Constructor.
+     * Prevents instantiation.
+     */
+    private Utils() { }
     
     /**
      * Converts provided value from radians to degrees.
@@ -37,7 +43,7 @@ package com.irurueta.geometry;
      * @return Converted angle in degrees.
      */
     public static double convertToDegrees(double radians) {
-<span class="fc" id="L40">        return radians / Math.PI * 180.0;</span>
+<span class="fc" id="L46">        return radians / Math.PI * 180.0;</span>
     }
     
     /**
@@ -46,7 +52,7 @@ package com.irurueta.geometry;
      * @return Converted angle in radians.
      */
     public static double convertToRadians(double degrees) {
-<span class="fc" id="L49">        return degrees / 180.0 * Math.PI;</span>
+<span class="fc" id="L55">        return degrees / 180.0 * Math.PI;</span>
     }   
         
     /**
@@ -56,7 +62,7 @@ package com.irurueta.geometry;
      * @return the same angle but normalized.
      */
     public static double normalizeAngleDegrees(double angle) {
-<span class="fc" id="L59">        return normalizeAngle(angle, HALF_TURN_DEGREES);</span>
+<span class="fc" id="L65">        return normalizeAngle(angle, HALF_TURN_DEGREES);</span>
     }
     
     /**
@@ -66,7 +72,7 @@ package com.irurueta.geometry;
      * @return the same angle but normalized.
      */
     public static double normalizeAngleRadians(double angle) {
-<span class="fc" id="L69">        return normalizeAngle(angle, HALF_TURN_RADIANS);</span>
+<span class="fc" id="L75">        return normalizeAngle(angle, HALF_TURN_RADIANS);</span>
     }
     
     /**
@@ -80,24 +86,24 @@ package com.irurueta.geometry;
      * @return the same angle but normalized.
      */
     private static double normalizeAngle(double angle, double halfTurn) {
-<span class="fc" id="L83">        double result = angle;</span>
-<span class="fc" id="L84">        double fullTurn = 2.0 * halfTurn;</span>
+<span class="fc" id="L89">        double result = angle;</span>
+<span class="fc" id="L90">        double fullTurn = 2.0 * halfTurn;</span>
         
-<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (result &lt;= -halfTurn) {</span>
-<span class="fc" id="L87">            int nTurns = (int)Math.ceil(-result / fullTurn);</span>
-<span class="fc" id="L88">            result += nTurns * fullTurn;</span>
-<span class="fc bfc" id="L89" title="All 2 branches covered.">            if (result &gt; halfTurn) {</span>
-<span class="fc" id="L90">                result -= fullTurn;</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (result &lt;= -halfTurn) {</span>
+<span class="fc" id="L93">            int nTurns = (int)Math.ceil(-result / fullTurn);</span>
+<span class="fc" id="L94">            result += nTurns * fullTurn;</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            if (result &gt; halfTurn) {</span>
+<span class="fc" id="L96">                result -= fullTurn;</span>
             }
         }
-<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (result &gt; halfTurn) {</span>
-<span class="fc" id="L94">            int nTurns = (int)Math.ceil(result / fullTurn);</span>
-<span class="fc" id="L95">            result -= nTurns * fullTurn;</span>
-<span class="fc bfc" id="L96" title="All 2 branches covered.">            if(result &lt;= -halfTurn){</span>
-<span class="fc" id="L97">                result += fullTurn;</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (result &gt; halfTurn) {</span>
+<span class="fc" id="L100">            int nTurns = (int)Math.ceil(result / fullTurn);</span>
+<span class="fc" id="L101">            result -= nTurns * fullTurn;</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">            if(result &lt;= -halfTurn){</span>
+<span class="fc" id="L103">                result += fullTurn;</span>
             }
         }
-<span class="fc" id="L100">        return result;</span>
+<span class="fc" id="L106">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

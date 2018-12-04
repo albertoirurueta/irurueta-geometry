@@ -681,14 +681,14 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
             try {
 <span class="fc" id="L682">                ProjectiveTransformation3D result = </span>
                         new ProjectiveTransformation3D();
-<span class="nc" id="L684">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L684">                boolean improved = refiner.refine(result);</span>
                 
-<span class="nc bnc" id="L686" title="All 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L686" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="nc" id="L688">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L688">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="nc bnc" id="L691" title="All 2 branches missed.">                return improved ? result : transformation;</span>
+<span class="pc bpc" id="L691" title="1 of 2 branches missed.">                return improved ? result : transformation;</span>
 <span class="fc" id="L692">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
 <span class="fc" id="L694">                return transformation;</span>

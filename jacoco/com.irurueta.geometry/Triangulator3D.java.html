@@ -97,11 +97,12 @@ public abstract class Triangulator3D {
      * @param method A triangulator method.
      * @return A triangulator for 3D polygons.
      */
+    @SuppressWarnings(&quot;all&quot;)
     public static Triangulator3D create(TriangulatorMethod method) {
-<span class="fc" id="L101">        switch (method) {</span>
+<span class="fc" id="L102">        switch (method) {</span>
             case VAN_GOGH_TRIANGULATOR:
             default:
-<span class="fc" id="L104">                return new VanGoghTriangulator3D();</span>
+<span class="fc" id="L105">                return new VanGoghTriangulator3D();</span>
         }        
     }
 }

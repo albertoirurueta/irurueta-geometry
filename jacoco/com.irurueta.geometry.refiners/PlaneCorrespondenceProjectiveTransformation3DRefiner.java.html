@@ -240,7 +240,7 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
 <span class="fc" id="L240">            double finalTotalResidual = totalResidual(result);</span>
 <span class="fc bfc" id="L241" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
             
-<span class="pc bpc" id="L243" title="1 of 2 branches missed.">            if (mListener != null) {</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">            if (mListener != null) {</span>
 <span class="fc" id="L244">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
                         errorDecreased);
             }

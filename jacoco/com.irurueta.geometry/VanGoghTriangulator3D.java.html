@@ -24,7 +24,7 @@ import java.util.List;
  * polygons into triangles, which are the simplest geometric figure.
  * This implementation uses Van Gogh or Ear Cutting algorithm for triangulation.
  */
-public class VanGoghTriangulator3D extends Triangulator3D {
+<span class="fc" id="L27">public class VanGoghTriangulator3D extends Triangulator3D {</span>
    
     /**
      * Default orientation threshold which is 90º.
@@ -42,11 +42,6 @@ public class VanGoghTriangulator3D extends Triangulator3D {
     public static final int INHOM_COORDS = 3;
 
     /**
-     * Empty constructor.
-     */
-<span class="fc" id="L47">    public VanGoghTriangulator3D() { }</span>
-    
-    /**
      * Returns triangulator method.
      * Each method implementation will divide polygons into triangles using
      * different techniques.
@@ -54,7 +49,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      */    
     @Override
     public TriangulatorMethod getMethod() {
-<span class="nc" id="L57">        return TriangulatorMethod.VAN_GOGH_TRIANGULATOR;</span>
+<span class="nc" id="L52">        return TriangulatorMethod.VAN_GOGH_TRIANGULATOR;</span>
     }
     
     /**
@@ -69,10 +64,10 @@ public class VanGoghTriangulator3D extends Triangulator3D {
             throws TriangulatorException {
         //triangulation will modify provided list of vertices so we make a copy 
         //of it
-<span class="fc" id="L72">        List&lt;Point3D&gt; vertices = polygon.getVertices(); //original vertices</span>
-<span class="fc" id="L73">        List&lt;Point3D&gt; verticesCopy = new ArrayList&lt;&gt;(</span>
-<span class="fc" id="L74">                polygon.getVertices());</span>
-<span class="fc" id="L75">        return internalTriangulate(verticesCopy, null, vertices);</span>
+<span class="fc" id="L67">        List&lt;Point3D&gt; vertices = polygon.getVertices(); //original vertices</span>
+<span class="fc" id="L68">        List&lt;Point3D&gt; verticesCopy = new ArrayList&lt;&gt;(</span>
+<span class="fc" id="L69">                polygon.getVertices());</span>
+<span class="fc" id="L70">        return internalTriangulate(verticesCopy, null, vertices);</span>
     }
             
     /**
@@ -85,14 +80,14 @@ public class VanGoghTriangulator3D extends Triangulator3D {
     @Override
     public List&lt;Triangle3D&gt; triangulate(List&lt;Point3D&gt; vertices) 
             throws TriangulatorException {
-<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (vertices.size() &lt; MIN_VERTICES) {</span>
-<span class="nc" id="L89">            throw new TriangulatorException();</span>
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (vertices.size() &lt; MIN_VERTICES) {</span>
+<span class="nc" id="L84">            throw new TriangulatorException();</span>
         }
 
         //triangulation will modify provided list of vertices so we make a copy 
         //of it        
-<span class="fc" id="L94">        List&lt;Point3D&gt; verticesCopy = new ArrayList&lt;&gt;(vertices);</span>
-<span class="fc" id="L95">        return internalTriangulate(verticesCopy, null, vertices);</span>
+<span class="fc" id="L89">        List&lt;Point3D&gt; verticesCopy = new ArrayList&lt;&gt;(vertices);</span>
+<span class="fc" id="L90">        return internalTriangulate(verticesCopy, null, vertices);</span>
     }
     
     /**
@@ -110,153 +105,16 @@ public class VanGoghTriangulator3D extends Triangulator3D {
     @Override
     public List&lt;Triangle3D&gt; triangulate(List&lt;Point3D&gt; vertices,
             List&lt;int[]&gt; indices) throws TriangulatorException {
-<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        if (vertices.size() &lt; MIN_VERTICES) {</span>
-<span class="nc" id="L114">            throw new TriangulatorException();</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if (vertices.size() &lt; MIN_VERTICES) {</span>
+<span class="nc" id="L109">            throw new TriangulatorException();</span>
         }
 
         //triangulation will modify provided list of vertices so we make a copy 
         //of it        
-<span class="fc" id="L119">        List&lt;Point3D&gt; verticesCopy = new ArrayList&lt;&gt;(vertices);</span>
-<span class="fc" id="L120">        return internalTriangulate(verticesCopy, indices, vertices);        </span>
+<span class="fc" id="L114">        List&lt;Point3D&gt; verticesCopy = new ArrayList&lt;&gt;(vertices);</span>
+<span class="fc" id="L115">        return internalTriangulate(verticesCopy, indices, vertices);        </span>
     }
-    
-    /**
-     * Internal method that computes the actual triangulation.
-     * @param verticesCopy List of points considered as verticesCopy of a 
-     * polygon. This list will be modified after execution of this method
-     * @param indices List where indices of original verticesCopy will be 
-     * stored.
-     * This list can be used to refer to the original order of verticesCopy. 
-     * Notice that verticesCopy indices might be repeated because verticesCopy 
-     * might appear in more than one triangle after triangulation. If this 
-     * parameter is null, indices won't be stored in this list.
-     * @param originalVertices Reference to original list of vertices that won't
-     * be modified.
-     * @return List of triangles forming the polygon that has been triangulated.
-     * @throws TriangulatorException Raised if triangulation cannot be done.
-     * Usually this indicates numerical instability or polygon degeneracy.
-     */
-    private static List&lt;Triangle3D&gt; internalTriangulate(
-            List&lt;Point3D&gt; verticesCopy, List&lt;int[]&gt; indices, 
-            List&lt;Point3D&gt; originalVertices) throws TriangulatorException {
-<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if (verticesCopy.size() &lt; MIN_VERTICES) {</span>
-<span class="nc" id="L143">            throw new TriangulatorException();</span>
-        }
-        
-<span class="fc" id="L146">        List&lt;Triangle3D&gt; result = new LinkedList&lt;&gt;();</span>
-        
-        //boolean isConvex;
-        boolean isEar, madeCut;
-        
-<span class="fc" id="L151">        Triangle3D triangle = null; </span>
-        
-        // Second, apply algorithm
-<span class="fc bfc" id="L154" title="All 2 branches covered.">        while (verticesCopy.size() &gt; MIN_VERTICES) {</span>
-<span class="fc" id="L155">            madeCut = false;</span>
-<span class="fc" id="L156">            int lastElement = verticesCopy.size() - 1;</span>
-<span class="pc bpc" id="L157" title="1 of 2 branches missed.">            for (int i=0; i &lt;= lastElement; i++) {</span>
 
-
-<span class="pc bpc" id="L160" title="1 of 2 branches missed.">                if (i == 0) {</span>
-<span class="pc bpc" id="L161" title="1 of 2 branches missed.">                    if (triangle == null) {</span>
-                        //instantiate triangle if not already instantiated
-<span class="fc" id="L163">                        triangle = new Triangle3D(verticesCopy.get(lastElement),</span>
-<span class="fc" id="L164">                                verticesCopy.get(0), verticesCopy.get(1));</span>
-                    } else {
-<span class="nc" id="L166">                        triangle.setVertices(verticesCopy.get(lastElement),</span>
-<span class="nc" id="L167">                                verticesCopy.get(0), verticesCopy.get(1));</span>
-                    }
-<span class="nc bnc" id="L169" title="All 2 branches missed.">                } else if (i == lastElement) {</span>
-<span class="nc" id="L170">                    triangle.setVertices(verticesCopy.get(lastElement - 1),</span>
-<span class="nc" id="L171">                            verticesCopy.get(lastElement),</span>
-<span class="nc" id="L172">                            verticesCopy.get(0));</span>
-                } else {
-<span class="nc" id="L174">                    triangle.setVertices(verticesCopy.get(i - 1),</span>
-<span class="nc" id="L175">                            verticesCopy.get(i), verticesCopy.get(i + 1));</span>
-                }
-
-                try {
-<span class="fc" id="L179">                    isEar = isEar(triangle, verticesCopy);</span>
-<span class="nc" id="L180">                } catch (CoincidentPointsException e) {</span>
-<span class="nc" id="L181">                    isEar = false;</span>
-<span class="fc" id="L182">                }</span>
-                
-<span class="pc bpc" id="L184" title="1 of 2 branches missed.">                if (!isEar) {</span>
-<span class="nc" id="L185">                    continue;</span>
-                }
-
-                // If it is an ear, we build a face out of the triangle being 
-                //cut and remove it from polygon by cutting it
-<span class="fc" id="L190">                result.add(triangle);</span>
-<span class="fc" id="L191">                triangle = null; //so that it cannot be reused after being added</span>
-                
-                //cut ear
-<span class="fc" id="L194">                verticesCopy.remove(i);</span>
-<span class="fc" id="L195">                madeCut = true;</span>
-                
-                //Leave from FOR loop to loop again to new reduced verticesCopy set
-<span class="fc" id="L198">                break;</span>
-            }
-            
-            //if arrived here but no cut was made and polygon size contains
-            //more than 3 verticesCopy, then the algorithm failed for some reason
-<span class="pc bpc" id="L203" title="1 of 2 branches missed.">            if (!madeCut) {</span>
-<span class="nc" id="L204">                throw new TriangulatorException();</span>
-            }
-<span class="fc" id="L206">        }</span>
-
-        //instantiate final triangle
-<span class="fc" id="L209">        triangle = new Triangle3D(verticesCopy.get(0),</span>
-<span class="fc" id="L210">                verticesCopy.get(1), verticesCopy.get(2));</span>
-
-
-<span class="fc" id="L213">        boolean arePointsColinear = triangle.areVerticesColinear();</span>
-        
-        //only add final triangle if not colinear (area greater than small 
-        //threshold)
-<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (!arePointsColinear) {</span>
-<span class="fc" id="L218">            result.add(triangle);</span>
-        }
-
-        //add indices of triangles verticesCopy
-<span class="fc" id="L222">        computeIndices(originalVertices, result, indices);</span>
-
-<span class="fc" id="L224">        return result;</span>
-    }        
-    
-    /**
-     * Computes indices of resulting triangles vertices respect to original 
-     * polygon vertices. Indices are stored in provided indices list.
-     * @param vertices Vertices of polygon.
-     * @param triangles Triangles obtained after triangulation.
-     * @param indices Indices of original positions of resulting triangle's
-     * vertices.
-     */
-    private static void computeIndices(List&lt;Point3D&gt; vertices,
-            List&lt;Triangle3D&gt; triangles, List&lt;int[]&gt; indices) {
-<span class="fc bfc" id="L237" title="All 2 branches covered.">        if (indices != null) {</span>
-            int vertexCounter, triangleVertexCounter;
-            int[] triangleIndices;
-<span class="fc bfc" id="L240" title="All 2 branches covered.">            for (Triangle3D t : triangles) {</span>
-<span class="fc" id="L241">                triangleVertexCounter = 0;</span>
-<span class="fc" id="L242">                triangleIndices = new int[Triangle3D.NUM_VERTICES];</span>
-<span class="fc bfc" id="L243" title="All 2 branches covered.">                for (Point3D p1 : t.getVertices()) {</span>
-<span class="fc" id="L244">                    vertexCounter = 0;</span>
-<span class="pc bpc" id="L245" title="1 of 2 branches missed.">                    for (Point3D p2 : vertices) {</span>
-<span class="fc bfc" id="L246" title="All 2 branches covered.">                        if (p1 == p2) {</span>
-<span class="fc" id="L247">                            triangleIndices[triangleVertexCounter] = </span>
-                                    vertexCounter;
-<span class="fc" id="L249">                            break;</span>
-                        }
-<span class="fc" id="L251">                        vertexCounter++;</span>
-<span class="fc" id="L252">                    }</span>
-<span class="fc" id="L253">                    triangleVertexCounter++;</span>
-<span class="fc" id="L254">                }</span>
-<span class="fc" id="L255">                indices.add(triangleIndices);</span>
-<span class="fc" id="L256">            }</span>
-        }                
-<span class="fc" id="L258">    }</span>
-    
     /**
      * Determines if provided triangle can be considered as an ear of the 
      * remaining polygon formed by provided vertices.
@@ -273,36 +131,37 @@ public class VanGoghTriangulator3D extends Triangulator3D {
     public static boolean isEar(Triangle3D triangle, 
             List&lt;Point3D&gt; polygonVertices) throws CoincidentPointsException {
         
-        boolean isInside, isReversed; 
+        boolean isInside;
+        boolean isReversed;
         //in a counterclockwise polygon, reversed orientation means that 
         //triangle is not convex and cannot be an ear
         
-<span class="fc" id="L280">        List&lt;Point3D&gt; triangleVertices = triangle.getVertices();</span>
+<span class="fc" id="L139">        List&lt;Point3D&gt; triangleVertices = triangle.getVertices();</span>
         
         //check that no points in the polygon (aside from points belonging to
         //the triangle) lie inside the triangle
-<span class="fc bfc" id="L284" title="All 2 branches covered.">        for (Point3D testPoint : polygonVertices) {</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        for (Point3D testPoint : polygonVertices) {</span>
             //Do not compare with polygon elements which are triangle points
             //if end is reached then polygon and triangle is equal and hence the 
             //polygon is the ear            
-<span class="fc bfc" id="L288" title="All 2 branches covered.">            if (triangleVertices.contains(testPoint)) {</span>
-<span class="fc" id="L289">                continue;</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">            if (triangleVertices.contains(testPoint)) {</span>
+<span class="fc" id="L148">                continue;</span>
             }
             
-<span class="fc" id="L292">            isInside = triangle.isInside(testPoint);</span>
-<span class="fc" id="L293">            isReversed = isPolygonOrientationReversed(triangleVertices, </span>
+<span class="fc" id="L151">            isInside = triangle.isInside(testPoint);</span>
+<span class="fc" id="L152">            isReversed = isPolygonOrientationReversed(triangleVertices, </span>
                     polygonVertices);
             
             //if a point is inside the triangle or orientation is reversed, then
             //it is not an ear
-<span class="fc bfc" id="L298" title="All 4 branches covered.">            if (isInside || isReversed) {</span>
-<span class="fc" id="L299">                return false;</span>
+<span class="fc bfc" id="L157" title="All 4 branches covered.">            if (isInside || isReversed) {</span>
+<span class="fc" id="L158">                return false;</span>
             }
-<span class="fc" id="L301">        }</span>
+<span class="fc" id="L160">        }</span>
         
         //no points in the polygon where found inside the triangle and 
         //orientation is the same, so an ear is detected
-<span class="fc" id="L305">        return true;</span>
+<span class="fc" id="L164">        return true;</span>
         
     }        
     
@@ -321,7 +180,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      */
     public static boolean isPolygonOrientationReversed(List&lt;Point3D&gt; vertices1,
             List&lt;Point3D&gt; vertices2) throws CoincidentPointsException {
-<span class="fc" id="L324">        return isPolygonOrientationReversed(vertices1, vertices2, </span>
+<span class="fc" id="L183">        return isPolygonOrientationReversed(vertices1, vertices2, </span>
                 DEFAULT_ORIENTATION_THRESHOLD);
     }
 
@@ -343,11 +202,11 @@ public class VanGoghTriangulator3D extends Triangulator3D {
     public static boolean isPolygonOrientationReversed(List&lt;Point3D&gt; vertices1,
             List&lt;Point3D&gt; vertices2, double threshold) 
             throws IllegalArgumentException, CoincidentPointsException {
-<span class="pc bpc" id="L346" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="nc" id="L347">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="nc" id="L206">            throw new IllegalArgumentException();</span>
         }
     
-<span class="fc" id="L350">        return isOrientationReversed(Polygon3D.getAngleBetweenPolygons(</span>
+<span class="fc" id="L209">        return isOrientationReversed(Polygon3D.getAngleBetweenPolygons(</span>
                 vertices1, vertices2), threshold);
     }
 
@@ -359,7 +218,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      * DEFAULT_ORIENTATION_THRESHOLD, false otherwise.
      */
     public static boolean isOrientationReversed(double angle) {
-<span class="fc" id="L362">        return isOrientationReversed(angle, DEFAULT_ORIENTATION_THRESHOLD);</span>
+<span class="fc" id="L221">        return isOrientationReversed(angle, DEFAULT_ORIENTATION_THRESHOLD);</span>
     }
 
     /**
@@ -371,7 +230,144 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      * threshold, false otherwise.
      */    
     public static boolean isOrientationReversed(double angle, double threshold) {
-<span class="fc bfc" id="L374" title="All 2 branches covered.">        return Math.abs(angle) &gt; Math.abs(threshold);</span>
-    } 
+<span class="fc bfc" id="L233" title="All 2 branches covered.">        return Math.abs(angle) &gt; Math.abs(threshold);</span>
+    }
+
+    /**
+     * Internal method that computes the actual triangulation.
+     * @param verticesCopy List of points considered as verticesCopy of a
+     * polygon. This list will be modified after execution of this method
+     * @param indices List where indices of original verticesCopy will be
+     * stored.
+     * This list can be used to refer to the original order of verticesCopy.
+     * Notice that verticesCopy indices might be repeated because verticesCopy
+     * might appear in more than one triangle after triangulation. If this
+     * parameter is null, indices won't be stored in this list.
+     * @param originalVertices Reference to original list of vertices that won't
+     * be modified.
+     * @return List of triangles forming the polygon that has been triangulated.
+     * @throws TriangulatorException Raised if triangulation cannot be done.
+     * Usually this indicates numerical instability or polygon degeneracy.
+     */
+    private static List&lt;Triangle3D&gt; internalTriangulate(
+            List&lt;Point3D&gt; verticesCopy, List&lt;int[]&gt; indices,
+            List&lt;Point3D&gt; originalVertices) throws TriangulatorException {
+<span class="pc bpc" id="L255" title="1 of 2 branches missed.">        if (verticesCopy.size() &lt; MIN_VERTICES) {</span>
+<span class="nc" id="L256">            throw new TriangulatorException();</span>
+        }
+
+<span class="fc" id="L259">        List&lt;Triangle3D&gt; result = new LinkedList&lt;&gt;();</span>
+
+        //boolean isConvex;
+        boolean isEar;
+        boolean madeCut;
+
+<span class="fc" id="L265">        Triangle3D triangle = null;</span>
+
+        // Second, apply algorithm
+<span class="fc bfc" id="L268" title="All 2 branches covered.">        while (verticesCopy.size() &gt; MIN_VERTICES) {</span>
+<span class="fc" id="L269">            madeCut = false;</span>
+<span class="fc" id="L270">            int lastElement = verticesCopy.size() - 1;</span>
+<span class="pc bpc" id="L271" title="1 of 2 branches missed.">            for (int i=0; i &lt;= lastElement; i++) {</span>
+
+
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">                if (i == 0) {</span>
+<span class="pc bpc" id="L275" title="1 of 2 branches missed.">                    if (triangle == null) {</span>
+                        //instantiate triangle if not already instantiated
+<span class="fc" id="L277">                        triangle = new Triangle3D(verticesCopy.get(lastElement),</span>
+<span class="fc" id="L278">                                verticesCopy.get(0), verticesCopy.get(1));</span>
+                    } else {
+<span class="nc" id="L280">                        triangle.setVertices(verticesCopy.get(lastElement),</span>
+<span class="nc" id="L281">                                verticesCopy.get(0), verticesCopy.get(1));</span>
+                    }
+<span class="nc bnc" id="L283" title="All 2 branches missed.">                } else if (i == lastElement) {</span>
+<span class="nc" id="L284">                    triangle.setVertices(verticesCopy.get(lastElement - 1),</span>
+<span class="nc" id="L285">                            verticesCopy.get(lastElement),</span>
+<span class="nc" id="L286">                            verticesCopy.get(0));</span>
+                } else {
+<span class="nc" id="L288">                    triangle.setVertices(verticesCopy.get(i - 1),</span>
+<span class="nc" id="L289">                            verticesCopy.get(i), verticesCopy.get(i + 1));</span>
+                }
+
+                try {
+<span class="fc" id="L293">                    isEar = isEar(triangle, verticesCopy);</span>
+<span class="nc" id="L294">                } catch (CoincidentPointsException e) {</span>
+<span class="nc" id="L295">                    isEar = false;</span>
+<span class="fc" id="L296">                }</span>
+
+<span class="pc bpc" id="L298" title="1 of 2 branches missed.">                if (isEar) {</span>
+                    // If it is an ear, we build a face out of the triangle being
+                    //cut and remove it from polygon by cutting it
+<span class="fc" id="L301">                    result.add(triangle);</span>
+<span class="fc" id="L302">                    triangle = null; //so that it cannot be reused after being added</span>
+
+                    //cut ear
+<span class="fc" id="L305">                    verticesCopy.remove(i);</span>
+<span class="fc" id="L306">                    madeCut = true;</span>
+
+                    //Leave from FOR loop to loop again to new reduced verticesCopy set
+<span class="fc" id="L309">                    break;</span>
+                }
+            }
+
+            //if arrived here but no cut was made and polygon size contains
+            //more than 3 verticesCopy, then the algorithm failed for some reason
+<span class="pc bpc" id="L315" title="1 of 2 branches missed.">            if (!madeCut) {</span>
+<span class="nc" id="L316">                throw new TriangulatorException();</span>
+            }
+<span class="fc" id="L318">        }</span>
+
+        //instantiate final triangle
+<span class="fc" id="L321">        triangle = new Triangle3D(verticesCopy.get(0),</span>
+<span class="fc" id="L322">                verticesCopy.get(1), verticesCopy.get(2));</span>
+
+
+<span class="fc" id="L325">        boolean arePointsColinear = triangle.areVerticesColinear();</span>
+
+        //only add final triangle if not colinear (area greater than small
+        //threshold)
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">        if (!arePointsColinear) {</span>
+<span class="fc" id="L330">            result.add(triangle);</span>
+        }
+
+        //add indices of triangles verticesCopy
+<span class="fc" id="L334">        computeIndices(originalVertices, result, indices);</span>
+
+<span class="fc" id="L336">        return result;</span>
+    }
+
+    /**
+     * Computes indices of resulting triangles vertices respect to original
+     * polygon vertices. Indices are stored in provided indices list.
+     * @param vertices Vertices of polygon.
+     * @param triangles Triangles obtained after triangulation.
+     * @param indices Indices of original positions of resulting triangle's
+     * vertices.
+     */
+    private static void computeIndices(List&lt;Point3D&gt; vertices,
+                                       List&lt;Triangle3D&gt; triangles, List&lt;int[]&gt; indices) {
+<span class="fc bfc" id="L349" title="All 2 branches covered.">        if (indices != null) {</span>
+            int vertexCounter;
+            int triangleVertexCounter;
+            int[] triangleIndices;
+<span class="fc bfc" id="L353" title="All 2 branches covered.">            for (Triangle3D t : triangles) {</span>
+<span class="fc" id="L354">                triangleVertexCounter = 0;</span>
+<span class="fc" id="L355">                triangleIndices = new int[Triangle3D.NUM_VERTICES];</span>
+<span class="fc bfc" id="L356" title="All 2 branches covered.">                for (Point3D p1 : t.getVertices()) {</span>
+<span class="fc" id="L357">                    vertexCounter = 0;</span>
+<span class="pc bpc" id="L358" title="1 of 2 branches missed.">                    for (Point3D p2 : vertices) {</span>
+<span class="fc bfc" id="L359" title="All 2 branches covered.">                        if (p1 == p2) {</span>
+<span class="fc" id="L360">                            triangleIndices[triangleVertexCounter] =</span>
+                                    vertexCounter;
+<span class="fc" id="L362">                            break;</span>
+                        }
+<span class="fc" id="L364">                        vertexCounter++;</span>
+<span class="fc" id="L365">                    }</span>
+<span class="fc" id="L366">                    triangleVertexCounter++;</span>
+<span class="fc" id="L367">                }</span>
+<span class="fc" id="L368">                indices.add(triangleIndices);</span>
+<span class="fc" id="L369">            }</span>
+        }
+<span class="fc" id="L371">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

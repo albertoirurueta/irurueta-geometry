@@ -692,7 +692,7 @@ public abstract class DualQuadricRobustEstimator {
      * greater or equal than MINIMUM_SIZE.
      */
     public static DualQuadricRobustEstimator create(List&lt;Plane&gt; planes,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
 <span class="fc" id="L696">        return create(planes, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
@@ -707,9 +707,8 @@ public abstract class DualQuadricRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 9 planes).
      */
     public static DualQuadricRobustEstimator create(
-            DualQuadricRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
-<span class="fc" id="L712">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            DualQuadricRobustEstimatorListener listener, double[] qualityScores) {
+<span class="fc" id="L711">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -726,8 +725,8 @@ public abstract class DualQuadricRobustEstimator {
      */
     public static DualQuadricRobustEstimator create(
             DualQuadricRobustEstimatorListener listener, List&lt;Plane&gt; planes,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L730">        return create(listener, planes, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L729">        return create(listener, planes, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -759,13 +758,12 @@ public abstract class DualQuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes doesn't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    private void internalSetPlanes(List&lt;Plane&gt; planes)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L764" title="All 2 branches covered.">        if (planes.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L765">            throw new IllegalArgumentException();</span>
+    private void internalSetPlanes(List&lt;Plane&gt; planes) {
+<span class="fc bfc" id="L762" title="All 2 branches covered.">        if (planes.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L763">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L767">        mPlanes = planes;</span>
-<span class="fc" id="L768">    }</span>
+<span class="fc" id="L765">        mPlanes = planes;</span>
+<span class="fc" id="L766">    }</span>
     
     /**
      * Computes the residual between a dual quadric and a 3D plane.
@@ -774,28 +772,28 @@ public abstract class DualQuadricRobustEstimator {
      * @return residual.
      */
     protected double residual(DualQuadric dq, Plane plane) {
-<span class="fc" id="L777">        dq.normalize();</span>
+<span class="fc" id="L775">        dq.normalize();</span>
         try {
-<span class="fc bfc" id="L779" title="All 2 branches covered.">            if (mTestDualQ == null) {</span>
-<span class="fc" id="L780">                mTestDualQ = dq.asMatrix();</span>
+<span class="fc bfc" id="L777" title="All 2 branches covered.">            if (mTestDualQ == null) {</span>
+<span class="fc" id="L778">                mTestDualQ = dq.asMatrix();</span>
             } else {
-<span class="fc" id="L782">                dq.asMatrix(mTestDualQ);</span>
+<span class="fc" id="L780">                dq.asMatrix(mTestDualQ);</span>
             }
             
-<span class="fc bfc" id="L785" title="All 2 branches covered.">            if (mTestPlane == null) {</span>
-<span class="fc" id="L786">                mTestPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);</span>
+<span class="fc bfc" id="L783" title="All 2 branches covered.">            if (mTestPlane == null) {</span>
+<span class="fc" id="L784">                mTestPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);</span>
             }
-<span class="fc" id="L788">            plane.normalize();</span>
-<span class="fc" id="L789">            mTestPlane.setElementAt(0, 0, plane.getA());</span>
-<span class="fc" id="L790">            mTestPlane.setElementAt(1, 0, plane.getB());</span>
-<span class="fc" id="L791">            mTestPlane.setElementAt(2, 0, plane.getC());</span>
-<span class="fc" id="L792">            mTestPlane.setElementAt(3, 0, plane.getD());</span>
-<span class="fc" id="L793">            Matrix locusMatrix = mTestPlane.transposeAndReturnNew();</span>
-<span class="fc" id="L794">            locusMatrix.multiply(mTestDualQ);</span>
-<span class="fc" id="L795">            locusMatrix.multiply(mTestPlane);</span>
-<span class="fc" id="L796">            return Math.abs(locusMatrix.getElementAt(0, 0));</span>
-<span class="nc" id="L797">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L798">            return Double.MAX_VALUE;</span>
+<span class="fc" id="L786">            plane.normalize();</span>
+<span class="fc" id="L787">            mTestPlane.setElementAt(0, 0, plane.getA());</span>
+<span class="fc" id="L788">            mTestPlane.setElementAt(1, 0, plane.getB());</span>
+<span class="fc" id="L789">            mTestPlane.setElementAt(2, 0, plane.getC());</span>
+<span class="fc" id="L790">            mTestPlane.setElementAt(3, 0, plane.getD());</span>
+<span class="fc" id="L791">            Matrix locusMatrix = mTestPlane.transposeAndReturnNew();</span>
+<span class="fc" id="L792">            locusMatrix.multiply(mTestDualQ);</span>
+<span class="fc" id="L793">            locusMatrix.multiply(mTestPlane);</span>
+<span class="fc" id="L794">            return Math.abs(locusMatrix.getElementAt(0, 0));</span>
+<span class="nc" id="L795">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L796">            return Double.MAX_VALUE;</span>
         }
     }    
 }

@@ -2253,10 +2253,10 @@ com.irurueta:irurueta-geometry
 <th>Line</th></tr>
 <tr class="a">
 <td>com/irurueta/geometry/Triangle2D.java</td>
-<td><a href="./xref/com/irurueta/geometry/Triangle2D.html#L774">774</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/Triangle2D.html#L770">770</a></td></tr>
 <tr class="b">
 <td>com/irurueta/geometry/Triangle3D.java</td>
-<td><a href="./xref/com/irurueta/geometry/Triangle3D.html#L844">844</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/Triangle3D.html#L840">840</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
 <pre>        Point2D closest3 = line3.getClosestPoint(point, threshold);
@@ -2304,21 +2304,21 @@ com.irurueta:irurueta-geometry
             } else {
                 result.setCoordinates(closest2);
             }
-        } else if (!between1 &amp;&amp; between2) { // &amp;&amp; between3
+        } else if (!between1 &amp;&amp; between2) { // and between3
             //determine if closest2 or closest3
             if (distClosest2 &lt; distClosest3) {
                 result.setCoordinates(closest2);
             } else {
                 result.setCoordinates(closest3);
             }
-        } else if (between1 &amp;&amp; !between2) { // &amp;&amp; between3
+        } else if (between1 &amp;&amp; !between2) { // and between3
             //determine if closest1 or closest3
             if (distClosest1 &lt; distClosest3) {
                 result.setCoordinates(closest1);
             } else {
                 result.setCoordinates(closest3);
             }
-        } else if (between1) { // &amp;&amp; between2 &amp;&amp; between3
+        } else if (between1) { // and between2 and between3
             //determine if closest1, closest2 or closest3
             if (distClosest1 &lt; distClosest2 &amp;&amp; distClosest1 &lt; distClosest3) {
                 //pick closest1
@@ -2332,7 +2332,7 @@ com.irurueta:irurueta-geometry
                 result.setCoordinates(closest3);
             }
         } else {
-            //all clasest points are outside vertex limits, so we pick the
+            //all closest points are outside vertex limits, so we pick the
             //closest vertex
             
             if (distVertex1 &lt; distVertex2 &amp;&amp; distVertex1 &lt; distVertex3) {
@@ -2357,7 +2357,7 @@ com.irurueta:irurueta-geometry
      * @return True if provided point is locus, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Point2D point, double threshold) </pre></div></td></tr></table>
+    public boolean isLocus(Point2D point, double threshold) {</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="b">
 <th>File</th>
@@ -24249,6 +24249,41 @@ com.irurueta:irurueta-geometry
 <th>File</th>
 <th>Line</th></tr>
 <tr class="b">
+<td>com/irurueta/geometry/Polygon3D.java</td>
+<td><a href="./xref/com/irurueta/geometry/Polygon3D.html#L1062">1062</a></td></tr>
+<tr class="a">
+<td>com/irurueta/geometry/Triangle3D.java</td>
+<td><a href="./xref/com/irurueta/geometry/Triangle3D.html#L1220">1220</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>    private static double getAngleBetweenOrientations(double[] orientation1, 
+            double[] orientation2) {
+        if (orientation1.length != INHOM_COORDS ||
+                orientation2.length != INHOM_COORDS) {
+            throw new IllegalArgumentException();
+        }
+        
+        double x1 = orientation1[0];
+        double y1 = orientation1[1];
+        double z1 = orientation1[2];
+        
+        double x2 = orientation2[0];
+        double y2 = orientation2[1];
+        double z2 = orientation2[2];
+        
+        double norm1 = Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);
+        double norm2 = Math.sqrt(x2 * x2 + y2 * y2 + z2 * z2);
+        
+        double dotProduct = (x1 * x2 + y1 * y2 + z1 * z2) / (norm1 * norm2);
+        
+        return Math.acos(dotProduct);        
+    }        
+}</pre></div></td></tr></table>
+<table border="0" class="bodyTable">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
 <td>com/irurueta/geometry/refiners/LineCorrespondenceProjectiveTransformation2DRefiner.java</td>
 <td><a href="./xref/com/irurueta/geometry/refiners/LineCorrespondenceProjectiveTransformation2DRefiner.html#L212">212</a></td></tr>
 <tr class="a">
@@ -26405,40 +26440,6 @@ com.irurueta:irurueta-geometry
             @Override
             public boolean isReady() {
                 return LMedSLine2DRobustEstimator.this.isReady();</pre></div></td></tr></table>
-<table border="0" class="bodyTable">
-<tr class="b">
-<th>File</th>
-<th>Line</th></tr>
-<tr class="a">
-<td>com/irurueta/geometry/Polygon3D.java</td>
-<td><a href="./xref/com/irurueta/geometry/Polygon3D.html#L1063">1063</a></td></tr>
-<tr class="b">
-<td>com/irurueta/geometry/Triangle3D.java</td>
-<td><a href="./xref/com/irurueta/geometry/Triangle3D.html#L1229">1229</a></td></tr>
-<tr class="a"><td colspan='2'>
-<div>
-<pre>            double[] orientation2) {
-        if (orientation1.length != INHOM_COORDS ||
-                orientation2.length != INHOM_COORDS) {
-            throw new IllegalArgumentException();
-        }
-        
-        double x1 = orientation1[0];
-        double y1 = orientation1[1];
-        double z1 = orientation1[2];
-        
-        double x2 = orientation2[0];
-        double y2 = orientation2[1];
-        double z2 = orientation2[2];
-        
-        double norm1 = Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);
-        double norm2 = Math.sqrt(x2 * x2 + y2 * y2 + z2 * z2);
-        
-        double dotProduct = (x1 * x2 + y1 * y2 + z1 * z2) / (norm1 * norm2);
-        
-        return Math.acos(dotProduct);        
-    }        
-}</pre></div></td></tr></table>
 <table border="0" class="bodyTable">
 <tr class="b">
 <th>File</th>
@@ -29553,10 +29554,10 @@ com.irurueta:irurueta-geometry
 <th>Line</th></tr>
 <tr class="a">
 <td>com/irurueta/geometry/VanGoghTriangulator2D.java</td>
-<td><a href="./xref/com/irurueta/geometry/VanGoghTriangulator2D.html#L146">146</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/VanGoghTriangulator2D.html#L141">141</a></td></tr>
 <tr class="b">
 <td>com/irurueta/geometry/VanGoghTriangulator3D.java</td>
-<td><a href="./xref/com/irurueta/geometry/VanGoghTriangulator3D.html#L163">163</a></td></tr>
+<td><a href="./xref/com/irurueta/geometry/VanGoghTriangulator3D.html#L277">277</a></td></tr>
 <tr class="a"><td colspan='2'>
 <div>
 <pre>                        triangle = new Triangle2D(verticesCopy.get(lastElement),

@@ -66,18 +66,17 @@ public class Triangle3D implements Serializable {
      * @param vertex3 3rd vertex.
      * @throws NullPointerException Raised if any of the vertices is null.
      */
-    public Triangle3D(Point3D vertex1, Point3D vertex2, Point3D vertex3)
-<span class="fc" id="L70">        throws NullPointerException {</span>
+<span class="fc" id="L69">    public Triangle3D(Point3D vertex1, Point3D vertex2, Point3D vertex3) {</span>
         
-<span class="fc" id="L72">        setVertices(vertex1, vertex2, vertex3);</span>
-<span class="fc" id="L73">    }</span>
+<span class="fc" id="L71">        setVertices(vertex1, vertex2, vertex3);</span>
+<span class="fc" id="L72">    }</span>
 
     /**
      * Returns 1st vertex of this triangle.
      * @return 1st vertex.
      */
     public Point3D getVertex1() {
-<span class="fc" id="L80">        return mVertex1;</span>
+<span class="fc" id="L79">        return mVertex1;</span>
     }
     
     /**
@@ -85,19 +84,19 @@ public class Triangle3D implements Serializable {
      * @param vertex1 1st vertex.
      * @throws NullPointerException Raised if provided vertex is null.
      */
-    public void setVertex1(Point3D vertex1) throws NullPointerException {
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (vertex1 == null) {</span>
-<span class="fc" id="L90">            throw new NullPointerException();</span>
+    public void setVertex1(Point3D vertex1) {
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (vertex1 == null) {</span>
+<span class="fc" id="L89">            throw new NullPointerException();</span>
         }
-<span class="fc" id="L92">        this.mVertex1 = vertex1;</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L91">        this.mVertex1 = vertex1;</span>
+<span class="fc" id="L92">    }</span>
     
     /**
      * Returns 2nd vertex of this triangle.
      * @return 2nd vertex.
      */
     public Point3D getVertex2() {
-<span class="fc" id="L100">        return mVertex2;</span>
+<span class="fc" id="L99">        return mVertex2;</span>
     }
     
     /**
@@ -105,19 +104,19 @@ public class Triangle3D implements Serializable {
      * @param vertex2 2nd vertex.
      * @throws NullPointerException Raised if provided vertex is null.
      */
-    public void setVertex2(Point3D vertex2) throws NullPointerException {
-<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (vertex2 == null) {</span>
-<span class="fc" id="L110">            throw new NullPointerException();</span>
+    public void setVertex2(Point3D vertex2) {
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (vertex2 == null) {</span>
+<span class="fc" id="L109">            throw new NullPointerException();</span>
         }
-<span class="fc" id="L112">        this.mVertex2 = vertex2;</span>
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L111">        this.mVertex2 = vertex2;</span>
+<span class="fc" id="L112">    }</span>
     
     /**
      * Returns 3rd vertex of this triangle.
      * @return 3rd vertex.
      */
     public Point3D getVertex3() {
-<span class="fc" id="L120">        return mVertex3;</span>
+<span class="fc" id="L119">        return mVertex3;</span>
     }        
     
     /**
@@ -125,21 +124,21 @@ public class Triangle3D implements Serializable {
      * @param vertex3 3rd vertex.
      * @throws NullPointerException Raised if provided vertex is null.
      */
-    public void setVertex3(Point3D vertex3) throws NullPointerException {
-<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (vertex3 == null) {</span>
-<span class="fc" id="L130">            throw new NullPointerException();</span>
+    public void setVertex3(Point3D vertex3) {
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (vertex3 == null) {</span>
+<span class="fc" id="L129">            throw new NullPointerException();</span>
         }
-<span class="fc" id="L132">        this.mVertex3 = vertex3;</span>
-<span class="fc" id="L133">    }</span>
+<span class="fc" id="L131">        this.mVertex3 = vertex3;</span>
+<span class="fc" id="L132">    }</span>
     
     /**
      * Returns vertices of this triangle as a list of points.
      * @return Vertices of this triangle.
      */
     public List&lt;Point3D&gt; getVertices() {
-<span class="fc" id="L140">        List&lt;Point3D&gt; vertices = new ArrayList&lt;&gt;(NUM_VERTICES);</span>
-<span class="fc" id="L141">        vertices(vertices);</span>
-<span class="fc" id="L142">        return vertices;</span>
+<span class="fc" id="L139">        List&lt;Point3D&gt; vertices = new ArrayList&lt;&gt;(NUM_VERTICES);</span>
+<span class="fc" id="L140">        vertices(vertices);</span>
+<span class="fc" id="L141">        return vertices;</span>
     }
     
     /**
@@ -148,11 +147,11 @@ public class Triangle3D implements Serializable {
      * @param result list where vertices will be stored.
      */
     public void vertices(List&lt;Point3D&gt; result) {
-<span class="fc" id="L151">        result.clear();</span>
-<span class="fc" id="L152">        result.add(mVertex1);</span>
-<span class="fc" id="L153">        result.add(mVertex2);</span>
-<span class="fc" id="L154">        result.add(mVertex3);</span>
-<span class="fc" id="L155">    }</span>
+<span class="fc" id="L150">        result.clear();</span>
+<span class="fc" id="L151">        result.add(mVertex1);</span>
+<span class="fc" id="L152">        result.add(mVertex2);</span>
+<span class="fc" id="L153">        result.add(mVertex3);</span>
+<span class="fc" id="L154">    }</span>
     
     /**
      * Sets all vertices of this triangle.
@@ -162,15 +161,15 @@ public class Triangle3D implements Serializable {
      * @throws NullPointerException Raised if any of the vertices is null.
      */
     public final void setVertices(Point3D vertex1, Point3D vertex2, 
-            Point3D vertex3) throws NullPointerException {
-<span class="fc bfc" id="L166" title="All 6 branches covered.">        if (vertex1 == null || vertex2 == null || vertex3 == null) {</span>
-<span class="fc" id="L167">            throw new NullPointerException();</span>
+            Point3D vertex3) {
+<span class="fc bfc" id="L165" title="All 6 branches covered.">        if (vertex1 == null || vertex2 == null || vertex3 == null) {</span>
+<span class="fc" id="L166">            throw new NullPointerException();</span>
         }
         
-<span class="fc" id="L170">        mVertex1 = vertex1;</span>
-<span class="fc" id="L171">        mVertex2 = vertex2;</span>
-<span class="fc" id="L172">        mVertex3 = vertex3;</span>
-<span class="fc" id="L173">    }</span>
+<span class="fc" id="L169">        mVertex1 = vertex1;</span>
+<span class="fc" id="L170">        mVertex2 = vertex2;</span>
+<span class="fc" id="L171">        mVertex3 = vertex3;</span>
+<span class="fc" id="L172">    }</span>
     
     /**
      * Returns area of provided triangle.
@@ -178,8 +177,8 @@ public class Triangle3D implements Serializable {
      * @return Area of triangle.
      */
     public static double area(Triangle3D triangle) {
-<span class="fc" id="L181">        return area(triangle.getVertex1(), triangle.getVertex2(), </span>
-<span class="fc" id="L182">                triangle.getVertex3());</span>
+<span class="fc" id="L180">        return area(triangle.getVertex1(), triangle.getVertex2(), </span>
+<span class="fc" id="L181">                triangle.getVertex3());</span>
     }
 
     /**
@@ -196,26 +195,26 @@ public class Triangle3D implements Serializable {
         
         //Hence, having the vectors of the triangle defined as:
         //v1 = vertex2 - vertex1, and v2 = vertex3 - vertex1, then:
-<span class="fc" id="L199">        double inhomX1 = vertex1.getInhomX();</span>
-<span class="fc" id="L200">        double inhomY1 = vertex1.getInhomY();</span>
-<span class="fc" id="L201">        double inhomZ1 = vertex1.getInhomZ();</span>
+<span class="fc" id="L198">        double inhomX1 = vertex1.getInhomX();</span>
+<span class="fc" id="L199">        double inhomY1 = vertex1.getInhomY();</span>
+<span class="fc" id="L200">        double inhomZ1 = vertex1.getInhomZ();</span>
         
         //given triangle ABC made by vectors ab and ac
-<span class="fc" id="L204">        double abX = vertex2.getInhomX() - inhomX1;</span>
-<span class="fc" id="L205">        double abY = vertex2.getInhomY() - inhomY1;</span>
-<span class="fc" id="L206">        double abZ = vertex2.getInhomZ() - inhomZ1;</span>
+<span class="fc" id="L203">        double abX = vertex2.getInhomX() - inhomX1;</span>
+<span class="fc" id="L204">        double abY = vertex2.getInhomY() - inhomY1;</span>
+<span class="fc" id="L205">        double abZ = vertex2.getInhomZ() - inhomZ1;</span>
         
-<span class="fc" id="L208">        double acX = vertex3.getInhomX() - inhomX1;</span>
-<span class="fc" id="L209">        double acY = vertex3.getInhomY() - inhomY1;</span>
-<span class="fc" id="L210">        double acZ = vertex3.getInhomZ() - inhomZ1;</span>
+<span class="fc" id="L207">        double acX = vertex3.getInhomX() - inhomX1;</span>
+<span class="fc" id="L208">        double acY = vertex3.getInhomY() - inhomY1;</span>
+<span class="fc" id="L209">        double acZ = vertex3.getInhomZ() - inhomZ1;</span>
         
         //the area of ABC is half the modulus of the cross product of 
         //vectors ab and ac
-<span class="fc" id="L214">        double crossX = abY * acZ - abZ * acY;</span>
-<span class="fc" id="L215">        double crossY = abZ * acX - abX * acZ;</span>
-<span class="fc" id="L216">        double crossZ = abX * acY - abY * acX;</span>
+<span class="fc" id="L213">        double crossX = abY * acZ - abZ * acY;</span>
+<span class="fc" id="L214">        double crossY = abZ * acX - abX * acZ;</span>
+<span class="fc" id="L215">        double crossZ = abX * acY - abY * acX;</span>
         
-<span class="fc" id="L218">        return 0.5 * Math.sqrt(crossX * crossX +</span>
+<span class="fc" id="L217">        return 0.5 * Math.sqrt(crossX * crossX +</span>
                 crossY * crossY + crossZ * crossZ);        
     }
     
@@ -224,7 +223,7 @@ public class Triangle3D implements Serializable {
      * @return Area of this triangle.
      */
     public double getArea() {
-<span class="fc" id="L227">        return area(mVertex1, mVertex2, mVertex3);</span>
+<span class="fc" id="L226">        return area(mVertex1, mVertex2, mVertex3);</span>
     }
     
     /**
@@ -234,7 +233,7 @@ public class Triangle3D implements Serializable {
      * @return True if vertices are colinear, false otherwise.
      */
     public boolean areVerticesColinear() {
-<span class="fc" id="L237">        return areVerticesColinear(DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L236">        return areVerticesColinear(DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -247,13 +246,12 @@ public class Triangle3D implements Serializable {
      * @return True if vertices are colinear, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean areVerticesColinear(double threshold) 
-            throws IllegalArgumentException {
+    public boolean areVerticesColinear(double threshold) {
         
-<span class="fc bfc" id="L253" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L254">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L252">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L256" title="All 2 branches covered.">        return getArea() &lt;= threshold;</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">        return getArea() &lt;= threshold;</span>
     }    
     
     /**
@@ -262,8 +260,8 @@ public class Triangle3D implements Serializable {
      * @return Perimeter of provided triangle.
      */
     public static double perimeter(Triangle3D triangle) {
-<span class="fc" id="L265">        return perimeter(triangle.getVertex1(), triangle.getVertex2(),</span>
-<span class="fc" id="L266">                triangle.getVertex3());</span>
+<span class="fc" id="L263">        return perimeter(triangle.getVertex1(), triangle.getVertex2(),</span>
+<span class="fc" id="L264">                triangle.getVertex3());</span>
     }
     
     /**
@@ -275,8 +273,8 @@ public class Triangle3D implements Serializable {
      */
     public static double perimeter(Point3D vertex1, Point3D vertex2, 
             Point3D vertex3) {
-<span class="fc" id="L278">        return vertex1.distanceTo(vertex2) + vertex2.distanceTo(vertex3) +</span>
-<span class="fc" id="L279">                vertex3.distanceTo(vertex1);</span>
+<span class="fc" id="L276">        return vertex1.distanceTo(vertex2) + vertex2.distanceTo(vertex3) +</span>
+<span class="fc" id="L277">                vertex3.distanceTo(vertex1);</span>
     }
     
     /**
@@ -284,7 +282,7 @@ public class Triangle3D implements Serializable {
      * @return Perimeter of this triangle.
      */
     public double getPerimeter() {
-<span class="fc" id="L287">        return perimeter(this);</span>
+<span class="fc" id="L285">        return perimeter(this);</span>
     }    
     
     /**
@@ -295,7 +293,7 @@ public class Triangle3D implements Serializable {
      * @return True if point lies inside this triangle, false otherwise.
      */
     public boolean isInside(Point3D point) {
-<span class="fc" id="L298">        return isInside(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L296">        return isInside(point, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -309,9 +307,8 @@ public class Triangle3D implements Serializable {
      * @return True if point lies inside this triangle, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isInside(Point3D point, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L314">        return isInside(mVertex1, mVertex2, mVertex3, point, threshold);</span>
+    public boolean isInside(Point3D point, double threshold) {
+<span class="fc" id="L311">        return isInside(mVertex1, mVertex2, mVertex3, point, threshold);</span>
     }
     
     /**
@@ -323,7 +320,7 @@ public class Triangle3D implements Serializable {
      * @return True if point lies inside provided triangle, false otherwise.
      */
     public static boolean isInside(Triangle3D triangle, Point3D point) {
-<span class="fc" id="L326">        return isInside(triangle, point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L323">        return isInside(triangle, point, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -339,9 +336,9 @@ public class Triangle3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public static boolean isInside(Triangle3D triangle, Point3D point,
-            double threshold) throws IllegalArgumentException {
-<span class="fc" id="L343">        return isInside(triangle.getVertex1(), triangle.getVertex2(), </span>
-<span class="fc" id="L344">                triangle.getVertex3(), point, threshold);</span>
+            double threshold) {
+<span class="fc" id="L340">        return isInside(triangle.getVertex1(), triangle.getVertex2(), </span>
+<span class="fc" id="L341">                triangle.getVertex3(), point, threshold);</span>
     }
     
     /**
@@ -358,7 +355,7 @@ public class Triangle3D implements Serializable {
      */
     public static boolean isInside(Point3D vertex1, Point3D vertex2,
             Point3D vertex3, Point3D point) {
-<span class="fc" id="L361">        return isInside(vertex1, vertex2, vertex3, point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L358">        return isInside(vertex1, vertex2, vertex3, point, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -378,10 +375,9 @@ public class Triangle3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public static boolean isInside(Point3D vertex1, Point3D vertex2, 
-            Point3D vertex3, Point3D point, double threshold) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L383" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L384">            throw new IllegalArgumentException();</span>
+            Point3D vertex3, Point3D point, double threshold) {
+<span class="fc bfc" id="L379" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L380">            throw new IllegalArgumentException();</span>
         }
         //given triangle ABC made by vectors:
         //ab = p2 - p1, and ac = p3 - p1
@@ -397,13 +393,13 @@ public class Triangle3D implements Serializable {
         //certain accuracy to account for numerical precision)
         
         //Then the areas of triangles are:
-<span class="fc" id="L400">        double areaABC = area(vertex1, vertex2, vertex3);</span>
+<span class="fc" id="L396">        double areaABC = area(vertex1, vertex2, vertex3);</span>
         
-<span class="fc" id="L402">        double areaApB = area(vertex1, point, vertex2);</span>
-<span class="fc" id="L403">        double areaBpC = area(vertex2, point, vertex3);</span>
-<span class="fc" id="L404">        double areaApC = area(vertex3, point, vertex1);</span>
+<span class="fc" id="L398">        double areaApB = area(vertex1, point, vertex2);</span>
+<span class="fc" id="L399">        double areaBpC = area(vertex2, point, vertex3);</span>
+<span class="fc" id="L400">        double areaApC = area(vertex3, point, vertex1);</span>
         
-<span class="fc bfc" id="L406" title="All 2 branches covered.">        return Math.abs(areaApB + areaBpC + areaApC - areaABC) &lt;= threshold;        </span>
+<span class="fc bfc" id="L402" title="All 2 branches covered.">        return Math.abs(areaApB + areaBpC + areaApC - areaABC) &lt;= threshold;        </span>
     }    
     
     /**
@@ -415,7 +411,7 @@ public class Triangle3D implements Serializable {
      * colinear (triangle has area equal or very close to 0.0).
      */
     public Plane toPlane() throws ColinearPointsException {
-<span class="fc" id="L418">        return new Plane(mVertex1, mVertex2, mVertex3);</span>
+<span class="fc" id="L414">        return new Plane(mVertex1, mVertex2, mVertex3);</span>
     }
     
     /**
@@ -428,8 +424,8 @@ public class Triangle3D implements Serializable {
      * colinear (triangle has area equal or very close to 0.0).
      */
     public void toPlane(Plane result) throws ColinearPointsException {
-<span class="fc" id="L431">        result.setParametersFromThreePoints(mVertex1, mVertex2, mVertex3);</span>
-<span class="fc" id="L432">    }</span>
+<span class="fc" id="L427">        result.setParametersFromThreePoints(mVertex1, mVertex2, mVertex3);</span>
+<span class="fc" id="L428">    }</span>
     
     /**
      * Returns center of this triangle, which is the result of averaging its
@@ -437,9 +433,9 @@ public class Triangle3D implements Serializable {
      * @return Center of this triangle.
      */
     public Point3D getCenter() {
-<span class="fc" id="L440">        Point3D result = Point3D.create();</span>
-<span class="fc" id="L441">        center(result);</span>
-<span class="fc" id="L442">        return result;</span>
+<span class="fc" id="L436">        Point3D result = Point3D.create();</span>
+<span class="fc" id="L437">        center(result);</span>
+<span class="fc" id="L438">        return result;</span>
     }
     
     /**
@@ -449,8 +445,8 @@ public class Triangle3D implements Serializable {
      * @param result Point instance where center will be stored.
      */
     public void center(Point3D result) {
-<span class="fc" id="L452">        center(mVertex1, mVertex2, mVertex3, result);</span>
-<span class="fc" id="L453">    }</span>
+<span class="fc" id="L448">        center(mVertex1, mVertex2, mVertex3, result);</span>
+<span class="fc" id="L449">    }</span>
     
     /**
      * Computes the center of a triangle formed by provided vertices.
@@ -462,9 +458,9 @@ public class Triangle3D implements Serializable {
      */
     public static Point3D center(Point3D vertex1, Point3D vertex2, 
             Point3D vertex3) {
-<span class="fc" id="L465">        Point3D result = Point3D.create();</span>
-<span class="fc" id="L466">        center(vertex1, vertex2, vertex3, result);</span>
-<span class="fc" id="L467">        return result;</span>
+<span class="fc" id="L461">        Point3D result = Point3D.create();</span>
+<span class="fc" id="L462">        center(vertex1, vertex2, vertex3, result);</span>
+<span class="fc" id="L463">        return result;</span>
     }
     
     /**
@@ -475,7 +471,7 @@ public class Triangle3D implements Serializable {
      * @return Center of provided triangle.
      */
     public static Point3D center(Triangle3D t) {
-<span class="fc" id="L478">        return center(t.getVertex1(), t.getVertex2(), t.getVertex3());</span>
+<span class="fc" id="L474">        return center(t.getVertex1(), t.getVertex2(), t.getVertex3());</span>
     }
     
     /**
@@ -490,18 +486,15 @@ public class Triangle3D implements Serializable {
     public static void center(Point3D vertex1, Point3D vertex2, Point3D vertex3,
             Point3D result) {
         
-        double x, y, z;
-        
-<span class="fc" id="L495">        x = (vertex1.getInhomX() + vertex2.getInhomX() + vertex3.getInhomX()) / </span>
+<span class="fc" id="L489">        double x = (vertex1.getInhomX() + vertex2.getInhomX() + vertex3.getInhomX()) /</span>
                 3.0;
-<span class="fc" id="L497">        y = (vertex1.getInhomY() + vertex2.getInhomY() + vertex3.getInhomY()) / </span>
+<span class="fc" id="L491">        double y = (vertex1.getInhomY() + vertex2.getInhomY() + vertex3.getInhomY()) /</span>
                 3.0;
-<span class="fc" id="L499">        z = (vertex1.getInhomZ() + vertex2.getInhomZ() + vertex3.getInhomZ()) / </span>
+<span class="fc" id="L493">        double z = (vertex1.getInhomZ() + vertex2.getInhomZ() + vertex3.getInhomZ()) /</span>
                 3.0;
         
-        
-<span class="fc" id="L503">        result.setInhomogeneousCoordinates(x, y, z);</span>
-<span class="fc" id="L504">    }</span>
+<span class="fc" id="L496">        result.setInhomogeneousCoordinates(x, y, z);</span>
+<span class="fc" id="L497">    }</span>
     
     /**
      * Computes the center of provided triangle and stores the result in 
@@ -512,8 +505,8 @@ public class Triangle3D implements Serializable {
      * @param result Point instance where center will be stored.
      */
     public static void center(Triangle3D t, Point3D result) {
-<span class="fc" id="L515">        center(t.getVertex1(), t.getVertex2(), t.getVertex3(), result);</span>
-<span class="fc" id="L516">    }</span>
+<span class="fc" id="L508">        center(t.getVertex1(), t.getVertex2(), t.getVertex3(), result);</span>
+<span class="fc" id="L509">    }</span>
     
     /**
      * Computes the shortest distance from a given point to the boundaries of
@@ -524,7 +517,7 @@ public class Triangle3D implements Serializable {
      * @return Shortest distance to this triangle.
      */
     public double getShortestDistance(Point3D point) {
-<span class="fc" id="L527">        return shortestDistance(this, point);</span>
+<span class="fc" id="L520">        return shortestDistance(this, point);</span>
     }
     
     /**
@@ -539,8 +532,8 @@ public class Triangle3D implements Serializable {
      */
     public static double shortestDistance(Triangle3D triangle, Point3D point) {
         
-<span class="fc" id="L542">        return shortestDistance(triangle.getVertex1(), triangle.getVertex2(),</span>
-<span class="fc" id="L543">                triangle.getVertex3(), point);</span>
+<span class="fc" id="L535">        return shortestDistance(triangle.getVertex1(), triangle.getVertex2(),</span>
+<span class="fc" id="L536">                triangle.getVertex3(), point);</span>
     }
     
     /**
@@ -559,125 +552,126 @@ public class Triangle3D implements Serializable {
             Point3D vertex3, Point3D point) {
         
         //normalize points to increase accuracy
-<span class="fc" id="L562">        vertex1.normalize();</span>
-<span class="fc" id="L563">        vertex2.normalize();</span>
-<span class="fc" id="L564">        vertex3.normalize();</span>
-<span class="fc" id="L565">        point.normalize();</span>
+<span class="fc" id="L555">        vertex1.normalize();</span>
+<span class="fc" id="L556">        vertex2.normalize();</span>
+<span class="fc" id="L557">        vertex3.normalize();</span>
+<span class="fc" id="L558">        point.normalize();</span>
         
-<span class="fc" id="L567">        double bestDist = Double.MAX_VALUE, dist = Double.MAX_VALUE;</span>
+<span class="fc" id="L560">        double bestDist = Double.MAX_VALUE;</span>
+<span class="fc" id="L561">        double dist = Double.MAX_VALUE;</span>
         
-<span class="fc" id="L569">        Line3D line = null;</span>
+<span class="fc" id="L563">        Line3D line = null;</span>
         try {
-<span class="fc" id="L571">            line = new Line3D(vertex1, vertex2);</span>
-<span class="fc" id="L572">            line.normalize(); //to increase accuracy</span>
-<span class="fc bfc" id="L573" title="All 2 branches covered.">            if (line.isLocus(point)) {</span>
-<span class="fc bfc" id="L574" title="All 2 branches covered.">                if (point.isBetween(vertex1, vertex2)) {</span>
-<span class="fc" id="L575">                    return 0.0;</span>
+<span class="fc" id="L565">            line = new Line3D(vertex1, vertex2);</span>
+<span class="fc" id="L566">            line.normalize(); //to increase accuracy</span>
+<span class="fc bfc" id="L567" title="All 2 branches covered.">            if (line.isLocus(point)) {</span>
+<span class="fc bfc" id="L568" title="All 2 branches covered.">                if (point.isBetween(vertex1, vertex2)) {</span>
+<span class="fc" id="L569">                    return 0.0;</span>
                 } else {
                     //point is outside the triangle and
                     //point belongs to the line forming this side of the 
                     //triangle, hence the closest vertex of this line will be 
                     //the shortest distance
-<span class="fc" id="L581">                    bestDist = vertex1.distanceTo(point);</span>
-<span class="fc" id="L582">                    dist = vertex2.distanceTo(point);</span>
-<span class="pc bpc" id="L583" title="1 of 2 branches missed.">                    if (dist &lt; bestDist) {</span>
-<span class="nc" id="L584">                        bestDist = dist;</span>
+<span class="fc" id="L575">                    bestDist = vertex1.distanceTo(point);</span>
+<span class="fc" id="L576">                    dist = vertex2.distanceTo(point);</span>
+<span class="pc bpc" id="L577" title="1 of 2 branches missed.">                    if (dist &lt; bestDist) {</span>
+<span class="nc" id="L578">                        bestDist = dist;</span>
                     }
             
-<span class="fc" id="L587">                    return bestDist;</span>
+<span class="fc" id="L581">                    return bestDist;</span>
                 }
             }
         
             //point does not belong to the first line
-<span class="fc" id="L592">            bestDist = Math.abs(line.getDistance(point));</span>
-<span class="nc" id="L593">        } catch (CoincidentPointsException e) {</span>
-<span class="nc bnc" id="L594" title="All 2 branches missed.">            if (point.equals(vertex1)) {</span>
-<span class="nc" id="L595">                return vertex1.distanceTo(point);</span>
+<span class="fc" id="L586">            bestDist = Math.abs(line.getDistance(point));</span>
+<span class="nc" id="L587">        } catch (CoincidentPointsException e) {</span>
+<span class="nc bnc" id="L588" title="All 2 branches missed.">            if (point.equals(vertex1)) {</span>
+<span class="nc" id="L589">                return vertex1.distanceTo(point);</span>
             }
-<span class="nc bnc" id="L597" title="All 2 branches missed.">            if (point.equals(vertex2)) {</span>
-<span class="nc" id="L598">                return vertex2.distanceTo(point);</span>
+<span class="nc bnc" id="L591" title="All 2 branches missed.">            if (point.equals(vertex2)) {</span>
+<span class="nc" id="L592">                return vertex2.distanceTo(point);</span>
             }
-<span class="fc" id="L600">        }</span>
+<span class="fc" id="L594">        }</span>
 
-<span class="pc bpc" id="L602" title="1 of 2 branches missed.">        if (line == null) {</span>
-<span class="nc" id="L603">            return bestDist;</span>
+<span class="pc bpc" id="L596" title="1 of 2 branches missed.">        if (line == null) {</span>
+<span class="nc" id="L597">            return bestDist;</span>
         }
         
         //try on second side of the triangle
         try {
-<span class="fc" id="L608">            line.setPlanesFromPoints(vertex1, vertex3);</span>
-<span class="fc" id="L609">            line.normalize(); //to increase accuracy</span>
-<span class="fc bfc" id="L610" title="All 2 branches covered.">            if (line.isLocus(point)) {</span>
-<span class="pc bpc" id="L611" title="1 of 2 branches missed.">                if (point.isBetween(vertex1, vertex3)) {</span>
-<span class="fc" id="L612">                    return 0.0;</span>
+<span class="fc" id="L602">            line.setPlanesFromPoints(vertex1, vertex3);</span>
+<span class="fc" id="L603">            line.normalize(); //to increase accuracy</span>
+<span class="fc bfc" id="L604" title="All 2 branches covered.">            if (line.isLocus(point)) {</span>
+<span class="pc bpc" id="L605" title="1 of 2 branches missed.">                if (point.isBetween(vertex1, vertex3)) {</span>
+<span class="fc" id="L606">                    return 0.0;</span>
                 } else {
                     //point belongs to the line forming this side of the 
                     //triangle, hence the closest vertex of this line will be 
                     //the shortest distance
-<span class="nc" id="L617">                    bestDist = vertex1.distanceTo(point);</span>
-<span class="nc" id="L618">                    dist = vertex3.distanceTo(point);</span>
-<span class="nc bnc" id="L619" title="All 2 branches missed.">                    if (dist &lt; bestDist) {</span>
-<span class="nc" id="L620">                        bestDist = dist;</span>
+<span class="nc" id="L611">                    bestDist = vertex1.distanceTo(point);</span>
+<span class="nc" id="L612">                    dist = vertex3.distanceTo(point);</span>
+<span class="nc bnc" id="L613" title="All 2 branches missed.">                    if (dist &lt; bestDist) {</span>
+<span class="nc" id="L614">                        bestDist = dist;</span>
                     }
             
-<span class="nc" id="L623">                    return bestDist;</span>
+<span class="nc" id="L617">                    return bestDist;</span>
                 }
             }
         
             //point does not belong to the first or second line
-<span class="fc" id="L628">            dist = Math.abs(line.getDistance(point));</span>
-<span class="nc" id="L629">        } catch (CoincidentPointsException e) {</span>
-<span class="nc bnc" id="L630" title="All 2 branches missed.">            if (point.equals(vertex1)) {</span>
-<span class="nc" id="L631">                return vertex1.distanceTo(point);</span>
+<span class="fc" id="L622">            dist = Math.abs(line.getDistance(point));</span>
+<span class="nc" id="L623">        } catch (CoincidentPointsException e) {</span>
+<span class="nc bnc" id="L624" title="All 2 branches missed.">            if (point.equals(vertex1)) {</span>
+<span class="nc" id="L625">                return vertex1.distanceTo(point);</span>
             }
-<span class="nc bnc" id="L633" title="All 2 branches missed.">            if (point.equals(vertex3)) {</span>
-<span class="nc" id="L634">                return vertex3.distanceTo(point);</span>
+<span class="nc bnc" id="L627" title="All 2 branches missed.">            if (point.equals(vertex3)) {</span>
+<span class="nc" id="L628">                return vertex3.distanceTo(point);</span>
             }
-<span class="fc" id="L636">        }</span>
+<span class="fc" id="L630">        }</span>
         
         //check if second line is closest to first line
-<span class="fc bfc" id="L639" title="All 2 branches covered.">        if (dist &lt; bestDist) {</span>
-<span class="fc" id="L640">            bestDist = dist;</span>
+<span class="fc bfc" id="L633" title="All 2 branches covered.">        if (dist &lt; bestDist) {</span>
+<span class="fc" id="L634">            bestDist = dist;</span>
         }
         
         //try on third side of the triangle
         try {
-<span class="fc" id="L645">            line.setPlanesFromPoints(vertex2, vertex3);</span>
-<span class="fc" id="L646">            line.normalize(); //to increase accuracy</span>
-<span class="pc bpc" id="L647" title="1 of 2 branches missed.">            if (line.isLocus(point)) {</span>
-<span class="nc bnc" id="L648" title="All 2 branches missed.">                if (point.isBetween(vertex2, vertex3)) {</span>
-<span class="nc" id="L649">                    return 0.0;</span>
+<span class="fc" id="L639">            line.setPlanesFromPoints(vertex2, vertex3);</span>
+<span class="fc" id="L640">            line.normalize(); //to increase accuracy</span>
+<span class="pc bpc" id="L641" title="1 of 2 branches missed.">            if (line.isLocus(point)) {</span>
+<span class="nc bnc" id="L642" title="All 2 branches missed.">                if (point.isBetween(vertex2, vertex3)) {</span>
+<span class="nc" id="L643">                    return 0.0;</span>
                 } else {
                     //point belongs to the line forming this side of the 
                     //triangle, hence the closest vertex of this line will be 
                     //the shortest distance
-<span class="nc" id="L654">                    bestDist = vertex2.distanceTo(point);</span>
-<span class="nc" id="L655">                    dist = vertex3.distanceTo(point);</span>
-<span class="nc bnc" id="L656" title="All 2 branches missed.">                    if (dist &lt; bestDist) {</span>
-<span class="nc" id="L657">                        bestDist = dist;</span>
+<span class="nc" id="L648">                    bestDist = vertex2.distanceTo(point);</span>
+<span class="nc" id="L649">                    dist = vertex3.distanceTo(point);</span>
+<span class="nc bnc" id="L650" title="All 2 branches missed.">                    if (dist &lt; bestDist) {</span>
+<span class="nc" id="L651">                        bestDist = dist;</span>
                     }
             
-<span class="nc" id="L660">                    return bestDist;</span>
+<span class="nc" id="L654">                    return bestDist;</span>
                 }
             }
         
             //point does not belong to any line forming a side of the triangle
-<span class="fc" id="L665">            dist = Math.abs(line.getDistance(point));</span>
-<span class="nc" id="L666">        } catch (CoincidentPointsException e) {</span>
-<span class="nc bnc" id="L667" title="All 2 branches missed.">            if (point.equals(vertex2)) {</span>
-<span class="nc" id="L668">                return vertex2.distanceTo(point);</span>
+<span class="fc" id="L659">            dist = Math.abs(line.getDistance(point));</span>
+<span class="nc" id="L660">        } catch (CoincidentPointsException e) {</span>
+<span class="nc bnc" id="L661" title="All 2 branches missed.">            if (point.equals(vertex2)) {</span>
+<span class="nc" id="L662">                return vertex2.distanceTo(point);</span>
             }
-<span class="nc bnc" id="L670" title="All 2 branches missed.">            if (point.equals(vertex3)) {</span>
-<span class="nc" id="L671">                return vertex3.distanceTo(point);</span>
+<span class="nc bnc" id="L664" title="All 2 branches missed.">            if (point.equals(vertex3)) {</span>
+<span class="nc" id="L665">                return vertex3.distanceTo(point);</span>
             }
-<span class="fc" id="L673">        }</span>
+<span class="fc" id="L667">        }</span>
         
         //check if distance to third line is the shortest
-<span class="fc bfc" id="L676" title="All 2 branches covered.">        if (dist &lt; bestDist) {</span>
-<span class="fc" id="L677">            bestDist = dist;</span>
+<span class="fc bfc" id="L670" title="All 2 branches covered.">        if (dist &lt; bestDist) {</span>
+<span class="fc" id="L671">            bestDist = dist;</span>
         }
         
-<span class="fc" id="L680">        return bestDist;</span>
+<span class="fc" id="L674">        return bestDist;</span>
     }
     
     /**
@@ -687,7 +681,7 @@ public class Triangle3D implements Serializable {
      * @return Closest point laying in this triangle boundaries.
      */
     public Point3D getClosestPoint(Point3D point) {
-<span class="fc" id="L690">        return getClosestPoint(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L684">        return getClosestPoint(point, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -699,11 +693,10 @@ public class Triangle3D implements Serializable {
      * @return Closest point laying in this triangle boundaries.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public Point3D getClosestPoint(Point3D point, double threshold)
-            throws IllegalArgumentException {
-<span class="fc" id="L704">        Point3D result = Point3D.create();</span>
-<span class="fc" id="L705">        closestPoint(point, result, threshold);</span>
-<span class="fc" id="L706">        return result;</span>
+    public Point3D getClosestPoint(Point3D point, double threshold) {
+<span class="fc" id="L697">        Point3D result = Point3D.create();</span>
+<span class="fc" id="L698">        closestPoint(point, result, threshold);</span>
+<span class="fc" id="L699">        return result;</span>
     }
     
     /**
@@ -713,8 +706,8 @@ public class Triangle3D implements Serializable {
      * @param result Point where result will be stored.
      */
     public void closestPoint(Point3D point, Point3D result) {
-<span class="fc" id="L716">        closestPoint(point, result, DEFAULT_THRESHOLD);</span>
-<span class="fc" id="L717">    }</span>
+<span class="fc" id="L709">        closestPoint(point, result, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L710">    }</span>
     
     /**
      * Computes the point which is locus of this triangle (up to a certain 
@@ -726,209 +719,212 @@ public class Triangle3D implements Serializable {
      * triangle or not.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public void closestPoint(Point3D point, Point3D result, double threshold)
-            throws IllegalArgumentException {
-<span class="pc bpc" id="L731" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="nc" id="L732">            throw new IllegalArgumentException();</span>
+    public void closestPoint(Point3D point, Point3D result, double threshold) {
+<span class="pc bpc" id="L723" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="nc" id="L724">            throw new IllegalArgumentException();</span>
         }
         
         //normalize vertices and point to increase accuracy
-<span class="fc" id="L736">        mVertex1.normalize();</span>
-<span class="fc" id="L737">        mVertex2.normalize();</span>
-<span class="fc" id="L738">        mVertex3.normalize();</span>
-<span class="fc" id="L739">        point.normalize();</span>
+<span class="fc" id="L728">        mVertex1.normalize();</span>
+<span class="fc" id="L729">        mVertex2.normalize();</span>
+<span class="fc" id="L730">        mVertex3.normalize();</span>
+<span class="fc" id="L731">        point.normalize();</span>
         
-        Line3D line1, line2, line3;
+        Line3D line1;
+        Line3D line2;
+        Line3D line3;
         try {
-<span class="fc" id="L743">            line1 = new Line3D(mVertex1, mVertex2);</span>
-<span class="fc" id="L744">            line1.normalize(); //to increase accuracy</span>
-<span class="fc bfc" id="L745" title="All 2 branches covered.">            if (line1.isLocus(point)) {</span>
-<span class="fc bfc" id="L746" title="All 2 branches covered.">                if (point.isBetween(mVertex1, mVertex2)) {</span>
+<span class="fc" id="L737">            line1 = new Line3D(mVertex1, mVertex2);</span>
+<span class="fc" id="L738">            line1.normalize(); //to increase accuracy</span>
+<span class="fc bfc" id="L739" title="All 2 branches covered.">            if (line1.isLocus(point)) {</span>
+<span class="fc bfc" id="L740" title="All 2 branches covered.">                if (point.isBetween(mVertex1, mVertex2)) {</span>
                     //point is on this side of the triangle, so point must 
                     //be the result
-<span class="fc" id="L749">                    result.setCoordinates(point);</span>
+<span class="fc" id="L743">                    result.setCoordinates(point);</span>
                 } else {
                     //point belongs to the line forming this side of the 
                     //triangle, hence the closest vertex of this line will be 
                     //the closest point to the triangle
-<span class="fc" id="L754">                    double dist1 = mVertex1.distanceTo(point);</span>
-<span class="fc" id="L755">                    double dist2 = mVertex2.distanceTo(point);</span>
-<span class="fc bfc" id="L756" title="All 2 branches covered.">                    if (dist1 &lt; dist2) {</span>
-<span class="fc" id="L757">                        result.setCoordinates(mVertex1);</span>
+<span class="fc" id="L748">                    double dist1 = mVertex1.distanceTo(point);</span>
+<span class="fc" id="L749">                    double dist2 = mVertex2.distanceTo(point);</span>
+<span class="fc bfc" id="L750" title="All 2 branches covered.">                    if (dist1 &lt; dist2) {</span>
+<span class="fc" id="L751">                        result.setCoordinates(mVertex1);</span>
                     } else {
-<span class="fc" id="L759">                        result.setCoordinates(mVertex2);</span>
+<span class="fc" id="L753">                        result.setCoordinates(mVertex2);</span>
                     }            
                 }
-<span class="fc" id="L762">                return;</span>
+<span class="fc" id="L756">                return;</span>
             }
-<span class="nc" id="L764">        } catch (CoincidentPointsException e) {</span>
-<span class="nc bnc" id="L765" title="All 4 branches missed.">            if (point.equals(mVertex1) || point.equals(mVertex2)) {</span>
-<span class="nc" id="L766">                result.setCoordinates(point);</span>
+<span class="nc" id="L758">        } catch (CoincidentPointsException e) {</span>
+<span class="nc bnc" id="L759" title="All 4 branches missed.">            if (point.equals(mVertex1) || point.equals(mVertex2)) {</span>
+<span class="nc" id="L760">                result.setCoordinates(point);</span>
             }
-<span class="nc" id="L768">            return;</span>
-<span class="fc" id="L769">        }</span>
+<span class="nc" id="L762">            return;</span>
+<span class="fc" id="L763">        }</span>
         
         
         //try on second side of the triangle
         try {
-<span class="fc" id="L774">            line2 = new Line3D(mVertex1, mVertex3);</span>
-<span class="fc" id="L775">            line2.normalize(); //to increase accuracy</span>
-<span class="fc bfc" id="L776" title="All 2 branches covered.">            if (line2.isLocus(point)) {</span>
-<span class="pc bpc" id="L777" title="1 of 2 branches missed.">                if (point.isBetween(mVertex1, mVertex3)) {</span>
+<span class="fc" id="L768">            line2 = new Line3D(mVertex1, mVertex3);</span>
+<span class="fc" id="L769">            line2.normalize(); //to increase accuracy</span>
+<span class="fc bfc" id="L770" title="All 2 branches covered.">            if (line2.isLocus(point)) {</span>
+<span class="pc bpc" id="L771" title="1 of 2 branches missed.">                if (point.isBetween(mVertex1, mVertex3)) {</span>
                     //point is on this side of the triangle, so point must be 
                     //the result
-<span class="fc" id="L780">                    result.setCoordinates(point);                </span>
+<span class="fc" id="L774">                    result.setCoordinates(point);                </span>
                 } else {
                     //point belongs to the line forming this side of the 
                     //triangle, hence the closest vertex of this line will be 
                     //the closest point to the triangle
-<span class="nc" id="L785">                    double dist1 = mVertex1.distanceTo(point);</span>
-<span class="nc" id="L786">                    double dist3 = mVertex3.distanceTo(point);</span>
-<span class="nc bnc" id="L787" title="All 2 branches missed.">                    if (dist1 &lt; dist3) {</span>
-<span class="nc" id="L788">                        result.setCoordinates(mVertex1);</span>
+<span class="nc" id="L779">                    double dist1 = mVertex1.distanceTo(point);</span>
+<span class="nc" id="L780">                    double dist3 = mVertex3.distanceTo(point);</span>
+<span class="nc bnc" id="L781" title="All 2 branches missed.">                    if (dist1 &lt; dist3) {</span>
+<span class="nc" id="L782">                        result.setCoordinates(mVertex1);</span>
                     } else {
-<span class="nc" id="L790">                        result.setCoordinates(mVertex3);</span>
+<span class="nc" id="L784">                        result.setCoordinates(mVertex3);</span>
                     }
                 }
-<span class="fc" id="L793">                return;</span>
+<span class="fc" id="L787">                return;</span>
             }
-<span class="nc" id="L795">        } catch (CoincidentPointsException e) {</span>
-<span class="nc bnc" id="L796" title="All 4 branches missed.">            if (point.equals(mVertex1) || point.equals(mVertex3)) {</span>
-<span class="nc" id="L797">                result.setCoordinates(point);</span>
+<span class="nc" id="L789">        } catch (CoincidentPointsException e) {</span>
+<span class="nc bnc" id="L790" title="All 4 branches missed.">            if (point.equals(mVertex1) || point.equals(mVertex3)) {</span>
+<span class="nc" id="L791">                result.setCoordinates(point);</span>
             }
-<span class="nc" id="L799">            return;</span>
-<span class="fc" id="L800">        }</span>
+<span class="nc" id="L793">            return;</span>
+<span class="fc" id="L794">        }</span>
         
                         
         //try on third side of the triangle
         try {
-<span class="fc" id="L805">            line3 = new Line3D(mVertex2, mVertex3);</span>
-<span class="fc" id="L806">            line3.normalize(); //to increase accuracy</span>
-<span class="pc bpc" id="L807" title="1 of 2 branches missed.">            if (line3.isLocus(point)) {</span>
-<span class="nc bnc" id="L808" title="All 2 branches missed.">                if (point.isBetween(mVertex2, mVertex3)) {</span>
+<span class="fc" id="L799">            line3 = new Line3D(mVertex2, mVertex3);</span>
+<span class="fc" id="L800">            line3.normalize(); //to increase accuracy</span>
+<span class="pc bpc" id="L801" title="1 of 2 branches missed.">            if (line3.isLocus(point)) {</span>
+<span class="nc bnc" id="L802" title="All 2 branches missed.">                if (point.isBetween(mVertex2, mVertex3)) {</span>
                     //point is on this side of the triangle, so point must be 
                     //the result
-<span class="nc" id="L811">                    result.setCoordinates(point);                                </span>
+<span class="nc" id="L805">                    result.setCoordinates(point);                                </span>
                 } else {
                     //point belongs to the line forming this side of the 
                     //triangle, hence the closest vertex of this line will be 
                     //the closest point to the triangle
-<span class="nc" id="L816">                    double dist2 = mVertex2.distanceTo(point);</span>
-<span class="nc" id="L817">                    double dist3 = mVertex3.distanceTo(point);</span>
-<span class="nc bnc" id="L818" title="All 2 branches missed.">                    if (dist2 &lt; dist3) {</span>
-<span class="nc" id="L819">                        result.setCoordinates(mVertex2);</span>
+<span class="nc" id="L810">                    double dist2 = mVertex2.distanceTo(point);</span>
+<span class="nc" id="L811">                    double dist3 = mVertex3.distanceTo(point);</span>
+<span class="nc bnc" id="L812" title="All 2 branches missed.">                    if (dist2 &lt; dist3) {</span>
+<span class="nc" id="L813">                        result.setCoordinates(mVertex2);</span>
                     } else {
-<span class="nc" id="L821">                        result.setCoordinates(mVertex3);</span>
+<span class="nc" id="L815">                        result.setCoordinates(mVertex3);</span>
                     }                
                 }
-<span class="nc" id="L824">                return;</span>
+<span class="nc" id="L818">                return;</span>
             }
-<span class="nc" id="L826">        } catch (CoincidentPointsException e) {</span>
-<span class="nc bnc" id="L827" title="All 4 branches missed.">            if (point.equals(mVertex2) || point.equals(mVertex3)) {</span>
-<span class="nc" id="L828">                result.setCoordinates(point);</span>
+<span class="nc" id="L820">        } catch (CoincidentPointsException e) {</span>
+<span class="nc bnc" id="L821" title="All 4 branches missed.">            if (point.equals(mVertex2) || point.equals(mVertex3)) {</span>
+<span class="nc" id="L822">                result.setCoordinates(point);</span>
             }
-<span class="nc" id="L830">            return;</span>
-<span class="fc" id="L831">        }</span>
+<span class="nc" id="L824">            return;</span>
+<span class="fc" id="L825">        }</span>
             
         
         //point does not belong to any line forming a side of the triangle
         //so we find the closest point for each side
-        Point3D closest1, closest2, closest3;
+        Point3D closest1;
+        Point3D closest2;
+        Point3D closest3;
 
-<span class="fc" id="L838">        closest1 = line1.getClosestPoint(point, threshold);</span>
-<span class="fc" id="L839">        closest1.normalize(); //to increase accuracy</span>
+<span class="fc" id="L834">        closest1 = line1.getClosestPoint(point, threshold);</span>
+<span class="fc" id="L835">        closest1.normalize(); //to increase accuracy</span>
 
-<span class="fc" id="L841">        closest2 = line2.getClosestPoint(point, threshold);</span>
-<span class="fc" id="L842">        closest2.normalize(); //to increase accuracy</span>
+<span class="fc" id="L837">        closest2 = line2.getClosestPoint(point, threshold);</span>
+<span class="fc" id="L838">        closest2.normalize(); //to increase accuracy</span>
 
-<span class="fc" id="L844">        closest3 = line3.getClosestPoint(point, threshold);</span>
-<span class="fc" id="L845">        closest3.normalize(); //to increase accuracy</span>
+<span class="fc" id="L840">        closest3 = line3.getClosestPoint(point, threshold);</span>
+<span class="fc" id="L841">        closest3.normalize(); //to increase accuracy</span>
 
         //check if points lie within sides of triangle
-<span class="fc" id="L848">        boolean between1 = closest1.isBetween(mVertex1, mVertex2);</span>
-<span class="fc" id="L849">        boolean between2 = closest2.isBetween(mVertex1, mVertex3);</span>
-<span class="fc" id="L850">        boolean between3 = closest3.isBetween(mVertex2, mVertex3);</span>
+<span class="fc" id="L844">        boolean between1 = closest1.isBetween(mVertex1, mVertex2);</span>
+<span class="fc" id="L845">        boolean between2 = closest2.isBetween(mVertex1, mVertex3);</span>
+<span class="fc" id="L846">        boolean between3 = closest3.isBetween(mVertex2, mVertex3);</span>
         
-<span class="fc" id="L852">        double distClosest1 = closest1.distanceTo(point);</span>
-<span class="fc" id="L853">        double distClosest2 = closest2.distanceTo(point);</span>
-<span class="fc" id="L854">        double distClosest3 = closest3.distanceTo(point);</span>
+<span class="fc" id="L848">        double distClosest1 = closest1.distanceTo(point);</span>
+<span class="fc" id="L849">        double distClosest2 = closest2.distanceTo(point);</span>
+<span class="fc" id="L850">        double distClosest3 = closest3.distanceTo(point);</span>
         
-<span class="fc" id="L856">        double distVertex1 = mVertex1.distanceTo(point);</span>
-<span class="fc" id="L857">        double distVertex2 = mVertex2.distanceTo(point);</span>
-<span class="fc" id="L858">        double distVertex3 = mVertex3.distanceTo(point);</span>
+<span class="fc" id="L852">        double distVertex1 = mVertex1.distanceTo(point);</span>
+<span class="fc" id="L853">        double distVertex2 = mVertex2.distanceTo(point);</span>
+<span class="fc" id="L854">        double distVertex3 = mVertex3.distanceTo(point);</span>
         
         
-<span class="pc bpc" id="L861" title="2 of 6 branches missed.">        if (between1 &amp;&amp; !between2 &amp;&amp; !between3) {</span>
+<span class="pc bpc" id="L857" title="2 of 6 branches missed.">        if (between1 &amp;&amp; !between2 &amp;&amp; !between3) {</span>
             //choose closest1 or opposite vertex (vertex3)
-<span class="fc bfc" id="L863" title="All 2 branches covered.">            if (distClosest1 &lt; distVertex3) {</span>
-<span class="fc" id="L864">                result.setCoordinates(closest1);</span>
+<span class="fc bfc" id="L859" title="All 2 branches covered.">            if (distClosest1 &lt; distVertex3) {</span>
+<span class="fc" id="L860">                result.setCoordinates(closest1);</span>
             } else {
-<span class="fc" id="L866">                result.setCoordinates(mVertex3);</span>
+<span class="fc" id="L862">                result.setCoordinates(mVertex3);</span>
             }
-<span class="pc bpc" id="L868" title="5 of 6 branches missed.">        } else if (!between1 &amp;&amp; between2 &amp;&amp; !between3) {</span>
+<span class="pc bpc" id="L864" title="5 of 6 branches missed.">        } else if (!between1 &amp;&amp; between2 &amp;&amp; !between3) {</span>
             //choose closest2 or opposite vertex (vertex2)
-<span class="nc bnc" id="L870" title="All 2 branches missed.">            if (distClosest2 &lt; distVertex2) {</span>
-<span class="nc" id="L871">                result.setCoordinates(closest2);</span>
+<span class="nc bnc" id="L866" title="All 2 branches missed.">            if (distClosest2 &lt; distVertex2) {</span>
+<span class="nc" id="L867">                result.setCoordinates(closest2);</span>
             } else {
-<span class="nc" id="L873">                result.setCoordinates(mVertex2);</span>
+<span class="nc" id="L869">                result.setCoordinates(mVertex2);</span>
             }
-<span class="pc bpc" id="L875" title="5 of 6 branches missed.">        } else if (!between1 &amp;&amp; !between2 &amp;&amp; between3) {</span>
+<span class="pc bpc" id="L871" title="5 of 6 branches missed.">        } else if (!between1 &amp;&amp; !between2 &amp;&amp; between3) {</span>
             //choose closest3 or opposite vertex (vertex1)
-<span class="nc bnc" id="L877" title="All 2 branches missed.">            if (distClosest3 &lt; distVertex1) {</span>
-<span class="nc" id="L878">                result.setCoordinates(closest3);</span>
+<span class="nc bnc" id="L873" title="All 2 branches missed.">            if (distClosest3 &lt; distVertex1) {</span>
+<span class="nc" id="L874">                result.setCoordinates(closest3);</span>
             } else {
-<span class="nc" id="L880">                result.setCoordinates(mVertex1);</span>
+<span class="nc" id="L876">                result.setCoordinates(mVertex1);</span>
             }
-<span class="pc bpc" id="L882" title="3 of 6 branches missed.">        } else if (between1 &amp;&amp; between2 &amp;&amp; !between3) {</span>
+<span class="pc bpc" id="L878" title="3 of 6 branches missed.">        } else if (between1 &amp;&amp; between2 &amp;&amp; !between3) {</span>
             //determine if closest1 or closest2
-<span class="nc bnc" id="L884" title="All 2 branches missed.">            if (distClosest1 &lt; distClosest2) {</span>
-<span class="nc" id="L885">                result.setCoordinates(closest1);</span>
+<span class="nc bnc" id="L880" title="All 2 branches missed.">            if (distClosest1 &lt; distClosest2) {</span>
+<span class="nc" id="L881">                result.setCoordinates(closest1);</span>
             } else {
-<span class="nc" id="L887">                result.setCoordinates(closest2);</span>
+<span class="nc" id="L883">                result.setCoordinates(closest2);</span>
             }
-<span class="pc bpc" id="L889" title="3 of 4 branches missed.">        } else if (!between1 &amp;&amp; between2) { // &amp;&amp; between3</span>
+<span class="pc bpc" id="L885" title="3 of 4 branches missed.">        } else if (!between1 &amp;&amp; between2) { // and between3</span>
             //determine if closest2 or closest3
-<span class="nc bnc" id="L891" title="All 2 branches missed.">            if (distClosest2 &lt; distClosest3) {</span>
-<span class="nc" id="L892">                result.setCoordinates(closest2);</span>
+<span class="nc bnc" id="L887" title="All 2 branches missed.">            if (distClosest2 &lt; distClosest3) {</span>
+<span class="nc" id="L888">                result.setCoordinates(closest2);</span>
             } else {
-<span class="nc" id="L894">                result.setCoordinates(closest3);</span>
+<span class="nc" id="L890">                result.setCoordinates(closest3);</span>
             }
-<span class="pc bpc" id="L896" title="2 of 4 branches missed.">        } else if (between1 &amp;&amp; !between2) { // &amp;&amp; between3</span>
+<span class="pc bpc" id="L892" title="2 of 4 branches missed.">        } else if (between1 &amp;&amp; !between2) { // and between3</span>
             //determine if closest1 or closest3
-<span class="nc bnc" id="L898" title="All 2 branches missed.">            if (distClosest1 &lt; distClosest3) {</span>
-<span class="nc" id="L899">                result.setCoordinates(closest1);</span>
+<span class="nc bnc" id="L894" title="All 2 branches missed.">            if (distClosest1 &lt; distClosest3) {</span>
+<span class="nc" id="L895">                result.setCoordinates(closest1);</span>
             } else {
-<span class="nc" id="L901">                result.setCoordinates(closest3);</span>
+<span class="nc" id="L897">                result.setCoordinates(closest3);</span>
             }
-<span class="pc bpc" id="L903" title="1 of 2 branches missed.">        } else if (between1) { // &amp;&amp; between2 &amp;&amp; between3</span>
+<span class="pc bpc" id="L899" title="1 of 2 branches missed.">        } else if (between1) { // and between2 and between3</span>
             //determine if closest1, closest2 or closest3
-<span class="pc bpc" id="L905" title="1 of 4 branches missed.">            if (distClosest1 &lt; distClosest2 &amp;&amp; distClosest1 &lt; distClosest3) {</span>
+<span class="pc bpc" id="L901" title="1 of 4 branches missed.">            if (distClosest1 &lt; distClosest2 &amp;&amp; distClosest1 &lt; distClosest3) {</span>
                 //pick closest1
-<span class="fc" id="L907">                result.setCoordinates(closest1);</span>
-<span class="pc bpc" id="L908" title="1 of 4 branches missed.">            } else if (distClosest2 &lt; distClosest1 &amp;&amp;</span>
+<span class="fc" id="L903">                result.setCoordinates(closest1);</span>
+<span class="pc bpc" id="L904" title="1 of 4 branches missed.">            } else if (distClosest2 &lt; distClosest1 &amp;&amp;</span>
                     distClosest2 &lt; distClosest3) {
                 //pick closest2
-<span class="fc" id="L911">                result.setCoordinates(closest2);</span>
+<span class="fc" id="L907">                result.setCoordinates(closest2);</span>
             } else {
                 //pick closest3
-<span class="fc" id="L914">                result.setCoordinates(closest3);</span>
+<span class="fc" id="L910">                result.setCoordinates(closest3);</span>
             }
         } else {
             //all closest points are outside vertex limits, so we pick the
             //closest vertex
             
-<span class="nc bnc" id="L920" title="All 4 branches missed.">            if (distVertex1 &lt; distVertex2 &amp;&amp; distVertex1 &lt; distVertex3) {</span>
+<span class="nc bnc" id="L916" title="All 4 branches missed.">            if (distVertex1 &lt; distVertex2 &amp;&amp; distVertex1 &lt; distVertex3) {</span>
                 //pick vertex1
-<span class="nc" id="L922">                result.setCoordinates(mVertex1);</span>
-<span class="nc bnc" id="L923" title="All 4 branches missed.">            } else if (distVertex2 &lt; distVertex1 &amp;&amp; distVertex2 &lt; distVertex3) {</span>
+<span class="nc" id="L918">                result.setCoordinates(mVertex1);</span>
+<span class="nc bnc" id="L919" title="All 4 branches missed.">            } else if (distVertex2 &lt; distVertex1 &amp;&amp; distVertex2 &lt; distVertex3) {</span>
                 //pick vertex2
-<span class="nc" id="L925">                result.setCoordinates(mVertex2);</span>
+<span class="nc" id="L921">                result.setCoordinates(mVertex2);</span>
             } else {
                 //pick vertex3
-<span class="nc" id="L928">                result.setCoordinates(mVertex3);</span>
+<span class="nc" id="L924">                result.setCoordinates(mVertex3);</span>
             }
         }        
-<span class="fc" id="L931">    }</span>
+<span class="fc" id="L927">    }</span>
 
     /**
      * Returns boolean indicating if provided point is locus of this triangle
@@ -939,15 +935,14 @@ public class Triangle3D implements Serializable {
      * @return True if provided point is locus, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean isLocus(Point3D point, double threshold) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L944" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L945">            throw new IllegalArgumentException();</span>
+    public boolean isLocus(Point3D point, double threshold) {
+<span class="fc bfc" id="L939" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L940">            throw new IllegalArgumentException();</span>
         }
 
-<span class="fc bfc" id="L948" title="All 2 branches covered.">        return point.isBetween(mVertex1, mVertex2, threshold) || </span>
-<span class="pc bpc" id="L949" title="1 of 2 branches missed.">                point.isBetween(mVertex1, mVertex2, threshold) ||</span>
-<span class="fc bfc" id="L950" title="All 2 branches covered.">                point.isBetween(mVertex2, mVertex3, threshold);</span>
+<span class="fc bfc" id="L943" title="All 2 branches covered.">        return point.isBetween(mVertex1, mVertex2, threshold) || </span>
+<span class="fc bfc" id="L944" title="All 2 branches covered.">                point.isBetween(mVertex1, mVertex3, threshold) ||</span>
+<span class="pc bpc" id="L945" title="1 of 2 branches missed.">                point.isBetween(mVertex2, mVertex3, threshold);</span>
     }    
     
     /**
@@ -957,7 +952,7 @@ public class Triangle3D implements Serializable {
      * @return True if provided point is locus, false otherwise.
      */
     public boolean isLocus(Point3D point) {
-<span class="fc" id="L960">        return isLocus(point, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L955">        return isLocus(point, DEFAULT_THRESHOLD);</span>
     }
     
  
@@ -968,7 +963,7 @@ public class Triangle3D implements Serializable {
      * are too close to each other.
      */
     public double[] getOrientation() throws CoincidentPointsException {
-<span class="fc" id="L971">        return orientation(this);</span>
+<span class="fc" id="L966">        return orientation(this);</span>
     }
     
     /**
@@ -980,9 +975,9 @@ public class Triangle3D implements Serializable {
      * @throws CoincidentPointsException  Raised if vertices of this triangle
      * are too close to each other.
      */
-    public double[] getOrientation(double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
-<span class="fc" id="L985">        return orientation(this, threshold);</span>
+    public double[] getOrientation(double threshold)
+            throws CoincidentPointsException {
+<span class="fc" id="L980">        return orientation(this, threshold);</span>
     }
     
     /**
@@ -994,10 +989,10 @@ public class Triangle3D implements Serializable {
      * @throws CoincidentPointsException Raised if vertices of this triangle
      * are too close to each other.
      */
-    public void orientation(double[] result) throws IllegalArgumentException,
-            CoincidentPointsException {
-<span class="fc" id="L999">        orientation(this, result);</span>
-<span class="fc" id="L1000">    }</span>
+    public void orientation(double[] result)
+            throws CoincidentPointsException {
+<span class="fc" id="L994">        orientation(this, result);</span>
+<span class="fc" id="L995">    }</span>
     
     /**
      * Computes orientation of this 3D triangle and stores the result in
@@ -1011,9 +1006,9 @@ public class Triangle3D implements Serializable {
      * are too close to each other.
      */
     public void orientation(double[] result, double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
-<span class="fc" id="L1015">        orientation(this, result, threshold);</span>
-<span class="fc" id="L1016">    }</span>
+            throws CoincidentPointsException {
+<span class="fc" id="L1010">        orientation(this, result, threshold);</span>
+<span class="fc" id="L1011">    }</span>
     
     /**
      * Returns orientation of provided 3D triangle.
@@ -1024,8 +1019,8 @@ public class Triangle3D implements Serializable {
      */
     public static double[] orientation(Triangle3D triangle) 
             throws CoincidentPointsException {
-<span class="fc" id="L1027">        return orientation(triangle.getVertex1(), triangle.getVertex2(), </span>
-<span class="fc" id="L1028">                triangle.getVertex3());</span>
+<span class="fc" id="L1022">        return orientation(triangle.getVertex1(), triangle.getVertex2(), </span>
+<span class="fc" id="L1023">                triangle.getVertex3());</span>
     }
     
     /**
@@ -1039,9 +1034,9 @@ public class Triangle3D implements Serializable {
      * too close to each other.
      */
     public static double[] orientation(Triangle3D triangle, double threshold)
-            throws IllegalArgumentException, CoincidentPointsException {
-<span class="fc" id="L1043">        return orientation(triangle.getVertex1(), triangle.getVertex2(),</span>
-<span class="fc" id="L1044">                triangle.getVertex3(), threshold);</span>
+            throws CoincidentPointsException {
+<span class="fc" id="L1038">        return orientation(triangle.getVertex1(), triangle.getVertex2(),</span>
+<span class="fc" id="L1039">                triangle.getVertex3(), threshold);</span>
     }
     
     /**
@@ -1055,10 +1050,10 @@ public class Triangle3D implements Serializable {
      * are too close to each other.
      */
     public static void orientation(Triangle3D triangle, double[] result) 
-            throws IllegalArgumentException, CoincidentPointsException {
-<span class="fc" id="L1059">        orientation(triangle.getVertex1(), triangle.getVertex2(), </span>
-<span class="fc" id="L1060">                triangle.getVertex3(), result);</span>
-<span class="fc" id="L1061">    }</span>
+            throws CoincidentPointsException {
+<span class="fc" id="L1054">        orientation(triangle.getVertex1(), triangle.getVertex2(), </span>
+<span class="fc" id="L1055">                triangle.getVertex3(), result);</span>
+<span class="fc" id="L1056">    }</span>
     
     /**
      * Computes orientation of provided 3D triangle and stores the result in
@@ -1073,11 +1068,10 @@ public class Triangle3D implements Serializable {
      * are too close to each other.
      */
     public static void orientation(Triangle3D triangle, double[] result, 
-            double threshold) throws IllegalArgumentException, 
-            CoincidentPointsException {
-<span class="fc" id="L1078">        orientation(triangle.getVertex1(), triangle.getVertex2(), </span>
-<span class="fc" id="L1079">                triangle.getVertex3(), result, threshold);</span>
-<span class="fc" id="L1080">    }</span>
+            double threshold) throws CoincidentPointsException {
+<span class="fc" id="L1072">        orientation(triangle.getVertex1(), triangle.getVertex2(), </span>
+<span class="fc" id="L1073">                triangle.getVertex3(), result, threshold);</span>
+<span class="fc" id="L1074">    }</span>
     
     /**
      * Returns orientation of 3D triangle formed by provided vertices.
@@ -1090,7 +1084,7 @@ public class Triangle3D implements Serializable {
      */
     public static double[] orientation(Point3D vertex1, Point3D vertex2, 
             Point3D vertex3) throws CoincidentPointsException {
-<span class="fc" id="L1093">        return orientation(vertex1, vertex2, vertex3, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L1087">        return orientation(vertex1, vertex2, vertex3, DEFAULT_THRESHOLD);</span>
     }
     
     /**
@@ -1106,11 +1100,10 @@ public class Triangle3D implements Serializable {
      * close to each other.
      */
     public static double[] orientation(Point3D vertex1, Point3D vertex2, 
-            Point3D vertex3, double threshold) throws IllegalArgumentException, 
-            CoincidentPointsException {
-<span class="fc" id="L1111">        double[] result = new double[INHOM_COORDS];</span>
-<span class="fc" id="L1112">        orientation(vertex1, vertex2, vertex3, result, threshold);</span>
-<span class="fc" id="L1113">        return result;</span>
+            Point3D vertex3, double threshold) throws CoincidentPointsException {
+<span class="fc" id="L1104">        double[] result = new double[INHOM_COORDS];</span>
+<span class="fc" id="L1105">        orientation(vertex1, vertex2, vertex3, result, threshold);</span>
+<span class="fc" id="L1106">        return result;</span>
     }
     
     /**
@@ -1126,10 +1119,9 @@ public class Triangle3D implements Serializable {
      * close to each other.
      */
     public static void orientation(Point3D vertex1, Point3D vertex2, 
-            Point3D vertex3, double[] result) throws IllegalArgumentException, 
-            CoincidentPointsException {
-<span class="fc" id="L1131">        orientation(vertex1, vertex2, vertex3, result, DEFAULT_THRESHOLD);</span>
-<span class="fc" id="L1132">    }</span>
+            Point3D vertex3, double[] result) throws CoincidentPointsException {
+<span class="fc" id="L1123">        orientation(vertex1, vertex2, vertex3, result, DEFAULT_THRESHOLD);</span>
+<span class="fc" id="L1124">    }</span>
     
     /**
      * Computes orientation of 3D triangle formed by provided vertices and
@@ -1147,57 +1139,57 @@ public class Triangle3D implements Serializable {
      */
     public static void orientation(Point3D vertex1, Point3D vertex2, 
             Point3D vertex3, double[] result, double threshold)                         
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         
-<span class="fc bfc" id="L1152" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
-<span class="fc" id="L1153">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L1144" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L1145">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L1155" title="All 2 branches covered.">        if (result.length != INHOM_COORDS) {</span>
-<span class="fc" id="L1156">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L1147" title="All 2 branches covered.">        if (result.length != INHOM_COORDS) {</span>
+<span class="fc" id="L1148">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L1159">        double inhomX1 = vertex1.getInhomX();</span>
-<span class="fc" id="L1160">        double inhomY1 = vertex1.getInhomY();</span>
-<span class="fc" id="L1161">        double inhomZ1 = vertex1.getInhomZ();</span>
+<span class="fc" id="L1151">        double inhomX1 = vertex1.getInhomX();</span>
+<span class="fc" id="L1152">        double inhomY1 = vertex1.getInhomY();</span>
+<span class="fc" id="L1153">        double inhomZ1 = vertex1.getInhomZ();</span>
         
-<span class="fc" id="L1163">        double inhomX2 = vertex2.getInhomX();</span>
-<span class="fc" id="L1164">        double inhomY2 = vertex2.getInhomY();</span>
-<span class="fc" id="L1165">        double inhomZ2 = vertex2.getInhomZ();</span>
+<span class="fc" id="L1155">        double inhomX2 = vertex2.getInhomX();</span>
+<span class="fc" id="L1156">        double inhomY2 = vertex2.getInhomY();</span>
+<span class="fc" id="L1157">        double inhomZ2 = vertex2.getInhomZ();</span>
         
-<span class="fc" id="L1167">        double inhomX3 = vertex3.getInhomX();</span>
-<span class="fc" id="L1168">        double inhomY3 = vertex3.getInhomY();</span>
-<span class="fc" id="L1169">        double inhomZ3 = vertex3.getInhomZ();</span>
+<span class="fc" id="L1159">        double inhomX3 = vertex3.getInhomX();</span>
+<span class="fc" id="L1160">        double inhomY3 = vertex3.getInhomY();</span>
+<span class="fc" id="L1161">        double inhomZ3 = vertex3.getInhomZ();</span>
 
         //given triangle ABC made by vectors ab and ac
-<span class="fc" id="L1172">        double abX = inhomX2 - inhomX1;</span>
-<span class="fc" id="L1173">        double abY = inhomY2 - inhomY1;</span>
-<span class="fc" id="L1174">        double abZ = inhomZ2 - inhomZ1;</span>
+<span class="fc" id="L1164">        double abX = inhomX2 - inhomX1;</span>
+<span class="fc" id="L1165">        double abY = inhomY2 - inhomY1;</span>
+<span class="fc" id="L1166">        double abZ = inhomZ2 - inhomZ1;</span>
         
-<span class="fc" id="L1176">        double acX = inhomX3 - inhomX1;</span>
-<span class="fc" id="L1177">        double acY = inhomY3 - inhomY1;</span>
-<span class="fc" id="L1178">        double acZ = inhomZ3 - inhomZ1;</span>
+<span class="fc" id="L1168">        double acX = inhomX3 - inhomX1;</span>
+<span class="fc" id="L1169">        double acY = inhomY3 - inhomY1;</span>
+<span class="fc" id="L1170">        double acZ = inhomZ3 - inhomZ1;</span>
         
         //the area of ABC is half the modulus of the cross product of 
         //vectors ab and ac
-<span class="fc" id="L1182">        double crossX = abY * acZ - abZ * acY;</span>
-<span class="fc" id="L1183">        double crossY = abZ * acX - abX * acZ;</span>
-<span class="fc" id="L1184">        double crossZ = abX * acY - abY * acX;</span>
+<span class="fc" id="L1174">        double crossX = abY * acZ - abZ * acY;</span>
+<span class="fc" id="L1175">        double crossY = abZ * acX - abX * acZ;</span>
+<span class="fc" id="L1176">        double crossZ = abX * acY - abY * acX;</span>
         //normalize orientation vector
-<span class="fc" id="L1186">        double norm = Math.sqrt(crossX * crossX + crossY * crossY + </span>
+<span class="fc" id="L1178">        double norm = Math.sqrt(crossX * crossX + crossY * crossY + </span>
                 crossZ * crossZ);
         
-<span class="fc bfc" id="L1189" title="All 2 branches covered.">        if (norm &lt; threshold) {</span>
-<span class="fc" id="L1190">            throw new CoincidentPointsException();</span>
+<span class="fc bfc" id="L1181" title="All 2 branches covered.">        if (norm &lt; threshold) {</span>
+<span class="fc" id="L1182">            throw new CoincidentPointsException();</span>
         }
         
-<span class="fc" id="L1193">        crossX /= norm;</span>
-<span class="fc" id="L1194">        crossY /= norm;</span>
-<span class="fc" id="L1195">        crossZ /= norm;</span>
+<span class="fc" id="L1185">        crossX /= norm;</span>
+<span class="fc" id="L1186">        crossY /= norm;</span>
+<span class="fc" id="L1187">        crossZ /= norm;</span>
         
-<span class="fc" id="L1197">        result[0] = crossX;</span>
-<span class="fc" id="L1198">        result[1] = crossY;</span>
-<span class="fc" id="L1199">        result[2] = crossZ;        </span>
-<span class="fc" id="L1200">    }</span>
+<span class="fc" id="L1189">        result[0] = crossX;</span>
+<span class="fc" id="L1190">        result[1] = crossY;</span>
+<span class="fc" id="L1191">        result[2] = crossZ;        </span>
+<span class="fc" id="L1192">    }</span>
     
     /**
      * Returns the angle formed by the two provided triangles, assuming that
@@ -1211,8 +1203,8 @@ public class Triangle3D implements Serializable {
      */
     public static double getAngleBetweenTriangles(Triangle3D triangle1, 
             Triangle3D triangle2) throws CoincidentPointsException {
-<span class="fc" id="L1214">        return getAngleBetweenTriangles(triangle1.getOrientation(), </span>
-<span class="fc" id="L1215">                triangle2.getOrientation());</span>
+<span class="fc" id="L1206">        return getAngleBetweenTriangles(triangle1.getOrientation(), </span>
+<span class="fc" id="L1207">                triangle2.getOrientation());</span>
     }
      
     /**
@@ -1226,26 +1218,26 @@ public class Triangle3D implements Serializable {
      * don't have length 3.
      */
     private static double getAngleBetweenTriangles(double[] orientation1, 
-            double[] orientation2) throws IllegalArgumentException {
-<span class="pc bpc" id="L1230" title="2 of 4 branches missed.">        if (orientation1.length != INHOM_COORDS ||</span>
+            double[] orientation2) {
+<span class="pc bpc" id="L1222" title="2 of 4 branches missed.">        if (orientation1.length != INHOM_COORDS ||</span>
                 orientation2.length != INHOM_COORDS) {
-<span class="nc" id="L1232">            throw new IllegalArgumentException();</span>
+<span class="nc" id="L1224">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L1235">        double x1 = orientation1[0];</span>
-<span class="fc" id="L1236">        double y1 = orientation1[1];</span>
-<span class="fc" id="L1237">        double z1 = orientation1[2];</span>
+<span class="fc" id="L1227">        double x1 = orientation1[0];</span>
+<span class="fc" id="L1228">        double y1 = orientation1[1];</span>
+<span class="fc" id="L1229">        double z1 = orientation1[2];</span>
         
-<span class="fc" id="L1239">        double x2 = orientation2[0];</span>
-<span class="fc" id="L1240">        double y2 = orientation2[1];</span>
-<span class="fc" id="L1241">        double z2 = orientation2[2];</span>
+<span class="fc" id="L1231">        double x2 = orientation2[0];</span>
+<span class="fc" id="L1232">        double y2 = orientation2[1];</span>
+<span class="fc" id="L1233">        double z2 = orientation2[2];</span>
         
-<span class="fc" id="L1243">        double norm1 = Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);</span>
-<span class="fc" id="L1244">        double norm2 = Math.sqrt(x2 * x2 + y2 * y2 + z2 * z2);</span>
+<span class="fc" id="L1235">        double norm1 = Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);</span>
+<span class="fc" id="L1236">        double norm2 = Math.sqrt(x2 * x2 + y2 * y2 + z2 * z2);</span>
         
-<span class="fc" id="L1246">        double dotProduct = (x1 * x2 + y1 * y2 + z1 * z2) / (norm1 * norm2);</span>
+<span class="fc" id="L1238">        double dotProduct = (x1 * x2 + y1 * y2 + z1 * z2) / (norm1 * norm2);</span>
         
-<span class="fc" id="L1248">        return Math.acos(dotProduct);        </span>
+<span class="fc" id="L1240">        return Math.acos(dotProduct);        </span>
     }
     
 }
