@@ -82,8 +82,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * size or their size is smaller than required minimum size (4 matches).
      */
     public LinePlaneCorrespondencePinholeCameraRobustEstimator(
-            List<Plane> planes, List<Line2D> lines) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         super();
         internalSetLinesAndPlanes(planes, lines);
     }
@@ -115,8 +114,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public LinePlaneCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List<Plane> planes, List<Line2D> lines)
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         super(listener);
         internalSetLinesAndPlanes(planes, lines);
     }
@@ -162,7 +160,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * already in progress.
      */
     public final void setLinesAndPlanes(List<Plane> planes, List<Line2D> lines)
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -206,8 +204,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES (i.e. 4 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException { }
+    public void setQualityScores(double[] qualityScores) throws LockedException { }
     
     /**
      * Creates a pinhole camera robust estimator based on plane/line 
@@ -238,7 +235,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             List<Plane> planes, List<Line2D> lines, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 planes, lines, method);
     }

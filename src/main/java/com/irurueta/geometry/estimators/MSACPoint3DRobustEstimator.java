@@ -64,8 +64,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public MSACPoint3DRobustEstimator(List<Plane> planes) 
-            throws IllegalArgumentException {
+    public MSACPoint3DRobustEstimator(List<Plane> planes) {
         super(planes);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -90,7 +89,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public MSACPoint3DRobustEstimator(Point3DRobustEstimatorListener listener,
-            List<Plane> planes) throws IllegalArgumentException {
+            List<Plane> planes) {
         super(listener, planes);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -118,8 +117,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

@@ -83,8 +83,7 @@ public class MSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public MSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-            List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException {
+            List<Line2D> inputLines, List<Line2D> outputLines) {
         super(inputLines, outputLines);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -117,8 +116,7 @@ public class MSACLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     public MSACLineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
-            List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException {
+            List<Line2D> inputLines, List<Line2D> outputLines) {
         super(listener, inputLines, outputLines);
         mThreshold = DEFAULT_THRESHOLD;     
     }
@@ -162,8 +160,7 @@ public class MSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

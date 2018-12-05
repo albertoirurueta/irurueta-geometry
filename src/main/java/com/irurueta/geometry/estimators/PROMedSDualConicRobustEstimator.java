@@ -88,8 +88,7 @@ public class PROMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      * @throws IllegalArgumentException if provided list of lines don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSDualConicRobustEstimator(List<Line2D> lines) 
-            throws IllegalArgumentException {
+    public PROMedSDualConicRobustEstimator(List<Line2D> lines) {
         super(lines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -116,7 +115,7 @@ public class PROMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      */
     public PROMedSDualConicRobustEstimator(
             DualConicRobustEstimatorListener listener,
-            List<Line2D> lines) throws IllegalArgumentException {
+            List<Line2D> lines) {
         super(listener, lines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -127,8 +126,7 @@ public class PROMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 5 lines).
      */
-    public PROMedSDualConicRobustEstimator(double[] qualityScores)
-            throws IllegalArgumentException {
+    public PROMedSDualConicRobustEstimator(double[] qualityScores) {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -143,7 +141,7 @@ public class PROMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSDualConicRobustEstimator(List<Line2D> lines,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(lines);
         
         if (qualityScores.length != lines.size()) {
@@ -163,8 +161,7 @@ public class PROMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      * smaller than MINIMUM_SIZE (i.e. 5 lines).
      */
     public PROMedSDualConicRobustEstimator(
-            DualConicRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
+            DualConicRobustEstimatorListener listener, double[] qualityScores) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -183,8 +180,7 @@ public class PROMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      */
     public PROMedSDualConicRobustEstimator(
             DualConicRobustEstimatorListener listener,
-            List<Line2D> lines, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Line2D> lines, double[] qualityScores) {
         super(listener, lines);
         
         if (qualityScores.length != lines.size()) {
@@ -240,8 +236,7 @@ public class PROMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -272,8 +267,7 @@ public class PROMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      * smaller than MINIMUM_SIZE (i.e. 5 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -433,8 +427,7 @@ public class PROMedSDualConicRobustEstimator extends DualConicRobustEstimator{
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

@@ -99,8 +99,7 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
      * (6 correspondences).
      */
     public PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
-            List<Point3D> points3D, List<Point2D> points2D)
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(points3D, points2D);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -133,8 +132,7 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(listener, points3D, points2D);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -147,7 +145,7 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -169,7 +167,7 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
             List<Point3D> points3D, List<Point2D> points2D,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(points3D, points2D);
 
         if (qualityScores.length != points3D.size()) {
@@ -191,7 +189,7 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -217,7 +215,7 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
     public PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
             List<Point3D> points3D, List<Point2D> points2D,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener, points3D, points2D);
         
         if (qualityScores.length != points3D.size()) {
@@ -273,8 +271,7 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -306,8 +303,7 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -569,8 +565,7 @@ public class PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MIN_NUMBER_OF_POINT_CORRESPONDENCES) {
             throw new IllegalArgumentException();
         }

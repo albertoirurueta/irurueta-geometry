@@ -99,8 +99,7 @@ public class PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * size or their size is smaller than required minimum size (4 matches).
      */
     public PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            List<Plane> planes, List<Line2D> lines) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         super(planes, lines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -133,8 +132,7 @@ public class PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List<Plane> planes, List<Line2D> lines)
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         super(listener, planes, lines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -147,7 +145,7 @@ public class PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * smaller than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES (i.e. 4 samples).
      */
     public PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super();        
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -170,8 +168,7 @@ public class PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * size (4 matches).
      */
     public PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            List<Plane> planes, List<Line2D> lines, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines, double[] qualityScores) {
         super(planes, lines);
         
         if (qualityScores.length != planes.size()) {
@@ -193,7 +190,7 @@ public class PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -218,8 +215,7 @@ public class PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List<Plane> planes, List<Line2D> lines, double[] qualityScores)
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines, double[] qualityScores) {
         super(listener, planes, lines);
         
         if (qualityScores.length != planes.size()) {
@@ -275,8 +271,7 @@ public class PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -308,8 +303,7 @@ public class PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * smaller than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES (i.e. 4 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -556,8 +550,7 @@ public class PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES) {
             throw new IllegalArgumentException();
         }

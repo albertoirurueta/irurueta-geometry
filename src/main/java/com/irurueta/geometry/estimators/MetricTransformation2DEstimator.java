@@ -81,7 +81,7 @@ public class MetricTransformation2DEstimator {
      * the same size or their size is smaller than 2.
      */
     public MetricTransformation2DEstimator(List<Point2D> inputPoints,
-            List<Point2D> outputPoints) throws IllegalArgumentException {
+            List<Point2D> outputPoints) {
         internalSetPoints(inputPoints, outputPoints);
     }
     
@@ -106,8 +106,7 @@ public class MetricTransformation2DEstimator {
      */
     public MetricTransformation2DEstimator(
             MetricTransformation2DEstimatorListener listener, 
-            List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point2D> inputPoints, List<Point2D> outputPoints) {
         mListener = listener;
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -129,8 +128,7 @@ public class MetricTransformation2DEstimator {
      * the same size or their size is smaller than 2.
      */
     public MetricTransformation2DEstimator(List<Point2D> inputPoints,
-            List<Point2D> outputPoints, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            List<Point2D> outputPoints, boolean weakMinimumSizeAllowed) {
         mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -161,8 +159,7 @@ public class MetricTransformation2DEstimator {
     public MetricTransformation2DEstimator(
             MetricTransformation2DEstimatorListener listener, 
             List<Point2D> inputPoints, List<Point2D> outputPoints,
-            boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
         mListener = listener;
         internalSetPoints(inputPoints, outputPoints);
@@ -211,8 +208,7 @@ public class MetricTransformation2DEstimator {
      * already in progres.
      */
     public void setPoints(List<Point2D> inputPoints, 
-            List<Point2D> outputPoints) throws IllegalArgumentException,
-            LockedException {
+            List<Point2D> outputPoints) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -358,7 +354,8 @@ public class MetricTransformation2DEstimator {
                     Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH);
             
             int n = mInputPoints.size();
-            Point2D inputPoint, outputPoint;
+            Point2D inputPoint;
+            Point2D outputPoint;
             Matrix col = new Matrix(
                     Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
             Matrix row = new Matrix(1, 

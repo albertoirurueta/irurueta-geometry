@@ -83,8 +83,7 @@ public class MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         super(inputPlanes, outputPlanes);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -117,8 +116,7 @@ public class MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
-            List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         super(listener, inputPlanes, outputPlanes);
         mThreshold = DEFAULT_THRESHOLD;     
     }
@@ -162,8 +160,7 @@ public class MSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

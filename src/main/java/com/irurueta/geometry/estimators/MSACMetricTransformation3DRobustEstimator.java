@@ -74,8 +74,7 @@ public class MSACMetricTransformation3DRobustEstimator extends
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public MSACMetricTransformation3DRobustEstimator(
-            List<Point3D> inputPoints, List<Point3D> outputPoints)
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         super(inputPoints, outputPoints);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -108,8 +107,7 @@ public class MSACMetricTransformation3DRobustEstimator extends
      */
     public MSACMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
-            List<Point3D> inputPoints, List<Point3D> outputPoints)
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         super(listener, inputPoints, outputPoints);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -140,7 +138,7 @@ public class MSACMetricTransformation3DRobustEstimator extends
      */
     public MSACMetricTransformation3DRobustEstimator(
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         super(inputPoints, outputPoints, weakMinimumSizeAllowed);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -177,7 +175,7 @@ public class MSACMetricTransformation3DRobustEstimator extends
     public MSACMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -206,8 +204,7 @@ public class MSACMetricTransformation3DRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException,
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

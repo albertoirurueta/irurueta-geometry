@@ -66,8 +66,7 @@ public class MSACQuadricRobustEstimator extends QuadricRobustEstimator{
      * @throws IllegalArgumentException if provided list of points don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public MSACQuadricRobustEstimator(List<Point3D> points) 
-            throws IllegalArgumentException {
+    public MSACQuadricRobustEstimator(List<Point3D> points) {
         super(points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -93,7 +92,7 @@ public class MSACQuadricRobustEstimator extends QuadricRobustEstimator{
      * a size greater or equal than MINIMUM_SIZE.
      */
     public MSACQuadricRobustEstimator(QuadricRobustEstimatorListener listener,
-            List<Point3D> points) throws IllegalArgumentException {
+            List<Point3D> points) {
         super(listener, points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -121,8 +120,7 @@ public class MSACQuadricRobustEstimator extends QuadricRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

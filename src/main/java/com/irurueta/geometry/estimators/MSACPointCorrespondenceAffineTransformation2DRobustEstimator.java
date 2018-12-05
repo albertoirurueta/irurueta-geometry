@@ -74,8 +74,7 @@ public class MSACPointCorrespondenceAffineTransformation2DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */    
     public MSACPointCorrespondenceAffineTransformation2DRobustEstimator(
-            List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point2D> inputPoints, List<Point2D> outputPoints) {
         super(inputPoints, outputPoints);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -108,8 +107,7 @@ public class MSACPointCorrespondenceAffineTransformation2DRobustEstimator
      */    
     public MSACPointCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
-            List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point2D> inputPoints, List<Point2D> outputPoints) {
         super(listener, inputPoints, outputPoints);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -138,8 +136,7 @@ public class MSACPointCorrespondenceAffineTransformation2DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

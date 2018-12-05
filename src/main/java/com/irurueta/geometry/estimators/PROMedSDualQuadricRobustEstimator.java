@@ -89,8 +89,7 @@ public class PROMedSDualQuadricRobustEstimator extends
      * @throws IllegalArgumentException if provided list of planes don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSDualQuadricRobustEstimator(List<Plane> planes) 
-            throws IllegalArgumentException {
+    public PROMedSDualQuadricRobustEstimator(List<Plane> planes) {
         super(planes);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -117,7 +116,7 @@ public class PROMedSDualQuadricRobustEstimator extends
      */
     public PROMedSDualQuadricRobustEstimator(
             DualQuadricRobustEstimatorListener listener,
-            List<Plane> planes) throws IllegalArgumentException {
+            List<Plane> planes) {
         super(listener, planes);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -128,8 +127,7 @@ public class PROMedSDualQuadricRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 9 planes).
      */
-    public PROMedSDualQuadricRobustEstimator(double[] qualityScores)
-            throws IllegalArgumentException {
+    public PROMedSDualQuadricRobustEstimator(double[] qualityScores) {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -144,7 +142,7 @@ public class PROMedSDualQuadricRobustEstimator extends
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSDualQuadricRobustEstimator(List<Plane> planes, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(planes);
         
         if (qualityScores.length != planes.size()) {
@@ -164,8 +162,7 @@ public class PROMedSDualQuadricRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 9 planes).
      */
     public PROMedSDualQuadricRobustEstimator(
-            DualQuadricRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
+            DualQuadricRobustEstimatorListener listener, double[] qualityScores) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -184,8 +181,7 @@ public class PROMedSDualQuadricRobustEstimator extends
      */
     public PROMedSDualQuadricRobustEstimator(
             DualQuadricRobustEstimatorListener listener,
-            List<Plane> planes, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Plane> planes, double[] qualityScores) {
         super(listener, planes);
         
         if (qualityScores.length != planes.size()) {
@@ -241,8 +237,7 @@ public class PROMedSDualQuadricRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -273,8 +268,7 @@ public class PROMedSDualQuadricRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 9 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -440,8 +434,7 @@ public class PROMedSDualQuadricRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

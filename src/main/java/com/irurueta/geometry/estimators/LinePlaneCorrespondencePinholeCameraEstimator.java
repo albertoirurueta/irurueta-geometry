@@ -73,8 +73,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * the same size and enough correspondences.
      */
     public LinePlaneCorrespondencePinholeCameraEstimator(List<Plane> planes,
-            List<Line2D> lines2D) throws IllegalArgumentException,
-            WrongListSizesException {
+            List<Line2D> lines2D) throws WrongListSizesException {
         super();
         internalSetLists(planes, lines2D);
     }
@@ -91,7 +90,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      */
     public LinePlaneCorrespondencePinholeCameraEstimator(List<Plane> planes,
             List<Line2D> lines2D, PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         super(listener);
         internalSetLists(planes, lines2D);
     }
@@ -106,7 +105,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * the same size and enough correspondences.
      */
     private void internalSetLists(List<Plane> planes, List<Line2D> lines2D)
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         
         if (planes == null || lines2D == null) {
             throw new IllegalArgumentException();
@@ -130,8 +129,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * the same size and enough correspondences.
      */
     public void setLists(List<Plane> planes, List<Line2D> lines2D)
-            throws LockedException, IllegalArgumentException,
-            WrongListSizesException {
+            throws LockedException, WrongListSizesException {
         if (isLocked()) {
             throw new LockedException();
         }
