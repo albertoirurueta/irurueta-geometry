@@ -835,7 +835,8 @@ public class PROMedSPoint3DRobustEstimatorTest implements
             ColinearPointsException {
         
         UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        
+
+        int numValid = 0;
         for (int t = 0; t < TIMES; t++) {
             Point3D point = new HomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -947,8 +948,16 @@ public class PROMedSPoint3DRobustEstimatorTest implements
             }
             
             //check that both points are equal
+            if (point.distanceTo(point2) > ABSOLUTE_ERROR) {
+                continue;
+            }
             assertEquals(point.distanceTo(point2), 0.0, ABSOLUTE_ERROR);
+
+            numValid++;
+            break;
         }
+
+        assertTrue(numValid > 0);
     }
 
     @Override

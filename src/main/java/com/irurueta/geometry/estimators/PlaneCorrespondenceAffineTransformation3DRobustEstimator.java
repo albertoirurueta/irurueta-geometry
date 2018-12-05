@@ -76,8 +76,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         super();
         internalSetPlanes(inputPlanes, outputPlanes);
     }
@@ -109,8 +108,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public PlaneCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
-            List<Plane> inputPlanes, List<Plane> outputPlanes)
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         super(listener);
         internalSetPlanes(inputPlanes, outputPlanes);
     }
@@ -158,8 +156,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * already in progress.
      */
     public final void setPlanes(List<Plane> inputPlanes, 
-            List<Plane> outputPlanes) throws IllegalArgumentException,
-            LockedException {
+            List<Plane> outputPlanes) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -202,8 +199,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is 
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException { }
+    public void setQualityScores(double[] qualityScores) throws LockedException { }
     
     /**
      * Creates an affine 3D transformation estimator based on 3D plane
@@ -244,7 +240,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
             create(List<Plane> inputPlanes, List<Plane> outputPlanes,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
@@ -315,7 +311,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
             create(AffineTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
@@ -381,8 +377,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
             create(List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
@@ -457,8 +452,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
             create(AffineTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
@@ -501,8 +495,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
-            create(List<Plane> inputPlanes, List<Plane> outputPlanes)
-            throws IllegalArgumentException {
+            create(List<Plane> inputPlanes, List<Plane> outputPlanes) {
         return create(inputPlanes, outputPlanes, DEFAULT_ROBUST_METHOD);
     }
             
@@ -533,8 +526,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
             create(AffineTransformation3DRobustEstimatorListener listener,
-            List<Plane> inputPlanes, List<Plane> outputPlanes)
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         return create(listener, inputPlanes, outputPlanes, 
                 DEFAULT_ROBUST_METHOD);
     }
@@ -566,7 +558,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
             create(List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(inputPlanes, outputPlanes, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }
@@ -604,7 +596,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
     public static PlaneCorrespondenceAffineTransformation3DRobustEstimator
             create(AffineTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, inputPlanes, outputPlanes, qualityScores,
                 DEFAULT_ROBUST_METHOD);
     }
@@ -621,7 +613,7 @@ public abstract class PlaneCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetPlanes(List<Plane> inputPlanes, 
-            List<Plane> outputPlanes) throws IllegalArgumentException {
+            List<Plane> outputPlanes) {
         if (inputPlanes.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

@@ -909,8 +909,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -939,8 +938,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+    public void setMaxIterations(int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -1100,7 +1098,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPoints(
             List<Point3D> points3D, List<Point2D> points2D, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, 
                 points2D, method);
     }
@@ -1123,7 +1121,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraRobustEstimatorListener listener,
             List<Point3D> points3D, List<Point2D> points2D,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(listener, 
                 points3D, points2D, method);
     }
@@ -1146,8 +1144,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPoints(
             List<Point3D> points3D, List<Point2D> points2D, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, 
                 points2D, qualityScores, method);
     }
@@ -1173,8 +1170,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraRobustEstimatorListener listener,
             List<Point3D> points3D, List<Point2D> points2D, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
                 points3D, points2D, qualityScores, method);
     }  
@@ -1191,8 +1187,7 @@ public abstract class PinholeCameraRobustEstimator {
      * (6 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPoints(
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, 
                 points2D);
     }
@@ -1213,8 +1208,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraRobustEstimatorListener listener,
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
                 points3D, points2D);
     }
@@ -1235,7 +1229,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPoints(
             List<Point3D> points3D, List<Point2D> points2D, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, 
                 points2D, qualityScores);
     }
@@ -1259,7 +1253,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraRobustEstimatorListener listener,
             List<Point3D> points3D, List<Point2D> points2D, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
                 points3D, points2D, qualityScores);
     }  
@@ -1280,8 +1274,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            List<Point2D> points2D, RobustEstimatorMethod method) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, 
                 points3D, points2D, method);
     }
@@ -1305,8 +1298,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            List<Point2D> points2D, RobustEstimatorMethod method) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(listener, 
                 intrinsic, points3D, points2D, method);
     }
@@ -1331,7 +1323,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
             List<Point2D> points2D, double[] qualityScores, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, 
                 points3D, points2D, qualityScores, method);
     }
@@ -1359,8 +1351,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic,
             List<Point3D> points3D, List<Point2D> points2D, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
                 intrinsic, points3D, points2D, qualityScores, method);
     }  
@@ -1379,8 +1370,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraIntrinsicParameters intrinsic,
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, 
                 points3D, points2D);
     }
@@ -1403,7 +1393,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException {
+            List<Point2D> points2D) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
                 intrinsic, points3D, points2D);
     }
@@ -1425,8 +1415,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Point2D> points2D, double[] qualityScores) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, 
                 points3D, points2D, qualityScores);
     }
@@ -1451,7 +1440,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D,
-            List<Point2D> points2D, double[] qualityScores) throws IllegalArgumentException {
+            List<Point2D> points2D, double[] qualityScores) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
                 intrinsic, points3D, points2D, qualityScores);
     }  
@@ -1478,8 +1467,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List<Point3D> points3D, 
-            List<Point2D> points2D, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            List<Point2D> points2D, RobustEstimatorMethod method) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,
                 horizontalPrincipalPoint, verticalPrincipalPoint, points3D, 
                 points2D, method);
@@ -1510,8 +1498,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraRobustEstimatorListener listener,
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List<Point3D> points3D, 
-            List<Point2D> points2D, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            List<Point2D> points2D, RobustEstimatorMethod method) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(listener, 
                 skewness, horizontalPrincipalPoint, verticalPrincipalPoint, 
                 points3D, points2D, method);
@@ -1543,7 +1530,7 @@ public abstract class PinholeCameraRobustEstimator {
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List<Point3D> points3D, 
             List<Point2D> points2D, double[] qualityScores, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,
                 horizontalPrincipalPoint, verticalPrincipalPoint, points3D, 
                 points2D, qualityScores, method);
@@ -1578,7 +1565,7 @@ public abstract class PinholeCameraRobustEstimator {
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List<Point3D> points3D, 
             List<Point2D> points2D, double[] qualityScores, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
                 skewness, horizontalPrincipalPoint, verticalPrincipalPoint, 
                 points3D, points2D, qualityScores, method);
@@ -1604,7 +1591,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException {
+            List<Point2D> points2D) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,
                 horizontalPrincipalPoint, verticalPrincipalPoint, points3D, 
                 points2D);
@@ -1634,7 +1621,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraRobustEstimatorListener listener,
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException {
+            List<Point2D> points2D) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
                 skewness, horizontalPrincipalPoint, verticalPrincipalPoint, 
                 points3D, points2D);
@@ -1663,8 +1650,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List<Point3D> points3D, 
-            List<Point2D> points2D, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Point2D> points2D, double[] qualityScores) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,
                 horizontalPrincipalPoint, verticalPrincipalPoint, points3D, 
                 points2D, qualityScores);
@@ -1696,8 +1682,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraRobustEstimatorListener listener,
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List<Point3D> points3D,
-            List<Point2D> points2D, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Point2D> points2D, double[] qualityScores) {
         return PointCorrespondencePinholeCameraRobustEstimator.create(listener,
                 skewness, horizontalPrincipalPoint, verticalPrincipalPoint, 
                 points3D, points2D, qualityScores);
@@ -1718,7 +1703,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             List<Plane> planes, List<Line2D> lines, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 planes, lines, method);
     }
@@ -1741,7 +1726,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             PinholeCameraRobustEstimatorListener listener,
             List<Plane> planes, List<Line2D> lines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 listener, planes, lines, method);
     }
@@ -1764,7 +1749,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             List<Plane> planes, List<Line2D> lines, double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 planes, lines, qualityScores, method);
     }
@@ -1790,7 +1775,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             PinholeCameraRobustEstimatorListener listener, List<Plane> planes,
             List<Line2D> lines, double[] qualityScores, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 listener, planes, lines, qualityScores, method);
     }
@@ -1807,8 +1792,7 @@ public abstract class PinholeCameraRobustEstimator {
      * correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
-            List<Plane> planes, List<Line2D> lines) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 planes, lines);
     }
@@ -1829,8 +1813,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             PinholeCameraRobustEstimatorListener listener,
-            List<Plane> planes, List<Line2D> lines) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 listener, planes, lines);
     }
@@ -1850,8 +1833,7 @@ public abstract class PinholeCameraRobustEstimator {
      * required minimum size (4 correspondences).
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
-            List<Plane> planes, List<Line2D> lines, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines, double[] qualityScores) {
         return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 planes, lines, qualityScores);
     }
@@ -1874,8 +1856,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             PinholeCameraRobustEstimatorListener listener, List<Plane> planes,
-            List<Line2D> lines, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Line2D> lines, double[] qualityScores) {
         return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 listener, planes, lines, qualityScores);
     }   
