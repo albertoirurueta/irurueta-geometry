@@ -111,8 +111,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-            List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException {
+            List<Line2D> inputLines, List<Line2D> outputLines) {
         super(inputLines, outputLines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -149,8 +148,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     public PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener,
-            List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException {
+            List<Line2D> inputLines, List<Line2D> outputLines) {
         super(listener, inputLines, outputLines);
         mThreshold = DEFAULT_THRESHOLD;     
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -165,7 +163,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super();
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -191,7 +189,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     public PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             List<Line2D> inputLines, List<Line2D> outputLines, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(inputLines, outputLines);
         
         if (qualityScores.length != inputLines.size()) {
@@ -215,7 +213,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     public PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -243,7 +241,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
     public PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener, inputLines, outputLines);
         
         if (qualityScores.length != inputLines.size()) {
@@ -295,8 +293,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -327,8 +324,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -588,8 +584,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
