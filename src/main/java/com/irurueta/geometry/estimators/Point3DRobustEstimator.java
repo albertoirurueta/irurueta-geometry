@@ -202,8 +202,7 @@ public abstract class Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public Point3DRobustEstimator(List<Plane> planes) 
-            throws IllegalArgumentException {
+    public Point3DRobustEstimator(List<Plane> planes) {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
         mMaxIterations = DEFAULT_MAX_ITERATIONS; 
@@ -221,7 +220,7 @@ public abstract class Point3DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public Point3DRobustEstimator(Point3DRobustEstimatorListener listener,
-            List<Plane> planes) throws IllegalArgumentException {
+            List<Plane> planes) {
         mListener = listener;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
@@ -292,8 +291,7 @@ public abstract class Point3DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta) 
-            throws IllegalArgumentException, LockedException {
+    public void setProgressDelta(float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -326,8 +324,7 @@ public abstract class Point3DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -356,8 +353,7 @@ public abstract class Point3DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+    public void setMaxIterations(int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -469,8 +465,7 @@ public abstract class Point3DRobustEstimator {
      * @throws LockedException if estimator is locked because a computation is
      * already in progress.
      */
-    public void setPlanes(List<Plane> planes) throws IllegalArgumentException,
-            LockedException {
+    public void setPlanes(List<Plane> planes) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -508,8 +503,7 @@ public abstract class Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException { }
+    public void setQualityScores(double[] qualityScores) throws LockedException { }
     
     /**
      * Gets estimated covariance of estimated 3D point if available.
@@ -555,7 +549,7 @@ public abstract class Point3DRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static Point3DRobustEstimator create(List<Plane> planes, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPoint3DRobustEstimator(planes);
@@ -612,7 +606,7 @@ public abstract class Point3DRobustEstimator {
      */
     public static Point3DRobustEstimator create(
             Point3DRobustEstimatorListener listener, List<Plane> planes,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPoint3DRobustEstimator(listener, planes);
@@ -639,7 +633,7 @@ public abstract class Point3DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
     public static Point3DRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPoint3DRobustEstimator();
@@ -668,8 +662,7 @@ public abstract class Point3DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static Point3DRobustEstimator create(List<Plane> planes, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPoint3DRobustEstimator(planes);
@@ -699,7 +692,7 @@ public abstract class Point3DRobustEstimator {
      */
     public static Point3DRobustEstimator create(
             Point3DRobustEstimatorListener listener, double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPoint3DRobustEstimator(listener);
@@ -731,8 +724,7 @@ public abstract class Point3DRobustEstimator {
      */
     public static Point3DRobustEstimator create(
             Point3DRobustEstimatorListener listener, List<Plane> planes,
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPoint3DRobustEstimator(listener, planes);
@@ -767,8 +759,7 @@ public abstract class Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines doesn't have a
      * size greater or equal than MINIMUM_SIZE.
      */
-    public static Point3DRobustEstimator create(List<Plane> planes) 
-            throws IllegalArgumentException {
+    public static Point3DRobustEstimator create(List<Plane> planes) {
         return create(planes, DEFAULT_ROBUST_METHOD);
     }
     
@@ -795,8 +786,7 @@ public abstract class Point3DRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static Point3DRobustEstimator create(
-            Point3DRobustEstimatorListener listener, List<Plane> planes) 
-            throws IllegalArgumentException {
+            Point3DRobustEstimatorListener listener, List<Plane> planes) {
         return create(listener, planes, DEFAULT_ROBUST_METHOD);
     }
     
@@ -808,8 +798,7 @@ public abstract class Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 3 planes).
      */
-    public static Point3DRobustEstimator create(double[] qualityScores) 
-            throws IllegalArgumentException {
+    public static Point3DRobustEstimator create(double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -824,7 +813,7 @@ public abstract class Point3DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static Point3DRobustEstimator create(List<Plane> planes, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(planes, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -839,8 +828,7 @@ public abstract class Point3DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 3 planes).
      */
     public static Point3DRobustEstimator create(
-            Point3DRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
+            Point3DRobustEstimatorListener listener, double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -858,7 +846,7 @@ public abstract class Point3DRobustEstimator {
      */
     public static Point3DRobustEstimator create(
             Point3DRobustEstimatorListener listener, List<Plane> planes,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) {
         return create(listener, planes, qualityScores, DEFAULT_ROBUST_METHOD);
     }        
     
@@ -910,33 +898,32 @@ public abstract class Point3DRobustEstimator {
             Point3DRefiner refiner;
             Point3D result;
             switch (mRefinementCoordinatesType) {
-                case HOMOGENEOUS_COORDINATES: {
-                    HomogeneousPoint3D p;
+                case HOMOGENEOUS_COORDINATES:
+                    HomogeneousPoint3D homP;
                     if (point.getType() == CoordinatesType.HOMOGENEOUS_COORDINATES) {
-                        p = (HomogeneousPoint3D)point;
+                        homP = (HomogeneousPoint3D)point;
                     } else {
-                        p = new HomogeneousPoint3D(point);
+                        homP = new HomogeneousPoint3D(point);
                     }
                     refiner = new HomogeneousPoint3DRefiner(
-                            p, mKeepCovariance, getInliersData(), mPlanes,
+                            homP, mKeepCovariance, getInliersData(), mPlanes,
                             getRefinementStandardDeviation());
                     result = new HomogeneousPoint3D();
                     break;
-                }                
+
                 case INHOMOGENEOUS_COORDINATES:
-                default: {
-                    InhomogeneousPoint3D p;
+                default:
+                    InhomogeneousPoint3D inhomP;
                     if (point.getType() == CoordinatesType.INHOMOGENEOUS_COORDINATES) {
-                        p = (InhomogeneousPoint3D)point;
+                        inhomP = (InhomogeneousPoint3D)point;
                     } else {
-                        p = new InhomogeneousPoint3D(point);
+                        inhomP = new InhomogeneousPoint3D(point);
                     }
-                    refiner = new InhomogeneousPoint3DRefiner(p, 
+                    refiner = new InhomogeneousPoint3DRefiner(inhomP,
                             mKeepCovariance, getInliersData(), mPlanes,
                             getRefinementStandardDeviation());
                     result = new InhomogeneousPoint3D();
                     break;
-                }                       
             }
             
             try {
@@ -978,8 +965,7 @@ public abstract class Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes doesn't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    private void internalSetPlanes(List<Plane> planes) 
-            throws IllegalArgumentException {
+    private void internalSetPlanes(List<Plane> planes) {
         if (planes.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

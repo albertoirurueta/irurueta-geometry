@@ -76,8 +76,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PointCorrespondenceAffineTransformation2DRobustEstimator(
-            List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point2D> inputPoints, List<Point2D> outputPoints) {
         super();
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -109,8 +108,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      */
     public PointCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
-            List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point2D> inputPoints, List<Point2D> outputPoints) {
         super(listener);
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -158,8 +156,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * already in progress.
      */
     public final void setPoints(List<Point2D> inputPoints, 
-            List<Point2D> outputPoints) throws IllegalArgumentException, 
-            LockedException {
+            List<Point2D> outputPoints) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -202,8 +199,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is 
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException { }    
+    public void setQualityScores(double[] qualityScores) throws LockedException { }
     
     /**
      * Creates an affine 2D transformation estimator based on 2D point 
@@ -244,7 +240,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation2DRobustEstimator
             create(List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
@@ -315,7 +311,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
     public static PointCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener, 
             List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
@@ -348,8 +344,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 matched points).
      */
     public static PointCorrespondenceAffineTransformation2DRobustEstimator 
-            create(double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            create(double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator();
@@ -385,8 +380,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation2DRobustEstimator
             create(List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
@@ -422,8 +416,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation2DRobustEstimator 
             create(AffineTransformation2DRobustEstimatorListener listener,
-            double[] qualityScores, RobustEstimatorMethod method) 
-                    throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
@@ -464,8 +457,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
     public static PointCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener, 
             List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
@@ -508,8 +500,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceAffineTransformation2DRobustEstimator
-            create(List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException {
+            create(List<Point2D> inputPoints, List<Point2D> outputPoints) {
         return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);
     }            
             
@@ -540,8 +531,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener, 
-            List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point2D> inputPoints, List<Point2D> outputPoints) {
         return create(listener, inputPoints, outputPoints, 
                 DEFAULT_ROBUST_METHOD);
     }            
@@ -573,7 +563,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation2DRobustEstimator
             create(List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(inputPoints, outputPoints, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }            
@@ -611,7 +601,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
     public static PointCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener, 
             List<Point2D> inputPoints, List<Point2D> outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, inputPoints, outputPoints, qualityScores,
                 DEFAULT_ROBUST_METHOD);
     }   
@@ -667,7 +657,7 @@ public abstract class PointCorrespondenceAffineTransformation2DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetPoints(List<Point2D> inputPoints, 
-            List<Point2D> outputPoints) throws IllegalArgumentException {
+            List<Point2D> outputPoints) {
         if (inputPoints.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

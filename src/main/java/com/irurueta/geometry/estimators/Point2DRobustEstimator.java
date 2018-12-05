@@ -202,8 +202,7 @@ public abstract class Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public Point2DRobustEstimator(List<Line2D> lines) 
-            throws IllegalArgumentException {
+    public Point2DRobustEstimator(List<Line2D> lines) {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
         mMaxIterations = DEFAULT_MAX_ITERATIONS; 
@@ -221,7 +220,7 @@ public abstract class Point2DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public Point2DRobustEstimator(Point2DRobustEstimatorListener listener,
-            List<Line2D> lines) throws IllegalArgumentException {
+            List<Line2D> lines) {
         mListener = listener;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
@@ -292,8 +291,7 @@ public abstract class Point2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta) 
-            throws IllegalArgumentException, LockedException {
+    public void setProgressDelta(float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -326,8 +324,7 @@ public abstract class Point2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -356,8 +353,7 @@ public abstract class Point2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+    public void setMaxIterations(int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -469,8 +465,7 @@ public abstract class Point2DRobustEstimator {
      * @throws LockedException if estimator is locked because a computation is
      * already in progress.
      */
-    public void setLines(List<Line2D> lines) throws IllegalArgumentException,
-            LockedException {
+    public void setLines(List<Line2D> lines) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -508,8 +503,7 @@ public abstract class Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 2 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException { }
+    public void setQualityScores(double[] qualityScores) throws LockedException { }
     
     /**
      * Gets estimated covariance of estimated 3D point if available.
@@ -555,7 +549,7 @@ public abstract class Point2DRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static Point2DRobustEstimator create(List<Line2D> lines, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPoint2DRobustEstimator(lines);
@@ -612,7 +606,7 @@ public abstract class Point2DRobustEstimator {
      */
     public static Point2DRobustEstimator create(
             Point2DRobustEstimatorListener listener, List<Line2D> lines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPoint2DRobustEstimator(listener, lines);
@@ -639,7 +633,7 @@ public abstract class Point2DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
     public static Point2DRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPoint2DRobustEstimator();
@@ -668,8 +662,7 @@ public abstract class Point2DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static Point2DRobustEstimator create(List<Line2D> lines, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPoint2DRobustEstimator(lines);
@@ -699,7 +692,7 @@ public abstract class Point2DRobustEstimator {
      */
     public static Point2DRobustEstimator create(
             Point2DRobustEstimatorListener listener, double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPoint2DRobustEstimator(listener);
@@ -731,8 +724,7 @@ public abstract class Point2DRobustEstimator {
      */
     public static Point2DRobustEstimator create(
             Point2DRobustEstimatorListener listener, List<Line2D> lines,
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPoint2DRobustEstimator(listener, lines);
@@ -767,8 +759,7 @@ public abstract class Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have a
      * size greater or equal than MINIMUM_SIZE.
      */
-    public static Point2DRobustEstimator create(List<Line2D> lines) 
-            throws IllegalArgumentException {
+    public static Point2DRobustEstimator create(List<Line2D> lines) {
         return create(lines, DEFAULT_ROBUST_METHOD);
     }
     
@@ -795,8 +786,7 @@ public abstract class Point2DRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static Point2DRobustEstimator create(
-            Point2DRobustEstimatorListener listener, List<Line2D> lines) 
-            throws IllegalArgumentException {
+            Point2DRobustEstimatorListener listener, List<Line2D> lines) {
         return create(listener, lines, DEFAULT_ROBUST_METHOD);
     }
     
@@ -808,8 +798,7 @@ public abstract class Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
-    public static Point2DRobustEstimator create(double[] qualityScores) 
-            throws IllegalArgumentException {
+    public static Point2DRobustEstimator create(double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -824,7 +813,7 @@ public abstract class Point2DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static Point2DRobustEstimator create(List<Line2D> lines, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(lines, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -839,8 +828,7 @@ public abstract class Point2DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
     public static Point2DRobustEstimator create(
-            Point2DRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
+            Point2DRobustEstimatorListener listener, double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -858,7 +846,7 @@ public abstract class Point2DRobustEstimator {
      */
     public static Point2DRobustEstimator create(
             Point2DRobustEstimatorListener listener, List<Line2D> lines,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, lines, qualityScores, DEFAULT_ROBUST_METHOD);
     }        
     
@@ -978,8 +966,7 @@ public abstract class Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines doesn't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    private void internalSetLines(List<Line2D> lines) 
-            throws IllegalArgumentException {
+    private void internalSetLines(List<Line2D> lines) {
         if (lines.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

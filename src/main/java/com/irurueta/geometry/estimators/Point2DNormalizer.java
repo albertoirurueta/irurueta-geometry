@@ -107,8 +107,7 @@ public class Point2DNormalizer {
      * @throws IllegalArgumentException if provided collection of points does
      * not contain enough points, which is MIN_POINTS.
      */
-    public Point2DNormalizer(List<Point2D> points) 
-            throws IllegalArgumentException {
+    public Point2DNormalizer(List<Point2D> points) {
         internalSetPoints(points);
         reset();
     }
@@ -129,8 +128,7 @@ public class Point2DNormalizer {
      * @throws IllegalArgumentException if provided collection of points does
      * not contain enough points, which is MIN_POINTS.
      */
-    public void setPoints(List<Point2D> points) throws LockedException,
-            IllegalArgumentException {
+    public void setPoints(List<Point2D> points) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -290,20 +288,20 @@ public class Point2DNormalizer {
             mCentroidY = (mMinInhomY + mMaxInhomY) / 2.0;
             
             //transformation to normalize points            
-            Matrix T = new Matrix(
+            Matrix t = new Matrix(
                     ProjectiveTransformation2D.HOM_COORDS,
                     ProjectiveTransformation2D.HOM_COORDS);
 
             //X' = s * X + s * t -->
             //s * X = X' - s * t -->
             //X = 1/s*X' - t            
-            T.setElementAt(0, 0, mScaleX);
-            T.setElementAt(1, 1, mScaleY);
-            T.setElementAt(0, 2, -mScaleX * mCentroidX);
-            T.setElementAt(1, 2, -mScaleY * mCentroidY);
-            T.setElementAt(2, 2, 1.0);
+            t.setElementAt(0, 0, mScaleX);
+            t.setElementAt(1, 1, mScaleY);
+            t.setElementAt(0, 2, -mScaleX * mCentroidX);
+            t.setElementAt(1, 2, -mScaleY * mCentroidY);
+            t.setElementAt(2, 2, 1.0);
             
-            mTransformation = new ProjectiveTransformation2D(T);
+            mTransformation = new ProjectiveTransformation2D(t);
             mTransformation.normalize();
             
             //transformation to denormalize points
@@ -356,8 +354,7 @@ public class Point2DNormalizer {
      * @throws IllegalArgumentException if not enough points are provided, which
      * is MIN_POINTS.
      */
-    private void internalSetPoints(List<Point2D> points) 
-            throws IllegalArgumentException {
+    private void internalSetPoints(List<Point2D> points) {
         if (points.size() < MIN_POINTS) {
             throw new IllegalArgumentException();
         }
