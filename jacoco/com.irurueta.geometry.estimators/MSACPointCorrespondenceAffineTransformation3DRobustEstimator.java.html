@@ -75,11 +75,10 @@ public class MSACPointCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */    
     public MSACPointCorrespondenceAffineTransformation3DRobustEstimator(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L80">        super(inputPoints, outputPoints);</span>
-<span class="fc" id="L81">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L82">    }</span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L79">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L80">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L81">    }</span>
     
     /**
      * Constructor.
@@ -88,9 +87,9 @@ public class MSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */    
     public MSACPointCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L91">        super(listener);</span>
-<span class="fc" id="L92">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L90">        super(listener);</span>
+<span class="fc" id="L91">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L92">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
@@ -109,11 +108,10 @@ public class MSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */    
     public MSACPointCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L114">        super(listener, inputPoints, outputPoints);</span>
-<span class="fc" id="L115">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L116">    }</span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L112">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L113">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L114">    }</span>
 
     /**
      * Returns threshold to determine whether points are inliers or not when 
@@ -124,7 +122,7 @@ public class MSACPointCorrespondenceAffineTransformation3DRobustEstimator
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-<span class="fc" id="L127">        return mThreshold;</span>
+<span class="fc" id="L125">        return mThreshold;</span>
     }
     
     /**
@@ -138,16 +136,15 @@ public class MSACPointCorrespondenceAffineTransformation3DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L144">            throw new LockedException();</span>
+    public void setThreshold(double threshold) throws LockedException {
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L141">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L147">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L144">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L149">        mThreshold = threshold;</span>
-<span class="fc" id="L150">    }</span>
+<span class="fc" id="L146">        mThreshold = threshold;</span>
+<span class="fc" id="L147">    }</span>
     
     /**
      * Estimates an affine 3D transformation using a robust estimator and
@@ -164,134 +161,134 @@ public class MSACPointCorrespondenceAffineTransformation3DRobustEstimator
     @Override
     public AffineTransformation3D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L167" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L168">            throw new LockedException();</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L165">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L170" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L171">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L168">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L174">        MSACRobustEstimator&lt;AffineTransformation3D&gt; innerEstimator = </span>
+<span class="fc" id="L171">        MSACRobustEstimator&lt;AffineTransformation3D&gt; innerEstimator = </span>
                 new MSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L176">                    new MSACRobustEstimatorListener&lt;AffineTransformation3D&gt;() {</span>
+<span class="fc" id="L173">                    new MSACRobustEstimatorListener&lt;AffineTransformation3D&gt;() {</span>
                     
             //point to be reused when computing residuals
-<span class="fc" id="L179">            private Point3D mTestPoint = Point3D.create(</span>
+<span class="fc" id="L176">            private Point3D mTestPoint = Point3D.create(</span>
                     CoordinatesType.HOMOGENEOUS_COORDINATES);
             
             @Override
             public double getThreshold() {
-<span class="fc" id="L184">                return mThreshold;</span>
+<span class="fc" id="L181">                return mThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L189">                return mInputPoints.size();</span>
+<span class="fc" id="L186">                return mInputPoints.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L194">                return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L191">                return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;AffineTransformation3D&gt; solutions) {
-<span class="fc" id="L200">                Point3D inputPoint1 = mInputPoints.get(samplesIndices[0]);                </span>
-<span class="fc" id="L201">                Point3D inputPoint2 = mInputPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L202">                Point3D inputPoint3 = mInputPoints.get(samplesIndices[2]);</span>
-<span class="fc" id="L203">                Point3D inputPoint4 = mInputPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L197">                Point3D inputPoint1 = mInputPoints.get(samplesIndices[0]);                </span>
+<span class="fc" id="L198">                Point3D inputPoint2 = mInputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L199">                Point3D inputPoint3 = mInputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L200">                Point3D inputPoint4 = mInputPoints.get(samplesIndices[3]);</span>
                 
-<span class="fc" id="L205">                Point3D outputPoint1 = mOutputPoints.get(samplesIndices[0]);                </span>
-<span class="fc" id="L206">                Point3D outputPoint2 = mOutputPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L207">                Point3D outputPoint3 = mOutputPoints.get(samplesIndices[2]);</span>
-<span class="fc" id="L208">                Point3D outputPoint4 = mOutputPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L202">                Point3D outputPoint1 = mOutputPoints.get(samplesIndices[0]);                </span>
+<span class="fc" id="L203">                Point3D outputPoint2 = mOutputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L204">                Point3D outputPoint3 = mOutputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L205">                Point3D outputPoint4 = mOutputPoints.get(samplesIndices[3]);</span>
 
                 try {
-<span class="fc" id="L211">                    AffineTransformation3D transformation = </span>
+<span class="fc" id="L208">                    AffineTransformation3D transformation = </span>
                         new AffineTransformation3D(inputPoint1, inputPoint2, 
                         inputPoint3, inputPoint4, outputPoint1, outputPoint2, 
                         outputPoint3, outputPoint4);
-<span class="fc" id="L215">                    solutions.add(transformation);</span>
-<span class="nc" id="L216">                } catch (CoincidentPointsException e) {</span>
+<span class="fc" id="L212">                    solutions.add(transformation);</span>
+<span class="nc" id="L213">                } catch (CoincidentPointsException e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L218">                }</span>
-<span class="fc" id="L219">            }</span>
+<span class="fc" id="L215">                }</span>
+<span class="fc" id="L216">            }</span>
 
             @Override
             public double computeResidual(
                     AffineTransformation3D currentEstimation, int i) {
-<span class="fc" id="L224">                Point3D inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L225">                Point3D outputPoint = mOutputPoints.get(i);</span>
+<span class="fc" id="L221">                Point3D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L222">                Point3D outputPoint = mOutputPoints.get(i);</span>
                 
                 //transform input point and store result in mTestPoint
-<span class="fc" id="L228">                currentEstimation.transform(inputPoint, mTestPoint);</span>
+<span class="fc" id="L225">                currentEstimation.transform(inputPoint, mTestPoint);</span>
                 
-<span class="fc" id="L230">                return outputPoint.distanceTo(mTestPoint);</span>
+<span class="fc" id="L227">                return outputPoint.distanceTo(mTestPoint);</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L235">                return MSACPointCorrespondenceAffineTransformation3DRobustEstimator.</span>
-<span class="fc" id="L236">                        this.isReady();</span>
+<span class="fc" id="L232">                return MSACPointCorrespondenceAffineTransformation3DRobustEstimator.</span>
+<span class="fc" id="L233">                        this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(
                     RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L242" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L243">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L240">                    mListener.onEstimateStart(</span>
                             MSACPointCorrespondenceAffineTransformation3DRobustEstimator.this);
                 }
-<span class="fc" id="L246">            }</span>
+<span class="fc" id="L243">            }</span>
 
             @Override
             public void onEstimateEnd(
                     RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L251" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L252">                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L248" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L249">                    mListener.onEstimateEnd(</span>
                             MSACPointCorrespondenceAffineTransformation3DRobustEstimator.this);
                 }
-<span class="fc" id="L255">            }</span>
+<span class="fc" id="L252">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;AffineTransformation3D&gt; estimator, 
                     int iteration) {
-<span class="pc bpc" id="L261" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L262">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L258" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L259">                    mListener.onEstimateNextIteration(</span>
                             MSACPointCorrespondenceAffineTransformation3DRobustEstimator.this, 
                             iteration);
                 }
-<span class="fc" id="L266">            }</span>
+<span class="fc" id="L263">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;AffineTransformation3D&gt; estimator, 
                     float progress) {
-<span class="pc bpc" id="L272" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L273">                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L269" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L270">                    mListener.onEstimateProgressChange(</span>
                             MSACPointCorrespondenceAffineTransformation3DRobustEstimator.this, 
                             progress);
                 }
-<span class="fc" id="L277">            }</span>
+<span class="fc" id="L274">            }</span>
         });
         
         try {
-<span class="fc" id="L281">            mLocked = true;</span>
-<span class="fc" id="L282">            mInliersData = null;</span>
-<span class="fc" id="L283">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L284">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L285">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L286">            AffineTransformation3D transformation = innerEstimator.estimate();</span>
-<span class="fc" id="L287">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L288">            return attemptRefine(transformation);            </span>
-<span class="nc" id="L289">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L290">            throw new LockedException(e);</span>
-<span class="nc" id="L291">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L292">            throw new NotReadyException(e);</span>
+<span class="fc" id="L278">            mLocked = true;</span>
+<span class="fc" id="L279">            mInliersData = null;</span>
+<span class="fc" id="L280">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L281">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L282">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L283">            AffineTransformation3D transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L284">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L285">            return attemptRefine(transformation);            </span>
+<span class="nc" id="L286">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L287">            throw new LockedException(e);</span>
+<span class="nc" id="L288">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L289">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L294">            mLocked = false;</span>
+<span class="fc" id="L291">            mLocked = false;</span>
         }
     }
 
@@ -301,7 +298,7 @@ public class MSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L304">        return RobustEstimatorMethod.MSAC;</span>
+<span class="fc" id="L301">        return RobustEstimatorMethod.MSAC;</span>
     }   
     
     /**
@@ -316,7 +313,7 @@ public class MSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L319">        return mThreshold;</span>
+<span class="fc" id="L316">        return mThreshold;</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

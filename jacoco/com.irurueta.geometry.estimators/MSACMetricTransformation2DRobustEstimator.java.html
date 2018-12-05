@@ -74,11 +74,10 @@ public class MSACMetricTransformation2DRobustEstimator extends
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public MSACMetricTransformation2DRobustEstimator(
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints)
-            throws IllegalArgumentException {
-<span class="fc" id="L79">        super(inputPoints, outputPoints);</span>
-<span class="fc" id="L80">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L81">    }</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L78">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L79">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L80">    }</span>
     
     /**
      * Constructor.
@@ -87,9 +86,9 @@ public class MSACMetricTransformation2DRobustEstimator extends
      */
     public MSACMetricTransformation2DRobustEstimator(
             MetricTransformation2DRobustEstimatorListener listener) {
-<span class="fc" id="L90">        super(listener);</span>
-<span class="fc" id="L91">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L89">        super(listener);</span>
+<span class="fc" id="L90">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L91">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate a
@@ -108,11 +107,10 @@ public class MSACMetricTransformation2DRobustEstimator extends
      */
     public MSACMetricTransformation2DRobustEstimator(
             MetricTransformation2DRobustEstimatorListener listener,
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints)
-            throws IllegalArgumentException {
-<span class="fc" id="L113">        super(listener, inputPoints, outputPoints);</span>
-<span class="fc" id="L114">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L115">    }</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L111">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L112">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L113">    }</span>
 
     /**
      * Constructor.
@@ -120,9 +118,9 @@ public class MSACMetricTransformation2DRobustEstimator extends
      */
     public MSACMetricTransformation2DRobustEstimator(
             boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L123">        super(weakMinimumSizeAllowed);</span>
-<span class="fc" id="L124">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L125">    }</span>
+<span class="fc" id="L121">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L122">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L123">    }</span>
     
     /**
      * Constructor with lists of points to be used to estimate a metric 2D
@@ -140,10 +138,10 @@ public class MSACMetricTransformation2DRobustEstimator extends
      */
     public MSACMetricTransformation2DRobustEstimator(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
-<span class="fc" id="L144">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L145">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L146">    }</span>
+            boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L142">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L143">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L144">    }</span>
     
     /**
      * Constructor.
@@ -154,9 +152,9 @@ public class MSACMetricTransformation2DRobustEstimator extends
     public MSACMetricTransformation2DRobustEstimator(
             MetricTransformation2DRobustEstimatorListener listener,
             boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L157">        super(listener, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L158">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L159">    }</span>
+<span class="fc" id="L155">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L156">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L157">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate a
@@ -177,10 +175,10 @@ public class MSACMetricTransformation2DRobustEstimator extends
     public MSACMetricTransformation2DRobustEstimator(
             MetricTransformation2DRobustEstimatorListener listener,
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
-<span class="fc" id="L181">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L182">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L183">    }</span>
+            boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L179">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L180">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L181">    }</span>
     
     /**
      * Returns threshold to determine whether points are inliers or not when
@@ -191,7 +189,7 @@ public class MSACMetricTransformation2DRobustEstimator extends
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-<span class="fc" id="L194">        return mThreshold;</span>
+<span class="fc" id="L192">        return mThreshold;</span>
     }
     
     /**
@@ -206,16 +204,15 @@ public class MSACMetricTransformation2DRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException,
-            LockedException {
-<span class="fc bfc" id="L211" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L212">            throw new LockedException();</span>
+    public void setThreshold(double threshold) throws LockedException {
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L209">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L215">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L212">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L217">        mThreshold = threshold;</span>
-<span class="fc" id="L218">    }</span>
+<span class="fc" id="L214">        mThreshold = threshold;</span>
+<span class="fc" id="L215">    }</span>
     
     /**
      * Estimates a metric 2D transformation using a robust estimator and
@@ -232,139 +229,139 @@ public class MSACMetricTransformation2DRobustEstimator extends
     @Override
     public MetricTransformation2D estimate() throws LockedException,
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L235" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L236">            throw new LockedException();</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L233">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L239">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L235" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L236">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L242">        MSACRobustEstimator&lt;MetricTransformation2D&gt; innerEstimator = </span>
+<span class="fc" id="L239">        MSACRobustEstimator&lt;MetricTransformation2D&gt; innerEstimator = </span>
                 new MSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L244">                    new MSACRobustEstimatorListener&lt;MetricTransformation2D&gt;() {</span>
+<span class="fc" id="L241">                    new MSACRobustEstimatorListener&lt;MetricTransformation2D&gt;() {</span>
                     
             //point to be reused when computing residuals
-<span class="fc" id="L247">            private Point2D mTestPoint = Point2D.create(</span>
+<span class="fc" id="L244">            private Point2D mTestPoint = Point2D.create(</span>
                     CoordinatesType.HOMOGENEOUS_COORDINATES);
             
-<span class="fc" id="L250">            private MetricTransformation2DEstimator mNonRobustEstimator = </span>
+<span class="fc" id="L247">            private MetricTransformation2DEstimator mNonRobustEstimator = </span>
                     new MetricTransformation2DEstimator(
-<span class="fc" id="L252">                            isWeakMinimumSizeAllowed());</span>
+<span class="fc" id="L249">                            isWeakMinimumSizeAllowed());</span>
             
-<span class="fc" id="L254">            private List&lt;Point2D&gt; mSubsetInputPoints = </span>
+<span class="fc" id="L251">            private List&lt;Point2D&gt; mSubsetInputPoints = </span>
                     new ArrayList&lt;&gt;();
-<span class="fc" id="L256">            private List&lt;Point2D&gt; mSubsetOutputPoints = </span>
+<span class="fc" id="L253">            private List&lt;Point2D&gt; mSubsetOutputPoints = </span>
                     new ArrayList&lt;&gt;();
             
             @Override
             public double getThreshold() {
-<span class="fc" id="L261">                return mThreshold;</span>
+<span class="fc" id="L258">                return mThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L266">                return mInputPoints.size();</span>
+<span class="fc" id="L263">                return mInputPoints.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L271">                return mNonRobustEstimator.getMinimumPoints();</span>
+<span class="fc" id="L268">                return mNonRobustEstimator.getMinimumPoints();</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;MetricTransformation2D&gt; solutions) {
-<span class="fc" id="L277">                mSubsetInputPoints.clear();</span>
-<span class="fc" id="L278">                mSubsetOutputPoints.clear();</span>
-<span class="fc bfc" id="L279" title="All 2 branches covered.">                for (int samplesIndex : samplesIndices) {</span>
-<span class="fc" id="L280">                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
-<span class="fc" id="L281">                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
+<span class="fc" id="L274">                mSubsetInputPoints.clear();</span>
+<span class="fc" id="L275">                mSubsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">                for (int samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L277">                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
+<span class="fc" id="L278">                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
                             samplesIndex));
                 }
 
                 try {
-<span class="fc" id="L286">                    mNonRobustEstimator.setPoints(mSubsetInputPoints, </span>
+<span class="fc" id="L283">                    mNonRobustEstimator.setPoints(mSubsetInputPoints, </span>
                             mSubsetOutputPoints);
-<span class="fc" id="L288">                    solutions.add(mNonRobustEstimator.estimate());</span>
-<span class="nc" id="L289">                } catch (Exception e) {</span>
+<span class="fc" id="L285">                    solutions.add(mNonRobustEstimator.estimate());</span>
+<span class="nc" id="L286">                } catch (Exception e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L291">                }</span>
-<span class="fc" id="L292">            }</span>
+<span class="fc" id="L288">                }</span>
+<span class="fc" id="L289">            }</span>
 
             @Override
             public double computeResidual(
                     MetricTransformation2D currentEstimation, int i) {
-<span class="fc" id="L297">                Point2D inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L298">                Point2D outputPoint = mOutputPoints.get(i);</span>
+<span class="fc" id="L294">                Point2D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L295">                Point2D outputPoint = mOutputPoints.get(i);</span>
                 
                 //transform input point and store result in mTestPoint
-<span class="fc" id="L301">                currentEstimation.transform(inputPoint, mTestPoint);</span>
+<span class="fc" id="L298">                currentEstimation.transform(inputPoint, mTestPoint);</span>
                 
-<span class="fc" id="L303">                return outputPoint.distanceTo(mTestPoint);</span>
+<span class="fc" id="L300">                return outputPoint.distanceTo(mTestPoint);</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L308">                return MSACMetricTransformation2DRobustEstimator.this.</span>
-<span class="fc" id="L309">                        isReady();</span>
+<span class="fc" id="L305">                return MSACMetricTransformation2DRobustEstimator.this.</span>
+<span class="fc" id="L306">                        isReady();</span>
             }
 
             @Override
             public void onEstimateStart(
                     RobustEstimator&lt;MetricTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L315" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L316">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L312" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L313">                    mListener.onEstimateStart(</span>
                             MSACMetricTransformation2DRobustEstimator.this);
                 }
-<span class="fc" id="L319">            }</span>
+<span class="fc" id="L316">            }</span>
 
             @Override
             public void onEstimateEnd(
                     RobustEstimator&lt;MetricTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L324" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L325">                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L321" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L322">                    mListener.onEstimateEnd(</span>
                             MSACMetricTransformation2DRobustEstimator.this);
                 }
-<span class="fc" id="L328">            }</span>
+<span class="fc" id="L325">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;MetricTransformation2D&gt; estimator, 
                     int iteration) {
-<span class="pc bpc" id="L334" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L335">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L331" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L332">                    mListener.onEstimateNextIteration(</span>
                             MSACMetricTransformation2DRobustEstimator.this, 
                             iteration);
                 }
-<span class="fc" id="L339">            }</span>
+<span class="fc" id="L336">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;MetricTransformation2D&gt; estimator, 
                     float progress) {
-<span class="pc bpc" id="L345" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L346">                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L342" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L343">                    mListener.onEstimateProgressChange(</span>
                             MSACMetricTransformation2DRobustEstimator.this, 
                             progress);
                 }
-<span class="fc" id="L350">            }</span>
+<span class="fc" id="L347">            }</span>
         });
         
         try {
-<span class="fc" id="L354">            mLocked = true;</span>
-<span class="fc" id="L355">            mInliersData = null;</span>
-<span class="fc" id="L356">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L357">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L358">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L359">            MetricTransformation2D transformation = innerEstimator.estimate();</span>
-<span class="fc" id="L360">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L361">            return attemptRefine(transformation);            </span>
-<span class="nc" id="L362">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L363">            throw new LockedException(e);</span>
-<span class="nc" id="L364">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L365">            throw new NotReadyException(e);</span>
+<span class="fc" id="L351">            mLocked = true;</span>
+<span class="fc" id="L352">            mInliersData = null;</span>
+<span class="fc" id="L353">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L354">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L355">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L356">            MetricTransformation2D transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L357">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L358">            return attemptRefine(transformation);            </span>
+<span class="nc" id="L359">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L360">            throw new LockedException(e);</span>
+<span class="nc" id="L361">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L362">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L367">            mLocked = false;</span>
+<span class="fc" id="L364">            mLocked = false;</span>
         }        
     }
     
@@ -374,7 +371,7 @@ public class MSACMetricTransformation2DRobustEstimator extends
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L377">        return RobustEstimatorMethod.MSAC;</span>
+<span class="fc" id="L374">        return RobustEstimatorMethod.MSAC;</span>
     } 
     
     /**
@@ -389,7 +386,7 @@ public class MSACMetricTransformation2DRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L392">        return mThreshold;</span>
+<span class="fc" id="L389">        return mThreshold;</span>
     }        
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

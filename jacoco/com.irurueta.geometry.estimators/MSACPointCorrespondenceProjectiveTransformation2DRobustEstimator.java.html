@@ -74,11 +74,10 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */    
     public MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L79">        super(inputPoints, outputPoints);</span>
-<span class="fc" id="L80">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L81">    }</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L78">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L79">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L80">    }</span>
     
     /**
      * Constructor.
@@ -87,9 +86,9 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
      */    
     public MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener) {
-<span class="fc" id="L90">        super(listener);</span>
-<span class="fc" id="L91">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L89">        super(listener);</span>
+<span class="fc" id="L90">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L91">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate a
@@ -108,11 +107,10 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
      */    
     public MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener,
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L113">        super(listener, inputPoints, outputPoints);</span>
-<span class="fc" id="L114">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L115">    }</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L111">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L112">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L113">    }</span>
 
     /**
      * Returns threshold to determine whether points are inliers or not when 
@@ -123,7 +121,7 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-<span class="fc" id="L126">        return mThreshold;</span>
+<span class="fc" id="L124">        return mThreshold;</span>
     }
     
     /**
@@ -137,16 +135,15 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L143">            throw new LockedException();</span>
+    public void setThreshold(double threshold) throws LockedException {
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L140">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L145" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L146">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L143">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L148">        mThreshold = threshold;</span>
-<span class="fc" id="L149">    }</span>
+<span class="fc" id="L145">        mThreshold = threshold;</span>
+<span class="fc" id="L146">    }</span>
     
     /**
      * Estimates a projective 2D transformation using a robust estimator and
@@ -163,135 +160,135 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
     @Override
     public ProjectiveTransformation2D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L167">            throw new LockedException();</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L164">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L170">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L167">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L173">        MSACRobustEstimator&lt;ProjectiveTransformation2D&gt; innerEstimator = </span>
+<span class="fc" id="L170">        MSACRobustEstimator&lt;ProjectiveTransformation2D&gt; innerEstimator = </span>
                 new MSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L175">                    new MSACRobustEstimatorListener&lt;ProjectiveTransformation2D&gt;() {</span>
+<span class="fc" id="L172">                    new MSACRobustEstimatorListener&lt;ProjectiveTransformation2D&gt;() {</span>
                     
             //point to be reused when computing residuals
-<span class="fc" id="L178">            private Point2D mTestPoint = Point2D.create(</span>
+<span class="fc" id="L175">            private Point2D mTestPoint = Point2D.create(</span>
                     CoordinatesType.HOMOGENEOUS_COORDINATES);
             
             @Override
             public double getThreshold() {
-<span class="fc" id="L183">                return mThreshold;</span>
+<span class="fc" id="L180">                return mThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L188">                return mInputPoints.size();</span>
+<span class="fc" id="L185">                return mInputPoints.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L193">                return ProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L190">                return ProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;ProjectiveTransformation2D&gt; solutions) {
-<span class="fc" id="L199">                Point2D inputPoint1 = mInputPoints.get(samplesIndices[0]);                </span>
-<span class="fc" id="L200">                Point2D inputPoint2 = mInputPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L201">                Point2D inputPoint3 = mInputPoints.get(samplesIndices[2]);</span>
-<span class="fc" id="L202">                Point2D inputPoint4 = mInputPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L196">                Point2D inputPoint1 = mInputPoints.get(samplesIndices[0]);                </span>
+<span class="fc" id="L197">                Point2D inputPoint2 = mInputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L198">                Point2D inputPoint3 = mInputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L199">                Point2D inputPoint4 = mInputPoints.get(samplesIndices[3]);</span>
                 
-<span class="fc" id="L204">                Point2D outputPoint1 = mOutputPoints.get(samplesIndices[0]);                </span>
-<span class="fc" id="L205">                Point2D outputPoint2 = mOutputPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L206">                Point2D outputPoint3 = mOutputPoints.get(samplesIndices[2]);</span>
-<span class="fc" id="L207">                Point2D outputPoint4 = mOutputPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L201">                Point2D outputPoint1 = mOutputPoints.get(samplesIndices[0]);                </span>
+<span class="fc" id="L202">                Point2D outputPoint2 = mOutputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L203">                Point2D outputPoint3 = mOutputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L204">                Point2D outputPoint4 = mOutputPoints.get(samplesIndices[3]);</span>
 
                 try {
-<span class="fc" id="L210">                    ProjectiveTransformation2D transformation = </span>
+<span class="fc" id="L207">                    ProjectiveTransformation2D transformation = </span>
                         new ProjectiveTransformation2D(inputPoint1, inputPoint2, 
                         inputPoint3, inputPoint4, outputPoint1, outputPoint2, 
                         outputPoint3, outputPoint4);
-<span class="fc" id="L214">                    solutions.add(transformation);</span>
-<span class="nc" id="L215">                } catch (CoincidentPointsException e) {</span>
+<span class="fc" id="L211">                    solutions.add(transformation);</span>
+<span class="nc" id="L212">                } catch (CoincidentPointsException e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L217">                }</span>
-<span class="fc" id="L218">            }</span>
+<span class="fc" id="L214">                }</span>
+<span class="fc" id="L215">            }</span>
 
             @Override
             public double computeResidual(
                     ProjectiveTransformation2D currentEstimation, int i) {
-<span class="fc" id="L223">                Point2D inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L224">                Point2D outputPoint = mOutputPoints.get(i);</span>
+<span class="fc" id="L220">                Point2D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L221">                Point2D outputPoint = mOutputPoints.get(i);</span>
                 
                 //transform input point and store result in mTestPoint
-<span class="fc" id="L227">                currentEstimation.transform(inputPoint, mTestPoint);</span>
+<span class="fc" id="L224">                currentEstimation.transform(inputPoint, mTestPoint);</span>
                 
-<span class="fc" id="L229">                return outputPoint.distanceTo(mTestPoint);</span>
+<span class="fc" id="L226">                return outputPoint.distanceTo(mTestPoint);</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L234">                return MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L235">                        this.isReady();</span>
+<span class="fc" id="L231">                return MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L232">                        this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(
                     RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L241" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L242">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L239">                    mListener.onEstimateStart(</span>
                             MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this);
                 }
-<span class="fc" id="L245">            }</span>
+<span class="fc" id="L242">            }</span>
 
             @Override
             public void onEstimateEnd(
                     RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L250" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L251">                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L247" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L248">                    mListener.onEstimateEnd(</span>
                             MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this);
                 }
-<span class="fc" id="L254">            }</span>
+<span class="fc" id="L251">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator, 
                     int iteration) {
-<span class="pc bpc" id="L260" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L261">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L257" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L258">                    mListener.onEstimateNextIteration(</span>
                             MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this, 
                             iteration);
                 }
-<span class="fc" id="L265">            }</span>
+<span class="fc" id="L262">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator, 
                     float progress) {
-<span class="pc bpc" id="L271" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L272">                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L268" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L269">                    mListener.onEstimateProgressChange(</span>
                             MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this, 
                             progress);
                 }
-<span class="fc" id="L276">            }</span>
+<span class="fc" id="L273">            }</span>
         });
         
         try {
-<span class="fc" id="L280">            mLocked = true;</span>
-<span class="fc" id="L281">            mInliersData = null;</span>
-<span class="fc" id="L282">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L283">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L284">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L285">            ProjectiveTransformation2D transformation = </span>
-<span class="fc" id="L286">                    innerEstimator.estimate();</span>
-<span class="fc" id="L287">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L288">            return attemptRefine(transformation);            </span>
-<span class="nc" id="L289">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L290">            throw new LockedException(e);</span>
-<span class="nc" id="L291">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L292">            throw new NotReadyException(e);</span>
+<span class="fc" id="L277">            mLocked = true;</span>
+<span class="fc" id="L278">            mInliersData = null;</span>
+<span class="fc" id="L279">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L280">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L281">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L282">            ProjectiveTransformation2D transformation = </span>
+<span class="fc" id="L283">                    innerEstimator.estimate();</span>
+<span class="fc" id="L284">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L285">            return attemptRefine(transformation);            </span>
+<span class="nc" id="L286">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L287">            throw new LockedException(e);</span>
+<span class="nc" id="L288">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L289">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L294">            mLocked = false;</span>
+<span class="fc" id="L291">            mLocked = false;</span>
         }
     }
 
@@ -301,7 +298,7 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L304">        return RobustEstimatorMethod.MSAC;</span>
+<span class="fc" id="L301">        return RobustEstimatorMethod.MSAC;</span>
     }    
     
     /**
@@ -316,7 +313,7 @@ public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L319">        return mThreshold;</span>
+<span class="fc" id="L316">        return mThreshold;</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

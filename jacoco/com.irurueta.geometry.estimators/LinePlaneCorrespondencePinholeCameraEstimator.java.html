@@ -73,11 +73,10 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * the same size and enough correspondences.
      */
     public LinePlaneCorrespondencePinholeCameraEstimator(List&lt;Plane&gt; planes,
-            List&lt;Line2D&gt; lines2D) throws IllegalArgumentException,
-            WrongListSizesException {
-<span class="fc" id="L78">        super();</span>
-<span class="fc" id="L79">        internalSetLists(planes, lines2D);</span>
-<span class="fc" id="L80">    }</span>
+            List&lt;Line2D&gt; lines2D) throws WrongListSizesException {
+<span class="fc" id="L77">        super();</span>
+<span class="fc" id="L78">        internalSetLists(planes, lines2D);</span>
+<span class="fc" id="L79">    }</span>
 
     /**
      * Constructor.
@@ -91,10 +90,10 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      */
     public LinePlaneCorrespondencePinholeCameraEstimator(List&lt;Plane&gt; planes,
             List&lt;Line2D&gt; lines2D, PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
-<span class="fc" id="L95">        super(listener);</span>
-<span class="fc" id="L96">        internalSetLists(planes, lines2D);</span>
-<span class="fc" id="L97">    }</span>
+            throws WrongListSizesException {
+<span class="fc" id="L94">        super(listener);</span>
+<span class="fc" id="L95">        internalSetLists(planes, lines2D);</span>
+<span class="fc" id="L96">    }</span>
     
     /**
      * Internal method to set list of corresponding lines/planes (it does not
@@ -106,19 +105,19 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * the same size and enough correspondences.
      */
     private void internalSetLists(List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines2D)
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         
-<span class="fc bfc" id="L111" title="All 4 branches covered.">        if (planes == null || lines2D == null) {</span>
-<span class="fc" id="L112">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L110" title="All 4 branches covered.">        if (planes == null || lines2D == null) {</span>
+<span class="fc" id="L111">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (!areValidLists(planes, lines2D)) {</span>
-<span class="fc" id="L116">            throw new WrongListSizesException();</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (!areValidLists(planes, lines2D)) {</span>
+<span class="fc" id="L115">            throw new WrongListSizesException();</span>
         }
         
-<span class="fc" id="L119">        mPlanes = planes;</span>
-<span class="fc" id="L120">        mLines2D = lines2D;</span>
-<span class="fc" id="L121">    }</span>
+<span class="fc" id="L118">        mPlanes = planes;</span>
+<span class="fc" id="L119">        mLines2D = lines2D;</span>
+<span class="fc" id="L120">    }</span>
     
     /**
      * Set list of corresponding lines/planes.
@@ -130,14 +129,13 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * the same size and enough correspondences.
      */
     public void setLists(List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines2D)
-            throws LockedException, IllegalArgumentException,
-            WrongListSizesException {
-<span class="fc bfc" id="L135" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L136">            throw new LockedException();</span>
+            throws LockedException, WrongListSizesException {
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L134">            throw new LockedException();</span>
         }
         
-<span class="fc" id="L139">        internalSetLists(planes, lines2D);</span>
-<span class="fc" id="L140">    }</span>
+<span class="fc" id="L137">        internalSetLists(planes, lines2D);</span>
+<span class="fc" id="L138">    }</span>
     
     /**
      * Returns list of corresponding lines/planes.
@@ -147,12 +145,12 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * @throws NotAvailableException if list of planes is not yet available.
      */
     public List&lt;Plane&gt; getPlanes() throws NotAvailableException {
-<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (mPlanes == null) {</span>
-<span class="fc" id="L151">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (mPlanes == null) {</span>
+<span class="fc" id="L149">            throw new NotAvailableException();</span>
         }
         
         //to avoid undesired modifications
-<span class="fc" id="L155">        return Collections.unmodifiableList(mPlanes);</span>
+<span class="fc" id="L153">        return Collections.unmodifiableList(mPlanes);</span>
     }
     
     /**
@@ -163,12 +161,12 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * @throws NotAvailableException if list of 2D lines is not yet available.
      */
     public List&lt;Line2D&gt; getLines2D() throws NotAvailableException {
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (mLines2D == null) {</span>
-<span class="fc" id="L167">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (mLines2D == null) {</span>
+<span class="fc" id="L165">            throw new NotAvailableException();</span>
         }
         
         //to avoid undesired modifications
-<span class="fc" id="L171">        return Collections.unmodifiableList(mLines2D);</span>
+<span class="fc" id="L169">        return Collections.unmodifiableList(mLines2D);</span>
     }
     
     /**
@@ -182,11 +180,11 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      */
     public static boolean areValidLists(List&lt;Plane&gt; planes, 
             List&lt;Line2D&gt; lines2D) {
-<span class="fc bfc" id="L185" title="All 4 branches covered.">        if (planes == null || lines2D == null) {</span>
-<span class="fc" id="L186">            return false;</span>
+<span class="fc bfc" id="L183" title="All 4 branches covered.">        if (planes == null || lines2D == null) {</span>
+<span class="fc" id="L184">            return false;</span>
         }
-<span class="fc bfc" id="L188" title="All 2 branches covered.">        return planes.size() == lines2D.size() &amp;&amp;</span>
-<span class="pc bpc" id="L189" title="1 of 2 branches missed.">                lines2D.size() &gt;= MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        return planes.size() == lines2D.size() &amp;&amp;</span>
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">                lines2D.size() &gt;= MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;</span>
     }
     
     /**
@@ -195,7 +193,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * @return true if available, false otherwise.
      */
     public boolean areListsAvailable() {
-<span class="pc bpc" id="L198" title="1 of 4 branches missed.">        return mPlanes != null &amp;&amp; mLines2D != null;</span>
+<span class="pc bpc" id="L196" title="1 of 4 branches missed.">        return mPlanes != null &amp;&amp; mLines2D != null;</span>
     }
     
     /**
@@ -207,55 +205,55 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      */
     @Override
     protected PinholeCamera attemptRefine(PinholeCamera pinholeCamera) {
-<span class="fc bfc" id="L210" title="All 2 branches covered.">        if (hasSuggestions()) {</span>
-<span class="fc" id="L211">            int numPoints = mPlanes.size();</span>
-<span class="fc" id="L212">            BitSet inliers = new BitSet(numPoints);</span>
-<span class="fc" id="L213">            inliers.set(0, numPoints, true);</span>
-<span class="fc" id="L214">            double[] residuals = new double[numPoints];</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (hasSuggestions()) {</span>
+<span class="fc" id="L209">            int numPoints = mPlanes.size();</span>
+<span class="fc" id="L210">            BitSet inliers = new BitSet(numPoints);</span>
+<span class="fc" id="L211">            inliers.set(0, numPoints, true);</span>
+<span class="fc" id="L212">            double[] residuals = new double[numPoints];</span>
             
-<span class="fc" id="L216">            DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =</span>
+<span class="fc" id="L214">            DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =</span>
                     new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
                     pinholeCamera, false, inliers, residuals, numPoints, 
                     mPlanes, mLines2D, 0.0);
             try {
-<span class="fc" id="L221">                refiner.setMinSuggestionWeight(mMinSuggestionWeight);</span>
-<span class="fc" id="L222">                refiner.setMaxSuggestionWeight(mMaxSuggestionWeight);</span>
-<span class="fc" id="L223">                refiner.setSuggestionWeightStep(mSuggestionWeightStep);</span>
+<span class="fc" id="L219">                refiner.setMinSuggestionWeight(mMinSuggestionWeight);</span>
+<span class="fc" id="L220">                refiner.setMaxSuggestionWeight(mMaxSuggestionWeight);</span>
+<span class="fc" id="L221">                refiner.setSuggestionWeightStep(mSuggestionWeightStep);</span>
                     
-<span class="fc" id="L225">                refiner.setSuggestSkewnessValueEnabled(</span>
+<span class="fc" id="L223">                refiner.setSuggestSkewnessValueEnabled(</span>
                         mSuggestSkewnessValueEnabled);
-<span class="fc" id="L227">                refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);</span>
-<span class="fc" id="L228">                refiner.setSuggestHorizontalFocalLengthEnabled(</span>
+<span class="fc" id="L225">                refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);</span>
+<span class="fc" id="L226">                refiner.setSuggestHorizontalFocalLengthEnabled(</span>
                         mSuggestHorizontalFocalLengthEnabled);
-<span class="fc" id="L230">                refiner.setSuggestedHorizontalFocalLengthValue(</span>
+<span class="fc" id="L228">                refiner.setSuggestedHorizontalFocalLengthValue(</span>
                         mSuggestedHorizontalFocalLengthValue);
-<span class="fc" id="L232">                refiner.setSuggestVerticalFocalLengthEnabled(</span>
+<span class="fc" id="L230">                refiner.setSuggestVerticalFocalLengthEnabled(</span>
                         mSuggestVerticalFocalLengthEnabled);
-<span class="fc" id="L234">                refiner.setSuggestedVerticalFocalLengthValue(</span>
+<span class="fc" id="L232">                refiner.setSuggestedVerticalFocalLengthValue(</span>
                         mSuggestedVerticalFocalLengthValue);
-<span class="fc" id="L236">                refiner.setSuggestAspectRatioEnabled(</span>
+<span class="fc" id="L234">                refiner.setSuggestAspectRatioEnabled(</span>
                         mSuggestAspectRatioEnabled);
-<span class="fc" id="L238">                refiner.setSuggestedAspectRatioValue(</span>
+<span class="fc" id="L236">                refiner.setSuggestedAspectRatioValue(</span>
                         mSuggestedAspectRatioValue);
-<span class="fc" id="L240">                refiner.setSuggestPrincipalPointEnabled(</span>
+<span class="fc" id="L238">                refiner.setSuggestPrincipalPointEnabled(</span>
                         mSuggestPrincipalPointEnabled);
-<span class="fc" id="L242">                refiner.setSuggestedPrincipalPointValue(</span>
+<span class="fc" id="L240">                refiner.setSuggestedPrincipalPointValue(</span>
                         mSuggestedPrincipalPointValue);
-<span class="fc" id="L244">                refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);</span>
-<span class="fc" id="L245">                refiner.setSuggestedRotationValue(mSuggestedRotationValue);</span>
-<span class="fc" id="L246">                refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);</span>
-<span class="fc" id="L247">                refiner.setSuggestedCenterValue(mSuggestedCenterValue);                </span>
+<span class="fc" id="L242">                refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);</span>
+<span class="fc" id="L243">                refiner.setSuggestedRotationValue(mSuggestedRotationValue);</span>
+<span class="fc" id="L244">                refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);</span>
+<span class="fc" id="L245">                refiner.setSuggestedCenterValue(mSuggestedCenterValue);                </span>
                 
-<span class="fc" id="L249">                PinholeCamera result = new PinholeCamera();</span>
-<span class="fc" id="L250">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L247">                PinholeCamera result = new PinholeCamera();</span>
+<span class="fc" id="L248">                boolean improved = refiner.refine(result);</span>
             
-<span class="fc bfc" id="L252" title="All 2 branches covered.">                return improved ? result : pinholeCamera;</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">                return improved ? result : pinholeCamera;</span>
                  
-<span class="nc" id="L254">            } catch (Exception e) {</span>
-<span class="nc" id="L255">                return pinholeCamera;   </span>
+<span class="nc" id="L252">            } catch (Exception e) {</span>
+<span class="nc" id="L253">                return pinholeCamera;   </span>
             }            
         } else {
-<span class="fc" id="L258">            return pinholeCamera;</span>
+<span class="fc" id="L256">            return pinholeCamera;</span>
         }
     }        
 }
