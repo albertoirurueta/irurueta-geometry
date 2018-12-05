@@ -506,8 +506,8 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L506">                mListener.onEstimateEnd(this);</span>
             }
             
-<span class="fc bfc" id="L509" title="All 2 branches covered.">            if (bestSolution == null) {</span>
-<span class="fc" id="L510">                throw new PinholeCameraEstimatorException();</span>
+<span class="pc bpc" id="L509" title="1 of 2 branches missed.">            if (bestSolution == null) {</span>
+<span class="nc" id="L510">                throw new PinholeCameraEstimatorException();</span>
             }
             
 <span class="fc" id="L513">            return attemptRefine(bestSolution.camera);            </span>
@@ -646,7 +646,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L646">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L648">            mSolutions.add(solution);        </span>
-<span class="fc" id="L649">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L649">        } catch (Exception ignore) { }</span>
 
         
 <span class="fc" id="L652">        beta1 = -initialBeta1;</span>
@@ -663,7 +663,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L663">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L665">            mSolutions.add(solution);        </span>
-<span class="fc" id="L666">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L666">        } catch (Exception ignore) { }</span>
         
         
 <span class="fc" id="L669">        beta1 = initialBeta1;</span>
@@ -680,7 +680,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L680">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L682">            mSolutions.add(solution);        </span>
-<span class="fc" id="L683">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L683">        } catch (Exception ignore) { }</span>
 
 
 <span class="fc" id="L686">        beta1 = -initialBeta1;</span>
@@ -697,7 +697,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L697">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L699">            mSolutions.add(solution);</span>
-<span class="fc" id="L700">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L700">        } catch (Exception ignore) { }</span>
         
         
         //2nd triplet: [beta11, beta12, betaff12] = [alpha1, alpha2, alpha5]
@@ -717,7 +717,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L717">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L719">            mSolutions.add(solution);        </span>
-<span class="fc" id="L720">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L720">        } catch (Exception ignore) { }</span>
         
         
 <span class="fc" id="L723">        beta1 = -initialBeta1;</span>
@@ -734,7 +734,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L734">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L736">            mSolutions.add(solution);        </span>
-<span class="fc" id="L737">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L737">        } catch (Exception ignore) { }</span>
 
 
 <span class="fc" id="L740">        beta1 = initialBeta1;</span>
@@ -751,7 +751,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L751">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L753">            mSolutions.add(solution);        </span>
-<span class="fc" id="L754">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L754">        } catch (Exception ignore) { }</span>
 
 
 <span class="fc" id="L757">        beta1 = -initialBeta1;</span>
@@ -768,7 +768,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L768">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L770">            mSolutions.add(solution);        </span>
-<span class="fc" id="L771">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L771">        } catch (Exception ignore) { }</span>
         
         
         //3rd triplet: [beta11, beta12, betaff22] = [alpha1, alpha2, alpha6]
@@ -788,7 +788,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L788">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L790">            mSolutions.add(solution);        </span>
-<span class="fc" id="L791">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L791">        } catch (Exception ignore) { }</span>
 
         
 <span class="fc" id="L794">        beta1 = -initialBeta1;</span>
@@ -805,7 +805,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L805">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L807">            mSolutions.add(solution);        </span>
-<span class="fc" id="L808">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L808">        } catch (Exception ignore) { }</span>
 
         
 <span class="fc" id="L811">        beta1 = initialBeta1;</span>
@@ -822,7 +822,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L822">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L824">            mSolutions.add(solution);        </span>
-<span class="fc" id="L825">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L825">        } catch (Exception ignore) { }</span>
 
 
 <span class="fc" id="L828">        beta1 = -initialBeta1;</span>
@@ -839,7 +839,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L839">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L841">            mSolutions.add(solution);        </span>
-<span class="fc" id="L842">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L842">        } catch (Exception ignore) { }</span>
         
         
         //4th triplet: [beta11, beta22, betaff11] = [alpha1, alpha3, alpha4]
@@ -859,7 +859,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L859">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L861">            mSolutions.add(solution);        </span>
-<span class="fc" id="L862">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L862">        } catch (Exception ignore) { }</span>
 
         
 <span class="fc" id="L865">        beta1 = -initialBeta1;</span>
@@ -876,7 +876,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L876">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L878">            mSolutions.add(solution);        </span>
-<span class="fc" id="L879">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L879">        } catch (Exception ignore) { }</span>
         
         
 <span class="fc" id="L882">        beta1 = initialBeta1;</span>
@@ -893,7 +893,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L893">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L895">            mSolutions.add(solution);        </span>
-<span class="fc" id="L896">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L896">        } catch (Exception ignore) { }</span>
         
         
 <span class="fc" id="L899">        beta1 = -initialBeta1;</span>
@@ -910,7 +910,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L910">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L912">            mSolutions.add(solution);                </span>
-<span class="fc" id="L913">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L913">        } catch (Exception ignore) { }</span>
 <span class="fc" id="L914">    }</span>
     
     /**
@@ -1099,7 +1099,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L1099">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     finalControlCameraPoints, focalLength);        
 <span class="fc" id="L1101">            mSolutions.add(solution);</span>
-<span class="fc" id="L1102">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L1102">        } catch (Exception ignore) { }</span>
         
         //add solution with opposite beta sign
 <span class="fc" id="L1105">        ArrayUtils.multiplyByScalar(v, -beta, finalV);</span>
@@ -1111,7 +1111,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L1111">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     finalControlCameraPoints, focalLength);        
 <span class="fc" id="L1113">            mSolutions.add(solution);        </span>
-<span class="fc" id="L1114">        } catch (Exception ignore) { }</span>
+<span class="pc" id="L1114">        } catch (Exception ignore) { }</span>
 <span class="fc" id="L1115">    }</span>
     
     /**

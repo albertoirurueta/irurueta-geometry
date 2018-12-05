@@ -4311,7 +4311,7 @@
 <a class="jxr_linenumber" name="L4303" href="#L4303">4303</a>             CameraException, NotAvailableException {
 <a class="jxr_linenumber" name="L4304" href="#L4304">4304</a>         <strong class="jxr_keyword">int</strong> numCovariances = 0;
 <a class="jxr_linenumber" name="L4305" href="#L4305">4305</a>         <strong class="jxr_keyword">int</strong> numValid = 0;        
-<a class="jxr_linenumber" name="L4306" href="#L4306">4306</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> t = 0; t &lt; TIMES; t++) {
+<a class="jxr_linenumber" name="L4306" href="#L4306">4306</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> t = 0; t &lt; 2 * TIMES; t++) {
 <a class="jxr_linenumber" name="L4307" href="#L4307">4307</a>             UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
 <a class="jxr_linenumber" name="L4308" href="#L4308">4308</a>             <strong class="jxr_keyword">double</strong> horizontalFocalLength = randomizer.nextDouble(
 <a class="jxr_linenumber" name="L4309" href="#L4309">4309</a>                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);

@@ -76,11 +76,10 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) 
-            throws IllegalArgumentException {
-<span class="fc" id="L81">        super();</span>
-<span class="fc" id="L82">        internalSetPlanes(inputPlanes, outputPlanes);</span>
-<span class="fc" id="L83">    }</span>
+            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L80">        super();</span>
+<span class="fc" id="L81">        internalSetPlanes(inputPlanes, outputPlanes);</span>
+<span class="fc" id="L82">    }</span>
     
     /**
      * Constructor.
@@ -89,8 +88,8 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public PlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L92">        super(listener);</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L91">        super(listener);</span>
+<span class="fc" id="L92">    }</span>
     
     /**
      * Constructor with listener and lists of planes to be used to estimate
@@ -109,11 +108,10 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public PlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes)
-            throws IllegalArgumentException {
-<span class="fc" id="L114">        super(listener);</span>
-<span class="fc" id="L115">        internalSetPlanes(inputPlanes, outputPlanes);</span>
-<span class="fc" id="L116">    }</span>
+            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L112">        super(listener);</span>
+<span class="fc" id="L113">        internalSetPlanes(inputPlanes, outputPlanes);</span>
+<span class="fc" id="L114">    }</span>
     
     /**
      * Returns list of input planes to be used to estimate a projective 3D
@@ -126,7 +124,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * transformation.
      */
     public List&lt;Plane&gt; getInputPlanes() {
-<span class="fc" id="L129">        return mInputPlanes;</span>
+<span class="fc" id="L127">        return mInputPlanes;</span>
     }
     
     /**
@@ -140,7 +138,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * transformation.
      */
     public List&lt;Plane&gt; getOutputPlanes() {
-<span class="fc" id="L143">        return mOutputPlanes;</span>
+<span class="fc" id="L141">        return mOutputPlanes;</span>
     }
     
     /**
@@ -159,13 +157,12 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * already in progress.
      */
     public final void setPlanes(List&lt;Plane&gt; inputPlanes, 
-            List&lt;Plane&gt; outputPlanes) throws IllegalArgumentException,
-            LockedException {
-<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L165">            throw new LockedException();</span>
+            List&lt;Plane&gt; outputPlanes) throws LockedException {
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L162">            throw new LockedException();</span>
         }
-<span class="fc" id="L167">        internalSetPlanes(inputPlanes, outputPlanes);</span>
-<span class="fc" id="L168">    }</span>
+<span class="fc" id="L164">        internalSetPlanes(inputPlanes, outputPlanes);</span>
+<span class="fc" id="L165">    }</span>
     
     /**
      * Indicates if estimator is ready to start the projective 3D transformation
@@ -175,9 +172,9 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L178" title="1 of 4 branches missed.">        return mInputPlanes != null &amp;&amp; mOutputPlanes != null &amp;&amp;</span>
-<span class="pc bpc" id="L179" title="1 of 2 branches missed.">                mInputPlanes.size() == mOutputPlanes.size() &amp;&amp;</span>
-<span class="pc bpc" id="L180" title="1 of 2 branches missed.">                mInputPlanes.size() &gt;= MINIMUM_SIZE;</span>
+<span class="pc bpc" id="L175" title="1 of 4 branches missed.">        return mInputPlanes != null &amp;&amp; mOutputPlanes != null &amp;&amp;</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">                mInputPlanes.size() == mOutputPlanes.size() &amp;&amp;</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">                mInputPlanes.size() &gt;= MINIMUM_SIZE;</span>
     }
     
     /**
@@ -188,7 +185,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * @return quality scores corresponding to each pair of matched points.
      */
     public double[] getQualityScores() {
-<span class="nc" id="L191">        return null;</span>
+<span class="nc" id="L188">        return null;</span>
     }    
     
     /**
@@ -203,8 +200,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * @throws IllegalArgumentException if provided quality scores length is 
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="nc" id="L207">            IllegalArgumentException { }</span>
+<span class="nc" id="L203">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
     
     /**
      * Creates a projective 3D transformation estimator based on 3D plane
@@ -215,18 +211,18 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(RobustEstimatorMethod method) {
-<span class="fc bfc" id="L218" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L214" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L220">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L216">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L222">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L218">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L224">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L220">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L226">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L222">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L229">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L225">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
         }
     }
             
@@ -245,23 +241,23 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L249" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L245" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L251">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L247">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
             case MSAC:
-<span class="fc" id="L254">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L250">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
             case PROSAC:
-<span class="fc" id="L257">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L253">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
             case PROMedS:
-<span class="fc" id="L260">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L256">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
             case RANSAC:
             default:
-<span class="fc" id="L264">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L260">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
         }
     }
@@ -278,22 +274,22 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L281" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L277" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L283">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L279">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L286">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L282">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L289">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L285">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
             case PROMedS:
-<span class="fc" id="L292">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L288">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
             case RANSAC:
             default:
-<span class="fc" id="L296">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L292">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
         }
     }
@@ -316,23 +312,23 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
             List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L320" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L316" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L322">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L318">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
             case MSAC:
-<span class="fc" id="L325">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L321">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
             case PROSAC:
-<span class="fc" id="L328">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L324">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
             case PROMedS:
-<span class="fc" id="L331">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L327">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
             case RANSAC:
             default:
-<span class="fc" id="L335">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L331">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
         }
     }
@@ -348,20 +344,20 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L351" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L347" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L353">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L349">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L355">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L351">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L357">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L353">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L360">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L356">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L364">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L360">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
         }
     }
             
@@ -382,24 +378,23 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L387" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L382" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L389">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L384">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
             case MSAC:
-<span class="fc" id="L392">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L387">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
             case PROSAC:
-<span class="fc" id="L395">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L390">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes, qualityScores);
             case PROMedS:
-<span class="fc" id="L398">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L393">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L402">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L397">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPlanes, outputPlanes);
         }
     }
@@ -418,22 +413,22 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
             double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L421" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L416" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L423">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L418">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L426">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L421">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L429">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L424">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, qualityScores);
             case PROMedS:
-<span class="fc" id="L432">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L427">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L436">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L431">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
         }
     }
@@ -458,24 +453,23 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
             List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L463" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L457" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L465">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L459">                return new LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
             case MSAC:
-<span class="fc" id="L468">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L462">                return new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
             case PROSAC:
-<span class="fc" id="L471">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L465">                return new PROSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes, qualityScores);
             case PROMedS:
-<span class="fc" id="L474">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L468">                return new PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L478">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L472">                return new RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPlanes, outputPlanes);
         }
     }
@@ -487,7 +481,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create() {
-<span class="fc" id="L490">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L484">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -502,9 +496,8 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
-            create(List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes)
-            throws IllegalArgumentException {
-<span class="fc" id="L507">        return create(inputPlanes, outputPlanes, DEFAULT_ROBUST_METHOD);</span>
+            create(List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L500">        return create(inputPlanes, outputPlanes, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -516,7 +509,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L519">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L512">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -534,9 +527,8 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes)
-            throws IllegalArgumentException {
-<span class="fc" id="L539">        return create(listener, inputPlanes, outputPlanes, </span>
+            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L531">        return create(listener, inputPlanes, outputPlanes, </span>
                 DEFAULT_ROBUST_METHOD);
     }
             
@@ -549,7 +541,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(double[] qualityScores) {
-<span class="fc" id="L552">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L544">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -567,8 +559,8 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L571">        return create(inputPlanes, outputPlanes, qualityScores, </span>
+            double[] qualityScores) {
+<span class="fc" id="L563">        return create(inputPlanes, outputPlanes, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }
             
@@ -584,7 +576,7 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
             double[] qualityScores) {
-<span class="fc" id="L587">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L579">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -605,8 +597,8 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PlaneCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
             List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L609">        return create(listener, inputPlanes, outputPlanes, qualityScores,</span>
+            double[] qualityScores) {
+<span class="fc" id="L601">        return create(listener, inputPlanes, outputPlanes, qualityScores,</span>
                 DEFAULT_ROBUST_METHOD);
     }
             
@@ -622,16 +614,16 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetPlanes(List&lt;Plane&gt; inputPlanes, 
-            List&lt;Plane&gt; outputPlanes) throws IllegalArgumentException {
-<span class="fc bfc" id="L626" title="All 2 branches covered.">        if (inputPlanes.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L627">            throw new IllegalArgumentException();</span>
+            List&lt;Plane&gt; outputPlanes) {
+<span class="fc bfc" id="L618" title="All 2 branches covered.">        if (inputPlanes.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L619">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L629" title="All 2 branches covered.">        if (inputPlanes.size() != outputPlanes.size()) {</span>
-<span class="fc" id="L630">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L621" title="All 2 branches covered.">        if (inputPlanes.size() != outputPlanes.size()) {</span>
+<span class="fc" id="L622">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L632">        mInputPlanes = inputPlanes;</span>
-<span class="fc" id="L633">        mOutputPlanes = outputPlanes;</span>
-<span class="fc" id="L634">    }</span>
+<span class="fc" id="L624">        mInputPlanes = inputPlanes;</span>
+<span class="fc" id="L625">        mOutputPlanes = outputPlanes;</span>
+<span class="fc" id="L626">    }</span>
     
     /**
      * Computes residual by comparing two lines algebraically by doing the
@@ -648,14 +640,14 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      * @return computed residual.
      */
     protected static double getResidual(Plane plane, Plane transformedPlane) {
-<span class="fc" id="L651">        plane.normalize();</span>
-<span class="fc" id="L652">        transformedPlane.normalize();</span>
+<span class="fc" id="L643">        plane.normalize();</span>
+<span class="fc" id="L644">        transformedPlane.normalize();</span>
         
-<span class="fc" id="L654">        double dotProduct = Math.abs(plane.getA() * transformedPlane.getA() +</span>
-<span class="fc" id="L655">                plane.getB() * transformedPlane.getB() +</span>
-<span class="fc" id="L656">                plane.getC() * transformedPlane.getC() +</span>
-<span class="fc" id="L657">                plane.getD() * transformedPlane.getD());</span>
-<span class="fc" id="L658">        return 1.0 - dotProduct;</span>
+<span class="fc" id="L646">        double dotProduct = Math.abs(plane.getA() * transformedPlane.getA() +</span>
+<span class="fc" id="L647">                plane.getB() * transformedPlane.getB() +</span>
+<span class="fc" id="L648">                plane.getC() * transformedPlane.getC() +</span>
+<span class="fc" id="L649">                plane.getD() * transformedPlane.getD());</span>
+<span class="fc" id="L650">        return 1.0 - dotProduct;</span>
     }   
     
     /**
@@ -671,30 +663,30 @@ public abstract class PlaneCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     protected ProjectiveTransformation3D attemptRefine(
             ProjectiveTransformation3D transformation) {
-<span class="fc bfc" id="L674" title="All 2 branches covered.">        if (mRefineResult) {</span>
-<span class="fc" id="L675">            PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =</span>
+<span class="fc bfc" id="L666" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L667">            PlaneCorrespondenceProjectiveTransformation3DRefiner refiner =</span>
                     new PlaneCorrespondenceProjectiveTransformation3DRefiner(
-<span class="fc" id="L677">                    transformation, mKeepCovariance, getInliersData(),</span>
+<span class="fc" id="L669">                    transformation, mKeepCovariance, getInliersData(),</span>
                     mInputPlanes, mOutputPlanes, 
-<span class="fc" id="L679">                    getRefinementStandardDeviation());</span>
+<span class="fc" id="L671">                    getRefinementStandardDeviation());</span>
             
             try {
-<span class="fc" id="L682">                ProjectiveTransformation3D result = </span>
+<span class="fc" id="L674">                ProjectiveTransformation3D result = </span>
                         new ProjectiveTransformation3D();
-<span class="fc" id="L684">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L676">                boolean improved = refiner.refine(result);</span>
                 
-<span class="pc bpc" id="L686" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L678" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L688">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L680">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="pc bpc" id="L691" title="1 of 2 branches missed.">                return improved ? result : transformation;</span>
-<span class="fc" id="L692">            } catch (Exception e) {</span>
+<span class="pc bpc" id="L683" title="1 of 2 branches missed.">                return improved ? result : transformation;</span>
+<span class="fc" id="L684">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="fc" id="L694">                return transformation;</span>
+<span class="fc" id="L686">                return transformation;</span>
             }
         } else {
-<span class="fc" id="L697">            return transformation;</span>
+<span class="fc" id="L689">            return transformation;</span>
         }        
     }    
 }

@@ -202,15 +202,14 @@ public abstract class Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public Point3DRobustEstimator(List&lt;Plane&gt; planes) 
-<span class="fc" id="L206">            throws IllegalArgumentException {</span>
-<span class="fc" id="L207">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L208">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L209">        mMaxIterations = DEFAULT_MAX_ITERATIONS; </span>
-<span class="fc" id="L210">        internalSetPlanes(planes);</span>
-<span class="fc" id="L211">        mRefineResult = DEFAULT_REFINE_RESULT;</span>
-<span class="fc" id="L212">        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;        </span>
-<span class="fc" id="L213">    }</span>
+<span class="fc" id="L205">    public Point3DRobustEstimator(List&lt;Plane&gt; planes) {</span>
+<span class="fc" id="L206">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L207">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L208">        mMaxIterations = DEFAULT_MAX_ITERATIONS; </span>
+<span class="fc" id="L209">        internalSetPlanes(planes);</span>
+<span class="fc" id="L210">        mRefineResult = DEFAULT_REFINE_RESULT;</span>
+<span class="fc" id="L211">        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;        </span>
+<span class="fc" id="L212">    }</span>
     
     /**
      * Constructor.
@@ -221,15 +220,15 @@ public abstract class Point3DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public Point3DRobustEstimator(Point3DRobustEstimatorListener listener,
-<span class="fc" id="L224">            List&lt;Plane&gt; planes) throws IllegalArgumentException {</span>
-<span class="fc" id="L225">        mListener = listener;</span>
-<span class="fc" id="L226">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L227">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L228">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
-<span class="fc" id="L229">        internalSetPlanes(planes);</span>
-<span class="fc" id="L230">        mRefineResult = DEFAULT_REFINE_RESULT;</span>
-<span class="fc" id="L231">        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;        </span>
-<span class="fc" id="L232">    }</span>
+<span class="fc" id="L223">            List&lt;Plane&gt; planes) {</span>
+<span class="fc" id="L224">        mListener = listener;</span>
+<span class="fc" id="L225">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L226">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L227">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L228">        internalSetPlanes(planes);</span>
+<span class="fc" id="L229">        mRefineResult = DEFAULT_REFINE_RESULT;</span>
+<span class="fc" id="L230">        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;        </span>
+<span class="fc" id="L231">    }</span>
     
     
     /**
@@ -238,7 +237,7 @@ public abstract class Point3DRobustEstimator {
      * @return listener to be notified of events.
      */
     public Point3DRobustEstimatorListener getListener() {
-<span class="fc" id="L241">        return mListener;</span>
+<span class="fc" id="L240">        return mListener;</span>
     }
     
     /**
@@ -249,11 +248,11 @@ public abstract class Point3DRobustEstimator {
      */
     public void setListener(Point3DRobustEstimatorListener listener) 
             throws LockedException {
-<span class="fc bfc" id="L252" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L253">            throw new LockedException();</span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L252">            throw new LockedException();</span>
         }
-<span class="fc" id="L255">        mListener = listener;</span>
-<span class="fc" id="L256">    }</span>
+<span class="fc" id="L254">        mListener = listener;</span>
+<span class="fc" id="L255">    }</span>
     
     /**
      * Indicates whether listener has been provided and is available for 
@@ -261,7 +260,7 @@ public abstract class Point3DRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L264" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L263" title="All 2 branches covered.">        return mListener != null;</span>
     }
     
     /**
@@ -269,7 +268,7 @@ public abstract class Point3DRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L272">        return mLocked;</span>
+<span class="fc" id="L271">        return mLocked;</span>
     }
 
     /**
@@ -279,7 +278,7 @@ public abstract class Point3DRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L282">        return mProgressDelta;</span>
+<span class="fc" id="L281">        return mProgressDelta;</span>
     }
     
     /**
@@ -292,17 +291,16 @@ public abstract class Point3DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L297" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L298">            throw new LockedException();</span>
+    public void setProgressDelta(float progressDelta) throws LockedException {
+<span class="fc bfc" id="L295" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L296">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L300" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L298" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L302">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L300">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L304">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L305">    }</span>
+<span class="fc" id="L302">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L303">    }</span>
     
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
@@ -312,7 +310,7 @@ public abstract class Point3DRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L315">        return mConfidence;</span>
+<span class="fc" id="L313">        return mConfidence;</span>
     }
     
     /**
@@ -326,16 +324,15 @@ public abstract class Point3DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L331" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L332">            throw new LockedException();</span>
+    public void setConfidence(double confidence) throws LockedException {
+<span class="fc bfc" id="L328" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L329">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L334" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L335">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L331" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L332">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L337">        mConfidence = confidence;</span>
-<span class="fc" id="L338">    }</span>
+<span class="fc" id="L334">        mConfidence = confidence;</span>
+<span class="fc" id="L335">    }</span>
     
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
@@ -344,7 +341,7 @@ public abstract class Point3DRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-<span class="fc" id="L347">        return mMaxIterations;</span>
+<span class="fc" id="L344">        return mMaxIterations;</span>
     }
     
     /**
@@ -356,23 +353,22 @@ public abstract class Point3DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L361" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L362">            throw new LockedException();</span>
+    public void setMaxIterations(int maxIterations) throws LockedException {
+<span class="fc bfc" id="L357" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L358">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L364" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L365">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L360" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L361">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L367">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L368">    }  </span>
+<span class="fc" id="L363">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L364">    }  </span>
     
     /**
      * Gets data related to inliers found after estimation.
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-<span class="fc" id="L375">        return mInliersData;</span>
+<span class="fc" id="L371">        return mInliersData;</span>
     }  
     
     /**
@@ -384,7 +380,7 @@ public abstract class Point3DRobustEstimator {
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-<span class="fc" id="L387">        return mRefineResult;</span>
+<span class="fc" id="L383">        return mRefineResult;</span>
     }
     
     /**
@@ -395,11 +391,11 @@ public abstract class Point3DRobustEstimator {
      * @throws LockedException if estimator is locked.
      */
     public void setResultRefined(boolean refineResult) throws LockedException {
-<span class="pc bpc" id="L398" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L399">            throw new LockedException();</span>
+<span class="pc bpc" id="L394" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L395">            throw new LockedException();</span>
         }
-<span class="fc" id="L401">        mRefineResult = refineResult;</span>
-<span class="fc" id="L402">    }</span>
+<span class="fc" id="L397">        mRefineResult = refineResult;</span>
+<span class="fc" id="L398">    }</span>
     
     /**
      * Gets coordinates type to use for refinement. When using inhomogeneous 
@@ -408,7 +404,7 @@ public abstract class Point3DRobustEstimator {
      * @return coordinates type to use for refinement.
      */
     public CoordinatesType getRefinementCoordinatesType() {
-<span class="fc" id="L411">        return mRefinementCoordinatesType;</span>
+<span class="fc" id="L407">        return mRefinementCoordinatesType;</span>
     }
     
     /**
@@ -420,11 +416,11 @@ public abstract class Point3DRobustEstimator {
      */
     public void setRefinementCoordinatesType(
             CoordinatesType refinementCoordinatesType) throws LockedException {
-<span class="fc bfc" id="L423" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L424">            throw new LockedException();</span>
+<span class="fc bfc" id="L419" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L420">            throw new LockedException();</span>
         }
-<span class="fc" id="L426">        mRefinementCoordinatesType = refinementCoordinatesType;</span>
-<span class="fc" id="L427">    }</span>
+<span class="fc" id="L422">        mRefinementCoordinatesType = refinementCoordinatesType;</span>
+<span class="fc" id="L423">    }</span>
         
     /**
      * Indicates whether covariance must be kept after refining result.
@@ -433,7 +429,7 @@ public abstract class Point3DRobustEstimator {
      * otherwise.
      */
     public boolean isCovarianceKept() {
-<span class="fc" id="L436">        return mKeepCovariance;</span>
+<span class="fc" id="L432">        return mKeepCovariance;</span>
     }
     
     /**
@@ -445,11 +441,11 @@ public abstract class Point3DRobustEstimator {
      */
     public void setCovarianceKept(boolean keepCovariance) 
             throws LockedException {
-<span class="fc bfc" id="L448" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L449">            throw new LockedException();</span>
+<span class="fc bfc" id="L444" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L445">            throw new LockedException();</span>
         }
-<span class="fc" id="L451">        mKeepCovariance = keepCovariance;</span>
-<span class="fc" id="L452">    }    </span>
+<span class="fc" id="L447">        mKeepCovariance = keepCovariance;</span>
+<span class="fc" id="L448">    }    </span>
     
     /**
      * Returns list of planes to be used to estimate a 3D point.
@@ -457,7 +453,7 @@ public abstract class Point3DRobustEstimator {
      * @return list of planes to be used to estimate a 3D point.
      */
     public List&lt;Plane&gt; getPlanes() {
-<span class="fc" id="L460">        return mPlanes;</span>
+<span class="fc" id="L456">        return mPlanes;</span>
     }
     
     /**
@@ -469,13 +465,12 @@ public abstract class Point3DRobustEstimator {
      * @throws LockedException if estimator is locked because a computation is
      * already in progress.
      */
-    public void setPlanes(List&lt;Plane&gt; planes) throws IllegalArgumentException,
-            LockedException {
-<span class="fc bfc" id="L474" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L475">            throw new LockedException();</span>
+    public void setPlanes(List&lt;Plane&gt; planes) throws LockedException {
+<span class="fc bfc" id="L469" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L470">            throw new LockedException();</span>
         }
-<span class="fc" id="L477">        internalSetPlanes(planes);</span>
-<span class="fc" id="L478">    }</span>
+<span class="fc" id="L472">        internalSetPlanes(planes);</span>
+<span class="fc" id="L473">    }</span>
     
     /**
      * Indicates if estimator is ready to start the 3D point estimation.
@@ -483,7 +478,7 @@ public abstract class Point3DRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="fc bfc" id="L486" title="All 4 branches covered.">        return mPlanes != null &amp;&amp; mPlanes.size() &gt;= MINIMUM_SIZE;</span>
+<span class="fc bfc" id="L481" title="All 4 branches covered.">        return mPlanes != null &amp;&amp; mPlanes.size() &gt;= MINIMUM_SIZE;</span>
     }
     
     /**
@@ -494,7 +489,7 @@ public abstract class Point3DRobustEstimator {
      * @return quality scores corresponding to each point.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L497">        return null;</span>
+<span class="fc" id="L492">        return null;</span>
     }
     
     /**
@@ -508,8 +503,7 @@ public abstract class Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="fc" id="L512">            IllegalArgumentException { }</span>
+<span class="fc" id="L506">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
     
     /**
      * Gets estimated covariance of estimated 3D point if available.
@@ -518,7 +512,7 @@ public abstract class Point3DRobustEstimator {
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-<span class="fc" id="L521">        return mCovariance;</span>
+<span class="fc" id="L515">        return mCovariance;</span>
     }
     
     /**
@@ -529,18 +523,18 @@ public abstract class Point3DRobustEstimator {
      * @return an instance of a 3D point robust estimator.
      */
     public static Point3DRobustEstimator create(RobustEstimatorMethod method) {
-<span class="fc bfc" id="L532" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L526" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L534">                return new LMedSPoint3DRobustEstimator();</span>
+<span class="fc" id="L528">                return new LMedSPoint3DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L536">                return new MSACPoint3DRobustEstimator();</span>
+<span class="fc" id="L530">                return new MSACPoint3DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L538">                return new PROSACPoint3DRobustEstimator();</span>
+<span class="fc" id="L532">                return new PROSACPoint3DRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L540">                return new PROMedSPoint3DRobustEstimator();</span>
+<span class="fc" id="L534">                return new PROMedSPoint3DRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L543">                return new RANSACPoint3DRobustEstimator();</span>
+<span class="fc" id="L537">                return new RANSACPoint3DRobustEstimator();</span>
         }
     }
     
@@ -555,19 +549,19 @@ public abstract class Point3DRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static Point3DRobustEstimator create(List&lt;Plane&gt; planes, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L559" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L553" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L561">                return new LMedSPoint3DRobustEstimator(planes);</span>
+<span class="fc" id="L555">                return new LMedSPoint3DRobustEstimator(planes);</span>
             case MSAC:
-<span class="fc" id="L563">                return new MSACPoint3DRobustEstimator(planes);</span>
+<span class="fc" id="L557">                return new MSACPoint3DRobustEstimator(planes);</span>
             case PROSAC:
-<span class="fc" id="L565">                return new PROSACPoint3DRobustEstimator(planes);</span>
+<span class="fc" id="L559">                return new PROSACPoint3DRobustEstimator(planes);</span>
             case PROMedS:
-<span class="fc" id="L567">                return new PROMedSPoint3DRobustEstimator(planes);</span>
+<span class="fc" id="L561">                return new PROMedSPoint3DRobustEstimator(planes);</span>
             case RANSAC:
             default:
-<span class="fc" id="L570">                return new RANSACPoint3DRobustEstimator(planes);</span>
+<span class="fc" id="L564">                return new RANSACPoint3DRobustEstimator(planes);</span>
         }
     }
     
@@ -583,18 +577,18 @@ public abstract class Point3DRobustEstimator {
     public static Point3DRobustEstimator create(
             Point3DRobustEstimatorListener listener, 
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L586" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L580" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L588">                return new LMedSPoint3DRobustEstimator(listener);</span>
+<span class="fc" id="L582">                return new LMedSPoint3DRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L590">                return new MSACPoint3DRobustEstimator(listener);</span>
+<span class="fc" id="L584">                return new MSACPoint3DRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L592">                return new PROSACPoint3DRobustEstimator(listener);</span>
+<span class="fc" id="L586">                return new PROSACPoint3DRobustEstimator(listener);</span>
             case PROMedS:
-<span class="fc" id="L594">                return new PROMedSPoint3DRobustEstimator(listener);</span>
+<span class="fc" id="L588">                return new PROMedSPoint3DRobustEstimator(listener);</span>
             case RANSAC:
             default:
-<span class="fc" id="L597">                return new RANSACPoint3DRobustEstimator(listener);</span>
+<span class="fc" id="L591">                return new RANSACPoint3DRobustEstimator(listener);</span>
         }
     }
     
@@ -612,19 +606,19 @@ public abstract class Point3DRobustEstimator {
      */
     public static Point3DRobustEstimator create(
             Point3DRobustEstimatorListener listener, List&lt;Plane&gt; planes,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L616" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L610" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L618">                return new LMedSPoint3DRobustEstimator(listener, planes);</span>
+<span class="fc" id="L612">                return new LMedSPoint3DRobustEstimator(listener, planes);</span>
             case MSAC:
-<span class="fc" id="L620">                return new MSACPoint3DRobustEstimator(listener, planes);</span>
+<span class="fc" id="L614">                return new MSACPoint3DRobustEstimator(listener, planes);</span>
             case PROSAC:
-<span class="fc" id="L622">                return new PROSACPoint3DRobustEstimator(listener, planes);</span>
+<span class="fc" id="L616">                return new PROSACPoint3DRobustEstimator(listener, planes);</span>
             case PROMedS:
-<span class="fc" id="L624">                return new PROMedSPoint3DRobustEstimator(listener, planes);</span>
+<span class="fc" id="L618">                return new PROMedSPoint3DRobustEstimator(listener, planes);</span>
             case RANSAC:
             default:
-<span class="fc" id="L627">                return new RANSACPoint3DRobustEstimator(listener, planes);</span>
+<span class="fc" id="L621">                return new RANSACPoint3DRobustEstimator(listener, planes);</span>
         }
     }
     
@@ -639,19 +633,19 @@ public abstract class Point3DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
     public static Point3DRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L643" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L637" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L645">                return new LMedSPoint3DRobustEstimator();</span>
+<span class="fc" id="L639">                return new LMedSPoint3DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L647">                return new MSACPoint3DRobustEstimator();</span>
+<span class="fc" id="L641">                return new MSACPoint3DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L649">                return new PROSACPoint3DRobustEstimator(qualityScores);</span>
+<span class="fc" id="L643">                return new PROSACPoint3DRobustEstimator(qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L651">                return new PROMedSPoint3DRobustEstimator(qualityScores);</span>
+<span class="fc" id="L645">                return new PROMedSPoint3DRobustEstimator(qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L654">                return new RANSACPoint3DRobustEstimator();</span>
+<span class="fc" id="L648">                return new RANSACPoint3DRobustEstimator();</span>
         }
     }
     
@@ -668,20 +662,19 @@ public abstract class Point3DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static Point3DRobustEstimator create(List&lt;Plane&gt; planes, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L673" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L666" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L675">                return new LMedSPoint3DRobustEstimator(planes);</span>
+<span class="fc" id="L668">                return new LMedSPoint3DRobustEstimator(planes);</span>
             case MSAC:
-<span class="fc" id="L677">                return new MSACPoint3DRobustEstimator(planes);</span>
+<span class="fc" id="L670">                return new MSACPoint3DRobustEstimator(planes);</span>
             case PROSAC:
-<span class="fc" id="L679">                return new PROSACPoint3DRobustEstimator(planes, qualityScores);</span>
+<span class="fc" id="L672">                return new PROSACPoint3DRobustEstimator(planes, qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L681">                return new PROMedSPoint3DRobustEstimator(planes, qualityScores);</span>
+<span class="fc" id="L674">                return new PROMedSPoint3DRobustEstimator(planes, qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L684">                return new RANSACPoint3DRobustEstimator(planes);</span>
+<span class="fc" id="L677">                return new RANSACPoint3DRobustEstimator(planes);</span>
         }
     }
     
@@ -699,19 +692,19 @@ public abstract class Point3DRobustEstimator {
      */
     public static Point3DRobustEstimator create(
             Point3DRobustEstimatorListener listener, double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L703" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L696" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L705">                return new LMedSPoint3DRobustEstimator(listener);</span>
+<span class="fc" id="L698">                return new LMedSPoint3DRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L707">                return new MSACPoint3DRobustEstimator(listener);</span>
+<span class="fc" id="L700">                return new MSACPoint3DRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L709">                return new PROSACPoint3DRobustEstimator(listener, qualityScores);</span>
+<span class="fc" id="L702">                return new PROSACPoint3DRobustEstimator(listener, qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L711">                return new PROMedSPoint3DRobustEstimator(listener, qualityScores);</span>
+<span class="fc" id="L704">                return new PROMedSPoint3DRobustEstimator(listener, qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L714">                return new RANSACPoint3DRobustEstimator(listener);</span>
+<span class="fc" id="L707">                return new RANSACPoint3DRobustEstimator(listener);</span>
         }
     }
     
@@ -731,22 +724,21 @@ public abstract class Point3DRobustEstimator {
      */
     public static Point3DRobustEstimator create(
             Point3DRobustEstimatorListener listener, List&lt;Plane&gt; planes,
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L736" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L728" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L738">                return new LMedSPoint3DRobustEstimator(listener, planes);</span>
+<span class="fc" id="L730">                return new LMedSPoint3DRobustEstimator(listener, planes);</span>
             case MSAC:
-<span class="fc" id="L740">                return new MSACPoint3DRobustEstimator(listener, planes);</span>
+<span class="fc" id="L732">                return new MSACPoint3DRobustEstimator(listener, planes);</span>
             case PROSAC:
-<span class="fc" id="L742">                return new PROSACPoint3DRobustEstimator(listener, planes, </span>
+<span class="fc" id="L734">                return new PROSACPoint3DRobustEstimator(listener, planes, </span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L745">                return new PROMedSPoint3DRobustEstimator(listener, planes, </span>
+<span class="fc" id="L737">                return new PROMedSPoint3DRobustEstimator(listener, planes, </span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L749">                return new RANSACPoint3DRobustEstimator(listener, planes);</span>
+<span class="fc" id="L741">                return new RANSACPoint3DRobustEstimator(listener, planes);</span>
         }
     }    
     
@@ -756,7 +748,7 @@ public abstract class Point3DRobustEstimator {
      * @return an instance of a 3D point robust estimator.
      */
     public static Point3DRobustEstimator create() {
-<span class="fc" id="L759">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L751">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -767,9 +759,8 @@ public abstract class Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines doesn't have a
      * size greater or equal than MINIMUM_SIZE.
      */
-    public static Point3DRobustEstimator create(List&lt;Plane&gt; planes) 
-            throws IllegalArgumentException {
-<span class="fc" id="L772">        return create(planes, DEFAULT_ROBUST_METHOD);</span>
+    public static Point3DRobustEstimator create(List&lt;Plane&gt; planes) {
+<span class="fc" id="L763">        return create(planes, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -781,7 +772,7 @@ public abstract class Point3DRobustEstimator {
      */
     public static Point3DRobustEstimator create(
             Point3DRobustEstimatorListener listener) {
-<span class="fc" id="L784">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L775">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -795,9 +786,8 @@ public abstract class Point3DRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static Point3DRobustEstimator create(
-            Point3DRobustEstimatorListener listener, List&lt;Plane&gt; planes) 
-            throws IllegalArgumentException {
-<span class="fc" id="L800">        return create(listener, planes, DEFAULT_ROBUST_METHOD);</span>
+            Point3DRobustEstimatorListener listener, List&lt;Plane&gt; planes) {
+<span class="fc" id="L790">        return create(listener, planes, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -808,9 +798,8 @@ public abstract class Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 3 planes).
      */
-    public static Point3DRobustEstimator create(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L813">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    public static Point3DRobustEstimator create(double[] qualityScores) {
+<span class="fc" id="L802">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -824,8 +813,8 @@ public abstract class Point3DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static Point3DRobustEstimator create(List&lt;Plane&gt; planes, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L828">        return create(planes, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L817">        return create(planes, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -839,9 +828,8 @@ public abstract class Point3DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 3 planes).
      */
     public static Point3DRobustEstimator create(
-            Point3DRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
-<span class="fc" id="L844">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            Point3DRobustEstimatorListener listener, double[] qualityScores) {
+<span class="fc" id="L832">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -858,8 +846,8 @@ public abstract class Point3DRobustEstimator {
      */
     public static Point3DRobustEstimator create(
             Point3DRobustEstimatorListener listener, List&lt;Plane&gt; planes,
-            double[] qualityScores) throws IllegalArgumentException{
-<span class="fc" id="L862">        return create(listener, planes, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L850">        return create(listener, planes, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }        
     
     /**
@@ -889,10 +877,10 @@ public abstract class Point3DRobustEstimator {
      * @return residual.
      */
     protected double residual(Point3D p, Plane plane) {
-<span class="fc" id="L892">        p.normalize();</span>
-<span class="fc" id="L893">        plane.normalize();</span>
+<span class="fc" id="L880">        p.normalize();</span>
+<span class="fc" id="L881">        plane.normalize();</span>
         
-<span class="fc" id="L895">        return Math.abs(plane.signedDistance(p));</span>
+<span class="fc" id="L883">        return Math.abs(plane.signedDistance(p));</span>
     } 
     
     /**
@@ -906,55 +894,54 @@ public abstract class Point3DRobustEstimator {
      * refined solution if not requested or if refinement failed.
      */
     protected Point3D attemptRefine(Point3D point) {
-<span class="fc bfc" id="L909" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc bfc" id="L897" title="All 2 branches covered.">        if (mRefineResult) {</span>
             Point3DRefiner refiner;
             Point3D result;
-<span class="fc bfc" id="L912" title="All 2 branches covered.">            switch (mRefinementCoordinatesType) {</span>
-                case HOMOGENEOUS_COORDINATES: {
-                    HomogeneousPoint3D p;
-<span class="pc bpc" id="L915" title="1 of 2 branches missed.">                    if (point.getType() == CoordinatesType.HOMOGENEOUS_COORDINATES) {</span>
-<span class="fc" id="L916">                        p = (HomogeneousPoint3D)point;</span>
+<span class="fc bfc" id="L900" title="All 2 branches covered.">            switch (mRefinementCoordinatesType) {</span>
+                case HOMOGENEOUS_COORDINATES:
+                    HomogeneousPoint3D homP;
+<span class="pc bpc" id="L903" title="1 of 2 branches missed.">                    if (point.getType() == CoordinatesType.HOMOGENEOUS_COORDINATES) {</span>
+<span class="fc" id="L904">                        homP = (HomogeneousPoint3D)point;</span>
                     } else {
-<span class="nc" id="L918">                        p = new HomogeneousPoint3D(point);</span>
+<span class="nc" id="L906">                        homP = new HomogeneousPoint3D(point);</span>
                     }
-<span class="fc" id="L920">                    refiner = new HomogeneousPoint3DRefiner(</span>
-<span class="fc" id="L921">                            p, mKeepCovariance, getInliersData(), mPlanes,</span>
-<span class="fc" id="L922">                            getRefinementStandardDeviation());</span>
-<span class="fc" id="L923">                    result = new HomogeneousPoint3D();</span>
-<span class="fc" id="L924">                    break;</span>
-                }                
+<span class="fc" id="L908">                    refiner = new HomogeneousPoint3DRefiner(</span>
+<span class="fc" id="L909">                            homP, mKeepCovariance, getInliersData(), mPlanes,</span>
+<span class="fc" id="L910">                            getRefinementStandardDeviation());</span>
+<span class="fc" id="L911">                    result = new HomogeneousPoint3D();</span>
+<span class="fc" id="L912">                    break;</span>
+
                 case INHOMOGENEOUS_COORDINATES:
-                default: {
-                    InhomogeneousPoint3D p;
-<span class="pc bpc" id="L929" title="1 of 2 branches missed.">                    if (point.getType() == CoordinatesType.INHOMOGENEOUS_COORDINATES) {</span>
-<span class="nc" id="L930">                        p = (InhomogeneousPoint3D)point;</span>
+                default:
+                    InhomogeneousPoint3D inhomP;
+<span class="pc bpc" id="L917" title="1 of 2 branches missed.">                    if (point.getType() == CoordinatesType.INHOMOGENEOUS_COORDINATES) {</span>
+<span class="nc" id="L918">                        inhomP = (InhomogeneousPoint3D)point;</span>
                     } else {
-<span class="fc" id="L932">                        p = new InhomogeneousPoint3D(point);</span>
+<span class="fc" id="L920">                        inhomP = new InhomogeneousPoint3D(point);</span>
                     }
-<span class="fc" id="L934">                    refiner = new InhomogeneousPoint3DRefiner(p, </span>
-<span class="fc" id="L935">                            mKeepCovariance, getInliersData(), mPlanes,</span>
-<span class="fc" id="L936">                            getRefinementStandardDeviation());</span>
-<span class="fc" id="L937">                    result = new InhomogeneousPoint3D();</span>
-<span class="fc" id="L938">                    break;</span>
-                }                       
+<span class="fc" id="L922">                    refiner = new InhomogeneousPoint3DRefiner(inhomP,</span>
+<span class="fc" id="L923">                            mKeepCovariance, getInliersData(), mPlanes,</span>
+<span class="fc" id="L924">                            getRefinementStandardDeviation());</span>
+<span class="fc" id="L925">                    result = new InhomogeneousPoint3D();</span>
+                    break;
             }
             
             try {
                 //noinspection unchecked
-<span class="fc" id="L944">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L931">                boolean improved = refiner.refine(result);</span>
                 
-<span class="pc bpc" id="L946" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L933" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L948">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L935">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="fc bfc" id="L951" title="All 2 branches covered.">                return improved ? result : point;</span>
-<span class="nc" id="L952">            } catch (Exception e) {</span>
+<span class="fc bfc" id="L938" title="All 2 branches covered.">                return improved ? result : point;</span>
+<span class="nc" id="L939">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="nc" id="L954">                return point;</span>
+<span class="nc" id="L941">                return point;</span>
             }
         } else {
-<span class="fc" id="L957">            return point;</span>
+<span class="fc" id="L944">            return point;</span>
         }
     }
     
@@ -978,12 +965,11 @@ public abstract class Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes doesn't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    private void internalSetPlanes(List&lt;Plane&gt; planes) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L983" title="All 2 branches covered.">        if (planes.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L984">            throw new IllegalArgumentException();</span>
+    private void internalSetPlanes(List&lt;Plane&gt; planes) {
+<span class="fc bfc" id="L969" title="All 2 branches covered.">        if (planes.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L970">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L986">        mPlanes = planes;</span>
-<span class="fc" id="L987">    }    </span>
+<span class="fc" id="L972">        mPlanes = planes;</span>
+<span class="fc" id="L973">    }    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

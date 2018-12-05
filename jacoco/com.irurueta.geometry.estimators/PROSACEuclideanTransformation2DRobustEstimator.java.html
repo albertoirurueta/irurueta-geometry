@@ -102,13 +102,12 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROSACEuclideanTransformation2DRobustEstimator(
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints)
-            throws IllegalArgumentException {
-<span class="fc" id="L107">        super(inputPoints, outputPoints);</span>
-<span class="fc" id="L108">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L109">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L110">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L111">    }</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L106">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L107">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L108">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L109">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L110">    }</span>
     
     /**
      * Constructor.
@@ -117,11 +116,11 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     public PROSACEuclideanTransformation2DRobustEstimator(
             EuclideanTransformation2DRobustEstimatorListener listener) {
-<span class="fc" id="L120">        super(listener);</span>
-<span class="fc" id="L121">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L122">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L123">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L124">    }</span>
+<span class="fc" id="L119">        super(listener);</span>
+<span class="fc" id="L120">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L121">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L122">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L123">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
@@ -140,13 +139,12 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     public PROSACEuclideanTransformation2DRobustEstimator(
             EuclideanTransformation2DRobustEstimatorListener listener,
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints)
-            throws IllegalArgumentException {
-<span class="fc" id="L145">        super(listener, inputPoints, outputPoints);</span>
-<span class="fc" id="L146">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L147">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L148">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L149">    }</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L143">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L144">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L145">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L146">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L147">    }</span>
     
     /**
      * Constructor.
@@ -156,13 +154,13 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACEuclideanTransformation2DRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L160">        super();</span>
-<span class="fc" id="L161">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L162">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L163">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L164">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L165">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L158">        super();</span>
+<span class="fc" id="L159">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L160">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L161">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L162">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L163">    }</span>
     
     /**
      * Constructor withlists of points to be used to estimate an euclidean 2D
@@ -182,18 +180,18 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     public PROSACEuclideanTransformation2DRobustEstimator(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L186">        super(inputPoints, outputPoints);</span>
+            double[] qualityScores) {
+<span class="fc" id="L184">        super(inputPoints, outputPoints);</span>
         
-<span class="fc bfc" id="L188" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
-<span class="fc" id="L189">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L187">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L192">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L193">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L194">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L195">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L196">    }</span>
+<span class="fc" id="L190">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L191">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L192">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L193">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L194">    }</span>
     
     /**
      * Constructor.
@@ -206,13 +204,13 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     public PROSACEuclideanTransformation2DRobustEstimator(
             EuclideanTransformation2DRobustEstimatorListener listener, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L210">        super(listener);</span>
-<span class="fc" id="L211">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L212">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L213">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L214">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L215">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L208">        super(listener);</span>
+<span class="fc" id="L209">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L210">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L211">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L212">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L213">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
@@ -234,18 +232,18 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
     public PROSACEuclideanTransformation2DRobustEstimator(
             EuclideanTransformation2DRobustEstimatorListener listener,
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L238">        super(listener, inputPoints, outputPoints);</span>
+            double[] qualityScores) {
+<span class="fc" id="L236">        super(listener, inputPoints, outputPoints);</span>
         
-<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
-<span class="fc" id="L241">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L239">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L244">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L245">        internalSetQualityScores(qualityScores);  </span>
-<span class="fc" id="L246">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L247">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L248">    }</span>
+<span class="fc" id="L242">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L243">        internalSetQualityScores(qualityScores);  </span>
+<span class="fc" id="L244">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L245">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L246">    }</span>
 
     /**
      * Constructor.
@@ -253,11 +251,11 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     public PROSACEuclideanTransformation2DRobustEstimator(
             boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L256">        super(weakMinimumSizeAllowed);</span>
-<span class="fc" id="L257">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L258">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L259">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L260">    }</span>
+<span class="fc" id="L254">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L255">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L256">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L257">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L258">    }</span>
     
     /**
      * Constructor with lists of points to be used to estimate an euclidean 2D
@@ -275,12 +273,12 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     public PROSACEuclideanTransformation2DRobustEstimator(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
-<span class="fc" id="L279">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L280">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L281">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L282">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L283">    }</span>
+            boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L277">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L278">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L279">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L280">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L281">    }</span>
     
     /**
      * Constructor.
@@ -291,11 +289,11 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
     public PROSACEuclideanTransformation2DRobustEstimator(
             EuclideanTransformation2DRobustEstimatorListener listener,
             boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L294">        super(listener, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L295">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L296">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L297">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L298">    }</span>
+<span class="fc" id="L292">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L293">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L294">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L295">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L296">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
@@ -316,12 +314,12 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
     public PROSACEuclideanTransformation2DRobustEstimator(
             EuclideanTransformation2DRobustEstimatorListener listener,
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
-<span class="fc" id="L320">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L321">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L322">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L323">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L324">    }</span>
+            boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L318">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L319">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L320">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L321">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L322">    }</span>
     
     /**
      * Constructor.
@@ -332,14 +330,13 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACEuclideanTransformation2DRobustEstimator(
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
-<span class="fc" id="L337">        super(weakMinimumSizeAllowed);</span>
-<span class="fc" id="L338">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L339">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L340">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L341">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L342">    }</span>
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L334">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L335">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L336">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L337">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L338">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L339">    }</span>
     
     /**
      * Constructor withlists of points to be used to estimate an euclidean 2D
@@ -360,19 +357,18 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     public PROSACEuclideanTransformation2DRobustEstimator(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
-<span class="fc" id="L365">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L361">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
         
-<span class="fc bfc" id="L367" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
-<span class="fc" id="L368">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L363" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L364">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L371">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L372">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L373">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L374">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L375">    }</span>
+<span class="fc" id="L367">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L368">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L369">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L370">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L371">    }</span>
     
     /**
      * Constructor.
@@ -386,14 +382,13 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     public PROSACEuclideanTransformation2DRobustEstimator(
             EuclideanTransformation2DRobustEstimatorListener listener, 
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
-<span class="fc" id="L391">        super(listener, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L392">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L393">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L394">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L395">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L396">    }</span>
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L386">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L387">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L388">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L389">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L390">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L391">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
@@ -416,19 +411,18 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
     public PROSACEuclideanTransformation2DRobustEstimator(
             EuclideanTransformation2DRobustEstimatorListener listener,
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
-<span class="fc" id="L421">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L415">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
         
-<span class="fc bfc" id="L423" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
-<span class="fc" id="L424">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L417" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L418">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L427">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L428">        internalSetQualityScores(qualityScores);  </span>
-<span class="fc" id="L429">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L430">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L431">    }</span>
+<span class="fc" id="L421">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L422">        internalSetQualityScores(qualityScores);  </span>
+<span class="fc" id="L423">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L424">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L425">    }</span>
     
     /**
      * Returns threshold to determine whether points are inliers or not when 
@@ -439,7 +433,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-<span class="fc" id="L442">        return mThreshold;</span>
+<span class="fc" id="L436">        return mThreshold;</span>
     }    
     
     /**
@@ -454,16 +448,15 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L459" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L460">            throw new LockedException();</span>
+    public void setThreshold(double threshold) throws LockedException {
+<span class="fc bfc" id="L452" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L453">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L462" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L463">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L455" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L456">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L465">        mThreshold = threshold;</span>
-<span class="fc" id="L466">    }</span>
+<span class="fc" id="L458">        mThreshold = threshold;</span>
+<span class="fc" id="L459">    }</span>
     
     /**
      * Returns quality scores corresponding to each pair of matched points.
@@ -472,7 +465,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L475">        return mQualityScores;</span>
+<span class="fc" id="L468">        return mQualityScores;</span>
     }
     
     /**
@@ -486,13 +479,12 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
-<span class="fc bfc" id="L491" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L492">            throw new LockedException();</span>
+    public void setQualityScores(double[] qualityScores) throws LockedException {
+<span class="fc bfc" id="L483" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L484">            throw new LockedException();</span>
         }
-<span class="fc" id="L494">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L495">    }</span>
+<span class="fc" id="L486">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L487">    }</span>
     
     /**
      * Indicates if eatimator is ready to start the euclidean 2D transformation
@@ -503,8 +495,8 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L506" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L507" title="1 of 2 branches missed.">                mQualityScores.length == mInputPoints.size();</span>
+<span class="fc bfc" id="L498" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
+<span class="pc bpc" id="L499" title="1 of 2 branches missed.">                mQualityScores.length == mInputPoints.size();</span>
     }
     
     /**
@@ -513,7 +505,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-<span class="fc" id="L516">        return mComputeAndKeepInliers;</span>
+<span class="fc" id="L508">        return mComputeAndKeepInliers;</span>
     }
     
     /**
@@ -524,11 +516,11 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     public void setComputeAndKeepInliersEnabled(boolean computeAndKeepInliers)
             throws LockedException {
-<span class="pc bpc" id="L527" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L528">            throw new LockedException();</span>
+<span class="pc bpc" id="L519" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L520">            throw new LockedException();</span>
         }
-<span class="fc" id="L530">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
-<span class="fc" id="L531">    }</span>
+<span class="fc" id="L522">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L523">    }</span>
     
     /**
      * Indicates whether residuals must be computed and kept.
@@ -536,7 +528,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-<span class="fc" id="L539">        return mComputeAndKeepResiduals;</span>
+<span class="fc" id="L531">        return mComputeAndKeepResiduals;</span>
     }
     
     /**
@@ -547,11 +539,11 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     public void setComputeAndKeepResidualsEnabled(
             boolean computeAndKeepResiduals) throws LockedException {
-<span class="pc bpc" id="L550" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L551">            throw new LockedException();</span>
+<span class="pc bpc" id="L542" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L543">            throw new LockedException();</span>
         }
-<span class="fc" id="L553">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
-<span class="fc" id="L554">    }</span>
+<span class="fc" id="L545">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L546">    }</span>
     
    /**
      * Estimates an euclidean 2D transformation using a robust estimator and
@@ -568,149 +560,149 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
     @Override
     public EuclideanTransformation2D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L571" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L572">            throw new LockedException();</span>
+<span class="fc bfc" id="L563" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L564">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L574" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L575">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L566" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L567">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L578">        PROSACRobustEstimator&lt;EuclideanTransformation2D&gt; innerEstimator = </span>
+<span class="fc" id="L570">        PROSACRobustEstimator&lt;EuclideanTransformation2D&gt; innerEstimator = </span>
                 new PROSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L580">                    new PROSACRobustEstimatorListener&lt;EuclideanTransformation2D&gt;() {</span>
+<span class="fc" id="L572">                    new PROSACRobustEstimatorListener&lt;EuclideanTransformation2D&gt;() {</span>
                     
             //point to be reused when computing residuals
-<span class="fc" id="L583">            private Point2D mTestPoint = Point2D.create(</span>
+<span class="fc" id="L575">            private Point2D mTestPoint = Point2D.create(</span>
                     CoordinatesType.HOMOGENEOUS_COORDINATES);
             
-<span class="fc" id="L586">            private EuclideanTransformation2DEstimator mNonRobustEstimator = </span>
+<span class="fc" id="L578">            private EuclideanTransformation2DEstimator mNonRobustEstimator = </span>
                     new EuclideanTransformation2DEstimator(
-<span class="fc" id="L588">                            isWeakMinimumSizeAllowed());</span>
+<span class="fc" id="L580">                            isWeakMinimumSizeAllowed());</span>
             
-<span class="fc" id="L590">            private List&lt;Point2D&gt; mSubsetInputPoints = </span>
+<span class="fc" id="L582">            private List&lt;Point2D&gt; mSubsetInputPoints = </span>
                     new ArrayList&lt;&gt;();
-<span class="fc" id="L592">            private List&lt;Point2D&gt; mSubsetOutputPoints = </span>
+<span class="fc" id="L584">            private List&lt;Point2D&gt; mSubsetOutputPoints = </span>
                     new ArrayList&lt;&gt;();
             
             @Override
             public double getThreshold() {
-<span class="fc" id="L597">                return mThreshold;</span>
+<span class="fc" id="L589">                return mThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L602">                return mInputPoints.size();</span>
+<span class="fc" id="L594">                return mInputPoints.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L607">                return mNonRobustEstimator.getMinimumPoints();</span>
+<span class="fc" id="L599">                return mNonRobustEstimator.getMinimumPoints();</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;EuclideanTransformation2D&gt; solutions) {
-<span class="fc" id="L613">                mSubsetInputPoints.clear();</span>
-<span class="fc" id="L614">                mSubsetOutputPoints.clear();</span>
-<span class="fc bfc" id="L615" title="All 2 branches covered.">                for (int samplesIndex : samplesIndices) {</span>
-<span class="fc" id="L616">                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
-<span class="fc" id="L617">                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
+<span class="fc" id="L605">                mSubsetInputPoints.clear();</span>
+<span class="fc" id="L606">                mSubsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L607" title="All 2 branches covered.">                for (int samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L608">                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
+<span class="fc" id="L609">                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
                             samplesIndex));
                 }
 
                 try {
-<span class="fc" id="L622">                    mNonRobustEstimator.setPoints(mSubsetInputPoints, </span>
+<span class="fc" id="L614">                    mNonRobustEstimator.setPoints(mSubsetInputPoints, </span>
                             mSubsetOutputPoints);
-<span class="fc" id="L624">                    solutions.add(mNonRobustEstimator.estimate());</span>
-<span class="nc" id="L625">                } catch (Exception e) {</span>
+<span class="fc" id="L616">                    solutions.add(mNonRobustEstimator.estimate());</span>
+<span class="nc" id="L617">                } catch (Exception e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L627">                }</span>
-<span class="fc" id="L628">            }</span>
+<span class="fc" id="L619">                }</span>
+<span class="fc" id="L620">            }</span>
 
             @Override
             public double computeResidual(
                     EuclideanTransformation2D currentEstimation, int i) {
-<span class="fc" id="L633">                Point2D inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L634">                Point2D outputPoint = mOutputPoints.get(i);</span>
+<span class="fc" id="L625">                Point2D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L626">                Point2D outputPoint = mOutputPoints.get(i);</span>
                 
                 //transform input point and store result in mTestPoint
-<span class="fc" id="L637">                currentEstimation.transform(inputPoint, mTestPoint);</span>
+<span class="fc" id="L629">                currentEstimation.transform(inputPoint, mTestPoint);</span>
                 
-<span class="fc" id="L639">                return outputPoint.distanceTo(mTestPoint);</span>
+<span class="fc" id="L631">                return outputPoint.distanceTo(mTestPoint);</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L644">                return PROSACEuclideanTransformation2DRobustEstimator.this.</span>
-<span class="fc" id="L645">                        isReady();</span>
+<span class="fc" id="L636">                return PROSACEuclideanTransformation2DRobustEstimator.this.</span>
+<span class="fc" id="L637">                        isReady();</span>
             }
 
             @Override
             public void onEstimateStart(
                     RobustEstimator&lt;EuclideanTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L651" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L652">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L643" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L644">                    mListener.onEstimateStart(</span>
                             PROSACEuclideanTransformation2DRobustEstimator.this);
                 }
-<span class="fc" id="L655">            }</span>
+<span class="fc" id="L647">            }</span>
 
             @Override
             public void onEstimateEnd(
                     RobustEstimator&lt;EuclideanTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L660" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L661">                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L652" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L653">                    mListener.onEstimateEnd(</span>
                             PROSACEuclideanTransformation2DRobustEstimator.this);
                 }
-<span class="fc" id="L664">            }</span>
+<span class="fc" id="L656">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;EuclideanTransformation2D&gt; estimator, 
                     int iteration) {
-<span class="pc bpc" id="L670" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L671">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L662" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L663">                    mListener.onEstimateNextIteration(</span>
                             PROSACEuclideanTransformation2DRobustEstimator.this, 
                             iteration);
                 }
-<span class="fc" id="L675">            }</span>
+<span class="fc" id="L667">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;EuclideanTransformation2D&gt; estimator, 
                     float progress) {
-<span class="pc bpc" id="L681" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L682">                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L673" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L674">                    mListener.onEstimateProgressChange(</span>
                             PROSACEuclideanTransformation2DRobustEstimator.this, 
                             progress);
                 }
-<span class="fc" id="L686">            }</span>
+<span class="fc" id="L678">            }</span>
 
             @Override
             public double[] getQualityScores() {
-<span class="fc" id="L690">                return mQualityScores;</span>
+<span class="fc" id="L682">                return mQualityScores;</span>
             }
         });
         
         try {
-<span class="fc" id="L695">            mLocked = true;</span>
-<span class="fc" id="L696">            mInliersData = null;</span>
-<span class="pc bpc" id="L697" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
+<span class="fc" id="L687">            mLocked = true;</span>
+<span class="fc" id="L688">            mInliersData = null;</span>
+<span class="pc bpc" id="L689" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
                     mComputeAndKeepInliers || mRefineResult);
-<span class="pc bpc" id="L699" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
+<span class="pc bpc" id="L691" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
                     mComputeAndKeepResiduals || mRefineResult);            
-<span class="fc" id="L701">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L702">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L703">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L704">            EuclideanTransformation2D transformation = </span>
-<span class="fc" id="L705">                    innerEstimator.estimate();</span>
-<span class="fc" id="L706">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L707">            return attemptRefine(transformation);            </span>
-<span class="nc" id="L708">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L709">            throw new LockedException(e);</span>
-<span class="nc" id="L710">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L711">            throw new NotReadyException(e);</span>
+<span class="fc" id="L693">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L694">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L695">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L696">            EuclideanTransformation2D transformation = </span>
+<span class="fc" id="L697">                    innerEstimator.estimate();</span>
+<span class="fc" id="L698">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L699">            return attemptRefine(transformation);            </span>
+<span class="nc" id="L700">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L701">            throw new LockedException(e);</span>
+<span class="nc" id="L702">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L703">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L713">            mLocked = false;</span>
+<span class="fc" id="L705">            mLocked = false;</span>
         }
     }
 
@@ -720,7 +712,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L723">        return RobustEstimatorMethod.PROSAC;</span>
+<span class="fc" id="L715">        return RobustEstimatorMethod.PROSAC;</span>
     }    
     
     /**
@@ -735,7 +727,7 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L738">        return mThreshold;</span>
+<span class="fc" id="L730">        return mThreshold;</span>
     }
     
     /**
@@ -746,13 +738,12 @@ public class PROSACEuclideanTransformation2DRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L751" title="All 2 branches covered.">        if (qualityScores.length &lt; getMinimumPoints()) {</span>
-<span class="fc" id="L752">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(double[] qualityScores) {
+<span class="fc bfc" id="L742" title="All 2 branches covered.">        if (qualityScores.length &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L743">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L755">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L756">    }        </span>
+<span class="fc" id="L746">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L747">    }        </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

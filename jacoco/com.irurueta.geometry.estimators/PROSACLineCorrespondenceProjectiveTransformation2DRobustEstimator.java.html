@@ -111,13 +111,12 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) 
-            throws IllegalArgumentException {
-<span class="fc" id="L116">        super(inputLines, outputLines);</span>
-<span class="fc" id="L117">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L118">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L119">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L120">    }</span>
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L115">        super(inputLines, outputLines);</span>
+<span class="fc" id="L116">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L117">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L118">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L119">    }</span>
     
     /**
      * Constructor.
@@ -126,11 +125,11 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     public PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener) {
-<span class="fc" id="L129">        super(listener);</span>
-<span class="fc" id="L130">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L131">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L132">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L133">    }</span>
+<span class="fc" id="L128">        super(listener);</span>
+<span class="fc" id="L129">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L130">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L131">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L132">    }</span>
     
     /**
      * Constructor with listener and lists of lines to be used to estimate a
@@ -149,13 +148,12 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     public PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener,
-            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) 
-            throws IllegalArgumentException {
-<span class="fc" id="L154">        super(listener, inputLines, outputLines);</span>
-<span class="fc" id="L155">        mThreshold = DEFAULT_THRESHOLD;     </span>
-<span class="fc" id="L156">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L157">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L158">    }</span>
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L152">        super(listener, inputLines, outputLines);</span>
+<span class="fc" id="L153">        mThreshold = DEFAULT_THRESHOLD;     </span>
+<span class="fc" id="L154">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L155">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L156">    }</span>
     
     /**
      * Constructor.
@@ -165,13 +163,13 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L169">        super();</span>
-<span class="fc" id="L170">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L171">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L172">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L173">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L174">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L167">        super();</span>
+<span class="fc" id="L168">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L169">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L170">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L171">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L172">    }</span>
 
     /**
      * Constructor with lists of lines to be used to estimate a projective 2D
@@ -191,18 +189,18 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     public PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L195">        super(inputLines, outputLines);</span>
+            double[] qualityScores) {
+<span class="fc" id="L193">        super(inputLines, outputLines);</span>
         
-<span class="fc bfc" id="L197" title="All 2 branches covered.">        if (qualityScores.length != inputLines.size()) {</span>
-<span class="fc" id="L198">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (qualityScores.length != inputLines.size()) {</span>
+<span class="fc" id="L196">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L201">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L202">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L203">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L204">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L205">    }</span>
+<span class="fc" id="L199">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L200">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L201">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L202">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L203">    }</span>
     
     /**
      * Constructor.
@@ -215,13 +213,13 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     public PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L219">        super(listener);</span>
-<span class="fc" id="L220">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L221">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L222">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L223">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L224">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L217">        super(listener);</span>
+<span class="fc" id="L218">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L219">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L220">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L221">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L222">    }</span>
     
     /**
      * Constructor with listener and lists of lines to be used to estimate a
@@ -243,18 +241,18 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
     public PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L247">        super(listener, inputLines, outputLines);</span>
+            double[] qualityScores) {
+<span class="fc" id="L245">        super(listener, inputLines, outputLines);</span>
         
-<span class="fc bfc" id="L249" title="All 2 branches covered.">        if (qualityScores.length != inputLines.size()) {</span>
-<span class="fc" id="L250">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">        if (qualityScores.length != inputLines.size()) {</span>
+<span class="fc" id="L248">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L253">        mThreshold = DEFAULT_THRESHOLD;     </span>
-<span class="fc" id="L254">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L255">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L256">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L257">    }</span>
+<span class="fc" id="L251">        mThreshold = DEFAULT_THRESHOLD;     </span>
+<span class="fc" id="L252">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L253">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L254">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L255">    }</span>
     
     /**
      * Returns threshold to determine whether lines are inliers or not when 
@@ -272,7 +270,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * @return threshold to determine whether matched lines are inliers or not.
      */
     public double getThreshold() {
-<span class="fc" id="L275">        return mThreshold;</span>
+<span class="fc" id="L273">        return mThreshold;</span>
     }
     
     /**
@@ -295,16 +293,15 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L300" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L301">            throw new LockedException();</span>
+    public void setThreshold(double threshold) throws LockedException {
+<span class="fc bfc" id="L297" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L298">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L303" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L304">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L301">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L306">        mThreshold = threshold;</span>
-<span class="fc" id="L307">    }    </span>
+<span class="fc" id="L303">        mThreshold = threshold;</span>
+<span class="fc" id="L304">    }    </span>
     
     /**
      * Returns quality scores corresponding to each pair of matched lines.
@@ -313,7 +310,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L316">        return mQualityScores;</span>
+<span class="fc" id="L313">        return mQualityScores;</span>
     }
     
     /**
@@ -327,13 +324,12 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
-<span class="pc bpc" id="L332" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L333">            throw new LockedException();</span>
+    public void setQualityScores(double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L328" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L329">            throw new LockedException();</span>
         }
-<span class="fc" id="L335">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L336">    }    </span>
+<span class="fc" id="L331">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L332">    }    </span>
     
     /**
      * Indicates if estimator is ready to start the projective 2D transformation
@@ -344,8 +340,8 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L347" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L348" title="1 of 2 branches missed.">                mQualityScores.length == mInputLines.size();</span>
+<span class="fc bfc" id="L343" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
+<span class="pc bpc" id="L344" title="1 of 2 branches missed.">                mQualityScores.length == mInputLines.size();</span>
     }    
     
     /**
@@ -354,7 +350,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-<span class="fc" id="L357">        return mComputeAndKeepInliers;</span>
+<span class="fc" id="L353">        return mComputeAndKeepInliers;</span>
     }
     
     /**
@@ -365,11 +361,11 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     public void setComputeAndKeepInliersEnabled(boolean computeAndKeepInliers)
             throws LockedException {
-<span class="pc bpc" id="L368" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L369">            throw new LockedException();</span>
+<span class="pc bpc" id="L364" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L365">            throw new LockedException();</span>
         }
-<span class="fc" id="L371">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
-<span class="fc" id="L372">    }</span>
+<span class="fc" id="L367">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L368">    }</span>
     
     /**
      * Indicates whether residuals must be computed and kept.
@@ -377,7 +373,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-<span class="fc" id="L380">        return mComputeAndKeepResiduals;</span>
+<span class="fc" id="L376">        return mComputeAndKeepResiduals;</span>
     }
     
     /**
@@ -388,11 +384,11 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     public void setComputeAndKeepResidualsEnabled(
             boolean computeAndKeepResiduals) throws LockedException {
-<span class="pc bpc" id="L391" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L392">            throw new LockedException();</span>
+<span class="pc bpc" id="L387" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L388">            throw new LockedException();</span>
         }
-<span class="fc" id="L394">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
-<span class="fc" id="L395">    }</span>
+<span class="fc" id="L390">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L391">    }</span>
     
     /**
      * Estimates a projective 2D transformation using a robust estimator and
@@ -409,150 +405,150 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
     @Override
     public ProjectiveTransformation2D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L412" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L413">            throw new LockedException();</span>
+<span class="fc bfc" id="L408" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L409">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L415" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L416">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L411" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L412">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L419">        PROSACRobustEstimator&lt;ProjectiveTransformation2D&gt; innerEstimator =</span>
+<span class="fc" id="L415">        PROSACRobustEstimator&lt;ProjectiveTransformation2D&gt; innerEstimator =</span>
                 new PROSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L421">                new PROSACRobustEstimatorListener&lt;ProjectiveTransformation2D&gt;() {</span>
+<span class="fc" id="L417">                new PROSACRobustEstimatorListener&lt;ProjectiveTransformation2D&gt;() {</span>
                     
             //line to be reused when computing residuals
-<span class="fc" id="L424">            private Line2D mTestLine = new Line2D();</span>
+<span class="fc" id="L420">            private Line2D mTestLine = new Line2D();</span>
 
             @Override
             public double getThreshold() {
-<span class="fc" id="L428">                return mThreshold;</span>
+<span class="fc" id="L424">                return mThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L433">                return mInputLines.size();</span>
+<span class="fc" id="L429">                return mInputLines.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L438">                return ProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L434">                return ProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;ProjectiveTransformation2D&gt; solutions) {
-<span class="fc" id="L444">                Line2D inputLine1 = mInputLines.get(samplesIndices[0]);</span>
-<span class="fc" id="L445">                Line2D inputLine2 = mInputLines.get(samplesIndices[1]);</span>
-<span class="fc" id="L446">                Line2D inputLine3 = mInputLines.get(samplesIndices[2]);</span>
-<span class="fc" id="L447">                Line2D inputLine4 = mInputLines.get(samplesIndices[3]);</span>
+<span class="fc" id="L440">                Line2D inputLine1 = mInputLines.get(samplesIndices[0]);</span>
+<span class="fc" id="L441">                Line2D inputLine2 = mInputLines.get(samplesIndices[1]);</span>
+<span class="fc" id="L442">                Line2D inputLine3 = mInputLines.get(samplesIndices[2]);</span>
+<span class="fc" id="L443">                Line2D inputLine4 = mInputLines.get(samplesIndices[3]);</span>
                 
-<span class="fc" id="L449">                Line2D outputLine1 = mOutputLines.get(samplesIndices[0]);</span>
-<span class="fc" id="L450">                Line2D outputLine2 = mOutputLines.get(samplesIndices[1]);</span>
-<span class="fc" id="L451">                Line2D outputLine3 = mOutputLines.get(samplesIndices[2]);</span>
-<span class="fc" id="L452">                Line2D outputLine4 = mOutputLines.get(samplesIndices[3]);</span>
+<span class="fc" id="L445">                Line2D outputLine1 = mOutputLines.get(samplesIndices[0]);</span>
+<span class="fc" id="L446">                Line2D outputLine2 = mOutputLines.get(samplesIndices[1]);</span>
+<span class="fc" id="L447">                Line2D outputLine3 = mOutputLines.get(samplesIndices[2]);</span>
+<span class="fc" id="L448">                Line2D outputLine4 = mOutputLines.get(samplesIndices[3]);</span>
                 
                 try {
-<span class="fc" id="L455">                    ProjectiveTransformation2D transformation =</span>
+<span class="fc" id="L451">                    ProjectiveTransformation2D transformation =</span>
                             new ProjectiveTransformation2D(inputLine1, 
                             inputLine2, inputLine3, inputLine4, outputLine1, 
                             outputLine2, outputLine3, outputLine4);
-<span class="fc" id="L459">                    solutions.add(transformation);</span>
-<span class="nc" id="L460">                } catch (CoincidentLinesException e) {</span>
+<span class="fc" id="L455">                    solutions.add(transformation);</span>
+<span class="nc" id="L456">                } catch (CoincidentLinesException e) {</span>
                     //if lines are coincident, no solution is added
-<span class="fc" id="L462">                }</span>
-<span class="fc" id="L463">            }</span>
+<span class="fc" id="L458">                }</span>
+<span class="fc" id="L459">            }</span>
 
             @Override
             public double computeResidual(
                     ProjectiveTransformation2D currentEstimation, int i) {
-<span class="fc" id="L468">                Line2D inputLine = mInputLines.get(i);</span>
-<span class="fc" id="L469">                Line2D outputLine = mOutputLines.get(i);</span>
+<span class="fc" id="L464">                Line2D inputLine = mInputLines.get(i);</span>
+<span class="fc" id="L465">                Line2D outputLine = mOutputLines.get(i);</span>
                 
                 //transform input line and store result in mTestLine
                 try {
-<span class="fc" id="L473">                    currentEstimation.transform(inputLine, mTestLine);</span>
+<span class="fc" id="L469">                    currentEstimation.transform(inputLine, mTestLine);</span>
                     
-<span class="fc" id="L475">                    return getResidual(outputLine, mTestLine);</span>
-<span class="nc" id="L476">                } catch (AlgebraException e) {</span>
+<span class="fc" id="L471">                    return getResidual(outputLine, mTestLine);</span>
+<span class="nc" id="L472">                } catch (AlgebraException e) {</span>
                     //this happens when internal matrix of affine transformation
                     //cannot be reverse (i.e. transformation is not well defined,
                     //numerical instabilities, etc)
-<span class="nc" id="L480">                    return Double.MAX_VALUE;</span>
+<span class="nc" id="L476">                    return Double.MAX_VALUE;</span>
                 }
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L486">                return PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L487">                        this.isReady();</span>
+<span class="fc" id="L482">                return PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L483">                        this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(
                     RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L493" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L494">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L489" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L490">                    mListener.onEstimateStart(</span>
                             PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.this);
                 }
-<span class="fc" id="L497">            }</span>
+<span class="fc" id="L493">            }</span>
 
             @Override
             public void onEstimateEnd(
                     RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L502" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L503">                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L498" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L499">                    mListener.onEstimateEnd(</span>
                             PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.this);
                 }
-<span class="fc" id="L506">            }</span>
+<span class="fc" id="L502">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator, 
                     int iteration) {
-<span class="pc bpc" id="L512" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L513">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L508" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L509">                    mListener.onEstimateNextIteration(</span>
                             PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.this, 
                             iteration);
                 }
-<span class="fc" id="L517">            }</span>
+<span class="fc" id="L513">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator, 
                     float progress) {
-<span class="nc bnc" id="L523" title="All 2 branches missed.">                if (mListener != null) {</span>
-<span class="nc" id="L524">                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L519" title="All 2 branches missed.">                if (mListener != null) {</span>
+<span class="nc" id="L520">                    mListener.onEstimateProgressChange(</span>
                             PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.this, 
                             progress);
                 }
-<span class="nc" id="L528">            }</span>
+<span class="nc" id="L524">            }</span>
             
             @Override
             public double[] getQualityScores() {
-<span class="fc" id="L532">                return mQualityScores;</span>
+<span class="fc" id="L528">                return mQualityScores;</span>
             }            
         });
         
         try {
-<span class="fc" id="L537">            mLocked = true;</span>
-<span class="fc" id="L538">            mInliersData = null;</span>
-<span class="pc bpc" id="L539" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
+<span class="fc" id="L533">            mLocked = true;</span>
+<span class="fc" id="L534">            mInliersData = null;</span>
+<span class="pc bpc" id="L535" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
                     mComputeAndKeepInliers || mRefineResult);
-<span class="pc bpc" id="L541" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
+<span class="pc bpc" id="L537" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
                     mComputeAndKeepResiduals || mRefineResult);            
-<span class="fc" id="L543">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L544">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L545">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L546">            ProjectiveTransformation2D transformation = </span>
-<span class="fc" id="L547">                    innerEstimator.estimate();</span>
-<span class="fc" id="L548">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L549">            return attemptRefine(transformation);            </span>
-<span class="nc" id="L550">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L551">            throw new LockedException(e);</span>
-<span class="nc" id="L552">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L553">            throw new NotReadyException(e);</span>
+<span class="fc" id="L539">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L540">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L541">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L542">            ProjectiveTransformation2D transformation = </span>
+<span class="fc" id="L543">                    innerEstimator.estimate();</span>
+<span class="fc" id="L544">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L545">            return attemptRefine(transformation);            </span>
+<span class="nc" id="L546">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L547">            throw new LockedException(e);</span>
+<span class="nc" id="L548">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L549">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L555">            mLocked = false;</span>
+<span class="fc" id="L551">            mLocked = false;</span>
         }        
     }
 
@@ -562,7 +558,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */        
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L565">        return RobustEstimatorMethod.PROSAC;</span>
+<span class="fc" id="L561">        return RobustEstimatorMethod.PROSAC;</span>
     }       
     
     /**
@@ -577,7 +573,7 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L580">        return mThreshold;</span>
+<span class="fc" id="L576">        return mThreshold;</span>
     }
     
     /**
@@ -588,13 +584,12 @@ public class PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L593" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L594">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(double[] qualityScores) {
+<span class="fc bfc" id="L588" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L589">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L597">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L598">    }            </span>
+<span class="fc" id="L592">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L593">    }            </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
