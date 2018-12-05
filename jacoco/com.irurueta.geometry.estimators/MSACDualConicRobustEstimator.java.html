@@ -67,11 +67,10 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
      * @throws IllegalArgumentException if provided list of lines don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public MSACDualConicRobustEstimator(List&lt;Line2D&gt; lines) 
-            throws IllegalArgumentException {
-<span class="fc" id="L72">        super(lines);</span>
-<span class="fc" id="L73">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L74">    }</span>
+    public MSACDualConicRobustEstimator(List&lt;Line2D&gt; lines) {
+<span class="fc" id="L71">        super(lines);</span>
+<span class="fc" id="L72">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L73">    }</span>
     
     /**
      * Constructor.
@@ -80,9 +79,9 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
      */
     public MSACDualConicRobustEstimator(
             DualConicRobustEstimatorListener listener) {
-<span class="fc" id="L83">        super(listener);</span>
-<span class="fc" id="L84">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L85">    }</span>
+<span class="fc" id="L82">        super(listener);</span>
+<span class="fc" id="L83">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L84">    }</span>
     
     
     /**
@@ -95,10 +94,10 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
      */
     public MSACDualConicRobustEstimator(
             DualConicRobustEstimatorListener listener,
-            List&lt;Line2D&gt; lines) throws IllegalArgumentException {
-<span class="fc" id="L99">        super(listener, lines);</span>
-<span class="fc" id="L100">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L101">    }</span>
+            List&lt;Line2D&gt; lines) {
+<span class="fc" id="L98">        super(listener, lines);</span>
+<span class="fc" id="L99">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L100">    }</span>
     
     /**
      * Returns threshold to determine whether lines are inliers or not when 
@@ -109,7 +108,7 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-<span class="fc" id="L112">        return mThreshold;</span>
+<span class="fc" id="L111">        return mThreshold;</span>
     }
     
     /**
@@ -123,16 +122,15 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L129">            throw new LockedException();</span>
+    public void setThreshold(double threshold) throws LockedException {
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L127">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L132">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L130">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L134">        mThreshold = threshold;</span>
-<span class="fc" id="L135">    }</span>
+<span class="fc" id="L132">        mThreshold = threshold;</span>
+<span class="fc" id="L133">    }</span>
     
             
     /**
@@ -150,107 +148,107 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
     @Override
     public DualConic estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-<span class="fc bfc" id="L153" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L154">            throw new LockedException();</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L152">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L156" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L157">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L155">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L160">        MSACRobustEstimator&lt;DualConic&gt; innerEstimator =</span>
+<span class="fc" id="L158">        MSACRobustEstimator&lt;DualConic&gt; innerEstimator =</span>
                 new MSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L162">                        new MSACRobustEstimatorListener&lt;DualConic&gt;() {</span>
+<span class="fc" id="L160">                        new MSACRobustEstimatorListener&lt;DualConic&gt;() {</span>
 
             @Override
             public double getThreshold() {
-<span class="fc" id="L166">                return mThreshold;</span>
+<span class="fc" id="L164">                return mThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L171">                return mLines.size();</span>
+<span class="fc" id="L169">                return mLines.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L176">                return DualConicRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L174">                return DualConicRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;DualConic&gt; solutions) {
-<span class="fc" id="L182">                Line2D line1 = mLines.get(samplesIndices[0]);</span>
-<span class="fc" id="L183">                Line2D line2 = mLines.get(samplesIndices[1]);</span>
-<span class="fc" id="L184">                Line2D line3 = mLines.get(samplesIndices[2]);</span>
-<span class="fc" id="L185">                Line2D line4 = mLines.get(samplesIndices[3]);</span>
-<span class="fc" id="L186">                Line2D line5 = mLines.get(samplesIndices[4]);</span>
+<span class="fc" id="L180">                Line2D line1 = mLines.get(samplesIndices[0]);</span>
+<span class="fc" id="L181">                Line2D line2 = mLines.get(samplesIndices[1]);</span>
+<span class="fc" id="L182">                Line2D line3 = mLines.get(samplesIndices[2]);</span>
+<span class="fc" id="L183">                Line2D line4 = mLines.get(samplesIndices[3]);</span>
+<span class="fc" id="L184">                Line2D line5 = mLines.get(samplesIndices[4]);</span>
                 
                 try {
-<span class="fc" id="L189">                    DualConic dualConic = new DualConic(line1, line2, line3, </span>
+<span class="fc" id="L187">                    DualConic dualConic = new DualConic(line1, line2, line3, </span>
                             line4, line5);
-<span class="fc" id="L191">                    solutions.add(dualConic);</span>
-<span class="fc" id="L192">                } catch (CoincidentLinesException e) {</span>
+<span class="fc" id="L189">                    solutions.add(dualConic);</span>
+<span class="fc" id="L190">                } catch (CoincidentLinesException e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L194">                }</span>
-<span class="fc" id="L195">            }</span>
+<span class="fc" id="L192">                }</span>
+<span class="fc" id="L193">            }</span>
 
             @Override
             public double computeResidual(DualConic currentEstimation, int i) {
-<span class="fc" id="L199">                return residual(currentEstimation, mLines.get(i));</span>
+<span class="fc" id="L197">                return residual(currentEstimation, mLines.get(i));</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L204">                return MSACDualConicRobustEstimator.this.isReady();</span>
+<span class="fc" id="L202">                return MSACDualConicRobustEstimator.this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(RobustEstimator&lt;DualConic&gt; estimator) {
-<span class="pc bpc" id="L209" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L210">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L208">                    mListener.onEstimateStart(</span>
                             MSACDualConicRobustEstimator.this);
                 }
-<span class="fc" id="L213">            }</span>
+<span class="fc" id="L211">            }</span>
 
             @Override
             public void onEstimateEnd(RobustEstimator&lt;DualConic&gt; estimator) {
-<span class="pc bpc" id="L217" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L218">                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L216">                    mListener.onEstimateEnd(</span>
                             MSACDualConicRobustEstimator.this);
                 }
-<span class="fc" id="L221">            }</span>
+<span class="fc" id="L219">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;DualConic&gt; estimator, int iteration) {
-<span class="pc bpc" id="L226" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L227">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L224" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L225">                    mListener.onEstimateNextIteration(</span>
                             MSACDualConicRobustEstimator.this, iteration);
                 }
-<span class="fc" id="L230">            }</span>
+<span class="fc" id="L228">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;DualConic&gt; estimator, float progress) {
-<span class="pc bpc" id="L235" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L236">                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L234">                    mListener.onEstimateProgressChange(</span>
                             MSACDualConicRobustEstimator.this, progress);
                 }
-<span class="fc" id="L239">            }</span>
+<span class="fc" id="L237">            }</span>
         });
         
         try {
-<span class="fc" id="L243">            mLocked = true;</span>
-<span class="fc" id="L244">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L245">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L246">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L247">            return innerEstimator.estimate();</span>
-<span class="nc" id="L248">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L249">            throw new LockedException(e);</span>
-<span class="nc" id="L250">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L251">            throw new NotReadyException(e);</span>
+<span class="fc" id="L241">            mLocked = true;</span>
+<span class="fc" id="L242">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L243">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L244">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L245">            return innerEstimator.estimate();</span>
+<span class="nc" id="L246">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L247">            throw new LockedException(e);</span>
+<span class="nc" id="L248">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L249">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L253">            mLocked = false;</span>
+<span class="fc" id="L251">            mLocked = false;</span>
         }
     }
 
@@ -260,7 +258,7 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L263">        return RobustEstimatorMethod.MSAC;</span>
+<span class="fc" id="L261">        return RobustEstimatorMethod.MSAC;</span>
     }            
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

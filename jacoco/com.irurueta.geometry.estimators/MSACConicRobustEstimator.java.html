@@ -66,11 +66,10 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public MSACConicRobustEstimator(List&lt;Point2D&gt; points)
-            throws IllegalArgumentException {
-<span class="fc" id="L71">        super(points);</span>
-<span class="fc" id="L72">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L73">    }</span>
+    public MSACConicRobustEstimator(List&lt;Point2D&gt; points) {
+<span class="fc" id="L70">        super(points);</span>
+<span class="fc" id="L71">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L72">    }</span>
     
     /**
      * Constructor.
@@ -78,9 +77,9 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      * starts, ends or its progress significantly changes.
      */
     public MSACConicRobustEstimator(ConicRobustEstimatorListener listener) {
-<span class="fc" id="L81">        super(listener);</span>
-<span class="fc" id="L82">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L80">        super(listener);</span>
+<span class="fc" id="L81">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L82">    }</span>
     
     /**
      * Constructor.
@@ -91,10 +90,10 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public MSACConicRobustEstimator(ConicRobustEstimatorListener listener,
-            List&lt;Point2D&gt; points) throws IllegalArgumentException {
-<span class="fc" id="L95">        super(listener, points);</span>
-<span class="fc" id="L96">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L97">    }</span>
+            List&lt;Point2D&gt; points) {
+<span class="fc" id="L94">        super(listener, points);</span>
+<span class="fc" id="L95">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L96">    }</span>
     
     /**
      * Returns threshold to determine whether points are inliers or not when 
@@ -105,7 +104,7 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-<span class="fc" id="L108">        return mThreshold;</span>
+<span class="fc" id="L107">        return mThreshold;</span>
     }
     
     /**
@@ -119,16 +118,15 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L124" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L125">            throw new LockedException();</span>
+    public void setThreshold(double threshold) throws LockedException {
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L123">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L128">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L126">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L130">        mThreshold = threshold;</span>
-<span class="fc" id="L131">    }</span>
+<span class="fc" id="L128">        mThreshold = threshold;</span>
+<span class="fc" id="L129">    }</span>
     
     /**
      * Estimates a conic using a robust estimator and the best set of 2D points 
@@ -145,104 +143,104 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
     @Override
     public Conic estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L149">            throw new LockedException();</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L147">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L152">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L150">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L155">        MSACRobustEstimator&lt;Conic&gt; innerEstimator =</span>
-<span class="fc" id="L156">                new MSACRobustEstimator&lt;&gt;(new MSACRobustEstimatorListener&lt;Conic&gt;() {</span>
+<span class="fc" id="L153">        MSACRobustEstimator&lt;Conic&gt; innerEstimator =</span>
+<span class="fc" id="L154">                new MSACRobustEstimator&lt;&gt;(new MSACRobustEstimatorListener&lt;Conic&gt;() {</span>
 
             @Override
             public double getThreshold() {
-<span class="fc" id="L160">                return mThreshold;</span>
+<span class="fc" id="L158">                return mThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L165">                return mPoints.size();</span>
+<span class="fc" id="L163">                return mPoints.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L170">                return ConicRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L168">                return ConicRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;Conic&gt; solutions) {
-<span class="fc" id="L176">                Point2D point1 = mPoints.get(samplesIndices[0]);</span>
-<span class="fc" id="L177">                Point2D point2 = mPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L178">                Point2D point3 = mPoints.get(samplesIndices[2]);</span>
-<span class="fc" id="L179">                Point2D point4 = mPoints.get(samplesIndices[3]);</span>
-<span class="fc" id="L180">                Point2D point5 = mPoints.get(samplesIndices[4]);</span>
+<span class="fc" id="L174">                Point2D point1 = mPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L175">                Point2D point2 = mPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L176">                Point2D point3 = mPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L177">                Point2D point4 = mPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L178">                Point2D point5 = mPoints.get(samplesIndices[4]);</span>
                 
                 try {
-<span class="fc" id="L183">                    Conic conic = new Conic(point1, point2, point3, point4, </span>
+<span class="fc" id="L181">                    Conic conic = new Conic(point1, point2, point3, point4, </span>
                             point5);
-<span class="fc" id="L185">                    solutions.add(conic);</span>
-<span class="nc" id="L186">                } catch (CoincidentPointsException e) {</span>
+<span class="fc" id="L183">                    solutions.add(conic);</span>
+<span class="fc" id="L184">                } catch (CoincidentPointsException e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L188">                }</span>
-<span class="fc" id="L189">            }</span>
+<span class="fc" id="L186">                }</span>
+<span class="fc" id="L187">            }</span>
 
             @Override
             public double computeResidual(Conic currentEstimation, int i) {
-<span class="fc" id="L193">                return residual(currentEstimation, mPoints.get(i));</span>
+<span class="fc" id="L191">                return residual(currentEstimation, mPoints.get(i));</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L198">                return MSACConicRobustEstimator.this.isReady();</span>
+<span class="fc" id="L196">                return MSACConicRobustEstimator.this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(RobustEstimator&lt;Conic&gt; estimator) {
-<span class="pc bpc" id="L203" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L204">                    mListener.onEstimateStart(MSACConicRobustEstimator.this);</span>
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L202">                    mListener.onEstimateStart(MSACConicRobustEstimator.this);</span>
                 }
-<span class="fc" id="L206">            }</span>
+<span class="fc" id="L204">            }</span>
 
             @Override
             public void onEstimateEnd(RobustEstimator&lt;Conic&gt; estimator) {
-<span class="pc bpc" id="L210" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L211">                    mListener.onEstimateEnd(MSACConicRobustEstimator.this);</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L209">                    mListener.onEstimateEnd(MSACConicRobustEstimator.this);</span>
                 }
-<span class="fc" id="L213">            }</span>
+<span class="fc" id="L211">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;Conic&gt; estimator, int iteration) {
-<span class="pc bpc" id="L218" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L219">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L217">                    mListener.onEstimateNextIteration(</span>
                             MSACConicRobustEstimator.this, iteration);
                 }
-<span class="fc" id="L222">            }</span>
+<span class="fc" id="L220">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;Conic&gt; estimator, float progress) {
-<span class="pc bpc" id="L227" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L228">                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L226">                    mListener.onEstimateProgressChange(</span>
                             MSACConicRobustEstimator.this, progress);
                 }
-<span class="fc" id="L231">            }</span>
+<span class="fc" id="L229">            }</span>
         });
         
         try {
-<span class="fc" id="L235">            mLocked = true;</span>
-<span class="fc" id="L236">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L237">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L238">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L239">            return innerEstimator.estimate();</span>
-<span class="nc" id="L240">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L241">            throw new LockedException(e);</span>
-<span class="nc" id="L242">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L243">            throw new NotReadyException(e);</span>
+<span class="fc" id="L233">            mLocked = true;</span>
+<span class="fc" id="L234">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L235">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L236">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L237">            return innerEstimator.estimate();</span>
+<span class="nc" id="L238">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L239">            throw new LockedException(e);</span>
+<span class="nc" id="L240">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L241">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L245">            mLocked = false;</span>
+<span class="fc" id="L243">            mLocked = false;</span>
         }
     }
 
@@ -252,7 +250,7 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L255">        return RobustEstimatorMethod.MSAC;</span>
+<span class="fc" id="L253">        return RobustEstimatorMethod.MSAC;</span>
     }      
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

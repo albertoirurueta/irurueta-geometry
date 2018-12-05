@@ -384,61 +384,65 @@ public class MetricTransformation2DEstimator {
 <span class="fc" id="L384">                col.multiply(row, tmp);</span>
 <span class="fc" id="L385">                m.add(tmp);                </span>
             }
+
+<span class="pc bpc" id="L388" title="1 of 2 branches missed.">            if (inCov == 0.0) {</span>
+<span class="nc" id="L389">                throw new CoincidentPointsException();</span>
+            }
             
-<span class="fc" id="L388">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
-<span class="fc" id="L389">            decomposer.decompose();</span>
+<span class="fc" id="L392">            SingularValueDecomposer decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L393">            decomposer.decompose();</span>
             
-<span class="pc bpc" id="L391" title="1 of 4 branches missed.">            if (!mWeakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {</span>
-<span class="nc" id="L392">                throw new CoincidentPointsException();</span>
+<span class="pc bpc" id="L395" title="1 of 4 branches missed.">            if (!mWeakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {</span>
+<span class="nc" id="L396">                throw new CoincidentPointsException();</span>
             }            
             
-<span class="fc" id="L395">            Matrix u = decomposer.getU();</span>
-<span class="fc" id="L396">            Matrix v = decomposer.getV();</span>
+<span class="fc" id="L399">            Matrix u = decomposer.getU();</span>
+<span class="fc" id="L400">            Matrix v = decomposer.getV();</span>
             
-<span class="fc" id="L398">            double[] s = decomposer.getSingularValues();</span>
+<span class="fc" id="L402">            double[] s = decomposer.getSingularValues();</span>
             
             //rotation R = V*U^T  
-<span class="fc" id="L401">            Matrix r = v.multiplyAndReturnNew(u.transposeAndReturnNew());</span>
+<span class="fc" id="L405">            Matrix r = v.multiplyAndReturnNew(u.transposeAndReturnNew());</span>
             
-<span class="fc" id="L403">            double[] e = new double[]{1.0, 1.0};</span>
+<span class="fc" id="L407">            double[] e = new double[]{1.0, 1.0};</span>
             
-<span class="fc bfc" id="L405" title="All 2 branches covered.">            if(Utils.det(r) &lt; 0.0) {</span>
+<span class="fc bfc" id="L409" title="All 2 branches covered.">            if(Utils.det(r) &lt; 0.0) {</span>
                 //ideally rotation has 2 unitary singular values.
                 //Because of reflection, we must change sign of last singular
                 //value and reconstruct rotation matrix
                                 
-<span class="fc" id="L410">                e[1] = -1.0;                                </span>
+<span class="fc" id="L414">                e[1] = -1.0;                                </span>
                 
                 //because rotation matrix can be seen as V*e*U^T, we can
                 //simply multiply 3rd column of R by -1
-<span class="fc" id="L414">                r.setElementAt(0, 1, -r.getElementAt(0, 1));</span>
-<span class="fc" id="L415">                r.setElementAt(1, 1, -r.getElementAt(1, 1));</span>
+<span class="fc" id="L418">                r.setElementAt(0, 1, -r.getElementAt(0, 1));</span>
+<span class="fc" id="L419">                r.setElementAt(1, 1, -r.getElementAt(1, 1));</span>
             }
             
-<span class="fc" id="L418">            Rotation2D rotation = new Rotation2D(r);</span>
+<span class="fc" id="L422">            Rotation2D rotation = new Rotation2D(r);</span>
             
             //scale
-<span class="fc" id="L421">            double dot = ArrayUtils.dotProduct(s, e);</span>
-<span class="fc" id="L422">            double invScale = dot / inCov;</span>
+<span class="fc" id="L425">            double dot = ArrayUtils.dotProduct(s, e);</span>
+<span class="fc" id="L426">            double invScale = dot / inCov;</span>
             
             //translation
-<span class="fc" id="L425">            Matrix t = r.multiplyAndReturnNew(inCentroid);</span>
-<span class="fc" id="L426">            t.multiplyByScalar(-invScale);</span>
-<span class="fc" id="L427">            t.add(outCentroid);</span>
+<span class="fc" id="L429">            Matrix t = r.multiplyAndReturnNew(inCentroid);</span>
+<span class="fc" id="L430">            t.multiplyByScalar(-invScale);</span>
+<span class="fc" id="L431">            t.add(outCentroid);</span>
             
-<span class="fc" id="L429">            result.setRotation(rotation);</span>
-<span class="fc" id="L430">            result.setTranslation(t.getBuffer());</span>
-<span class="fc" id="L431">            result.setScale(invScale);</span>
+<span class="fc" id="L433">            result.setRotation(rotation);</span>
+<span class="fc" id="L434">            result.setTranslation(t.getBuffer());</span>
+<span class="fc" id="L435">            result.setScale(invScale);</span>
             
-<span class="fc bfc" id="L433" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L434">                mListener.onEstimateEnd(this);</span>
+<span class="fc bfc" id="L437" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L438">                mListener.onEstimateEnd(this);</span>
             }            
-<span class="nc" id="L436">        } catch (AlgebraException | InvalidRotationMatrixException e) {</span>
-<span class="nc" id="L437">            throw new CoincidentPointsException(e);</span>
+<span class="nc" id="L440">        } catch (AlgebraException | InvalidRotationMatrixException e) {</span>
+<span class="nc" id="L441">            throw new CoincidentPointsException(e);</span>
         } finally {
-<span class="fc" id="L439">            mLocked = false;</span>
+<span class="fc" id="L443">            mLocked = false;</span>
         }
-<span class="fc" id="L441">    }</span>
+<span class="fc" id="L445">    }</span>
     
     /**
      * Computes centroid of provided list of points using inhomogeneous
@@ -449,18 +453,19 @@ public class MetricTransformation2DEstimator {
      */
     private static Matrix computeCentroid(List&lt;Point2D&gt; points) 
             throws AlgebraException {        
-<span class="fc" id="L452">        double x = 0.0, y = 0.0;</span>
-<span class="fc" id="L453">        double n = points.size();</span>
-<span class="fc bfc" id="L454" title="All 2 branches covered.">        for (Point2D p : points) {</span>
-<span class="fc" id="L455">            x += p.getInhomX() / n;</span>
-<span class="fc" id="L456">            y += p.getInhomY() / n;</span>
-<span class="fc" id="L457">        }</span>
+<span class="fc" id="L456">        double x = 0.0;</span>
+<span class="fc" id="L457">        double y = 0.0;</span>
+<span class="fc" id="L458">        double n = points.size();</span>
+<span class="fc bfc" id="L459" title="All 2 branches covered.">        for (Point2D p : points) {</span>
+<span class="fc" id="L460">            x += p.getInhomX() / n;</span>
+<span class="fc" id="L461">            y += p.getInhomY() / n;</span>
+<span class="fc" id="L462">        }</span>
         
-<span class="fc" id="L459">        Matrix result = new Matrix(</span>
+<span class="fc" id="L464">        Matrix result = new Matrix(</span>
                 Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
-<span class="fc" id="L461">        result.setElementAtIndex(0, x);</span>
-<span class="fc" id="L462">        result.setElementAtIndex(1, y);</span>
-<span class="fc" id="L463">        return result;</span>
+<span class="fc" id="L466">        result.setElementAtIndex(0, x);</span>
+<span class="fc" id="L467">        result.setElementAtIndex(1, y);</span>
+<span class="fc" id="L468">        return result;</span>
     }
     
     /**
@@ -475,15 +480,15 @@ public class MetricTransformation2DEstimator {
      * the same size or their size is smaller than #getMinimumPoints.
      */
     private void internalSetPoints(List&lt;Point2D&gt; inputPoints,
-            List&lt;Point2D&gt; outputPoints) throws IllegalArgumentException {
-<span class="fc bfc" id="L479" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
-<span class="fc" id="L480">            throw new IllegalArgumentException();</span>
+            List&lt;Point2D&gt; outputPoints) {
+<span class="fc bfc" id="L484" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L485">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L482" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
-<span class="fc" id="L483">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L487" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L488">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L485">        mInputPoints = inputPoints;</span>
-<span class="fc" id="L486">        mOutputPoints = outputPoints;        </span>
-<span class="fc" id="L487">    }    </span>
+<span class="fc" id="L490">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L491">        mOutputPoints = outputPoints;        </span>
+<span class="fc" id="L492">    }    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

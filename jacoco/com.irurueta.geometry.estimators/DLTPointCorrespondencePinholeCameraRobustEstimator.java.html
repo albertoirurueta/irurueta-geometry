@@ -51,10 +51,9 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      * correspondences).
      */
     public DLTPointCorrespondencePinholeCameraRobustEstimator(
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D)
-            throws IllegalArgumentException {
-<span class="fc" id="L56">        super(points3D, points2D);</span>
-<span class="fc" id="L57">    }</span>
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L55">        super(points3D, points2D);</span>
+<span class="fc" id="L56">    }</span>
     
     /**
      * Constructor with listener.
@@ -63,8 +62,8 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      */
     public DLTPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener) {
-<span class="fc" id="L66">        super(listener);</span>
-<span class="fc" id="L67">    }</span>
+<span class="fc" id="L65">        super(listener);</span>
+<span class="fc" id="L66">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate a
@@ -83,10 +82,9 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      */
     public DLTPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D)
-            throws IllegalArgumentException {
-<span class="fc" id="L88">        super(listener, points3D, points2D);</span>
-<span class="fc" id="L89">    }</span>
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L86">        super(listener, points3D, points2D);</span>
+<span class="fc" id="L87">    }</span>
     
     /**
      * Creates a pinhole camera robust estimator based on point correspondences
@@ -97,18 +95,18 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      */    
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L100" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L98" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L102">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
+<span class="fc" id="L100">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L104">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
+<span class="fc" id="L102">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L106">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
+<span class="fc" id="L104">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L108">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
+<span class="fc" id="L106">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L111">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
+<span class="fc" id="L109">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
         }
     }
     
@@ -127,23 +125,23 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      */
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L131" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L129" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L133">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L131">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         points3D, points2D);
             case MSAC:
-<span class="fc" id="L136">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L134">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         points3D, points2D);
             case PROSAC:
-<span class="fc" id="L139">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L137">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         points3D, points2D);
             case PROMedS:
-<span class="fc" id="L142">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L140">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         points3D, points2D);
             case RANSAC:
             default:
-<span class="fc" id="L146">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L144">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         points3D, points2D);
         }
     }
@@ -160,22 +158,22 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L163" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L161" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L165">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L163">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L168">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L166">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L171">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L169">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener);
             case PROMedS:
-<span class="fc" id="L174">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L172">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener);
             case RANSAC:
             default:
-<span class="fc" id="L178">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L176">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener);
         }
     }
@@ -198,23 +196,23 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L202" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L200" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L204">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L202">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener, points3D, points2D);
             case MSAC:
-<span class="fc" id="L207">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L205">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener, points3D, points2D);
             case PROSAC:
-<span class="fc" id="L210">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L208">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener, points3D, points2D);
             case PROMedS:
-<span class="fc" id="L213">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L211">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener, points3D, points2D);
             case RANSAC:
             default:
-<span class="fc" id="L217">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L215">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener, points3D, points2D);
         }
     }
@@ -231,22 +229,21 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      * smaller than required minimum size (6 samples).
      */    
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L236" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L233" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L238">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
+<span class="fc" id="L235">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L240">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
+<span class="fc" id="L237">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L242">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L239">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L245">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L242">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L249">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
+<span class="fc" id="L246">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator();</span>
         }
     }
     
@@ -268,24 +265,23 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      */
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L273" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L269" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L275">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L271">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         points3D, points2D);
             case MSAC:
-<span class="fc" id="L278">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L274">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         points3D, points2D);
             case PROSAC:
-<span class="fc" id="L281">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L277">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         points3D, points2D, qualityScores);
             case PROMedS:
-<span class="fc" id="L284">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L280">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         points3D, points2D, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L288">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L284">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         points3D, points2D);
         }
     }
@@ -305,24 +301,23 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      */
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L310" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L305" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L312">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L307">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L315">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L310">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L318">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L313">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener, qualityScores);
             case PROMedS:
-<span class="fc" id="L321">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L316">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L325">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L320">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener);
         }
     }
@@ -348,24 +343,23 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L353" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L347" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L355">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L349">                return new LMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener, points3D, points2D);
             case MSAC:
-<span class="fc" id="L358">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L352">                return new MSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener, points3D, points2D);
             case PROSAC:
-<span class="fc" id="L361">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L355">                return new PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener, points3D, points2D, qualityScores);
             case PROMedS:
-<span class="fc" id="L364">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L358">                return new PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener, points3D, points2D, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L368">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
+<span class="fc" id="L362">                return new RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(</span>
                         listener, points3D, points2D);
         }
     }  
@@ -376,7 +370,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      * @return an instance of a pinhole camera robust estimator.
      */
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create() {
-<span class="fc" id="L379">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L373">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
         
     /**
@@ -391,9 +385,8 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      * (6 correspondences).
      */
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
-            throws IllegalArgumentException {
-<span class="fc" id="L396">        return create(points3D, points2D, DEFAULT_ROBUST_METHOD);</span>
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L389">        return create(points3D, points2D, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -406,7 +399,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      */
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener) {
-<span class="fc" id="L409">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L402">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -425,9 +418,8 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      */
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
-            throws IllegalArgumentException {
-<span class="fc" id="L430">        return create(listener, points3D, points2D, DEFAULT_ROBUST_METHOD);</span>
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L422">        return create(listener, points3D, points2D, DEFAULT_ROBUST_METHOD);</span>
     }
 
     /**
@@ -440,8 +432,8 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      * smalelr than required minimum size (6 samples).
      */    
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L444">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L436">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -460,8 +452,8 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      */
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L464">        return create(points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L456">        return create(points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -478,8 +470,8 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      */
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L482">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L474">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -501,8 +493,8 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
     public static DLTPointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L505">        return create(listener, points3D, points2D, qualityScores, </span>
+            double[] qualityScores) {
+<span class="fc" id="L497">        return create(listener, points3D, points2D, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }        
 }

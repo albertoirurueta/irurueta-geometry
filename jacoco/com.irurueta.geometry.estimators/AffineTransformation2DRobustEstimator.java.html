@@ -240,17 +240,16 @@ public abstract class AffineTransformation2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L245" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L246">            throw new LockedException();</span>
+    public void setProgressDelta(float progressDelta) throws LockedException {
+<span class="fc bfc" id="L244" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L245">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L248" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA || </span>
+<span class="fc bfc" id="L247" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA || </span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L250">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L249">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L252">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L253">    }</span>
+<span class="fc" id="L251">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L252">    }</span>
     
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
@@ -260,7 +259,7 @@ public abstract class AffineTransformation2DRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L263">        return mConfidence;</span>
+<span class="fc" id="L262">        return mConfidence;</span>
     }
     
     /**
@@ -274,16 +273,15 @@ public abstract class AffineTransformation2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L279" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L280">            throw new LockedException();</span>
+    public void setConfidence(double confidence) throws LockedException {
+<span class="fc bfc" id="L277" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L278">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L282" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L283">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L280" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L281">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L285">        mConfidence = confidence;</span>
-<span class="fc" id="L286">    }</span>
+<span class="fc" id="L283">        mConfidence = confidence;</span>
+<span class="fc" id="L284">    }</span>
     
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
@@ -292,7 +290,7 @@ public abstract class AffineTransformation2DRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-<span class="fc" id="L295">        return mMaxIterations;</span>
+<span class="fc" id="L293">        return mMaxIterations;</span>
     }
     
     /**
@@ -304,23 +302,22 @@ public abstract class AffineTransformation2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException{
-<span class="fc bfc" id="L309" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L310">            throw new LockedException();</span>
+    public void setMaxIterations(int maxIterations) throws LockedException {
+<span class="fc bfc" id="L306" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L307">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L312" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L313">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L309" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L310">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L315">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L316">    }    </span>
+<span class="fc" id="L312">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L313">    }    </span>
     
     /**
      * Gets data related to inliers found after estimation.
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-<span class="fc" id="L323">        return mInliersData;</span>
+<span class="fc" id="L320">        return mInliersData;</span>
     }
     
     /**
@@ -332,7 +329,7 @@ public abstract class AffineTransformation2DRobustEstimator {
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-<span class="fc" id="L335">        return mRefineResult;</span>
+<span class="fc" id="L332">        return mRefineResult;</span>
     }
     
     /**
@@ -343,11 +340,11 @@ public abstract class AffineTransformation2DRobustEstimator {
      * @throws LockedException if estimator is locked.
      */
     public void setResultRefined(boolean refineResult) throws LockedException {
-<span class="pc bpc" id="L346" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L347">            throw new LockedException();</span>
+<span class="pc bpc" id="L343" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L344">            throw new LockedException();</span>
         }
-<span class="fc" id="L349">        mRefineResult = refineResult;</span>
-<span class="fc" id="L350">    }</span>
+<span class="fc" id="L346">        mRefineResult = refineResult;</span>
+<span class="fc" id="L347">    }</span>
     
     /**
      * Indicates whether covariance must be kept after refining result.
@@ -356,7 +353,7 @@ public abstract class AffineTransformation2DRobustEstimator {
      * otherwise.
      */
     public boolean isCovarianceKept() {
-<span class="fc" id="L359">        return mKeepCovariance;</span>
+<span class="fc" id="L356">        return mKeepCovariance;</span>
     }
     
     /**
@@ -368,11 +365,11 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public void setCovarianceKept(boolean keepCovariance)
             throws LockedException {
-<span class="pc bpc" id="L371" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L372">            throw new LockedException();</span>
+<span class="pc bpc" id="L368" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L369">            throw new LockedException();</span>
         }
-<span class="fc" id="L374">        mKeepCovariance = keepCovariance;</span>
-<span class="fc" id="L375">    }</span>
+<span class="fc" id="L371">        mKeepCovariance = keepCovariance;</span>
+<span class="fc" id="L372">    }</span>
     
     /**
      * Gets estimated covariance of estimated 3D point if available.
@@ -381,7 +378,7 @@ public abstract class AffineTransformation2DRobustEstimator {
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-<span class="fc" id="L384">        return mCovariance;</span>
+<span class="fc" id="L381">        return mCovariance;</span>
     }
     
     /**
@@ -420,8 +417,8 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromPoints(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L424">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L421">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 inputPoints, outputPoints, method);
     }            
                         
@@ -443,8 +440,8 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromPoints(
             AffineTransformation2DRobustEstimatorListener listener, 
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L447">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L444">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 listener, inputPoints, outputPoints, method);
     }            
             
@@ -465,9 +462,8 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromPoints(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L470">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L466">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 inputPoints, outputPoints, qualityScores, method);
     }            
                         
@@ -491,9 +487,8 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromPoints(
             AffineTransformation2DRobustEstimatorListener listener, 
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L496">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L491">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 listener, inputPoints, outputPoints, qualityScores, method);
     }            
             
@@ -509,10 +504,9 @@ public abstract class AffineTransformation2DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE
      */
     public static AffineTransformation2DRobustEstimator createFromPoints(
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L514">        return PointCorrespondenceAffineTransformation2DRobustEstimator.</span>
-<span class="fc" id="L515">                create(inputPoints, outputPoints);</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L508">        return PointCorrespondenceAffineTransformation2DRobustEstimator.</span>
+<span class="fc" id="L509">                create(inputPoints, outputPoints);</span>
     }            
             
     /**
@@ -530,9 +524,8 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromPoints(
             AffineTransformation2DRobustEstimatorListener listener, 
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L535">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L528">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 listener, inputPoints, outputPoints);
     }            
 
@@ -551,8 +544,8 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromPoints(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L555">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            double[] qualityScores) {
+<span class="fc" id="L548">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 inputPoints, outputPoints, qualityScores);
     }            
             
@@ -574,8 +567,8 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromPoints(
             AffineTransformation2DRobustEstimatorListener listener, 
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L578">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            double[] qualityScores) {
+<span class="fc" id="L571">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 listener, inputPoints, outputPoints, qualityScores);
     }     
             
@@ -594,8 +587,8 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromLines(
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L598">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L591">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 inputLines, outputLines, method);
     }
                         
@@ -617,8 +610,8 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromLines(
             AffineTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L621">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L614">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 listener, inputLines, outputLines, method);
     }
                         
@@ -640,7 +633,7 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromLines(
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
             double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc" id="L643">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+<span class="fc" id="L636">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 inputLines, outputLines, qualityScores, method);
     }
             
@@ -665,7 +658,7 @@ public abstract class AffineTransformation2DRobustEstimator {
             AffineTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
             double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc" id="L668">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+<span class="fc" id="L661">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 listener, inputLines, outputLines, qualityScores, method);
     }
                 
@@ -682,7 +675,7 @@ public abstract class AffineTransformation2DRobustEstimator {
      */
     public static AffineTransformation2DRobustEstimator createFromLines(
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
-<span class="fc" id="L685">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+<span class="fc" id="L678">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 inputLines, outputLines);
     }
             
@@ -702,7 +695,7 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromLines(
             AffineTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
-<span class="fc" id="L705">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+<span class="fc" id="L698">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 listener, inputLines, outputLines);
     }
                         
@@ -722,7 +715,7 @@ public abstract class AffineTransformation2DRobustEstimator {
     public static AffineTransformation2DRobustEstimator createFromLines(
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
             double[] qualityScores) {
-<span class="fc" id="L725">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+<span class="fc" id="L718">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 inputLines, outputLines, qualityScores);
     }
                         
@@ -745,7 +738,7 @@ public abstract class AffineTransformation2DRobustEstimator {
             AffineTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
             double[] qualityScores) {
-<span class="fc" id="L748">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
+<span class="fc" id="L741">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(</span>
                 listener, inputLines, outputLines, qualityScores);
     } 
     

@@ -164,13 +164,12 @@ public abstract class DualQuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes don't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public DualQuadricRobustEstimator(List&lt;Plane&gt; planes)
-<span class="fc" id="L168">            throws IllegalArgumentException {</span>
-<span class="fc" id="L169">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L170">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L171">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
-<span class="fc" id="L172">        internalSetPlanes(planes);</span>
-<span class="fc" id="L173">    }</span>
+<span class="fc" id="L167">    public DualQuadricRobustEstimator(List&lt;Plane&gt; planes) {</span>
+<span class="fc" id="L168">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L169">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L170">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L171">        internalSetPlanes(planes);</span>
+<span class="fc" id="L172">    }</span>
     
     /**
      * Constructor.
@@ -181,14 +180,13 @@ public abstract class DualQuadricRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public DualQuadricRobustEstimator(
-            DualQuadricRobustEstimatorListener listener, List&lt;Plane&gt; planes) 
-<span class="fc" id="L185">            throws IllegalArgumentException {</span>
-<span class="fc" id="L186">        mListener = listener;</span>
-<span class="fc" id="L187">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L188">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L189">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
-<span class="fc" id="L190">        internalSetPlanes(planes);</span>
-<span class="fc" id="L191">    }</span>
+<span class="fc" id="L183">            DualQuadricRobustEstimatorListener listener, List&lt;Plane&gt; planes) {</span>
+<span class="fc" id="L184">        mListener = listener;</span>
+<span class="fc" id="L185">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L186">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L187">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L188">        internalSetPlanes(planes);</span>
+<span class="fc" id="L189">    }</span>
     
     /**
      * Returns reference to listener to be notified of events such as when
@@ -196,7 +194,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return listener to be notified of events.
      */
     public DualQuadricRobustEstimatorListener getListener() {
-<span class="fc" id="L199">        return mListener;</span>
+<span class="fc" id="L197">        return mListener;</span>
     }
     
     /**
@@ -207,11 +205,11 @@ public abstract class DualQuadricRobustEstimator {
      */
     public void setListener(DualQuadricRobustEstimatorListener listener)
             throws LockedException {
-<span class="fc bfc" id="L210" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L211">            throw new LockedException();</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L209">            throw new LockedException();</span>
         }
-<span class="fc" id="L213">        mListener = listener;</span>
-<span class="fc" id="L214">    }</span>
+<span class="fc" id="L211">        mListener = listener;</span>
+<span class="fc" id="L212">    }</span>
     
     /**
      * Indicates whether listener has been provided and is available for
@@ -219,7 +217,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L222" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">        return mListener != null;</span>
     }
     
     /**
@@ -227,7 +225,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L230">        return mLocked;</span>
+<span class="fc" id="L228">        return mLocked;</span>
     }
     
     /**
@@ -237,7 +235,7 @@ public abstract class DualQuadricRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L240">        return mProgressDelta;</span>
+<span class="fc" id="L238">        return mProgressDelta;</span>
     }
     
     /**
@@ -250,17 +248,16 @@ public abstract class DualQuadricRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L255" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L256">            throw new LockedException();</span>
+    public void setProgressDelta(float progressDelta) throws LockedException {
+<span class="fc bfc" id="L252" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L253">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L258" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L255" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L260">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L257">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L262">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L263">    }</span>
+<span class="fc" id="L259">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L260">    }</span>
     
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
@@ -270,7 +267,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L273">        return mConfidence;</span>
+<span class="fc" id="L270">        return mConfidence;</span>
     }
     
     /**
@@ -284,16 +281,15 @@ public abstract class DualQuadricRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L289" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L290">            throw new LockedException();</span>
+    public void setConfidence(double confidence) throws LockedException {
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L286">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L292" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L293">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L288" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L289">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L295">        mConfidence = confidence;</span>
-<span class="fc" id="L296">    }</span>
+<span class="fc" id="L291">        mConfidence = confidence;</span>
+<span class="fc" id="L292">    }</span>
     
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
@@ -302,7 +298,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-<span class="fc" id="L305">        return mMaxIterations;</span>
+<span class="fc" id="L301">        return mMaxIterations;</span>
     }
     
     /**
@@ -314,16 +310,15 @@ public abstract class DualQuadricRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L319" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L320">            throw new LockedException();</span>
+    public void setMaxIterations(int maxIterations) throws LockedException {
+<span class="fc bfc" id="L314" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L315">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L322" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L323">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L318">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L325">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L326">    }</span>
+<span class="fc" id="L320">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L321">    }</span>
     
     /**
      * Returns list of planes to be used to estimate a dual quadric.
@@ -331,7 +326,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return list of planes to be used to estimate a dual quadric.
      */
     public List&lt;Plane&gt; getPlanes() {
-<span class="fc" id="L334">        return mPlanes;</span>
+<span class="fc" id="L329">        return mPlanes;</span>
     }
     
     /**
@@ -343,13 +338,12 @@ public abstract class DualQuadricRobustEstimator {
      * @throws LockedException if estimator is locked because a computation is
      * already in progress.
      */
-    public void setPlanes(List&lt;Plane&gt; planes) throws IllegalArgumentException,
-            LockedException {
-<span class="fc bfc" id="L348" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L349">            throw new LockedException();</span>
+    public void setPlanes(List&lt;Plane&gt; planes) throws LockedException {
+<span class="fc bfc" id="L342" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L343">            throw new LockedException();</span>
         }
-<span class="fc" id="L351">        internalSetPlanes(planes);</span>
-<span class="fc" id="L352">    }</span>
+<span class="fc" id="L345">        internalSetPlanes(planes);</span>
+<span class="fc" id="L346">    }</span>
     
     /**
      * Indicates if estimator is ready to start the dual quadric estimation.
@@ -357,7 +351,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="fc bfc" id="L360" title="All 4 branches covered.">        return mPlanes != null &amp;&amp; mPlanes.size() &gt;= MINIMUM_SIZE;</span>
+<span class="fc bfc" id="L354" title="All 4 branches covered.">        return mPlanes != null &amp;&amp; mPlanes.size() &gt;= MINIMUM_SIZE;</span>
     }
     
     /**
@@ -368,7 +362,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return quality scores coresponding to each plane.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L371">        return null;</span>
+<span class="fc" id="L365">        return null;</span>
     }
     
     /**
@@ -382,8 +376,7 @@ public abstract class DualQuadricRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 9 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="fc" id="L386">            IllegalArgumentException { }</span>
+<span class="fc" id="L379">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
     
     /**
      * Creates a dual quadric robust estimator based on plane samples and using
@@ -393,18 +386,18 @@ public abstract class DualQuadricRobustEstimator {
      * @return an instance of a dual quadric robust estimator.
      */
     public static DualQuadricRobustEstimator create(RobustEstimatorMethod method) {
-<span class="fc bfc" id="L396" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L389" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L398">                return new LMedSDualQuadricRobustEstimator();</span>
+<span class="fc" id="L391">                return new LMedSDualQuadricRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L400">                return new MSACDualQuadricRobustEstimator();</span>
+<span class="fc" id="L393">                return new MSACDualQuadricRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L402">                return new PROSACDualQuadricRobustEstimator();</span>
+<span class="fc" id="L395">                return new PROSACDualQuadricRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L404">                return new PROMedSDualQuadricRobustEstimator();</span>
+<span class="fc" id="L397">                return new PROMedSDualQuadricRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L407">                return new RANSACDualQuadricRobustEstimator();</span>
+<span class="fc" id="L400">                return new RANSACDualQuadricRobustEstimator();</span>
         }
     }
     
@@ -419,19 +412,19 @@ public abstract class DualQuadricRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static DualQuadricRobustEstimator create(List&lt;Plane&gt; planes, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L423" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L416" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L425">                return new LMedSDualQuadricRobustEstimator(planes);</span>
+<span class="fc" id="L418">                return new LMedSDualQuadricRobustEstimator(planes);</span>
             case MSAC:
-<span class="fc" id="L427">                return new MSACDualQuadricRobustEstimator(planes);</span>
+<span class="fc" id="L420">                return new MSACDualQuadricRobustEstimator(planes);</span>
             case PROSAC:
-<span class="fc" id="L429">                return new PROSACDualQuadricRobustEstimator(planes);</span>
+<span class="fc" id="L422">                return new PROSACDualQuadricRobustEstimator(planes);</span>
             case PROMedS:
-<span class="fc" id="L431">                return new PROMedSDualQuadricRobustEstimator(planes);</span>
+<span class="fc" id="L424">                return new PROMedSDualQuadricRobustEstimator(planes);</span>
             case RANSAC:
             default:
-<span class="fc" id="L434">                return new RANSACDualQuadricRobustEstimator(planes);</span>
+<span class="fc" id="L427">                return new RANSACDualQuadricRobustEstimator(planes);</span>
         }
     }
     
@@ -447,18 +440,18 @@ public abstract class DualQuadricRobustEstimator {
     public static DualQuadricRobustEstimator create(
             DualQuadricRobustEstimatorListener listener, 
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L450" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L443" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L452">                return new LMedSDualQuadricRobustEstimator(listener);</span>
+<span class="fc" id="L445">                return new LMedSDualQuadricRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L454">                return new MSACDualQuadricRobustEstimator(listener);</span>
+<span class="fc" id="L447">                return new MSACDualQuadricRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L456">                return new PROSACDualQuadricRobustEstimator(listener);</span>
+<span class="fc" id="L449">                return new PROSACDualQuadricRobustEstimator(listener);</span>
             case PROMedS:
-<span class="fc" id="L458">                return new PROMedSDualQuadricRobustEstimator(listener);</span>
+<span class="fc" id="L451">                return new PROMedSDualQuadricRobustEstimator(listener);</span>
             case RANSAC:
             default:
-<span class="fc" id="L461">                return new RANSACDualQuadricRobustEstimator(listener);</span>
+<span class="fc" id="L454">                return new RANSACDualQuadricRobustEstimator(listener);</span>
         }
     }
     
@@ -476,19 +469,19 @@ public abstract class DualQuadricRobustEstimator {
      */
     public static DualQuadricRobustEstimator create(
             DualQuadricRobustEstimatorListener listener, List&lt;Plane&gt; planes,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L480" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L473" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L482">                return new LMedSDualQuadricRobustEstimator(listener, planes);</span>
+<span class="fc" id="L475">                return new LMedSDualQuadricRobustEstimator(listener, planes);</span>
             case MSAC:
-<span class="fc" id="L484">                return new MSACDualQuadricRobustEstimator(listener, planes);</span>
+<span class="fc" id="L477">                return new MSACDualQuadricRobustEstimator(listener, planes);</span>
             case PROSAC:
-<span class="fc" id="L486">                return new PROSACDualQuadricRobustEstimator(listener, planes);</span>
+<span class="fc" id="L479">                return new PROSACDualQuadricRobustEstimator(listener, planes);</span>
             case PROMedS:
-<span class="fc" id="L488">                return new PROMedSDualQuadricRobustEstimator(listener, planes);</span>
+<span class="fc" id="L481">                return new PROMedSDualQuadricRobustEstimator(listener, planes);</span>
             case RANSAC:
             default:
-<span class="fc" id="L491">                return new RANSACDualQuadricRobustEstimator(listener, planes);</span>
+<span class="fc" id="L484">                return new RANSACDualQuadricRobustEstimator(listener, planes);</span>
         }
     }
     
@@ -503,19 +496,19 @@ public abstract class DualQuadricRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 9 planes).
      */
     public static DualQuadricRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L507" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L500" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L509">                return new LMedSDualQuadricRobustEstimator();</span>
+<span class="fc" id="L502">                return new LMedSDualQuadricRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L511">                return new MSACDualQuadricRobustEstimator();</span>
+<span class="fc" id="L504">                return new MSACDualQuadricRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L513">                return new PROSACDualQuadricRobustEstimator(qualityScores);</span>
+<span class="fc" id="L506">                return new PROSACDualQuadricRobustEstimator(qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L515">                return new PROMedSDualQuadricRobustEstimator(qualityScores);</span>
+<span class="fc" id="L508">                return new PROMedSDualQuadricRobustEstimator(qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L518">                return new RANSACDualQuadricRobustEstimator();</span>
+<span class="fc" id="L511">                return new RANSACDualQuadricRobustEstimator();</span>
         }
     }
     
@@ -532,22 +525,21 @@ public abstract class DualQuadricRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static DualQuadricRobustEstimator create(List&lt;Plane&gt; planes, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L537" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L529" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L539">                return new LMedSDualQuadricRobustEstimator(planes);</span>
+<span class="fc" id="L531">                return new LMedSDualQuadricRobustEstimator(planes);</span>
             case MSAC:
-<span class="fc" id="L541">                return new MSACDualQuadricRobustEstimator(planes);</span>
+<span class="fc" id="L533">                return new MSACDualQuadricRobustEstimator(planes);</span>
             case PROSAC:
-<span class="fc" id="L543">                return new PROSACDualQuadricRobustEstimator(planes, </span>
+<span class="fc" id="L535">                return new PROSACDualQuadricRobustEstimator(planes, </span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L546">                return new PROMedSDualQuadricRobustEstimator(planes, </span>
+<span class="fc" id="L538">                return new PROMedSDualQuadricRobustEstimator(planes, </span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L550">                return new RANSACDualQuadricRobustEstimator(planes);</span>
+<span class="fc" id="L542">                return new RANSACDualQuadricRobustEstimator(planes);</span>
         }
     }
     
@@ -565,21 +557,21 @@ public abstract class DualQuadricRobustEstimator {
      */
     public static DualQuadricRobustEstimator create(
             DualQuadricRobustEstimatorListener listener, double[] qualityScores, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L569" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L561" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L571">                return new LMedSDualQuadricRobustEstimator(listener);</span>
+<span class="fc" id="L563">                return new LMedSDualQuadricRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L573">                return new MSACDualQuadricRobustEstimator(listener);</span>
+<span class="fc" id="L565">                return new MSACDualQuadricRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L575">                return new PROSACDualQuadricRobustEstimator(listener, </span>
+<span class="fc" id="L567">                return new PROSACDualQuadricRobustEstimator(listener, </span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L578">                return new PROMedSDualQuadricRobustEstimator(listener, </span>
+<span class="fc" id="L570">                return new PROMedSDualQuadricRobustEstimator(listener, </span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L582">                return new RANSACDualQuadricRobustEstimator(listener);</span>
+<span class="fc" id="L574">                return new RANSACDualQuadricRobustEstimator(listener);</span>
         }
     }
     
@@ -599,22 +591,21 @@ public abstract class DualQuadricRobustEstimator {
      */
     public static DualQuadricRobustEstimator create(
             DualQuadricRobustEstimatorListener listener, List&lt;Plane&gt; planes,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L604" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L595" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L606">                return new LMedSDualQuadricRobustEstimator(listener, planes);</span>
+<span class="fc" id="L597">                return new LMedSDualQuadricRobustEstimator(listener, planes);</span>
             case MSAC:
-<span class="fc" id="L608">                return new MSACDualQuadricRobustEstimator(listener, planes);</span>
+<span class="fc" id="L599">                return new MSACDualQuadricRobustEstimator(listener, planes);</span>
             case PROSAC:
-<span class="fc" id="L610">                return new PROSACDualQuadricRobustEstimator(listener, planes, </span>
+<span class="fc" id="L601">                return new PROSACDualQuadricRobustEstimator(listener, planes, </span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L613">                return new PROMedSDualQuadricRobustEstimator(listener, planes, </span>
+<span class="fc" id="L604">                return new PROMedSDualQuadricRobustEstimator(listener, planes, </span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L617">                return new RANSACDualQuadricRobustEstimator(listener, planes);</span>
+<span class="fc" id="L608">                return new RANSACDualQuadricRobustEstimator(listener, planes);</span>
         }
     }
     
@@ -624,7 +615,7 @@ public abstract class DualQuadricRobustEstimator {
      * @return an instance of a dual quadric robust estimator.
      */
     public static DualQuadricRobustEstimator create() {
-<span class="fc" id="L627">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L618">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -635,9 +626,8 @@ public abstract class DualQuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public static DualQuadricRobustEstimator create(List&lt;Plane&gt; planes)
-            throws IllegalArgumentException {
-<span class="fc" id="L640">        return create(planes, DEFAULT_ROBUST_METHOD);</span>
+    public static DualQuadricRobustEstimator create(List&lt;Plane&gt; planes) {
+<span class="fc" id="L630">        return create(planes, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -649,7 +639,7 @@ public abstract class DualQuadricRobustEstimator {
      */
     public static DualQuadricRobustEstimator create(
             DualQuadricRobustEstimatorListener listener) {
-<span class="fc" id="L652">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L642">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -663,9 +653,8 @@ public abstract class DualQuadricRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public static DualQuadricRobustEstimator create(
-            DualQuadricRobustEstimatorListener listener, List&lt;Plane&gt; planes)
-            throws IllegalArgumentException {
-<span class="fc" id="L668">        return create(listener, planes, DEFAULT_ROBUST_METHOD);</span>
+            DualQuadricRobustEstimatorListener listener, List&lt;Plane&gt; planes) {
+<span class="fc" id="L657">        return create(listener, planes, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -676,9 +665,8 @@ public abstract class DualQuadricRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 9 planes).
      */
-    public static DualQuadricRobustEstimator create(double[] qualityScores)
-            throws IllegalArgumentException {
-<span class="fc" id="L681">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    public static DualQuadricRobustEstimator create(double[] qualityScores) {
+<span class="fc" id="L669">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -693,7 +681,7 @@ public abstract class DualQuadricRobustEstimator {
      */
     public static DualQuadricRobustEstimator create(List&lt;Plane&gt; planes,
             double[] qualityScores) {
-<span class="fc" id="L696">        return create(planes, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L684">        return create(planes, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -708,7 +696,7 @@ public abstract class DualQuadricRobustEstimator {
      */
     public static DualQuadricRobustEstimator create(
             DualQuadricRobustEstimatorListener listener, double[] qualityScores) {
-<span class="fc" id="L711">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L699">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -726,7 +714,7 @@ public abstract class DualQuadricRobustEstimator {
     public static DualQuadricRobustEstimator create(
             DualQuadricRobustEstimatorListener listener, List&lt;Plane&gt; planes,
             double[] qualityScores) {
-<span class="fc" id="L729">        return create(listener, planes, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L717">        return create(listener, planes, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -759,11 +747,11 @@ public abstract class DualQuadricRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     private void internalSetPlanes(List&lt;Plane&gt; planes) {
-<span class="fc bfc" id="L762" title="All 2 branches covered.">        if (planes.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L763">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L750" title="All 2 branches covered.">        if (planes.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L751">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L765">        mPlanes = planes;</span>
-<span class="fc" id="L766">    }</span>
+<span class="fc" id="L753">        mPlanes = planes;</span>
+<span class="fc" id="L754">    }</span>
     
     /**
      * Computes the residual between a dual quadric and a 3D plane.
@@ -772,28 +760,28 @@ public abstract class DualQuadricRobustEstimator {
      * @return residual.
      */
     protected double residual(DualQuadric dq, Plane plane) {
-<span class="fc" id="L775">        dq.normalize();</span>
+<span class="fc" id="L763">        dq.normalize();</span>
         try {
-<span class="fc bfc" id="L777" title="All 2 branches covered.">            if (mTestDualQ == null) {</span>
-<span class="fc" id="L778">                mTestDualQ = dq.asMatrix();</span>
+<span class="fc bfc" id="L765" title="All 2 branches covered.">            if (mTestDualQ == null) {</span>
+<span class="fc" id="L766">                mTestDualQ = dq.asMatrix();</span>
             } else {
-<span class="fc" id="L780">                dq.asMatrix(mTestDualQ);</span>
+<span class="fc" id="L768">                dq.asMatrix(mTestDualQ);</span>
             }
             
-<span class="fc bfc" id="L783" title="All 2 branches covered.">            if (mTestPlane == null) {</span>
-<span class="fc" id="L784">                mTestPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);</span>
+<span class="fc bfc" id="L771" title="All 2 branches covered.">            if (mTestPlane == null) {</span>
+<span class="fc" id="L772">                mTestPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);</span>
             }
-<span class="fc" id="L786">            plane.normalize();</span>
-<span class="fc" id="L787">            mTestPlane.setElementAt(0, 0, plane.getA());</span>
-<span class="fc" id="L788">            mTestPlane.setElementAt(1, 0, plane.getB());</span>
-<span class="fc" id="L789">            mTestPlane.setElementAt(2, 0, plane.getC());</span>
-<span class="fc" id="L790">            mTestPlane.setElementAt(3, 0, plane.getD());</span>
-<span class="fc" id="L791">            Matrix locusMatrix = mTestPlane.transposeAndReturnNew();</span>
-<span class="fc" id="L792">            locusMatrix.multiply(mTestDualQ);</span>
-<span class="fc" id="L793">            locusMatrix.multiply(mTestPlane);</span>
-<span class="fc" id="L794">            return Math.abs(locusMatrix.getElementAt(0, 0));</span>
-<span class="nc" id="L795">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L796">            return Double.MAX_VALUE;</span>
+<span class="fc" id="L774">            plane.normalize();</span>
+<span class="fc" id="L775">            mTestPlane.setElementAt(0, 0, plane.getA());</span>
+<span class="fc" id="L776">            mTestPlane.setElementAt(1, 0, plane.getB());</span>
+<span class="fc" id="L777">            mTestPlane.setElementAt(2, 0, plane.getC());</span>
+<span class="fc" id="L778">            mTestPlane.setElementAt(3, 0, plane.getD());</span>
+<span class="fc" id="L779">            Matrix locusMatrix = mTestPlane.transposeAndReturnNew();</span>
+<span class="fc" id="L780">            locusMatrix.multiply(mTestDualQ);</span>
+<span class="fc" id="L781">            locusMatrix.multiply(mTestPlane);</span>
+<span class="fc" id="L782">            return Math.abs(locusMatrix.getElementAt(0, 0));</span>
+<span class="nc" id="L783">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L784">            return Double.MAX_VALUE;</span>
         }
     }    
 }

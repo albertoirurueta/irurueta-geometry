@@ -4823,7 +4823,7 @@
 <a class="jxr_linenumber" name="L4815" href="#L4815">4815</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isLocusToTopSide(<strong class="jxr_keyword">double</strong> x, <strong class="jxr_keyword">double</strong> y, <strong class="jxr_keyword">double</strong> left,
 <a class="jxr_linenumber" name="L4816" href="#L4816">4816</a>             <strong class="jxr_keyword">double</strong> top, <strong class="jxr_keyword">double</strong> right, <strong class="jxr_keyword">double</strong> bottom, <strong class="jxr_keyword">double</strong> threshold) {
 <a class="jxr_linenumber" name="L4817" href="#L4817">4817</a>         <strong class="jxr_keyword">if</strong> (threshold &lt; 0.0) {
-<a class="jxr_linenumber" name="L4818" href="#L4818">4818</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"threshold must be positive"</span>);
+<a class="jxr_linenumber" name="L4818" href="#L4818">4818</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
 <a class="jxr_linenumber" name="L4819" href="#L4819">4819</a>         }
 <a class="jxr_linenumber" name="L4820" href="#L4820">4820</a>         
 <a class="jxr_linenumber" name="L4821" href="#L4821">4821</a>         <strong class="jxr_keyword">return</strong> getDistanceToTopSide(x, y, left, top, right, bottom) 

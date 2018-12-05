@@ -201,7 +201,7 @@ import java.util.List;
      */    
     public static boolean isPolygonOrientationReversed(List&lt;Point3D&gt; vertices1,
             List&lt;Point3D&gt; vertices2, double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
 <span class="pc bpc" id="L205" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
 <span class="nc" id="L206">            throw new IllegalArgumentException();</span>
         }
@@ -258,82 +258,81 @@ import java.util.List;
 
 <span class="fc" id="L259">        List&lt;Triangle3D&gt; result = new LinkedList&lt;&gt;();</span>
 
-        //boolean isConvex;
         boolean isEar;
         boolean madeCut;
 
-<span class="fc" id="L265">        Triangle3D triangle = null;</span>
+<span class="fc" id="L264">        Triangle3D triangle = null;</span>
 
         // Second, apply algorithm
-<span class="fc bfc" id="L268" title="All 2 branches covered.">        while (verticesCopy.size() &gt; MIN_VERTICES) {</span>
-<span class="fc" id="L269">            madeCut = false;</span>
-<span class="fc" id="L270">            int lastElement = verticesCopy.size() - 1;</span>
-<span class="pc bpc" id="L271" title="1 of 2 branches missed.">            for (int i=0; i &lt;= lastElement; i++) {</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">        while (verticesCopy.size() &gt; MIN_VERTICES) {</span>
+<span class="fc" id="L268">            madeCut = false;</span>
+<span class="fc" id="L269">            int lastElement = verticesCopy.size() - 1;</span>
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">            for (int i=0; i &lt;= lastElement; i++) {</span>
 
 
-<span class="pc bpc" id="L274" title="1 of 2 branches missed.">                if (i == 0) {</span>
-<span class="pc bpc" id="L275" title="1 of 2 branches missed.">                    if (triangle == null) {</span>
+<span class="pc bpc" id="L273" title="1 of 2 branches missed.">                if (i == 0) {</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">                    if (triangle == null) {</span>
                         //instantiate triangle if not already instantiated
-<span class="fc" id="L277">                        triangle = new Triangle3D(verticesCopy.get(lastElement),</span>
-<span class="fc" id="L278">                                verticesCopy.get(0), verticesCopy.get(1));</span>
+<span class="fc" id="L276">                        triangle = new Triangle3D(verticesCopy.get(lastElement),</span>
+<span class="fc" id="L277">                                verticesCopy.get(0), verticesCopy.get(1));</span>
                     } else {
-<span class="nc" id="L280">                        triangle.setVertices(verticesCopy.get(lastElement),</span>
-<span class="nc" id="L281">                                verticesCopy.get(0), verticesCopy.get(1));</span>
+<span class="nc" id="L279">                        triangle.setVertices(verticesCopy.get(lastElement),</span>
+<span class="nc" id="L280">                                verticesCopy.get(0), verticesCopy.get(1));</span>
                     }
-<span class="nc bnc" id="L283" title="All 2 branches missed.">                } else if (i == lastElement) {</span>
-<span class="nc" id="L284">                    triangle.setVertices(verticesCopy.get(lastElement - 1),</span>
-<span class="nc" id="L285">                            verticesCopy.get(lastElement),</span>
-<span class="nc" id="L286">                            verticesCopy.get(0));</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">                } else if (i == lastElement) {</span>
+<span class="nc" id="L283">                    triangle.setVertices(verticesCopy.get(lastElement - 1),</span>
+<span class="nc" id="L284">                            verticesCopy.get(lastElement),</span>
+<span class="nc" id="L285">                            verticesCopy.get(0));</span>
                 } else {
-<span class="nc" id="L288">                    triangle.setVertices(verticesCopy.get(i - 1),</span>
-<span class="nc" id="L289">                            verticesCopy.get(i), verticesCopy.get(i + 1));</span>
+<span class="nc" id="L287">                    triangle.setVertices(verticesCopy.get(i - 1),</span>
+<span class="nc" id="L288">                            verticesCopy.get(i), verticesCopy.get(i + 1));</span>
                 }
 
                 try {
-<span class="fc" id="L293">                    isEar = isEar(triangle, verticesCopy);</span>
-<span class="nc" id="L294">                } catch (CoincidentPointsException e) {</span>
-<span class="nc" id="L295">                    isEar = false;</span>
-<span class="fc" id="L296">                }</span>
+<span class="fc" id="L292">                    isEar = isEar(triangle, verticesCopy);</span>
+<span class="nc" id="L293">                } catch (CoincidentPointsException e) {</span>
+<span class="nc" id="L294">                    isEar = false;</span>
+<span class="fc" id="L295">                }</span>
 
-<span class="pc bpc" id="L298" title="1 of 2 branches missed.">                if (isEar) {</span>
+<span class="pc bpc" id="L297" title="1 of 2 branches missed.">                if (isEar) {</span>
                     // If it is an ear, we build a face out of the triangle being
                     //cut and remove it from polygon by cutting it
-<span class="fc" id="L301">                    result.add(triangle);</span>
-<span class="fc" id="L302">                    triangle = null; //so that it cannot be reused after being added</span>
+<span class="fc" id="L300">                    result.add(triangle);</span>
+<span class="fc" id="L301">                    triangle = null; //so that it cannot be reused after being added</span>
 
                     //cut ear
-<span class="fc" id="L305">                    verticesCopy.remove(i);</span>
-<span class="fc" id="L306">                    madeCut = true;</span>
+<span class="fc" id="L304">                    verticesCopy.remove(i);</span>
+<span class="fc" id="L305">                    madeCut = true;</span>
 
                     //Leave from FOR loop to loop again to new reduced verticesCopy set
-<span class="fc" id="L309">                    break;</span>
+<span class="fc" id="L308">                    break;</span>
                 }
             }
 
             //if arrived here but no cut was made and polygon size contains
             //more than 3 verticesCopy, then the algorithm failed for some reason
-<span class="pc bpc" id="L315" title="1 of 2 branches missed.">            if (!madeCut) {</span>
-<span class="nc" id="L316">                throw new TriangulatorException();</span>
+<span class="pc bpc" id="L314" title="1 of 2 branches missed.">            if (!madeCut) {</span>
+<span class="nc" id="L315">                throw new TriangulatorException();</span>
             }
-<span class="fc" id="L318">        }</span>
+<span class="fc" id="L317">        }</span>
 
         //instantiate final triangle
-<span class="fc" id="L321">        triangle = new Triangle3D(verticesCopy.get(0),</span>
-<span class="fc" id="L322">                verticesCopy.get(1), verticesCopy.get(2));</span>
+<span class="fc" id="L320">        triangle = new Triangle3D(verticesCopy.get(0),</span>
+<span class="fc" id="L321">                verticesCopy.get(1), verticesCopy.get(2));</span>
 
 
-<span class="fc" id="L325">        boolean arePointsColinear = triangle.areVerticesColinear();</span>
+<span class="fc" id="L324">        boolean arePointsColinear = triangle.areVerticesColinear();</span>
 
         //only add final triangle if not colinear (area greater than small
         //threshold)
-<span class="pc bpc" id="L329" title="1 of 2 branches missed.">        if (!arePointsColinear) {</span>
-<span class="fc" id="L330">            result.add(triangle);</span>
+<span class="pc bpc" id="L328" title="1 of 2 branches missed.">        if (!arePointsColinear) {</span>
+<span class="fc" id="L329">            result.add(triangle);</span>
         }
 
         //add indices of triangles verticesCopy
-<span class="fc" id="L334">        computeIndices(originalVertices, result, indices);</span>
+<span class="fc" id="L333">        computeIndices(originalVertices, result, indices);</span>
 
-<span class="fc" id="L336">        return result;</span>
+<span class="fc" id="L335">        return result;</span>
     }
 
     /**
@@ -346,28 +345,28 @@ import java.util.List;
      */
     private static void computeIndices(List&lt;Point3D&gt; vertices,
                                        List&lt;Triangle3D&gt; triangles, List&lt;int[]&gt; indices) {
-<span class="fc bfc" id="L349" title="All 2 branches covered.">        if (indices != null) {</span>
+<span class="fc bfc" id="L348" title="All 2 branches covered.">        if (indices != null) {</span>
             int vertexCounter;
             int triangleVertexCounter;
             int[] triangleIndices;
-<span class="fc bfc" id="L353" title="All 2 branches covered.">            for (Triangle3D t : triangles) {</span>
-<span class="fc" id="L354">                triangleVertexCounter = 0;</span>
-<span class="fc" id="L355">                triangleIndices = new int[Triangle3D.NUM_VERTICES];</span>
-<span class="fc bfc" id="L356" title="All 2 branches covered.">                for (Point3D p1 : t.getVertices()) {</span>
-<span class="fc" id="L357">                    vertexCounter = 0;</span>
-<span class="pc bpc" id="L358" title="1 of 2 branches missed.">                    for (Point3D p2 : vertices) {</span>
-<span class="fc bfc" id="L359" title="All 2 branches covered.">                        if (p1 == p2) {</span>
-<span class="fc" id="L360">                            triangleIndices[triangleVertexCounter] =</span>
+<span class="fc bfc" id="L352" title="All 2 branches covered.">            for (Triangle3D t : triangles) {</span>
+<span class="fc" id="L353">                triangleVertexCounter = 0;</span>
+<span class="fc" id="L354">                triangleIndices = new int[Triangle3D.NUM_VERTICES];</span>
+<span class="fc bfc" id="L355" title="All 2 branches covered.">                for (Point3D p1 : t.getVertices()) {</span>
+<span class="fc" id="L356">                    vertexCounter = 0;</span>
+<span class="pc bpc" id="L357" title="1 of 2 branches missed.">                    for (Point3D p2 : vertices) {</span>
+<span class="fc bfc" id="L358" title="All 2 branches covered.">                        if (p1 == p2) {</span>
+<span class="fc" id="L359">                            triangleIndices[triangleVertexCounter] =</span>
                                     vertexCounter;
-<span class="fc" id="L362">                            break;</span>
+<span class="fc" id="L361">                            break;</span>
                         }
-<span class="fc" id="L364">                        vertexCounter++;</span>
-<span class="fc" id="L365">                    }</span>
-<span class="fc" id="L366">                    triangleVertexCounter++;</span>
-<span class="fc" id="L367">                }</span>
-<span class="fc" id="L368">                indices.add(triangleIndices);</span>
-<span class="fc" id="L369">            }</span>
+<span class="fc" id="L363">                        vertexCounter++;</span>
+<span class="fc" id="L364">                    }</span>
+<span class="fc" id="L365">                    triangleVertexCounter++;</span>
+<span class="fc" id="L366">                }</span>
+<span class="fc" id="L367">                indices.add(triangleIndices);</span>
+<span class="fc" id="L368">            }</span>
         }
-<span class="fc" id="L371">    }</span>
+<span class="fc" id="L370">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

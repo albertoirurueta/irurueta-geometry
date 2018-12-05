@@ -392,108 +392,113 @@
 <a class="jxr_linenumber" name="L384" href="#L384">384</a>                 col.multiply(row, tmp);
 <a class="jxr_linenumber" name="L385" href="#L385">385</a>                 m.add(tmp);                
 <a class="jxr_linenumber" name="L386" href="#L386">386</a>             }
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>             
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>             SingularValueDecomposer decomposer = <strong class="jxr_keyword">new</strong> SingularValueDecomposer(m);
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>             decomposer.decompose();
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>             
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>             <strong class="jxr_keyword">if</strong> (!mWeakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/CoincidentPointsException.html">CoincidentPointsException</a>();
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>             }            
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>             <strong class="jxr_keyword">if</strong> (inCov == 0.0) {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/CoincidentPointsException.html">CoincidentPointsException</a>();
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>             }
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>             
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>             SingularValueDecomposer decomposer = <strong class="jxr_keyword">new</strong> SingularValueDecomposer(m);
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>             decomposer.decompose();
 <a class="jxr_linenumber" name="L394" href="#L394">394</a>             
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>             Matrix u = decomposer.getU();
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>             Matrix v = decomposer.getV();
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>             
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>             <strong class="jxr_keyword">double</strong>[] s = decomposer.getSingularValues();
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>             
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>             <em class="jxr_comment">//rotation R = V*U^T  </em>
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>             Matrix r = v.multiplyAndReturnNew(u.transposeAndReturnNew());
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>             
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>             <strong class="jxr_keyword">double</strong>[] e = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[]{1.0, 1.0};
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>             
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>             <strong class="jxr_keyword">if</strong>(Utils.det(r) &lt; 0.0) {
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>                 <em class="jxr_comment">//ideally rotation has 2 unitary singular values.</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>                 <em class="jxr_comment">//Because of reflection, we must change sign of last singular</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>                 <em class="jxr_comment">//value and reconstruct rotation matrix</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>                                 
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>                 e[1] = -1.0;                                
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>                 
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>                 <em class="jxr_comment">//because rotation matrix can be seen as V*e*U^T, we can</em>
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>                 <em class="jxr_comment">//simply multiply 3rd column of R by -1</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>                 r.setElementAt(0, 1, -r.getElementAt(0, 1));
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>                 r.setElementAt(1, 1, -r.getElementAt(1, 1));
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>             }
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>             
-<a class="jxr_linenumber" name="L418" href="#L418">418</a>             <a href="../../../../com/irurueta/geometry/Rotation2D.html">Rotation2D</a> rotation = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/Rotation2D.html">Rotation2D</a>(r);
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>             
-<a class="jxr_linenumber" name="L420" href="#L420">420</a>             <em class="jxr_comment">//scale</em>
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>             <strong class="jxr_keyword">double</strong> dot = ArrayUtils.dotProduct(s, e);
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>             <strong class="jxr_keyword">double</strong> invScale = dot / inCov;
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>             <strong class="jxr_keyword">if</strong> (!mWeakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/CoincidentPointsException.html">CoincidentPointsException</a>();
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>             }            
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>             
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>             Matrix u = decomposer.getU();
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>             Matrix v = decomposer.getV();
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>             
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>             <strong class="jxr_keyword">double</strong>[] s = decomposer.getSingularValues();
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>             
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>             <em class="jxr_comment">//rotation R = V*U^T  </em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>             Matrix r = v.multiplyAndReturnNew(u.transposeAndReturnNew());
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>             
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>             <strong class="jxr_keyword">double</strong>[] e = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[]{1.0, 1.0};
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>             
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>             <strong class="jxr_keyword">if</strong>(Utils.det(r) &lt; 0.0) {
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>                 <em class="jxr_comment">//ideally rotation has 2 unitary singular values.</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>                 <em class="jxr_comment">//Because of reflection, we must change sign of last singular</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>                 <em class="jxr_comment">//value and reconstruct rotation matrix</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>                                 
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>                 e[1] = -1.0;                                
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>                 
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>                 <em class="jxr_comment">//because rotation matrix can be seen as V*e*U^T, we can</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>                 <em class="jxr_comment">//simply multiply 3rd column of R by -1</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>                 r.setElementAt(0, 1, -r.getElementAt(0, 1));
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>                 r.setElementAt(1, 1, -r.getElementAt(1, 1));
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>             }
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>             
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>             <a href="../../../../com/irurueta/geometry/Rotation2D.html">Rotation2D</a> rotation = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/Rotation2D.html">Rotation2D</a>(r);
 <a class="jxr_linenumber" name="L423" href="#L423">423</a>             
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>             <em class="jxr_comment">//translation</em>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>             Matrix t = r.multiplyAndReturnNew(inCentroid);
-<a class="jxr_linenumber" name="L426" href="#L426">426</a>             t.multiplyByScalar(-invScale);
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>             t.add(outCentroid);
-<a class="jxr_linenumber" name="L428" href="#L428">428</a>             
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>             result.setRotation(rotation);
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>             result.setTranslation(t.getBuffer());
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>             result.setScale(invScale);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>             <em class="jxr_comment">//scale</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>             <strong class="jxr_keyword">double</strong> dot = ArrayUtils.dotProduct(s, e);
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>             <strong class="jxr_keyword">double</strong> invScale = dot / inCov;
+<a class="jxr_linenumber" name="L427" href="#L427">427</a>             
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>             <em class="jxr_comment">//translation</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>             Matrix t = r.multiplyAndReturnNew(inCentroid);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>             t.multiplyByScalar(-invScale);
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>             t.add(outCentroid);
 <a class="jxr_linenumber" name="L432" href="#L432">432</a>             
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>             <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>                 mListener.onEstimateEnd(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>             }            
-<a class="jxr_linenumber" name="L436" href="#L436">436</a>         } <strong class="jxr_keyword">catch</strong> (AlgebraException | InvalidRotationMatrixException e) {
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/CoincidentPointsException.html">CoincidentPointsException</a>(e);
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>         } <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L439" href="#L439">439</a>             mLocked = false;
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>         }
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>     }
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>     
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">     * Computes centroid of provided list of points using inhomogeneous</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">     * coordinates.</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">     * @param points list of points to compute centroid.</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">     * @return centroid.</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">     * @throws AlgebraException never thrown.</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Matrix computeCentroid(List&lt;Point2D&gt; points) 
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>             <strong class="jxr_keyword">throws</strong> AlgebraException {        
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>         <strong class="jxr_keyword">double</strong> x = 0.0, y = 0.0;
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>         <strong class="jxr_keyword">double</strong> n = points.size();
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>         <strong class="jxr_keyword">for</strong> (Point2D p : points) {
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>             x += p.getInhomX() / n;
-<a class="jxr_linenumber" name="L456" href="#L456">456</a>             y += p.getInhomY() / n;
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>         }
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>         
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>         Matrix result = <strong class="jxr_keyword">new</strong> Matrix(
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>                 Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
-<a class="jxr_linenumber" name="L461" href="#L461">461</a>         result.setElementAtIndex(0, x);
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>         result.setElementAtIndex(1, y);
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>         <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L464" href="#L464">464</a>     }
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>     
-<a class="jxr_linenumber" name="L466" href="#L466">466</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">     * Internal method to set lists of points to be used to estimate a </em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">     * metric 2D transformation.</em>
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">     * This method does not check whether estimator is locked or not.</em>
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">     * @param inputPoints list of input points to be used to estimate a </em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">     * metric 2D transformation.</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">     * @param outputPoints list of output points to be used to estimate a</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>             result.setRotation(rotation);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>             result.setTranslation(t.getBuffer());
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>             result.setScale(invScale);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>             
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>             <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>                 mListener.onEstimateEnd(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>             }            
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>         } <strong class="jxr_keyword">catch</strong> (AlgebraException | InvalidRotationMatrixException e) {
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/CoincidentPointsException.html">CoincidentPointsException</a>(e);
+<a class="jxr_linenumber" name="L442" href="#L442">442</a>         } <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>             mLocked = false;
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>         }
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>     }
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>     
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">     * Computes centroid of provided list of points using inhomogeneous</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">     * coordinates.</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">     * @param points list of points to compute centroid.</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">     * @return centroid.</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">     * @throws AlgebraException never thrown.</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Matrix computeCentroid(List&lt;Point2D&gt; points) 
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>             <strong class="jxr_keyword">throws</strong> AlgebraException {        
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>         <strong class="jxr_keyword">double</strong> x = 0.0;
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>         <strong class="jxr_keyword">double</strong> y = 0.0;
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>         <strong class="jxr_keyword">double</strong> n = points.size();
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>         <strong class="jxr_keyword">for</strong> (Point2D p : points) {
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>             x += p.getInhomX() / n;
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>             y += p.getInhomY() / n;
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>         }
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>         
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>         Matrix result = <strong class="jxr_keyword">new</strong> Matrix(
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>                 Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>         result.setElementAtIndex(0, x);
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>         result.setElementAtIndex(1, y);
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>         <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L469" href="#L469">469</a>     }
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>     
+<a class="jxr_linenumber" name="L471" href="#L471">471</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">     * Internal method to set lists of points to be used to estimate a </em>
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">     * metric 2D transformation.</em>
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided lists of points don't have</em>
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">     * the same size or their size is smaller than #getMinimumPoints.</em>
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetPoints(List&lt;Point2D&gt; inputPoints,
-<a class="jxr_linenumber" name="L478" href="#L478">478</a>             List&lt;Point2D&gt; outputPoints) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
-<a class="jxr_linenumber" name="L479" href="#L479">479</a>         <strong class="jxr_keyword">if</strong> (inputPoints.size() &lt; getMinimumPoints()) {
-<a class="jxr_linenumber" name="L480" href="#L480">480</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L481" href="#L481">481</a>         }
-<a class="jxr_linenumber" name="L482" href="#L482">482</a>         <strong class="jxr_keyword">if</strong> (inputPoints.size() != outputPoints.size()) {
-<a class="jxr_linenumber" name="L483" href="#L483">483</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L484" href="#L484">484</a>         }
-<a class="jxr_linenumber" name="L485" href="#L485">485</a>         mInputPoints = inputPoints;
-<a class="jxr_linenumber" name="L486" href="#L486">486</a>         mOutputPoints = outputPoints;        
-<a class="jxr_linenumber" name="L487" href="#L487">487</a>     }    
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> }
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">     * This method does not check whether estimator is locked or not.</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">     * @param inputPoints list of input points to be used to estimate a </em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">     * metric 2D transformation.</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">     * @param outputPoints list of output points to be used to estimate a</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">     * metric 2D transformation.</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided lists of points don't have</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">     * the same size or their size is smaller than #getMinimumPoints.</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetPoints(List&lt;Point2D&gt; inputPoints,
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>             List&lt;Point2D&gt; outputPoints) {
+<a class="jxr_linenumber" name="L484" href="#L484">484</a>         <strong class="jxr_keyword">if</strong> (inputPoints.size() &lt; getMinimumPoints()) {
+<a class="jxr_linenumber" name="L485" href="#L485">485</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L486" href="#L486">486</a>         }
+<a class="jxr_linenumber" name="L487" href="#L487">487</a>         <strong class="jxr_keyword">if</strong> (inputPoints.size() != outputPoints.size()) {
+<a class="jxr_linenumber" name="L488" href="#L488">488</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L489" href="#L489">489</a>         }
+<a class="jxr_linenumber" name="L490" href="#L490">490</a>         mInputPoints = inputPoints;
+<a class="jxr_linenumber" name="L491" href="#L491">491</a>         mOutputPoints = outputPoints;        
+<a class="jxr_linenumber" name="L492" href="#L492">492</a>     }    
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>

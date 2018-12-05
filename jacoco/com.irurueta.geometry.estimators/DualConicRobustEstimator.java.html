@@ -164,13 +164,12 @@ public abstract class DualConicRobustEstimator {
      * @throws IllegalArgumentException if provided lsit of lines don't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public DualConicRobustEstimator(List&lt;Line2D&gt; lines)
-<span class="fc" id="L168">            throws IllegalArgumentException {</span>
-<span class="fc" id="L169">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L170">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L171">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
-<span class="fc" id="L172">        internalSetLines(lines);</span>
-<span class="fc" id="L173">    }</span>
+<span class="fc" id="L167">    public DualConicRobustEstimator(List&lt;Line2D&gt; lines) {</span>
+<span class="fc" id="L168">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L169">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L170">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L171">        internalSetLines(lines);</span>
+<span class="fc" id="L172">    }</span>
     
     /**
      * Constructor.
@@ -181,13 +180,13 @@ public abstract class DualConicRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public DualConicRobustEstimator(DualConicRobustEstimatorListener listener,
-<span class="fc" id="L184">            List&lt;Line2D&gt; lines) throws IllegalArgumentException {</span>
-<span class="fc" id="L185">        mListener = listener;</span>
-<span class="fc" id="L186">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L187">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L188">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
-<span class="fc" id="L189">        internalSetLines(lines);</span>
-<span class="fc" id="L190">    }</span>
+<span class="fc" id="L183">            List&lt;Line2D&gt; lines) {</span>
+<span class="fc" id="L184">        mListener = listener;</span>
+<span class="fc" id="L185">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L186">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L187">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L188">        internalSetLines(lines);</span>
+<span class="fc" id="L189">    }</span>
     
     /**
      * Returns reference to listener to be notified of events such as when
@@ -195,7 +194,7 @@ public abstract class DualConicRobustEstimator {
      * @return listener to be notified of events.
      */
     public DualConicRobustEstimatorListener getListener() {
-<span class="fc" id="L198">        return mListener;</span>
+<span class="fc" id="L197">        return mListener;</span>
     }
     
     /**
@@ -206,11 +205,11 @@ public abstract class DualConicRobustEstimator {
      */
     public void setListener(DualConicRobustEstimatorListener listener)
             throws LockedException {
-<span class="fc bfc" id="L209" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L210">            throw new LockedException();</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L209">            throw new LockedException();</span>
         }
-<span class="fc" id="L212">        mListener = listener;</span>
-<span class="fc" id="L213">    }</span>
+<span class="fc" id="L211">        mListener = listener;</span>
+<span class="fc" id="L212">    }</span>
     
     /**
      * Indicates whether listener has been provided and is available for
@@ -218,7 +217,7 @@ public abstract class DualConicRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L221" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">        return mListener != null;</span>
     }
     
     /**
@@ -226,7 +225,7 @@ public abstract class DualConicRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L229">        return mLocked;</span>
+<span class="fc" id="L228">        return mLocked;</span>
     }
     
     /**
@@ -236,7 +235,7 @@ public abstract class DualConicRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L239">        return mProgressDelta;</span>
+<span class="fc" id="L238">        return mProgressDelta;</span>
     }
     
     /**
@@ -249,17 +248,16 @@ public abstract class DualConicRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L254" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L255">            throw new LockedException();</span>
+    public void setProgressDelta(float progressDelta) throws LockedException {
+<span class="fc bfc" id="L252" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L253">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L257" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L255" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L259">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L257">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L261">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L262">    }</span>
+<span class="fc" id="L259">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L260">    }</span>
     
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
@@ -269,7 +267,7 @@ public abstract class DualConicRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L272">        return mConfidence;</span>
+<span class="fc" id="L270">        return mConfidence;</span>
     }
     
     /**
@@ -283,16 +281,15 @@ public abstract class DualConicRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L288" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L289">            throw new LockedException();</span>
+    public void setConfidence(double confidence) throws LockedException {
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L286">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L291" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L292">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L288" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L289">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L294">        mConfidence = confidence;</span>
-<span class="fc" id="L295">    }</span>
+<span class="fc" id="L291">        mConfidence = confidence;</span>
+<span class="fc" id="L292">    }</span>
     
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
@@ -301,7 +298,7 @@ public abstract class DualConicRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-<span class="fc" id="L304">        return mMaxIterations;</span>
+<span class="fc" id="L301">        return mMaxIterations;</span>
     }
     
     /**
@@ -313,16 +310,15 @@ public abstract class DualConicRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L318" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L319">            throw new LockedException();</span>
+    public void setMaxIterations(int maxIterations) throws LockedException {
+<span class="fc bfc" id="L314" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L315">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L321" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L322">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L318">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L324">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L325">    }</span>
+<span class="fc" id="L320">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L321">    }</span>
     
     /**
      * Returns list of lines to be used to estimate a dual conic.
@@ -330,7 +326,7 @@ public abstract class DualConicRobustEstimator {
      * @return list of lines to be used to estimate a dual conic.
      */
     public List&lt;Line2D&gt; getLines() {
-<span class="fc" id="L333">        return mLines;</span>
+<span class="fc" id="L329">        return mLines;</span>
     }
     
     /**
@@ -342,13 +338,12 @@ public abstract class DualConicRobustEstimator {
      * @throws LockedException if estimator is locked because a computation is
      * already in progress.
      */
-    public void setLines(List&lt;Line2D&gt; lines) throws IllegalArgumentException,
-            LockedException {
-<span class="fc bfc" id="L347" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L348">            throw new LockedException();</span>
+    public void setLines(List&lt;Line2D&gt; lines) throws LockedException {
+<span class="fc bfc" id="L342" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L343">            throw new LockedException();</span>
         }
-<span class="fc" id="L350">        internalSetLines(lines);</span>
-<span class="fc" id="L351">    }</span>
+<span class="fc" id="L345">        internalSetLines(lines);</span>
+<span class="fc" id="L346">    }</span>
     
     /**
      * Indicates if estimator is ready to start the dual conic estimation.
@@ -356,7 +351,7 @@ public abstract class DualConicRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="fc bfc" id="L359" title="All 4 branches covered.">        return mLines != null &amp;&amp; mLines.size() &gt;= MINIMUM_SIZE;</span>
+<span class="fc bfc" id="L354" title="All 4 branches covered.">        return mLines != null &amp;&amp; mLines.size() &gt;= MINIMUM_SIZE;</span>
     }
     
     /**
@@ -367,7 +362,7 @@ public abstract class DualConicRobustEstimator {
      * @return quality scores coresponding to each line.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L370">        return null;</span>
+<span class="fc" id="L365">        return null;</span>
     }
     
     /**
@@ -381,8 +376,7 @@ public abstract class DualConicRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 9 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="fc" id="L385">            IllegalArgumentException { }</span>
+<span class="fc" id="L379">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
     
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
@@ -392,18 +386,18 @@ public abstract class DualConicRobustEstimator {
      * @return an instance of a dual conic robust estimator.
      */
     public static DualConicRobustEstimator create(RobustEstimatorMethod method) {
-<span class="fc bfc" id="L395" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L389" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L397">                return new LMedSDualConicRobustEstimator();</span>
+<span class="fc" id="L391">                return new LMedSDualConicRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L399">                return new MSACDualConicRobustEstimator();</span>
+<span class="fc" id="L393">                return new MSACDualConicRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L401">                return new PROSACDualConicRobustEstimator();</span>
+<span class="fc" id="L395">                return new PROSACDualConicRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L403">                return new PROMedSDualConicRobustEstimator();</span>
+<span class="fc" id="L397">                return new PROMedSDualConicRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L406">                return new RANSACDualConicRobustEstimator();</span>
+<span class="fc" id="L400">                return new RANSACDualConicRobustEstimator();</span>
         }
     }
     
@@ -418,19 +412,19 @@ public abstract class DualConicRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static DualConicRobustEstimator create(List&lt;Line2D&gt; lines, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L422" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L416" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L424">                return new LMedSDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L418">                return new LMedSDualConicRobustEstimator(lines);</span>
             case MSAC:
-<span class="fc" id="L426">                return new MSACDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L420">                return new MSACDualConicRobustEstimator(lines);</span>
             case PROSAC:
-<span class="fc" id="L428">                return new PROSACDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L422">                return new PROSACDualConicRobustEstimator(lines);</span>
             case PROMedS:
-<span class="fc" id="L430">                return new PROMedSDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L424">                return new PROMedSDualConicRobustEstimator(lines);</span>
             case RANSAC:
             default:
-<span class="fc" id="L433">                return new RANSACDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L427">                return new RANSACDualConicRobustEstimator(lines);</span>
         }
     }
     
@@ -446,18 +440,18 @@ public abstract class DualConicRobustEstimator {
     public static DualConicRobustEstimator create(
             DualConicRobustEstimatorListener listener, 
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L449" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L443" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L451">                return new LMedSDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L445">                return new LMedSDualConicRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L453">                return new MSACDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L447">                return new MSACDualConicRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L455">                return new PROSACDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L449">                return new PROSACDualConicRobustEstimator(listener);</span>
             case PROMedS:
-<span class="fc" id="L457">                return new PROMedSDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L451">                return new PROMedSDualConicRobustEstimator(listener);</span>
             case RANSAC:
             default:
-<span class="fc" id="L460">                return new RANSACDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L454">                return new RANSACDualConicRobustEstimator(listener);</span>
         }
     }
     
@@ -475,19 +469,19 @@ public abstract class DualConicRobustEstimator {
      */
     public static DualConicRobustEstimator create(
             DualConicRobustEstimatorListener listener, List&lt;Line2D&gt; lines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L479" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L473" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L481">                return new LMedSDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L475">                return new LMedSDualConicRobustEstimator(listener, lines);</span>
             case MSAC:
-<span class="fc" id="L483">                return new MSACDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L477">                return new MSACDualConicRobustEstimator(listener, lines);</span>
             case PROSAC:
-<span class="fc" id="L485">                return new PROSACDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L479">                return new PROSACDualConicRobustEstimator(listener, lines);</span>
             case PROMedS:
-<span class="fc" id="L487">                return new PROMedSDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L481">                return new PROMedSDualConicRobustEstimator(listener, lines);</span>
             case RANSAC:
             default:
-<span class="fc" id="L490">                return new RANSACDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L484">                return new RANSACDualConicRobustEstimator(listener, lines);</span>
         }
     }
     
@@ -502,19 +496,19 @@ public abstract class DualConicRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 5 lines).
      */
     public static DualConicRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L506" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L500" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L508">                return new LMedSDualConicRobustEstimator();</span>
+<span class="fc" id="L502">                return new LMedSDualConicRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L510">                return new MSACDualConicRobustEstimator();</span>
+<span class="fc" id="L504">                return new MSACDualConicRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L512">                return new PROSACDualConicRobustEstimator(qualityScores);</span>
+<span class="fc" id="L506">                return new PROSACDualConicRobustEstimator(qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L514">                return new PROMedSDualConicRobustEstimator(qualityScores);</span>
+<span class="fc" id="L508">                return new PROMedSDualConicRobustEstimator(qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L517">                return new RANSACDualConicRobustEstimator();</span>
+<span class="fc" id="L511">                return new RANSACDualConicRobustEstimator();</span>
         }
     }
     
@@ -531,22 +525,21 @@ public abstract class DualConicRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static DualConicRobustEstimator create(List&lt;Line2D&gt; lines, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L536" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L529" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L538">                return new LMedSDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L531">                return new LMedSDualConicRobustEstimator(lines);</span>
             case MSAC:
-<span class="fc" id="L540">                return new MSACDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L533">                return new MSACDualConicRobustEstimator(lines);</span>
             case PROSAC:
-<span class="fc" id="L542">                return new PROSACDualConicRobustEstimator(lines, </span>
+<span class="fc" id="L535">                return new PROSACDualConicRobustEstimator(lines, </span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L545">                return new PROMedSDualConicRobustEstimator(lines, </span>
+<span class="fc" id="L538">                return new PROMedSDualConicRobustEstimator(lines, </span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L549">                return new RANSACDualConicRobustEstimator(lines);</span>
+<span class="fc" id="L542">                return new RANSACDualConicRobustEstimator(lines);</span>
         }
     }
     
@@ -564,21 +557,21 @@ public abstract class DualConicRobustEstimator {
      */
     public static DualConicRobustEstimator create(
             DualConicRobustEstimatorListener listener, double[] qualityScores, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L568" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L561" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L570">                return new LMedSDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L563">                return new LMedSDualConicRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L572">                return new MSACDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L565">                return new MSACDualConicRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L574">                return new PROSACDualConicRobustEstimator(listener, </span>
+<span class="fc" id="L567">                return new PROSACDualConicRobustEstimator(listener, </span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L577">                return new PROMedSDualConicRobustEstimator(listener, </span>
+<span class="fc" id="L570">                return new PROMedSDualConicRobustEstimator(listener, </span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L581">                return new RANSACDualConicRobustEstimator(listener);</span>
+<span class="fc" id="L574">                return new RANSACDualConicRobustEstimator(listener);</span>
         }
     }
     
@@ -598,22 +591,21 @@ public abstract class DualConicRobustEstimator {
      */
     public static DualConicRobustEstimator create(
             DualConicRobustEstimatorListener listener, List&lt;Line2D&gt; lines,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L603" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L595" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L605">                return new LMedSDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L597">                return new LMedSDualConicRobustEstimator(listener, lines);</span>
             case MSAC:
-<span class="fc" id="L607">                return new MSACDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L599">                return new MSACDualConicRobustEstimator(listener, lines);</span>
             case PROSAC:
-<span class="fc" id="L609">                return new PROSACDualConicRobustEstimator(listener, lines, </span>
+<span class="fc" id="L601">                return new PROSACDualConicRobustEstimator(listener, lines, </span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L612">                return new PROMedSDualConicRobustEstimator(listener, lines, </span>
+<span class="fc" id="L604">                return new PROMedSDualConicRobustEstimator(listener, lines, </span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L616">                return new RANSACDualConicRobustEstimator(listener, lines);</span>
+<span class="fc" id="L608">                return new RANSACDualConicRobustEstimator(listener, lines);</span>
         }
     }
     
@@ -623,7 +615,7 @@ public abstract class DualConicRobustEstimator {
      * @return an instance of a dual conic robust estimator.
      */
     public static DualConicRobustEstimator create() {
-<span class="fc" id="L626">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L618">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -634,9 +626,8 @@ public abstract class DualConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines doesn't have a
      * size greater or equal than MINIMUM_SIZE.
      */
-    public static DualConicRobustEstimator create(List&lt;Line2D&gt; lines)
-            throws IllegalArgumentException {
-<span class="fc" id="L639">        return create(lines, DEFAULT_ROBUST_METHOD);        </span>
+    public static DualConicRobustEstimator create(List&lt;Line2D&gt; lines) {
+<span class="fc" id="L630">        return create(lines, DEFAULT_ROBUST_METHOD);        </span>
     }
     
     /**
@@ -648,7 +639,7 @@ public abstract class DualConicRobustEstimator {
      */
     public static DualConicRobustEstimator create(
             DualConicRobustEstimatorListener listener) {
-<span class="fc" id="L651">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L642">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -662,9 +653,8 @@ public abstract class DualConicRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public static DualConicRobustEstimator create(
-            DualConicRobustEstimatorListener listener, List&lt;Line2D&gt; lines)
-            throws IllegalArgumentException {
-<span class="fc" id="L667">        return create(listener, lines, DEFAULT_ROBUST_METHOD);</span>
+            DualConicRobustEstimatorListener listener, List&lt;Line2D&gt; lines) {
+<span class="fc" id="L657">        return create(listener, lines, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -675,9 +665,8 @@ public abstract class DualConicRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 5 lines).
      */
-    public static DualConicRobustEstimator create(double[] qualityScores)
-            throws IllegalArgumentException {
-<span class="fc" id="L680">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    public static DualConicRobustEstimator create(double[] qualityScores) {
+<span class="fc" id="L669">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -691,8 +680,8 @@ public abstract class DualConicRobustEstimator {
      * greater or equal than MINIMUM_SIZE.
      */
     public static DualConicRobustEstimator create(List&lt;Line2D&gt; lines,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L695">        return create(lines, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L684">        return create(lines, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -706,9 +695,8 @@ public abstract class DualConicRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 5 lines).
      */
     public static DualConicRobustEstimator create(
-            DualConicRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
-<span class="fc" id="L711">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            DualConicRobustEstimatorListener listener, double[] qualityScores) {
+<span class="fc" id="L699">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -725,8 +713,8 @@ public abstract class DualConicRobustEstimator {
      */
     public static DualConicRobustEstimator create(
             DualConicRobustEstimatorListener listener, List&lt;Line2D&gt; lines,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L729">        return create(listener, lines, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L717">        return create(listener, lines, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -757,13 +745,12 @@ public abstract class DualConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines doesn't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    private void internalSetLines(List&lt;Line2D&gt; lines)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L762" title="All 2 branches covered.">        if (lines.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L763">            throw new IllegalArgumentException();</span>
+    private void internalSetLines(List&lt;Line2D&gt; lines) {
+<span class="fc bfc" id="L749" title="All 2 branches covered.">        if (lines.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L750">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L765">        mLines = lines;</span>
-<span class="fc" id="L766">    }</span>
+<span class="fc" id="L752">        mLines = lines;</span>
+<span class="fc" id="L753">    }</span>
     
     /**
      * Computes the residual between a dual conic and a 2D line.
@@ -772,27 +759,27 @@ public abstract class DualConicRobustEstimator {
      * @return residual.
      */
     protected double residual(DualConic dc, Line2D line) {
-<span class="fc" id="L775">        dc.normalize();</span>
+<span class="fc" id="L762">        dc.normalize();</span>
         try {
-<span class="fc bfc" id="L777" title="All 2 branches covered.">            if (mTestDualC == null) {</span>
-<span class="fc" id="L778">                mTestDualC = dc.asMatrix();</span>
+<span class="fc bfc" id="L764" title="All 2 branches covered.">            if (mTestDualC == null) {</span>
+<span class="fc" id="L765">                mTestDualC = dc.asMatrix();</span>
             } else {
-<span class="fc" id="L780">                dc.asMatrix(mTestDualC);</span>
+<span class="fc" id="L767">                dc.asMatrix(mTestDualC);</span>
             }
             
-<span class="fc bfc" id="L783" title="All 2 branches covered.">            if (mTestLine == null) {</span>
-<span class="fc" id="L784">                mTestLine = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);</span>
+<span class="fc bfc" id="L770" title="All 2 branches covered.">            if (mTestLine == null) {</span>
+<span class="fc" id="L771">                mTestLine = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);</span>
             }
-<span class="fc" id="L786">            line.normalize();</span>
-<span class="fc" id="L787">            mTestLine.setElementAt(0, 0, line.getA());</span>
-<span class="fc" id="L788">            mTestLine.setElementAt(1, 0, line.getB());</span>
-<span class="fc" id="L789">            mTestLine.setElementAt(2, 0, line.getC());</span>
-<span class="fc" id="L790">            Matrix locusMatrix = mTestLine.transposeAndReturnNew();</span>
-<span class="fc" id="L791">            locusMatrix.multiply(mTestDualC);</span>
-<span class="fc" id="L792">            locusMatrix.multiply(mTestLine);</span>
-<span class="fc" id="L793">            return Math.abs(locusMatrix.getElementAt(0, 0));</span>
-<span class="nc" id="L794">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L795">            return Double.MAX_VALUE;</span>
+<span class="fc" id="L773">            line.normalize();</span>
+<span class="fc" id="L774">            mTestLine.setElementAt(0, 0, line.getA());</span>
+<span class="fc" id="L775">            mTestLine.setElementAt(1, 0, line.getB());</span>
+<span class="fc" id="L776">            mTestLine.setElementAt(2, 0, line.getC());</span>
+<span class="fc" id="L777">            Matrix locusMatrix = mTestLine.transposeAndReturnNew();</span>
+<span class="fc" id="L778">            locusMatrix.multiply(mTestDualC);</span>
+<span class="fc" id="L779">            locusMatrix.multiply(mTestLine);</span>
+<span class="fc" id="L780">            return Math.abs(locusMatrix.getElementAt(0, 0));</span>
+<span class="nc" id="L781">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L782">            return Double.MAX_VALUE;</span>
         }
     }
 }
