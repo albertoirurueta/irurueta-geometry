@@ -88,8 +88,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator{
      * @throws IllegalArgumentException if provided list of points doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPlaneRobustEstimator(List<Point3D> points) 
-            throws IllegalArgumentException {
+    public PROMedSPlaneRobustEstimator(List<Point3D> points) {
         super(points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -114,7 +113,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator{
      * a size greater or equal than MINIMUM_SIZE.
      */
     public PROMedSPlaneRobustEstimator(PlaneRobustEstimatorListener listener,
-            List<Point3D> points) throws IllegalArgumentException {
+            List<Point3D> points) {
         super(listener, points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -125,8 +124,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator{
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 3 points).
      */
-    public PROMedSPlaneRobustEstimator(double[] qualityScores) 
-            throws IllegalArgumentException {
+    public PROMedSPlaneRobustEstimator(double[] qualityScores) {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -141,8 +139,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator{
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSPlaneRobustEstimator(List<Point3D> points,
-            double[] qualityScores) 
-            throws IllegalArgumentException {
+            double[] qualityScores) {
         super(points);
         
         if (qualityScores.length != points.size()) {
@@ -162,7 +159,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator{
      * smaller than MINIMUM_SIZE (i.e. 3 points).
      */
     public PROMedSPlaneRobustEstimator(PlaneRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -180,8 +177,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator{
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSPlaneRobustEstimator(PlaneRobustEstimatorListener listener,
-            List<Point3D> points, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Point3D> points, double[] qualityScores) {
         super(listener, points);
         
         if (qualityScores.length != points.size()) {
@@ -235,8 +231,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -267,8 +262,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator{
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -423,8 +417,7 @@ public class PROMedSPlaneRobustEstimator extends PlaneRobustEstimator{
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

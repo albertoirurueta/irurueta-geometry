@@ -99,8 +99,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-            List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         super(inputPlanes, outputPlanes);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -133,8 +132,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     public PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener,
-            List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         super(listener, inputPlanes, outputPlanes);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;     
     }
@@ -147,7 +145,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -171,7 +169,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     public PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             List<Plane> inputPlanes, List<Plane> outputPlanes, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(inputPlanes, outputPlanes);
         
         if (qualityScores.length != inputPlanes.size()) {
@@ -193,7 +191,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     public PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -219,7 +217,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
     public PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener, inputPlanes, outputPlanes);
         
         if (qualityScores.length != inputPlanes.size()) {
@@ -273,8 +271,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -306,8 +303,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -525,8 +521,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

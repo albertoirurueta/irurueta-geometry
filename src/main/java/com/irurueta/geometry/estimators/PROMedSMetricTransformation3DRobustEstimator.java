@@ -171,7 +171,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */
     public PROMedSMetricTransformation3DRobustEstimator(
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(inputPoints, outputPoints);
 
         if (qualityScores.length != inputPoints.size()) {
@@ -193,7 +193,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */
     public PROMedSMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -219,7 +219,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
     public PROMedSMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener, inputPoints, outputPoints);
         
         if (qualityScores.length != inputPoints.size()) {
@@ -256,7 +256,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */
     public PROMedSMetricTransformation3DRobustEstimator(
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         super(inputPoints, outputPoints, weakMinimumSizeAllowed);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -293,7 +293,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
     public PROMedSMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -307,8 +307,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSMetricTransformation3DRobustEstimator(
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
         super(weakMinimumSizeAllowed);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -333,8 +332,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */
     public PROMedSMetricTransformation3DRobustEstimator(
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
         super(inputPoints, outputPoints, weakMinimumSizeAllowed);
 
         if (qualityScores.length != inputPoints.size()) {
@@ -357,8 +355,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */
     public PROMedSMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
         super(listener, weakMinimumSizeAllowed);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -385,8 +382,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
     public PROMedSMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
         super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
         
         if (qualityScores.length != inputPoints.size()) {
@@ -442,8 +438,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -475,8 +470,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -686,8 +680,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < getMinimumPoints()) {
             throw new IllegalArgumentException();
         }

@@ -96,8 +96,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * (6 correspondences).
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            List<Point3D> points3D, List<Point2D> points2D)
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(points3D, points2D);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -130,8 +129,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(listener, points3D, points2D);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -144,7 +142,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -166,7 +164,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             List<Point3D> points3D, List<Point2D> points2D,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(points3D, points2D);
 
         if (qualityScores.length != points3D.size()) {
@@ -188,7 +186,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -214,7 +212,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
             List<Point3D> points3D, List<Point2D> points2D,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener, points3D, points2D);
         
         if (qualityScores.length != points3D.size()) {
@@ -251,7 +249,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException {
+            List<Point2D> points2D) {
         super(intrinsic, points3D, points2D);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -288,7 +286,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D,
-            List<Point2D> points2D) throws IllegalArgumentException {
+            List<Point2D> points2D) {
         super(listener, intrinsic, points3D, points2D);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -302,8 +300,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            PinholeCameraIntrinsicParameters intrinsic, double[] qualityScores) 
-            throws IllegalArgumentException {
+            PinholeCameraIntrinsicParameters intrinsic, double[] qualityScores) {
         super(intrinsic);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -326,8 +323,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Point2D> points2D, double[] qualityScores) {
         super(intrinsic, points3D, points2D);
 
         if (qualityScores.length != points3D.size()) {
@@ -351,7 +347,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener, intrinsic);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -379,7 +375,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic,
             List<Point3D> points3D, List<Point2D> points2D,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener, intrinsic, points3D, points2D);
         
         if (qualityScores.length != points3D.size()) {
@@ -435,8 +431,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -468,8 +463,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 6 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -733,8 +727,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MIN_NUMBER_OF_POINT_CORRESPONDENCES) {
             throw new IllegalArgumentException();
         }
