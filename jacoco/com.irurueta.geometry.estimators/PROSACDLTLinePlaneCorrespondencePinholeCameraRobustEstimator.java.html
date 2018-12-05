@@ -110,13 +110,12 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * size or their size is smaller than required minimum size (4 matches).
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines) 
-            throws IllegalArgumentException {
-<span class="fc" id="L115">        super(planes, lines);</span>
-<span class="fc" id="L116">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L117">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L118">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L119">    }</span>
+            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines) {
+<span class="fc" id="L114">        super(planes, lines);</span>
+<span class="fc" id="L115">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L116">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L117">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L118">    }</span>
     
     /**
      * Constructor with listener.
@@ -125,11 +124,11 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener) {
-<span class="fc" id="L128">        super(listener);</span>
-<span class="fc" id="L129">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L130">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L131">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L132">    }</span>
+<span class="fc" id="L127">        super(listener);</span>
+<span class="fc" id="L128">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L129">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L130">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L131">    }</span>
     
     /**
      * Constructor with listener and lists of matched planes and 2D lines to
@@ -148,13 +147,12 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines)
-            throws IllegalArgumentException {
-<span class="fc" id="L153">        super(listener, planes, lines);</span>
-<span class="fc" id="L154">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L155">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L156">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L157">    }</span>
+            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines) {
+<span class="fc" id="L151">        super(listener, planes, lines);</span>
+<span class="fc" id="L152">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L153">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L154">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L155">    }</span>
     
     /**
      * Constructor.
@@ -164,13 +162,13 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * smaller than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES (i.e. 4 samples).
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L168">        super();        </span>
-<span class="fc" id="L169">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L170">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L171">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L172">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L173">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L166">        super();        </span>
+<span class="fc" id="L167">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L168">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L169">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L170">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L171">    }</span>
     
     /**
      * Constructor with lists of matched planes and 2D lines to estimate a 
@@ -189,19 +187,18 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * size (4 matches).
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines, double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L194">        super(planes, lines);</span>
+            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines, double[] qualityScores) {
+<span class="fc" id="L191">        super(planes, lines);</span>
         
-<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (qualityScores.length != planes.size()) {</span>
-<span class="fc" id="L197">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (qualityScores.length != planes.size()) {</span>
+<span class="fc" id="L194">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L200">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L201">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L202">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L203">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L204">    }</span>
+<span class="fc" id="L197">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L198">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L199">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L200">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L201">    }</span>
     
     /**
      * Constructor with listener.
@@ -214,13 +211,13 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L218">        super(listener);</span>
-<span class="fc" id="L219">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L220">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L221">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L222">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L223">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L215">        super(listener);</span>
+<span class="fc" id="L216">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L217">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L218">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L219">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L220">    }</span>
     
     /**
      * Constructor with listener and lists of matched planes and 2D lines to
@@ -241,19 +238,18 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines, double[] qualityScores)
-            throws IllegalArgumentException {
-<span class="fc" id="L246">        super(listener, planes, lines);</span>
+            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines, double[] qualityScores) {
+<span class="fc" id="L242">        super(listener, planes, lines);</span>
         
-<span class="fc bfc" id="L248" title="All 2 branches covered.">        if (qualityScores.length != planes.size()) {</span>
-<span class="fc" id="L249">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L244" title="All 2 branches covered.">        if (qualityScores.length != planes.size()) {</span>
+<span class="fc" id="L245">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L252">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L253">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L254">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L255">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L256">    }</span>
+<span class="fc" id="L248">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L249">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L250">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L251">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L252">    }</span>
     
     /**
      * Returns threshold to determine whether planes are inliers or not when 
@@ -273,7 +269,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * @return threshold to determine whether matched planes are inliers or not.
      */
     public double getThreshold() {
-<span class="fc" id="L276">        return mThreshold;</span>
+<span class="fc" id="L272">        return mThreshold;</span>
     }
     
     /**
@@ -298,16 +294,15 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L303" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L304">            throw new LockedException();</span>
+    public void setThreshold(double threshold) throws LockedException {
+<span class="fc bfc" id="L298" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L299">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L306" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L307">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L301" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L302">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L309">        mThreshold = threshold;</span>
-<span class="fc" id="L310">    }   </span>
+<span class="fc" id="L304">        mThreshold = threshold;</span>
+<span class="fc" id="L305">    }   </span>
     
     /**
      * Returns quality scores corresponding to each pair of matched points.
@@ -316,7 +311,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L319">        return mQualityScores;</span>
+<span class="fc" id="L314">        return mQualityScores;</span>
     }
     
     /**
@@ -332,11 +327,11 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
     @Override
     public void setQualityScores(double[] qualityScores) throws LockedException,
             IllegalArgumentException {
-<span class="fc bfc" id="L335" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L336">            throw new LockedException();</span>
+<span class="fc bfc" id="L330" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L331">            throw new LockedException();</span>
         }
-<span class="fc" id="L338">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L339">    }</span>
+<span class="fc" id="L333">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L334">    }</span>
         
     /**
      * Indicates if estimator is ready to start the affine 2D transformation
@@ -347,8 +342,8 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L350" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L351" title="1 of 2 branches missed.">                mQualityScores.length == mPlanes.size();</span>
+<span class="fc bfc" id="L345" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
+<span class="pc bpc" id="L346" title="1 of 2 branches missed.">                mQualityScores.length == mPlanes.size();</span>
     }    
     
     /**
@@ -357,7 +352,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-<span class="fc" id="L360">        return mComputeAndKeepInliers;</span>
+<span class="fc" id="L355">        return mComputeAndKeepInliers;</span>
     }
     
     /**
@@ -368,11 +363,11 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public void setComputeAndKeepInliersEnabled(boolean computeAndKeepInliers) 
             throws LockedException {
-<span class="pc bpc" id="L371" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L372">            throw new LockedException();</span>
+<span class="pc bpc" id="L366" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L367">            throw new LockedException();</span>
         }
-<span class="fc" id="L374">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
-<span class="fc" id="L375">    }</span>
+<span class="fc" id="L369">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L370">    }</span>
     
     /**
      * Indicates whether residuals must be computed and kept.
@@ -380,7 +375,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-<span class="fc" id="L383">        return mComputeAndKeepResiduals;</span>
+<span class="fc" id="L378">        return mComputeAndKeepResiduals;</span>
     }
     
     /**
@@ -391,11 +386,11 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public void setComputeAndKeepResidualsEnabled(
             boolean computeAndKeepResiduals) throws LockedException {
-<span class="pc bpc" id="L394" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L395">            throw new LockedException();</span>
+<span class="pc bpc" id="L389" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L390">            throw new LockedException();</span>
         }
-<span class="fc" id="L397">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
-<span class="fc" id="L398">    }    </span>
+<span class="fc" id="L392">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L393">    }    </span>
     
     /**
      * Estimates a pinhole camera using a robust estimator and
@@ -412,176 +407,176 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
     @Override
     public PinholeCamera estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-<span class="fc bfc" id="L415" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L416">            throw new LockedException();</span>
+<span class="fc bfc" id="L410" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L411">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L418" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L419">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L413" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L414">            throw new NotReadyException();</span>
         }
         
         //pinhole camera estimator using DLT (Direct Linear Transform) algorithm
-<span class="fc" id="L423">        final DLTLinePlaneCorrespondencePinholeCameraEstimator nonRobustEstimator =</span>
+<span class="fc" id="L418">        final DLTLinePlaneCorrespondencePinholeCameraEstimator nonRobustEstimator =</span>
                 new DLTLinePlaneCorrespondencePinholeCameraEstimator();
         
-<span class="fc" id="L426">        nonRobustEstimator.setLMSESolutionAllowed(false);</span>
+<span class="fc" id="L421">        nonRobustEstimator.setLMSESolutionAllowed(false);</span>
         
         //suggestions
-<span class="fc" id="L429">        nonRobustEstimator.setSuggestSkewnessValueEnabled(</span>
-<span class="fc" id="L430">                isSuggestSkewnessValueEnabled());</span>
-<span class="fc" id="L431">        nonRobustEstimator.setSuggestedSkewnessValue(</span>
-<span class="fc" id="L432">                getSuggestedSkewnessValue());</span>
-<span class="fc" id="L433">        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(</span>
-<span class="fc" id="L434">                isSuggestHorizontalFocalLengthEnabled());</span>
-<span class="fc" id="L435">        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(</span>
-<span class="fc" id="L436">                getSuggestedHorizontalFocalLengthValue());</span>
-<span class="fc" id="L437">        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(</span>
-<span class="fc" id="L438">                isSuggestVerticalFocalLengthEnabled());</span>
-<span class="fc" id="L439">        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(</span>
-<span class="fc" id="L440">                getSuggestedVerticalFocalLengthValue());</span>
-<span class="fc" id="L441">        nonRobustEstimator.setSuggestAspectRatioEnabled(</span>
-<span class="fc" id="L442">                isSuggestAspectRatioEnabled());</span>
-<span class="fc" id="L443">        nonRobustEstimator.setSuggestedAspectRatioValue(</span>
-<span class="fc" id="L444">                getSuggestedAspectRatioValue());</span>
-<span class="fc" id="L445">        nonRobustEstimator.setSuggestPrincipalPointEnabled(</span>
-<span class="fc" id="L446">                isSuggestPrincipalPointEnabled());</span>
-<span class="fc" id="L447">        nonRobustEstimator.setSuggestedPrincipalPointValue(</span>
-<span class="fc" id="L448">                getSuggestedPrincipalPointValue());</span>
-<span class="fc" id="L449">        nonRobustEstimator.setSuggestRotationEnabled(</span>
-<span class="fc" id="L450">                isSuggestRotationEnabled());</span>
-<span class="fc" id="L451">        nonRobustEstimator.setSuggestedRotationValue(</span>
-<span class="fc" id="L452">                getSuggestedRotationValue());</span>
-<span class="fc" id="L453">        nonRobustEstimator.setSuggestCenterEnabled(isSuggestCenterEnabled());</span>
-<span class="fc" id="L454">        nonRobustEstimator.setSuggestedCenterValue(getSuggestedCenterValue());</span>
+<span class="fc" id="L424">        nonRobustEstimator.setSuggestSkewnessValueEnabled(</span>
+<span class="fc" id="L425">                isSuggestSkewnessValueEnabled());</span>
+<span class="fc" id="L426">        nonRobustEstimator.setSuggestedSkewnessValue(</span>
+<span class="fc" id="L427">                getSuggestedSkewnessValue());</span>
+<span class="fc" id="L428">        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(</span>
+<span class="fc" id="L429">                isSuggestHorizontalFocalLengthEnabled());</span>
+<span class="fc" id="L430">        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(</span>
+<span class="fc" id="L431">                getSuggestedHorizontalFocalLengthValue());</span>
+<span class="fc" id="L432">        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(</span>
+<span class="fc" id="L433">                isSuggestVerticalFocalLengthEnabled());</span>
+<span class="fc" id="L434">        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(</span>
+<span class="fc" id="L435">                getSuggestedVerticalFocalLengthValue());</span>
+<span class="fc" id="L436">        nonRobustEstimator.setSuggestAspectRatioEnabled(</span>
+<span class="fc" id="L437">                isSuggestAspectRatioEnabled());</span>
+<span class="fc" id="L438">        nonRobustEstimator.setSuggestedAspectRatioValue(</span>
+<span class="fc" id="L439">                getSuggestedAspectRatioValue());</span>
+<span class="fc" id="L440">        nonRobustEstimator.setSuggestPrincipalPointEnabled(</span>
+<span class="fc" id="L441">                isSuggestPrincipalPointEnabled());</span>
+<span class="fc" id="L442">        nonRobustEstimator.setSuggestedPrincipalPointValue(</span>
+<span class="fc" id="L443">                getSuggestedPrincipalPointValue());</span>
+<span class="fc" id="L444">        nonRobustEstimator.setSuggestRotationEnabled(</span>
+<span class="fc" id="L445">                isSuggestRotationEnabled());</span>
+<span class="fc" id="L446">        nonRobustEstimator.setSuggestedRotationValue(</span>
+<span class="fc" id="L447">                getSuggestedRotationValue());</span>
+<span class="fc" id="L448">        nonRobustEstimator.setSuggestCenterEnabled(isSuggestCenterEnabled());</span>
+<span class="fc" id="L449">        nonRobustEstimator.setSuggestedCenterValue(getSuggestedCenterValue());</span>
         
-<span class="fc" id="L456">        PROSACRobustEstimator&lt;PinholeCamera&gt; innerEstimator =</span>
+<span class="fc" id="L451">        PROSACRobustEstimator&lt;PinholeCamera&gt; innerEstimator =</span>
                 new PROSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L458">                new PROSACRobustEstimatorListener&lt;PinholeCamera&gt;() {</span>
+<span class="fc" id="L453">                new PROSACRobustEstimatorListener&lt;PinholeCamera&gt;() {</span>
 
             //3D planes for a subset of samples
-<span class="fc" id="L461">            private List&lt;Plane&gt; mSubsetPlanes = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L456">            private List&lt;Plane&gt; mSubsetPlanes = new ArrayList&lt;&gt;();</span>
             
             //2D lines for a subset of samples
-<span class="fc" id="L464">            private List&lt;Line2D&gt; mSubsetLines = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L459">            private List&lt;Line2D&gt; mSubsetLines = new ArrayList&lt;&gt;();</span>
                     
             @Override
             public double getThreshold() {
-<span class="fc" id="L468">                return mThreshold;</span>
+<span class="fc" id="L463">                return mThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L473">                return mPlanes.size();</span>
+<span class="fc" id="L468">                return mPlanes.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L478">                return LinePlaneCorrespondencePinholeCameraEstimator.</span>
+<span class="fc" id="L473">                return LinePlaneCorrespondencePinholeCameraEstimator.</span>
                         MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;PinholeCamera&gt; solutions) {
-<span class="fc" id="L485">                mSubsetPlanes.clear();</span>
-<span class="fc" id="L486">                mSubsetPlanes.add(mPlanes.get(samplesIndices[0]));</span>
-<span class="fc" id="L487">                mSubsetPlanes.add(mPlanes.get(samplesIndices[1]));</span>
-<span class="fc" id="L488">                mSubsetPlanes.add(mPlanes.get(samplesIndices[2]));</span>
-<span class="fc" id="L489">                mSubsetPlanes.add(mPlanes.get(samplesIndices[3]));</span>
+<span class="fc" id="L480">                mSubsetPlanes.clear();</span>
+<span class="fc" id="L481">                mSubsetPlanes.add(mPlanes.get(samplesIndices[0]));</span>
+<span class="fc" id="L482">                mSubsetPlanes.add(mPlanes.get(samplesIndices[1]));</span>
+<span class="fc" id="L483">                mSubsetPlanes.add(mPlanes.get(samplesIndices[2]));</span>
+<span class="fc" id="L484">                mSubsetPlanes.add(mPlanes.get(samplesIndices[3]));</span>
                 
-<span class="fc" id="L491">                mSubsetLines.clear();</span>
-<span class="fc" id="L492">                mSubsetLines.add(mLines.get(samplesIndices[0]));</span>
-<span class="fc" id="L493">                mSubsetLines.add(mLines.get(samplesIndices[1]));</span>
-<span class="fc" id="L494">                mSubsetLines.add(mLines.get(samplesIndices[2]));</span>
-<span class="fc" id="L495">                mSubsetLines.add(mLines.get(samplesIndices[3]));</span>
+<span class="fc" id="L486">                mSubsetLines.clear();</span>
+<span class="fc" id="L487">                mSubsetLines.add(mLines.get(samplesIndices[0]));</span>
+<span class="fc" id="L488">                mSubsetLines.add(mLines.get(samplesIndices[1]));</span>
+<span class="fc" id="L489">                mSubsetLines.add(mLines.get(samplesIndices[2]));</span>
+<span class="fc" id="L490">                mSubsetLines.add(mLines.get(samplesIndices[3]));</span>
                 
                 try {
-<span class="fc" id="L498">                    nonRobustEstimator.setLists(mSubsetPlanes, mSubsetLines);</span>
+<span class="fc" id="L493">                    nonRobustEstimator.setLists(mSubsetPlanes, mSubsetLines);</span>
                                         
-<span class="fc" id="L500">                    PinholeCamera cam = nonRobustEstimator.estimate();</span>
-<span class="fc" id="L501">                    solutions.add(cam);</span>
-<span class="nc" id="L502">                } catch (Exception e) {</span>
+<span class="fc" id="L495">                    PinholeCamera cam = nonRobustEstimator.estimate();</span>
+<span class="fc" id="L496">                    solutions.add(cam);</span>
+<span class="nc" id="L497">                } catch (Exception e) {</span>
                     //if lines/planes configuration is degenerate, no solution 
                     //is added
-<span class="fc" id="L505">                }</span>
-<span class="fc" id="L506">            }</span>
+<span class="fc" id="L500">                }</span>
+<span class="fc" id="L501">            }</span>
 
             @Override
             public double computeResidual(PinholeCamera currentEstimation, 
                     int i) {
-<span class="fc" id="L511">                Line2D inputLine = mLines.get(i);</span>
-<span class="fc" id="L512">                Plane inputPlane = mPlanes.get(i);</span>
+<span class="fc" id="L506">                Line2D inputLine = mLines.get(i);</span>
+<span class="fc" id="L507">                Plane inputPlane = mPlanes.get(i);</span>
                 
-<span class="fc" id="L514">                return singleBackprojectionResidual(currentEstimation, </span>
+<span class="fc" id="L509">                return singleBackprojectionResidual(currentEstimation, </span>
                         inputLine, inputPlane);
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L520">                return PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.</span>
-<span class="fc" id="L521">                        this.isReady();</span>
+<span class="fc" id="L515">                return PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.</span>
+<span class="fc" id="L516">                        this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(
                     RobustEstimator&lt;PinholeCamera&gt; estimator) {
-<span class="pc bpc" id="L527" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L528">                    mListener.onEstimateStart(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);</span>
+<span class="pc bpc" id="L522" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L523">                    mListener.onEstimateStart(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);</span>
                 }
-<span class="fc" id="L530">            }</span>
+<span class="fc" id="L525">            }</span>
 
             @Override
             public void onEstimateEnd(
                     RobustEstimator&lt;PinholeCamera&gt; estimator) {
-<span class="pc bpc" id="L535" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L536">                    mListener.onEstimateEnd(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);</span>
+<span class="pc bpc" id="L530" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L531">                    mListener.onEstimateEnd(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);</span>
                 }
-<span class="fc" id="L538">            }</span>
+<span class="fc" id="L533">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;PinholeCamera&gt; estimator, int iteration) {
-<span class="pc bpc" id="L543" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L544">                    mListener.onEstimateNextIteration(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this, </span>
+<span class="pc bpc" id="L538" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L539">                    mListener.onEstimateNextIteration(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this, </span>
                             iteration);
                 }
-<span class="fc" id="L547">            }</span>
+<span class="fc" id="L542">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;PinholeCamera&gt; estimator, float progress) {
-<span class="pc bpc" id="L552" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L553">                    mListener.onEstimateProgressChange(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this, </span>
+<span class="nc bnc" id="L547" title="All 2 branches missed.">                if (mListener != null) {</span>
+<span class="nc" id="L548">                    mListener.onEstimateProgressChange(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this, </span>
                             progress);
                 }
-<span class="fc" id="L556">            }</span>
+<span class="nc" id="L551">            }</span>
             
             @Override
             public double[] getQualityScores() {
-<span class="fc" id="L560">                return mQualityScores;</span>
+<span class="fc" id="L555">                return mQualityScores;</span>
             }            
         });
         
         try {
-<span class="fc" id="L565">            mLocked = true;</span>
-<span class="fc" id="L566">            mInliersData = null;</span>
-<span class="pc bpc" id="L567" title="3 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
+<span class="fc" id="L560">            mLocked = true;</span>
+<span class="fc" id="L561">            mInliersData = null;</span>
+<span class="pc bpc" id="L562" title="3 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
                     mComputeAndKeepInliers || mRefineResult);
-<span class="pc bpc" id="L569" title="3 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
+<span class="pc bpc" id="L564" title="3 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
                     mComputeAndKeepResiduals || mRefineResult);            
-<span class="fc" id="L571">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L572">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L573">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L574">            PinholeCamera result = innerEstimator.estimate();</span>
-<span class="fc" id="L575">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L576">            return attemptRefine(result, </span>
-<span class="fc" id="L577">                    nonRobustEstimator.getMaxSuggestionWeight());</span>
+<span class="fc" id="L566">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L567">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L568">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L569">            PinholeCamera result = innerEstimator.estimate();</span>
+<span class="fc" id="L570">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L571">            return attemptRefine(result, </span>
+<span class="fc" id="L572">                    nonRobustEstimator.getMaxSuggestionWeight());</span>
 
-<span class="nc" id="L579">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L580">            throw new LockedException(e);</span>
-<span class="nc" id="L581">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L582">            throw new NotReadyException(e);</span>
+<span class="nc" id="L574">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L575">            throw new LockedException(e);</span>
+<span class="nc" id="L576">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L577">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L584">            mLocked = false;</span>
+<span class="fc" id="L579">            mLocked = false;</span>
         }        
     }
 
@@ -591,7 +586,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L594">        return RobustEstimatorMethod.PROSAC;</span>
+<span class="fc" id="L589">        return RobustEstimatorMethod.PROSAC;</span>
     }    
     
     /**
@@ -606,7 +601,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L609">        return mThreshold;</span>
+<span class="fc" id="L604">        return mThreshold;</span>
     }
     
     /**
@@ -619,11 +614,11 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     private void internalSetQualityScores(double[] qualityScores) 
             throws IllegalArgumentException {
-<span class="fc bfc" id="L622" title="All 2 branches covered.">        if (qualityScores.length &lt; MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES) {</span>
-<span class="fc" id="L623">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L617" title="All 2 branches covered.">        if (qualityScores.length &lt; MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES) {</span>
+<span class="fc" id="L618">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L626">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L627">    }            </span>
+<span class="fc" id="L621">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L622">    }            </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

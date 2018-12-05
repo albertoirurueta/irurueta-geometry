@@ -325,7 +325,7 @@
 <a class="jxr_linenumber" name="L317" href="#L317">317</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testRefine() <strong class="jxr_keyword">throws</strong> LockedException, NotReadyException,
 <a class="jxr_linenumber" name="L318" href="#L318">318</a>             RobustEstimatorException, RefinerException {
 <a class="jxr_linenumber" name="L319" href="#L319">319</a>         <strong class="jxr_keyword">int</strong> numValid = 0;
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> t = 0; t &lt; 5*TIMES; t++) {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> t = 0; t &lt; 10*TIMES; t++) {
 <a class="jxr_linenumber" name="L321" href="#L321">321</a>             RANSACPoint2DRobustEstimator estimator = createRobustEstimator();
 <a class="jxr_linenumber" name="L322" href="#L322">322</a>             
 <a class="jxr_linenumber" name="L323" href="#L323">323</a>             HomogeneousPoint2D point = <strong class="jxr_keyword">new</strong> HomogeneousPoint2D(

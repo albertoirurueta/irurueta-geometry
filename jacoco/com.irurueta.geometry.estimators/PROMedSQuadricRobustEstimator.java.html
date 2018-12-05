@@ -89,11 +89,10 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSQuadricRobustEstimator(List&lt;Point3D&gt; points) 
-            throws IllegalArgumentException {
-<span class="fc" id="L94">        super(points);</span>
-<span class="fc" id="L95">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L96">    }</span>
+    public PROMedSQuadricRobustEstimator(List&lt;Point3D&gt; points) {
+<span class="fc" id="L93">        super(points);</span>
+<span class="fc" id="L94">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L95">    }</span>
     
     /**
      * Constructor.
@@ -102,9 +101,9 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      */
     public PROMedSQuadricRobustEstimator(
             QuadricRobustEstimatorListener listener) {
-<span class="fc" id="L105">        super(listener);</span>
-<span class="fc" id="L106">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L107">    }</span>
+<span class="fc" id="L104">        super(listener);</span>
+<span class="fc" id="L105">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L106">    }</span>
     
     
     /**
@@ -117,10 +116,10 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      */
     public PROMedSQuadricRobustEstimator(
             QuadricRobustEstimatorListener listener,
-            List&lt;Point3D&gt; points) throws IllegalArgumentException {
-<span class="fc" id="L121">        super(listener, points);</span>
-<span class="fc" id="L122">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L123">    }</span>
+            List&lt;Point3D&gt; points) {
+<span class="fc" id="L120">        super(listener, points);</span>
+<span class="fc" id="L121">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L122">    }</span>
     
     /**
      * Constructor.
@@ -128,12 +127,11 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 5 points).
      */
-    public PROMedSQuadricRobustEstimator(double[] qualityScores)
-            throws IllegalArgumentException {
-<span class="fc" id="L133">        super();</span>
-<span class="fc" id="L134">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L135">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L136">    }</span>
+    public PROMedSQuadricRobustEstimator(double[] qualityScores) {
+<span class="fc" id="L131">        super();</span>
+<span class="fc" id="L132">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L133">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L134">    }</span>
 
     /**
      * Constructor with points.
@@ -144,16 +142,16 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSQuadricRobustEstimator(List&lt;Point3D&gt; points,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L148">        super(points);</span>
+            double[] qualityScores) {
+<span class="fc" id="L146">        super(points);</span>
         
-<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
-<span class="fc" id="L151">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
+<span class="fc" id="L149">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L154">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L155">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L156">    }</span>
+<span class="fc" id="L152">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L153">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L154">    }</span>
     
     /**
      * Constructor.
@@ -165,11 +163,11 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      */
     public PROMedSQuadricRobustEstimator(
             QuadricRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException{
-<span class="fc" id="L169">        super(listener);</span>
-<span class="fc" id="L170">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L171">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L172">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L167">        super(listener);</span>
+<span class="fc" id="L168">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L169">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L170">    }</span>
     
     
     /**
@@ -184,16 +182,16 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      */
     public PROMedSQuadricRobustEstimator(
             QuadricRobustEstimatorListener listener, List&lt;Point3D&gt; points, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L188">        super(listener, points);</span>
+            double[] qualityScores) {
+<span class="fc" id="L186">        super(listener, points);</span>
         
-<span class="fc bfc" id="L190" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
-<span class="fc" id="L191">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
+<span class="fc" id="L189">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L194">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L195">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L196">    }</span>
+<span class="fc" id="L192">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L193">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L194">    }</span>
     
     /**
      * Returns threshold to be used to keep the algorithm iterating in case that 
@@ -215,7 +213,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-<span class="fc" id="L218">        return mStopThreshold;</span>
+<span class="fc" id="L216">        return mStopThreshold;</span>
     }
     
     /**
@@ -240,17 +238,16 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L245" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L246">            throw new LockedException();</span>
+    public void setStopThreshold(double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L242" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L243">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L248" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
-<span class="fc" id="L249">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L245" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L246">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L252">        mStopThreshold = stopThreshold;</span>
-<span class="fc" id="L253">    }</span>
+<span class="fc" id="L249">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L250">    }</span>
     
     /**
      * Returns quality scores corresponding to each provided point.
@@ -259,7 +256,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L262">        return mQualityScores;</span>
+<span class="fc" id="L259">        return mQualityScores;</span>
     }
     
     /**
@@ -272,13 +269,12 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 5 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
-<span class="pc bpc" id="L277" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L278">            throw new LockedException();</span>
+    public void setQualityScores(double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L273" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L274">            throw new LockedException();</span>
         }
-<span class="fc" id="L280">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L281">    }</span>
+<span class="fc" id="L276">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L277">    }</span>
     
     /**
      * Indicates if eatimator is ready to start the quadric estimation.
@@ -288,8 +284,8 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L291" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L292" title="1 of 2 branches missed.">                mQualityScores.length == mPoints.size();</span>
+<span class="fc bfc" id="L287" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
+<span class="pc bpc" id="L288" title="1 of 2 branches missed.">                mQualityScores.length == mPoints.size();</span>
     }    
     
     /**
@@ -307,114 +303,114 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
     @Override
     public Quadric estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-<span class="fc bfc" id="L310" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L311">            throw new LockedException();</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L307">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L313" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L314">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L309" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L310">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L317">        PROMedSRobustEstimator&lt;Quadric&gt; innerEstimator =</span>
+<span class="fc" id="L313">        PROMedSRobustEstimator&lt;Quadric&gt; innerEstimator =</span>
                 new PROMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L319">                        new PROMedSRobustEstimatorListener&lt;Quadric&gt;() {</span>
+<span class="fc" id="L315">                        new PROMedSRobustEstimatorListener&lt;Quadric&gt;() {</span>
 
             @Override
             public double getThreshold() {
-<span class="fc" id="L323">                return mStopThreshold;</span>
+<span class="fc" id="L319">                return mStopThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L328">                return mPoints.size();</span>
+<span class="fc" id="L324">                return mPoints.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L333">                return QuadricRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L329">                return QuadricRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;Quadric&gt; solutions) {
-<span class="fc" id="L339">                Point3D point1 = mPoints.get(samplesIndices[0]);</span>
-<span class="fc" id="L340">                Point3D point2 = mPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L341">                Point3D point3 = mPoints.get(samplesIndices[2]);</span>
-<span class="fc" id="L342">                Point3D point4 = mPoints.get(samplesIndices[3]);</span>
-<span class="fc" id="L343">                Point3D point5 = mPoints.get(samplesIndices[4]);</span>
-<span class="fc" id="L344">                Point3D point6 = mPoints.get(samplesIndices[5]);</span>
-<span class="fc" id="L345">                Point3D point7 = mPoints.get(samplesIndices[6]);</span>
-<span class="fc" id="L346">                Point3D point8 = mPoints.get(samplesIndices[7]);</span>
-<span class="fc" id="L347">                Point3D point9 = mPoints.get(samplesIndices[8]);</span>
+<span class="fc" id="L335">                Point3D point1 = mPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L336">                Point3D point2 = mPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L337">                Point3D point3 = mPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L338">                Point3D point4 = mPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L339">                Point3D point5 = mPoints.get(samplesIndices[4]);</span>
+<span class="fc" id="L340">                Point3D point6 = mPoints.get(samplesIndices[5]);</span>
+<span class="fc" id="L341">                Point3D point7 = mPoints.get(samplesIndices[6]);</span>
+<span class="fc" id="L342">                Point3D point8 = mPoints.get(samplesIndices[7]);</span>
+<span class="fc" id="L343">                Point3D point9 = mPoints.get(samplesIndices[8]);</span>
                 
                 try {
-<span class="fc" id="L350">                    Quadric quadric = new Quadric(point1, point2, point3, </span>
+<span class="fc" id="L346">                    Quadric quadric = new Quadric(point1, point2, point3, </span>
                             point4, point5, point6, point7, point8, point9);
-<span class="fc" id="L352">                    solutions.add(quadric);</span>
-<span class="fc" id="L353">                } catch (CoincidentPointsException e) {</span>
+<span class="fc" id="L348">                    solutions.add(quadric);</span>
+<span class="fc" id="L349">                } catch (CoincidentPointsException e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L355">                }            }</span>
+<span class="fc" id="L351">                }            }</span>
 
             @Override
             public double computeResidual(Quadric currentEstimation, int i) {
-<span class="fc" id="L359">                return residual(currentEstimation, mPoints.get(i));</span>
+<span class="fc" id="L355">                return residual(currentEstimation, mPoints.get(i));</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L364">                return PROMedSQuadricRobustEstimator.this.isReady();</span>
+<span class="fc" id="L360">                return PROMedSQuadricRobustEstimator.this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(RobustEstimator&lt;Quadric&gt; estimator) {
-<span class="pc bpc" id="L369" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L370">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L365" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L366">                    mListener.onEstimateStart(</span>
                             PROMedSQuadricRobustEstimator.this);
                 }
-<span class="fc" id="L373">            }</span>
+<span class="fc" id="L369">            }</span>
 
             @Override
             public void onEstimateEnd(RobustEstimator&lt;Quadric&gt; estimator) {
-<span class="pc bpc" id="L377" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L378">                    mListener.onEstimateEnd(PROMedSQuadricRobustEstimator.this);</span>
+<span class="pc bpc" id="L373" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L374">                    mListener.onEstimateEnd(PROMedSQuadricRobustEstimator.this);</span>
                 }
-<span class="fc" id="L380">            }</span>
+<span class="fc" id="L376">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;Quadric&gt; estimator, int iteration) {
-<span class="pc bpc" id="L385" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L386">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L381" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L382">                    mListener.onEstimateNextIteration(</span>
                             PROMedSQuadricRobustEstimator.this, iteration);
                 }
-<span class="fc" id="L389">            }</span>
+<span class="fc" id="L385">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;Quadric&gt; estimator, float progress) {
-<span class="pc bpc" id="L394" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L395">                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L390" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L391">                    mListener.onEstimateProgressChange(</span>
                             PROMedSQuadricRobustEstimator.this, progress);
                 }
-<span class="fc" id="L398">            }</span>
+<span class="fc" id="L394">            }</span>
             
             @Override
             public double[] getQualityScores() {
-<span class="fc" id="L402">                return mQualityScores;</span>
+<span class="fc" id="L398">                return mQualityScores;</span>
             }            
         });
         
         try {
-<span class="fc" id="L407">            mLocked = true;</span>
-<span class="fc" id="L408">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L409">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L410">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L411">            return innerEstimator.estimate();</span>
-<span class="nc" id="L412">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L413">            throw new LockedException(e);</span>
-<span class="nc" id="L414">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L415">            throw new NotReadyException(e);</span>
+<span class="fc" id="L403">            mLocked = true;</span>
+<span class="fc" id="L404">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L405">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L406">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L407">            return innerEstimator.estimate();</span>
+<span class="nc" id="L408">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L409">            throw new LockedException(e);</span>
+<span class="nc" id="L410">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L411">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L417">            mLocked = false;</span>
+<span class="fc" id="L413">            mLocked = false;</span>
         }
     }
 
@@ -424,7 +420,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L427">        return RobustEstimatorMethod.PROMedS;</span>
+<span class="fc" id="L423">        return RobustEstimatorMethod.PROMedS;</span>
     }     
     
     /**
@@ -435,13 +431,12 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L440" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L441">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(double[] qualityScores) {
+<span class="fc bfc" id="L435" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L436">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L444">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L445">    }             </span>
+<span class="fc" id="L439">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L440">    }             </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

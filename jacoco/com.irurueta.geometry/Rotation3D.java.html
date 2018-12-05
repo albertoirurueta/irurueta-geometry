@@ -584,8 +584,8 @@ public abstract class Rotation3D {
 <span class="fc" id="L584">            double sumZ = thisAxis[2] + otherAxis[2];</span>
 <span class="fc" id="L585">            double sqrNormSum = sumX * sumX + sumY * sumY + sumZ * sumZ;</span>
             
-<span class="pc bpc" id="L587" title="1 of 2 branches missed.">            if (sqrNormSum &gt; threshold) {</span>
-<span class="nc" id="L588">                return false; //axes are not equal</span>
+<span class="fc bfc" id="L587" title="All 2 branches covered.">            if (sqrNormSum &gt; threshold) {</span>
+<span class="fc" id="L588">                return false; //axes are not equal</span>
             }
             
             //compare sum of angles (because rotation angle is also reversed)
