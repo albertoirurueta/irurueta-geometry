@@ -76,11 +76,10 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LineCorrespondenceAffineTransformation2DRobustEstimator(
-            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) 
-            throws IllegalArgumentException {
-<span class="fc" id="L81">        super();</span>
-<span class="fc" id="L82">        internalSetLines(inputLines, outputLines);</span>
-<span class="fc" id="L83">    }</span>
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L80">        super();</span>
+<span class="fc" id="L81">        internalSetLines(inputLines, outputLines);</span>
+<span class="fc" id="L82">    }</span>
     
     /**
      * Constructor.
@@ -89,8 +88,8 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public LineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener) {
-<span class="fc" id="L92">        super(listener);</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L91">        super(listener);</span>
+<span class="fc" id="L92">    }</span>
     
     /**
      * Constructor with listener and lists of lines to be used to estimate
@@ -109,11 +108,10 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public LineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
-            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines)
-            throws IllegalArgumentException {
-<span class="fc" id="L114">        super(listener);</span>
-<span class="fc" id="L115">        internalSetLines(inputLines, outputLines);</span>
-<span class="fc" id="L116">    }</span>
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L112">        super(listener);</span>
+<span class="fc" id="L113">        internalSetLines(inputLines, outputLines);</span>
+<span class="fc" id="L114">    }</span>
     
     /**
      * Returns list of input lines to be used to estimate an affine 2D
@@ -126,7 +124,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * transformation.
      */
     public List&lt;Line2D&gt; getInputLines() {
-<span class="fc" id="L129">        return mInputLines;</span>
+<span class="fc" id="L127">        return mInputLines;</span>
     }
     
     /**
@@ -140,7 +138,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * transformation.
      */
     public List&lt;Line2D&gt; getOutputLines() {
-<span class="fc" id="L143">        return mOutputLines;</span>
+<span class="fc" id="L141">        return mOutputLines;</span>
     }
     
     /**
@@ -158,13 +156,12 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * already in progress.
      */
     public final void setLines(List&lt;Line2D&gt; inputLines, 
-            List&lt;Line2D&gt; outputLines) throws IllegalArgumentException,
-            LockedException {
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L164">            throw new LockedException();</span>
+            List&lt;Line2D&gt; outputLines) throws LockedException {
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L161">            throw new LockedException();</span>
         }
-<span class="fc" id="L166">        internalSetLines(inputLines, outputLines);</span>
-<span class="fc" id="L167">    }</span>
+<span class="fc" id="L163">        internalSetLines(inputLines, outputLines);</span>
+<span class="fc" id="L164">    }</span>
     
     /**
      * Indicates if estimator is ready to start the affine 2D transformation
@@ -174,9 +171,9 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L177" title="1 of 4 branches missed.">        return mInputLines != null &amp;&amp; mOutputLines != null &amp;&amp;</span>
-<span class="pc bpc" id="L178" title="1 of 2 branches missed.">                mInputLines.size() == mOutputLines.size() &amp;&amp;</span>
-<span class="pc bpc" id="L179" title="1 of 2 branches missed.">                mInputLines.size() &gt;= MINIMUM_SIZE;</span>
+<span class="pc bpc" id="L174" title="1 of 4 branches missed.">        return mInputLines != null &amp;&amp; mOutputLines != null &amp;&amp;</span>
+<span class="pc bpc" id="L175" title="1 of 2 branches missed.">                mInputLines.size() == mOutputLines.size() &amp;&amp;</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">                mInputLines.size() &gt;= MINIMUM_SIZE;</span>
     }
     
     /**
@@ -187,7 +184,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * @return quality scores corresponding to each pair of matched points.
      */
     public double[] getQualityScores() {
-<span class="nc" id="L190">        return null;</span>
+<span class="nc" id="L187">        return null;</span>
     }    
     
     /**
@@ -202,8 +199,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * @throws IllegalArgumentException if provided quality scores length is 
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="nc" id="L206">            IllegalArgumentException { }</span>
+<span class="nc" id="L202">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
     
     /**
      * Creates an affine 2D transformation estimator based on 2D line
@@ -214,18 +210,18 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(RobustEstimatorMethod method) {
-<span class="fc bfc" id="L217" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L213" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L219">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
+<span class="fc" id="L215">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L221">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
+<span class="fc" id="L217">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L223">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
+<span class="fc" id="L219">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L225">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
+<span class="fc" id="L221">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L228">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
+<span class="fc" id="L224">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
         }
     }
             
@@ -244,23 +240,23 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L248" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L244" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L250">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L246">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         inputLines, outputLines);
             case MSAC:
-<span class="fc" id="L253">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L249">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         inputLines, outputLines);
             case PROSAC:
-<span class="fc" id="L256">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L252">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         inputLines, outputLines);
             case PROMedS:
-<span class="fc" id="L259">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L255">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         inputLines, outputLines);
             case RANSAC:
             default:
-<span class="fc" id="L263">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L259">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         inputLines, outputLines);
         }
     }
@@ -277,22 +273,22 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L280" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L276" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L282">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L278">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L285">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L281">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L288">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L284">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener);
             case PROMedS:
-<span class="fc" id="L291">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L287">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener);
             case RANSAC:
             default:
-<span class="fc" id="L295">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L291">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener);
         }
     }
@@ -315,23 +311,23 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L319" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L315" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L321">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L317">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener, inputLines, outputLines);
             case MSAC:
-<span class="fc" id="L324">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L320">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener, inputLines, outputLines);
             case PROSAC:
-<span class="fc" id="L327">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L323">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener, inputLines, outputLines);
             case PROMedS:
-<span class="fc" id="L330">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L326">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener, inputLines, outputLines);
             case RANSAC:
             default:
-<span class="fc" id="L334">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L330">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener, inputLines, outputLines);
         }
     }
@@ -347,20 +343,20 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L350" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L346" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L352">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
+<span class="fc" id="L348">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L354">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
+<span class="fc" id="L350">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L356">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L352">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L359">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L355">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L363">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
+<span class="fc" id="L359">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator();</span>
         }
     }
             
@@ -381,24 +377,23 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L386" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L381" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L388">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L383">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         inputLines, outputLines);
             case MSAC:
-<span class="fc" id="L391">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L386">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         inputLines, outputLines);
             case PROSAC:
-<span class="fc" id="L394">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L389">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         inputLines, outputLines, qualityScores);
             case PROMedS:
-<span class="fc" id="L397">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L392">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         inputLines, outputLines, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L401">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L396">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         inputLines, outputLines);
         }
     }
@@ -417,22 +412,22 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
             double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L420" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L415" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L422">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L417">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L425">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L420">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L428">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L423">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener, qualityScores);
             case PROMedS:
-<span class="fc" id="L431">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L426">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L435">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L430">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener);
         }
     }
@@ -457,24 +452,23 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L462" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L456" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L464">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L458">                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener, inputLines, outputLines);
             case MSAC:
-<span class="fc" id="L467">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L461">                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener, inputLines, outputLines);
             case PROSAC:
-<span class="fc" id="L470">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L464">                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener, inputLines, outputLines, qualityScores);
             case PROMedS:
-<span class="fc" id="L473">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L467">                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener, inputLines, outputLines, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L477">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
+<span class="fc" id="L471">                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(</span>
                         listener, inputLines, outputLines);
         }
     }
@@ -486,7 +480,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create() {
-<span class="fc" id="L489">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L483">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -501,9 +495,8 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
-            create(List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines)
-            throws IllegalArgumentException {
-<span class="fc" id="L506">        return create(inputLines, outputLines, DEFAULT_ROBUST_METHOD);</span>
+            create(List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L499">        return create(inputLines, outputLines, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -515,7 +508,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener) {
-<span class="fc" id="L518">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L511">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -533,9 +526,8 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
-            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines)
-            throws IllegalArgumentException {
-<span class="fc" id="L538">        return create(listener, inputLines, outputLines, </span>
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L530">        return create(listener, inputLines, outputLines, </span>
                 DEFAULT_ROBUST_METHOD);
     }
             
@@ -548,7 +540,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(double[] qualityScores) {
-<span class="fc" id="L551">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L543">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -566,8 +558,8 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L570">        return create(inputLines, outputLines, qualityScores, </span>
+            double[] qualityScores) {
+<span class="fc" id="L562">        return create(inputLines, outputLines, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }
             
@@ -583,7 +575,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
             double[] qualityScores) {
-<span class="fc" id="L586">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L578">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -604,8 +596,8 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
     public static LineCorrespondenceAffineTransformation2DRobustEstimator
             create(AffineTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L608">        return create(listener, inputLines, outputLines, qualityScores,</span>
+            double[] qualityScores) {
+<span class="fc" id="L600">        return create(listener, inputLines, outputLines, qualityScores,</span>
                 DEFAULT_ROBUST_METHOD);
     }
             
@@ -621,16 +613,16 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetLines(List&lt;Line2D&gt; inputLines, 
-            List&lt;Line2D&gt; outputLines) throws IllegalArgumentException {
-<span class="fc bfc" id="L625" title="All 2 branches covered.">        if (inputLines.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L626">            throw new IllegalArgumentException();</span>
+            List&lt;Line2D&gt; outputLines) {
+<span class="fc bfc" id="L617" title="All 2 branches covered.">        if (inputLines.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L618">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L628" title="All 2 branches covered.">        if (inputLines.size() != outputLines.size()) {</span>
-<span class="fc" id="L629">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L620" title="All 2 branches covered.">        if (inputLines.size() != outputLines.size()) {</span>
+<span class="fc" id="L621">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L631">        mInputLines = inputLines;</span>
-<span class="fc" id="L632">        mOutputLines = outputLines;</span>
-<span class="fc" id="L633">    }</span>
+<span class="fc" id="L623">        mInputLines = inputLines;</span>
+<span class="fc" id="L624">        mOutputLines = outputLines;</span>
+<span class="fc" id="L625">    }</span>
     
     /**
      * Computes residual by comparing two lines algebraically by doing the
@@ -647,13 +639,13 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * @return computed residual.
      */
     protected static double getResidual(Line2D line, Line2D transformedLine) {
-<span class="fc" id="L650">        line.normalize();</span>
-<span class="fc" id="L651">        transformedLine.normalize();</span>
+<span class="fc" id="L642">        line.normalize();</span>
+<span class="fc" id="L643">        transformedLine.normalize();</span>
         
-<span class="fc" id="L653">        double dotProduct = Math.abs(line.getA() * transformedLine.getA() +</span>
-<span class="fc" id="L654">                line.getB() * transformedLine.getB() +</span>
-<span class="fc" id="L655">                line.getC() * transformedLine.getC());</span>
-<span class="fc" id="L656">        return 1.0 - dotProduct;</span>
+<span class="fc" id="L645">        double dotProduct = Math.abs(line.getA() * transformedLine.getA() +</span>
+<span class="fc" id="L646">                line.getB() * transformedLine.getB() +</span>
+<span class="fc" id="L647">                line.getC() * transformedLine.getC());</span>
+<span class="fc" id="L648">        return 1.0 - dotProduct;</span>
     }    
     
     /**
@@ -669,29 +661,29 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     protected AffineTransformation2D attemptRefine(
             AffineTransformation2D transformation) {
-<span class="fc bfc" id="L672" title="All 2 branches covered.">        if (mRefineResult) {</span>
-<span class="fc" id="L673">            LineCorrespondenceAffineTransformation2DRefiner refiner =</span>
+<span class="fc bfc" id="L664" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L665">            LineCorrespondenceAffineTransformation2DRefiner refiner =</span>
                     new LineCorrespondenceAffineTransformation2DRefiner(
-<span class="fc" id="L675">                    transformation, mKeepCovariance, getInliersData(),</span>
+<span class="fc" id="L667">                    transformation, mKeepCovariance, getInliersData(),</span>
                     mInputLines, mOutputLines, 
-<span class="fc" id="L677">                    getRefinementStandardDeviation());</span>
+<span class="fc" id="L669">                    getRefinementStandardDeviation());</span>
             
             try {
-<span class="fc" id="L680">                AffineTransformation2D result = new AffineTransformation2D();</span>
-<span class="fc" id="L681">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L672">                AffineTransformation2D result = new AffineTransformation2D();</span>
+<span class="fc" id="L673">                boolean improved = refiner.refine(result);</span>
                 
-<span class="pc bpc" id="L683" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L675" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L685">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L677">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="fc bfc" id="L688" title="All 2 branches covered.">                return improved ? result : transformation;</span>
-<span class="nc" id="L689">            } catch (Exception e) {</span>
+<span class="fc bfc" id="L680" title="All 2 branches covered.">                return improved ? result : transformation;</span>
+<span class="nc" id="L681">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="nc" id="L691">                return transformation;</span>
+<span class="nc" id="L683">                return transformation;</span>
             }
         } else {
-<span class="fc" id="L694">            return transformation;</span>
+<span class="fc" id="L686">            return transformation;</span>
         }
     }
 }

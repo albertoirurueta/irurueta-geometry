@@ -3560,7 +3560,7 @@ public class Rectangle implements Serializable {
 <span class="pc bpc" id="L3560" title="1 of 2 branches missed.">            if(leftDist &gt; largest) largest = leftDist;</span>
 <span class="fc bfc" id="L3561" title="All 2 branches covered.">            if(topDist &gt; largest) largest = topDist;</span>
 <span class="fc bfc" id="L3562" title="All 2 branches covered.">            if(rightDist &gt; largest) largest = rightDist;</span>
-<span class="pc bpc" id="L3563" title="1 of 2 branches missed.">            if(bottomDist &gt; largest) largest = bottomDist;</span>
+<span class="fc bfc" id="L3563" title="All 2 branches covered.">            if(bottomDist &gt; largest) largest = bottomDist;</span>
             
 <span class="fc" id="L3565">            return largest;</span>
         }
@@ -4272,14 +4272,14 @@ public class Rectangle implements Serializable {
                 //pick top side
 <span class="fc" id="L4273">                result.setInhomogeneousCoordinates(x, top2);</span>
                 
-<span class="pc bpc" id="L4275" title="3 of 6 branches missed.">            } else if (rightDist &lt; leftDist &amp;&amp; rightDist &lt; topDist &amp;&amp;</span>
+<span class="pc bpc" id="L4275" title="4 of 6 branches missed.">            } else if (rightDist &lt; leftDist &amp;&amp; rightDist &lt; topDist &amp;&amp;</span>
                     rightDist &lt; bottomDist) {
                 //pick right side
-<span class="fc" id="L4278">                result.setInhomogeneousCoordinates(right2, y);</span>
+<span class="nc" id="L4278">                result.setInhomogeneousCoordinates(right2, y);</span>
                 
             } else {
                 //pick bottom side
-<span class="nc" id="L4282">                result.setInhomogeneousCoordinates(x, bottom2);</span>
+<span class="fc" id="L4282">                result.setInhomogeneousCoordinates(x, bottom2);</span>
             }
         }        
 <span class="fc" id="L4285">    }</span>

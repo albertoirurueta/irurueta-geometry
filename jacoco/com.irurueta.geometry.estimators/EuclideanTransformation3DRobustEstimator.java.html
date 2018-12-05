@@ -1571,9 +1571,9 @@ public abstract class EuclideanTransformation3DRobustEstimator {
                 }
                 
 <span class="fc bfc" id="L1573" title="All 2 branches covered.">                return improved ? result : transformation;</span>
-<span class="fc" id="L1574">            } catch (Exception e) {</span>
+<span class="nc" id="L1574">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="fc" id="L1576">                return transformation;</span>
+<span class="nc" id="L1576">                return transformation;</span>
             }
         } else {
 <span class="fc" id="L1579">            return transformation;</span>

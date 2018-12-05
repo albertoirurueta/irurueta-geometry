@@ -149,13 +149,12 @@ public abstract class Line2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public Line2DRobustEstimator(List&lt;Point2D&gt; points) 
-<span class="fc" id="L153">            throws IllegalArgumentException {</span>
-<span class="fc" id="L154">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L155">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L156">        mMaxIterations = DEFAULT_MAX_ITERATIONS; </span>
-<span class="fc" id="L157">        internalSetPoints(points);</span>
-<span class="fc" id="L158">    }</span>
+<span class="fc" id="L152">    public Line2DRobustEstimator(List&lt;Point2D&gt; points) {</span>
+<span class="fc" id="L153">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L154">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L155">        mMaxIterations = DEFAULT_MAX_ITERATIONS; </span>
+<span class="fc" id="L156">        internalSetPoints(points);</span>
+<span class="fc" id="L157">    }</span>
     
     /**
      * Constructor.
@@ -166,13 +165,13 @@ public abstract class Line2DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public Line2DRobustEstimator(Line2DRobustEstimatorListener listener,
-<span class="fc" id="L169">            List&lt;Point2D&gt; points) throws IllegalArgumentException {</span>
-<span class="fc" id="L170">        mListener = listener;</span>
-<span class="fc" id="L171">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L172">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L173">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
-<span class="fc" id="L174">        internalSetPoints(points);</span>
-<span class="fc" id="L175">    }</span>
+<span class="fc" id="L168">            List&lt;Point2D&gt; points) {</span>
+<span class="fc" id="L169">        mListener = listener;</span>
+<span class="fc" id="L170">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L171">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L172">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L173">        internalSetPoints(points);</span>
+<span class="fc" id="L174">    }</span>
     
     
     /**
@@ -181,7 +180,7 @@ public abstract class Line2DRobustEstimator {
      * @return listener to be notified of events.
      */
     public Line2DRobustEstimatorListener getListener() {
-<span class="fc" id="L184">        return mListener;</span>
+<span class="fc" id="L183">        return mListener;</span>
     }
     
     /**
@@ -192,11 +191,11 @@ public abstract class Line2DRobustEstimator {
      */
     public void setListener(Line2DRobustEstimatorListener listener) 
             throws LockedException {
-<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L196">            throw new LockedException();</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L195">            throw new LockedException();</span>
         }
-<span class="fc" id="L198">        mListener = listener;</span>
-<span class="fc" id="L199">    }</span>
+<span class="fc" id="L197">        mListener = listener;</span>
+<span class="fc" id="L198">    }</span>
     
     /**
      * Indicates whether listener has been provided and is available for 
@@ -204,7 +203,7 @@ public abstract class Line2DRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L207" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        return mListener != null;</span>
     }
     
     /**
@@ -212,7 +211,7 @@ public abstract class Line2DRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L215">        return mLocked;</span>
+<span class="fc" id="L214">        return mLocked;</span>
     }
 
     /**
@@ -222,7 +221,7 @@ public abstract class Line2DRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L225">        return mProgressDelta;</span>
+<span class="fc" id="L224">        return mProgressDelta;</span>
     }
     
     /**
@@ -235,17 +234,16 @@ public abstract class Line2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L241">            throw new LockedException();</span>
+    public void setProgressDelta(float progressDelta) throws LockedException {
+<span class="fc bfc" id="L238" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L239">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L243" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L241" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L245">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L243">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L247">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L248">    }</span>
+<span class="fc" id="L245">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L246">    }</span>
     
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
@@ -255,7 +253,7 @@ public abstract class Line2DRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L258">        return mConfidence;</span>
+<span class="fc" id="L256">        return mConfidence;</span>
     }
     
     /**
@@ -269,16 +267,15 @@ public abstract class Line2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L274" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L275">            throw new LockedException();</span>
+    public void setConfidence(double confidence) throws LockedException {
+<span class="fc bfc" id="L271" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L272">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L277" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L278">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L274" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L275">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L280">        mConfidence = confidence;</span>
-<span class="fc" id="L281">    }</span>
+<span class="fc" id="L277">        mConfidence = confidence;</span>
+<span class="fc" id="L278">    }</span>
     
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
@@ -287,7 +284,7 @@ public abstract class Line2DRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-<span class="fc" id="L290">        return mMaxIterations;</span>
+<span class="fc" id="L287">        return mMaxIterations;</span>
     }
     
     /**
@@ -299,16 +296,15 @@ public abstract class Line2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L304" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L305">            throw new LockedException();</span>
+    public void setMaxIterations(int maxIterations) throws LockedException {
+<span class="fc bfc" id="L300" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L301">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L307" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L308">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L304">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L310">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L311">    }  </span>
+<span class="fc" id="L306">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L307">    }  </span>
     
     /**
      * Returns list of points to be used to estimate a 2D line.
@@ -316,7 +312,7 @@ public abstract class Line2DRobustEstimator {
      * @return list of points to be used to estimate a 2D line.
      */
     public List&lt;Point2D&gt; getPoints() {
-<span class="fc" id="L319">        return mPoints;</span>
+<span class="fc" id="L315">        return mPoints;</span>
     }
     
     /**
@@ -328,13 +324,12 @@ public abstract class Line2DRobustEstimator {
      * @throws LockedException if estimator is locked because a computation is
      * already in progress.
      */
-    public void setPoints(List&lt;Point2D&gt; points) throws IllegalArgumentException,
-            LockedException {
-<span class="fc bfc" id="L333" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L334">            throw new LockedException();</span>
+    public void setPoints(List&lt;Point2D&gt; points) throws LockedException {
+<span class="fc bfc" id="L328" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L329">            throw new LockedException();</span>
         }
-<span class="fc" id="L336">        internalSetPoints(points);</span>
-<span class="fc" id="L337">    }</span>
+<span class="fc" id="L331">        internalSetPoints(points);</span>
+<span class="fc" id="L332">    }</span>
     
     /**
      * Indicates if estimator is ready to start the 2D line estimation.
@@ -342,7 +337,7 @@ public abstract class Line2DRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="fc bfc" id="L345" title="All 4 branches covered.">        return mPoints != null &amp;&amp; mPoints.size() &gt;= MINIMUM_SIZE;</span>
+<span class="fc bfc" id="L340" title="All 4 branches covered.">        return mPoints != null &amp;&amp; mPoints.size() &gt;= MINIMUM_SIZE;</span>
     }
     
     /**
@@ -353,7 +348,7 @@ public abstract class Line2DRobustEstimator {
      * @return quality scores corresponding to each point.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L356">        return null;</span>
+<span class="fc" id="L351">        return null;</span>
     }
     
     /**
@@ -367,8 +362,7 @@ public abstract class Line2DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 2 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="fc" id="L371">            IllegalArgumentException { }</span>
+<span class="fc" id="L365">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
     
     /**
      * Creates a 2D line robust estimator based on 2D point samples and using
@@ -378,18 +372,18 @@ public abstract class Line2DRobustEstimator {
      * @return an instance of a 2D line robust estimator.
      */
     public static Line2DRobustEstimator create(RobustEstimatorMethod method) {
-<span class="fc bfc" id="L381" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L375" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L383">                return new LMedSLine2DRobustEstimator();</span>
+<span class="fc" id="L377">                return new LMedSLine2DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L385">                return new MSACLine2DRobustEstimator();</span>
+<span class="fc" id="L379">                return new MSACLine2DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L387">                return new PROSACLine2DRobustEstimator();</span>
+<span class="fc" id="L381">                return new PROSACLine2DRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L389">                return new PROMedSLine2DRobustEstimator();</span>
+<span class="fc" id="L383">                return new PROMedSLine2DRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L392">                return new RANSACLine2DRobustEstimator();</span>
+<span class="fc" id="L386">                return new RANSACLine2DRobustEstimator();</span>
         }
     }
     
@@ -404,19 +398,19 @@ public abstract class Line2DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public static Line2DRobustEstimator create(List&lt;Point2D&gt; points, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L408" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L402" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L410">                return new LMedSLine2DRobustEstimator(points);</span>
+<span class="fc" id="L404">                return new LMedSLine2DRobustEstimator(points);</span>
             case MSAC:
-<span class="fc" id="L412">                return new MSACLine2DRobustEstimator(points);</span>
+<span class="fc" id="L406">                return new MSACLine2DRobustEstimator(points);</span>
             case PROSAC:
-<span class="fc" id="L414">                return new PROSACLine2DRobustEstimator(points);</span>
+<span class="fc" id="L408">                return new PROSACLine2DRobustEstimator(points);</span>
             case PROMedS:
-<span class="fc" id="L416">                return new PROMedSLine2DRobustEstimator(points);</span>
+<span class="fc" id="L410">                return new PROMedSLine2DRobustEstimator(points);</span>
             case RANSAC:
             default:
-<span class="fc" id="L419">                return new RANSACLine2DRobustEstimator(points);</span>
+<span class="fc" id="L413">                return new RANSACLine2DRobustEstimator(points);</span>
         }
     }
     
@@ -432,18 +426,18 @@ public abstract class Line2DRobustEstimator {
     public static Line2DRobustEstimator create(
             Line2DRobustEstimatorListener listener, 
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L435" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L429" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L437">                return new LMedSLine2DRobustEstimator(listener);</span>
+<span class="fc" id="L431">                return new LMedSLine2DRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L439">                return new MSACLine2DRobustEstimator(listener);</span>
+<span class="fc" id="L433">                return new MSACLine2DRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L441">                return new PROSACLine2DRobustEstimator(listener);</span>
+<span class="fc" id="L435">                return new PROSACLine2DRobustEstimator(listener);</span>
             case PROMedS:
-<span class="fc" id="L443">                return new PROMedSLine2DRobustEstimator(listener);</span>
+<span class="fc" id="L437">                return new PROMedSLine2DRobustEstimator(listener);</span>
             case RANSAC:
             default:
-<span class="fc" id="L446">                return new RANSACLine2DRobustEstimator(listener);</span>
+<span class="fc" id="L440">                return new RANSACLine2DRobustEstimator(listener);</span>
         }
     }
     
@@ -461,19 +455,19 @@ public abstract class Line2DRobustEstimator {
      */
     public static Line2DRobustEstimator create(
             Line2DRobustEstimatorListener listener, List&lt;Point2D&gt; points,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L465" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L459" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L467">                return new LMedSLine2DRobustEstimator(listener, points);</span>
+<span class="fc" id="L461">                return new LMedSLine2DRobustEstimator(listener, points);</span>
             case MSAC:
-<span class="fc" id="L469">                return new MSACLine2DRobustEstimator(listener, points);</span>
+<span class="fc" id="L463">                return new MSACLine2DRobustEstimator(listener, points);</span>
             case PROSAC:
-<span class="fc" id="L471">                return new PROSACLine2DRobustEstimator(listener, points);</span>
+<span class="fc" id="L465">                return new PROSACLine2DRobustEstimator(listener, points);</span>
             case PROMedS:
-<span class="fc" id="L473">                return new PROMedSLine2DRobustEstimator(listener, points);</span>
+<span class="fc" id="L467">                return new PROMedSLine2DRobustEstimator(listener, points);</span>
             case RANSAC:
             default:
-<span class="fc" id="L476">                return new RANSACLine2DRobustEstimator(listener, points);</span>
+<span class="fc" id="L470">                return new RANSACLine2DRobustEstimator(listener, points);</span>
         }
     }
     
@@ -488,19 +482,19 @@ public abstract class Line2DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 2 points).
      */
     public static Line2DRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L492" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L486" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L494">                return new LMedSLine2DRobustEstimator();</span>
+<span class="fc" id="L488">                return new LMedSLine2DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L496">                return new MSACLine2DRobustEstimator();</span>
+<span class="fc" id="L490">                return new MSACLine2DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L498">                return new PROSACLine2DRobustEstimator(qualityScores);</span>
+<span class="fc" id="L492">                return new PROSACLine2DRobustEstimator(qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L500">                return new PROMedSLine2DRobustEstimator(qualityScores);</span>
+<span class="fc" id="L494">                return new PROMedSLine2DRobustEstimator(qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L503">                return new RANSACLine2DRobustEstimator();</span>
+<span class="fc" id="L497">                return new RANSACLine2DRobustEstimator();</span>
         }
     }
     
@@ -517,20 +511,19 @@ public abstract class Line2DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static Line2DRobustEstimator create(List&lt;Point2D&gt; points, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L522" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L515" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L524">                return new LMedSLine2DRobustEstimator(points);</span>
+<span class="fc" id="L517">                return new LMedSLine2DRobustEstimator(points);</span>
             case MSAC:
-<span class="fc" id="L526">                return new MSACLine2DRobustEstimator(points);</span>
+<span class="fc" id="L519">                return new MSACLine2DRobustEstimator(points);</span>
             case PROSAC:
-<span class="fc" id="L528">                return new PROSACLine2DRobustEstimator(points, qualityScores);</span>
+<span class="fc" id="L521">                return new PROSACLine2DRobustEstimator(points, qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L530">                return new PROMedSLine2DRobustEstimator(points, qualityScores);</span>
+<span class="fc" id="L523">                return new PROMedSLine2DRobustEstimator(points, qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L533">                return new RANSACLine2DRobustEstimator(points);</span>
+<span class="fc" id="L526">                return new RANSACLine2DRobustEstimator(points);</span>
         }
     }
     
@@ -548,19 +541,19 @@ public abstract class Line2DRobustEstimator {
      */
     public static Line2DRobustEstimator create(
             Line2DRobustEstimatorListener listener, double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L552" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L545" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L554">                return new LMedSLine2DRobustEstimator(listener);</span>
+<span class="fc" id="L547">                return new LMedSLine2DRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L556">                return new MSACLine2DRobustEstimator(listener);</span>
+<span class="fc" id="L549">                return new MSACLine2DRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L558">                return new PROSACLine2DRobustEstimator(listener, qualityScores);</span>
+<span class="fc" id="L551">                return new PROSACLine2DRobustEstimator(listener, qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L560">                return new PROMedSLine2DRobustEstimator(listener, qualityScores);</span>
+<span class="fc" id="L553">                return new PROMedSLine2DRobustEstimator(listener, qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L563">                return new RANSACLine2DRobustEstimator(listener);</span>
+<span class="fc" id="L556">                return new RANSACLine2DRobustEstimator(listener);</span>
         }
     }
     
@@ -580,22 +573,21 @@ public abstract class Line2DRobustEstimator {
      */
     public static Line2DRobustEstimator create(
             Line2DRobustEstimatorListener listener, List&lt;Point2D&gt; points,
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L585" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L577" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L587">                return new LMedSLine2DRobustEstimator(listener, points);</span>
+<span class="fc" id="L579">                return new LMedSLine2DRobustEstimator(listener, points);</span>
             case MSAC:
-<span class="fc" id="L589">                return new MSACLine2DRobustEstimator(listener, points);</span>
+<span class="fc" id="L581">                return new MSACLine2DRobustEstimator(listener, points);</span>
             case PROSAC:
-<span class="fc" id="L591">                return new PROSACLine2DRobustEstimator(listener, points, </span>
+<span class="fc" id="L583">                return new PROSACLine2DRobustEstimator(listener, points, </span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L594">                return new PROMedSLine2DRobustEstimator(listener, points, </span>
+<span class="fc" id="L586">                return new PROMedSLine2DRobustEstimator(listener, points, </span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L598">                return new RANSACLine2DRobustEstimator(listener, points);</span>
+<span class="fc" id="L590">                return new RANSACLine2DRobustEstimator(listener, points);</span>
         }
     }    
     
@@ -605,7 +597,7 @@ public abstract class Line2DRobustEstimator {
      * @return an instance of a 2D line robust estimator.
      */
     public static Line2DRobustEstimator create() {
-<span class="fc" id="L608">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L600">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -616,9 +608,8 @@ public abstract class Line2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public static Line2DRobustEstimator create(List&lt;Point2D&gt; points) 
-            throws IllegalArgumentException {
-<span class="fc" id="L621">        return create(points, DEFAULT_ROBUST_METHOD);</span>
+    public static Line2DRobustEstimator create(List&lt;Point2D&gt; points) {
+<span class="fc" id="L612">        return create(points, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -630,7 +621,7 @@ public abstract class Line2DRobustEstimator {
      */
     public static Line2DRobustEstimator create(
             Line2DRobustEstimatorListener listener) {
-<span class="fc" id="L633">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L624">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -644,9 +635,8 @@ public abstract class Line2DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public static Line2DRobustEstimator create(
-            Line2DRobustEstimatorListener listener, List&lt;Point2D&gt; points) 
-            throws IllegalArgumentException {
-<span class="fc" id="L649">        return create(listener, points, DEFAULT_ROBUST_METHOD);</span>
+            Line2DRobustEstimatorListener listener, List&lt;Point2D&gt; points) {
+<span class="fc" id="L639">        return create(listener, points, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -657,9 +647,8 @@ public abstract class Line2DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 2 points).
      */
-    public static Line2DRobustEstimator create(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L662">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    public static Line2DRobustEstimator create(double[] qualityScores) {
+<span class="fc" id="L651">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -673,8 +662,8 @@ public abstract class Line2DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static Line2DRobustEstimator create(List&lt;Point2D&gt; points, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L677">        return create(points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L666">        return create(points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -688,9 +677,8 @@ public abstract class Line2DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 2 points).
      */
     public static Line2DRobustEstimator create(
-            Line2DRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
-<span class="fc" id="L693">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            Line2DRobustEstimatorListener listener, double[] qualityScores) {
+<span class="fc" id="L681">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -707,8 +695,8 @@ public abstract class Line2DRobustEstimator {
      */
     public static Line2DRobustEstimator create(
             Line2DRobustEstimatorListener listener, List&lt;Point2D&gt; points,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L711">        return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L699">        return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }        
     
     /**
@@ -739,13 +727,12 @@ public abstract class Line2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    private void internalSetPoints(List&lt;Point2D&gt; points) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L744" title="All 2 branches covered.">        if (points.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L745">            throw new IllegalArgumentException();</span>
+    private void internalSetPoints(List&lt;Point2D&gt; points) {
+<span class="fc bfc" id="L731" title="All 2 branches covered.">        if (points.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L732">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L747">        mPoints = points;</span>
-<span class="fc" id="L748">    }</span>
+<span class="fc" id="L734">        mPoints = points;</span>
+<span class="fc" id="L735">    }</span>
     
     /**
      * Computes the residual between a 2D point and a line.
@@ -754,10 +741,10 @@ public abstract class Line2DRobustEstimator {
      * @return residual.
      */
     protected double residual(Line2D l, Point2D point) {
-<span class="fc" id="L757">        l.normalize();</span>
-<span class="fc" id="L758">        point.normalize();</span>
+<span class="fc" id="L744">        l.normalize();</span>
+<span class="fc" id="L745">        point.normalize();</span>
         
-<span class="fc" id="L760">        return Math.abs(l.signedDistance(point));</span>
+<span class="fc" id="L747">        return Math.abs(l.signedDistance(point));</span>
     }        
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
