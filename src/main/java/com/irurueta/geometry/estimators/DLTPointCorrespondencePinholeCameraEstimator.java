@@ -79,8 +79,7 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
      * the same size and enough points.
      */
     public DLTPointCorrespondencePinholeCameraEstimator(List<Point3D> points3D,
-            List<Point2D> points2D) throws IllegalArgumentException,
-            WrongListSizesException {
+            List<Point2D> points2D) throws WrongListSizesException {
         super(points3D, points2D);
         mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
@@ -97,7 +96,7 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
      */
     public DLTPointCorrespondencePinholeCameraEstimator(List<Point3D> points3D,
             List<Point2D> points2D, PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         super(points3D, points2D, listener);
         mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
@@ -173,8 +172,13 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
             Point2D point2D;
             Point3D point3D;
             int counter = 0;
-            double homImageX, homImageY, homImageW;
-            double homWorldX, homWorldY, homWorldZ, homWorldW;
+            double homImageX;
+            double homImageY;
+            double homImageW;
+            double homWorldX;
+            double homWorldY;
+            double homWorldZ;
+            double homWorldW;
             double rowNorm;
             while (iterator2D.hasNext() && iterator3D.hasNext()) {
                 point2D = iterator2D.next();

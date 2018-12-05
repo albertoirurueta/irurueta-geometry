@@ -384,6 +384,10 @@ public class MetricTransformation2DEstimator {
                 col.multiply(row, tmp);
                 m.add(tmp);                
             }
+
+            if (inCov == 0.0) {
+                throw new CoincidentPointsException();
+            }
             
             SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
@@ -449,7 +453,8 @@ public class MetricTransformation2DEstimator {
      */
     private static Matrix computeCentroid(List<Point2D> points) 
             throws AlgebraException {        
-        double x = 0.0, y = 0.0;
+        double x = 0.0;
+        double y = 0.0;
         double n = points.size();
         for (Point2D p : points) {
             x += p.getInhomX() / n;
@@ -475,7 +480,7 @@ public class MetricTransformation2DEstimator {
      * the same size or their size is smaller than #getMinimumPoints.
      */
     private void internalSetPoints(List<Point2D> inputPoints,
-            List<Point2D> outputPoints) throws IllegalArgumentException {
+            List<Point2D> outputPoints) {
         if (inputPoints.size() < getMinimumPoints()) {
             throw new IllegalArgumentException();
         }

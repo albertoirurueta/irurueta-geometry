@@ -63,8 +63,7 @@ public class MSACLine2DRobustEstimator extends Line2DRobustEstimator{
      * @throws IllegalArgumentException if provided list of points doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public MSACLine2DRobustEstimator(List<Point2D> points) 
-            throws IllegalArgumentException {
+    public MSACLine2DRobustEstimator(List<Point2D> points) {
         super(points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -89,7 +88,7 @@ public class MSACLine2DRobustEstimator extends Line2DRobustEstimator{
      * a size greater or equal than MINIMUM_SIZE.
      */
     public MSACLine2DRobustEstimator(Line2DRobustEstimatorListener listener,
-            List<Point2D> points) throws IllegalArgumentException {
+            List<Point2D> points) {
         super(listener, points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -117,8 +116,7 @@ public class MSACLine2DRobustEstimator extends Line2DRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

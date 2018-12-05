@@ -66,8 +66,7 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public MSACConicRobustEstimator(List<Point2D> points)
-            throws IllegalArgumentException {
+    public MSACConicRobustEstimator(List<Point2D> points) {
         super(points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -91,7 +90,7 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public MSACConicRobustEstimator(ConicRobustEstimatorListener listener,
-            List<Point2D> points) throws IllegalArgumentException {
+            List<Point2D> points) {
         super(listener, points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -119,8 +118,7 @@ public class MSACConicRobustEstimator extends ConicRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

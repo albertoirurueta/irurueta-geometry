@@ -74,8 +74,7 @@ public class MSACDLTPointCorrespondencePinholeCameraRobustEstimator extends
      * (6 correspondences).
      */
     public MSACDLTPointCorrespondencePinholeCameraRobustEstimator(
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(points3D, points2D);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -108,8 +107,7 @@ public class MSACDLTPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public MSACDLTPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List<Point3D> points3D, List<Point2D> points2D)
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(listener, points3D, points2D);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -137,8 +135,7 @@ public class MSACDLTPointCorrespondencePinholeCameraRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

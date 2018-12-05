@@ -164,8 +164,7 @@ public abstract class DualConicRobustEstimator {
      * @throws IllegalArgumentException if provided lsit of lines don't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public DualConicRobustEstimator(List<Line2D> lines)
-            throws IllegalArgumentException {
+    public DualConicRobustEstimator(List<Line2D> lines) {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
         mMaxIterations = DEFAULT_MAX_ITERATIONS;
@@ -181,7 +180,7 @@ public abstract class DualConicRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public DualConicRobustEstimator(DualConicRobustEstimatorListener listener,
-            List<Line2D> lines) throws IllegalArgumentException {
+            List<Line2D> lines) {
         mListener = listener;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
@@ -249,8 +248,7 @@ public abstract class DualConicRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta)
-            throws IllegalArgumentException, LockedException {
+    public void setProgressDelta(float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -283,8 +281,7 @@ public abstract class DualConicRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -313,8 +310,7 @@ public abstract class DualConicRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+    public void setMaxIterations(int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -342,8 +338,7 @@ public abstract class DualConicRobustEstimator {
      * @throws LockedException if estimator is locked because a computation is
      * already in progress.
      */
-    public void setLines(List<Line2D> lines) throws IllegalArgumentException,
-            LockedException {
+    public void setLines(List<Line2D> lines) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -381,8 +376,7 @@ public abstract class DualConicRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 9 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException { }
+    public void setQualityScores(double[] qualityScores) throws LockedException { }
     
     /**
      * Creates a dual conic robust estimator based on 2D line samples and using
@@ -418,7 +412,7 @@ public abstract class DualConicRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static DualConicRobustEstimator create(List<Line2D> lines, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDualConicRobustEstimator(lines);
@@ -475,7 +469,7 @@ public abstract class DualConicRobustEstimator {
      */
     public static DualConicRobustEstimator create(
             DualConicRobustEstimatorListener listener, List<Line2D> lines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDualConicRobustEstimator(listener, lines);
@@ -502,7 +496,7 @@ public abstract class DualConicRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 5 lines).
      */
     public static DualConicRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDualConicRobustEstimator();
@@ -531,8 +525,7 @@ public abstract class DualConicRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static DualConicRobustEstimator create(List<Line2D> lines, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDualConicRobustEstimator(lines);
@@ -564,7 +557,7 @@ public abstract class DualConicRobustEstimator {
      */
     public static DualConicRobustEstimator create(
             DualConicRobustEstimatorListener listener, double[] qualityScores, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDualConicRobustEstimator(listener);
@@ -598,8 +591,7 @@ public abstract class DualConicRobustEstimator {
      */
     public static DualConicRobustEstimator create(
             DualConicRobustEstimatorListener listener, List<Line2D> lines,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDualConicRobustEstimator(listener, lines);
@@ -634,8 +626,7 @@ public abstract class DualConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines doesn't have a
      * size greater or equal than MINIMUM_SIZE.
      */
-    public static DualConicRobustEstimator create(List<Line2D> lines)
-            throws IllegalArgumentException {
+    public static DualConicRobustEstimator create(List<Line2D> lines) {
         return create(lines, DEFAULT_ROBUST_METHOD);        
     }
     
@@ -662,8 +653,7 @@ public abstract class DualConicRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public static DualConicRobustEstimator create(
-            DualConicRobustEstimatorListener listener, List<Line2D> lines)
-            throws IllegalArgumentException {
+            DualConicRobustEstimatorListener listener, List<Line2D> lines) {
         return create(listener, lines, DEFAULT_ROBUST_METHOD);
     }
     
@@ -675,8 +665,7 @@ public abstract class DualConicRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 5 lines).
      */
-    public static DualConicRobustEstimator create(double[] qualityScores)
-            throws IllegalArgumentException {
+    public static DualConicRobustEstimator create(double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -691,7 +680,7 @@ public abstract class DualConicRobustEstimator {
      * greater or equal than MINIMUM_SIZE.
      */
     public static DualConicRobustEstimator create(List<Line2D> lines,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(lines, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -706,8 +695,7 @@ public abstract class DualConicRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 5 lines).
      */
     public static DualConicRobustEstimator create(
-            DualConicRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
+            DualConicRobustEstimatorListener listener, double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -725,7 +713,7 @@ public abstract class DualConicRobustEstimator {
      */
     public static DualConicRobustEstimator create(
             DualConicRobustEstimatorListener listener, List<Line2D> lines,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, lines, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -757,8 +745,7 @@ public abstract class DualConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines doesn't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    private void internalSetLines(List<Line2D> lines)
-            throws IllegalArgumentException {
+    private void internalSetLines(List<Line2D> lines) {
         if (lines.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

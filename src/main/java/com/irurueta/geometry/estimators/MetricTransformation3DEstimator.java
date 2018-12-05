@@ -83,7 +83,7 @@ public class MetricTransformation3DEstimator {
      * the same size or their size is smaller than 4.
      */
     public MetricTransformation3DEstimator(List<Point3D> inputPoints, 
-            List<Point3D> outputPoints) throws IllegalArgumentException {
+            List<Point3D> outputPoints) {
         internalSetPoints(inputPoints, outputPoints);
     }
     
@@ -108,8 +108,7 @@ public class MetricTransformation3DEstimator {
      */
     public MetricTransformation3DEstimator(
             MetricTransformation3DEstimatorListener listener,
-            List<Point3D> inputPoints, List<Point3D> outputPoints)
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         mListener = listener;
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -131,8 +130,7 @@ public class MetricTransformation3DEstimator {
      * the same size or their size is smaller than 4.
      */
     public MetricTransformation3DEstimator(List<Point3D> inputPoints, 
-            List<Point3D> outputPoints, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            List<Point3D> outputPoints, boolean weakMinimumSizeAllowed) {
         mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -163,8 +161,7 @@ public class MetricTransformation3DEstimator {
     public MetricTransformation3DEstimator(
             MetricTransformation3DEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            boolean weakMinimumSizeAllowed)
-            throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
         mListener = listener;
         internalSetPoints(inputPoints, outputPoints);
@@ -214,8 +211,7 @@ public class MetricTransformation3DEstimator {
      * already in progress.
      */
     public void setPoints(List<Point3D> inputPoints, 
-            List<Point3D> outputPoints) throws IllegalArgumentException, 
-            LockedException {
+            List<Point3D> outputPoints) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -362,7 +358,8 @@ public class MetricTransformation3DEstimator {
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
         
             int n = mInputPoints.size();
-            Point3D inputPoint, outputPoint;
+            Point3D inputPoint;
+            Point3D outputPoint;
             Matrix col = new Matrix(
                     Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
             Matrix row = new Matrix(1, 
@@ -395,7 +392,11 @@ public class MetricTransformation3DEstimator {
                 col.multiply(row, tmp);
                 m.add(tmp);
             }
-            
+
+            if (inCov == 0.0) {
+                throw new CoincidentPointsException();
+            }
+
             SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
             
@@ -447,8 +448,6 @@ public class MetricTransformation3DEstimator {
                 mListener.onEstimateEnd(this);
             }
             
-        } catch (CoincidentPointsException e) {
-            throw e;
         } catch (AlgebraException | InvalidRotationMatrixException e) {
             throw new CoincidentPointsException(e);
         } finally {

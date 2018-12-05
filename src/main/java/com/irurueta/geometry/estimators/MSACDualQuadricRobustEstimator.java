@@ -66,8 +66,7 @@ public class MSACDualQuadricRobustEstimator extends DualQuadricRobustEstimator{
      * @throws IllegalArgumentException if provided list of planes don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public MSACDualQuadricRobustEstimator(List<Plane> planes) 
-            throws IllegalArgumentException {
+    public MSACDualQuadricRobustEstimator(List<Plane> planes) {
         super(planes);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -94,7 +93,7 @@ public class MSACDualQuadricRobustEstimator extends DualQuadricRobustEstimator{
      */
     public MSACDualQuadricRobustEstimator(
             DualQuadricRobustEstimatorListener listener,
-            List<Plane> planes) throws IllegalArgumentException {
+            List<Plane> planes) {
         super(listener, planes);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -122,8 +121,7 @@ public class MSACDualQuadricRobustEstimator extends DualQuadricRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

@@ -164,8 +164,7 @@ public abstract class DualQuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes don't have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public DualQuadricRobustEstimator(List<Plane> planes)
-            throws IllegalArgumentException {
+    public DualQuadricRobustEstimator(List<Plane> planes) {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
         mMaxIterations = DEFAULT_MAX_ITERATIONS;
@@ -181,8 +180,7 @@ public abstract class DualQuadricRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public DualQuadricRobustEstimator(
-            DualQuadricRobustEstimatorListener listener, List<Plane> planes) 
-            throws IllegalArgumentException {
+            DualQuadricRobustEstimatorListener listener, List<Plane> planes) {
         mListener = listener;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
@@ -250,8 +248,7 @@ public abstract class DualQuadricRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta)
-            throws IllegalArgumentException, LockedException {
+    public void setProgressDelta(float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -284,8 +281,7 @@ public abstract class DualQuadricRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -314,8 +310,7 @@ public abstract class DualQuadricRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+    public void setMaxIterations(int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -343,8 +338,7 @@ public abstract class DualQuadricRobustEstimator {
      * @throws LockedException if estimator is locked because a computation is
      * already in progress.
      */
-    public void setPlanes(List<Plane> planes) throws IllegalArgumentException,
-            LockedException {
+    public void setPlanes(List<Plane> planes) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -382,8 +376,7 @@ public abstract class DualQuadricRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 9 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException { }
+    public void setQualityScores(double[] qualityScores) throws LockedException { }
     
     /**
      * Creates a dual quadric robust estimator based on plane samples and using
@@ -419,7 +412,7 @@ public abstract class DualQuadricRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static DualQuadricRobustEstimator create(List<Plane> planes, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDualQuadricRobustEstimator(planes);
@@ -476,7 +469,7 @@ public abstract class DualQuadricRobustEstimator {
      */
     public static DualQuadricRobustEstimator create(
             DualQuadricRobustEstimatorListener listener, List<Plane> planes,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDualQuadricRobustEstimator(listener, planes);
@@ -503,7 +496,7 @@ public abstract class DualQuadricRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 9 planes).
      */
     public static DualQuadricRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDualQuadricRobustEstimator();
@@ -532,8 +525,7 @@ public abstract class DualQuadricRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static DualQuadricRobustEstimator create(List<Plane> planes, 
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDualQuadricRobustEstimator(planes);
@@ -565,7 +557,7 @@ public abstract class DualQuadricRobustEstimator {
      */
     public static DualQuadricRobustEstimator create(
             DualQuadricRobustEstimatorListener listener, double[] qualityScores, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDualQuadricRobustEstimator(listener);
@@ -599,8 +591,7 @@ public abstract class DualQuadricRobustEstimator {
      */
     public static DualQuadricRobustEstimator create(
             DualQuadricRobustEstimatorListener listener, List<Plane> planes,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSDualQuadricRobustEstimator(listener, planes);
@@ -635,8 +626,7 @@ public abstract class DualQuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public static DualQuadricRobustEstimator create(List<Plane> planes)
-            throws IllegalArgumentException {
+    public static DualQuadricRobustEstimator create(List<Plane> planes) {
         return create(planes, DEFAULT_ROBUST_METHOD);
     }
     
@@ -663,8 +653,7 @@ public abstract class DualQuadricRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public static DualQuadricRobustEstimator create(
-            DualQuadricRobustEstimatorListener listener, List<Plane> planes)
-            throws IllegalArgumentException {
+            DualQuadricRobustEstimatorListener listener, List<Plane> planes) {
         return create(listener, planes, DEFAULT_ROBUST_METHOD);
     }
     
@@ -676,8 +665,7 @@ public abstract class DualQuadricRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 9 planes).
      */
-    public static DualQuadricRobustEstimator create(double[] qualityScores)
-            throws IllegalArgumentException {
+    public static DualQuadricRobustEstimator create(double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
     

@@ -201,7 +201,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      */    
     public static boolean isPolygonOrientationReversed(List<Point3D> vertices1,
             List<Point3D> vertices2, double threshold) 
-            throws IllegalArgumentException, CoincidentPointsException {
+            throws CoincidentPointsException {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -258,7 +258,6 @@ public class VanGoghTriangulator3D extends Triangulator3D {
 
         List<Triangle3D> result = new LinkedList<>();
 
-        //boolean isConvex;
         boolean isEar;
         boolean madeCut;
 

@@ -67,8 +67,7 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
      * @throws IllegalArgumentException if provided list of lines don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public MSACDualConicRobustEstimator(List<Line2D> lines) 
-            throws IllegalArgumentException {
+    public MSACDualConicRobustEstimator(List<Line2D> lines) {
         super(lines);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -95,7 +94,7 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
      */
     public MSACDualConicRobustEstimator(
             DualConicRobustEstimatorListener listener,
-            List<Line2D> lines) throws IllegalArgumentException {
+            List<Line2D> lines) {
         super(listener, lines);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -123,8 +122,7 @@ public class MSACDualConicRobustEstimator extends DualConicRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
