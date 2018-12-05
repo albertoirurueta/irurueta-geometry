@@ -93,8 +93,7 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSEuclideanTransformation3DRobustEstimator(
-            List<Point3D> inputPoints, List<Point3D> outputPoints)
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         super(inputPoints, outputPoints);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }

@@ -22,6 +22,7 @@ import com.irurueta.geometry.Point2D;
 import com.irurueta.geometry.Point3D;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
@@ -399,7 +400,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
                         new GradientEstimator(
                                 new MultiDimensionFunctionEvaluatorListener() {
                     @Override
-                    public double evaluate(double[] params) throws Throwable {
+                    public double evaluate(double[] params) {
                         
                         parametersToCamera(params, mPinholeCamera);
                         return residualLevenbergMarquardt(mPinholeCamera, 
@@ -419,7 +420,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
 
                 @Override
                 public double evaluate(int i, double[] point, double[] params, 
-                        double[] derivatives) throws Throwable {
+                        double[] derivatives) throws EvaluationException {
                     mPoint2D.setHomogeneousCoordinates(point[0], point[1], 
                             point[2]);
                     mPoint3D.setHomogeneousCoordinates(point[3], point[4], 
@@ -548,10 +549,10 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
          * Evaluates cost function
          * @param point parameters to evaluate cost function.
          * @return cost value.
-         * @throws Throwable if anything fails.
+         * @throws EvaluationException if anything fails.
          */
         @Override
-        public double evaluate(double[] point) throws Throwable {
+        public double evaluate(double[] point) throws EvaluationException {
             parametersToCamera(point, mRefineCamera);
             return residualPowell(mRefineCamera, point, weight);
         }        

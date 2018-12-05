@@ -21,6 +21,7 @@ import com.irurueta.geometry.Plane;
 import com.irurueta.geometry.ProjectiveTransformation3D;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
@@ -198,7 +199,7 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
 
                 @Override
                 public double evaluate(int i, double[] point, double[] params, 
-                        double[] derivatives) throws Throwable {
+                        double[] derivatives) throws EvaluationException {
                     mInputPlane.setParameters(point[0], point[1], point[2], 
                             point[3]);
                     mOutputPlane.setParameters(point[4], point[5], point[6], 

@@ -5097,7 +5097,7 @@ public class Rectangle implements Serializable {
     public static boolean isLocusToRightSide(double x, double y, double left,
             double top, double right, double bottom, double threshold) {
         if (threshold < 0.0) {
-            throw new IllegalArgumentException("threshold must be positive");
+            throw new IllegalArgumentException();
         }
         
         return getDistanceToRightSide(x, y, left, top, right, bottom)

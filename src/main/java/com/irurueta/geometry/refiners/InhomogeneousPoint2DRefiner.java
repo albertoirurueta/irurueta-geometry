@@ -20,6 +20,7 @@ import com.irurueta.geometry.InhomogeneousPoint2D;
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
@@ -187,7 +188,7 @@ public class InhomogeneousPoint2DRefiner extends
 
                 @Override
                 public double evaluate(int i, double[] point, double[] params, 
-                        double[] derivatives) throws Throwable {
+                        double[] derivatives) throws EvaluationException {
                     //point contains, a,b,c values for line
                     mLine.setParameters(point);
                     

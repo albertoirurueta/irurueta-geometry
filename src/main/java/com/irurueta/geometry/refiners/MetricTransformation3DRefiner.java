@@ -19,6 +19,7 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.geometry.*;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
@@ -293,7 +294,7 @@ public class MetricTransformation3DRefiner extends
 
                 @Override
                 public double evaluate(int i, double[] point, double[] params, 
-                        double[] derivatives) throws Throwable {
+                        double[] derivatives) throws EvaluationException {
                     mInputPoint.setHomogeneousCoordinates(point[0], point[1], 
                             point[2], point[3]);
                     mOutputPoint.setHomogeneousCoordinates(point[4], point[5], 
