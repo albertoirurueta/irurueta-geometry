@@ -71,8 +71,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator{
      * @throws IllegalArgumentException if provided list of points don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public PROSACConicRobustEstimator(List<Point2D> points) 
-            throws IllegalArgumentException {
+    public PROSACConicRobustEstimator(List<Point2D> points) {
         super(points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -97,7 +96,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator{
      * a size greater or equal than MINIMUM_SIZE.
      */
     public PROSACConicRobustEstimator(ConicRobustEstimatorListener listener,
-            List<Point2D> points) throws IllegalArgumentException {
+            List<Point2D> points) {
         super(listener, points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -108,8 +107,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator{
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 5 points).
      */
-    public PROSACConicRobustEstimator(double[] qualityScores)
-            throws IllegalArgumentException {
+    public PROSACConicRobustEstimator(double[] qualityScores) {
         super();
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -124,7 +122,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator{
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROSACConicRobustEstimator(List<Point2D> points,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(points);
         
         if (qualityScores.length != points.size()) {
@@ -144,7 +142,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator{
      * smaller than MINIMUM_SIZE (i.e. 5 points).
      */
     public PROSACConicRobustEstimator(ConicRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -162,8 +160,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator{
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROSACConicRobustEstimator(ConicRobustEstimatorListener listener,
-            List<Point2D> points, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Point2D> points, double[] qualityScores) {
         super(listener, points);
         
         if (qualityScores.length != points.size()) {
@@ -197,8 +194,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -228,8 +224,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator{
      * smaller than MINIMUM_SIZE (i.e. 5 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -386,8 +381,7 @@ public class PROSACConicRobustEstimator extends ConicRobustEstimator{
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

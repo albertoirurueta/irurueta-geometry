@@ -110,8 +110,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * size or their size is smaller than required minimum size (4 matches).
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            List<Plane> planes, List<Line2D> lines) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         super(planes, lines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -148,8 +147,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List<Plane> planes, List<Line2D> lines)
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         super(listener, planes, lines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -164,7 +162,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * smaller than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES (i.e. 4 samples).
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super();        
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -189,8 +187,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * size (4 matches).
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            List<Plane> planes, List<Line2D> lines, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines, double[] qualityScores) {
         super(planes, lines);
         
         if (qualityScores.length != planes.size()) {
@@ -214,7 +211,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -241,8 +238,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List<Plane> planes, List<Line2D> lines, double[] qualityScores)
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines, double[] qualityScores) {
         super(listener, planes, lines);
         
         if (qualityScores.length != planes.size()) {
@@ -298,8 +294,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

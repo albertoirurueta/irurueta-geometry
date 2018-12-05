@@ -317,7 +317,7 @@ public class HomogeneousPoint2DRefinerTest implements
     public void testRefine() throws LockedException, NotReadyException,
             RobustEstimatorException, RefinerException {
         int numValid = 0;
-        for (int t = 0; t < 5*TIMES; t++) {
+        for (int t = 0; t < 10*TIMES; t++) {
             RANSACPoint2DRobustEstimator estimator = createRobustEstimator();
             
             HomogeneousPoint2D point = new HomogeneousPoint2D(
