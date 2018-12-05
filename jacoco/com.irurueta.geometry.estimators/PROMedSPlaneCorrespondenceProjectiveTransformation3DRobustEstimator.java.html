@@ -99,11 +99,10 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) 
-            throws IllegalArgumentException {
-<span class="fc" id="L104">        super(inputPlanes, outputPlanes);</span>
-<span class="fc" id="L105">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L106">    }</span>
+            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L103">        super(inputPlanes, outputPlanes);</span>
+<span class="fc" id="L104">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L105">    }</span>
     
     /**
      * Constructor.
@@ -112,9 +111,9 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     public PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L115">        super(listener);</span>
-<span class="fc" id="L116">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L114">        super(listener);</span>
+<span class="fc" id="L115">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L116">    }</span>
     
     /**
      * Constructor with listener and lists of planes to be used to estimate a
@@ -133,11 +132,10 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     public PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) 
-            throws IllegalArgumentException {
-<span class="fc" id="L138">        super(listener, inputPlanes, outputPlanes);</span>
-<span class="fc" id="L139">        mStopThreshold = DEFAULT_STOP_THRESHOLD;     </span>
-<span class="fc" id="L140">    }</span>
+            List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L136">        super(listener, inputPlanes, outputPlanes);</span>
+<span class="fc" id="L137">        mStopThreshold = DEFAULT_STOP_THRESHOLD;     </span>
+<span class="fc" id="L138">    }</span>
     
     /**
      * Constructor.
@@ -147,11 +145,11 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L151">        super();</span>
-<span class="fc" id="L152">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L153">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L154">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L149">        super();</span>
+<span class="fc" id="L150">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L151">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L152">    }</span>
 
     /**
      * Constructor with lists of planes to be used to estimate a projective 3D
@@ -171,16 +169,16 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     public PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L175">        super(inputPlanes, outputPlanes);</span>
+            double[] qualityScores) {
+<span class="fc" id="L173">        super(inputPlanes, outputPlanes);</span>
         
-<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (qualityScores.length != inputPlanes.size()) {</span>
-<span class="fc" id="L178">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        if (qualityScores.length != inputPlanes.size()) {</span>
+<span class="fc" id="L176">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L181">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L182">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L183">    }</span>
+<span class="fc" id="L179">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L180">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L181">    }</span>
     
     /**
      * Constructor.
@@ -193,11 +191,11 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     public PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L197">        super(listener);</span>
-<span class="fc" id="L198">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L199">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L200">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L195">        super(listener);</span>
+<span class="fc" id="L196">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L197">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L198">    }</span>
     
     /**
      * Constructor with listener and lists of planes to be used to estimate a
@@ -219,16 +217,16 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
     public PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener,
             List&lt;Plane&gt; inputPlanes, List&lt;Plane&gt; outputPlanes,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L223">        super(listener, inputPlanes, outputPlanes);</span>
+            double[] qualityScores) {
+<span class="fc" id="L221">        super(listener, inputPlanes, outputPlanes);</span>
         
-<span class="fc bfc" id="L225" title="All 2 branches covered.">        if (qualityScores.length != inputPlanes.size()) {</span>
-<span class="fc" id="L226">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">        if (qualityScores.length != inputPlanes.size()) {</span>
+<span class="fc" id="L224">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L229">        mStopThreshold = DEFAULT_STOP_THRESHOLD;     </span>
-<span class="fc" id="L230">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L231">    }</span>
+<span class="fc" id="L227">        mStopThreshold = DEFAULT_STOP_THRESHOLD;     </span>
+<span class="fc" id="L228">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L229">    }</span>
     
     /**
      * Returns threshold to be used to keep the algorithm iterating in case that 
@@ -249,7 +247,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-<span class="fc" id="L252">        return mStopThreshold;</span>
+<span class="fc" id="L250">        return mStopThreshold;</span>
     }
     
     /**
@@ -273,17 +271,16 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L278" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L279">            throw new LockedException();</span>
+    public void setStopThreshold(double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L275" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L276">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L281" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
-<span class="fc" id="L282">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L279">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L285">        mStopThreshold = stopThreshold;</span>
-<span class="fc" id="L286">    }    </span>
+<span class="fc" id="L282">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L283">    }    </span>
     
     /**
      * Returns quality scores corresponding to each pair of matched planes.
@@ -292,7 +289,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L295">        return mQualityScores;</span>
+<span class="fc" id="L292">        return mQualityScores;</span>
     }
     
     /**
@@ -306,13 +303,12 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
-<span class="pc bpc" id="L311" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L312">            throw new LockedException();</span>
+    public void setQualityScores(double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L307" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L308">            throw new LockedException();</span>
         }
-<span class="fc" id="L314">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L315">    }    </span>
+<span class="fc" id="L310">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L311">    }    </span>
     
     /**
      * Indicates if estimator is ready to start the projective 3D transformation
@@ -323,8 +319,8 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L326" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L327" title="1 of 2 branches missed.">                mQualityScores.length == mInputPlanes.size();</span>
+<span class="fc bfc" id="L322" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
+<span class="pc bpc" id="L323" title="1 of 2 branches missed.">                mQualityScores.length == mInputPlanes.size();</span>
     }    
     
     /**
@@ -342,149 +338,149 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
     @Override
     public ProjectiveTransformation3D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L345" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L346">            throw new LockedException();</span>
+<span class="fc bfc" id="L341" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L342">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L348" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L349">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L344" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L345">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L352">        PROMedSRobustEstimator&lt;ProjectiveTransformation3D&gt; innerEstimator =</span>
+<span class="fc" id="L348">        PROMedSRobustEstimator&lt;ProjectiveTransformation3D&gt; innerEstimator =</span>
                 new PROMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L354">                new PROMedSRobustEstimatorListener&lt;ProjectiveTransformation3D&gt;() {</span>
+<span class="fc" id="L350">                new PROMedSRobustEstimatorListener&lt;ProjectiveTransformation3D&gt;() {</span>
                     
             //plane to be reused when computing residuals
-<span class="fc" id="L357">            private Plane mTestPlane = new Plane();</span>
+<span class="fc" id="L353">            private Plane mTestPlane = new Plane();</span>
 
             @Override
             public double getThreshold() {
-<span class="fc" id="L361">                return mStopThreshold;</span>
+<span class="fc" id="L357">                return mStopThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L366">                return mInputPlanes.size();</span>
+<span class="fc" id="L362">                return mInputPlanes.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L371">                return ProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L367">                return ProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;ProjectiveTransformation3D&gt; solutions) {
-<span class="fc" id="L377">                Plane inputPlane1 = mInputPlanes.get(samplesIndices[0]);</span>
-<span class="fc" id="L378">                Plane inputPlane2 = mInputPlanes.get(samplesIndices[1]);</span>
-<span class="fc" id="L379">                Plane inputPlane3 = mInputPlanes.get(samplesIndices[2]);</span>
-<span class="fc" id="L380">                Plane inputPlane4 = mInputPlanes.get(samplesIndices[3]);</span>
-<span class="fc" id="L381">                Plane inputPlane5 = mInputPlanes.get(samplesIndices[4]);</span>
+<span class="fc" id="L373">                Plane inputPlane1 = mInputPlanes.get(samplesIndices[0]);</span>
+<span class="fc" id="L374">                Plane inputPlane2 = mInputPlanes.get(samplesIndices[1]);</span>
+<span class="fc" id="L375">                Plane inputPlane3 = mInputPlanes.get(samplesIndices[2]);</span>
+<span class="fc" id="L376">                Plane inputPlane4 = mInputPlanes.get(samplesIndices[3]);</span>
+<span class="fc" id="L377">                Plane inputPlane5 = mInputPlanes.get(samplesIndices[4]);</span>
                 
-<span class="fc" id="L383">                Plane outputPlane1 = mOutputPlanes.get(samplesIndices[0]);</span>
-<span class="fc" id="L384">                Plane outputPlane2 = mOutputPlanes.get(samplesIndices[1]);</span>
-<span class="fc" id="L385">                Plane outputPlane3 = mOutputPlanes.get(samplesIndices[2]);</span>
-<span class="fc" id="L386">                Plane outputPlane4 = mOutputPlanes.get(samplesIndices[3]);</span>
-<span class="fc" id="L387">                Plane outputPlane5 = mOutputPlanes.get(samplesIndices[4]);</span>
+<span class="fc" id="L379">                Plane outputPlane1 = mOutputPlanes.get(samplesIndices[0]);</span>
+<span class="fc" id="L380">                Plane outputPlane2 = mOutputPlanes.get(samplesIndices[1]);</span>
+<span class="fc" id="L381">                Plane outputPlane3 = mOutputPlanes.get(samplesIndices[2]);</span>
+<span class="fc" id="L382">                Plane outputPlane4 = mOutputPlanes.get(samplesIndices[3]);</span>
+<span class="fc" id="L383">                Plane outputPlane5 = mOutputPlanes.get(samplesIndices[4]);</span>
                 
                 try {
-<span class="fc" id="L390">                    ProjectiveTransformation3D transformation =</span>
+<span class="fc" id="L386">                    ProjectiveTransformation3D transformation =</span>
                             new ProjectiveTransformation3D(inputPlane1, 
                             inputPlane2, inputPlane3, inputPlane4, inputPlane5,
                             outputPlane1, outputPlane2, outputPlane3, 
                             outputPlane4, outputPlane5);
-<span class="fc" id="L395">                    solutions.add(transformation);</span>
-<span class="nc" id="L396">                } catch (CoincidentPlanesException e) {</span>
+<span class="fc" id="L391">                    solutions.add(transformation);</span>
+<span class="nc" id="L392">                } catch (CoincidentPlanesException e) {</span>
                     //if lines are coincident, no solution is added
-<span class="fc" id="L398">                }</span>
-<span class="fc" id="L399">            }</span>
+<span class="fc" id="L394">                }</span>
+<span class="fc" id="L395">            }</span>
 
             @Override
             public double computeResidual(
                     ProjectiveTransformation3D currentEstimation, int i) {
-<span class="fc" id="L404">                Plane inputPlane = mInputPlanes.get(i);</span>
-<span class="fc" id="L405">                Plane outputPlane = mOutputPlanes.get(i);</span>
+<span class="fc" id="L400">                Plane inputPlane = mInputPlanes.get(i);</span>
+<span class="fc" id="L401">                Plane outputPlane = mOutputPlanes.get(i);</span>
                 
                 //transform input plane and store result in mTestPlane
                 try {
-<span class="fc" id="L409">                    currentEstimation.transform(inputPlane, mTestPlane);</span>
+<span class="fc" id="L405">                    currentEstimation.transform(inputPlane, mTestPlane);</span>
                     
-<span class="fc" id="L411">                    return getResidual(outputPlane, mTestPlane);</span>
-<span class="nc" id="L412">                } catch (AlgebraException e) {</span>
+<span class="fc" id="L407">                    return getResidual(outputPlane, mTestPlane);</span>
+<span class="nc" id="L408">                } catch (AlgebraException e) {</span>
                     //this happens when internal matrix of affine transformation
                     //cannot be reverse (i.e. transformation is not well defined,
                     //numerical instabilities, etc)
-<span class="nc" id="L416">                    return Double.MAX_VALUE;</span>
+<span class="nc" id="L412">                    return Double.MAX_VALUE;</span>
                 }
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L422">                return PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.</span>
-<span class="fc" id="L423">                        this.isReady();</span>
+<span class="fc" id="L418">                return PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.</span>
+<span class="fc" id="L419">                        this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(
                     RobustEstimator&lt;ProjectiveTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L429" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L430">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L425" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L426">                    mListener.onEstimateStart(</span>
                             PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.this);
                 }
-<span class="fc" id="L433">            }</span>
+<span class="fc" id="L429">            }</span>
 
             @Override
             public void onEstimateEnd(
                     RobustEstimator&lt;ProjectiveTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L438" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L439">                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L434" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L435">                    mListener.onEstimateEnd(</span>
                             PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.this);
                 }
-<span class="fc" id="L442">            }</span>
+<span class="fc" id="L438">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;ProjectiveTransformation3D&gt; estimator, 
                     int iteration) {
-<span class="pc bpc" id="L448" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L449">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L444" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L445">                    mListener.onEstimateNextIteration(</span>
                             PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.this, 
                             iteration);
                 }
-<span class="fc" id="L453">            }</span>
+<span class="fc" id="L449">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;ProjectiveTransformation3D&gt; estimator, 
                     float progress) {
-<span class="nc bnc" id="L459" title="All 2 branches missed.">                if (mListener != null) {</span>
-<span class="nc" id="L460">                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L455" title="All 2 branches missed.">                if (mListener != null) {</span>
+<span class="nc" id="L456">                    mListener.onEstimateProgressChange(</span>
                             PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.this, 
                             progress);
                 }
-<span class="nc" id="L464">            }</span>
+<span class="nc" id="L460">            }</span>
             
             @Override
             public double[] getQualityScores() {
-<span class="fc" id="L468">                return mQualityScores;</span>
+<span class="fc" id="L464">                return mQualityScores;</span>
             }            
         });
         
         try {
-<span class="fc" id="L473">            mLocked = true;</span>
-<span class="fc" id="L474">            mInliersData = null;</span>
-<span class="fc" id="L475">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L476">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L477">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L478">            ProjectiveTransformation3D transformation = </span>
-<span class="fc" id="L479">                    innerEstimator.estimate();</span>
-<span class="fc" id="L480">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L481">            return attemptRefine(transformation);            </span>
-<span class="nc" id="L482">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L483">            throw new LockedException(e);</span>
-<span class="nc" id="L484">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L485">            throw new NotReadyException(e);</span>
+<span class="fc" id="L469">            mLocked = true;</span>
+<span class="fc" id="L470">            mInliersData = null;</span>
+<span class="fc" id="L471">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L472">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L473">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L474">            ProjectiveTransformation3D transformation = </span>
+<span class="fc" id="L475">                    innerEstimator.estimate();</span>
+<span class="fc" id="L476">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L477">            return attemptRefine(transformation);            </span>
+<span class="nc" id="L478">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L479">            throw new LockedException(e);</span>
+<span class="nc" id="L480">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L481">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L487">            mLocked = false;</span>
+<span class="fc" id="L483">            mLocked = false;</span>
         }        
     }
 
@@ -494,7 +490,7 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      */        
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L497">        return RobustEstimatorMethod.PROMedS;</span>
+<span class="fc" id="L493">        return RobustEstimatorMethod.PROMedS;</span>
     }       
     
     /**
@@ -509,12 +505,12 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L512">        PROMedSRobustEstimator.PROMedSInliersData inliersData =</span>
-<span class="fc" id="L513">                (PROMedSRobustEstimator.PROMedSInliersData)getInliersData();</span>
+<span class="fc" id="L508">        PROMedSRobustEstimator.PROMedSInliersData inliersData =</span>
+<span class="fc" id="L509">                (PROMedSRobustEstimator.PROMedSInliersData)getInliersData();</span>
 
         //avoid setting a threshold too strict
-<span class="fc" id="L516">        double threshold = inliersData.getEstimatedThreshold();</span>
-<span class="pc bpc" id="L517" title="1 of 2 branches missed.">        return threshold &gt; mStopThreshold ? threshold : mStopThreshold;</span>
+<span class="fc" id="L512">        double threshold = inliersData.getEstimatedThreshold();</span>
+<span class="pc bpc" id="L513" title="1 of 2 branches missed.">        return threshold &gt; mStopThreshold ? threshold : mStopThreshold;</span>
     }
     
     /**
@@ -525,14 +521,13 @@ public class PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L530" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L531">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(double[] qualityScores) {
+<span class="fc bfc" id="L525" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L526">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L534">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L535">    }            </span>
+<span class="fc" id="L529">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L530">    }            </span>
     
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -171,7 +171,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */
     public PROMedSMetricTransformation3DRobustEstimator(
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
 <span class="fc" id="L175">        super(inputPoints, outputPoints);</span>
 
 <span class="fc bfc" id="L177" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
@@ -193,7 +193,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */
     public PROMedSMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
 <span class="fc" id="L197">        super(listener);</span>
 <span class="fc" id="L198">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
 <span class="fc" id="L199">        internalSetQualityScores(qualityScores);</span>
@@ -219,7 +219,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
     public PROMedSMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
 <span class="fc" id="L223">        super(listener, inputPoints, outputPoints);</span>
         
 <span class="fc bfc" id="L225" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
@@ -256,7 +256,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */
     public PROMedSMetricTransformation3DRobustEstimator(
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
 <span class="fc" id="L260">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
 <span class="fc" id="L261">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
 <span class="fc" id="L262">    }</span>
@@ -293,7 +293,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
     public PROMedSMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
 <span class="fc" id="L297">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
 <span class="fc" id="L298">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
 <span class="fc" id="L299">    }</span>
@@ -307,12 +307,11 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSMetricTransformation3DRobustEstimator(
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
-<span class="fc" id="L312">        super(weakMinimumSizeAllowed);</span>
-<span class="fc" id="L313">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L314">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L315">    }</span>
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L311">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L312">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L313">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L314">    }</span>
     
     /**
      * Constructor with lists of points to be used to estimate a metric 3D 
@@ -333,17 +332,16 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */
     public PROMedSMetricTransformation3DRobustEstimator(
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
-<span class="fc" id="L338">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L336">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
 
-<span class="fc bfc" id="L340" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
-<span class="fc" id="L341">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L338" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L339">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L344">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L345">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L346">    }</span>
+<span class="fc" id="L342">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L343">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L344">    }</span>
     
     /**
      * Constructor.
@@ -357,12 +355,11 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */
     public PROMedSMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
-<span class="fc" id="L362">        super(listener, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L363">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L364">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L365">    }</span>
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L359">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L360">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L361">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L362">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate a
@@ -385,17 +382,16 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
     public PROMedSMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            double[] qualityScores, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
-<span class="fc" id="L390">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+            double[] qualityScores, boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L386">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
         
-<span class="fc bfc" id="L392" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
-<span class="fc" id="L393">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L388" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L389">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L396">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L397">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L398">    }</span>
+<span class="fc" id="L392">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L393">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L394">    }</span>
     
     /**
      * Returns threshold to be used to keep the algorithm iterating in case that 
@@ -417,7 +413,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-<span class="fc" id="L420">        return mStopThreshold;</span>
+<span class="fc" id="L416">        return mStopThreshold;</span>
     }
     
     /**
@@ -442,17 +438,16 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L447" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L448">            throw new LockedException();</span>
+    public void setStopThreshold(double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L442" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L443">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L450" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
-<span class="fc" id="L451">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L445" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L446">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L454">        mStopThreshold = stopThreshold;</span>
-<span class="fc" id="L455">    }</span>
+<span class="fc" id="L449">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L450">    }</span>
     
     /**
      * Returns quality scores corresponding to each pair of matched points.
@@ -461,7 +456,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L464">        return mQualityScores;</span>
+<span class="fc" id="L459">        return mQualityScores;</span>
     }
     
     /**
@@ -475,13 +470,12 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
-<span class="fc bfc" id="L480" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L481">            throw new LockedException();</span>
+    public void setQualityScores(double[] qualityScores) throws LockedException {
+<span class="fc bfc" id="L474" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L475">            throw new LockedException();</span>
         }
-<span class="fc" id="L483">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L484">    }</span>
+<span class="fc" id="L477">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L478">    }</span>
         
     /**
      * Indicates if eatimator is ready to start the metric 3D transformation
@@ -492,8 +486,8 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L495" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L496" title="1 of 2 branches missed.">                mQualityScores.length == mInputPoints.size();</span>
+<span class="fc bfc" id="L489" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
+<span class="pc bpc" id="L490" title="1 of 2 branches missed.">                mQualityScores.length == mInputPoints.size();</span>
     }
     
     /**
@@ -511,144 +505,144 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
     @Override
     public MetricTransformation3D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L514" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L515">            throw new LockedException();</span>
+<span class="fc bfc" id="L508" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L509">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L517" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L518">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L511" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L512">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L521">        PROMedSRobustEstimator&lt;MetricTransformation3D&gt; innerEstimator = </span>
+<span class="fc" id="L515">        PROMedSRobustEstimator&lt;MetricTransformation3D&gt; innerEstimator = </span>
                 new PROMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L523">                    new PROMedSRobustEstimatorListener&lt;MetricTransformation3D&gt;() {</span>
+<span class="fc" id="L517">                    new PROMedSRobustEstimatorListener&lt;MetricTransformation3D&gt;() {</span>
                     
             //point to be reused when computing residuals
-<span class="fc" id="L526">            private Point3D mTestPoint = Point3D.create(</span>
+<span class="fc" id="L520">            private Point3D mTestPoint = Point3D.create(</span>
                     CoordinatesType.HOMOGENEOUS_COORDINATES);
             
-<span class="fc" id="L529">            private MetricTransformation3DEstimator mNonRobustEstimator = </span>
+<span class="fc" id="L523">            private MetricTransformation3DEstimator mNonRobustEstimator = </span>
                     new MetricTransformation3DEstimator(
-<span class="fc" id="L531">                            isWeakMinimumSizeAllowed());</span>
+<span class="fc" id="L525">                            isWeakMinimumSizeAllowed());</span>
             
-<span class="fc" id="L533">            private List&lt;Point3D&gt; mSubsetInputPoints = </span>
+<span class="fc" id="L527">            private List&lt;Point3D&gt; mSubsetInputPoints = </span>
                     new ArrayList&lt;&gt;();
-<span class="fc" id="L535">            private List&lt;Point3D&gt; mSubsetOutputPoints = </span>
+<span class="fc" id="L529">            private List&lt;Point3D&gt; mSubsetOutputPoints = </span>
                     new ArrayList&lt;&gt;();
             
             @Override
             public double getThreshold() {
-<span class="fc" id="L540">                return mStopThreshold;</span>
+<span class="fc" id="L534">                return mStopThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L545">                return mInputPoints.size();</span>
+<span class="fc" id="L539">                return mInputPoints.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L550">                return mNonRobustEstimator.getMinimumPoints();</span>
+<span class="fc" id="L544">                return mNonRobustEstimator.getMinimumPoints();</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;MetricTransformation3D&gt; solutions) {
-<span class="fc" id="L556">                mSubsetInputPoints.clear();</span>
-<span class="fc" id="L557">                mSubsetOutputPoints.clear();</span>
-<span class="fc bfc" id="L558" title="All 2 branches covered.">                for (int samplesIndex : samplesIndices) {</span>
-<span class="fc" id="L559">                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
-<span class="fc" id="L560">                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
+<span class="fc" id="L550">                mSubsetInputPoints.clear();</span>
+<span class="fc" id="L551">                mSubsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L552" title="All 2 branches covered.">                for (int samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L553">                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
+<span class="fc" id="L554">                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
                             samplesIndex));
                 }
 
                 try {
-<span class="fc" id="L565">                    mNonRobustEstimator.setPoints(mSubsetInputPoints, </span>
+<span class="fc" id="L559">                    mNonRobustEstimator.setPoints(mSubsetInputPoints, </span>
                             mSubsetOutputPoints);
-<span class="fc" id="L567">                    solutions.add(mNonRobustEstimator.estimate());</span>
-<span class="nc" id="L568">                } catch (Exception e) {</span>
+<span class="fc" id="L561">                    solutions.add(mNonRobustEstimator.estimate());</span>
+<span class="nc" id="L562">                } catch (Exception e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L570">                }</span>
-<span class="fc" id="L571">            }</span>
+<span class="fc" id="L564">                }</span>
+<span class="fc" id="L565">            }</span>
 
             @Override
             public double computeResidual(
                     MetricTransformation3D currentEstimation, int i) {
-<span class="fc" id="L576">                Point3D inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L577">                Point3D outputPoint = mOutputPoints.get(i);</span>
+<span class="fc" id="L570">                Point3D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L571">                Point3D outputPoint = mOutputPoints.get(i);</span>
                 
                 //transform input point and store result in mTestPoint
-<span class="fc" id="L580">                currentEstimation.transform(inputPoint, mTestPoint);</span>
+<span class="fc" id="L574">                currentEstimation.transform(inputPoint, mTestPoint);</span>
                 
-<span class="fc" id="L582">                return outputPoint.distanceTo(mTestPoint);</span>
+<span class="fc" id="L576">                return outputPoint.distanceTo(mTestPoint);</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L587">                return PROMedSMetricTransformation3DRobustEstimator.this.</span>
-<span class="fc" id="L588">                        isReady();</span>
+<span class="fc" id="L581">                return PROMedSMetricTransformation3DRobustEstimator.this.</span>
+<span class="fc" id="L582">                        isReady();</span>
             }
 
             @Override
             public void onEstimateStart(
                     RobustEstimator&lt;MetricTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L594" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L595">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L588" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L589">                    mListener.onEstimateStart(</span>
                             PROMedSMetricTransformation3DRobustEstimator.this);
                 }
-<span class="fc" id="L598">            }</span>
+<span class="fc" id="L592">            }</span>
 
             @Override
             public void onEstimateEnd(
                     RobustEstimator&lt;MetricTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L603" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L604">                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L597" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L598">                    mListener.onEstimateEnd(</span>
                             PROMedSMetricTransformation3DRobustEstimator.this);
                 }
-<span class="fc" id="L607">            }</span>
+<span class="fc" id="L601">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;MetricTransformation3D&gt; estimator, 
                     int iteration) {
-<span class="pc bpc" id="L613" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L614">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L607" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L608">                    mListener.onEstimateNextIteration(</span>
                             PROMedSMetricTransformation3DRobustEstimator.this, 
                             iteration);
                 }
-<span class="fc" id="L618">            }</span>
+<span class="fc" id="L612">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;MetricTransformation3D&gt; estimator, 
                     float progress) {
-<span class="nc bnc" id="L624" title="All 2 branches missed.">                if (mListener != null) {</span>
-<span class="nc" id="L625">                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L618" title="All 2 branches missed.">                if (mListener != null) {</span>
+<span class="nc" id="L619">                    mListener.onEstimateProgressChange(</span>
                             PROMedSMetricTransformation3DRobustEstimator.this, 
                             progress);
                 }
-<span class="nc" id="L629">            }</span>
+<span class="nc" id="L623">            }</span>
 
             @Override
             public double[] getQualityScores() {
-<span class="fc" id="L633">                return mQualityScores;</span>
+<span class="fc" id="L627">                return mQualityScores;</span>
             }
         });
         
         try {
-<span class="fc" id="L638">            mLocked = true;</span>
-<span class="fc" id="L639">            mInliersData = null;</span>
-<span class="fc" id="L640">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L641">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L642">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L643">            MetricTransformation3D transformation = innerEstimator.estimate();</span>
-<span class="fc" id="L644">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L645">            return attemptRefine(transformation);                        </span>
-<span class="nc" id="L646">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L647">            throw new LockedException(e);</span>
-<span class="nc" id="L648">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L649">            throw new NotReadyException(e);</span>
+<span class="fc" id="L632">            mLocked = true;</span>
+<span class="fc" id="L633">            mInliersData = null;</span>
+<span class="fc" id="L634">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L635">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L636">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L637">            MetricTransformation3D transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L638">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L639">            return attemptRefine(transformation);                        </span>
+<span class="nc" id="L640">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L641">            throw new LockedException(e);</span>
+<span class="nc" id="L642">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L643">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L651">            mLocked = false;</span>
+<span class="fc" id="L645">            mLocked = false;</span>
         }
     }
 
@@ -658,7 +652,7 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L661">        return RobustEstimatorMethod.PROMedS;</span>
+<span class="fc" id="L655">        return RobustEstimatorMethod.PROMedS;</span>
     }    
     
     /**
@@ -673,9 +667,9 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L676">        PROMedSRobustEstimator.PROMedSInliersData inliersData =</span>
-<span class="fc" id="L677">                (PROMedSRobustEstimator.PROMedSInliersData)getInliersData();</span>
-<span class="fc" id="L678">        return inliersData.getEstimatedThreshold();</span>
+<span class="fc" id="L670">        PROMedSRobustEstimator.PROMedSInliersData inliersData =</span>
+<span class="fc" id="L671">                (PROMedSRobustEstimator.PROMedSInliersData)getInliersData();</span>
+<span class="fc" id="L672">        return inliersData.getEstimatedThreshold();</span>
     }
     
     /**
@@ -686,13 +680,12 @@ public class PROMedSMetricTransformation3DRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L691" title="All 2 branches covered.">        if (qualityScores.length &lt; getMinimumPoints()) {</span>
-<span class="fc" id="L692">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(double[] qualityScores) {
+<span class="fc bfc" id="L684" title="All 2 branches covered.">        if (qualityScores.length &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L685">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L695">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L696">    }            </span>
+<span class="fc" id="L688">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L689">    }            </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
