@@ -76,8 +76,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PointCorrespondenceAffineTransformation3DRobustEstimator(
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         super();
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -109,8 +108,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public PointCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         super(listener);
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -158,8 +156,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * already in progress.
      */
     public final void setPoints(List<Point3D> inputPoints, 
-            List<Point3D> outputPoints) throws IllegalArgumentException, 
-            LockedException {
+            List<Point3D> outputPoints) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -202,8 +199,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is 
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException { }    
+    public void setQualityScores(double[] qualityScores) throws LockedException { }
     
     /**
      * Creates an affine 3D transformation estimator based on 2D point 
@@ -244,7 +240,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
@@ -315,7 +311,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(AffineTransformation3DRobustEstimatorListener listener, 
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
@@ -381,8 +377,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
@@ -457,8 +452,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(AffineTransformation3DRobustEstimatorListener listener, 
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
@@ -501,8 +495,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
-            create(List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            create(List<Point3D> inputPoints, List<Point3D> outputPoints) {
         return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);
     }            
             
@@ -533,8 +526,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(AffineTransformation3DRobustEstimatorListener listener, 
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         return create(listener, inputPoints, outputPoints, 
                 DEFAULT_ROBUST_METHOD);
     }            
@@ -566,7 +558,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(inputPoints, outputPoints, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }            
@@ -604,7 +596,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(AffineTransformation3DRobustEstimatorListener listener, 
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, inputPoints, outputPoints, qualityScores,
                 DEFAULT_ROBUST_METHOD);
     }    
@@ -660,7 +652,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetPoints(List<Point3D> inputPoints, 
-            List<Point3D> outputPoints) throws IllegalArgumentException {
+            List<Point3D> outputPoints) {
         if (inputPoints.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

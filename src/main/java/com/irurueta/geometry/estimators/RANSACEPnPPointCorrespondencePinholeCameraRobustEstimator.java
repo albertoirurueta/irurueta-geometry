@@ -106,8 +106,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * correspondences).
      */
     public RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(points3D, points2D);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -131,8 +130,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener, 
-            List<Point3D> points3D, List<Point2D> points2D)
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(listener, points3D, points2D);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -182,7 +180,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException {
+            List<Point2D> points2D) {
         super(intrinsic, points3D, points2D);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -208,7 +206,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     public RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener, 
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException {
+            List<Point2D> points2D) {
         super(listener, intrinsic, points3D, points2D);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -238,8 +236,7 @@ public class RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

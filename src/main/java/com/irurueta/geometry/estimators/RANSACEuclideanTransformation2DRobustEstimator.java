@@ -96,8 +96,7 @@ public class RANSACEuclideanTransformation2DRobustEstimator extends
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public RANSACEuclideanTransformation2DRobustEstimator(
-            List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point2D> inputPoints, List<Point2D> outputPoints) {
         super(inputPoints, outputPoints);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -134,8 +133,7 @@ public class RANSACEuclideanTransformation2DRobustEstimator extends
      */
     public RANSACEuclideanTransformation2DRobustEstimator(
             EuclideanTransformation2DRobustEstimatorListener listener,
-            List<Point2D> inputPoints, List<Point2D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point2D> inputPoints, List<Point2D> outputPoints) {
         super(listener, inputPoints, outputPoints);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -170,8 +168,7 @@ public class RANSACEuclideanTransformation2DRobustEstimator extends
      */
     public RANSACEuclideanTransformation2DRobustEstimator(
             List<Point2D> inputPoints, List<Point2D> outputPoints,
-            boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         super(inputPoints, outputPoints, weakMinimumSizeAllowed);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -212,8 +209,7 @@ public class RANSACEuclideanTransformation2DRobustEstimator extends
     public RANSACEuclideanTransformation2DRobustEstimator(
             EuclideanTransformation2DRobustEstimatorListener listener,
             List<Point2D> inputPoints, List<Point2D> outputPoints,
-            boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -243,8 +239,7 @@ public class RANSACEuclideanTransformation2DRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

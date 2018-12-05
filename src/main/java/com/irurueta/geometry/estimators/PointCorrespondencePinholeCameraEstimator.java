@@ -97,8 +97,7 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * the same size and enough points.
      */
     public PointCorrespondencePinholeCameraEstimator(List<Point3D> points3D,
-            List<Point2D> points2D) throws IllegalArgumentException,
-            WrongListSizesException {
+            List<Point2D> points2D) throws WrongListSizesException {
         super();
         internalSetLists(points3D, points2D);
         mNormalizePointCorrespondences = 
@@ -117,7 +116,7 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      */
     public PointCorrespondencePinholeCameraEstimator(List<Point3D> points3D,
             List<Point2D> points2D, PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         super(listener);
         internalSetLists(points3D, points2D);
         mNormalizePointCorrespondences = 
@@ -134,8 +133,7 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * the same size and enough points.
      */
     private void internalSetLists(List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException,
-            WrongListSizesException {
+            List<Point2D> points2D) throws WrongListSizesException {
         
         if (points3D == null || points2D == null) {
             throw new IllegalArgumentException();
@@ -159,8 +157,7 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
      * the same size and enough points.
      */
     public void setLists(List<Point3D> points3D, List<Point2D> points2D)
-            throws LockedException, IllegalArgumentException, 
-            WrongListSizesException {
+            throws LockedException, WrongListSizesException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -268,7 +265,8 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
             throws PinholeCameraEstimatorException {
         
         //compute image point coordinates limits
-        double x, y;
+        double x;
+        double y;
         double minX = Double.MAX_VALUE;
         double maxX = -Double.MAX_VALUE;
         double minY = Double.MAX_VALUE;
@@ -313,7 +311,9 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
             inverseTransformationMatrix.setElementAt(1, 2, centroidY);
         
             inverseTransformation.setT(inverseTransformationMatrix);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         
         inverseTransformation.normalize();
         
@@ -321,7 +321,9 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
         //transform list of image points
         List<Point2D> transformedPoints = new ArrayList<>(list.size());
         HomogeneousPoint2D homPoint;
-        double homX, homY, homW;
+        double homX;
+        double homY;
+        double homW;
         for (Point2D point : list) {
             point.normalize();
             homX = point.getHomX();
@@ -355,7 +357,9 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
             throws PinholeCameraEstimatorException {
         
         //compute image point coordinates limits
-        double x, y, z;
+        double x;
+        double y;
+        double z;
         double minX = Double.MAX_VALUE;
         double maxX = -Double.MAX_VALUE;
         double minY = Double.MAX_VALUE;
@@ -410,7 +414,9 @@ public abstract class PointCorrespondencePinholeCameraEstimator extends
         
             //normalize transformation to increase accuracy
             transformation.setT(transformMatrix);
-        } catch (WrongSizeException ignore) { }
+        } catch (WrongSizeException ignore) {
+            //never happens
+        }
         transformation.normalize();
                     
         //transform list of world points

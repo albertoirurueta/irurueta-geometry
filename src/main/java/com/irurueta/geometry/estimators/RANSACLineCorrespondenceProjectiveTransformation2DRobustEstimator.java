@@ -104,8 +104,7 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE
      */
     public RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
-            List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException {
+            List<Line2D> inputLines, List<Line2D> outputLines) {
         super(inputLines, outputLines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -142,8 +141,7 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     public RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener,
-            List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException {
+            List<Line2D> inputLines, List<Line2D> outputLines) {
         super(listener, inputLines, outputLines);
         mThreshold = DEFAULT_THRESHOLD; 
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -189,8 +187,7 @@ public class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
