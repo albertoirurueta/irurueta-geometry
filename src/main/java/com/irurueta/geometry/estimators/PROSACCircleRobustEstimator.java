@@ -70,8 +70,7 @@ public class PROSACCircleRobustEstimator extends CircleRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public PROSACCircleRobustEstimator(List<Point2D> points) 
-            throws IllegalArgumentException {
+    public PROSACCircleRobustEstimator(List<Point2D> points) {
         super(points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -96,7 +95,7 @@ public class PROSACCircleRobustEstimator extends CircleRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public PROSACCircleRobustEstimator(CircleRobustEstimatorListener listener,
-            List<Point2D> points) throws IllegalArgumentException {
+            List<Point2D> points) {
         super(listener, points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -107,8 +106,7 @@ public class PROSACCircleRobustEstimator extends CircleRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 3 points).
      */
-    public PROSACCircleRobustEstimator(double[] qualityScores) 
-            throws IllegalArgumentException {
+    public PROSACCircleRobustEstimator(double[] qualityScores) {
         super();
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -123,7 +121,7 @@ public class PROSACCircleRobustEstimator extends CircleRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROSACCircleRobustEstimator(List<Point2D> points,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(points);
         
         if (qualityScores.length != points.size()) {
@@ -143,7 +141,7 @@ public class PROSACCircleRobustEstimator extends CircleRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 3 points).
      */
     public PROSACCircleRobustEstimator(CircleRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -161,8 +159,7 @@ public class PROSACCircleRobustEstimator extends CircleRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROSACCircleRobustEstimator(CircleRobustEstimatorListener listener,
-            List<Point2D> points, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Point2D> points, double[] qualityScores) {
         super(listener, points);
         
         if (qualityScores.length != points.size()) {
@@ -196,8 +193,7 @@ public class PROSACCircleRobustEstimator extends CircleRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -227,8 +223,7 @@ public class PROSACCircleRobustEstimator extends CircleRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -383,8 +378,7 @@ public class PROSACCircleRobustEstimator extends CircleRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

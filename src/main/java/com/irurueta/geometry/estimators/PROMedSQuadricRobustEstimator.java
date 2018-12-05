@@ -89,8 +89,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSQuadricRobustEstimator(List<Point3D> points) 
-            throws IllegalArgumentException {
+    public PROMedSQuadricRobustEstimator(List<Point3D> points) {
         super(points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -117,7 +116,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      */
     public PROMedSQuadricRobustEstimator(
             QuadricRobustEstimatorListener listener,
-            List<Point3D> points) throws IllegalArgumentException {
+            List<Point3D> points) {
         super(listener, points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -128,8 +127,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 5 points).
      */
-    public PROMedSQuadricRobustEstimator(double[] qualityScores)
-            throws IllegalArgumentException {
+    public PROMedSQuadricRobustEstimator(double[] qualityScores) {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -144,7 +142,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSQuadricRobustEstimator(List<Point3D> points,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(points);
         
         if (qualityScores.length != points.size()) {
@@ -165,7 +163,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      */
     public PROMedSQuadricRobustEstimator(
             QuadricRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException{
+            double[] qualityScores) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -184,7 +182,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      */
     public PROMedSQuadricRobustEstimator(
             QuadricRobustEstimatorListener listener, List<Point3D> points, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener, points);
         
         if (qualityScores.length != points.size()) {
@@ -240,8 +238,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -272,8 +269,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 5 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -435,8 +431,7 @@ public class PROMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
