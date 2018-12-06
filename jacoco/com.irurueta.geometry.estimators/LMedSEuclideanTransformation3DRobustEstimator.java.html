@@ -93,11 +93,10 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSEuclideanTransformation3DRobustEstimator(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints)
-            throws IllegalArgumentException {
-<span class="fc" id="L98">        super(inputPoints, outputPoints);</span>
-<span class="fc" id="L99">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L100">    }</span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L97">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L98">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L99">    }</span>
     
     /**
      * Constructor.
@@ -106,9 +105,9 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
      */
     public LMedSEuclideanTransformation3DRobustEstimator(
             EuclideanTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L109">        super(listener);</span>
-<span class="fc" id="L110">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L111">    }</span>
+<span class="fc" id="L108">        super(listener);</span>
+<span class="fc" id="L109">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L110">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
@@ -129,9 +128,9 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
             EuclideanTransformation3DRobustEstimatorListener listener,
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints)
             throws IllegalArgumentException {
-<span class="fc" id="L132">        super(listener, inputPoints, outputPoints);</span>
-<span class="fc" id="L133">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L134">    }</span>
+<span class="fc" id="L131">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L132">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L133">    }</span>
 
     /**
      * Constructor.
@@ -139,9 +138,9 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
      */
     public LMedSEuclideanTransformation3DRobustEstimator(
             boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L142">        super(weakMinimumSizeAllowed);</span>
-<span class="fc" id="L143">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L144">    }</span>
+<span class="fc" id="L141">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L142">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L143">    }</span>
     
     /**
      * Constructor with lists of points to be used to estimate an euclidean 3D
@@ -161,9 +160,9 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             boolean weakMinimumSizeAllowed)
             throws IllegalArgumentException {
-<span class="fc" id="L164">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L165">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L166">    }</span>
+<span class="fc" id="L163">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L164">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L165">    }</span>
     
     /**
      * Constructor.
@@ -174,9 +173,9 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
     public LMedSEuclideanTransformation3DRobustEstimator(
             EuclideanTransformation3DRobustEstimatorListener listener,
             boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L177">        super(listener, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L178">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L179">    }</span>
+<span class="fc" id="L176">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L177">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L178">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
@@ -199,9 +198,9 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             boolean weakMinimumSizeAllowed)
             throws IllegalArgumentException {
-<span class="fc" id="L202">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
-<span class="fc" id="L203">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L204">    }</span>
+<span class="fc" id="L201">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L202">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L203">    }</span>
     
     /**
      * Returns threshold to be used to keep the algorithm iterating in case that
@@ -222,7 +221,7 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-<span class="fc" id="L225">        return mStopThreshold;</span>
+<span class="fc" id="L224">        return mStopThreshold;</span>
     }
     
     /**
@@ -248,15 +247,15 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
      */
     public void setStopThreshold(double stopThreshold)
             throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L251" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L252">            throw new LockedException();</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L251">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L254" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
-<span class="fc" id="L255">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L254">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L258">        mStopThreshold = stopThreshold;</span>
-<span class="fc" id="L259">    }</span>
+<span class="fc" id="L257">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L258">    }</span>
     
     /**
      * Estimates an euclidean 3D transformaiton using a robust estimator and
@@ -273,136 +272,136 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
     @Override
     public EuclideanTransformation3D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L277">            throw new LockedException();</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L276">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L279" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L280">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L278" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L279">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L283">        LMedSRobustEstimator&lt;EuclideanTransformation3D&gt; innerEstimator =</span>
+<span class="fc" id="L282">        LMedSRobustEstimator&lt;EuclideanTransformation3D&gt; innerEstimator =</span>
                 new LMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L285">                new LMedSRobustEstimatorListener&lt;EuclideanTransformation3D&gt;() {</span>
+<span class="fc" id="L284">                new LMedSRobustEstimatorListener&lt;EuclideanTransformation3D&gt;() {</span>
                             
             //point to be reused when computing residuals
-<span class="fc" id="L288">            private Point3D mTestPoint = Point3D.create(</span>
+<span class="fc" id="L287">            private Point3D mTestPoint = Point3D.create(</span>
                     CoordinatesType.HOMOGENEOUS_COORDINATES);
             
-<span class="fc" id="L291">            private EuclideanTransformation3DEstimator mNonRobustEstimator = </span>
+<span class="fc" id="L290">            private EuclideanTransformation3DEstimator mNonRobustEstimator = </span>
                     new EuclideanTransformation3DEstimator(
-<span class="fc" id="L293">                            isWeakMinimumSizeAllowed());</span>
+<span class="fc" id="L292">                            isWeakMinimumSizeAllowed());</span>
             
-<span class="fc" id="L295">            private List&lt;Point3D&gt; mSubsetInputPoints = </span>
+<span class="fc" id="L294">            private List&lt;Point3D&gt; mSubsetInputPoints = </span>
                     new ArrayList&lt;&gt;();
-<span class="fc" id="L297">            private List&lt;Point3D&gt; mSubsetOutputPoints = </span>
+<span class="fc" id="L296">            private List&lt;Point3D&gt; mSubsetOutputPoints = </span>
                     new ArrayList&lt;&gt;();
                             
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L302">                return mInputPoints.size();</span>
+<span class="fc" id="L301">                return mInputPoints.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L307">                return mNonRobustEstimator.getMinimumPoints();</span>
+<span class="fc" id="L306">                return mNonRobustEstimator.getMinimumPoints();</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;EuclideanTransformation3D&gt; solutions) {
-<span class="fc" id="L313">                mSubsetInputPoints.clear();</span>
-<span class="fc" id="L314">                mSubsetOutputPoints.clear();</span>
-<span class="fc bfc" id="L315" title="All 2 branches covered.">                for (int samplesIndex : samplesIndices) {</span>
-<span class="fc" id="L316">                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
-<span class="fc" id="L317">                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
+<span class="fc" id="L312">                mSubsetInputPoints.clear();</span>
+<span class="fc" id="L313">                mSubsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L314" title="All 2 branches covered.">                for (int samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L315">                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));</span>
+<span class="fc" id="L316">                    mSubsetOutputPoints.add(mOutputPoints.get(</span>
                             samplesIndex));
                 }
                 
                 try {
-<span class="fc" id="L322">                    mNonRobustEstimator.setPoints(mSubsetInputPoints, </span>
+<span class="fc" id="L321">                    mNonRobustEstimator.setPoints(mSubsetInputPoints, </span>
                             mSubsetOutputPoints);
-<span class="fc" id="L324">                    solutions.add(mNonRobustEstimator.estimate());</span>
-<span class="nc" id="L325">                } catch (Exception e) {</span>
+<span class="fc" id="L323">                    solutions.add(mNonRobustEstimator.estimate());</span>
+<span class="nc" id="L324">                } catch (Exception e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L327">                }</span>
-<span class="fc" id="L328">            }</span>
+<span class="fc" id="L326">                }</span>
+<span class="fc" id="L327">            }</span>
 
             @Override
             public double computeResidual(
                     EuclideanTransformation3D currentEstimation, int i) {
-<span class="fc" id="L333">                Point3D inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L334">                Point3D outputPoint = mOutputPoints.get(i);</span>
+<span class="fc" id="L332">                Point3D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L333">                Point3D outputPoint = mOutputPoints.get(i);</span>
                 
                 //transform input point and store result in mTestPoint
-<span class="fc" id="L337">                currentEstimation.transform(inputPoint, mTestPoint);</span>
+<span class="fc" id="L336">                currentEstimation.transform(inputPoint, mTestPoint);</span>
                 
-<span class="fc" id="L339">                return outputPoint.distanceTo(mTestPoint);</span>
+<span class="fc" id="L338">                return outputPoint.distanceTo(mTestPoint);</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L344">                return LMedSEuclideanTransformation3DRobustEstimator.this.</span>
-<span class="fc" id="L345">                        isReady();</span>
+<span class="fc" id="L343">                return LMedSEuclideanTransformation3DRobustEstimator.this.</span>
+<span class="fc" id="L344">                        isReady();</span>
             }
 
             @Override
             public void onEstimateStart(
                     RobustEstimator&lt;EuclideanTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L351" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L352">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L350" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L351">                    mListener.onEstimateStart(</span>
                             LMedSEuclideanTransformation3DRobustEstimator.this);
                 }
-<span class="fc" id="L355">            }</span>
+<span class="fc" id="L354">            }</span>
 
             @Override
             public void onEstimateEnd(
                     RobustEstimator&lt;EuclideanTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L360" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L361">                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L359" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L360">                    mListener.onEstimateEnd(</span>
                             LMedSEuclideanTransformation3DRobustEstimator.this);
                 }
-<span class="fc" id="L364">            }</span>
+<span class="fc" id="L363">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;EuclideanTransformation3D&gt; estimator, 
                     int iteration) {
-<span class="pc bpc" id="L370" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L371">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L369" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L370">                    mListener.onEstimateNextIteration(</span>
                             LMedSEuclideanTransformation3DRobustEstimator.this, 
                             iteration);
                 }
-<span class="fc" id="L375">            }</span>
+<span class="fc" id="L374">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;EuclideanTransformation3D&gt; estimator, 
                     float progress) {
-<span class="pc bpc" id="L381" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L382">                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L380" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L381">                    mListener.onEstimateProgressChange(</span>
                             LMedSEuclideanTransformation3DRobustEstimator.this, 
                             progress);
                 }
-<span class="fc" id="L386">            }</span>
+<span class="fc" id="L385">            }</span>
         });
         
         try {
-<span class="fc" id="L390">            mLocked = true;</span>
-<span class="fc" id="L391">            mInliersData = null;</span>
-<span class="fc" id="L392">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L393">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L394">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L395">            innerEstimator.setStopThreshold(mStopThreshold);</span>
-<span class="fc" id="L396">            EuclideanTransformation3D transformation = </span>
-<span class="fc" id="L397">                    innerEstimator.estimate();</span>
-<span class="fc" id="L398">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L399">            return attemptRefine(transformation);            </span>
-<span class="nc" id="L400">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L401">            throw new LockedException(e);</span>
-<span class="nc" id="L402">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L403">            throw new NotReadyException(e);</span>
+<span class="fc" id="L389">            mLocked = true;</span>
+<span class="fc" id="L390">            mInliersData = null;</span>
+<span class="fc" id="L391">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L392">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L393">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L394">            innerEstimator.setStopThreshold(mStopThreshold);</span>
+<span class="fc" id="L395">            EuclideanTransformation3D transformation = </span>
+<span class="fc" id="L396">                    innerEstimator.estimate();</span>
+<span class="fc" id="L397">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L398">            return attemptRefine(transformation);            </span>
+<span class="nc" id="L399">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L400">            throw new LockedException(e);</span>
+<span class="nc" id="L401">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L402">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L405">            mLocked = false;</span>
+<span class="fc" id="L404">            mLocked = false;</span>
         }
     }
 
@@ -412,7 +411,7 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
      */            
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L415">        return RobustEstimatorMethod.LMedS;</span>
+<span class="fc" id="L414">        return RobustEstimatorMethod.LMedS;</span>
     }  
     
     /**
@@ -427,9 +426,9 @@ public class LMedSEuclideanTransformation3DRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L430">        LMedSRobustEstimator.LMedSInliersData inliersData =</span>
-<span class="fc" id="L431">                (LMedSRobustEstimator.LMedSInliersData)getInliersData();</span>
-<span class="fc" id="L432">        return inliersData.getEstimatedThreshold();</span>
+<span class="fc" id="L429">        LMedSRobustEstimator.LMedSInliersData inliersData =</span>
+<span class="fc" id="L430">                (LMedSRobustEstimator.LMedSInliersData)getInliersData();</span>
+<span class="fc" id="L431">        return inliersData.getEstimatedThreshold();</span>
     }        
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

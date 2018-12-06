@@ -89,13 +89,12 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * (6 correspondences).
      */
     public PointCorrespondencePinholeCameraRobustEstimator(
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
-            throws IllegalArgumentException {
-<span class="fc" id="L94">        super();</span>
-<span class="fc" id="L95">        mNormalizeSubsetPointCorrespondences = </span>
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L93">        super();</span>
+<span class="fc" id="L94">        mNormalizeSubsetPointCorrespondences = </span>
                 DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES;
-<span class="fc" id="L97">        internalSetPoints(points3D, points2D);</span>
-<span class="fc" id="L98">    }</span>
+<span class="fc" id="L96">        internalSetPoints(points3D, points2D);</span>
+<span class="fc" id="L97">    }</span>
     
     /**
      * Constructor with listener.
@@ -104,10 +103,10 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener) {
-<span class="fc" id="L107">        super(listener);</span>
-<span class="fc" id="L108">        mNormalizeSubsetPointCorrespondences = </span>
+<span class="fc" id="L106">        super(listener);</span>
+<span class="fc" id="L107">        mNormalizeSubsetPointCorrespondences = </span>
                 DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES;        
-<span class="fc" id="L110">    }</span>
+<span class="fc" id="L109">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate a 
@@ -126,13 +125,12 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D)
-            throws IllegalArgumentException {
-<span class="fc" id="L131">        super(listener);</span>
-<span class="fc" id="L132">        mNormalizeSubsetPointCorrespondences = </span>
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L129">        super(listener);</span>
+<span class="fc" id="L130">        mNormalizeSubsetPointCorrespondences = </span>
                 DEFAULT_NORMALIZE_SUBSET_POINT_CORRESPONDENCES;        
-<span class="fc" id="L134">        internalSetPoints(points3D, points2D);</span>
-<span class="fc" id="L135">    }</span>
+<span class="fc" id="L132">        internalSetPoints(points3D, points2D);</span>
+<span class="fc" id="L133">    }</span>
     
     /**
      * Returns list of 3D points to be used to estimate a pinhole camera.
@@ -144,7 +142,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return list of 3D points to be used to estimate a pinhole camera.
      */
     public List&lt;Point3D&gt; getPoints3D() {
-<span class="fc" id="L147">        return mPoints3D;</span>
+<span class="fc" id="L145">        return mPoints3D;</span>
     }
     
     /**
@@ -157,7 +155,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return list of 2D points to be used to estimate a pinhole camera.
      */
     public List&lt;Point2D&gt; getPoints2D() {
-<span class="fc" id="L160">        return mPoints2D;</span>
+<span class="fc" id="L158">        return mPoints2D;</span>
     }
     
     /**
@@ -175,12 +173,12 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * already in progress.
      */
     public final void setPoints(List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L179" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L180">            throw new LockedException();</span>
+            throws LockedException {
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L178">            throw new LockedException();</span>
         }
-<span class="fc" id="L182">        internalSetPoints(points3D, points2D);</span>
-<span class="fc" id="L183">    }</span>
+<span class="fc" id="L180">        internalSetPoints(points3D, points2D);</span>
+<span class="fc" id="L181">    }</span>
     
     /**
      * Indicates if estimator is ready to start the pinhole camera estimation.
@@ -190,9 +188,9 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L193" title="1 of 4 branches missed.">        return mPoints3D != null &amp;&amp; mPoints2D != null &amp;&amp;</span>
-<span class="pc bpc" id="L194" title="1 of 2 branches missed.">                mPoints3D.size() == mPoints2D.size() &amp;&amp;</span>
-<span class="pc bpc" id="L195" title="1 of 2 branches missed.">                mPoints3D.size() &gt;= MIN_NUMBER_OF_POINT_CORRESPONDENCES;</span>
+<span class="pc bpc" id="L191" title="1 of 4 branches missed.">        return mPoints3D != null &amp;&amp; mPoints2D != null &amp;&amp;</span>
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">                mPoints3D.size() == mPoints2D.size() &amp;&amp;</span>
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">                mPoints3D.size() &gt;= MIN_NUMBER_OF_POINT_CORRESPONDENCES;</span>
     }
     
     /**
@@ -203,7 +201,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return quality scores corresponding to each pair of matched points.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L206">        return null;</span>
+<span class="fc" id="L204">        return null;</span>
     }    
     
     /**
@@ -218,8 +216,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is 
      * smaller than MIN_NUMBER_OF_POINT_CORRESPONDENCES (i.e. 6 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="nc" id="L222">            IllegalArgumentException { }   </span>
+<span class="nc" id="L219">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
 
     /**
      * Returns value indicating if each picked subset point correspondences are
@@ -228,7 +225,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * false otherwise.
      */
     public boolean isNormalizeSubsetPointCorrespondences() {
-<span class="fc" id="L231">        return mNormalizeSubsetPointCorrespondences;</span>
+<span class="fc" id="L228">        return mNormalizeSubsetPointCorrespondences;</span>
     }
     
     /**
@@ -242,12 +239,12 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public void setNormalizeSubsetPointCorrespondences(
             boolean normalizeSubsetPointCorrespondences) 
             throws LockedException {
-<span class="fc bfc" id="L245" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L246">            throw new LockedException();</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L243">            throw new LockedException();</span>
         }
-<span class="fc" id="L248">        mNormalizeSubsetPointCorrespondences = </span>
+<span class="fc" id="L245">        mNormalizeSubsetPointCorrespondences = </span>
                 normalizeSubsetPointCorrespondences;
-<span class="fc" id="L250">    }</span>
+<span class="fc" id="L247">    }</span>
     
     /**
      * Creates a pinhole camera robust estimator based on point correspondences
@@ -258,7 +255,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public static PointCorrespondencePinholeCameraRobustEstimator 
             create(RobustEstimatorMethod method) {
-<span class="fc" id="L261">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L258">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 method);
     }
         
@@ -277,8 +274,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L281">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L278">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 points3D, points2D, method);
     }
     
@@ -295,7 +292,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
             RobustEstimatorMethod method) {
-<span class="fc" id="L298">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L295">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, method);
     }
     
@@ -318,8 +315,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L322">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L319">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, points3D, points2D, method);
     }
 
@@ -335,9 +332,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * smaller than required minimum size (6 samples).
      */    
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc" id="L340">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L336">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 qualityScores, method);
     }
     
@@ -359,9 +355,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L364">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L359">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 points3D, points2D, qualityScores, method);
     }
     
@@ -381,9 +376,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L386">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L380">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, qualityScores, method);
     }
     
@@ -408,9 +402,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L413">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L406">        return DLTPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, points3D, points2D, qualityScores, method);
     }  
     
@@ -425,7 +418,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator 
             create(PinholeCameraIntrinsicParameters intrinsic, 
                     RobustEstimatorMethod method) {
-<span class="fc" id="L428">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L421">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 intrinsic, method);
     }
         
@@ -445,9 +438,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraIntrinsicParameters intrinsic, List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L450">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            List&lt;Point2D&gt; points2D, RobustEstimatorMethod method) {
+<span class="fc" id="L442">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 intrinsic, points3D, points2D, method);
     }
     
@@ -466,7 +458,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             PinholeCameraRobustEstimatorListener listener, 
             PinholeCameraIntrinsicParameters intrinsic, 
             RobustEstimatorMethod method) {
-<span class="fc" id="L469">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L461">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, intrinsic, method);
     }
     
@@ -491,8 +483,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic, 
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L495">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L487">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, intrinsic, points3D, points2D, method);
     }
 
@@ -510,8 +502,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */    
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraIntrinsicParameters intrinsic, double[] qualityScores, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L514">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L506">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 intrinsic, qualityScores, method);
     }
     
@@ -535,9 +527,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraIntrinsicParameters intrinsic, 
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L540">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L531">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 intrinsic, points3D, points2D, qualityScores, method);
     }
     
@@ -559,9 +550,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
             PinholeCameraIntrinsicParameters intrinsic, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L564">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L554">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, intrinsic, qualityScores, method);
     }
     
@@ -588,9 +578,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic, 
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L593">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L582">        return EPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, intrinsic, points3D, points2D, qualityScores, method);
     }      
     
@@ -611,15 +600,15 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             create(double skewness, double horizontalPrincipalPoint,
                     double verticalPrincipalPoint,
                     RobustEstimatorMethod method) {
-<span class="fc" id="L614">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
-<span class="fc" id="L615">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L603">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
+<span class="fc" id="L604">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                         method);
         try {
-<span class="fc" id="L618">            estimator.setSkewness(skewness);</span>
-<span class="fc" id="L619">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
-<span class="fc" id="L620">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
-<span class="pc" id="L621">        } catch (LockedException ignore) { /* ignore */ }</span>
-<span class="fc" id="L622">        return estimator;</span>
+<span class="fc" id="L607">            estimator.setSkewness(skewness);</span>
+<span class="fc" id="L608">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
+<span class="fc" id="L609">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
+<span class="pc" id="L610">        } catch (LockedException ignore) { /* ignore */ }</span>
+<span class="fc" id="L611">        return estimator;</span>
     }
         
     /**
@@ -644,17 +633,16 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L649">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator = </span>
-<span class="fc" id="L650">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            List&lt;Point2D&gt; points2D, RobustEstimatorMethod method) {
+<span class="fc" id="L637">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator = </span>
+<span class="fc" id="L638">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 points3D, points2D, method);
         try {
-<span class="fc" id="L653">            estimator.setSkewness(skewness);</span>
-<span class="fc" id="L654">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
-<span class="fc" id="L655">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
-<span class="pc" id="L656">        } catch (LockedException ignore) { /* ignore */ }</span>
-<span class="fc" id="L657">        return estimator;        </span>
+<span class="fc" id="L641">            estimator.setSkewness(skewness);</span>
+<span class="fc" id="L642">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
+<span class="fc" id="L643">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
+<span class="pc" id="L644">        } catch (LockedException ignore) { /* ignore */ }</span>
+<span class="fc" id="L645">        return estimator;        </span>
     }
     
     /**
@@ -676,15 +664,15 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             PinholeCameraRobustEstimatorListener listener, 
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, RobustEstimatorMethod method) {
-<span class="fc" id="L679">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
-<span class="fc" id="L680">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L667">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
+<span class="fc" id="L668">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, method);
         try {
-<span class="fc" id="L683">            estimator.setSkewness(skewness);</span>
-<span class="fc" id="L684">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
-<span class="fc" id="L685">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
-<span class="pc" id="L686">        } catch (LockedException ignore) { /* ignore */ }</span>
-<span class="fc" id="L687">        return estimator;        </span>
+<span class="fc" id="L671">            estimator.setSkewness(skewness);</span>
+<span class="fc" id="L672">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
+<span class="fc" id="L673">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
+<span class="pc" id="L674">        } catch (LockedException ignore) { /* ignore */ }</span>
+<span class="fc" id="L675">        return estimator;        </span>
     }
     
     /**
@@ -713,17 +701,16 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             PinholeCameraRobustEstimatorListener listener,
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L718">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
-<span class="fc" id="L719">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            List&lt;Point2D&gt; points2D, RobustEstimatorMethod method) {
+<span class="fc" id="L705">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
+<span class="fc" id="L706">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, points3D, points2D, method);
         try {
-<span class="fc" id="L722">            estimator.setSkewness(skewness);</span>
-<span class="fc" id="L723">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
-<span class="fc" id="L724">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
-<span class="pc" id="L725">        } catch (LockedException ignore) { /* ignore */ }</span>
-<span class="fc" id="L726">        return estimator;        </span>
+<span class="fc" id="L709">            estimator.setSkewness(skewness);</span>
+<span class="fc" id="L710">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
+<span class="fc" id="L711">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
+<span class="pc" id="L712">        } catch (LockedException ignore) { /* ignore */ }</span>
+<span class="fc" id="L713">        return estimator;        </span>
     }
 
     /**
@@ -746,16 +733,16 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, double[] qualityScores, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L750">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
-<span class="fc" id="L751">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L737">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
+<span class="fc" id="L738">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 qualityScores, method);
         try {
-<span class="fc" id="L754">            estimator.setSkewness(skewness);</span>
-<span class="fc" id="L755">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
-<span class="fc" id="L756">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
-<span class="pc" id="L757">        } catch (LockedException ignore) { /* ignore */ }</span>
-<span class="fc" id="L758">        return estimator;        </span>
+<span class="fc" id="L741">            estimator.setSkewness(skewness);</span>
+<span class="fc" id="L742">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
+<span class="fc" id="L743">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
+<span class="pc" id="L744">        } catch (LockedException ignore) { /* ignore */ }</span>
+<span class="fc" id="L745">        return estimator;        </span>
     }
     
     /**
@@ -784,16 +771,16 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, double[] qualityScores, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L788">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
-<span class="fc" id="L789">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L775">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
+<span class="fc" id="L776">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 points3D, points2D, qualityScores, method);
         try {
-<span class="fc" id="L792">            estimator.setSkewness(skewness);</span>
-<span class="fc" id="L793">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
-<span class="fc" id="L794">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
-<span class="pc" id="L795">        } catch (LockedException ignore) { /* ignore */ }</span>
-<span class="fc" id="L796">        return estimator;        </span>
+<span class="fc" id="L779">            estimator.setSkewness(skewness);</span>
+<span class="fc" id="L780">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
+<span class="fc" id="L781">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
+<span class="pc" id="L782">        } catch (LockedException ignore) { /* ignore */ }</span>
+<span class="fc" id="L783">        return estimator;        </span>
     }
     
     /**
@@ -820,16 +807,16 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             PinholeCameraRobustEstimatorListener listener, 
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, double[] qualityScores, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L824">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
-<span class="fc" id="L825">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L811">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
+<span class="fc" id="L812">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, qualityScores, method);
         try {
-<span class="fc" id="L828">            estimator.setSkewness(skewness);</span>
-<span class="fc" id="L829">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
-<span class="fc" id="L830">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
-<span class="pc" id="L831">        } catch (LockedException ignore) { /* ignore */ }</span>
-<span class="fc" id="L832">        return estimator;        </span>
+<span class="fc" id="L815">            estimator.setSkewness(skewness);</span>
+<span class="fc" id="L816">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
+<span class="fc" id="L817">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
+<span class="pc" id="L818">        } catch (LockedException ignore) { /* ignore */ }</span>
+<span class="fc" id="L819">        return estimator;        </span>
     }
     
     /**
@@ -861,17 +848,16 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L866">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
-<span class="fc" id="L867">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L852">        UPnPPointCorrespondencePinholeCameraRobustEstimator estimator =</span>
+<span class="fc" id="L853">                UPnPPointCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, points3D, points2D, qualityScores, method);
         try {
-<span class="fc" id="L870">            estimator.setSkewness(skewness);</span>
-<span class="fc" id="L871">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
-<span class="fc" id="L872">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
-<span class="pc" id="L873">        } catch (LockedException ignore) { /* ignore */ }</span>
-<span class="fc" id="L874">        return estimator;        </span>
+<span class="fc" id="L856">            estimator.setSkewness(skewness);</span>
+<span class="fc" id="L857">            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
+<span class="fc" id="L858">            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
+<span class="pc" id="L859">        } catch (LockedException ignore) { /* ignore */ }</span>
+<span class="fc" id="L860">        return estimator;        </span>
     }       
     
     /**
@@ -880,7 +866,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * @return an instance of a pinhole camera robust estimator.
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create() {
-<span class="fc" id="L883">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L869">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
         
     /**
@@ -896,9 +882,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * (6 correspondences).
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
-            throws IllegalArgumentException {
-<span class="fc" id="L901">        return create(points3D, points2D, DEFAULT_ROBUST_METHOD);</span>
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L886">        return create(points3D, points2D, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -911,7 +896,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener) {
-<span class="fc" id="L914">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L899">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -930,9 +915,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
-            throws IllegalArgumentException {
-<span class="fc" id="L935">        return create(listener, points3D, points2D, DEFAULT_ROBUST_METHOD);</span>
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L919">        return create(listener, points3D, points2D, DEFAULT_ROBUST_METHOD);</span>
     }
 
     /**
@@ -946,8 +930,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * smalelr than required minimum size (6 samples).
      */    
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L950">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L934">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -966,8 +950,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L970">        return create(points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L954">        return create(points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -984,8 +968,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L988">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L972">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1007,8 +991,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L1011">        return create(listener, points3D, points2D, qualityScores, </span>
+            double[] qualityScores) {
+<span class="fc" id="L995">        return create(listener, points3D, points2D, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }    
     
@@ -1020,7 +1004,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraIntrinsicParameters intrinsic) {
-<span class="fc" id="L1023">        return create(intrinsic, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L1007">        return create(intrinsic, DEFAULT_ROBUST_METHOD);</span>
     }
         
     /**
@@ -1038,8 +1022,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraIntrinsicParameters intrinsic, List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D) throws IllegalArgumentException {
-<span class="fc" id="L1042">        return create(intrinsic, points3D, points2D, DEFAULT_ROBUST_METHOD);</span>
+            List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L1026">        return create(intrinsic, points3D, points2D, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1054,7 +1038,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
             PinholeCameraIntrinsicParameters intrinsic) {
-<span class="fc" id="L1057">        return create(listener, intrinsic, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L1041">        return create(listener, intrinsic, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1075,9 +1059,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic,
-            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
-            throws IllegalArgumentException {
-<span class="fc" id="L1080">        return create(listener, intrinsic, points3D, points2D, </span>
+            List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L1063">        return create(listener, intrinsic, points3D, points2D, </span>
                 DEFAULT_ROBUST_METHOD);
     }
 
@@ -1093,9 +1076,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * smalelr than required minimum size (6 samples).
      */    
     public static PointCorrespondencePinholeCameraRobustEstimator create(
-            PinholeCameraIntrinsicParameters intrinsic, double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L1098">        return create(intrinsic, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            PinholeCameraIntrinsicParameters intrinsic, double[] qualityScores) {
+<span class="fc" id="L1080">        return create(intrinsic, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1115,9 +1097,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraIntrinsicParameters intrinsic, List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D, double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L1120">        return create(intrinsic, points3D, points2D, qualityScores, </span>
+            List&lt;Point2D&gt; points2D, double[] qualityScores) {
+<span class="fc" id="L1101">        return create(intrinsic, points3D, points2D, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1137,8 +1118,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
             PinholeCameraIntrinsicParameters intrinsic,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L1141">        return create(listener, intrinsic, qualityScores, </span>
+            double[] qualityScores) {
+<span class="fc" id="L1122">        return create(listener, intrinsic, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1163,8 +1144,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L1167">        return create(listener, intrinsic, points3D, points2D, qualityScores, </span>
+            double[] qualityScores) {
+<span class="fc" id="L1148">        return create(listener, intrinsic, points3D, points2D, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }        
 
@@ -1182,7 +1163,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint) {
-<span class="fc" id="L1185">        return create(skewness, horizontalPrincipalPoint, </span>
+<span class="fc" id="L1166">        return create(skewness, horizontalPrincipalPoint, </span>
                 verticalPrincipalPoint, DEFAULT_ROBUST_METHOD);
     }
         
@@ -1207,8 +1188,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D) throws IllegalArgumentException {
-<span class="fc" id="L1211">        return create(skewness, horizontalPrincipalPoint, </span>
+            List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L1192">        return create(skewness, horizontalPrincipalPoint, </span>
                 verticalPrincipalPoint, points3D, points2D, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1230,7 +1211,7 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             PinholeCameraRobustEstimatorListener listener, 
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint) {
-<span class="fc" id="L1233">        return create(listener, skewness, horizontalPrincipalPoint, </span>
+<span class="fc" id="L1214">        return create(listener, skewness, horizontalPrincipalPoint, </span>
                 verticalPrincipalPoint, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1258,8 +1239,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             PinholeCameraRobustEstimatorListener listener,
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D) throws IllegalArgumentException {
-<span class="fc" id="L1262">        return create(listener, skewness, horizontalPrincipalPoint, </span>
+            List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L1243">        return create(listener, skewness, horizontalPrincipalPoint, </span>
                 verticalPrincipalPoint, points3D, points2D, 
                 DEFAULT_ROBUST_METHOD);
     }
@@ -1282,9 +1263,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */    
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             double skewness, double horizontalPrincipalPoint,
-            double verticalPrincipalPoint, double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L1287">        return create(skewness, horizontalPrincipalPoint, </span>
+            double verticalPrincipalPoint, double[] qualityScores) {
+<span class="fc" id="L1267">        return create(skewness, horizontalPrincipalPoint, </span>
                 verticalPrincipalPoint, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1311,9 +1291,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D, double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L1316">        return create(skewness, horizontalPrincipalPoint, </span>
+            List&lt;Point2D&gt; points2D, double[] qualityScores) {
+<span class="fc" id="L1295">        return create(skewness, horizontalPrincipalPoint, </span>
                 verticalPrincipalPoint, points3D, points2D, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }
@@ -1339,9 +1318,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
     public static PointCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
             double skewness, double horizontalPrincipalPoint,
-            double verticalPrincipalPoint, double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L1344">        return create(listener, skewness, horizontalPrincipalPoint, </span>
+            double verticalPrincipalPoint, double[] qualityScores) {
+<span class="fc" id="L1322">        return create(listener, skewness, horizontalPrincipalPoint, </span>
                 verticalPrincipalPoint, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1371,9 +1349,8 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
             PinholeCameraRobustEstimatorListener listener,
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D, double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L1376">        return create(listener, skewness, horizontalPrincipalPoint, </span>
+            List&lt;Point2D&gt; points2D, double[] qualityScores) {
+<span class="fc" id="L1353">        return create(listener, skewness, horizontalPrincipalPoint, </span>
                 verticalPrincipalPoint, points3D, points2D, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }        
@@ -1386,10 +1363,10 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     protected PinholeCamera attemptRefine(PinholeCamera pinholeCamera, 
             double weight) {
-<span class="fc bfc" id="L1389" title="All 4 branches covered.">        if (hasSuggestions() &amp;&amp; mUseFastRefinement) {</span>
-<span class="fc" id="L1390">            return attemptFastRefine(pinholeCamera, weight);</span>
+<span class="fc bfc" id="L1366" title="All 4 branches covered.">        if (hasSuggestions() &amp;&amp; mUseFastRefinement) {</span>
+<span class="fc" id="L1367">            return attemptFastRefine(pinholeCamera, weight);</span>
         } else {
-<span class="fc" id="L1392">            return attemptSlowRefine(pinholeCamera, weight);</span>
+<span class="fc" id="L1369">            return attemptSlowRefine(pinholeCamera, weight);</span>
         }
     }   
     
@@ -1405,16 +1382,16 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      * points).
      */
     private void internalSetPoints(List&lt;Point3D&gt; points3D, 
-            List&lt;Point2D&gt; points2D) throws IllegalArgumentException {
-<span class="fc bfc" id="L1409" title="All 2 branches covered.">        if (points3D.size() &lt; MIN_NUMBER_OF_POINT_CORRESPONDENCES) {</span>
-<span class="fc" id="L1410">            throw new IllegalArgumentException();</span>
+            List&lt;Point2D&gt; points2D) {
+<span class="fc bfc" id="L1386" title="All 2 branches covered.">        if (points3D.size() &lt; MIN_NUMBER_OF_POINT_CORRESPONDENCES) {</span>
+<span class="fc" id="L1387">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L1412" title="All 2 branches covered.">        if (points3D.size() != points2D.size()) {</span>
-<span class="fc" id="L1413">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L1389" title="All 2 branches covered.">        if (points3D.size() != points2D.size()) {</span>
+<span class="fc" id="L1390">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L1415">        mPoints3D = points3D;</span>
-<span class="fc" id="L1416">        mPoints2D = points2D;</span>
-<span class="fc" id="L1417">    }</span>
+<span class="fc" id="L1392">        mPoints3D = points3D;</span>
+<span class="fc" id="L1393">        mPoints2D = points2D;</span>
+<span class="fc" id="L1394">    }</span>
     
     /**
      * Attempts to refine provided camera using a slow but more accurate and
@@ -1426,58 +1403,58 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     private PinholeCamera attemptSlowRefine(PinholeCamera pinholeCamera,
             double weight) {
-<span class="fc" id="L1429">        InliersData inliersData = getInliersData();</span>
-<span class="pc bpc" id="L1430" title="1 of 6 branches missed.">        if ((mRefineResult || mKeepCovariance) &amp;&amp; inliersData != null) {</span>
-<span class="fc" id="L1431">            DecomposedPointCorrespondencePinholeCameraRefiner refiner =</span>
+<span class="fc" id="L1406">        InliersData inliersData = getInliersData();</span>
+<span class="pc bpc" id="L1407" title="1 of 6 branches missed.">        if ((mRefineResult || mKeepCovariance) &amp;&amp; inliersData != null) {</span>
+<span class="fc" id="L1408">            DecomposedPointCorrespondencePinholeCameraRefiner refiner =</span>
                     new DecomposedPointCorrespondencePinholeCameraRefiner(
                     pinholeCamera, mKeepCovariance, inliersData, mPoints3D,
-<span class="fc" id="L1434">                    mPoints2D, getRefinementStandardDeviation());</span>
+<span class="fc" id="L1411">                    mPoints2D, getRefinementStandardDeviation());</span>
             try {
-<span class="pc bpc" id="L1436" title="1 of 2 branches missed.">                if (mRefineResult) {</span>
-<span class="fc" id="L1437">                    refiner.setMinSuggestionWeight(weight);</span>
-<span class="fc" id="L1438">                    refiner.setMaxSuggestionWeight(weight);</span>
+<span class="pc bpc" id="L1413" title="1 of 2 branches missed.">                if (mRefineResult) {</span>
+<span class="fc" id="L1414">                    refiner.setMinSuggestionWeight(weight);</span>
+<span class="fc" id="L1415">                    refiner.setMaxSuggestionWeight(weight);</span>
                     
-<span class="fc" id="L1440">                    refiner.setSuggestSkewnessValueEnabled(</span>
+<span class="fc" id="L1417">                    refiner.setSuggestSkewnessValueEnabled(</span>
                             mSuggestSkewnessValueEnabled);
-<span class="fc" id="L1442">                    refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);</span>
-<span class="fc" id="L1443">                    refiner.setSuggestHorizontalFocalLengthEnabled(</span>
+<span class="fc" id="L1419">                    refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);</span>
+<span class="fc" id="L1420">                    refiner.setSuggestHorizontalFocalLengthEnabled(</span>
                             mSuggestHorizontalFocalLengthEnabled);
-<span class="fc" id="L1445">                    refiner.setSuggestedHorizontalFocalLengthValue(</span>
+<span class="fc" id="L1422">                    refiner.setSuggestedHorizontalFocalLengthValue(</span>
                             mSuggestedHorizontalFocalLengthValue);
-<span class="fc" id="L1447">                    refiner.setSuggestVerticalFocalLengthEnabled(</span>
+<span class="fc" id="L1424">                    refiner.setSuggestVerticalFocalLengthEnabled(</span>
                             mSuggestVerticalFocalLengthEnabled);
-<span class="fc" id="L1449">                    refiner.setSuggestedVerticalFocalLengthValue(</span>
+<span class="fc" id="L1426">                    refiner.setSuggestedVerticalFocalLengthValue(</span>
                             mSuggestedVerticalFocalLengthValue);
-<span class="fc" id="L1451">                    refiner.setSuggestAspectRatioEnabled(</span>
+<span class="fc" id="L1428">                    refiner.setSuggestAspectRatioEnabled(</span>
                             mSuggestAspectRatioEnabled);
-<span class="fc" id="L1453">                    refiner.setSuggestedAspectRatioValue(</span>
+<span class="fc" id="L1430">                    refiner.setSuggestedAspectRatioValue(</span>
                             mSuggestedAspectRatioValue);
-<span class="fc" id="L1455">                    refiner.setSuggestPrincipalPointEnabled(</span>
+<span class="fc" id="L1432">                    refiner.setSuggestPrincipalPointEnabled(</span>
                             mSuggestPrincipalPointEnabled);
-<span class="fc" id="L1457">                    refiner.setSuggestedPrincipalPointValue(</span>
+<span class="fc" id="L1434">                    refiner.setSuggestedPrincipalPointValue(</span>
                             mSuggestedPrincipalPointValue);
-<span class="fc" id="L1459">                    refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);</span>
-<span class="fc" id="L1460">                    refiner.setSuggestedRotationValue(mSuggestedRotationValue);</span>
-<span class="fc" id="L1461">                    refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);</span>
-<span class="fc" id="L1462">                    refiner.setSuggestedCenterValue(mSuggestedCenterValue);                </span>
+<span class="fc" id="L1436">                    refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);</span>
+<span class="fc" id="L1437">                    refiner.setSuggestedRotationValue(mSuggestedRotationValue);</span>
+<span class="fc" id="L1438">                    refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);</span>
+<span class="fc" id="L1439">                    refiner.setSuggestedCenterValue(mSuggestedCenterValue);                </span>
                 }
                 
-<span class="fc" id="L1465">                PinholeCamera result = new PinholeCamera();</span>
-<span class="fc" id="L1466">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L1442">                PinholeCamera result = new PinholeCamera();</span>
+<span class="fc" id="L1443">                boolean improved = refiner.refine(result);</span>
             
-<span class="fc bfc" id="L1468" title="All 2 branches covered.">                if (mKeepCovariance) {</span>
+<span class="fc bfc" id="L1445" title="All 2 branches covered.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L1470">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L1447">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="fc bfc" id="L1473" title="All 2 branches covered.">                return improved ? result : pinholeCamera;</span>
+<span class="fc bfc" id="L1450" title="All 2 branches covered.">                return improved ? result : pinholeCamera;</span>
                  
-<span class="fc" id="L1475">            } catch (Exception e) {</span>
-<span class="fc" id="L1476">                return pinholeCamera;   </span>
+<span class="fc" id="L1452">            } catch (Exception e) {</span>
+<span class="fc" id="L1453">                return pinholeCamera;   </span>
             }            
         } else {
-<span class="fc" id="L1479">            mCovariance = null;</span>
-<span class="fc" id="L1480">            return pinholeCamera;</span>
+<span class="fc" id="L1456">            mCovariance = null;</span>
+<span class="fc" id="L1457">            return pinholeCamera;</span>
         }
     }
     
@@ -1490,55 +1467,55 @@ public abstract class PointCorrespondencePinholeCameraRobustEstimator extends
      */
     private PinholeCamera attemptFastRefine(PinholeCamera pinholeCamera, 
             final double weight) {
-<span class="fc" id="L1493">        InliersData inliersData = getInliersData();</span>
-<span class="pc bpc" id="L1494" title="2 of 4 branches missed.">        if (mRefineResult &amp;&amp; inliersData != null) {</span>
-<span class="fc" id="L1495">            NonDecomposedPointCorrespondencePinholeCameraRefiner refiner =</span>
+<span class="fc" id="L1470">        InliersData inliersData = getInliersData();</span>
+<span class="pc bpc" id="L1471" title="2 of 4 branches missed.">        if (mRefineResult &amp;&amp; inliersData != null) {</span>
+<span class="fc" id="L1472">            NonDecomposedPointCorrespondencePinholeCameraRefiner refiner =</span>
                     new NonDecomposedPointCorrespondencePinholeCameraRefiner(
                     pinholeCamera, mKeepCovariance, inliersData, mPoints3D,
-<span class="fc" id="L1498">                    mPoints2D, getRefinementStandardDeviation());</span>
+<span class="fc" id="L1475">                    mPoints2D, getRefinementStandardDeviation());</span>
             
             try {
-<span class="fc" id="L1501">                refiner.setSuggestionErrorWeight(weight);</span>
+<span class="fc" id="L1478">                refiner.setSuggestionErrorWeight(weight);</span>
                 
-<span class="fc" id="L1503">                refiner.setSuggestSkewnessValueEnabled(</span>
+<span class="fc" id="L1480">                refiner.setSuggestSkewnessValueEnabled(</span>
                         mSuggestSkewnessValueEnabled);
-<span class="fc" id="L1505">                refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);</span>
-<span class="fc" id="L1506">                refiner.setSuggestHorizontalFocalLengthEnabled(</span>
+<span class="fc" id="L1482">                refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);</span>
+<span class="fc" id="L1483">                refiner.setSuggestHorizontalFocalLengthEnabled(</span>
                         mSuggestHorizontalFocalLengthEnabled);
-<span class="fc" id="L1508">                refiner.setSuggestedHorizontalFocalLengthValue(</span>
+<span class="fc" id="L1485">                refiner.setSuggestedHorizontalFocalLengthValue(</span>
                         mSuggestedHorizontalFocalLengthValue);
-<span class="fc" id="L1510">                refiner.setSuggestVerticalFocalLengthEnabled(</span>
+<span class="fc" id="L1487">                refiner.setSuggestVerticalFocalLengthEnabled(</span>
                         mSuggestVerticalFocalLengthEnabled);
-<span class="fc" id="L1512">                refiner.setSuggestedVerticalFocalLengthValue(</span>
+<span class="fc" id="L1489">                refiner.setSuggestedVerticalFocalLengthValue(</span>
                         mSuggestedVerticalFocalLengthValue);
-<span class="fc" id="L1514">                refiner.setSuggestAspectRatioEnabled(</span>
+<span class="fc" id="L1491">                refiner.setSuggestAspectRatioEnabled(</span>
                         mSuggestAspectRatioEnabled);
-<span class="fc" id="L1516">                refiner.setSuggestedAspectRatioValue(</span>
+<span class="fc" id="L1493">                refiner.setSuggestedAspectRatioValue(</span>
                         mSuggestedAspectRatioValue);
-<span class="fc" id="L1518">                refiner.setSuggestPrincipalPointEnabled(</span>
+<span class="fc" id="L1495">                refiner.setSuggestPrincipalPointEnabled(</span>
                         mSuggestPrincipalPointEnabled);
-<span class="fc" id="L1520">                refiner.setSuggestedPrincipalPointValue(</span>
+<span class="fc" id="L1497">                refiner.setSuggestedPrincipalPointValue(</span>
                         mSuggestedPrincipalPointValue);
-<span class="fc" id="L1522">                refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);</span>
-<span class="fc" id="L1523">                refiner.setSuggestedRotationValue(mSuggestedRotationValue);</span>
-<span class="fc" id="L1524">                refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);</span>
-<span class="fc" id="L1525">                refiner.setSuggestedCenterValue(mSuggestedCenterValue);                </span>
+<span class="fc" id="L1499">                refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);</span>
+<span class="fc" id="L1500">                refiner.setSuggestedRotationValue(mSuggestedRotationValue);</span>
+<span class="fc" id="L1501">                refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);</span>
+<span class="fc" id="L1502">                refiner.setSuggestedCenterValue(mSuggestedCenterValue);                </span>
             
-<span class="fc" id="L1527">                PinholeCamera result = new PinholeCamera();</span>
-<span class="fc" id="L1528">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L1504">                PinholeCamera result = new PinholeCamera();</span>
+<span class="fc" id="L1505">                boolean improved = refiner.refine(result);</span>
                 
-<span class="pc bpc" id="L1530" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L1507" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L1532">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L1509">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="fc bfc" id="L1535" title="All 2 branches covered.">                return improved ? result : pinholeCamera;                </span>
-<span class="fc" id="L1536">            } catch (Exception e) {</span>
+<span class="fc bfc" id="L1512" title="All 2 branches covered.">                return improved ? result : pinholeCamera;                </span>
+<span class="fc" id="L1513">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="fc" id="L1538">                return pinholeCamera;</span>
+<span class="fc" id="L1515">                return pinholeCamera;</span>
             }                                   
         } else {
-<span class="nc" id="L1541">            return pinholeCamera;</span>
+<span class="nc" id="L1518">            return pinholeCamera;</span>
         }        
     }                        
 }

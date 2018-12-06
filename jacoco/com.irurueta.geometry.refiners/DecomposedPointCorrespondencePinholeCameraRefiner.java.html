@@ -22,6 +22,7 @@ import com.irurueta.geometry.Point2D;
 import com.irurueta.geometry.Point3D;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
@@ -87,7 +88,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * The faster the weights are increased the less likely that suggested 
      * values can be converged if they differ too much from the original ones.
      */
-<span class="fc" id="L90">    protected double mMinSuggestionWeight = DEFAULT_MIN_SUGGESTION_WEIGHT;</span>
+<span class="fc" id="L91">    protected double mMinSuggestionWeight = DEFAULT_MIN_SUGGESTION_WEIGHT;</span>
     
     /**
      * Maximum suggestion weight. This weight is used to slowly draw original
@@ -97,7 +98,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * The faster the weights are increased the less likely that suggested
      * values can be converged if they differ too much from the original ones.
      */
-<span class="fc" id="L100">    protected double mMaxSuggestionWeight = DEFAULT_MAX_SUGGESTION_WEIGHT;</span>
+<span class="fc" id="L101">    protected double mMaxSuggestionWeight = DEFAULT_MAX_SUGGESTION_WEIGHT;</span>
     
     /**
      * Step to increase suggestion weight. This weight is used to slowly draw
@@ -107,7 +108,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * faster the weights are increased the less likely that suggested values
      * can be converged if they differ too much from the original ones.
      */
-<span class="fc" id="L110">    protected double mSuggestionWeightStep = DEFAULT_SUGGESTION_WEIGHT_STEP;    </span>
+<span class="fc" id="L111">    protected double mSuggestionWeightStep = DEFAULT_SUGGESTION_WEIGHT_STEP;    </span>
     
     /**
      * Instance of a pinhole camera to be reused during refinement.
@@ -122,7 +123,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
     /**
      * Constructor.
      */
-<span class="fc" id="L125">    public DecomposedPointCorrespondencePinholeCameraRefiner() { }</span>
+<span class="fc" id="L126">    public DecomposedPointCorrespondencePinholeCameraRefiner() { }</span>
     
     /**
      * Constructor.
@@ -142,9 +143,9 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
             BitSet inliers, double[] residuals, int numInliers,
             List&lt;Point3D&gt; samples1, List&lt;Point2D&gt; samples2,
             double refinementStandardDeviation) {
-<span class="fc" id="L145">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
+<span class="fc" id="L146">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
                 samples1, samples2, refinementStandardDeviation);
-<span class="fc" id="L147">    }</span>
+<span class="fc" id="L148">    }</span>
 
     /**
      * Constructor.
@@ -162,9 +163,9 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
             PinholeCamera initialEstimation, boolean keepCovariance,
             InliersData inliersData, List&lt;Point3D&gt; samples1, 
             List&lt;Point2D&gt; samples2, double refinementStandardDeviation) {
-<span class="fc" id="L165">        super(initialEstimation, keepCovariance, inliersData, samples1, </span>
+<span class="fc" id="L166">        super(initialEstimation, keepCovariance, inliersData, samples1, </span>
                 samples2, refinementStandardDeviation);
-<span class="fc" id="L167">    }</span>
+<span class="fc" id="L168">    }</span>
     
     /**
      * Gets minimum suggestion weight. This weight is used to slowly draw 
@@ -176,7 +177,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * @return minimum suggestion weight.
      */
     public double getMinSuggestionWeight() {
-<span class="fc" id="L179">        return mMinSuggestionWeight;</span>
+<span class="fc" id="L180">        return mMinSuggestionWeight;</span>
     }
     
     /**
@@ -191,11 +192,11 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      */
     public void setMinSuggestionWeight(double minSuggestionWeight) 
             throws LockedException {
-<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L195">            throw new LockedException();</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L196">            throw new LockedException();</span>
         }
-<span class="fc" id="L197">        mMinSuggestionWeight = minSuggestionWeight;</span>
-<span class="fc" id="L198">    }</span>
+<span class="fc" id="L198">        mMinSuggestionWeight = minSuggestionWeight;</span>
+<span class="fc" id="L199">    }</span>
     
     /**
      * Gets maximum suggestion weight. This weight is used to slowly draw 
@@ -207,7 +208,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * @return maximum suggestion weight.
      */
     public double getMaxSuggestionWeight() {
-<span class="fc" id="L210">        return mMaxSuggestionWeight;</span>
+<span class="fc" id="L211">        return mMaxSuggestionWeight;</span>
     }
     
     /**
@@ -222,11 +223,11 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      */
     public void setMaxSuggestionWeight(double maxSuggestionWeight)
             throws LockedException {
-<span class="fc bfc" id="L225" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L226">            throw new LockedException();</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L227">            throw new LockedException();</span>
         }
-<span class="fc" id="L228">        mMaxSuggestionWeight = maxSuggestionWeight;</span>
-<span class="fc" id="L229">    }</span>
+<span class="fc" id="L229">        mMaxSuggestionWeight = maxSuggestionWeight;</span>
+<span class="fc" id="L230">    }</span>
     
     /**
      * Sets minimum and maximum suggestion weights. Suggestion weight is used to
@@ -244,16 +245,16 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
     public void setMinMaxSuggestionWeight(double minSuggestionWeight, 
             double maxSuggestionWeight) throws LockedException, 
             IllegalArgumentException {
-<span class="fc bfc" id="L247" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L248">            throw new LockedException();</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L249">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L250" title="1 of 2 branches missed.">        if (minSuggestionWeight &gt;= maxSuggestionWeight) {</span>
-<span class="nc" id="L251">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">        if (minSuggestionWeight &gt;= maxSuggestionWeight) {</span>
+<span class="nc" id="L252">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L254">        mMinSuggestionWeight = minSuggestionWeight;</span>
-<span class="fc" id="L255">        mMaxSuggestionWeight = maxSuggestionWeight;</span>
-<span class="fc" id="L256">    }</span>
+<span class="fc" id="L255">        mMinSuggestionWeight = minSuggestionWeight;</span>
+<span class="fc" id="L256">        mMaxSuggestionWeight = maxSuggestionWeight;</span>
+<span class="fc" id="L257">    }</span>
     
     /**
      * Gets step to increase suggestion weight. This weight is used to slowly
@@ -265,7 +266,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * @return step to increase suggestion weight.
      */
     public double getSuggestionWeightStep() {
-<span class="fc" id="L268">        return mSuggestionWeightStep;</span>
+<span class="fc" id="L269">        return mSuggestionWeightStep;</span>
     }
     
     /**
@@ -281,15 +282,15 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      */
     public void setSuggestionWeightStep(double suggestionWeightStep) 
             throws LockedException, IllegalArgumentException {
-<span class="fc bfc" id="L284" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L285">            throw new LockedException();</span>
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L286">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L287" title="All 2 branches covered.">        if (suggestionWeightStep &lt;= 0.0) {</span>
-<span class="fc" id="L288">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">        if (suggestionWeightStep &lt;= 0.0) {</span>
+<span class="fc" id="L289">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L291">        mSuggestionWeightStep = suggestionWeightStep;</span>
-<span class="fc" id="L292">    }    </span>
+<span class="fc" id="L292">        mSuggestionWeightStep = suggestionWeightStep;</span>
+<span class="fc" id="L293">    }    </span>
     
     /**
      * Refines provided initial estimation.
@@ -307,34 +308,34 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
     @Override
     public boolean refine(PinholeCamera result) throws NotReadyException, 
             LockedException, RefinerException {
-<span class="fc bfc" id="L310" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L311">            throw new LockedException();</span>
+<span class="fc bfc" id="L311" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L312">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L313" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L314">            throw new NotReadyException();</span>
-        }
-        
-<span class="fc" id="L317">        mLocked = true;</span>
-        
-<span class="fc bfc" id="L319" title="All 2 branches covered.">        if (mListener != null) {</span>
-<span class="fc" id="L320">            mListener.onRefineStart(this, mInitialEstimation);</span>
+<span class="fc bfc" id="L314" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L315">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L323">        boolean improved = refinePowell(result);</span>
+<span class="fc" id="L318">        mLocked = true;</span>
         
-<span class="fc bfc" id="L325" title="All 2 branches covered.">        if (mKeepCovariance) {</span>
-<span class="fc" id="L326">            mCovariance = estimateCovarianceLevenbergMarquardt(</span>
-<span class="fc bfc" id="L327" title="All 2 branches covered.">                    improved ? result : mInitialEstimation, </span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">        if (mListener != null) {</span>
+<span class="fc" id="L321">            mListener.onRefineStart(this, mInitialEstimation);</span>
+        }
+        
+<span class="fc" id="L324">        boolean improved = refinePowell(result);</span>
+        
+<span class="fc bfc" id="L326" title="All 2 branches covered.">        if (mKeepCovariance) {</span>
+<span class="fc" id="L327">            mCovariance = estimateCovarianceLevenbergMarquardt(</span>
+<span class="fc bfc" id="L328" title="All 2 branches covered.">                    improved ? result : mInitialEstimation, </span>
                     mCurrentWeight);
         }
         
-<span class="fc bfc" id="L331" title="All 2 branches covered.">        if (mListener != null) {</span>
-<span class="fc" id="L332">            mListener.onRefineEnd(this, mInitialEstimation, result, improved);</span>
+<span class="fc bfc" id="L332" title="All 2 branches covered.">        if (mListener != null) {</span>
+<span class="fc" id="L333">            mListener.onRefineEnd(this, mInitialEstimation, result, improved);</span>
         }
         
-<span class="fc" id="L335">        mLocked = false;</span>
+<span class="fc" id="L336">        mLocked = false;</span>
         
-<span class="fc" id="L337">        return improved;</span>
+<span class="fc" id="L338">        return improved;</span>
     } 
     
     /**
@@ -346,106 +347,106 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
     private Matrix estimateCovarianceLevenbergMarquardt(
             PinholeCamera pinholeCamera, final double weight) {
         try {
-<span class="fc" id="L349">            pinholeCamera.normalize();</span>
+<span class="fc" id="L350">            pinholeCamera.normalize();</span>
             
             //output values to be fitted/optimized will contain residuals
-<span class="fc" id="L352">            double[] y = new double[mNumInliers];</span>
+<span class="fc" id="L353">            double[] y = new double[mNumInliers];</span>
             //input values will contain 3D point and 2D point to compute 
             //residuals
-<span class="fc" id="L355">            final int nDims = Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH +</span>
+<span class="fc" id="L356">            final int nDims = Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH +</span>
                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH;
-<span class="fc" id="L357">            Matrix x = new Matrix(mNumInliers, nDims);</span>
-<span class="fc" id="L358">            int nSamples = mInliers.length();</span>
-<span class="fc" id="L359">            int pos = 0;</span>
+<span class="fc" id="L358">            Matrix x = new Matrix(mNumInliers, nDims);</span>
+<span class="fc" id="L359">            int nSamples = mInliers.length();</span>
+<span class="fc" id="L360">            int pos = 0;</span>
             Point2D point2D;
             Point3D point3D;
-<span class="fc" id="L362">            final double[] initParams = new double[REFINE_DIMS];</span>
-<span class="fc" id="L363">            cameraToParameters(pinholeCamera, initParams);</span>
+<span class="fc" id="L363">            final double[] initParams = new double[REFINE_DIMS];</span>
+<span class="fc" id="L364">            cameraToParameters(pinholeCamera, initParams);</span>
             
-<span class="fc bfc" id="L365" title="All 2 branches covered.">            double suggestionResidual = hasSuggestions() ?</span>
-<span class="fc" id="L366">                    suggestionResidual(initParams, weight) : 0.0;</span>
-<span class="fc bfc" id="L367" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L368" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
+<span class="fc bfc" id="L366" title="All 2 branches covered.">            double suggestionResidual = hasSuggestions() ?</span>
+<span class="fc" id="L367">                    suggestionResidual(initParams, weight) : 0.0;</span>
+<span class="fc bfc" id="L368" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L369" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
                     //sample is inlier
-<span class="fc" id="L370">                    point2D = mSamples2.get(i);</span>
-<span class="fc" id="L371">                    point3D = mSamples1.get(i);</span>
-<span class="fc" id="L372">                    point2D.normalize();</span>
-<span class="fc" id="L373">                    point3D.normalize();</span>
-<span class="fc" id="L374">                    x.setElementAt(pos, 0, point2D.getHomX());</span>
-<span class="fc" id="L375">                    x.setElementAt(pos, 1, point2D.getHomY());</span>
-<span class="fc" id="L376">                    x.setElementAt(pos, 2, point2D.getHomW());</span>
-<span class="fc" id="L377">                    x.setElementAt(pos, 3, point3D.getHomX());</span>
-<span class="fc" id="L378">                    x.setElementAt(pos, 4, point3D.getHomY());</span>
-<span class="fc" id="L379">                    x.setElementAt(pos, 5, point3D.getHomZ());</span>
-<span class="fc" id="L380">                    x.setElementAt(pos, 6, point3D.getHomW());</span>
+<span class="fc" id="L371">                    point2D = mSamples2.get(i);</span>
+<span class="fc" id="L372">                    point3D = mSamples1.get(i);</span>
+<span class="fc" id="L373">                    point2D.normalize();</span>
+<span class="fc" id="L374">                    point3D.normalize();</span>
+<span class="fc" id="L375">                    x.setElementAt(pos, 0, point2D.getHomX());</span>
+<span class="fc" id="L376">                    x.setElementAt(pos, 1, point2D.getHomY());</span>
+<span class="fc" id="L377">                    x.setElementAt(pos, 2, point2D.getHomW());</span>
+<span class="fc" id="L378">                    x.setElementAt(pos, 3, point3D.getHomX());</span>
+<span class="fc" id="L379">                    x.setElementAt(pos, 4, point3D.getHomY());</span>
+<span class="fc" id="L380">                    x.setElementAt(pos, 5, point3D.getHomZ());</span>
+<span class="fc" id="L381">                    x.setElementAt(pos, 6, point3D.getHomW());</span>
                         
-<span class="fc" id="L382">                    y[pos] = Math.pow(mResiduals[i], 2.0) + suggestionResidual;</span>
-<span class="fc" id="L383">                    pos++;</span>
+<span class="fc" id="L383">                    y[pos] = Math.pow(mResiduals[i], 2.0) + suggestionResidual;</span>
+<span class="fc" id="L384">                    pos++;</span>
                 }
             }
             
-<span class="fc" id="L387">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
-<span class="fc" id="L388">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+<span class="fc" id="L388">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
+<span class="fc" id="L389">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
                         
-<span class="fc" id="L390">                private Point2D mPoint2D = Point2D.create(</span>
+<span class="fc" id="L391">                private Point2D mPoint2D = Point2D.create(</span>
                         CoordinatesType.HOMOGENEOUS_COORDINATES);
                 
-<span class="fc" id="L393">                private Point3D mPoint3D = Point3D.create(</span>
+<span class="fc" id="L394">                private Point3D mPoint3D = Point3D.create(</span>
                         CoordinatesType.HOMOGENEOUS_COORDINATES);
                 
-<span class="fc" id="L396">                private PinholeCamera mPinholeCamera = new PinholeCamera();</span>
+<span class="fc" id="L397">                private PinholeCamera mPinholeCamera = new PinholeCamera();</span>
                 
-<span class="fc" id="L398">                private GradientEstimator mGradientEstimator =</span>
+<span class="fc" id="L399">                private GradientEstimator mGradientEstimator =</span>
                         new GradientEstimator(
-<span class="fc" id="L400">                                new MultiDimensionFunctionEvaluatorListener() {</span>
+<span class="fc" id="L401">                                new MultiDimensionFunctionEvaluatorListener() {</span>
                     @Override
-                    public double evaluate(double[] params) throws Throwable {
+                    public double evaluate(double[] params) {
                         
-<span class="fc" id="L404">                        parametersToCamera(params, mPinholeCamera);</span>
-<span class="fc" id="L405">                        return residualLevenbergMarquardt(mPinholeCamera, </span>
-<span class="fc" id="L406">                                mPoint3D, mPoint2D, params, weight);</span>
+<span class="fc" id="L405">                        parametersToCamera(params, mPinholeCamera);</span>
+<span class="fc" id="L406">                        return residualLevenbergMarquardt(mPinholeCamera, </span>
+<span class="fc" id="L407">                                mPoint3D, mPoint2D, params, weight);</span>
                     }
                 });
                 
                 @Override
                 public int getNumberOfDimensions() {
-<span class="fc" id="L412">                    return nDims;</span>
+<span class="fc" id="L413">                    return nDims;</span>
                 }
 
                 @Override
                 public double[] createInitialParametersArray() {
-<span class="fc" id="L417">                    return initParams;</span>
+<span class="fc" id="L418">                    return initParams;</span>
                 }
 
                 @Override
                 public double evaluate(int i, double[] point, double[] params, 
-                        double[] derivatives) throws Throwable {
-<span class="fc" id="L423">                    mPoint2D.setHomogeneousCoordinates(point[0], point[1], </span>
+                        double[] derivatives) throws EvaluationException {
+<span class="fc" id="L424">                    mPoint2D.setHomogeneousCoordinates(point[0], point[1], </span>
                             point[2]);
-<span class="fc" id="L425">                    mPoint3D.setHomogeneousCoordinates(point[3], point[4], </span>
+<span class="fc" id="L426">                    mPoint3D.setHomogeneousCoordinates(point[3], point[4], </span>
                             point[5], point[6]);
 
-<span class="fc" id="L428">                    parametersToCamera(params, mPinholeCamera);</span>
-<span class="fc" id="L429">                    double y = residualLevenbergMarquardt(mPinholeCamera, </span>
+<span class="fc" id="L429">                    parametersToCamera(params, mPinholeCamera);</span>
+<span class="fc" id="L430">                    double y = residualLevenbergMarquardt(mPinholeCamera, </span>
                             mPoint3D, mPoint2D, params, weight);                      
-<span class="fc" id="L431">                    mGradientEstimator.gradient(params, derivatives);</span>
+<span class="fc" id="L432">                    mGradientEstimator.gradient(params, derivatives);</span>
                         
-<span class="fc" id="L433">                    return y;</span>
+<span class="fc" id="L434">                    return y;</span>
                 }
             };
             
-<span class="fc" id="L437">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
+<span class="fc" id="L438">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, 
-<span class="fc" id="L439">                    x, y, getRefinementStandardDeviation());</span>
+<span class="fc" id="L440">                    x, y, getRefinementStandardDeviation());</span>
                 
-<span class="fc" id="L441">            fitter.fit();</span>
+<span class="fc" id="L442">            fitter.fit();</span>
 
             //obtain covariance
-<span class="fc" id="L444">            return fitter.getCovar();</span>
+<span class="fc" id="L445">            return fitter.getCovar();</span>
             
-<span class="fc" id="L446">        } catch (Exception e) {</span>
+<span class="fc" id="L447">        } catch (Exception e) {</span>
             //estimation failed, so we return null
-<span class="fc" id="L448">            return null;</span>
+<span class="fc" id="L449">            return null;</span>
         }
     }
         
@@ -458,45 +459,45 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * initial estimation, false if no improvement has been achieved.
      */    
     private boolean refinePowell(PinholeCamera result) {
-<span class="fc" id="L461">        boolean improvedAtLeastOnce = false;</span>
-<span class="fc" id="L462">        mCurrentWeight = mMinSuggestionWeight;    </span>
+<span class="fc" id="L462">        boolean improvedAtLeastOnce = false;</span>
+<span class="fc" id="L463">        mCurrentWeight = mMinSuggestionWeight;    </span>
         
-<span class="fc bfc" id="L464" title="All 2 branches covered.">        if (hasSuggestions()) {</span>
+<span class="fc bfc" id="L465" title="All 2 branches covered.">        if (hasSuggestions()) {</span>
             try {
                 //copy camera into a new instance
-<span class="fc" id="L467">                mRefineCamera = new PinholeCamera(</span>
-<span class="fc" id="L468">                        mInitialEstimation.getInternalMatrix().clone());</span>
-<span class="fc" id="L469">                mRefineCamera.normalize();</span>
+<span class="fc" id="L468">                mRefineCamera = new PinholeCamera(</span>
+<span class="fc" id="L469">                        mInitialEstimation.getInternalMatrix().clone());</span>
+<span class="fc" id="L470">                mRefineCamera.normalize();</span>
                 
-<span class="fc" id="L471">                double[] startPoint = new double[REFINE_DIMS];</span>
-<span class="fc" id="L472">                RefinementMultiDimensionFunctionEvaluatorListener listener =</span>
+<span class="fc" id="L472">                double[] startPoint = new double[REFINE_DIMS];</span>
+<span class="fc" id="L473">                RefinementMultiDimensionFunctionEvaluatorListener listener =</span>
                         new RefinementMultiDimensionFunctionEvaluatorListener();
-<span class="fc" id="L474">                PowellMultiOptimizer optimizer = new PowellMultiOptimizer(</span>
+<span class="fc" id="L475">                PowellMultiOptimizer optimizer = new PowellMultiOptimizer(</span>
                         listener,
                         PowellMultiOptimizer.DEFAULT_TOLERANCE);
                 
                 boolean improved;
                 do {           
-<span class="fc" id="L480">                    improved = refinementStepPowell(optimizer, listener, </span>
+<span class="fc" id="L481">                    improved = refinementStepPowell(optimizer, listener, </span>
                             startPoint, mCurrentWeight);
                     
-<span class="fc bfc" id="L483" title="All 2 branches covered.">                    if(improved) {</span>
+<span class="fc bfc" id="L484" title="All 2 branches covered.">                    if(improved) {</span>
                         //update result
-<span class="fc" id="L485">                        result.setInternalMatrix(</span>
-<span class="fc" id="L486">                                mRefineCamera.getInternalMatrix().clone());</span>
-<span class="fc" id="L487">                        improvedAtLeastOnce = true;</span>
+<span class="fc" id="L486">                        result.setInternalMatrix(</span>
+<span class="fc" id="L487">                                mRefineCamera.getInternalMatrix().clone());</span>
+<span class="fc" id="L488">                        improvedAtLeastOnce = true;</span>
                     }
                     
-<span class="fc" id="L490">                    mCurrentWeight += mSuggestionWeightStep;</span>
-<span class="fc bfc" id="L491" title="All 4 branches covered.">                } while (mCurrentWeight &lt; mMaxSuggestionWeight &amp;&amp; improved);</span>
+<span class="fc" id="L491">                    mCurrentWeight += mSuggestionWeightStep;</span>
+<span class="fc bfc" id="L492" title="All 4 branches covered.">                } while (mCurrentWeight &lt; mMaxSuggestionWeight &amp;&amp; improved);</span>
                                                                                 
-<span class="fc" id="L493">                return improvedAtLeastOnce;</span>
-<span class="fc" id="L494">            } catch (Exception e) {</span>
+<span class="fc" id="L494">                return improvedAtLeastOnce;</span>
+<span class="fc" id="L495">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="fc" id="L496">                return improvedAtLeastOnce;</span>
+<span class="fc" id="L497">                return improvedAtLeastOnce;</span>
             }
         }
-<span class="fc" id="L499">        return false;</span>
+<span class="fc" id="L500">        return false;</span>
     }
     
     /**
@@ -515,20 +516,20 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
             RefinementMultiDimensionFunctionEvaluatorListener listener,
             double[] startPoint, double weight) throws Exception {
         
-<span class="fc" id="L518">        listener.weight = weight;</span>
-<span class="fc" id="L519">        cameraToParameters(mRefineCamera, startPoint);</span>
-<span class="fc" id="L520">        double initResidual = residualPowell(mRefineCamera, startPoint, weight);</span>
+<span class="fc" id="L519">        listener.weight = weight;</span>
+<span class="fc" id="L520">        cameraToParameters(mRefineCamera, startPoint);</span>
+<span class="fc" id="L521">        double initResidual = residualPowell(mRefineCamera, startPoint, weight);</span>
                     
-<span class="fc" id="L522">        optimizer.setStartPoint(startPoint);                </span>
-<span class="fc" id="L523">        optimizer.minimize();</span>
+<span class="fc" id="L523">        optimizer.setStartPoint(startPoint);                </span>
+<span class="fc" id="L524">        optimizer.minimize();</span>
                     
-<span class="fc" id="L525">        double[] resultParams = optimizer.getResult();</span>
-<span class="fc" id="L526">        parametersToCamera(resultParams, mRefineCamera);</span>
+<span class="fc" id="L526">        double[] resultParams = optimizer.getResult();</span>
+<span class="fc" id="L527">        parametersToCamera(resultParams, mRefineCamera);</span>
         
-<span class="fc" id="L528">        double finalResidual = residualPowell(mRefineCamera, resultParams, </span>
+<span class="fc" id="L529">        double finalResidual = residualPowell(mRefineCamera, resultParams, </span>
                 weight);
         
-<span class="fc bfc" id="L531" title="All 2 branches covered.">        return finalResidual &lt; initResidual;</span>
+<span class="fc bfc" id="L532" title="All 2 branches covered.">        return finalResidual &lt; initResidual;</span>
     }
 
     /**
@@ -537,7 +538,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * A weight can be provided so that required parameters are slowly drawn
      * to suggested values.
      */
-<span class="fc" id="L540">    private class RefinementMultiDimensionFunctionEvaluatorListener </span>
+<span class="fc" id="L541">    private class RefinementMultiDimensionFunctionEvaluatorListener </span>
             implements MultiDimensionFunctionEvaluatorListener {
         /**
          * Weight to slowly draw parameters to suggested values.
@@ -548,12 +549,12 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
          * Evaluates cost function
          * @param point parameters to evaluate cost function.
          * @return cost value.
-         * @throws Throwable if anything fails.
+         * @throws EvaluationException if anything fails.
          */
         @Override
-        public double evaluate(double[] point) throws Throwable {
-<span class="fc" id="L555">            parametersToCamera(point, mRefineCamera);</span>
-<span class="fc" id="L556">            return residualPowell(mRefineCamera, point, weight);</span>
+        public double evaluate(double[] point) throws EvaluationException {
+<span class="fc" id="L556">            parametersToCamera(point, mRefineCamera);</span>
+<span class="fc" id="L557">            return residualPowell(mRefineCamera, point, weight);</span>
         }        
     }
 }

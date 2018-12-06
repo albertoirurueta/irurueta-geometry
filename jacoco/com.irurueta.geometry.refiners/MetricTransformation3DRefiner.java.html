@@ -19,6 +19,7 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.geometry.*;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
@@ -43,13 +44,13 @@ public class MetricTransformation3DRefiner extends
     /**
      * Point to be reused when computing residuals.
      */
-<span class="fc" id="L46">    private Point3D mResidualTestPoint = Point3D.create(</span>
+<span class="fc" id="L47">    private Point3D mResidualTestPoint = Point3D.create(</span>
             CoordinatesType.HOMOGENEOUS_COORDINATES);
     
     /**
      * Quaternion to be reused for refinement computations.
      */
-<span class="fc" id="L52">    private Quaternion mQuaternion = new Quaternion();</span>
+<span class="fc" id="L53">    private Quaternion mQuaternion = new Quaternion();</span>
     
     /**
      * Standard deviation used for Levenberg-Marquardt fitting during 
@@ -65,7 +66,7 @@ public class MetricTransformation3DRefiner extends
     /**
      * Constructor.
      */
-<span class="fc" id="L68">    public MetricTransformation3DRefiner() { }</span>
+<span class="fc" id="L69">    public MetricTransformation3DRefiner() { }</span>
     
     /**
      * Constructor.
@@ -85,10 +86,10 @@ public class MetricTransformation3DRefiner extends
             BitSet inliers, double[] residuals, int numInliers, 
             List&lt;Point3D&gt; samples1, List&lt;Point3D&gt; samples2, 
             double refinementStandardDeviation) {
-<span class="fc" id="L88">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
+<span class="fc" id="L89">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
                 samples1, samples2);
-<span class="fc" id="L90">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L91">    }</span>
+<span class="fc" id="L91">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L92">    }</span>
     
     /**
      * Constructor.
@@ -106,10 +107,10 @@ public class MetricTransformation3DRefiner extends
             MetricTransformation3D initialEstimation, boolean keepCovariance,
             InliersData inliersData, List&lt;Point3D&gt; samples1, 
             List&lt;Point3D&gt; samples2, double refinementStandardDeviation) {
-<span class="fc" id="L109">        super(initialEstimation, keepCovariance, inliersData, samples1, </span>
+<span class="fc" id="L110">        super(initialEstimation, keepCovariance, inliersData, samples1, </span>
                 samples2);
-<span class="fc" id="L111">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L112">    }</span>
+<span class="fc" id="L112">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L113">    }</span>
     
     /**
      * Gets standard deviation used for Levenberg-Marquardt fitting during
@@ -122,7 +123,7 @@ public class MetricTransformation3DRefiner extends
      * @return standard deviation used for refinement.
      */
     public double getRefinementStandardDeviation() {
-<span class="fc" id="L125">        return mRefinementStandardDeviation;</span>
+<span class="fc" id="L126">        return mRefinementStandardDeviation;</span>
     }
     
     /**
@@ -139,11 +140,11 @@ public class MetricTransformation3DRefiner extends
      */
     public void setRefinementStandardDeviation(
             double refinementStandardDeviation) throws LockedException {
-<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L143">            throw new LockedException();</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L144">            throw new LockedException();</span>
         }
-<span class="fc" id="L145">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
-<span class="fc" id="L146">    }</span>
+<span class="fc" id="L146">        mRefinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L147">    }</span>
     
     /**
      * Refines provided initial estimation.
@@ -157,9 +158,9 @@ public class MetricTransformation3DRefiner extends
     @Override
     public MetricTransformation3D refine() throws NotReadyException, 
             LockedException, RefinerException {
-<span class="fc" id="L160">        MetricTransformation3D result = new MetricTransformation3D();</span>
-<span class="fc" id="L161">        refine(result);</span>
-<span class="fc" id="L162">        return result;</span>
+<span class="fc" id="L161">        MetricTransformation3D result = new MetricTransformation3D();</span>
+<span class="fc" id="L162">        refine(result);</span>
+<span class="fc" id="L163">        return result;</span>
     }
 
     /**
@@ -178,186 +179,186 @@ public class MetricTransformation3DRefiner extends
     @Override
     public boolean refine(MetricTransformation3D result) 
             throws NotReadyException, LockedException, RefinerException {
-<span class="fc bfc" id="L181" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L182">            throw new LockedException();</span>
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L183">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L185">            throw new NotReadyException();</span>
-        }
-        
-<span class="fc" id="L188">        mLocked = true;</span>
-        
-<span class="fc bfc" id="L190" title="All 2 branches covered.">        if (mListener != null) {</span>
-<span class="fc" id="L191">            mListener.onRefineStart(this, mInitialEstimation);</span>
+<span class="pc bpc" id="L185" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L186">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L194">        double initialTotalResidual = totalResidual(mInitialEstimation);</span>
+<span class="fc" id="L189">        mLocked = true;</span>
+        
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (mListener != null) {</span>
+<span class="fc" id="L192">            mListener.onRefineStart(this, mInitialEstimation);</span>
+        }
+        
+<span class="fc" id="L195">        double initialTotalResidual = totalResidual(mInitialEstimation);</span>
 
         try {
             //parameters: rotation angle + scale + translation
-<span class="fc" id="L198">            final double[] initParams = new double[1 + Quaternion.N_PARAMS + </span>
+<span class="fc" id="L199">            final double[] initParams = new double[1 + Quaternion.N_PARAMS + </span>
                     MetricTransformation3D.NUM_TRANSLATION_COORDS];
             //copy rotation values
-<span class="pc bpc" id="L201" title="1 of 2 branches missed.">            if (mInitialEstimation.getRotation().getType() == </span>
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">            if (mInitialEstimation.getRotation().getType() == </span>
                     Rotation3DType.QUATERNION) {
-<span class="nc" id="L203">                mQuaternion = (Quaternion)mInitialEstimation.getRotation();</span>
+<span class="nc" id="L204">                mQuaternion = (Quaternion)mInitialEstimation.getRotation();</span>
             } else {
-<span class="fc" id="L205">                mQuaternion = mInitialEstimation.getRotation().toQuaternion();</span>
+<span class="fc" id="L206">                mQuaternion = mInitialEstimation.getRotation().toQuaternion();</span>
             }
-<span class="fc" id="L207">            mQuaternion.normalize();</span>
+<span class="fc" id="L208">            mQuaternion.normalize();</span>
             
             //copy values
-<span class="fc" id="L210">            initParams[0] = mInitialEstimation.getScale();</span>
-<span class="fc" id="L211">            initParams[1] = mQuaternion.getA();</span>
-<span class="fc" id="L212">            initParams[2] = mQuaternion.getB();</span>
-<span class="fc" id="L213">            initParams[3] = mQuaternion.getC();</span>
-<span class="fc" id="L214">            initParams[4] = mQuaternion.getD();</span>
+<span class="fc" id="L211">            initParams[0] = mInitialEstimation.getScale();</span>
+<span class="fc" id="L212">            initParams[1] = mQuaternion.getA();</span>
+<span class="fc" id="L213">            initParams[2] = mQuaternion.getB();</span>
+<span class="fc" id="L214">            initParams[3] = mQuaternion.getC();</span>
+<span class="fc" id="L215">            initParams[4] = mQuaternion.getD();</span>
             
-<span class="fc" id="L216">            System.arraycopy(mInitialEstimation.getTranslation(), 0, initParams,</span>
+<span class="fc" id="L217">            System.arraycopy(mInitialEstimation.getTranslation(), 0, initParams,</span>
                     Quaternion.N_PARAMS + 1, 
                     MetricTransformation3D.NUM_TRANSLATION_COORDS);
             
             //output values to be fitted/optimized will contain residuals
-<span class="fc" id="L221">            double[] y = new double[mNumInliers];</span>
+<span class="fc" id="L222">            double[] y = new double[mNumInliers];</span>
             //input values will contain 2 sets of 2D points to compute residuals
-<span class="fc" id="L223">            final int nDims = </span>
+<span class="fc" id="L224">            final int nDims = </span>
                     2 * Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH;
-<span class="fc" id="L225">            Matrix x = new Matrix(mNumInliers, nDims);</span>
-<span class="fc" id="L226">            int nSamples = mInliers.length();</span>
-<span class="fc" id="L227">            int pos = 0;</span>
+<span class="fc" id="L226">            Matrix x = new Matrix(mNumInliers, nDims);</span>
+<span class="fc" id="L227">            int nSamples = mInliers.length();</span>
+<span class="fc" id="L228">            int pos = 0;</span>
             Point3D inputPoint, outputPoint;
-<span class="fc bfc" id="L229" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L230" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
                     //sample is inlier
-<span class="fc" id="L232">                    inputPoint = mSamples1.get(i);</span>
-<span class="fc" id="L233">                    outputPoint = mSamples2.get(i);</span>
-<span class="fc" id="L234">                    inputPoint.normalize();</span>
-<span class="fc" id="L235">                    outputPoint.normalize();</span>
-<span class="fc" id="L236">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
-<span class="fc" id="L237">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
-<span class="fc" id="L238">                    x.setElementAt(pos, 2, inputPoint.getHomZ());</span>
-<span class="fc" id="L239">                    x.setElementAt(pos, 3, inputPoint.getHomW());</span>
-<span class="fc" id="L240">                    x.setElementAt(pos, 4, outputPoint.getHomX());</span>
-<span class="fc" id="L241">                    x.setElementAt(pos, 5, outputPoint.getHomY());</span>
-<span class="fc" id="L242">                    x.setElementAt(pos, 6, outputPoint.getHomZ());</span>
-<span class="fc" id="L243">                    x.setElementAt(pos, 7, outputPoint.getHomW());</span>
+<span class="fc" id="L233">                    inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L234">                    outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L235">                    inputPoint.normalize();</span>
+<span class="fc" id="L236">                    outputPoint.normalize();</span>
+<span class="fc" id="L237">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
+<span class="fc" id="L238">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
+<span class="fc" id="L239">                    x.setElementAt(pos, 2, inputPoint.getHomZ());</span>
+<span class="fc" id="L240">                    x.setElementAt(pos, 3, inputPoint.getHomW());</span>
+<span class="fc" id="L241">                    x.setElementAt(pos, 4, outputPoint.getHomX());</span>
+<span class="fc" id="L242">                    x.setElementAt(pos, 5, outputPoint.getHomY());</span>
+<span class="fc" id="L243">                    x.setElementAt(pos, 6, outputPoint.getHomZ());</span>
+<span class="fc" id="L244">                    x.setElementAt(pos, 7, outputPoint.getHomW());</span>
                     
-<span class="fc" id="L245">                    y[pos] = mResiduals[i];</span>
-<span class="fc" id="L246">                    pos++;</span>
+<span class="fc" id="L246">                    y[pos] = mResiduals[i];</span>
+<span class="fc" id="L247">                    pos++;</span>
                 }
             }
             
-<span class="fc" id="L250">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
-<span class="fc" id="L251">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+<span class="fc" id="L251">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
+<span class="fc" id="L252">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
                         
-<span class="fc" id="L253">                private Point3D mInputPoint = Point3D.create(</span>
+<span class="fc" id="L254">                private Point3D mInputPoint = Point3D.create(</span>
                         CoordinatesType.HOMOGENEOUS_COORDINATES);
                 
-<span class="fc" id="L256">                private Point3D mOutputPoint = Point3D.create(</span>
+<span class="fc" id="L257">                private Point3D mOutputPoint = Point3D.create(</span>
                         CoordinatesType.HOMOGENEOUS_COORDINATES);
                 
-<span class="fc" id="L259">                private MetricTransformation3D mTransformation = </span>
+<span class="fc" id="L260">                private MetricTransformation3D mTransformation = </span>
                         new MetricTransformation3D();
                 
-<span class="fc" id="L262">                private GradientEstimator mGradientEstimator =</span>
+<span class="fc" id="L263">                private GradientEstimator mGradientEstimator =</span>
                         new GradientEstimator(
-<span class="fc" id="L264">                                new MultiDimensionFunctionEvaluatorListener() {</span>
+<span class="fc" id="L265">                                new MultiDimensionFunctionEvaluatorListener() {</span>
                     @Override
                     public double evaluate(double[] params) {
                         //copy values
-<span class="fc" id="L268">                        mTransformation.setScale(params[0]);</span>
-<span class="fc" id="L269">                        mQuaternion.setA(params[1]);</span>
-<span class="fc" id="L270">                        mQuaternion.setB(params[2]);</span>
-<span class="fc" id="L271">                        mQuaternion.setC(params[3]);</span>
-<span class="fc" id="L272">                        mQuaternion.setD(params[4]);</span>
-<span class="fc" id="L273">                        mTransformation.setRotation(mQuaternion);</span>
+<span class="fc" id="L269">                        mTransformation.setScale(params[0]);</span>
+<span class="fc" id="L270">                        mQuaternion.setA(params[1]);</span>
+<span class="fc" id="L271">                        mQuaternion.setB(params[2]);</span>
+<span class="fc" id="L272">                        mQuaternion.setC(params[3]);</span>
+<span class="fc" id="L273">                        mQuaternion.setD(params[4]);</span>
+<span class="fc" id="L274">                        mTransformation.setRotation(mQuaternion);</span>
                                                
-<span class="fc" id="L275">                        System.arraycopy(params, 1 + Quaternion.N_PARAMS, </span>
-<span class="fc" id="L276">                            mTransformation.getTranslation(), 0, </span>
+<span class="fc" id="L276">                        System.arraycopy(params, 1 + Quaternion.N_PARAMS, </span>
+<span class="fc" id="L277">                            mTransformation.getTranslation(), 0, </span>
                             MetricTransformation3D.NUM_TRANSLATION_COORDS);
 
-<span class="fc" id="L279">                        return residual(mTransformation, mInputPoint, </span>
-<span class="fc" id="L280">                                mOutputPoint);</span>
+<span class="fc" id="L280">                        return residual(mTransformation, mInputPoint, </span>
+<span class="fc" id="L281">                                mOutputPoint);</span>
                     }
                 });
                 
                 @Override
                 public int getNumberOfDimensions() {
-<span class="fc" id="L286">                    return nDims;</span>
+<span class="fc" id="L287">                    return nDims;</span>
                 }
 
                 @Override
                 public double[] createInitialParametersArray() {
-<span class="fc" id="L291">                    return initParams;</span>
+<span class="fc" id="L292">                    return initParams;</span>
                 }
 
                 @Override
                 public double evaluate(int i, double[] point, double[] params, 
-                        double[] derivatives) throws Throwable {
-<span class="fc" id="L297">                    mInputPoint.setHomogeneousCoordinates(point[0], point[1], </span>
+                        double[] derivatives) throws EvaluationException {
+<span class="fc" id="L298">                    mInputPoint.setHomogeneousCoordinates(point[0], point[1], </span>
                             point[2], point[3]);
-<span class="fc" id="L299">                    mOutputPoint.setHomogeneousCoordinates(point[4], point[5], </span>
+<span class="fc" id="L300">                    mOutputPoint.setHomogeneousCoordinates(point[4], point[5], </span>
                             point[6], point[7]);
                     
                     //copy values
-<span class="fc" id="L303">                    mTransformation.setScale(params[0]);</span>
-<span class="fc" id="L304">                    mQuaternion.setA(params[1]);</span>
-<span class="fc" id="L305">                    mQuaternion.setB(params[2]);</span>
-<span class="fc" id="L306">                    mQuaternion.setC(params[3]);</span>
-<span class="fc" id="L307">                    mQuaternion.setD(params[4]);</span>
-<span class="fc" id="L308">                    mTransformation.setRotation(mQuaternion);</span>
+<span class="fc" id="L304">                    mTransformation.setScale(params[0]);</span>
+<span class="fc" id="L305">                    mQuaternion.setA(params[1]);</span>
+<span class="fc" id="L306">                    mQuaternion.setB(params[2]);</span>
+<span class="fc" id="L307">                    mQuaternion.setC(params[3]);</span>
+<span class="fc" id="L308">                    mQuaternion.setD(params[4]);</span>
+<span class="fc" id="L309">                    mTransformation.setRotation(mQuaternion);</span>
                     
-<span class="fc" id="L310">                    System.arraycopy(params, 1 + Quaternion.N_PARAMS, </span>
-<span class="fc" id="L311">                        mTransformation.getTranslation(), 0, </span>
+<span class="fc" id="L311">                    System.arraycopy(params, 1 + Quaternion.N_PARAMS, </span>
+<span class="fc" id="L312">                        mTransformation.getTranslation(), 0, </span>
                         MetricTransformation3D.NUM_TRANSLATION_COORDS);
 
-<span class="fc" id="L314">                    double y = residual(mTransformation, mInputPoint, </span>
+<span class="fc" id="L315">                    double y = residual(mTransformation, mInputPoint, </span>
                             mOutputPoint);
-<span class="fc" id="L316">                    mGradientEstimator.gradient(params, derivatives);</span>
+<span class="fc" id="L317">                    mGradientEstimator.gradient(params, derivatives);</span>
                     
-<span class="fc" id="L318">                    return y;</span>
+<span class="fc" id="L319">                    return y;</span>
                 }
             };
             
-<span class="fc" id="L322">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
+<span class="fc" id="L323">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-<span class="fc" id="L324">                    getRefinementStandardDeviation());</span>
+<span class="fc" id="L325">                    getRefinementStandardDeviation());</span>
             
-<span class="fc" id="L326">            fitter.fit();</span>
+<span class="fc" id="L327">            fitter.fit();</span>
             
             //obtain estimated params
-<span class="fc" id="L329">            double[] params = fitter.getA();</span>
+<span class="fc" id="L330">            double[] params = fitter.getA();</span>
             
             //update transformation
-<span class="fc" id="L332">            result.setScale(params[0]);</span>
-<span class="fc" id="L333">            mQuaternion.setA(params[1]);</span>
-<span class="fc" id="L334">            mQuaternion.setB(params[2]);</span>
-<span class="fc" id="L335">            mQuaternion.setC(params[3]);</span>
-<span class="fc" id="L336">            mQuaternion.setD(params[4]);</span>
-<span class="fc" id="L337">            result.setRotation(mQuaternion);</span>
-<span class="fc" id="L338">            System.arraycopy(params, 1 + Quaternion.N_PARAMS, </span>
-<span class="fc" id="L339">                    result.getTranslation(), 0, </span>
+<span class="fc" id="L333">            result.setScale(params[0]);</span>
+<span class="fc" id="L334">            mQuaternion.setA(params[1]);</span>
+<span class="fc" id="L335">            mQuaternion.setB(params[2]);</span>
+<span class="fc" id="L336">            mQuaternion.setC(params[3]);</span>
+<span class="fc" id="L337">            mQuaternion.setD(params[4]);</span>
+<span class="fc" id="L338">            result.setRotation(mQuaternion);</span>
+<span class="fc" id="L339">            System.arraycopy(params, 1 + Quaternion.N_PARAMS, </span>
+<span class="fc" id="L340">                    result.getTranslation(), 0, </span>
                     MetricTransformation3D.NUM_TRANSLATION_COORDS);
             
-<span class="pc bpc" id="L342" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L343" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
                 //keep covariance
-<span class="fc" id="L344">                mCovariance = fitter.getCovar();</span>
+<span class="fc" id="L345">                mCovariance = fitter.getCovar();</span>
             }
             
-<span class="fc" id="L347">            double finalTotalResidual = totalResidual(result);</span>
-<span class="fc bfc" id="L348" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
+<span class="fc" id="L348">            double finalTotalResidual = totalResidual(result);</span>
+<span class="fc bfc" id="L349" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
             
-<span class="fc bfc" id="L350" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L351">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
+<span class="fc bfc" id="L351" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L352">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
                         errorDecreased);
             }
             
-<span class="fc" id="L355">            return errorDecreased;</span>
+<span class="fc" id="L356">            return errorDecreased;</span>
             
-<span class="nc" id="L357">        } catch (Exception e) {</span>
-<span class="nc" id="L358">            throw new RefinerException(e);</span>
+<span class="nc" id="L358">        } catch (Exception e) {</span>
+<span class="nc" id="L359">            throw new RefinerException(e);</span>
         } finally {
-<span class="fc" id="L360">            mLocked = false;</span>
+<span class="fc" id="L361">            mLocked = false;</span>
         }        
         
     }
@@ -372,11 +373,11 @@ public class MetricTransformation3DRefiner extends
      */
     private double residual (MetricTransformation3D transformation, 
             Point3D inputPoint, Point3D outputPoint) {
-<span class="fc" id="L375">        inputPoint.normalize();</span>
-<span class="fc" id="L376">        outputPoint.normalize();</span>
+<span class="fc" id="L376">        inputPoint.normalize();</span>
+<span class="fc" id="L377">        outputPoint.normalize();</span>
         
-<span class="fc" id="L378">        transformation.transform(inputPoint, mResidualTestPoint);</span>
-<span class="fc" id="L379">        return mResidualTestPoint.distanceTo(outputPoint);</span>
+<span class="fc" id="L379">        transformation.transform(inputPoint, mResidualTestPoint);</span>
+<span class="fc" id="L380">        return mResidualTestPoint.distanceTo(outputPoint);</span>
     }
     
     /**
@@ -385,22 +386,22 @@ public class MetricTransformation3DRefiner extends
      * @return total residual.
      */
     private double totalResidual(MetricTransformation3D transformation) {
-<span class="fc" id="L388">        double result = 0.0;</span>
+<span class="fc" id="L389">        double result = 0.0;</span>
         
-<span class="fc" id="L390">        int nSamples = mInliers.length();</span>
+<span class="fc" id="L391">        int nSamples = mInliers.length();</span>
         Point3D inputPoint, outputPoint;
-<span class="fc bfc" id="L392" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L393" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
+<span class="fc bfc" id="L393" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L394" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
                 //sample is inlier
-<span class="fc" id="L395">                inputPoint = mSamples1.get(i);</span>
-<span class="fc" id="L396">                outputPoint = mSamples2.get(i);</span>
-<span class="fc" id="L397">                inputPoint.normalize();</span>
-<span class="fc" id="L398">                outputPoint.normalize();</span>
-<span class="fc" id="L399">                result += residual(transformation, inputPoint, outputPoint);</span>
+<span class="fc" id="L396">                inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L397">                outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L398">                inputPoint.normalize();</span>
+<span class="fc" id="L399">                outputPoint.normalize();</span>
+<span class="fc" id="L400">                result += residual(transformation, inputPoint, outputPoint);</span>
             }
         }
         
-<span class="fc" id="L403">        return result;        </span>
+<span class="fc" id="L404">        return result;        </span>
     }        
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

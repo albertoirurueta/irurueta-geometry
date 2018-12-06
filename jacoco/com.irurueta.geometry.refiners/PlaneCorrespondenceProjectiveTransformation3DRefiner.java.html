@@ -21,6 +21,7 @@ import com.irurueta.geometry.Plane;
 import com.irurueta.geometry.ProjectiveTransformation3D;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
+import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
@@ -44,12 +45,12 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
     /**
      * Plane to be reused when computing residuals.
      */
-<span class="fc" id="L47">    private Plane mResidualTestPlane = new Plane();</span>
+<span class="fc" id="L48">    private Plane mResidualTestPlane = new Plane();</span>
     
     /**
      * Constructor.
      */
-<span class="fc" id="L52">    public PlaneCorrespondenceProjectiveTransformation3DRefiner() { }</span>
+<span class="fc" id="L53">    public PlaneCorrespondenceProjectiveTransformation3DRefiner() { }</span>
     
     /**
      * Constructor.
@@ -69,9 +70,9 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
             BitSet inliers, double[] residuals, int numInliers,
             List&lt;Plane&gt; samples1, List&lt;Plane&gt; samples2,
             double refinementStandardDeviation) {
-<span class="fc" id="L72">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
+<span class="fc" id="L73">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,</span>
                 samples1, samples2, refinementStandardDeviation);
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L75">    }</span>
     
     /**
      * Constructor.
@@ -89,9 +90,9 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
             ProjectiveTransformation3D initialEstimation, boolean keepCovariance,
             InliersData inliersData, List&lt;Plane&gt; samples1, 
             List&lt;Plane&gt; samples2, double refinementStandardDeviation) {
-<span class="fc" id="L92">        super(initialEstimation, keepCovariance, inliersData, samples1, </span>
+<span class="fc" id="L93">        super(initialEstimation, keepCovariance, inliersData, samples1, </span>
                 samples2, refinementStandardDeviation);
-<span class="fc" id="L94">    }</span>
+<span class="fc" id="L95">    }</span>
     
     /**
      * Refines provided initial estimation.
@@ -109,148 +110,148 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
     @Override
     public boolean refine(ProjectiveTransformation3D result) 
             throws NotReadyException, LockedException, RefinerException {
-<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L113">            throw new LockedException();</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L114">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L116">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L117">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L119">        mLocked = true;</span>
+<span class="fc" id="L120">        mLocked = true;</span>
         
-<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (mListener != null) {</span>
-<span class="fc" id="L122">            mListener.onRefineStart(this, mInitialEstimation);</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        if (mListener != null) {</span>
+<span class="fc" id="L123">            mListener.onRefineStart(this, mInitialEstimation);</span>
         }
 
-<span class="fc" id="L125">        double initialTotalResidual = totalResidual(mInitialEstimation);</span>
+<span class="fc" id="L126">        double initialTotalResidual = totalResidual(mInitialEstimation);</span>
         
         try {
-<span class="fc" id="L128">            final double[] initParams = new double[</span>
+<span class="fc" id="L129">            final double[] initParams = new double[</span>
                     ProjectiveTransformation3D.HOM_COORDS *
                     ProjectiveTransformation3D.HOM_COORDS];
             //copy values
-<span class="fc" id="L132">            System.arraycopy(mInitialEstimation.getT().getBuffer(), 0, </span>
+<span class="fc" id="L133">            System.arraycopy(mInitialEstimation.getT().getBuffer(), 0, </span>
                     initParams, 0, initParams.length);
             
             //output values to be fitted/optimized will contain residuals
-<span class="fc" id="L136">            double[] y = new double[mNumInliers];</span>
+<span class="fc" id="L137">            double[] y = new double[mNumInliers];</span>
             //input values will contain 2 sets of 2D points to compute residuals
-<span class="fc" id="L138">            final int nDims = 2 * Plane.PLANE_NUMBER_PARAMS;</span>
-<span class="fc" id="L139">            Matrix x = new Matrix(mNumInliers, nDims);</span>
-<span class="fc" id="L140">            int nSamples = mInliers.length();</span>
-<span class="fc" id="L141">            int pos = 0;</span>
+<span class="fc" id="L139">            final int nDims = 2 * Plane.PLANE_NUMBER_PARAMS;</span>
+<span class="fc" id="L140">            Matrix x = new Matrix(mNumInliers, nDims);</span>
+<span class="fc" id="L141">            int nSamples = mInliers.length();</span>
+<span class="fc" id="L142">            int pos = 0;</span>
             Plane inputPlane, outputPlane;
-<span class="fc bfc" id="L143" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L144" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
                     //sample is inlier
-<span class="fc" id="L146">                    inputPlane = mSamples1.get(i);</span>
-<span class="fc" id="L147">                    outputPlane = mSamples2.get(i);</span>
-<span class="fc" id="L148">                    inputPlane.normalize();</span>
-<span class="fc" id="L149">                    outputPlane.normalize();</span>
-<span class="fc" id="L150">                    x.setElementAt(pos, 0, inputPlane.getA());</span>
-<span class="fc" id="L151">                    x.setElementAt(pos, 1, inputPlane.getB());</span>
-<span class="fc" id="L152">                    x.setElementAt(pos, 2, inputPlane.getC());</span>
-<span class="fc" id="L153">                    x.setElementAt(pos, 3, inputPlane.getD());</span>
-<span class="fc" id="L154">                    x.setElementAt(pos, 4, outputPlane.getA());</span>
-<span class="fc" id="L155">                    x.setElementAt(pos, 5, outputPlane.getB());</span>
-<span class="fc" id="L156">                    x.setElementAt(pos, 6, outputPlane.getC());</span>
-<span class="fc" id="L157">                    x.setElementAt(pos, 7, outputPlane.getD());</span>
+<span class="fc" id="L147">                    inputPlane = mSamples1.get(i);</span>
+<span class="fc" id="L148">                    outputPlane = mSamples2.get(i);</span>
+<span class="fc" id="L149">                    inputPlane.normalize();</span>
+<span class="fc" id="L150">                    outputPlane.normalize();</span>
+<span class="fc" id="L151">                    x.setElementAt(pos, 0, inputPlane.getA());</span>
+<span class="fc" id="L152">                    x.setElementAt(pos, 1, inputPlane.getB());</span>
+<span class="fc" id="L153">                    x.setElementAt(pos, 2, inputPlane.getC());</span>
+<span class="fc" id="L154">                    x.setElementAt(pos, 3, inputPlane.getD());</span>
+<span class="fc" id="L155">                    x.setElementAt(pos, 4, outputPlane.getA());</span>
+<span class="fc" id="L156">                    x.setElementAt(pos, 5, outputPlane.getB());</span>
+<span class="fc" id="L157">                    x.setElementAt(pos, 6, outputPlane.getC());</span>
+<span class="fc" id="L158">                    x.setElementAt(pos, 7, outputPlane.getD());</span>
                     
-<span class="fc" id="L159">                    y[pos] = mResiduals[i];</span>
-<span class="fc" id="L160">                    pos++;</span>
+<span class="fc" id="L160">                    y[pos] = mResiduals[i];</span>
+<span class="fc" id="L161">                    pos++;</span>
                 }
             }
             
-<span class="fc" id="L164">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
-<span class="fc" id="L165">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+<span class="fc" id="L165">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
+<span class="fc" id="L166">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
                         
-<span class="fc" id="L167">                private Plane mInputPlane = new Plane();</span>
+<span class="fc" id="L168">                private Plane mInputPlane = new Plane();</span>
                 
-<span class="fc" id="L169">                private Plane mOutputPlane = new Plane();</span>
+<span class="fc" id="L170">                private Plane mOutputPlane = new Plane();</span>
                 
-<span class="fc" id="L171">                private ProjectiveTransformation3D mTransformation =</span>
+<span class="fc" id="L172">                private ProjectiveTransformation3D mTransformation =</span>
                         new ProjectiveTransformation3D();
                 
-<span class="fc" id="L174">                private GradientEstimator mGradientEstimator =</span>
+<span class="fc" id="L175">                private GradientEstimator mGradientEstimator =</span>
                         new GradientEstimator(
-<span class="fc" id="L176">                                new MultiDimensionFunctionEvaluatorListener() {</span>
+<span class="fc" id="L177">                                new MultiDimensionFunctionEvaluatorListener() {</span>
                     @Override
                     public double evaluate(double[] params) {
                         //copy values
-<span class="fc" id="L180">                        System.arraycopy(params, 0, </span>
-<span class="fc" id="L181">                                mTransformation.getT().getBuffer(), 0, </span>
+<span class="fc" id="L181">                        System.arraycopy(params, 0, </span>
+<span class="fc" id="L182">                                mTransformation.getT().getBuffer(), 0, </span>
                                 params.length);
                         
-<span class="fc" id="L184">                        return residual(mTransformation, mInputPlane, </span>
-<span class="fc" id="L185">                                mOutputPlane);</span>
+<span class="fc" id="L185">                        return residual(mTransformation, mInputPlane, </span>
+<span class="fc" id="L186">                                mOutputPlane);</span>
                     }
                 });
                 
                 @Override
                 public int getNumberOfDimensions() {
-<span class="fc" id="L191">                    return nDims;</span>
+<span class="fc" id="L192">                    return nDims;</span>
                 }
 
                 @Override
                 public double[] createInitialParametersArray() {
-<span class="fc" id="L196">                    return initParams;</span>
+<span class="fc" id="L197">                    return initParams;</span>
                 }
 
                 @Override
                 public double evaluate(int i, double[] point, double[] params, 
-                        double[] derivatives) throws Throwable {
-<span class="fc" id="L202">                    mInputPlane.setParameters(point[0], point[1], point[2], </span>
+                        double[] derivatives) throws EvaluationException {
+<span class="fc" id="L203">                    mInputPlane.setParameters(point[0], point[1], point[2], </span>
                             point[3]);
-<span class="fc" id="L204">                    mOutputPlane.setParameters(point[4], point[5], point[6], </span>
+<span class="fc" id="L205">                    mOutputPlane.setParameters(point[4], point[5], point[6], </span>
                             point[7]);
                     
                     //copy values
-<span class="fc" id="L208">                    System.arraycopy(params, 0, </span>
-<span class="fc" id="L209">                            mTransformation.getT().getBuffer(), 0, </span>
+<span class="fc" id="L209">                    System.arraycopy(params, 0, </span>
+<span class="fc" id="L210">                            mTransformation.getT().getBuffer(), 0, </span>
                             params.length);
                     
-<span class="fc" id="L212">                    double y = residual(mTransformation, mInputPlane, </span>
+<span class="fc" id="L213">                    double y = residual(mTransformation, mInputPlane, </span>
                             mOutputPlane);
-<span class="fc" id="L214">                    mGradientEstimator.gradient(params, derivatives);</span>
+<span class="fc" id="L215">                    mGradientEstimator.gradient(params, derivatives);</span>
                     
-<span class="fc" id="L216">                    return y;</span>
+<span class="fc" id="L217">                    return y;</span>
                 }
             };
             
-<span class="fc" id="L220">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
+<span class="fc" id="L221">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-<span class="fc" id="L222">                    getRefinementStandardDeviation());</span>
+<span class="fc" id="L223">                    getRefinementStandardDeviation());</span>
             
-<span class="fc" id="L224">            fitter.fit();</span>
+<span class="fc" id="L225">            fitter.fit();</span>
             
             //obtain estimated params
-<span class="fc" id="L227">            double[] params = fitter.getA();</span>
+<span class="fc" id="L228">            double[] params = fitter.getA();</span>
             
             //update transformation
             
             //copy values for A matrix
-<span class="fc" id="L232">            System.arraycopy(params, 0, result.getT().getBuffer(), 0, </span>
+<span class="fc" id="L233">            System.arraycopy(params, 0, result.getT().getBuffer(), 0, </span>
                     params.length);
             
-<span class="pc bpc" id="L235" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
                 //keep covariance
-<span class="fc" id="L237">                mCovariance = fitter.getCovar();</span>
+<span class="fc" id="L238">                mCovariance = fitter.getCovar();</span>
             }
             
-<span class="fc" id="L240">            double finalTotalResidual = totalResidual(result);</span>
-<span class="fc bfc" id="L241" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
+<span class="fc" id="L241">            double finalTotalResidual = totalResidual(result);</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
             
-<span class="fc bfc" id="L243" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L244">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
+<span class="fc bfc" id="L244" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L245">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
                         errorDecreased);
             }
             
-<span class="fc" id="L248">            return errorDecreased;</span>
+<span class="fc" id="L249">            return errorDecreased;</span>
                         
-<span class="fc" id="L250">        } catch (Exception e) {</span>
-<span class="fc" id="L251">            throw new RefinerException(e);</span>
+<span class="fc" id="L251">        } catch (Exception e) {</span>
+<span class="fc" id="L252">            throw new RefinerException(e);</span>
         } finally {
-<span class="fc" id="L253">            mLocked = false;</span>
+<span class="fc" id="L254">            mLocked = false;</span>
         }        
     }
     
@@ -265,13 +266,13 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
     private double residual(ProjectiveTransformation3D transformation, 
             Plane inputPlane, Plane outputPlane) {
         try {
-<span class="fc" id="L268">            inputPlane.normalize();</span>
-<span class="fc" id="L269">            outputPlane.normalize();</span>
+<span class="fc" id="L269">            inputPlane.normalize();</span>
+<span class="fc" id="L270">            outputPlane.normalize();</span>
         
-<span class="fc" id="L271">            transformation.transform(inputPlane, mResidualTestPlane);</span>
-<span class="fc" id="L272">            return 1.0 - Math.abs(outputPlane.dotProduct(mResidualTestPlane));</span>
-<span class="nc" id="L273">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L274">            return 1.0;</span>
+<span class="fc" id="L272">            transformation.transform(inputPlane, mResidualTestPlane);</span>
+<span class="fc" id="L273">            return 1.0 - Math.abs(outputPlane.dotProduct(mResidualTestPlane));</span>
+<span class="nc" id="L274">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L275">            return 1.0;</span>
         }
     }
     
@@ -281,22 +282,22 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
      * @return total residual.
      */
     private double totalResidual(ProjectiveTransformation3D transformation) {
-<span class="fc" id="L284">        double result = 0.0;</span>
+<span class="fc" id="L285">        double result = 0.0;</span>
         
-<span class="fc" id="L286">        int nSamples = mInliers.length();</span>
+<span class="fc" id="L287">        int nSamples = mInliers.length();</span>
         Plane inputPlane, outputPlane;
-<span class="fc bfc" id="L288" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L289" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
                 //sample is inlier
-<span class="fc" id="L291">                inputPlane = mSamples1.get(i);</span>
-<span class="fc" id="L292">                outputPlane = mSamples2.get(i);</span>
-<span class="fc" id="L293">                inputPlane.normalize();</span>
-<span class="fc" id="L294">                outputPlane.normalize();</span>
-<span class="fc" id="L295">                result += residual(transformation, inputPlane, outputPlane);</span>
+<span class="fc" id="L292">                inputPlane = mSamples1.get(i);</span>
+<span class="fc" id="L293">                outputPlane = mSamples2.get(i);</span>
+<span class="fc" id="L294">                inputPlane.normalize();</span>
+<span class="fc" id="L295">                outputPlane.normalize();</span>
+<span class="fc" id="L296">                result += residual(transformation, inputPlane, outputPlane);</span>
             }
         }
         
-<span class="fc" id="L299">        return result;</span>
+<span class="fc" id="L300">        return result;</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

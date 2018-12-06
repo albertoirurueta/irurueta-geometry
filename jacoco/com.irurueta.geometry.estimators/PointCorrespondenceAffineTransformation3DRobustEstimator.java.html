@@ -76,11 +76,10 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PointCorrespondenceAffineTransformation3DRobustEstimator(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L81">        super();</span>
-<span class="fc" id="L82">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L83">    }</span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L80">        super();</span>
+<span class="fc" id="L81">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L82">    }</span>
     
     /**
      * Constructor.
@@ -89,8 +88,8 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public PointCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L92">        super(listener);</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L91">        super(listener);</span>
+<span class="fc" id="L92">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
@@ -109,11 +108,10 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public PointCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L114">        super(listener);</span>
-<span class="fc" id="L115">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L116">    }</span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L112">        super(listener);</span>
+<span class="fc" id="L113">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L114">    }</span>
     
     /**
      * Returns list of input points to be used to estimate an affine 3D 
@@ -126,7 +124,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * transformation.
      */
     public List&lt;Point3D&gt; getInputPoints() {
-<span class="fc" id="L129">        return mInputPoints;</span>
+<span class="fc" id="L127">        return mInputPoints;</span>
     }    
     
     /**
@@ -140,7 +138,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * transformation.
      */
     public List&lt;Point3D&gt; getOutputPoints() {
-<span class="fc" id="L143">        return mOutputPoints;</span>
+<span class="fc" id="L141">        return mOutputPoints;</span>
     }
     
     /**
@@ -158,13 +156,12 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * already in progress.
      */
     public final void setPoints(List&lt;Point3D&gt; inputPoints, 
-            List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L164">            throw new LockedException();</span>
+            List&lt;Point3D&gt; outputPoints) throws LockedException {
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L161">            throw new LockedException();</span>
         }
-<span class="fc" id="L166">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L167">    }</span>
+<span class="fc" id="L163">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L164">    }</span>
         
     /**
      * Indicates if estimator is ready to start the affine 3D transformation
@@ -174,9 +171,9 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L177" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp; </span>
-<span class="pc bpc" id="L178" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
-<span class="pc bpc" id="L179" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= MINIMUM_SIZE;</span>
+<span class="pc bpc" id="L174" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp; </span>
+<span class="pc bpc" id="L175" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= MINIMUM_SIZE;</span>
     }
     
     /**
@@ -187,7 +184,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * @return quality scores corresponding to each pair of matched points.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L190">        return null;</span>
+<span class="fc" id="L187">        return null;</span>
     }    
     
     /**
@@ -202,8 +199,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is 
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="fc" id="L206">            IllegalArgumentException { }    </span>
+<span class="fc" id="L202">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
     
     /**
      * Creates an affine 3D transformation estimator based on 2D point 
@@ -214,18 +210,18 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator 
             create(RobustEstimatorMethod method) {
-<span class="fc bfc" id="L217" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L213" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L219">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L215">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L221">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L217">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L223">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L219">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L225">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L221">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L228">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L224">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
         }
     }
             
@@ -244,23 +240,23 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L248" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L244" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L250">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L246">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L253">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L249">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L256">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L252">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L259">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L255">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L263">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L259">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
         }
     }            
@@ -277,22 +273,22 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
     public static PointCorrespondenceAffineTransformation3DRobustEstimator 
             create(AffineTransformation3DRobustEstimatorListener listener,
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L280" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L276" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L282">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L278">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L285">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L281">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L288">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L284">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
             case PROMedS:
-<span class="fc" id="L291">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L287">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
             case RANSAC:
             default:
-<span class="fc" id="L295">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L291">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
         }
     }
@@ -315,23 +311,23 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(AffineTransformation3DRobustEstimatorListener listener, 
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L319" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L315" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L321">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L317">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L324">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L320">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L327">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L323">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L330">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L326">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L334">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L330">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
         }
     }            
@@ -347,20 +343,20 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator 
             create(double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L350" title="All 5 branches covered.">        switch (method) { </span>
+<span class="fc bfc" id="L346" title="All 5 branches covered.">        switch (method) { </span>
             case LMedS:
-<span class="fc" id="L352">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L348">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L354">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L350">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L356">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L352">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L359">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L355">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L363">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
+<span class="fc" id="L359">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator();</span>
         }
     }
             
@@ -381,24 +377,23 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L386" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L381" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L388">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L383">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L391">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L386">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L394">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L389">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L397">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L392">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L401">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L396">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
         }
     }            
@@ -417,22 +412,22 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
     public static PointCorrespondenceAffineTransformation3DRobustEstimator 
             create(AffineTransformation3DRobustEstimatorListener listener,
             double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L420" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L415" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L422">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L417">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L425">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L420">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L428">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L423">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, qualityScores);
             case PROMedS:
-<span class="fc" id="L431">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L426">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L435">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L430">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener);
         }
     }
@@ -457,24 +452,23 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(AffineTransformation3DRobustEstimatorListener listener, 
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L462" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L456" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L464">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L458">                return new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L467">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L461">                return new MSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L470">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L464">                return new PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L473">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L467">                return new PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L477">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
+<span class="fc" id="L471">                return new RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
         }
     }            
@@ -486,7 +480,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator 
             create() {
-<span class="fc" id="L489">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L483">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -501,9 +495,8 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
-            create(List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L506">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
+            create(List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L499">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
     }            
             
     /**
@@ -515,7 +508,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator 
             create(AffineTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L518">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L511">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -533,9 +526,8 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(AffineTransformation3DRobustEstimatorListener listener, 
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L538">        return create(listener, inputPoints, outputPoints, </span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L530">        return create(listener, inputPoints, outputPoints, </span>
                 DEFAULT_ROBUST_METHOD);
     }            
 
@@ -548,7 +540,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator 
             create(double[] qualityScores) {
-<span class="fc" id="L551">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L543">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -566,8 +558,8 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L570">        return create(inputPoints, outputPoints, qualityScores, </span>
+            double[] qualityScores) {
+<span class="fc" id="L562">        return create(inputPoints, outputPoints, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }            
             
@@ -583,7 +575,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
     public static PointCorrespondenceAffineTransformation3DRobustEstimator 
             create(AffineTransformation3DRobustEstimatorListener listener,
             double[] qualityScores) {
-<span class="fc" id="L586">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L578">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -604,8 +596,8 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
     public static PointCorrespondenceAffineTransformation3DRobustEstimator
             create(AffineTransformation3DRobustEstimatorListener listener, 
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L608">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
+            double[] qualityScores) {
+<span class="fc" id="L600">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
                 DEFAULT_ROBUST_METHOD);
     }    
          
@@ -622,29 +614,29 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      */            
     protected AffineTransformation3D attemptRefine(
             AffineTransformation3D transformation) {
-<span class="fc bfc" id="L625" title="All 2 branches covered.">        if (mRefineResult) {</span>
-<span class="fc" id="L626">            PointCorrespondenceAffineTransformation3DRefiner refiner =</span>
+<span class="fc bfc" id="L617" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L618">            PointCorrespondenceAffineTransformation3DRefiner refiner =</span>
                     new PointCorrespondenceAffineTransformation3DRefiner(
-<span class="fc" id="L628">                    transformation, mKeepCovariance, getInliersData(), </span>
+<span class="fc" id="L620">                    transformation, mKeepCovariance, getInliersData(), </span>
                     mInputPoints, mOutputPoints, 
-<span class="fc" id="L630">                    getRefinementStandardDeviation());</span>
+<span class="fc" id="L622">                    getRefinementStandardDeviation());</span>
             
             try {
-<span class="fc" id="L633">                AffineTransformation3D result = new AffineTransformation3D();</span>
-<span class="fc" id="L634">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L625">                AffineTransformation3D result = new AffineTransformation3D();</span>
+<span class="fc" id="L626">                boolean improved = refiner.refine(result);</span>
                 
-<span class="pc bpc" id="L636" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L628" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L638">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L630">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="fc bfc" id="L641" title="All 2 branches covered.">                return improved ? result : transformation;</span>
-<span class="nc" id="L642">            } catch (Exception e) {</span>
+<span class="fc bfc" id="L633" title="All 2 branches covered.">                return improved ? result : transformation;</span>
+<span class="nc" id="L634">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="nc" id="L644">                return transformation;</span>
+<span class="nc" id="L636">                return transformation;</span>
             }
         } else {
-<span class="fc" id="L647">            return transformation;</span>
+<span class="fc" id="L639">            return transformation;</span>
         }        
     }
             
@@ -660,15 +652,15 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetPoints(List&lt;Point3D&gt; inputPoints, 
-            List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException {
-<span class="fc bfc" id="L664" title="All 2 branches covered.">        if (inputPoints.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L665">            throw new IllegalArgumentException();</span>
+            List&lt;Point3D&gt; outputPoints) {
+<span class="fc bfc" id="L656" title="All 2 branches covered.">        if (inputPoints.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L657">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L667" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
-<span class="fc" id="L668">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L659" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L660">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L670">        mInputPoints = inputPoints;</span>
-<span class="fc" id="L671">        mOutputPoints = outputPoints;        </span>
-<span class="fc" id="L672">    }                </span>
+<span class="fc" id="L662">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L663">        mOutputPoints = outputPoints;        </span>
+<span class="fc" id="L664">    }                </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

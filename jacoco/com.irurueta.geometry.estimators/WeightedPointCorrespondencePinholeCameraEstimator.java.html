@@ -500,11 +500,11 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
 <span class="fc" id="L500">            SingularValueDecomposer decomposer = new SingularValueDecomposer(a);</span>
 <span class="fc" id="L501">            decomposer.decompose();</span>
             
-<span class="pc bpc" id="L503" title="1 of 2 branches missed.">            if (decomposer.getNullity() &gt; 1) {</span>
+<span class="fc bfc" id="L503" title="All 2 branches covered.">            if (decomposer.getNullity() &gt; 1) {</span>
                 //point configuration is degenerate and exists a linear 
                 //combination of possible pinhole cameras (i.e. solution is not
                 //unique up to scale)
-<span class="nc" id="L507">                throw new PinholeCameraEstimatorException();</span>
+<span class="fc" id="L507">                throw new PinholeCameraEstimatorException();</span>
             }
             
 <span class="fc" id="L510">            Matrix v = decomposer.getV();</span>
@@ -539,8 +539,8 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
 
 <span class="fc" id="L540">            return pinholeCameraMatrix;</span>
             
-<span class="nc" id="L542">        } catch (PinholeCameraEstimatorException e) {</span>
-<span class="nc" id="L543">            throw e;</span>
+<span class="fc" id="L542">        } catch (PinholeCameraEstimatorException e) {</span>
+<span class="fc" id="L543">            throw e;</span>
 <span class="nc" id="L544">        } catch (Exception e) {</span>
 <span class="nc" id="L545">            throw new PinholeCameraEstimatorException(e);</span>
         }
