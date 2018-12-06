@@ -679,13 +679,12 @@ public class PROMedSEuclideanTransformation3DRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L684" title="All 2 branches covered.">        if (qualityScores.length &lt; getMinimumPoints()) {</span>
-<span class="fc" id="L685">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(double[] qualityScores) {
+<span class="fc bfc" id="L683" title="All 2 branches covered.">        if (qualityScores.length &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L684">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L688">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L689">    }            </span>
+<span class="fc" id="L687">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L688">    }            </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

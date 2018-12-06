@@ -99,11 +99,10 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) 
-            throws IllegalArgumentException {
-<span class="fc" id="L104">        super(inputLines, outputLines);</span>
-<span class="fc" id="L105">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L106">    }</span>
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L103">        super(inputLines, outputLines);</span>
+<span class="fc" id="L104">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L105">    }</span>
     
     /**
      * Constructor.
@@ -112,9 +111,9 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener) {
-<span class="fc" id="L115">        super(listener);</span>
-<span class="fc" id="L116">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L114">        super(listener);</span>
+<span class="fc" id="L115">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L116">    }</span>
     
     /**
      * Constructor with listener and lists of lines to be used to estimate an
@@ -133,11 +132,10 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
-            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) 
-            throws IllegalArgumentException {
-<span class="fc" id="L138">        super(listener, inputLines, outputLines);</span>
-<span class="fc" id="L139">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L140">    }</span>
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L136">        super(listener, inputLines, outputLines);</span>
+<span class="fc" id="L137">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L138">    }</span>
     
     /**
      * Constructor.
@@ -147,11 +145,11 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L151">        super();</span>
-<span class="fc" id="L152">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L153">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L154">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L149">        super();</span>
+<span class="fc" id="L150">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L151">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L152">    }</span>
 
     /**
      * Constructor with lists of lines to be used to estimate an affine 2D
@@ -171,15 +169,15 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L175">        super(inputLines, outputLines);</span>
+            double[] qualityScores) {
+<span class="fc" id="L173">        super(inputLines, outputLines);</span>
         
-<span class="fc bfc" id="L177" title="All 2 branches covered.">        if(qualityScores.length != inputLines.size())</span>
-<span class="fc" id="L178">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        if(qualityScores.length != inputLines.size())</span>
+<span class="fc" id="L176">            throw new IllegalArgumentException();</span>
         
-<span class="fc" id="L180">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L181">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L182">    }</span>
+<span class="fc" id="L178">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L179">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L180">    }</span>
     
     /**
      * Constructor.
@@ -192,11 +190,11 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L196">        super(listener);</span>
-<span class="fc" id="L197">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L198">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L199">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L194">        super(listener);</span>
+<span class="fc" id="L195">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L196">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L197">    }</span>
     
     /**
      * Constructor with listener and lists of lines to be used to estimate an
@@ -218,16 +216,16 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L222">        super(listener, inputLines, outputLines);</span>
+            double[] qualityScores) {
+<span class="fc" id="L220">        super(listener, inputLines, outputLines);</span>
         
-<span class="fc bfc" id="L224" title="All 2 branches covered.">        if (qualityScores.length != inputLines.size()) {</span>
-<span class="fc" id="L225">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">        if (qualityScores.length != inputLines.size()) {</span>
+<span class="fc" id="L223">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L228">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L229">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L230">    }</span>
+<span class="fc" id="L226">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L227">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L228">    }</span>
     
     /**
      * Returns threshold to be used to keep the algorithm iterating in case that 
@@ -248,7 +246,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-<span class="fc" id="L251">        return mStopThreshold;</span>
+<span class="fc" id="L249">        return mStopThreshold;</span>
     }
     
     /**
@@ -272,17 +270,16 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L277" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L278">            throw new LockedException();</span>
+    public void setStopThreshold(double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L274" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L275">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L280" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
-<span class="fc" id="L281">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L278">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L284">        mStopThreshold = stopThreshold;</span>
-<span class="fc" id="L285">    }</span>
+<span class="fc" id="L281">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L282">    }</span>
     
     /**
      * Returns quality scores corresponding to each pair of matched lines.
@@ -291,7 +288,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L294">        return mQualityScores;</span>
+<span class="fc" id="L291">        return mQualityScores;</span>
     }
     
     /**
@@ -305,13 +302,12 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
-<span class="pc bpc" id="L310" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L311">            throw new LockedException();</span>
+    public void setQualityScores(double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L306" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L307">            throw new LockedException();</span>
         }
-<span class="fc" id="L313">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L314">    }    </span>
+<span class="fc" id="L309">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L310">    }    </span>
     
     /**
      * Indicates if estimator is ready to start the affine 2D transformation
@@ -322,8 +318,8 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L325" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L326" title="1 of 2 branches missed.">                mQualityScores.length == mInputLines.size();</span>
+<span class="fc bfc" id="L321" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
+<span class="pc bpc" id="L322" title="1 of 2 branches missed.">                mQualityScores.length == mInputLines.size();</span>
     }    
     
     /**
@@ -341,141 +337,141 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
     @Override
     public AffineTransformation2D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L344" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L345">            throw new LockedException();</span>
+<span class="fc bfc" id="L340" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L341">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L347" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L348">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L343" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L344">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L351">        PROMedSRobustEstimator&lt;AffineTransformation2D&gt; innerEstimator =</span>
+<span class="fc" id="L347">        PROMedSRobustEstimator&lt;AffineTransformation2D&gt; innerEstimator =</span>
                 new PROMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L353">                new PROMedSRobustEstimatorListener&lt;AffineTransformation2D&gt;() {</span>
+<span class="fc" id="L349">                new PROMedSRobustEstimatorListener&lt;AffineTransformation2D&gt;() {</span>
                     
             //line to be reused when computing residuals
-<span class="fc" id="L356">            private Line2D mTestLine = new Line2D();</span>
+<span class="fc" id="L352">            private Line2D mTestLine = new Line2D();</span>
 
             @Override
             public double getThreshold() {
-<span class="fc" id="L360">                return mStopThreshold;</span>
+<span class="fc" id="L356">                return mStopThreshold;</span>
             }
             
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L365">                return mInputLines.size();</span>
+<span class="fc" id="L361">                return mInputLines.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L370">                return AffineTransformation2DRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L366">                return AffineTransformation2DRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;AffineTransformation2D&gt; solutions) {
-<span class="fc" id="L376">                Line2D inputLine1 = mInputLines.get(samplesIndices[0]);</span>
-<span class="fc" id="L377">                Line2D inputLine2 = mInputLines.get(samplesIndices[1]);</span>
-<span class="fc" id="L378">                Line2D inputLine3 = mInputLines.get(samplesIndices[2]);</span>
+<span class="fc" id="L372">                Line2D inputLine1 = mInputLines.get(samplesIndices[0]);</span>
+<span class="fc" id="L373">                Line2D inputLine2 = mInputLines.get(samplesIndices[1]);</span>
+<span class="fc" id="L374">                Line2D inputLine3 = mInputLines.get(samplesIndices[2]);</span>
                 
-<span class="fc" id="L380">                Line2D outputLine1 = mOutputLines.get(samplesIndices[0]);</span>
-<span class="fc" id="L381">                Line2D outputLine2 = mOutputLines.get(samplesIndices[1]);</span>
-<span class="fc" id="L382">                Line2D outputLine3 = mOutputLines.get(samplesIndices[2]);</span>
+<span class="fc" id="L376">                Line2D outputLine1 = mOutputLines.get(samplesIndices[0]);</span>
+<span class="fc" id="L377">                Line2D outputLine2 = mOutputLines.get(samplesIndices[1]);</span>
+<span class="fc" id="L378">                Line2D outputLine3 = mOutputLines.get(samplesIndices[2]);</span>
                 
                 try {
-<span class="fc" id="L385">                    AffineTransformation2D transformation =</span>
+<span class="fc" id="L381">                    AffineTransformation2D transformation =</span>
                             new AffineTransformation2D(inputLine1, inputLine2, 
                             inputLine3, outputLine1, outputLine2, outputLine3);
-<span class="fc" id="L388">                    solutions.add(transformation);</span>
-<span class="nc" id="L389">                } catch (CoincidentLinesException e) {</span>
+<span class="fc" id="L384">                    solutions.add(transformation);</span>
+<span class="nc" id="L385">                } catch (CoincidentLinesException e) {</span>
                     //if lines are coincident, no solution is added
-<span class="fc" id="L391">                }</span>
-<span class="fc" id="L392">            }</span>
+<span class="fc" id="L387">                }</span>
+<span class="fc" id="L388">            }</span>
 
             @Override
             public double computeResidual(AffineTransformation2D currentEstimation, int i) {
-<span class="fc" id="L396">                Line2D inputLine = mInputLines.get(i);</span>
-<span class="fc" id="L397">                Line2D outputLine = mOutputLines.get(i);</span>
+<span class="fc" id="L392">                Line2D inputLine = mInputLines.get(i);</span>
+<span class="fc" id="L393">                Line2D outputLine = mOutputLines.get(i);</span>
                 
                 //transform input line and store result in mTestLine
                 try {
-<span class="fc" id="L401">                    currentEstimation.transform(inputLine, mTestLine);</span>
+<span class="fc" id="L397">                    currentEstimation.transform(inputLine, mTestLine);</span>
                     
-<span class="fc" id="L403">                    return getResidual(outputLine, mTestLine);</span>
-<span class="nc" id="L404">                } catch (AlgebraException e) {</span>
+<span class="fc" id="L399">                    return getResidual(outputLine, mTestLine);</span>
+<span class="nc" id="L400">                } catch (AlgebraException e) {</span>
                     //this happens when internal matrix of affine transformation
                     //cannot be reverse (i.e. transformation is not well defined,
                     //numerical instabilities, etc)
-<span class="nc" id="L408">                    return Double.MAX_VALUE;</span>
+<span class="nc" id="L404">                    return Double.MAX_VALUE;</span>
                 }
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L414">                return PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.</span>
-<span class="fc" id="L415">                        this.isReady();</span>
+<span class="fc" id="L410">                return PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.</span>
+<span class="fc" id="L411">                        this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(
                     RobustEstimator&lt;AffineTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L421" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L422">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L417" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L418">                    mListener.onEstimateStart(</span>
                             PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.this);
                 }
-<span class="fc" id="L425">            }</span>
+<span class="fc" id="L421">            }</span>
 
             @Override
             public void onEstimateEnd(
                     RobustEstimator&lt;AffineTransformation2D&gt; estimator) {
-<span class="pc bpc" id="L430" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L431">                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L426" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L427">                    mListener.onEstimateEnd(</span>
                             PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.this);
                 }
-<span class="fc" id="L434">            }</span>
+<span class="fc" id="L430">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;AffineTransformation2D&gt; estimator, 
                     int iteration) {
-<span class="pc bpc" id="L440" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L441">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L436" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L437">                    mListener.onEstimateNextIteration(</span>
                             PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.this, 
                             iteration);
                 }
-<span class="fc" id="L445">            }</span>
+<span class="fc" id="L441">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;AffineTransformation2D&gt; estimator, 
                     float progress) {
-<span class="nc bnc" id="L451" title="All 2 branches missed.">                if (mListener != null) {</span>
-<span class="nc" id="L452">                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L447" title="All 2 branches missed.">                if (mListener != null) {</span>
+<span class="nc" id="L448">                    mListener.onEstimateProgressChange(</span>
                             PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.this, 
                             progress);
                 }
-<span class="nc" id="L456">            }</span>
+<span class="nc" id="L452">            }</span>
             
             @Override
             public double[] getQualityScores() {
-<span class="fc" id="L460">                return mQualityScores;</span>
+<span class="fc" id="L456">                return mQualityScores;</span>
             }            
         });
         
         try {
-<span class="fc" id="L465">            mLocked = true;</span>
-<span class="fc" id="L466">            mInliersData = null;</span>
-<span class="fc" id="L467">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L468">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L469">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L470">            AffineTransformation2D transformation = innerEstimator.estimate();</span>
-<span class="fc" id="L471">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L472">            return attemptRefine(transformation);</span>
-<span class="nc" id="L473">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L474">            throw new LockedException(e);</span>
-<span class="nc" id="L475">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L476">            throw new NotReadyException(e);</span>
+<span class="fc" id="L461">            mLocked = true;</span>
+<span class="fc" id="L462">            mInliersData = null;</span>
+<span class="fc" id="L463">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L464">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L465">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L466">            AffineTransformation2D transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L467">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L468">            return attemptRefine(transformation);</span>
+<span class="nc" id="L469">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L470">            throw new LockedException(e);</span>
+<span class="nc" id="L471">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L472">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L478">            mLocked = false;</span>
+<span class="fc" id="L474">            mLocked = false;</span>
         }        
     }
 
@@ -485,7 +481,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */        
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L488">        return RobustEstimatorMethod.PROMedS;</span>
+<span class="fc" id="L484">        return RobustEstimatorMethod.PROMedS;</span>
     }  
     
     /**
@@ -500,12 +496,12 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L503">        PROMedSRobustEstimator.PROMedSInliersData inliersData =</span>
-<span class="fc" id="L504">                (PROMedSRobustEstimator.PROMedSInliersData)getInliersData();</span>
+<span class="fc" id="L499">        PROMedSRobustEstimator.PROMedSInliersData inliersData =</span>
+<span class="fc" id="L500">                (PROMedSRobustEstimator.PROMedSInliersData)getInliersData();</span>
 
         //avoid setting a threshold too strict
-<span class="fc" id="L507">        double threshold = inliersData.getEstimatedThreshold();</span>
-<span class="pc bpc" id="L508" title="1 of 2 branches missed.">        return threshold &gt; mStopThreshold ? threshold : mStopThreshold;</span>
+<span class="fc" id="L503">        double threshold = inliersData.getEstimatedThreshold();</span>
+<span class="pc bpc" id="L504" title="1 of 2 branches missed.">        return threshold &gt; mStopThreshold ? threshold : mStopThreshold;</span>
     }
     
     /**
@@ -516,13 +512,12 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L521" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L522">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(double[] qualityScores) {
+<span class="fc bfc" id="L516" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L517">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L525">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L526">    }            </span>
+<span class="fc" id="L520">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L521">    }            </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

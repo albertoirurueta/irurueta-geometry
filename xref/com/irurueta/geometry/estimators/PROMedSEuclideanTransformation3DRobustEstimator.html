@@ -687,15 +687,14 @@
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided quality scores length is</em>
 <a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">     * smaller than MINIMUM_SIZE.</em>
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L682" href="#L682">682</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetQualityScores(<strong class="jxr_keyword">double</strong>[] qualityScores) 
-<a class="jxr_linenumber" name="L683" href="#L683">683</a>             <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
-<a class="jxr_linenumber" name="L684" href="#L684">684</a>         <strong class="jxr_keyword">if</strong> (qualityScores.length &lt; getMinimumPoints()) {
-<a class="jxr_linenumber" name="L685" href="#L685">685</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L686" href="#L686">686</a>         }
-<a class="jxr_linenumber" name="L687" href="#L687">687</a>         
-<a class="jxr_linenumber" name="L688" href="#L688">688</a>         mQualityScores = qualityScores;        
-<a class="jxr_linenumber" name="L689" href="#L689">689</a>     }            
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> }
+<a class="jxr_linenumber" name="L682" href="#L682">682</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetQualityScores(<strong class="jxr_keyword">double</strong>[] qualityScores) {
+<a class="jxr_linenumber" name="L683" href="#L683">683</a>         <strong class="jxr_keyword">if</strong> (qualityScores.length &lt; getMinimumPoints()) {
+<a class="jxr_linenumber" name="L684" href="#L684">684</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L685" href="#L685">685</a>         }
+<a class="jxr_linenumber" name="L686" href="#L686">686</a>         
+<a class="jxr_linenumber" name="L687" href="#L687">687</a>         mQualityScores = qualityScores;        
+<a class="jxr_linenumber" name="L688" href="#L688">688</a>     }            
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>

@@ -89,11 +89,10 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSLine2DRobustEstimator(List&lt;Point2D&gt; points) 
-            throws IllegalArgumentException {
-<span class="fc" id="L94">        super(points);</span>
-<span class="fc" id="L95">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L96">    }</span>
+    public PROMedSLine2DRobustEstimator(List&lt;Point2D&gt; points) {
+<span class="fc" id="L93">        super(points);</span>
+<span class="fc" id="L94">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L95">    }</span>
     
     /**
      * Constructor.
@@ -101,9 +100,9 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * starts, ends or its progress significantly changes.
      */
     public PROMedSLine2DRobustEstimator(Line2DRobustEstimatorListener listener) {
-<span class="fc" id="L104">        super(listener);</span>
-<span class="fc" id="L105">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L106">    }</span>
+<span class="fc" id="L103">        super(listener);</span>
+<span class="fc" id="L104">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L105">    }</span>
     
     
     /**
@@ -115,10 +114,10 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public PROMedSLine2DRobustEstimator(Line2DRobustEstimatorListener listener,
-            List&lt;Point2D&gt; points) throws IllegalArgumentException {
-<span class="fc" id="L119">        super(listener, points);</span>
-<span class="fc" id="L120">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L121">    }</span>
+            List&lt;Point2D&gt; points) {
+<span class="fc" id="L118">        super(listener, points);</span>
+<span class="fc" id="L119">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L120">    }</span>
     
     /**
      * Constructor.
@@ -126,12 +125,11 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 2 points).
      */
-    public PROMedSLine2DRobustEstimator(double[] qualityScores)
-            throws IllegalArgumentException {
-<span class="fc" id="L131">        super();</span>
-<span class="fc" id="L132">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L133">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L134">    }</span>
+    public PROMedSLine2DRobustEstimator(double[] qualityScores) {
+<span class="fc" id="L129">        super();</span>
+<span class="fc" id="L130">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L131">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L132">    }</span>
 
     /**
      * Constructor with points.
@@ -142,16 +140,16 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSLine2DRobustEstimator(List&lt;Point2D&gt; points, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L146">        super(points);</span>
+            double[] qualityScores) {
+<span class="fc" id="L144">        super(points);</span>
         
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
-<span class="fc" id="L149">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
+<span class="fc" id="L147">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L152">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L153">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L150">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L151">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L152">    }</span>
     
     /**
      * Constructor.
@@ -162,11 +160,11 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 2 points).
      */
     public PROMedSLine2DRobustEstimator(Line2DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L166">        super(listener);</span>
-<span class="fc" id="L167">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L168">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L169">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L164">        super(listener);</span>
+<span class="fc" id="L165">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L166">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L167">    }</span>
     
     
     /**
@@ -180,17 +178,16 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSLine2DRobustEstimator(Line2DRobustEstimatorListener listener,
-            List&lt;Point2D&gt; points, double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L185">        super(listener, points);</span>
+            List&lt;Point2D&gt; points, double[] qualityScores) {
+<span class="fc" id="L182">        super(listener, points);</span>
         
-<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
-<span class="fc" id="L188">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (qualityScores.length != points.size()) {</span>
+<span class="fc" id="L185">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L191">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L192">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L193">    }    </span>
+<span class="fc" id="L188">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L189">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L190">    }    </span>
     
     /**
      * Returns threshold to be used to keep the algorithm iterating in case that 
@@ -211,7 +208,7 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-<span class="fc" id="L214">        return mStopThreshold;</span>
+<span class="fc" id="L211">        return mStopThreshold;</span>
     }
     
     /**
@@ -235,17 +232,16 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L241">            throw new LockedException();</span>
+    public void setStopThreshold(double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L236" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L237">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L243" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
-<span class="fc" id="L244">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L240">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L247">        mStopThreshold = stopThreshold;</span>
-<span class="fc" id="L248">    }</span>
+<span class="fc" id="L243">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L244">    }</span>
     
     /**
      * Returns quality scores corresponding to each provided point.
@@ -254,7 +250,7 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L257">        return mQualityScores;</span>
+<span class="fc" id="L253">        return mQualityScores;</span>
     }
     
     /**
@@ -267,13 +263,12 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 2 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
-<span class="pc bpc" id="L272" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L273">            throw new LockedException();</span>
+    public void setQualityScores(double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L267" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L268">            throw new LockedException();</span>
         }
-<span class="fc" id="L275">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L276">    }</span>
+<span class="fc" id="L270">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L271">    }</span>
     
     /**
      * Indicates if eatimator is ready to start the 2D line estimation.
@@ -283,8 +278,8 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L286" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L287" title="1 of 2 branches missed.">                mQualityScores.length == mPoints.size();</span>
+<span class="fc bfc" id="L281" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
+<span class="pc bpc" id="L282" title="1 of 2 branches missed.">                mQualityScores.length == mPoints.size();</span>
     }      
             
     /**
@@ -301,107 +296,107 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
     @Override
     public Line2D estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-<span class="fc bfc" id="L304" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L305">            throw new LockedException();</span>
+<span class="fc bfc" id="L299" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L300">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L307" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L308">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L302" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L303">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L311">        PROMedSRobustEstimator&lt;Line2D&gt; innerEstimator =</span>
+<span class="fc" id="L306">        PROMedSRobustEstimator&lt;Line2D&gt; innerEstimator =</span>
                 new PROMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L313">                        new PROMedSRobustEstimatorListener&lt;Line2D&gt;() {</span>
+<span class="fc" id="L308">                        new PROMedSRobustEstimatorListener&lt;Line2D&gt;() {</span>
 
             @Override
             public double getThreshold() {
-<span class="fc" id="L317">                return mStopThreshold;</span>
+<span class="fc" id="L312">                return mStopThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L322">                return mPoints.size();</span>
+<span class="fc" id="L317">                return mPoints.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L327">                return Line2DRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L322">                return Line2DRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;Line2D&gt; solutions) {
-<span class="fc" id="L333">                Point2D point1 = mPoints.get(samplesIndices[0]);</span>
-<span class="fc" id="L334">                Point2D point2 = mPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L328">                Point2D point1 = mPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L329">                Point2D point2 = mPoints.get(samplesIndices[1]);</span>
                 
                 try {
-<span class="fc" id="L337">                    Line2D line = new Line2D(point1, point2, false);</span>
-<span class="fc" id="L338">                    solutions.add(line);</span>
-<span class="nc" id="L339">                } catch (CoincidentPointsException e) {</span>
+<span class="fc" id="L332">                    Line2D line = new Line2D(point1, point2, false);</span>
+<span class="fc" id="L333">                    solutions.add(line);</span>
+<span class="nc" id="L334">                } catch (CoincidentPointsException e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L341">                }</span>
-<span class="fc" id="L342">            }</span>
+<span class="fc" id="L336">                }</span>
+<span class="fc" id="L337">            }</span>
 
             @Override
             public double computeResidual(Line2D currentEstimation, int i) {
-<span class="fc" id="L346">                return residual(currentEstimation, mPoints.get(i));</span>
+<span class="fc" id="L341">                return residual(currentEstimation, mPoints.get(i));</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L351">                return PROMedSLine2DRobustEstimator.this.isReady();</span>
+<span class="fc" id="L346">                return PROMedSLine2DRobustEstimator.this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(RobustEstimator&lt;Line2D&gt; estimator) {
-<span class="pc bpc" id="L356" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L357">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L351" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L352">                    mListener.onEstimateStart(</span>
                             PROMedSLine2DRobustEstimator.this);
                 }
-<span class="fc" id="L360">            }</span>
+<span class="fc" id="L355">            }</span>
 
             @Override
             public void onEstimateEnd(RobustEstimator&lt;Line2D&gt; estimator) {
-<span class="pc bpc" id="L364" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L365">                    mListener.onEstimateEnd(PROMedSLine2DRobustEstimator.this);</span>
+<span class="pc bpc" id="L359" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L360">                    mListener.onEstimateEnd(PROMedSLine2DRobustEstimator.this);</span>
                 }
-<span class="fc" id="L367">            }</span>
+<span class="fc" id="L362">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;Line2D&gt; estimator, int iteration) {
-<span class="pc bpc" id="L372" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L373">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L367" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L368">                    mListener.onEstimateNextIteration(</span>
                             PROMedSLine2DRobustEstimator.this, iteration);
                 }
-<span class="fc" id="L376">            }</span>
+<span class="fc" id="L371">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;Line2D&gt; estimator, float progress) {
-<span class="nc bnc" id="L381" title="All 2 branches missed.">                if (mListener != null) {</span>
-<span class="nc" id="L382">                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L376" title="All 2 branches missed.">                if (mListener != null) {</span>
+<span class="nc" id="L377">                    mListener.onEstimateProgressChange(</span>
                             PROMedSLine2DRobustEstimator.this, progress);
                 }
-<span class="nc" id="L385">            }</span>
+<span class="nc" id="L380">            }</span>
             
             @Override
             public double[] getQualityScores() {
-<span class="fc" id="L389">                return mQualityScores;</span>
+<span class="fc" id="L384">                return mQualityScores;</span>
             }              
         });
         
         try {
-<span class="fc" id="L394">            mLocked = true;</span>
-<span class="fc" id="L395">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L396">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L397">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L398">            return innerEstimator.estimate();</span>
-<span class="nc" id="L399">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L400">            throw new LockedException(e);</span>
-<span class="nc" id="L401">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L402">            throw new NotReadyException(e);</span>
+<span class="fc" id="L389">            mLocked = true;</span>
+<span class="fc" id="L390">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L391">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L392">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L393">            return innerEstimator.estimate();</span>
+<span class="nc" id="L394">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L395">            throw new LockedException(e);</span>
+<span class="nc" id="L396">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L397">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L404">            mLocked = false;</span>
+<span class="fc" id="L399">            mLocked = false;</span>
         }
     }
 
@@ -411,7 +406,7 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L414">        return RobustEstimatorMethod.PROMedS;</span>
+<span class="fc" id="L409">        return RobustEstimatorMethod.PROMedS;</span>
     }    
     
     /**
@@ -422,13 +417,12 @@ public class PROMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L427" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L428">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(double[] qualityScores) {
+<span class="fc bfc" id="L421" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L422">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L431">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L432">    }     </span>
+<span class="fc" id="L425">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L426">    }     </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
