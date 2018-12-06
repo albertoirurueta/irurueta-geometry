@@ -92,13 +92,12 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public PROSACPoint2DRobustEstimator(List&lt;Line2D&gt; lines) 
-            throws IllegalArgumentException {
-<span class="fc" id="L97">        super(lines);</span>
-<span class="fc" id="L98">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L99">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L100">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L101">    }</span>
+    public PROSACPoint2DRobustEstimator(List&lt;Line2D&gt; lines) {
+<span class="fc" id="L96">        super(lines);</span>
+<span class="fc" id="L97">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L98">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L99">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L100">    }</span>
     
     /**
      * Constructor.
@@ -106,11 +105,11 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * starts, ends or its progress significantly changes.
      */
     public PROSACPoint2DRobustEstimator(Point2DRobustEstimatorListener listener) {
-<span class="fc" id="L109">        super(listener);</span>
-<span class="fc" id="L110">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L111">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L112">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L108">        super(listener);</span>
+<span class="fc" id="L109">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L110">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L111">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L112">    }</span>
     
     
     /**
@@ -122,12 +121,12 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public PROSACPoint2DRobustEstimator(Point2DRobustEstimatorListener listener,
-            List&lt;Line2D&gt; lines) throws IllegalArgumentException {
-<span class="fc" id="L126">        super(listener, lines);</span>
-<span class="fc" id="L127">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L128">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L129">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L130">    }</span>
+            List&lt;Line2D&gt; lines) {
+<span class="fc" id="L125">        super(listener, lines);</span>
+<span class="fc" id="L126">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L127">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L128">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L129">    }</span>
     
     /**
      * Constructor.
@@ -135,14 +134,13 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
-    public PROSACPoint2DRobustEstimator(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L140">        super();</span>
-<span class="fc" id="L141">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L142">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L143">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L144">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L145">    }</span>
+    public PROSACPoint2DRobustEstimator(double[] qualityScores) {
+<span class="fc" id="L138">        super();</span>
+<span class="fc" id="L139">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L140">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L141">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L142">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L143">    }</span>
 
     /**
      * Constructor with lines.
@@ -153,18 +151,18 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROSACPoint2DRobustEstimator(List&lt;Line2D&gt; lines,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L157">        super(lines);</span>
+            double[] qualityScores) {
+<span class="fc" id="L155">        super(lines);</span>
         
-<span class="fc bfc" id="L159" title="All 2 branches covered.">        if (qualityScores.length != lines.size()) {</span>
-<span class="fc" id="L160">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        if (qualityScores.length != lines.size()) {</span>
+<span class="fc" id="L158">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L163">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L164">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L165">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L166">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L167">    }</span>
+<span class="fc" id="L161">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L162">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L163">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L164">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L165">    }</span>
     
     /**
      * Constructor.
@@ -175,13 +173,13 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
     public PROSACPoint2DRobustEstimator(Point2DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L179">        super(listener);</span>
-<span class="fc" id="L180">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L181">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L182">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L183">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L184">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L177">        super(listener);</span>
+<span class="fc" id="L178">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L179">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L180">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L181">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L182">    }</span>
     
     
     /**
@@ -195,19 +193,18 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROSACPoint2DRobustEstimator(Point2DRobustEstimatorListener listener,
-            List&lt;Line2D&gt; lines, double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L200">        super(listener, lines);</span>
+            List&lt;Line2D&gt; lines, double[] qualityScores) {
+<span class="fc" id="L197">        super(listener, lines);</span>
         
-<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (qualityScores.length != lines.size()) {</span>
-<span class="fc" id="L203">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (qualityScores.length != lines.size()) {</span>
+<span class="fc" id="L200">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L206">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L207">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L208">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L209">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L210">    }</span>
+<span class="fc" id="L203">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L204">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L205">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L206">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L207">    }</span>
     
     /**
      * Returns threshold to determine whether lines are inliers or not when 
@@ -218,7 +215,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-<span class="fc" id="L221">        return mThreshold;</span>
+<span class="fc" id="L218">        return mThreshold;</span>
     }
     
     /**
@@ -232,16 +229,15 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L237" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L238">            throw new LockedException();</span>
+    public void setThreshold(double threshold) throws LockedException {
+<span class="fc bfc" id="L233" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L234">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L241">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L236" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L237">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L243">        mThreshold = threshold;</span>
-<span class="fc" id="L244">    }</span>
+<span class="fc" id="L239">        mThreshold = threshold;</span>
+<span class="fc" id="L240">    }</span>
     
     /**
      * Returns quality scores corresponding to each provided line.
@@ -250,7 +246,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L253">        return mQualityScores;</span>
+<span class="fc" id="L249">        return mQualityScores;</span>
     }
     
     /**
@@ -263,13 +259,12 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 2 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
-<span class="pc bpc" id="L268" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L269">            throw new LockedException();</span>
+    public void setQualityScores(double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L263" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L264">            throw new LockedException();</span>
         }
-<span class="fc" id="L271">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L272">    }</span>
+<span class="fc" id="L266">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L267">    }</span>
     
     /**
      * Indicates if estimator is ready to start the 2D point estimation.
@@ -279,8 +274,8 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L282" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L283" title="1 of 2 branches missed.">                mQualityScores.length == mLines.size();</span>
+<span class="fc bfc" id="L277" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
+<span class="pc bpc" id="L278" title="1 of 2 branches missed.">                mQualityScores.length == mLines.size();</span>
     }      
             
     /**
@@ -289,7 +284,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-<span class="fc" id="L292">        return mComputeAndKeepInliers;</span>
+<span class="fc" id="L287">        return mComputeAndKeepInliers;</span>
     }
     
     /**
@@ -300,11 +295,11 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     public void setComputeAndKeepInliersEnabled(boolean computeAndKeepInliers) 
             throws LockedException {
-<span class="pc bpc" id="L303" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L304">            throw new LockedException();</span>
+<span class="pc bpc" id="L298" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L299">            throw new LockedException();</span>
         }
-<span class="fc" id="L306">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
-<span class="fc" id="L307">    }    </span>
+<span class="fc" id="L301">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L302">    }    </span>
     
     /**
      * Indicates whether residuals must be computed and kept.
@@ -312,7 +307,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-<span class="fc" id="L315">        return mComputeAndKeepResiduals;</span>
+<span class="fc" id="L310">        return mComputeAndKeepResiduals;</span>
     }
     
     /**
@@ -323,11 +318,11 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     public void setComputeAndKeepResidualsEnabled(
             boolean computeAndKeepResiduals) throws LockedException {
-<span class="pc bpc" id="L326" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L327">            throw new LockedException();</span>
+<span class="pc bpc" id="L321" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L322">            throw new LockedException();</span>
         }
-<span class="fc" id="L329">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
-<span class="fc" id="L330">    }</span>
+<span class="fc" id="L324">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L325">    }</span>
     
     /**
      * Estimates a 2D point using a robust estimator and the best set of 2D 
@@ -343,113 +338,113 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
     @Override
     public Point2D estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-<span class="fc bfc" id="L346" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L347">            throw new LockedException();</span>
+<span class="fc bfc" id="L341" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L342">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L349" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L350">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L344" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L345">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L353">        PROSACRobustEstimator&lt;Point2D&gt; innerEstimator =</span>
+<span class="fc" id="L348">        PROSACRobustEstimator&lt;Point2D&gt; innerEstimator =</span>
                 new PROSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L355">                        new PROSACRobustEstimatorListener&lt;Point2D&gt;() {</span>
+<span class="fc" id="L350">                        new PROSACRobustEstimatorListener&lt;Point2D&gt;() {</span>
 
             @Override
             public double getThreshold() {
-<span class="fc" id="L359">                return mThreshold;</span>
+<span class="fc" id="L354">                return mThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L364">                return mLines.size();</span>
+<span class="fc" id="L359">                return mLines.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L369">                return Point2DRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L364">                return Point2DRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;Point2D&gt; solutions) {
-<span class="fc" id="L375">                Line2D line1 = mLines.get(samplesIndices[0]);</span>
-<span class="fc" id="L376">                Line2D line2 = mLines.get(samplesIndices[1]);</span>
+<span class="fc" id="L370">                Line2D line1 = mLines.get(samplesIndices[0]);</span>
+<span class="fc" id="L371">                Line2D line2 = mLines.get(samplesIndices[1]);</span>
                 
                 try {
-<span class="fc" id="L379">                    Point2D point = line1.getIntersection(line2);</span>
-<span class="fc" id="L380">                    solutions.add(point);</span>
-<span class="nc" id="L381">                } catch (NoIntersectionException e) {</span>
+<span class="fc" id="L374">                    Point2D point = line1.getIntersection(line2);</span>
+<span class="fc" id="L375">                    solutions.add(point);</span>
+<span class="nc" id="L376">                } catch (NoIntersectionException e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L383">                }</span>
-<span class="fc" id="L384">            }</span>
+<span class="fc" id="L378">                }</span>
+<span class="fc" id="L379">            }</span>
 
             @Override
             public double computeResidual(Point2D currentEstimation, int i) {
-<span class="fc" id="L388">                return residual(currentEstimation, mLines.get(i));</span>
+<span class="fc" id="L383">                return residual(currentEstimation, mLines.get(i));</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L393">                return PROSACPoint2DRobustEstimator.this.isReady();</span>
+<span class="fc" id="L388">                return PROSACPoint2DRobustEstimator.this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(RobustEstimator&lt;Point2D&gt; estimator) {
-<span class="pc bpc" id="L398" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L399">                    mListener.onEstimateStart(PROSACPoint2DRobustEstimator.this);</span>
+<span class="pc bpc" id="L393" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L394">                    mListener.onEstimateStart(PROSACPoint2DRobustEstimator.this);</span>
                 }
-<span class="fc" id="L401">            }</span>
+<span class="fc" id="L396">            }</span>
 
             @Override
             public void onEstimateEnd(RobustEstimator&lt;Point2D&gt; estimator) {
-<span class="pc bpc" id="L405" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L406">                    mListener.onEstimateEnd(PROSACPoint2DRobustEstimator.this);</span>
+<span class="pc bpc" id="L400" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L401">                    mListener.onEstimateEnd(PROSACPoint2DRobustEstimator.this);</span>
                 }
-<span class="fc" id="L408">            }</span>
+<span class="fc" id="L403">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;Point2D&gt; estimator, int iteration) {
-<span class="pc bpc" id="L413" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L414">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L408" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L409">                    mListener.onEstimateNextIteration(</span>
                             PROSACPoint2DRobustEstimator.this, iteration);
                 }
-<span class="fc" id="L417">            }</span>
+<span class="fc" id="L412">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;Point2D&gt; estimator, float progress) {
-<span class="nc bnc" id="L422" title="All 2 branches missed.">                if (mListener != null) {</span>
-<span class="nc" id="L423">                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L417" title="All 2 branches missed.">                if (mListener != null) {</span>
+<span class="nc" id="L418">                    mListener.onEstimateProgressChange(</span>
                             PROSACPoint2DRobustEstimator.this, progress);
                 }
-<span class="nc" id="L426">            }</span>
+<span class="nc" id="L421">            }</span>
             
             @Override
             public double[] getQualityScores() {
-<span class="fc" id="L430">                return mQualityScores;</span>
+<span class="fc" id="L425">                return mQualityScores;</span>
             }            
         });
         
         try {
-<span class="fc" id="L435">            mLocked = true;</span>
-<span class="fc" id="L436">            mInliersData = null;</span>
-<span class="pc bpc" id="L437" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
+<span class="fc" id="L430">            mLocked = true;</span>
+<span class="fc" id="L431">            mInliersData = null;</span>
+<span class="pc bpc" id="L432" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
                     mComputeAndKeepInliers || mRefineResult);
-<span class="pc bpc" id="L439" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
+<span class="pc bpc" id="L434" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
                     mComputeAndKeepResiduals || mRefineResult);                        
-<span class="fc" id="L441">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L442">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L443">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L444">            Point2D result = innerEstimator.estimate();</span>
-<span class="fc" id="L445">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L446">            return attemptRefine(result);</span>
-<span class="nc" id="L447">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L448">            throw new LockedException(e);</span>
-<span class="nc" id="L449">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L450">            throw new NotReadyException(e);</span>
+<span class="fc" id="L436">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L437">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L438">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L439">            Point2D result = innerEstimator.estimate();</span>
+<span class="fc" id="L440">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L441">            return attemptRefine(result);</span>
+<span class="nc" id="L442">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L443">            throw new LockedException(e);</span>
+<span class="nc" id="L444">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L445">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L452">            mLocked = false;</span>
+<span class="fc" id="L447">            mLocked = false;</span>
         }
     }
 
@@ -459,7 +454,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L462">        return RobustEstimatorMethod.PROSAC;</span>
+<span class="fc" id="L457">        return RobustEstimatorMethod.PROSAC;</span>
     }   
     
     /**
@@ -474,7 +469,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L477">        return mThreshold;</span>
+<span class="fc" id="L472">        return mThreshold;</span>
     }    
     
     /**
@@ -485,13 +480,12 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L490" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L491">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(double[] qualityScores) {
+<span class="fc bfc" id="L484" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L485">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L494">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L495">    }        </span>
+<span class="fc" id="L488">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L489">    }        </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

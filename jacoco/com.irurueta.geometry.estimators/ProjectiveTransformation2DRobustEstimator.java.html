@@ -239,17 +239,16 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L244" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L245">            throw new LockedException();</span>
+    public void setProgressDelta(float progressDelta) throws LockedException {
+<span class="fc bfc" id="L243" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L244">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L247" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L246" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L249">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L248">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L251">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L252">    }</span>
+<span class="fc" id="L250">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L251">    }</span>
     
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
@@ -259,7 +258,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L262">        return mConfidence;</span>
+<span class="fc" id="L261">        return mConfidence;</span>
     }
     
     /**
@@ -273,16 +272,15 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L278" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L279">            throw new LockedException();</span>
+    public void setConfidence(double confidence) throws LockedException {
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L277">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L281" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L282">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L279" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L280">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L284">        mConfidence = confidence;</span>
-<span class="fc" id="L285">    }</span>
+<span class="fc" id="L282">        mConfidence = confidence;</span>
+<span class="fc" id="L283">    }</span>
     
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number 
@@ -291,7 +289,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-<span class="fc" id="L294">        return mMaxIterations;</span>
+<span class="fc" id="L292">        return mMaxIterations;</span>
     }
     
     /**
@@ -303,23 +301,22 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L308" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L309">            throw new LockedException();</span>
+    public void setMaxIterations(int maxIterations) throws LockedException {
+<span class="fc bfc" id="L305" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L306">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L311" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L312">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L308" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L309">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L314">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L315">    }</span>
+<span class="fc" id="L311">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L312">    }</span>
     
     /**
      * Gets data related to inliers found after estimation.
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-<span class="fc" id="L322">        return mInliersData;</span>
+<span class="fc" id="L319">        return mInliersData;</span>
     }
     
     /**
@@ -331,7 +328,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-<span class="fc" id="L334">        return mRefineResult;</span>
+<span class="fc" id="L331">        return mRefineResult;</span>
     }
     
     /**
@@ -342,11 +339,11 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @throws LockedException if estimator is locked.
      */
     public void setResultRefined(boolean refineResult) throws LockedException {
-<span class="pc bpc" id="L345" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L346">            throw new LockedException();</span>
+<span class="pc bpc" id="L342" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L343">            throw new LockedException();</span>
         }
-<span class="fc" id="L348">        mRefineResult = refineResult;</span>
-<span class="fc" id="L349">    }</span>
+<span class="fc" id="L345">        mRefineResult = refineResult;</span>
+<span class="fc" id="L346">    }</span>
     
     /**
      * Indicates whether covariance must be kept after refining result.
@@ -355,7 +352,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * otherwise.
      */
     public boolean isCovarianceKept() {
-<span class="fc" id="L358">        return mKeepCovariance;</span>
+<span class="fc" id="L355">        return mKeepCovariance;</span>
     }
     
     /**
@@ -367,11 +364,11 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      */
     public void setCovarianceKept(boolean keepCovariance)
             throws LockedException {
-<span class="pc bpc" id="L370" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L371">            throw new LockedException();</span>
+<span class="pc bpc" id="L367" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L368">            throw new LockedException();</span>
         }
-<span class="fc" id="L373">        mKeepCovariance = keepCovariance;</span>
-<span class="fc" id="L374">    }</span>
+<span class="fc" id="L370">        mKeepCovariance = keepCovariance;</span>
+<span class="fc" id="L371">    }</span>
     
     /**
      * Gets estimated covariance of estimated homography if available.
@@ -380,7 +377,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-<span class="fc" id="L383">        return mCovariance;</span>
+<span class="fc" id="L380">        return mCovariance;</span>
     }
     
     /**
@@ -419,9 +416,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      */
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L423">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L424">                create(inputPoints, outputPoints, method);</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L420">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L421">                create(inputPoints, outputPoints, method);</span>
     }
     
     /**
@@ -442,9 +439,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
             ProjectiveTransformation2DRobustEstimatorListener listener,
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L446">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L447">                create(listener, inputPoints, outputPoints, method);</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L443">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L444">                create(listener, inputPoints, outputPoints, method);</span>
     }
     
     /**
@@ -464,10 +461,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      */
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc" id="L469">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L470">                create(inputPoints, outputPoints, qualityScores, method);</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L465">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L466">                create(inputPoints, outputPoints, qualityScores, method);</span>
     }
     
     /**
@@ -490,10 +486,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
             ProjectiveTransformation2DRobustEstimatorListener listener,
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc" id="L495">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L496">                create(listener, inputPoints,outputPoints, qualityScores, </span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L490">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L491">                create(listener, inputPoints,outputPoints, qualityScores, </span>
                 method);
     }
     
@@ -509,10 +504,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints)
-            throws IllegalArgumentException {
-<span class="fc" id="L514">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L515">                create(inputPoints, outputPoints);</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L508">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L509">                create(inputPoints, outputPoints);</span>
     }
     
     /**
@@ -530,10 +524,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      */
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
             ProjectiveTransformation2DRobustEstimatorListener listener,
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints)
-            throws IllegalArgumentException {
-<span class="fc" id="L535">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L536">                create(listener, inputPoints, outputPoints);</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L528">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L529">                create(listener, inputPoints, outputPoints);</span>
     }
     
     /**
@@ -551,9 +544,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      */
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L555">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L556">                create(inputPoints, outputPoints, qualityScores);</span>
+            double[] qualityScores) {
+<span class="fc" id="L548">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L549">                create(inputPoints, outputPoints, qualityScores);</span>
     }
     
     /**
@@ -574,9 +567,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
             ProjectiveTransformation2DRobustEstimatorListener listener,
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L578">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L579">                create(listener, inputPoints, outputPoints, qualityScores);</span>
+            double[] qualityScores) {
+<span class="fc" id="L571">        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L572">                create(listener, inputPoints, outputPoints, qualityScores);</span>
     }
     
     /**
@@ -594,9 +587,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      */
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L598">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L599">                create(inputLines, outputLines, method);</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L591">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L592">                create(inputLines, outputLines, method);</span>
     }
     
     /**
@@ -617,9 +610,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
             ProjectiveTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L621">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L622">                create(listener, inputLines, outputLines, method);</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L614">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L615">                create(listener, inputLines, outputLines, method);</span>
     }
                         
     /**
@@ -639,10 +632,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      */
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc" id="L644">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L645">                create(inputLines, outputLines, qualityScores, method);</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L636">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L637">                create(inputLines, outputLines, qualityScores, method);</span>
     }
             
     /**
@@ -665,10 +657,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
             ProjectiveTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc" id="L670">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L671">                create(listener, inputLines, outputLines, qualityScores, </span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L661">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L662">                create(listener, inputLines, outputLines, qualityScores, </span>
                         method);
     }
                 
@@ -684,10 +675,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
-            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines)
-            throws IllegalArgumentException {
-<span class="fc" id="L689">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L690">                create(inputLines, outputLines);</span>
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L679">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L680">                create(inputLines, outputLines);</span>
     }
             
     /**
@@ -705,10 +695,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      */
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
             ProjectiveTransformation2DRobustEstimatorListener listener,
-            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines)
-            throws IllegalArgumentException {
-<span class="fc" id="L710">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L711">                create(listener, inputLines, outputLines);</span>
+            List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L699">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L700">                create(listener, inputLines, outputLines);</span>
     }
                         
     /**
@@ -726,9 +715,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      */
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L730">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L731">                create(inputLines, outputLines, qualityScores);</span>
+            double[] qualityScores) {
+<span class="fc" id="L719">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L720">                create(inputLines, outputLines, qualityScores);</span>
     }
                         
     /**
@@ -749,9 +738,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
             ProjectiveTransformation2DRobustEstimatorListener listener,
             List&lt;Line2D&gt; inputLines, List&lt;Line2D&gt; outputLines,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L753">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
-<span class="fc" id="L754">                create(listener, inputLines, outputLines, qualityScores);</span>
+            double[] qualityScores) {
+<span class="fc" id="L742">        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.</span>
+<span class="fc" id="L743">                create(listener, inputLines, outputLines, qualityScores);</span>
     }            
     
     /**

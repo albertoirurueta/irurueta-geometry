@@ -76,11 +76,10 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PointCorrespondenceProjectiveTransformation3DRobustEstimator(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L81">        super();</span>
-<span class="fc" id="L82">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L83">    }</span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L80">        super();</span>
+<span class="fc" id="L81">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L82">    }</span>
     
     /**
      * Constructor.
@@ -89,8 +88,8 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public PointCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L92">        super(listener);</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L91">        super(listener);</span>
+<span class="fc" id="L92">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate a
@@ -109,11 +108,10 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public PointCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L114">        super(listener);</span>
-<span class="fc" id="L115">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L116">    }</span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L112">        super(listener);</span>
+<span class="fc" id="L113">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L114">    }</span>
     
     /**
      * Returns list of input points to be used to estimate a projective 3D 
@@ -126,7 +124,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * transformation.
      */
     public List&lt;Point3D&gt; getInputPoints() {
-<span class="fc" id="L129">        return mInputPoints;</span>
+<span class="fc" id="L127">        return mInputPoints;</span>
     }    
     
     /**
@@ -140,7 +138,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * transformation.
      */
     public List&lt;Point3D&gt; getOutputPoints() {
-<span class="fc" id="L143">        return mOutputPoints;</span>
+<span class="fc" id="L141">        return mOutputPoints;</span>
     }
     
     /**
@@ -159,13 +157,12 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * already in progress.
      */
     public final void setPoints(List&lt;Point3D&gt; inputPoints, 
-            List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L165">            throw new LockedException();</span>
+            List&lt;Point3D&gt; outputPoints) throws LockedException {
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L162">            throw new LockedException();</span>
         }
-<span class="fc" id="L167">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L168">    }</span>
+<span class="fc" id="L164">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L165">    }</span>
         
     /**
      * Indicates if estimator is ready to start the projective 3D transformation
@@ -175,9 +172,9 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L178" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp; </span>
-<span class="pc bpc" id="L179" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
-<span class="pc bpc" id="L180" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= MINIMUM_SIZE;</span>
+<span class="pc bpc" id="L175" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp; </span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= MINIMUM_SIZE;</span>
     }
     
     /**
@@ -188,7 +185,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * @return quality scores corresponding to each pair of matched points.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L191">        return null;</span>
+<span class="fc" id="L188">        return null;</span>
     }    
     
     /**
@@ -203,8 +200,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * @throws IllegalArgumentException if provided quality scores length is 
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="fc" id="L207">            IllegalArgumentException { }</span>
+<span class="fc" id="L203">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
     
     /**
      * Creates a projective 3D transformation estimator based on 2D point 
@@ -215,18 +211,18 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator 
             create(RobustEstimatorMethod method) {
-<span class="fc bfc" id="L218" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L214" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L220">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L216">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L222">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L218">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L224">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L220">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L226">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L222">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L229">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L225">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
         }
     }
             
@@ -245,23 +241,23 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator
             create(List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L249" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L245" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L251">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L247">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L254">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L250">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L257">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L253">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L260">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L256">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L264">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L260">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
         }
     }            
@@ -278,22 +274,22 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator 
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L281" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L277" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L283">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L279">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L286">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L282">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L289">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L285">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
             case PROMedS:
-<span class="fc" id="L292">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L288">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
             case RANSAC:
             default:
-<span class="fc" id="L296">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L292">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
         }
     }
@@ -316,23 +312,23 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener, 
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L320" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L316" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L322">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L318">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L325">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L321">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L328">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L324">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L331">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L327">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L335">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L331">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
         }
     }            
@@ -348,20 +344,20 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator 
             create(double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L351" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L347" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L353">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L349">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L355">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L351">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L357">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L353">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L360">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L356">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L364">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
+<span class="fc" id="L360">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator();</span>
         }
     }
             
@@ -382,24 +378,23 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator
             create(List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L387" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L382" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L389">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L384">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L392">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L387">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L395">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L390">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L398">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L393">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L402">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L397">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
         }
     }            
@@ -418,22 +413,22 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator 
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
             double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L421" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L416" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L423">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L418">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L426">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L421">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L429">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L424">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, qualityScores);
             case PROMedS:
-<span class="fc" id="L432">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L427">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L436">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L431">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener);
         }
     }
@@ -458,24 +453,23 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener, 
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L463" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L457" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L465">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L459">                return new LMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L468">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L462">                return new MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L471">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L465">                return new PROSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L474">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L468">                return new PROMedSPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L478">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
+<span class="fc" id="L472">                return new RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
         }
     }            
@@ -487,7 +481,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator 
             create() {
-<span class="fc" id="L490">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L484">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -502,9 +496,8 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator
-            create(List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L507">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
+            create(List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L500">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
     }            
             
     /**
@@ -516,7 +509,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator 
             create(ProjectiveTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L519">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L512">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -534,9 +527,8 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener, 
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L539">        return create(listener, inputPoints, outputPoints, </span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L531">        return create(listener, inputPoints, outputPoints, </span>
                 DEFAULT_ROBUST_METHOD);
     }            
 
@@ -549,7 +541,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator 
             create(double[] qualityScores) {
-<span class="fc" id="L552">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L544">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -567,8 +559,8 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator
             create(List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L571">        return create(inputPoints, outputPoints, qualityScores, </span>
+            double[] qualityScores) {
+<span class="fc" id="L563">        return create(inputPoints, outputPoints, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }            
             
@@ -584,7 +576,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator 
             create(ProjectiveTransformation3DRobustEstimatorListener listener,
             double[] qualityScores) {
-<span class="fc" id="L587">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L579">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -605,8 +597,8 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation3DRobustEstimator
             create(ProjectiveTransformation3DRobustEstimatorListener listener, 
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L609">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
+            double[] qualityScores) {
+<span class="fc" id="L601">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
                 DEFAULT_ROBUST_METHOD);
     }            
             
@@ -623,30 +615,30 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      */            
     protected ProjectiveTransformation3D attemptRefine(
             ProjectiveTransformation3D transformation) {
-<span class="fc bfc" id="L626" title="All 2 branches covered.">        if (mRefineResult) {</span>
-<span class="fc" id="L627">            PointCorrespondenceProjectiveTransformation3DRefiner refiner =</span>
+<span class="fc bfc" id="L618" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L619">            PointCorrespondenceProjectiveTransformation3DRefiner refiner =</span>
                     new PointCorrespondenceProjectiveTransformation3DRefiner(
-<span class="fc" id="L629">                    transformation, mKeepCovariance, getInliersData(), </span>
+<span class="fc" id="L621">                    transformation, mKeepCovariance, getInliersData(), </span>
                     mInputPoints, mOutputPoints, 
-<span class="fc" id="L631">                    getRefinementStandardDeviation());</span>
+<span class="fc" id="L623">                    getRefinementStandardDeviation());</span>
             
             try {
-<span class="fc" id="L634">                ProjectiveTransformation3D result = </span>
+<span class="fc" id="L626">                ProjectiveTransformation3D result = </span>
                         new ProjectiveTransformation3D();
-<span class="fc" id="L636">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L628">                boolean improved = refiner.refine(result);</span>
                 
-<span class="pc bpc" id="L638" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L630" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L640">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L632">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="fc bfc" id="L643" title="All 2 branches covered.">                return improved ? result : transformation;</span>
-<span class="fc" id="L644">            } catch (Exception e) {</span>
+<span class="fc bfc" id="L635" title="All 2 branches covered.">                return improved ? result : transformation;</span>
+<span class="fc" id="L636">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="fc" id="L646">                return transformation;</span>
+<span class="fc" id="L638">                return transformation;</span>
             }
         } else {
-<span class="fc" id="L649">            return transformation;</span>
+<span class="fc" id="L641">            return transformation;</span>
         }        
     }
             
@@ -662,15 +654,15 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetPoints(List&lt;Point3D&gt; inputPoints, 
-            List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException {
-<span class="fc bfc" id="L666" title="All 2 branches covered.">        if (inputPoints.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L667">            throw new IllegalArgumentException();</span>
+            List&lt;Point3D&gt; outputPoints) {
+<span class="fc bfc" id="L658" title="All 2 branches covered.">        if (inputPoints.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L659">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L669" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
-<span class="fc" id="L670">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L661" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L662">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L672">        mInputPoints = inputPoints;</span>
-<span class="fc" id="L673">        mOutputPoints = outputPoints;        </span>
-<span class="fc" id="L674">    }                    </span>
+<span class="fc" id="L664">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L665">        mOutputPoints = outputPoints;        </span>
+<span class="fc" id="L666">    }                    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

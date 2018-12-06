@@ -898,51 +898,49 @@ public abstract class Point2DRobustEstimator {
             Point2DRefiner refiner;
             Point2D result;
 <span class="fc bfc" id="L900" title="All 2 branches covered.">            switch (mRefinementCoordinatesType) {</span>
-                case HOMOGENEOUS_COORDINATES: {
-                    HomogeneousPoint2D p;
+                case HOMOGENEOUS_COORDINATES:
+                    HomogeneousPoint2D homP;
 <span class="pc bpc" id="L903" title="1 of 2 branches missed.">                    if (point.getType() == CoordinatesType.HOMOGENEOUS_COORDINATES) {</span>
-<span class="fc" id="L904">                        p = (HomogeneousPoint2D)point;</span>
+<span class="fc" id="L904">                        homP = (HomogeneousPoint2D)point;</span>
                     } else {
-<span class="nc" id="L906">                        p = new HomogeneousPoint2D(point);</span>
+<span class="nc" id="L906">                        homP = new HomogeneousPoint2D(point);</span>
                     }
 <span class="fc" id="L908">                    refiner = new HomogeneousPoint2DRefiner(</span>
-<span class="fc" id="L909">                            p, mKeepCovariance, getInliersData(), mLines,</span>
+<span class="fc" id="L909">                            homP, mKeepCovariance, getInliersData(), mLines,</span>
 <span class="fc" id="L910">                            getRefinementStandardDeviation());</span>
 <span class="fc" id="L911">                    result = new HomogeneousPoint2D();</span>
 <span class="fc" id="L912">                    break;</span>
-                }                
                 case INHOMOGENEOUS_COORDINATES:
-                default: {
-                    InhomogeneousPoint2D p;
-<span class="pc bpc" id="L917" title="1 of 2 branches missed.">                    if (point.getType() == CoordinatesType.INHOMOGENEOUS_COORDINATES) {</span>
-<span class="nc" id="L918">                        p = (InhomogeneousPoint2D)point;</span>
+                default:
+                    InhomogeneousPoint2D inhomP;
+<span class="pc bpc" id="L916" title="1 of 2 branches missed.">                    if (point.getType() == CoordinatesType.INHOMOGENEOUS_COORDINATES) {</span>
+<span class="nc" id="L917">                        inhomP = (InhomogeneousPoint2D)point;</span>
                     } else {
-<span class="fc" id="L920">                        p = new InhomogeneousPoint2D(point);</span>
+<span class="fc" id="L919">                        inhomP = new InhomogeneousPoint2D(point);</span>
                     }
-<span class="fc" id="L922">                    refiner = new InhomogeneousPoint2DRefiner(p, </span>
-<span class="fc" id="L923">                            mKeepCovariance, getInliersData(), mLines,</span>
-<span class="fc" id="L924">                            getRefinementStandardDeviation());</span>
-<span class="fc" id="L925">                    result = new InhomogeneousPoint2D();</span>
-<span class="fc" id="L926">                    break;</span>
-                }                       
+<span class="fc" id="L921">                    refiner = new InhomogeneousPoint2DRefiner(inhomP,</span>
+<span class="fc" id="L922">                            mKeepCovariance, getInliersData(), mLines,</span>
+<span class="fc" id="L923">                            getRefinementStandardDeviation());</span>
+<span class="fc" id="L924">                    result = new InhomogeneousPoint2D();</span>
+                    break;
             }
             
             try {
                 //noinspection unchecked
-<span class="fc" id="L932">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L930">                boolean improved = refiner.refine(result);</span>
                 
-<span class="pc bpc" id="L934" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L932" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L936">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L934">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="fc bfc" id="L939" title="All 2 branches covered.">                return improved ? result : point;</span>
-<span class="nc" id="L940">            } catch (Exception e) {</span>
+<span class="fc bfc" id="L937" title="All 2 branches covered.">                return improved ? result : point;</span>
+<span class="nc" id="L938">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="nc" id="L942">                return point;</span>
+<span class="nc" id="L940">                return point;</span>
             }
         } else {
-<span class="fc" id="L945">            return point;</span>
+<span class="fc" id="L943">            return point;</span>
         }
     }
     
@@ -967,10 +965,10 @@ public abstract class Point2DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     private void internalSetLines(List&lt;Line2D&gt; lines) {
-<span class="fc bfc" id="L970" title="All 2 branches covered.">        if (lines.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L971">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L968" title="All 2 branches covered.">        if (lines.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L969">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L973">        mLines = lines;</span>
-<span class="fc" id="L974">    }    </span>
+<span class="fc" id="L971">        mLines = lines;</span>
+<span class="fc" id="L972">    }    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

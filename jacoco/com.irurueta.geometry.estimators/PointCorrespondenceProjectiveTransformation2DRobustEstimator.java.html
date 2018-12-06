@@ -76,11 +76,10 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PointCorrespondenceProjectiveTransformation2DRobustEstimator(
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L81">        super();</span>
-<span class="fc" id="L82">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L83">    }</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L80">        super();</span>
+<span class="fc" id="L81">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L82">    }</span>
     
     /**
      * Constructor.
@@ -89,8 +88,8 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     public PointCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener) {
-<span class="fc" id="L92">        super(listener);</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L91">        super(listener);</span>
+<span class="fc" id="L92">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate a
@@ -109,11 +108,10 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     public PointCorrespondenceProjectiveTransformation2DRobustEstimator(
             ProjectiveTransformation2DRobustEstimatorListener listener,
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L114">        super(listener);</span>
-<span class="fc" id="L115">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L116">    }</span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L112">        super(listener);</span>
+<span class="fc" id="L113">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L114">    }</span>
     
     /**
      * Returns list of input points to be used to estimate a projective 2D 
@@ -126,7 +124,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * transformation.
      */
     public List&lt;Point2D&gt; getInputPoints() {
-<span class="fc" id="L129">        return mInputPoints;</span>
+<span class="fc" id="L127">        return mInputPoints;</span>
     }    
     
     /**
@@ -140,7 +138,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * transformation.
      */
     public List&lt;Point2D&gt; getOutputPoints() {
-<span class="fc" id="L143">        return mOutputPoints;</span>
+<span class="fc" id="L141">        return mOutputPoints;</span>
     }
     
     /**
@@ -159,13 +157,12 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * already in progress.
      */
     public final void setPoints(List&lt;Point2D&gt; inputPoints, 
-            List&lt;Point2D&gt; outputPoints) throws IllegalArgumentException,
-            LockedException {
-<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L165">            throw new LockedException();</span>
+            List&lt;Point2D&gt; outputPoints) throws LockedException {
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L162">            throw new LockedException();</span>
         }
-<span class="fc" id="L167">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L168">    }</span>
+<span class="fc" id="L164">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L165">    }</span>
         
     /**
      * Indicates if estimator is ready to start the projective 2D transformation
@@ -175,9 +172,9 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L178" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp; </span>
-<span class="pc bpc" id="L179" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
-<span class="pc bpc" id="L180" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= MINIMUM_SIZE;</span>
+<span class="pc bpc" id="L175" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp; </span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= MINIMUM_SIZE;</span>
     }
     
     /**
@@ -188,7 +185,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * @return quality scores corresponding to each pair of matched points.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L191">        return null;</span>
+<span class="fc" id="L188">        return null;</span>
     }    
     
     /**
@@ -203,8 +200,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * @throws IllegalArgumentException if provided quality scores length is 
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="fc" id="L207">            IllegalArgumentException { }</span>
+<span class="fc" id="L203">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
     
     /**
      * Creates a projective 2D transformation estimator based on 2D point 
@@ -215,18 +211,18 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
             create(RobustEstimatorMethod method) {
-<span class="fc bfc" id="L218" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L214" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L220">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+<span class="fc" id="L216">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L222">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+<span class="fc" id="L218">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L224">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+<span class="fc" id="L220">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L226">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+<span class="fc" id="L222">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L229">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+<span class="fc" id="L225">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
         }
     }
             
@@ -245,23 +241,23 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L249" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L245" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L251">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L247">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L254">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L250">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L257">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L253">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L260">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L256">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L264">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L260">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
         }
     }            
@@ -278,22 +274,22 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
             create(ProjectiveTransformation2DRobustEstimatorListener listener,
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L281" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L277" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L283">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L279">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L286">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L282">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L289">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L285">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener);
             case PROMedS:
-<span class="fc" id="L292">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L288">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener);
             case RANSAC:
             default:
-<span class="fc" id="L296">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L292">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener);
         }
     }
@@ -316,23 +312,23 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(ProjectiveTransformation2DRobustEstimatorListener listener, 
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L320" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L316" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L322">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L318">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L325">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L321">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L328">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L324">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L331">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L327">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L335">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L331">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
         }
     }            
@@ -349,22 +345,21 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * smaller than MINIMUM_SIZE (i.e. 3 matched points).
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
-            create(double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L354" title="All 5 branches covered.">        switch (method) {</span>
+            create(double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L349" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L356">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+<span class="fc" id="L351">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L358">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+<span class="fc" id="L353">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L360">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L355">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L363">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L358">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L367">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
+<span class="fc" id="L362">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();</span>
         }
     }
             
@@ -386,24 +381,23 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L391" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L385" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L393">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L387">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L396">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L390">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L399">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L393">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L402">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L396">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L406">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L400">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         inputPoints, outputPoints);
         }
     }            
@@ -422,22 +416,22 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
             create(ProjectiveTransformation2DRobustEstimatorListener listener,
             double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc bfc" id="L425" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L419" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L427">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L421">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="fc" id="L430">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L424">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="fc" id="L433">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L427">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener, qualityScores);
             case PROMedS:
-<span class="fc" id="L436">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L430">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L440">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L434">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener);
         }
     }
@@ -462,24 +456,23 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(ProjectiveTransformation2DRobustEstimatorListener listener, 
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L467" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L460" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L469">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L462">                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L472">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L465">                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L475">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L468">                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L478">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L471">                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L482">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
+<span class="fc" id="L475">                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
         }
     }            
@@ -491,7 +484,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
             create() {
-<span class="fc" id="L494">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L487">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -506,9 +499,8 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
-            create(List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L511">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
+            create(List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L503">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
     }            
             
     /**
@@ -520,7 +512,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
             create(ProjectiveTransformation2DRobustEstimatorListener listener) {
-<span class="fc" id="L523">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L515">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -538,9 +530,8 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(ProjectiveTransformation2DRobustEstimatorListener listener, 
-            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L543">        return create(listener, inputPoints, outputPoints, </span>
+            List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L534">        return create(listener, inputPoints, outputPoints, </span>
                 DEFAULT_ROBUST_METHOD);
     }            
 
@@ -553,7 +544,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
             create(double[] qualityScores) {
-<span class="fc" id="L556">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L547">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -571,8 +562,8 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L575">        return create(inputPoints, outputPoints, qualityScores, </span>
+            double[] qualityScores) {
+<span class="fc" id="L566">        return create(inputPoints, outputPoints, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }            
             
@@ -588,7 +579,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator 
             create(ProjectiveTransformation2DRobustEstimatorListener listener,
             double[] qualityScores) {
-<span class="fc" id="L591">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L582">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -609,8 +600,8 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator
             create(ProjectiveTransformation2DRobustEstimatorListener listener, 
             List&lt;Point2D&gt; inputPoints, List&lt;Point2D&gt; outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L613">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
+            double[] qualityScores) {
+<span class="fc" id="L604">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
                 DEFAULT_ROBUST_METHOD);
     }            
       
@@ -627,30 +618,30 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     protected ProjectiveTransformation2D attemptRefine(
             ProjectiveTransformation2D transformation) {
-<span class="fc bfc" id="L630" title="All 2 branches covered.">        if (mRefineResult) {</span>
-<span class="fc" id="L631">            PointCorrespondenceProjectiveTransformation2DRefiner refiner =</span>
+<span class="fc bfc" id="L621" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L622">            PointCorrespondenceProjectiveTransformation2DRefiner refiner =</span>
                     new PointCorrespondenceProjectiveTransformation2DRefiner(
-<span class="fc" id="L633">                    transformation, mKeepCovariance, getInliersData(), </span>
+<span class="fc" id="L624">                    transformation, mKeepCovariance, getInliersData(), </span>
                     mInputPoints, mOutputPoints, 
-<span class="fc" id="L635">                    getRefinementStandardDeviation());</span>
+<span class="fc" id="L626">                    getRefinementStandardDeviation());</span>
             
             try {
-<span class="fc" id="L638">                ProjectiveTransformation2D result = </span>
+<span class="fc" id="L629">                ProjectiveTransformation2D result = </span>
                         new ProjectiveTransformation2D();
-<span class="fc" id="L640">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L631">                boolean improved = refiner.refine(result);</span>
                 
-<span class="pc bpc" id="L642" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L633" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L644">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L635">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="pc bpc" id="L647" title="1 of 2 branches missed.">                return improved ? result : transformation;</span>
-<span class="fc" id="L648">            } catch (Exception e) {</span>
+<span class="fc bfc" id="L638" title="All 2 branches covered.">                return improved ? result : transformation;</span>
+<span class="fc" id="L639">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="fc" id="L650">                return transformation;</span>
+<span class="fc" id="L641">                return transformation;</span>
             }
         } else {
-<span class="fc" id="L653">            return transformation;</span>
+<span class="fc" id="L644">            return transformation;</span>
         }
     }
             
@@ -666,15 +657,15 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     private void internalSetPoints(List&lt;Point2D&gt; inputPoints, 
-            List&lt;Point2D&gt; outputPoints) throws IllegalArgumentException {
-<span class="fc bfc" id="L670" title="All 2 branches covered.">        if (inputPoints.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L671">            throw new IllegalArgumentException();</span>
+            List&lt;Point2D&gt; outputPoints) {
+<span class="fc bfc" id="L661" title="All 2 branches covered.">        if (inputPoints.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L662">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L673" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
-<span class="fc" id="L674">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L664" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L665">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L676">        mInputPoints = inputPoints;</span>
-<span class="fc" id="L677">        mOutputPoints = outputPoints;        </span>
-<span class="fc" id="L678">    }                </span>
+<span class="fc" id="L667">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L668">        mOutputPoints = outputPoints;        </span>
+<span class="fc" id="L669">    }                </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

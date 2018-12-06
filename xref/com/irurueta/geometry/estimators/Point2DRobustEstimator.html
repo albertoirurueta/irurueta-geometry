@@ -906,81 +906,79 @@
 <a class="jxr_linenumber" name="L898" href="#L898">898</a>             <a href="../../../../com/irurueta/geometry/refiners/Point2DRefiner.html">Point2DRefiner</a> refiner;
 <a class="jxr_linenumber" name="L899" href="#L899">899</a>             <a href="../../../../com/irurueta/geometry/Point2D.html">Point2D</a> result;
 <a class="jxr_linenumber" name="L900" href="#L900">900</a>             <strong class="jxr_keyword">switch</strong> (mRefinementCoordinatesType) {
-<a class="jxr_linenumber" name="L901" href="#L901">901</a>                 <strong class="jxr_keyword">case</strong> HOMOGENEOUS_COORDINATES: {
-<a class="jxr_linenumber" name="L902" href="#L902">902</a>                     <a href="../../../../com/irurueta/geometry/HomogeneousPoint2D.html">HomogeneousPoint2D</a> p;
+<a class="jxr_linenumber" name="L901" href="#L901">901</a>                 <strong class="jxr_keyword">case</strong> HOMOGENEOUS_COORDINATES:
+<a class="jxr_linenumber" name="L902" href="#L902">902</a>                     <a href="../../../../com/irurueta/geometry/HomogeneousPoint2D.html">HomogeneousPoint2D</a> homP;
 <a class="jxr_linenumber" name="L903" href="#L903">903</a>                     <strong class="jxr_keyword">if</strong> (point.getType() == CoordinatesType.HOMOGENEOUS_COORDINATES) {
-<a class="jxr_linenumber" name="L904" href="#L904">904</a>                         p = (HomogeneousPoint2D)point;
+<a class="jxr_linenumber" name="L904" href="#L904">904</a>                         homP = (HomogeneousPoint2D)point;
 <a class="jxr_linenumber" name="L905" href="#L905">905</a>                     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L906" href="#L906">906</a>                         p = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/HomogeneousPoint2D.html">HomogeneousPoint2D</a>(point);
+<a class="jxr_linenumber" name="L906" href="#L906">906</a>                         homP = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/HomogeneousPoint2D.html">HomogeneousPoint2D</a>(point);
 <a class="jxr_linenumber" name="L907" href="#L907">907</a>                     }
 <a class="jxr_linenumber" name="L908" href="#L908">908</a>                     refiner = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/refiners/HomogeneousPoint2DRefiner.html">HomogeneousPoint2DRefiner</a>(
-<a class="jxr_linenumber" name="L909" href="#L909">909</a>                             p, mKeepCovariance, getInliersData(), mLines,
+<a class="jxr_linenumber" name="L909" href="#L909">909</a>                             homP, mKeepCovariance, getInliersData(), mLines,
 <a class="jxr_linenumber" name="L910" href="#L910">910</a>                             getRefinementStandardDeviation());
 <a class="jxr_linenumber" name="L911" href="#L911">911</a>                     result = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/HomogeneousPoint2D.html">HomogeneousPoint2D</a>();
 <a class="jxr_linenumber" name="L912" href="#L912">912</a>                     <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L913" href="#L913">913</a>                 }                
-<a class="jxr_linenumber" name="L914" href="#L914">914</a>                 <strong class="jxr_keyword">case</strong> INHOMOGENEOUS_COORDINATES:
-<a class="jxr_linenumber" name="L915" href="#L915">915</a>                 <strong class="jxr_keyword">default</strong>: {
-<a class="jxr_linenumber" name="L916" href="#L916">916</a>                     <a href="../../../../com/irurueta/geometry/InhomogeneousPoint2D.html">InhomogeneousPoint2D</a> p;
-<a class="jxr_linenumber" name="L917" href="#L917">917</a>                     <strong class="jxr_keyword">if</strong> (point.getType() == CoordinatesType.INHOMOGENEOUS_COORDINATES) {
-<a class="jxr_linenumber" name="L918" href="#L918">918</a>                         p = (InhomogeneousPoint2D)point;
-<a class="jxr_linenumber" name="L919" href="#L919">919</a>                     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L920" href="#L920">920</a>                         p = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/InhomogeneousPoint2D.html">InhomogeneousPoint2D</a>(point);
-<a class="jxr_linenumber" name="L921" href="#L921">921</a>                     }
-<a class="jxr_linenumber" name="L922" href="#L922">922</a>                     refiner = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/refiners/InhomogeneousPoint2DRefiner.html">InhomogeneousPoint2DRefiner</a>(p, 
-<a class="jxr_linenumber" name="L923" href="#L923">923</a>                             mKeepCovariance, getInliersData(), mLines,
-<a class="jxr_linenumber" name="L924" href="#L924">924</a>                             getRefinementStandardDeviation());
-<a class="jxr_linenumber" name="L925" href="#L925">925</a>                     result = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/InhomogeneousPoint2D.html">InhomogeneousPoint2D</a>();
-<a class="jxr_linenumber" name="L926" href="#L926">926</a>                     <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L927" href="#L927">927</a>                 }                       
-<a class="jxr_linenumber" name="L928" href="#L928">928</a>             }
-<a class="jxr_linenumber" name="L929" href="#L929">929</a>             
-<a class="jxr_linenumber" name="L930" href="#L930">930</a>             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L931" href="#L931">931</a>                 <em class="jxr_comment">//noinspection unchecked</em>
-<a class="jxr_linenumber" name="L932" href="#L932">932</a>                 <strong class="jxr_keyword">boolean</strong> improved = refiner.refine(result);
-<a class="jxr_linenumber" name="L933" href="#L933">933</a>                 
-<a class="jxr_linenumber" name="L934" href="#L934">934</a>                 <strong class="jxr_keyword">if</strong> (mKeepCovariance) {
-<a class="jxr_linenumber" name="L935" href="#L935">935</a>                     <em class="jxr_comment">//keep covariance</em>
-<a class="jxr_linenumber" name="L936" href="#L936">936</a>                     mCovariance = refiner.getCovariance();
-<a class="jxr_linenumber" name="L937" href="#L937">937</a>                 }
-<a class="jxr_linenumber" name="L938" href="#L938">938</a>                 
-<a class="jxr_linenumber" name="L939" href="#L939">939</a>                 <strong class="jxr_keyword">return</strong> improved ? result : point;
-<a class="jxr_linenumber" name="L940" href="#L940">940</a>             } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L941" href="#L941">941</a>                 <em class="jxr_comment">//refinement failed, so we return input value</em>
-<a class="jxr_linenumber" name="L942" href="#L942">942</a>                 <strong class="jxr_keyword">return</strong> point;
-<a class="jxr_linenumber" name="L943" href="#L943">943</a>             }
-<a class="jxr_linenumber" name="L944" href="#L944">944</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L945" href="#L945">945</a>             <strong class="jxr_keyword">return</strong> point;
-<a class="jxr_linenumber" name="L946" href="#L946">946</a>         }
-<a class="jxr_linenumber" name="L947" href="#L947">947</a>     }
-<a class="jxr_linenumber" name="L948" href="#L948">948</a>     
-<a class="jxr_linenumber" name="L949" href="#L949">949</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">     * Gets standard deviation used for Levenberg-Marquardt fitting during </em>
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> <em class="jxr_javadoccomment">     * refinement.</em>
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> <em class="jxr_javadoccomment">     * Returned value gives an indication of how much variance each residual</em>
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> <em class="jxr_javadoccomment">     * has.</em>
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> <em class="jxr_javadoccomment">     * Typically this value is related to the threshold used on each robust </em>
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment">     * estimation, since residuals of found inliers are within the range of </em>
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">     * such threshold.</em>
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">     * @return standard deviation used for refinement.</em>
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L959" href="#L959">959</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">double</strong> getRefinementStandardDeviation();    
-<a class="jxr_linenumber" name="L960" href="#L960">960</a>     
-<a class="jxr_linenumber" name="L961" href="#L961">961</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> <em class="jxr_javadoccomment">     * Internal method to set list of 2D lines to be used to estimate a 2D </em>
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> <em class="jxr_javadoccomment">     * point.</em>
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> <em class="jxr_javadoccomment">     * This method does not check whether estimator is locked or not</em>
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> <em class="jxr_javadoccomment">     * @param lines list of lines to be used to estimate a 2D point</em>
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided list of lines doesn't have</em>
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> <em class="jxr_javadoccomment">     * a size greater or equal than MINIMUM_SIZE.</em>
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L969" href="#L969">969</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetLines(List&lt;Line2D&gt; lines) {
-<a class="jxr_linenumber" name="L970" href="#L970">970</a>         <strong class="jxr_keyword">if</strong> (lines.size() &lt; MINIMUM_SIZE) {
-<a class="jxr_linenumber" name="L971" href="#L971">971</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L972" href="#L972">972</a>         }
-<a class="jxr_linenumber" name="L973" href="#L973">973</a>         mLines = lines;
-<a class="jxr_linenumber" name="L974" href="#L974">974</a>     }    
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> }
+<a class="jxr_linenumber" name="L913" href="#L913">913</a>                 <strong class="jxr_keyword">case</strong> INHOMOGENEOUS_COORDINATES:
+<a class="jxr_linenumber" name="L914" href="#L914">914</a>                 <strong class="jxr_keyword">default</strong>:
+<a class="jxr_linenumber" name="L915" href="#L915">915</a>                     <a href="../../../../com/irurueta/geometry/InhomogeneousPoint2D.html">InhomogeneousPoint2D</a> inhomP;
+<a class="jxr_linenumber" name="L916" href="#L916">916</a>                     <strong class="jxr_keyword">if</strong> (point.getType() == CoordinatesType.INHOMOGENEOUS_COORDINATES) {
+<a class="jxr_linenumber" name="L917" href="#L917">917</a>                         inhomP = (InhomogeneousPoint2D)point;
+<a class="jxr_linenumber" name="L918" href="#L918">918</a>                     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L919" href="#L919">919</a>                         inhomP = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/InhomogeneousPoint2D.html">InhomogeneousPoint2D</a>(point);
+<a class="jxr_linenumber" name="L920" href="#L920">920</a>                     }
+<a class="jxr_linenumber" name="L921" href="#L921">921</a>                     refiner = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/refiners/InhomogeneousPoint2DRefiner.html">InhomogeneousPoint2DRefiner</a>(inhomP,
+<a class="jxr_linenumber" name="L922" href="#L922">922</a>                             mKeepCovariance, getInliersData(), mLines,
+<a class="jxr_linenumber" name="L923" href="#L923">923</a>                             getRefinementStandardDeviation());
+<a class="jxr_linenumber" name="L924" href="#L924">924</a>                     result = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/InhomogeneousPoint2D.html">InhomogeneousPoint2D</a>();
+<a class="jxr_linenumber" name="L925" href="#L925">925</a>                     <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L926" href="#L926">926</a>             }
+<a class="jxr_linenumber" name="L927" href="#L927">927</a>             
+<a class="jxr_linenumber" name="L928" href="#L928">928</a>             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L929" href="#L929">929</a>                 <em class="jxr_comment">//noinspection unchecked</em>
+<a class="jxr_linenumber" name="L930" href="#L930">930</a>                 <strong class="jxr_keyword">boolean</strong> improved = refiner.refine(result);
+<a class="jxr_linenumber" name="L931" href="#L931">931</a>                 
+<a class="jxr_linenumber" name="L932" href="#L932">932</a>                 <strong class="jxr_keyword">if</strong> (mKeepCovariance) {
+<a class="jxr_linenumber" name="L933" href="#L933">933</a>                     <em class="jxr_comment">//keep covariance</em>
+<a class="jxr_linenumber" name="L934" href="#L934">934</a>                     mCovariance = refiner.getCovariance();
+<a class="jxr_linenumber" name="L935" href="#L935">935</a>                 }
+<a class="jxr_linenumber" name="L936" href="#L936">936</a>                 
+<a class="jxr_linenumber" name="L937" href="#L937">937</a>                 <strong class="jxr_keyword">return</strong> improved ? result : point;
+<a class="jxr_linenumber" name="L938" href="#L938">938</a>             } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L939" href="#L939">939</a>                 <em class="jxr_comment">//refinement failed, so we return input value</em>
+<a class="jxr_linenumber" name="L940" href="#L940">940</a>                 <strong class="jxr_keyword">return</strong> point;
+<a class="jxr_linenumber" name="L941" href="#L941">941</a>             }
+<a class="jxr_linenumber" name="L942" href="#L942">942</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L943" href="#L943">943</a>             <strong class="jxr_keyword">return</strong> point;
+<a class="jxr_linenumber" name="L944" href="#L944">944</a>         }
+<a class="jxr_linenumber" name="L945" href="#L945">945</a>     }
+<a class="jxr_linenumber" name="L946" href="#L946">946</a>     
+<a class="jxr_linenumber" name="L947" href="#L947">947</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">     * Gets standard deviation used for Levenberg-Marquardt fitting during </em>
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">     * refinement.</em>
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">     * Returned value gives an indication of how much variance each residual</em>
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> <em class="jxr_javadoccomment">     * has.</em>
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> <em class="jxr_javadoccomment">     * Typically this value is related to the threshold used on each robust </em>
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> <em class="jxr_javadoccomment">     * estimation, since residuals of found inliers are within the range of </em>
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> <em class="jxr_javadoccomment">     * such threshold.</em>
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment">     * @return standard deviation used for refinement.</em>
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L957" href="#L957">957</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">double</strong> getRefinementStandardDeviation();    
+<a class="jxr_linenumber" name="L958" href="#L958">958</a>     
+<a class="jxr_linenumber" name="L959" href="#L959">959</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> <em class="jxr_javadoccomment">     * Internal method to set list of 2D lines to be used to estimate a 2D </em>
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> <em class="jxr_javadoccomment">     * point.</em>
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> <em class="jxr_javadoccomment">     * This method does not check whether estimator is locked or not</em>
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> <em class="jxr_javadoccomment">     * @param lines list of lines to be used to estimate a 2D point</em>
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided list of lines doesn't have</em>
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> <em class="jxr_javadoccomment">     * a size greater or equal than MINIMUM_SIZE.</em>
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L967" href="#L967">967</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetLines(List&lt;Line2D&gt; lines) {
+<a class="jxr_linenumber" name="L968" href="#L968">968</a>         <strong class="jxr_keyword">if</strong> (lines.size() &lt; MINIMUM_SIZE) {
+<a class="jxr_linenumber" name="L969" href="#L969">969</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L970" href="#L970">970</a>         }
+<a class="jxr_linenumber" name="L971" href="#L971">971</a>         mLines = lines;
+<a class="jxr_linenumber" name="L972" href="#L972">972</a>     }    
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>

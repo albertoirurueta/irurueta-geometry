@@ -829,18 +829,17 @@ public abstract class PinholeCameraEstimator {
      * or equal than maximum value.
      */
     public void setMinMaxSuggestionWeight(double minSuggestionWeight, 
-            double maxSuggestionWeight) throws LockedException, 
-            IllegalArgumentException {
-<span class="fc bfc" id="L834" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L835">            throw new LockedException();</span>
+            double maxSuggestionWeight) throws LockedException {
+<span class="fc bfc" id="L833" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L834">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L837" title="All 2 branches covered.">        if (minSuggestionWeight &gt;= maxSuggestionWeight) {</span>
-<span class="fc" id="L838">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L836" title="All 2 branches covered.">        if (minSuggestionWeight &gt;= maxSuggestionWeight) {</span>
+<span class="fc" id="L837">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L841">        mMinSuggestionWeight = minSuggestionWeight;</span>
-<span class="fc" id="L842">        mMaxSuggestionWeight = maxSuggestionWeight;</span>
-<span class="fc" id="L843">    }</span>
+<span class="fc" id="L840">        mMinSuggestionWeight = minSuggestionWeight;</span>
+<span class="fc" id="L841">        mMaxSuggestionWeight = maxSuggestionWeight;</span>
+<span class="fc" id="L842">    }</span>
     
     /**
      * Gets step to increase suggestion weight. This weight is used to slowly
@@ -852,7 +851,7 @@ public abstract class PinholeCameraEstimator {
      * @return step to increase suggestion weight.
      */
     public double getSuggestionWeightStep() {
-<span class="fc" id="L855">        return mSuggestionWeightStep;</span>
+<span class="fc" id="L854">        return mSuggestionWeightStep;</span>
     }
     
     /**
@@ -867,16 +866,16 @@ public abstract class PinholeCameraEstimator {
      * @throws IllegalArgumentException if provided step is negative or zero.
      */
     public void setSuggestionWeightStep(double suggestionWeightStep) 
-            throws LockedException, IllegalArgumentException {
-<span class="fc bfc" id="L871" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L872">            throw new LockedException();</span>
+            throws LockedException {
+<span class="fc bfc" id="L870" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L871">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L874" title="All 2 branches covered.">        if (suggestionWeightStep &lt;= 0.0) {</span>
-<span class="fc" id="L875">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L873" title="All 2 branches covered.">        if (suggestionWeightStep &lt;= 0.0) {</span>
+<span class="fc" id="L874">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L878">        mSuggestionWeightStep = suggestionWeightStep;</span>
-<span class="fc" id="L879">    }</span>
+<span class="fc" id="L877">        mSuggestionWeightStep = suggestionWeightStep;</span>
+<span class="fc" id="L878">    }</span>
     
     /**
      * Indicates whether this instance is locked.
@@ -884,7 +883,7 @@ public abstract class PinholeCameraEstimator {
      * otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L887">        return mLocked;</span>
+<span class="fc" id="L886">        return mLocked;</span>
     }
     
     /**
@@ -915,7 +914,7 @@ public abstract class PinholeCameraEstimator {
      * @return an instance of a pinhole camera estimator.
      */
     public static PinholeCameraEstimator create() {
-<span class="fc" id="L918">        return create(DEFAULT_ESTIMATOR_TYPE);</span>
+<span class="fc" id="L917">        return create(DEFAULT_ESTIMATOR_TYPE);</span>
     }
     
     /**
@@ -925,16 +924,16 @@ public abstract class PinholeCameraEstimator {
      */
     public static PinholeCameraEstimator create(
             PinholeCameraEstimatorType type) {
-<span class="pc bpc" id="L928" title="3 of 4 branches missed.">        switch (type) {</span>
+<span class="pc bpc" id="L927" title="3 of 4 branches missed.">        switch (type) {</span>
             case DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR:
-<span class="nc" id="L930">                return new DLTLinePlaneCorrespondencePinholeCameraEstimator();</span>
+<span class="nc" id="L929">                return new DLTLinePlaneCorrespondencePinholeCameraEstimator();</span>
             case WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR:
-<span class="nc" id="L932">                return new WeightedLinePlaneCorrespondencePinholeCameraEstimator();</span>
+<span class="nc" id="L931">                return new WeightedLinePlaneCorrespondencePinholeCameraEstimator();</span>
             case WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR:
-<span class="nc" id="L934">                return new WeightedPointCorrespondencePinholeCameraEstimator();</span>
+<span class="nc" id="L933">                return new WeightedPointCorrespondencePinholeCameraEstimator();</span>
             case DLT_POINT_PINHOLE_CAMERA_ESTIMATOR:
             default:
-<span class="fc" id="L937">                return new DLTPointCorrespondencePinholeCameraEstimator();</span>
+<span class="fc" id="L936">                return new DLTPointCorrespondencePinholeCameraEstimator();</span>
         }
     }   
     
@@ -943,7 +942,7 @@ public abstract class PinholeCameraEstimator {
      * @return true if suggested parameters are ready, false otherwise.
      */
     protected boolean isSuggestionReady() {
-<span class="nc bnc" id="L946" title="All 16 branches missed.">        return !((mSuggestPrincipalPointEnabled &amp;&amp; mSuggestedPrincipalPointValue == null) ||</span>
+<span class="nc bnc" id="L945" title="All 16 branches missed.">        return !((mSuggestPrincipalPointEnabled &amp;&amp; mSuggestedPrincipalPointValue == null) ||</span>
                 (mSuggestRotationEnabled &amp;&amp; mSuggestedRotationValue == null) ||
                 (mSuggestCenterEnabled &amp;&amp; mSuggestedCenterValue == null) ||
                 (mMinSuggestionWeight &gt;= mMaxSuggestionWeight) || 
@@ -966,7 +965,7 @@ public abstract class PinholeCameraEstimator {
      * suggestions, false otherwise.
      */
     protected boolean hasSuggestions() {
-<span class="fc bfc" id="L969" title="All 4 branches covered.">        return hasIntrinsicSuggestions() || hasExtrinsicSuggestions();</span>
+<span class="fc bfc" id="L968" title="All 4 branches covered.">        return hasIntrinsicSuggestions() || hasExtrinsicSuggestions();</span>
     }
     
     /**
@@ -976,7 +975,7 @@ public abstract class PinholeCameraEstimator {
      * false otherwise.
      */
     private boolean hasIntrinsicSuggestions() {
-<span class="fc bfc" id="L979" title="All 8 branches covered.">        return mSuggestSkewnessValueEnabled || </span>
+<span class="fc bfc" id="L978" title="All 8 branches covered.">        return mSuggestSkewnessValueEnabled || </span>
                 mSuggestHorizontalFocalLengthEnabled || 
                 mSuggestVerticalFocalLengthEnabled || 
                 mSuggestAspectRatioEnabled;
@@ -989,7 +988,7 @@ public abstract class PinholeCameraEstimator {
      * false otherwise.
      */
     private boolean hasExtrinsicSuggestions() {
-<span class="fc bfc" id="L992" title="All 6 branches covered.">        return mSuggestPrincipalPointEnabled ||</span>
+<span class="fc bfc" id="L991" title="All 6 branches covered.">        return mSuggestPrincipalPointEnabled ||</span>
                 mSuggestRotationEnabled || mSuggestCenterEnabled;
     }        
 }

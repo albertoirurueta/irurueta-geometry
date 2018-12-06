@@ -875,17 +875,16 @@ public abstract class PinholeCameraRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L880" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L881">            throw new LockedException();</span>
+    public void setProgressDelta(float progressDelta) throws LockedException {
+<span class="fc bfc" id="L879" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L880">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L883" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA || </span>
+<span class="fc bfc" id="L882" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA || </span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L885">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L884">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L887">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L888">    }</span>
+<span class="fc" id="L886">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L887">    }</span>
     
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
@@ -895,7 +894,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L898">        return mConfidence;</span>
+<span class="fc" id="L897">        return mConfidence;</span>
     }
     
     /**
@@ -910,14 +909,14 @@ public abstract class PinholeCameraRobustEstimator {
      * is being computed.
      */
     public void setConfidence(double confidence) throws LockedException {
-<span class="fc bfc" id="L913" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L914">            throw new LockedException();</span>
+<span class="fc bfc" id="L912" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L913">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L916" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L917">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L915" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L916">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L919">        mConfidence = confidence;</span>
-<span class="fc" id="L920">    }</span>
+<span class="fc" id="L918">        mConfidence = confidence;</span>
+<span class="fc" id="L919">    }</span>
     
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
@@ -926,7 +925,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-<span class="fc" id="L929">        return mMaxIterations;</span>
+<span class="fc" id="L928">        return mMaxIterations;</span>
     }
     
     /**
@@ -939,21 +938,21 @@ public abstract class PinholeCameraRobustEstimator {
      * is being computed.
      */
     public void setMaxIterations(int maxIterations) throws LockedException {
-<span class="fc bfc" id="L942" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L943">            throw new LockedException();</span>
+<span class="fc bfc" id="L941" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L942">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L945" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L946">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L944" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L945">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L948">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L949">    }    </span>
+<span class="fc" id="L947">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L948">    }    </span>
     
     /**
      * Gets data related to inliers found after estimation.
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-<span class="fc" id="L956">        return mInliersData;</span>
+<span class="fc" id="L955">        return mInliersData;</span>
     }  
     
     /**
@@ -965,7 +964,7 @@ public abstract class PinholeCameraRobustEstimator {
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-<span class="fc" id="L968">        return mRefineResult;</span>
+<span class="fc" id="L967">        return mRefineResult;</span>
     }
     
     /**
@@ -976,11 +975,11 @@ public abstract class PinholeCameraRobustEstimator {
      * @throws LockedException if estimator is locked.
      */
     public void setResultRefined(boolean refineResult) throws LockedException {
-<span class="pc bpc" id="L979" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L980">            throw new LockedException();</span>
+<span class="pc bpc" id="L978" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L979">            throw new LockedException();</span>
         }
-<span class="fc" id="L982">        mRefineResult = refineResult;</span>
-<span class="fc" id="L983">    }</span>
+<span class="fc" id="L981">        mRefineResult = refineResult;</span>
+<span class="fc" id="L982">    }</span>
     
     /**
      * Indicates whether covariance must be kept after refining result.
@@ -989,7 +988,7 @@ public abstract class PinholeCameraRobustEstimator {
      * otherwise.
      */
     public boolean isCovarianceKept() {
-<span class="fc" id="L992">        return mKeepCovariance;</span>
+<span class="fc" id="L991">        return mKeepCovariance;</span>
     }
     
     /**
@@ -1001,11 +1000,11 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public void setCovarianceKept(boolean keepCovariance) 
             throws LockedException {
-<span class="pc bpc" id="L1004" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L1005">            throw new LockedException();</span>
+<span class="pc bpc" id="L1003" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L1004">            throw new LockedException();</span>
         }
-<span class="fc" id="L1007">        mKeepCovariance = keepCovariance;</span>
-<span class="fc" id="L1008">    }</span>
+<span class="fc" id="L1006">        mKeepCovariance = keepCovariance;</span>
+<span class="fc" id="L1007">    }</span>
     
     /**
      * Indicates whether fast refinement must be used or not.
@@ -1018,7 +1017,7 @@ public abstract class PinholeCameraRobustEstimator {
      * accurate and stable refinement.
      */
     public boolean isFastRefinementUsed() {
-<span class="fc" id="L1021">        return mUseFastRefinement;</span>
+<span class="fc" id="L1020">        return mUseFastRefinement;</span>
     }
     
     /**
@@ -1034,11 +1033,11 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public void setFastRefinementUsed(boolean useFastRefinement) 
             throws LockedException {
-<span class="fc bfc" id="L1037" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L1038">            throw new LockedException();</span>
+<span class="fc bfc" id="L1036" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L1037">            throw new LockedException();</span>
         }
-<span class="fc" id="L1040">        mUseFastRefinement = useFastRefinement;</span>
-<span class="fc" id="L1041">    }    </span>
+<span class="fc" id="L1039">        mUseFastRefinement = useFastRefinement;</span>
+<span class="fc" id="L1040">    }    </span>
     
     /**
      * Gets estimated covariance of estimated pinhole camera if available.
@@ -1047,7 +1046,7 @@ public abstract class PinholeCameraRobustEstimator {
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-<span class="fc" id="L1050">        return mCovariance;</span>
+<span class="fc" id="L1049">        return mCovariance;</span>
     }
     
     /**
@@ -1099,7 +1098,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
             RobustEstimatorMethod method) {
-<span class="fc" id="L1102">        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, </span>
+<span class="fc" id="L1101">        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, </span>
                 points2D, method);
     }
     
@@ -1122,7 +1121,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D,
             RobustEstimatorMethod method) {
-<span class="fc" id="L1125">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, </span>
+<span class="fc" id="L1124">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, </span>
                 points3D, points2D, method);
     }
     
@@ -1145,7 +1144,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
             double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc" id="L1148">        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, </span>
+<span class="fc" id="L1147">        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, </span>
                 points2D, qualityScores, method);
     }
     
@@ -1171,7 +1170,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
             double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc" id="L1174">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+<span class="fc" id="L1173">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
                 points3D, points2D, qualityScores, method);
     }  
     
@@ -1188,7 +1187,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPoints(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
-<span class="fc" id="L1191">        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, </span>
+<span class="fc" id="L1190">        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, </span>
                 points2D);
     }
     
@@ -1209,7 +1208,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
-<span class="fc" id="L1212">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+<span class="fc" id="L1211">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
                 points3D, points2D);
     }
     
@@ -1230,7 +1229,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
             double[] qualityScores) {
-<span class="fc" id="L1233">        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, </span>
+<span class="fc" id="L1232">        return PointCorrespondencePinholeCameraRobustEstimator.create(points3D, </span>
                 points2D, qualityScores);
     }
     
@@ -1254,7 +1253,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
             double[] qualityScores) {
-<span class="fc" id="L1257">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+<span class="fc" id="L1256">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
                 points3D, points2D, qualityScores);
     }  
 
@@ -1275,7 +1274,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraIntrinsicParameters intrinsic, List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, RobustEstimatorMethod method) {
-<span class="fc" id="L1278">        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, </span>
+<span class="fc" id="L1277">        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, </span>
                 points3D, points2D, method);
     }
     
@@ -1299,7 +1298,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic, List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, RobustEstimatorMethod method) {
-<span class="fc" id="L1302">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, </span>
+<span class="fc" id="L1301">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, </span>
                 intrinsic, points3D, points2D, method);
     }
     
@@ -1324,7 +1323,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraIntrinsicParameters intrinsic, List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, double[] qualityScores, 
             RobustEstimatorMethod method) {
-<span class="fc" id="L1327">        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, </span>
+<span class="fc" id="L1326">        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, </span>
                 points3D, points2D, qualityScores, method);
     }
     
@@ -1352,7 +1351,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraIntrinsicParameters intrinsic,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
             double[] qualityScores, RobustEstimatorMethod method) {
-<span class="fc" id="L1355">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+<span class="fc" id="L1354">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
                 intrinsic, points3D, points2D, qualityScores, method);
     }  
     
@@ -1371,7 +1370,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraIntrinsicParameters intrinsic,
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) {
-<span class="fc" id="L1374">        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, </span>
+<span class="fc" id="L1373">        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, </span>
                 points3D, points2D);
     }
     
@@ -1394,7 +1393,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic, List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D) {
-<span class="fc" id="L1397">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+<span class="fc" id="L1396">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
                 intrinsic, points3D, points2D);
     }
     
@@ -1416,7 +1415,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPoints(
             PinholeCameraIntrinsicParameters intrinsic, List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, double[] qualityScores) {
-<span class="fc" id="L1419">        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, </span>
+<span class="fc" id="L1418">        return PointCorrespondencePinholeCameraRobustEstimator.create(intrinsic, </span>
                 points3D, points2D, qualityScores);
     }
     
@@ -1441,7 +1440,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic, List&lt;Point3D&gt; points3D,
             List&lt;Point2D&gt; points2D, double[] qualityScores) {
-<span class="fc" id="L1444">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+<span class="fc" id="L1443">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
                 intrinsic, points3D, points2D, qualityScores);
     }  
     
@@ -1468,7 +1467,7 @@ public abstract class PinholeCameraRobustEstimator {
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, RobustEstimatorMethod method) {
-<span class="fc" id="L1471">        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,</span>
+<span class="fc" id="L1470">        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,</span>
                 horizontalPrincipalPoint, verticalPrincipalPoint, points3D, 
                 points2D, method);
     }
@@ -1499,7 +1498,7 @@ public abstract class PinholeCameraRobustEstimator {
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, RobustEstimatorMethod method) {
-<span class="fc" id="L1502">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, </span>
+<span class="fc" id="L1501">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener, </span>
                 skewness, horizontalPrincipalPoint, verticalPrincipalPoint, 
                 points3D, points2D, method);
     }
@@ -1531,7 +1530,7 @@ public abstract class PinholeCameraRobustEstimator {
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, double[] qualityScores, 
             RobustEstimatorMethod method) {
-<span class="fc" id="L1534">        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,</span>
+<span class="fc" id="L1533">        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,</span>
                 horizontalPrincipalPoint, verticalPrincipalPoint, points3D, 
                 points2D, qualityScores, method);
     }
@@ -1566,7 +1565,7 @@ public abstract class PinholeCameraRobustEstimator {
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, double[] qualityScores, 
             RobustEstimatorMethod method) {
-<span class="fc" id="L1569">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+<span class="fc" id="L1568">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
                 skewness, horizontalPrincipalPoint, verticalPrincipalPoint, 
                 points3D, points2D, qualityScores, method);
     }  
@@ -1592,7 +1591,7 @@ public abstract class PinholeCameraRobustEstimator {
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D) {
-<span class="fc" id="L1595">        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,</span>
+<span class="fc" id="L1594">        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,</span>
                 horizontalPrincipalPoint, verticalPrincipalPoint, points3D, 
                 points2D);
     }
@@ -1622,7 +1621,7 @@ public abstract class PinholeCameraRobustEstimator {
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D) {
-<span class="fc" id="L1625">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+<span class="fc" id="L1624">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
                 skewness, horizontalPrincipalPoint, verticalPrincipalPoint, 
                 points3D, points2D);
     }
@@ -1651,7 +1650,7 @@ public abstract class PinholeCameraRobustEstimator {
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, double[] qualityScores) {
-<span class="fc" id="L1654">        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,</span>
+<span class="fc" id="L1653">        return PointCorrespondencePinholeCameraRobustEstimator.create(skewness,</span>
                 horizontalPrincipalPoint, verticalPrincipalPoint, points3D, 
                 points2D, qualityScores);
     }
@@ -1683,7 +1682,7 @@ public abstract class PinholeCameraRobustEstimator {
             double skewness, double horizontalPrincipalPoint,
             double verticalPrincipalPoint, List&lt;Point3D&gt; points3D,
             List&lt;Point2D&gt; points2D, double[] qualityScores) {
-<span class="fc" id="L1686">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
+<span class="fc" id="L1685">        return PointCorrespondencePinholeCameraRobustEstimator.create(listener,</span>
                 skewness, horizontalPrincipalPoint, verticalPrincipalPoint, 
                 points3D, points2D, qualityScores);
     }  
@@ -1704,7 +1703,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines, 
             RobustEstimatorMethod method) {
-<span class="fc" id="L1707">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L1706">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
                 planes, lines, method);
     }
     
@@ -1727,7 +1726,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines,
             RobustEstimatorMethod method) {
-<span class="fc" id="L1730">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L1729">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, planes, lines, method);
     }
         
@@ -1750,7 +1749,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines, double[] qualityScores,
             RobustEstimatorMethod method) {
-<span class="fc" id="L1753">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L1752">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
                 planes, lines, qualityScores, method);
     }
     
@@ -1776,7 +1775,7 @@ public abstract class PinholeCameraRobustEstimator {
             PinholeCameraRobustEstimatorListener listener, List&lt;Plane&gt; planes,
             List&lt;Line2D&gt; lines, double[] qualityScores, 
             RobustEstimatorMethod method) {
-<span class="fc" id="L1779">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L1778">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, planes, lines, qualityScores, method);
     }
 
@@ -1793,7 +1792,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines) {
-<span class="fc" id="L1796">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L1795">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
                 planes, lines);
     }
     
@@ -1814,7 +1813,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines) {
-<span class="fc" id="L1817">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L1816">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, planes, lines);
     }
         
@@ -1834,7 +1833,7 @@ public abstract class PinholeCameraRobustEstimator {
      */
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines, double[] qualityScores) {
-<span class="fc" id="L1837">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L1836">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
                 planes, lines, qualityScores);
     }
     
@@ -1857,7 +1856,7 @@ public abstract class PinholeCameraRobustEstimator {
     public static PinholeCameraRobustEstimator createFromPlanesAndLines(
             PinholeCameraRobustEstimatorListener listener, List&lt;Plane&gt; planes,
             List&lt;Line2D&gt; lines, double[] qualityScores) {
-<span class="fc" id="L1860">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+<span class="fc" id="L1859">        return LinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, planes, lines, qualityScores);
     }   
         
@@ -1872,75 +1871,75 @@ public abstract class PinholeCameraRobustEstimator {
      * @return term for any required suggestion.
      */
     protected double suggestionResidual(double[] params, double weight) {
-<span class="nc" id="L1875">        double residual = 0.0;</span>
+<span class="nc" id="L1874">        double residual = 0.0;</span>
         
-<span class="nc bnc" id="L1877" title="All 2 branches missed.">        if (mSuggestSkewnessValueEnabled) {</span>
-<span class="nc" id="L1878">            residual += Math.pow(params[0] - mSuggestedSkewnessValue, 2.0);</span>
+<span class="nc bnc" id="L1876" title="All 2 branches missed.">        if (mSuggestSkewnessValueEnabled) {</span>
+<span class="nc" id="L1877">            residual += Math.pow(params[0] - mSuggestedSkewnessValue, 2.0);</span>
         }
         
-<span class="nc bnc" id="L1881" title="All 2 branches missed.">        if (mSuggestHorizontalFocalLengthEnabled) {</span>
-<span class="nc" id="L1882">            residual += Math.pow(</span>
+<span class="nc bnc" id="L1880" title="All 2 branches missed.">        if (mSuggestHorizontalFocalLengthEnabled) {</span>
+<span class="nc" id="L1881">            residual += Math.pow(</span>
                     params[1] - mSuggestedHorizontalFocalLengthValue, 2.0);
         }
         
-<span class="nc bnc" id="L1886" title="All 2 branches missed.">        if (mSuggestVerticalFocalLengthEnabled) {</span>
-<span class="nc" id="L1887">            residual += Math.pow(</span>
+<span class="nc bnc" id="L1885" title="All 2 branches missed.">        if (mSuggestVerticalFocalLengthEnabled) {</span>
+<span class="nc" id="L1886">            residual += Math.pow(</span>
                     params[2] - mSuggestedVerticalFocalLengthValue, 2.0);
         }
         
-<span class="nc bnc" id="L1891" title="All 2 branches missed.">        if (mSuggestAspectRatioEnabled) {</span>
-<span class="nc" id="L1892">            double aspectRatio = params[2] / params[1];</span>
-<span class="nc" id="L1893">            residual += Math.pow(aspectRatio - mSuggestedAspectRatioValue, 2.0);</span>
+<span class="nc bnc" id="L1890" title="All 2 branches missed.">        if (mSuggestAspectRatioEnabled) {</span>
+<span class="nc" id="L1891">            double aspectRatio = params[2] / params[1];</span>
+<span class="nc" id="L1892">            residual += Math.pow(aspectRatio - mSuggestedAspectRatioValue, 2.0);</span>
         }
         
-<span class="nc bnc" id="L1896" title="All 2 branches missed.">        if (mSuggestPrincipalPointEnabled) {</span>
-<span class="nc bnc" id="L1897" title="All 2 branches missed.">            if (mResidualPrincipalPoint == null) {</span>
-<span class="nc" id="L1898">                mResidualPrincipalPoint = new InhomogeneousPoint2D(</span>
+<span class="nc bnc" id="L1895" title="All 2 branches missed.">        if (mSuggestPrincipalPointEnabled) {</span>
+<span class="nc bnc" id="L1896" title="All 2 branches missed.">            if (mResidualPrincipalPoint == null) {</span>
+<span class="nc" id="L1897">                mResidualPrincipalPoint = new InhomogeneousPoint2D(</span>
                         params[3], params[4]);
             } else {
-<span class="nc" id="L1901">                mResidualPrincipalPoint.setInhomogeneousCoordinates(</span>
+<span class="nc" id="L1900">                mResidualPrincipalPoint.setInhomogeneousCoordinates(</span>
                         params[3], params[4]);
             }
             
-<span class="nc" id="L1905">            residual += Math.pow(mResidualPrincipalPoint.distanceTo(</span>
+<span class="nc" id="L1904">            residual += Math.pow(mResidualPrincipalPoint.distanceTo(</span>
                     mSuggestedPrincipalPointValue), 2.0);
         }
         
-<span class="nc bnc" id="L1909" title="All 2 branches missed.">        if (mSuggestRotationEnabled) {</span>
-<span class="nc bnc" id="L1910" title="All 2 branches missed.">            if (mResidualRotation == null) {</span>
-<span class="nc" id="L1911">                mResidualRotation = new Quaternion(params[5], params[6], </span>
+<span class="nc bnc" id="L1908" title="All 2 branches missed.">        if (mSuggestRotationEnabled) {</span>
+<span class="nc bnc" id="L1909" title="All 2 branches missed.">            if (mResidualRotation == null) {</span>
+<span class="nc" id="L1910">                mResidualRotation = new Quaternion(params[5], params[6], </span>
                         params[7], params[8]);
             } else {
-<span class="nc" id="L1914">                mResidualRotation.setA(params[5]);</span>
-<span class="nc" id="L1915">                mResidualRotation.setB(params[6]);</span>
-<span class="nc" id="L1916">                mResidualRotation.setC(params[7]);</span>
-<span class="nc" id="L1917">                mResidualRotation.setD(params[8]);</span>
+<span class="nc" id="L1913">                mResidualRotation.setA(params[5]);</span>
+<span class="nc" id="L1914">                mResidualRotation.setB(params[6]);</span>
+<span class="nc" id="L1915">                mResidualRotation.setC(params[7]);</span>
+<span class="nc" id="L1916">                mResidualRotation.setD(params[8]);</span>
             }
-<span class="nc" id="L1919">            mResidualRotation.normalize();</span>
-<span class="nc" id="L1920">            mSuggestedRotationValue.normalize();</span>
-<span class="nc" id="L1921">            residual += Math.pow(mResidualRotation.getA() - </span>
-<span class="nc" id="L1922">                    mSuggestedRotationValue.getA(), 2.0) + </span>
-<span class="nc" id="L1923">                    Math.pow(mResidualRotation.getB() - </span>
-<span class="nc" id="L1924">                    mSuggestedRotationValue.getB(), 2.0) +</span>
-<span class="nc" id="L1925">                    Math.pow(mResidualRotation.getC() - </span>
-<span class="nc" id="L1926">                    mSuggestedRotationValue.getC(), 2.0) +</span>
-<span class="nc" id="L1927">                    Math.pow(mResidualRotation.getD() - </span>
-<span class="nc" id="L1928">                    mSuggestedRotationValue.getD(), 2.0);            </span>
+<span class="nc" id="L1918">            mResidualRotation.normalize();</span>
+<span class="nc" id="L1919">            mSuggestedRotationValue.normalize();</span>
+<span class="nc" id="L1920">            residual += Math.pow(mResidualRotation.getA() - </span>
+<span class="nc" id="L1921">                    mSuggestedRotationValue.getA(), 2.0) + </span>
+<span class="nc" id="L1922">                    Math.pow(mResidualRotation.getB() - </span>
+<span class="nc" id="L1923">                    mSuggestedRotationValue.getB(), 2.0) +</span>
+<span class="nc" id="L1924">                    Math.pow(mResidualRotation.getC() - </span>
+<span class="nc" id="L1925">                    mSuggestedRotationValue.getC(), 2.0) +</span>
+<span class="nc" id="L1926">                    Math.pow(mResidualRotation.getD() - </span>
+<span class="nc" id="L1927">                    mSuggestedRotationValue.getD(), 2.0);            </span>
         }
         
-<span class="nc bnc" id="L1931" title="All 2 branches missed.">        if (mSuggestCenterEnabled) {</span>
-<span class="nc bnc" id="L1932" title="All 2 branches missed.">            if (mResidualCenter == null) {</span>
-<span class="nc" id="L1933">                mResidualCenter = new InhomogeneousPoint3D(</span>
+<span class="nc bnc" id="L1930" title="All 2 branches missed.">        if (mSuggestCenterEnabled) {</span>
+<span class="nc bnc" id="L1931" title="All 2 branches missed.">            if (mResidualCenter == null) {</span>
+<span class="nc" id="L1932">                mResidualCenter = new InhomogeneousPoint3D(</span>
                         params[9], params[10], params[11]);
             } else {
-<span class="nc" id="L1936">                mResidualCenter.setInhomogeneousCoordinates(</span>
+<span class="nc" id="L1935">                mResidualCenter.setInhomogeneousCoordinates(</span>
                         params[9], params[10], params[11]);
             }
-<span class="nc" id="L1939">            residual += Math.pow(</span>
-<span class="nc" id="L1940">                    mResidualCenter.distanceTo(mSuggestedCenterValue), 2.0);</span>
+<span class="nc" id="L1938">            residual += Math.pow(</span>
+<span class="nc" id="L1939">                    mResidualCenter.distanceTo(mSuggestedCenterValue), 2.0);</span>
         }
         
-<span class="nc" id="L1943">        return weight * residual;</span>
+<span class="nc" id="L1942">        return weight * residual;</span>
     }    
     
     /**
@@ -1955,39 +1954,39 @@ public abstract class PinholeCameraRobustEstimator {
     protected void parametersToCamera(double[] params, 
             PinholeCamera result) {
         
-<span class="nc bnc" id="L1958" title="All 2 branches missed.">        if (mResidualIntrinsic == null) {</span>
-<span class="nc" id="L1959">            mResidualIntrinsic = new PinholeCameraIntrinsicParameters();</span>
+<span class="nc bnc" id="L1957" title="All 2 branches missed.">        if (mResidualIntrinsic == null) {</span>
+<span class="nc" id="L1958">            mResidualIntrinsic = new PinholeCameraIntrinsicParameters();</span>
         }
-<span class="nc" id="L1961">        mResidualIntrinsic.setSkewness(params[0]);</span>
-<span class="nc" id="L1962">        mResidualIntrinsic.setHorizontalFocalLength(params[1]);</span>
-<span class="nc" id="L1963">        mResidualIntrinsic.setVerticalFocalLength(params[2]);</span>
-<span class="nc" id="L1964">        mResidualIntrinsic.setHorizontalPrincipalPoint(params[3]);</span>
-<span class="nc" id="L1965">        mResidualIntrinsic.setVerticalPrincipalPoint(params[4]);</span>
+<span class="nc" id="L1960">        mResidualIntrinsic.setSkewness(params[0]);</span>
+<span class="nc" id="L1961">        mResidualIntrinsic.setHorizontalFocalLength(params[1]);</span>
+<span class="nc" id="L1962">        mResidualIntrinsic.setVerticalFocalLength(params[2]);</span>
+<span class="nc" id="L1963">        mResidualIntrinsic.setHorizontalPrincipalPoint(params[3]);</span>
+<span class="nc" id="L1964">        mResidualIntrinsic.setVerticalPrincipalPoint(params[4]);</span>
         
-<span class="nc bnc" id="L1967" title="All 2 branches missed.">        if (mResidualRotation == null) {</span>
-<span class="nc" id="L1968">            mResidualRotation = new Quaternion(params[5], params[6], </span>
+<span class="nc bnc" id="L1966" title="All 2 branches missed.">        if (mResidualRotation == null) {</span>
+<span class="nc" id="L1967">            mResidualRotation = new Quaternion(params[5], params[6], </span>
                     params[7], params[8]);
         } else {
-<span class="nc" id="L1971">            mResidualRotation.setA(params[5]);</span>
-<span class="nc" id="L1972">            mResidualRotation.setB(params[6]);</span>
-<span class="nc" id="L1973">            mResidualRotation.setC(params[7]);</span>
-<span class="nc" id="L1974">            mResidualRotation.setD(params[8]);</span>
+<span class="nc" id="L1970">            mResidualRotation.setA(params[5]);</span>
+<span class="nc" id="L1971">            mResidualRotation.setB(params[6]);</span>
+<span class="nc" id="L1972">            mResidualRotation.setC(params[7]);</span>
+<span class="nc" id="L1973">            mResidualRotation.setD(params[8]);</span>
         }
-<span class="nc" id="L1976">        mResidualRotation.normalize();</span>
+<span class="nc" id="L1975">        mResidualRotation.normalize();</span>
         
-<span class="nc bnc" id="L1978" title="All 2 branches missed.">        if (mResidualCenter == null) {</span>
-<span class="nc" id="L1979">            mResidualCenter = new InhomogeneousPoint3D(params[9], params[10], </span>
+<span class="nc bnc" id="L1977" title="All 2 branches missed.">        if (mResidualCenter == null) {</span>
+<span class="nc" id="L1978">            mResidualCenter = new InhomogeneousPoint3D(params[9], params[10], </span>
                     params[11]);
         } else {
-<span class="nc" id="L1982">            mResidualCenter.setInhomogeneousCoordinates(params[9], params[10],</span>
+<span class="nc" id="L1981">            mResidualCenter.setInhomogeneousCoordinates(params[9], params[10],</span>
                     params[11]);
         }
-<span class="nc" id="L1985">        mResidualCenter.normalize();</span>
+<span class="nc" id="L1984">        mResidualCenter.normalize();</span>
         
-<span class="nc" id="L1987">        result.setIntrinsicAndExtrinsicParameters(mResidualIntrinsic, </span>
+<span class="nc" id="L1986">        result.setIntrinsicAndExtrinsicParameters(mResidualIntrinsic, </span>
                 mResidualRotation, mResidualCenter);     
-<span class="nc" id="L1989">        result.normalize();</span>
-<span class="nc" id="L1990">    }   </span>
+<span class="nc" id="L1988">        result.normalize();</span>
+<span class="nc" id="L1989">    }   </span>
     
     /**
      * Sets camera parameters into array of parameters.
@@ -2005,35 +2004,35 @@ public abstract class PinholeCameraRobustEstimator {
     protected void cameraToParameters(PinholeCamera camera, double[] result) 
             throws CameraException, NotAvailableException {
         
-<span class="nc" id="L2008">        camera.decompose();</span>
+<span class="nc" id="L2007">        camera.decompose();</span>
         
-<span class="nc" id="L2010">        PinholeCameraIntrinsicParameters intrinsic =</span>
-<span class="nc" id="L2011">                camera.getIntrinsicParameters();</span>
-<span class="nc" id="L2012">        result[0] = intrinsic.getSkewness();</span>
-<span class="nc" id="L2013">        result[1] = intrinsic.getHorizontalFocalLength();</span>
-<span class="nc" id="L2014">        result[2] = intrinsic.getVerticalFocalLength();</span>
-<span class="nc" id="L2015">        result[3] = intrinsic.getHorizontalPrincipalPoint();</span>
-<span class="nc" id="L2016">        result[4] = intrinsic.getVerticalPrincipalPoint();</span>
+<span class="nc" id="L2009">        PinholeCameraIntrinsicParameters intrinsic =</span>
+<span class="nc" id="L2010">                camera.getIntrinsicParameters();</span>
+<span class="nc" id="L2011">        result[0] = intrinsic.getSkewness();</span>
+<span class="nc" id="L2012">        result[1] = intrinsic.getHorizontalFocalLength();</span>
+<span class="nc" id="L2013">        result[2] = intrinsic.getVerticalFocalLength();</span>
+<span class="nc" id="L2014">        result[3] = intrinsic.getHorizontalPrincipalPoint();</span>
+<span class="nc" id="L2015">        result[4] = intrinsic.getVerticalPrincipalPoint();</span>
         
-<span class="nc" id="L2018">        Rotation3D rotation = camera.getCameraRotation();</span>
-<span class="nc bnc" id="L2019" title="All 2 branches missed.">        if (mResidualRotation == null) {</span>
-<span class="nc" id="L2020">            mResidualRotation = rotation.toQuaternion();</span>
+<span class="nc" id="L2017">        Rotation3D rotation = camera.getCameraRotation();</span>
+<span class="nc bnc" id="L2018" title="All 2 branches missed.">        if (mResidualRotation == null) {</span>
+<span class="nc" id="L2019">            mResidualRotation = rotation.toQuaternion();</span>
         } else {
-<span class="nc" id="L2022">            rotation.toQuaternion(mResidualRotation);</span>
+<span class="nc" id="L2021">            rotation.toQuaternion(mResidualRotation);</span>
         }
-<span class="nc" id="L2024">        mResidualRotation.normalize();</span>
+<span class="nc" id="L2023">        mResidualRotation.normalize();</span>
         
-<span class="nc" id="L2026">        result[5] = mResidualRotation.getA();</span>
-<span class="nc" id="L2027">        result[6] = mResidualRotation.getB();</span>
-<span class="nc" id="L2028">        result[7] = mResidualRotation.getC();</span>
-<span class="nc" id="L2029">        result[8] = mResidualRotation.getD();</span>
+<span class="nc" id="L2025">        result[5] = mResidualRotation.getA();</span>
+<span class="nc" id="L2026">        result[6] = mResidualRotation.getB();</span>
+<span class="nc" id="L2027">        result[7] = mResidualRotation.getC();</span>
+<span class="nc" id="L2028">        result[8] = mResidualRotation.getD();</span>
         
-<span class="nc" id="L2031">        Point3D center = camera.getCameraCenter();</span>
+<span class="nc" id="L2030">        Point3D center = camera.getCameraCenter();</span>
         
-<span class="nc" id="L2033">        result[9] = center.getInhomX();</span>
-<span class="nc" id="L2034">        result[10] = center.getInhomY();</span>
-<span class="nc" id="L2035">        result[11] = center.getInhomZ();        </span>
-<span class="nc" id="L2036">    }    </span>
+<span class="nc" id="L2032">        result[9] = center.getInhomX();</span>
+<span class="nc" id="L2033">        result[10] = center.getInhomY();</span>
+<span class="nc" id="L2034">        result[11] = center.getInhomZ();        </span>
+<span class="nc" id="L2035">    }    </span>
     
     /**
      * Indicates whether obtained solution requires refinement to apply provided
@@ -2042,7 +2041,7 @@ public abstract class PinholeCameraRobustEstimator {
      * suggestions, false otherwise.
      */
     protected boolean hasSuggestions() {
-<span class="fc bfc" id="L2045" title="All 4 branches covered.">        return hasIntrinsicSuggestions() || hasExtrinsicSuggestions();</span>
+<span class="fc bfc" id="L2044" title="All 4 branches covered.">        return hasIntrinsicSuggestions() || hasExtrinsicSuggestions();</span>
     }
     
     /**
@@ -2052,7 +2051,7 @@ public abstract class PinholeCameraRobustEstimator {
      * false otherwise.
      */
     private boolean hasIntrinsicSuggestions() {
-<span class="fc bfc" id="L2055" title="All 8 branches covered.">        return mSuggestSkewnessValueEnabled || </span>
+<span class="fc bfc" id="L2054" title="All 8 branches covered.">        return mSuggestSkewnessValueEnabled || </span>
                 mSuggestHorizontalFocalLengthEnabled || 
                 mSuggestVerticalFocalLengthEnabled || 
                 mSuggestAspectRatioEnabled;
@@ -2065,7 +2064,7 @@ public abstract class PinholeCameraRobustEstimator {
      * false otherwise.
      */
     private boolean hasExtrinsicSuggestions() {
-<span class="fc bfc" id="L2068" title="All 6 branches covered.">        return mSuggestPrincipalPointEnabled ||</span>
+<span class="fc bfc" id="L2067" title="All 6 branches covered.">        return mSuggestPrincipalPointEnabled ||</span>
                 mSuggestRotationEnabled || mSuggestCenterEnabled;
     }                    
 }
