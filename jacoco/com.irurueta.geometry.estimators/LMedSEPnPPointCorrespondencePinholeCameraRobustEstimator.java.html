@@ -421,12 +421,12 @@ public class LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;PinholeCamera&gt; estimator, float progress) {
-<span class="pc bpc" id="L424" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L425">                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L424" title="All 2 branches missed.">                if (mListener != null) {</span>
+<span class="nc" id="L425">                    mListener.onEstimateProgressChange(</span>
                             LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
                                     this, progress);
                 }
-<span class="fc" id="L429">            }</span>
+<span class="nc" id="L429">            }</span>
         });
         
         try {
