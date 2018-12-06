@@ -731,8 +731,8 @@ public class Ellipse implements Serializable {
 <span class="fc" id="L731">            double e = 2.0*ePrime;</span>
 
 <span class="fc" id="L733">            setParameters(aPrime, b, cPrime, d, e, fPrime, threshold);</span>
-<span class="fc" id="L734">        } catch (AlgebraException | IllegalArgumentException ex) {</span>
-<span class="fc" id="L735">            throw new ColinearPointsException(ex);</span>
+<span class="nc" id="L734">        } catch (AlgebraException | IllegalArgumentException ex) {</span>
+<span class="nc" id="L735">            throw new ColinearPointsException(ex);</span>
 <span class="fc" id="L736">        }</span>
 <span class="fc" id="L737">    }</span>
     
@@ -770,9 +770,9 @@ public class Ellipse implements Serializable {
     public final void setParameters(double a, double b, double c, double d, 
             double e, double f, double threshold) {
 <span class="fc" id="L772">        double discriminant = b * b - 4.0 * a * c;</span>
-<span class="fc bfc" id="L773" title="All 2 branches covered.">        if (discriminant &gt;= threshold) {</span>
+<span class="pc bpc" id="L773" title="1 of 2 branches missed.">        if (discriminant &gt;= threshold) {</span>
             //not an ellipse
-<span class="fc" id="L775">            throw new IllegalArgumentException();</span>
+<span class="nc" id="L775">            throw new IllegalArgumentException();</span>
         }
 
 <span class="fc" id="L778">        double tmp1 = a * e * e + c * d * d - b * d * e + discriminant * f;</span>

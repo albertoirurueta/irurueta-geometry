@@ -632,7 +632,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
 <span class="fc" id="L632">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="pc bpc" id="L635" title="1 of 2 branches missed.">                return improved ? result : transformation;</span>
+<span class="fc bfc" id="L635" title="All 2 branches covered.">                return improved ? result : transformation;</span>
 <span class="fc" id="L636">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
 <span class="fc" id="L638">                return transformation;</span>

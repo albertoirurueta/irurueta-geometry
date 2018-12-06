@@ -208,119 +208,120 @@ public class EuclideanTransformation2DRefiner extends
 <span class="fc" id="L208">            Matrix x = new Matrix(mNumInliers, nDims);</span>
 <span class="fc" id="L209">            int nSamples = mInliers.length();</span>
 <span class="fc" id="L210">            int pos = 0;</span>
-            Point2D inputPoint, outputPoint;
-<span class="fc bfc" id="L212" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L213" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
+            Point2D inputPoint;
+            Point2D outputPoint;
+<span class="fc bfc" id="L213" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
                     //sample is inlier
-<span class="fc" id="L215">                    inputPoint = mSamples1.get(i);</span>
-<span class="fc" id="L216">                    outputPoint = mSamples2.get(i);</span>
-<span class="fc" id="L217">                    inputPoint.normalize();</span>
-<span class="fc" id="L218">                    outputPoint.normalize();</span>
-<span class="fc" id="L219">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
-<span class="fc" id="L220">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
-<span class="fc" id="L221">                    x.setElementAt(pos, 2, inputPoint.getHomW());</span>
-<span class="fc" id="L222">                    x.setElementAt(pos, 3, outputPoint.getHomX());</span>
-<span class="fc" id="L223">                    x.setElementAt(pos, 4, outputPoint.getHomY());</span>
-<span class="fc" id="L224">                    x.setElementAt(pos, 5, outputPoint.getHomW());</span>
+<span class="fc" id="L216">                    inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L217">                    outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L218">                    inputPoint.normalize();</span>
+<span class="fc" id="L219">                    outputPoint.normalize();</span>
+<span class="fc" id="L220">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
+<span class="fc" id="L221">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
+<span class="fc" id="L222">                    x.setElementAt(pos, 2, inputPoint.getHomW());</span>
+<span class="fc" id="L223">                    x.setElementAt(pos, 3, outputPoint.getHomX());</span>
+<span class="fc" id="L224">                    x.setElementAt(pos, 4, outputPoint.getHomY());</span>
+<span class="fc" id="L225">                    x.setElementAt(pos, 5, outputPoint.getHomW());</span>
                     
-<span class="fc" id="L226">                    y[pos] = mResiduals[i];</span>
-<span class="fc" id="L227">                    pos++;</span>
+<span class="fc" id="L227">                    y[pos] = mResiduals[i];</span>
+<span class="fc" id="L228">                    pos++;</span>
                 }
             }
             
-<span class="fc" id="L231">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
-<span class="fc" id="L232">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+<span class="fc" id="L232">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
+<span class="fc" id="L233">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
                         
-<span class="fc" id="L234">                private Point2D mInputPoint = Point2D.create(</span>
+<span class="fc" id="L235">                private Point2D mInputPoint = Point2D.create(</span>
                         CoordinatesType.HOMOGENEOUS_COORDINATES);
                 
-<span class="fc" id="L237">                private Point2D mOutputPoint = Point2D.create(</span>
+<span class="fc" id="L238">                private Point2D mOutputPoint = Point2D.create(</span>
                         CoordinatesType.HOMOGENEOUS_COORDINATES);
                 
-<span class="fc" id="L240">                private EuclideanTransformation2D mTransformation = </span>
+<span class="fc" id="L241">                private EuclideanTransformation2D mTransformation = </span>
                         new EuclideanTransformation2D();
                 
-<span class="fc" id="L243">                private GradientEstimator mGradientEstimator =</span>
+<span class="fc" id="L244">                private GradientEstimator mGradientEstimator =</span>
                         new GradientEstimator(
-<span class="fc" id="L245">                                new MultiDimensionFunctionEvaluatorListener() {</span>
+<span class="fc" id="L246">                                new MultiDimensionFunctionEvaluatorListener() {</span>
                     @Override
                     public double evaluate(double[] params) {
                         //copy values
-<span class="fc" id="L249">                        mTransformation.getRotation().setTheta(params[0]);</span>
-<span class="fc" id="L250">                        System.arraycopy(params, 1, </span>
-<span class="fc" id="L251">                            mTransformation.getTranslation(), 0, </span>
+<span class="fc" id="L250">                        mTransformation.getRotation().setTheta(params[0]);</span>
+<span class="fc" id="L251">                        System.arraycopy(params, 1, </span>
+<span class="fc" id="L252">                            mTransformation.getTranslation(), 0, </span>
                             EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
 
-<span class="fc" id="L254">                        return residual(mTransformation, mInputPoint, </span>
-<span class="fc" id="L255">                                mOutputPoint);</span>
+<span class="fc" id="L255">                        return residual(mTransformation, mInputPoint, </span>
+<span class="fc" id="L256">                                mOutputPoint);</span>
                     }
                 });
                 
                 @Override
                 public int getNumberOfDimensions() {
-<span class="fc" id="L261">                    return nDims;</span>
+<span class="fc" id="L262">                    return nDims;</span>
                 }
 
                 @Override
                 public double[] createInitialParametersArray() {
-<span class="fc" id="L266">                    return initParams;</span>
+<span class="fc" id="L267">                    return initParams;</span>
                 }
 
                 @Override
                 public double evaluate(int i, double[] point, double[] params, 
                         double[] derivatives) throws EvaluationException {
-<span class="fc" id="L272">                    mInputPoint.setHomogeneousCoordinates(point[0], point[1], </span>
+<span class="fc" id="L273">                    mInputPoint.setHomogeneousCoordinates(point[0], point[1], </span>
                             point[2]);
-<span class="fc" id="L274">                    mOutputPoint.setHomogeneousCoordinates(point[3], point[4], </span>
+<span class="fc" id="L275">                    mOutputPoint.setHomogeneousCoordinates(point[3], point[4], </span>
                             point[5]);
                     
                     //copy values
-<span class="fc" id="L278">                    mTransformation.getRotation().setTheta(params[0]);</span>
-<span class="fc" id="L279">                    System.arraycopy(params, 1, </span>
-<span class="fc" id="L280">                        mTransformation.getTranslation(), 0, </span>
+<span class="fc" id="L279">                    mTransformation.getRotation().setTheta(params[0]);</span>
+<span class="fc" id="L280">                    System.arraycopy(params, 1, </span>
+<span class="fc" id="L281">                        mTransformation.getTranslation(), 0, </span>
                         EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
 
-<span class="fc" id="L283">                    double y = residual(mTransformation, mInputPoint, </span>
+<span class="fc" id="L284">                    double y = residual(mTransformation, mInputPoint, </span>
                             mOutputPoint);
-<span class="fc" id="L285">                    mGradientEstimator.gradient(params, derivatives);</span>
+<span class="fc" id="L286">                    mGradientEstimator.gradient(params, derivatives);</span>
                     
-<span class="fc" id="L287">                    return y;</span>
+<span class="fc" id="L288">                    return y;</span>
                 }
             };
             
-<span class="fc" id="L291">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
+<span class="fc" id="L292">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-<span class="fc" id="L293">                    getRefinementStandardDeviation());</span>
+<span class="fc" id="L294">                    getRefinementStandardDeviation());</span>
             
-<span class="fc" id="L295">            fitter.fit();</span>
+<span class="fc" id="L296">            fitter.fit();</span>
             
             //obtain estimated params
-<span class="fc" id="L298">            double[] params = fitter.getA();</span>
+<span class="fc" id="L299">            double[] params = fitter.getA();</span>
             
             //update transformation
-<span class="fc" id="L301">            result.getRotation().setTheta(params[0]);</span>
-<span class="fc" id="L302">            System.arraycopy(params, 1, result.getTranslation(), 0, </span>
+<span class="fc" id="L302">            result.getRotation().setTheta(params[0]);</span>
+<span class="fc" id="L303">            System.arraycopy(params, 1, result.getTranslation(), 0, </span>
                     EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
             
-<span class="pc bpc" id="L305" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L306" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
                 //keep covariance
-<span class="fc" id="L307">                mCovariance = fitter.getCovar();</span>
+<span class="fc" id="L308">                mCovariance = fitter.getCovar();</span>
             }
             
-<span class="fc" id="L310">            double finalTotalResidual = totalResidual(result);</span>
-<span class="fc bfc" id="L311" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
+<span class="fc" id="L311">            double finalTotalResidual = totalResidual(result);</span>
+<span class="fc bfc" id="L312" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
             
-<span class="fc bfc" id="L313" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L314">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
+<span class="fc bfc" id="L314" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L315">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
                         errorDecreased);
             }
             
-<span class="fc" id="L318">            return errorDecreased;</span>
+<span class="fc" id="L319">            return errorDecreased;</span>
             
-<span class="fc" id="L320">        } catch (Exception e) {</span>
-<span class="fc" id="L321">            throw new RefinerException(e);</span>
+<span class="fc" id="L321">        } catch (Exception e) {</span>
+<span class="fc" id="L322">            throw new RefinerException(e);</span>
         } finally {
-<span class="fc" id="L323">            mLocked = false;</span>
+<span class="fc" id="L324">            mLocked = false;</span>
         }        
     }
     
@@ -334,11 +335,11 @@ public class EuclideanTransformation2DRefiner extends
      */
     private double residual (EuclideanTransformation2D transformation, 
             Point2D inputPoint, Point2D outputPoint) {
-<span class="fc" id="L337">        inputPoint.normalize();</span>
-<span class="fc" id="L338">        outputPoint.normalize();</span>
+<span class="fc" id="L338">        inputPoint.normalize();</span>
+<span class="fc" id="L339">        outputPoint.normalize();</span>
         
-<span class="fc" id="L340">        transformation.transform(inputPoint, mResidualTestPoint);</span>
-<span class="fc" id="L341">        return mResidualTestPoint.distanceTo(outputPoint);</span>
+<span class="fc" id="L341">        transformation.transform(inputPoint, mResidualTestPoint);</span>
+<span class="fc" id="L342">        return mResidualTestPoint.distanceTo(outputPoint);</span>
     }
     
     /**
@@ -347,22 +348,23 @@ public class EuclideanTransformation2DRefiner extends
      * @return total residual.
      */
     private double totalResidual(EuclideanTransformation2D transformation) {
-<span class="fc" id="L350">        double result = 0.0;</span>
+<span class="fc" id="L351">        double result = 0.0;</span>
         
-<span class="fc" id="L352">        int nSamples = mInliers.length();</span>
-        Point2D inputPoint, outputPoint;
-<span class="fc bfc" id="L354" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L355" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
+<span class="fc" id="L353">        int nSamples = mInliers.length();</span>
+        Point2D inputPoint;
+        Point2D outputPoint;
+<span class="fc bfc" id="L356" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L357" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
                 //sample is inlier
-<span class="fc" id="L357">                inputPoint = mSamples1.get(i);</span>
-<span class="fc" id="L358">                outputPoint = mSamples2.get(i);</span>
-<span class="fc" id="L359">                inputPoint.normalize();</span>
-<span class="fc" id="L360">                outputPoint.normalize();</span>
-<span class="fc" id="L361">                result += residual(transformation, inputPoint, outputPoint);</span>
+<span class="fc" id="L359">                inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L360">                outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L361">                inputPoint.normalize();</span>
+<span class="fc" id="L362">                outputPoint.normalize();</span>
+<span class="fc" id="L363">                result += residual(transformation, inputPoint, outputPoint);</span>
             }
         }
         
-<span class="fc" id="L365">        return result;        </span>
+<span class="fc" id="L367">        return result;        </span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
