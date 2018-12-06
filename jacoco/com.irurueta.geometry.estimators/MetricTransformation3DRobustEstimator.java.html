@@ -225,7 +225,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public MetricTransformation3DRobustEstimator(List&lt;Point3D&gt; inputPoints,
-            List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException {
+            List&lt;Point3D&gt; outputPoints) {
 <span class="fc" id="L229">        this();</span>
 <span class="fc" id="L230">        internalSetPoints(inputPoints, outputPoints);</span>
 <span class="fc" id="L231">    }</span>
@@ -247,11 +247,10 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public MetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L252">        this(listener);</span>
-<span class="fc" id="L253">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L254">    }</span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L251">        this(listener);</span>
+<span class="fc" id="L252">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L253">    }</span>
 
     /**
      * Constructor.
@@ -259,9 +258,9 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public MetricTransformation3DRobustEstimator(
             boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L262">        this();</span>
-<span class="fc" id="L263">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L264">    }</span>
+<span class="fc" id="L261">        this();</span>
+<span class="fc" id="L262">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L263">    }</span>
     
     /**
      * Constructor.
@@ -272,10 +271,10 @@ public abstract class MetricTransformation3DRobustEstimator {
     public MetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
             boolean weakMinimumSizeAllowed) {
-<span class="fc" id="L275">        this();</span>
-<span class="fc" id="L276">        mListener = listener;</span>
-<span class="fc" id="L277">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L278">    }</span>
+<span class="fc" id="L274">        this();</span>
+<span class="fc" id="L275">        mListener = listener;</span>
+<span class="fc" id="L276">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L277">    }</span>
     
     /**
      * Constructor with lists of points to be used to estimate a metric 3D
@@ -292,12 +291,11 @@ public abstract class MetricTransformation3DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public MetricTransformation3DRobustEstimator(List&lt;Point3D&gt; inputPoints,
-            List&lt;Point3D&gt; outputPoints, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
-<span class="fc" id="L297">        this();</span>
-<span class="fc" id="L298">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L299">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L300">    }</span>
+            List&lt;Point3D&gt; outputPoints, boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L295">        this();</span>
+<span class="fc" id="L296">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L297">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L298">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate a
@@ -318,11 +316,11 @@ public abstract class MetricTransformation3DRobustEstimator {
     public MetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
-<span class="fc" id="L322">        this(listener);</span>
-<span class="fc" id="L323">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L324">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L325">    }</span>
+            boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L320">        this(listener);</span>
+<span class="fc" id="L321">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L322">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L323">    }</span>
     
     /**
      * Returns list of input points to be used to estimate a metric 3D
@@ -335,7 +333,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * transformation.
      */
     public List&lt;Point3D&gt; getInputPoints() {
-<span class="fc" id="L338">        return mInputPoints;</span>
+<span class="fc" id="L336">        return mInputPoints;</span>
     }
     
     /**
@@ -349,7 +347,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * transformation.
      */
     public List&lt;Point3D&gt; getOutputPoints() {
-<span class="fc" id="L352">        return mOutputPoints;</span>
+<span class="fc" id="L350">        return mOutputPoints;</span>
     }
     
     /**
@@ -368,13 +366,12 @@ public abstract class MetricTransformation3DRobustEstimator {
      * already in progress.
      */
     public void setPoints(List&lt;Point3D&gt; inputPoints, 
-            List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException,
-            LockedException {
-<span class="fc bfc" id="L373" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L374">            throw new LockedException();</span>
+            List&lt;Point3D&gt; outputPoints) throws LockedException {
+<span class="fc bfc" id="L370" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L371">            throw new LockedException();</span>
         }
-<span class="fc" id="L376">        internalSetPoints(inputPoints, outputPoints);</span>
-<span class="fc" id="L377">    }</span>
+<span class="fc" id="L373">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L374">    }</span>
     
     /**
      * Indicates if estimator is ready to start the metric 3D transformation
@@ -384,9 +381,9 @@ public abstract class MetricTransformation3DRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="pc bpc" id="L387" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
-<span class="pc bpc" id="L388" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
-<span class="pc bpc" id="L389" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
+<span class="pc bpc" id="L384" title="1 of 4 branches missed.">        return mInputPoints != null &amp;&amp; mOutputPoints != null &amp;&amp;</span>
+<span class="pc bpc" id="L385" title="1 of 2 branches missed.">                mInputPoints.size() == mOutputPoints.size() &amp;&amp;</span>
+<span class="pc bpc" id="L386" title="1 of 2 branches missed.">                mInputPoints.size() &gt;= getMinimumPoints();</span>
     }
     
     /**
@@ -397,7 +394,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * @return quality scores corresponding to each pair of matched points.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L400">        return null;</span>
+<span class="fc" id="L397">        return null;</span>
     }
     
     /**
@@ -413,7 +410,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="fc" id="L416">            IllegalArgumentException { }</span>
+<span class="fc" id="L413">            IllegalArgumentException { }</span>
     
     /**
      * Returns reference to listener to be notified of events such as when
@@ -421,7 +418,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * @return listener to be notified of events.
      */
     public MetricTransformation3DRobustEstimatorListener getListener() {
-<span class="fc" id="L424">        return mListener;</span>
+<span class="fc" id="L421">        return mListener;</span>
     }
     
     /**
@@ -433,11 +430,11 @@ public abstract class MetricTransformation3DRobustEstimator {
     public void setListener(
             MetricTransformation3DRobustEstimatorListener listener)
             throws LockedException {
-<span class="fc bfc" id="L436" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L437">            throw new LockedException();</span>
+<span class="fc bfc" id="L433" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L434">            throw new LockedException();</span>
         }
-<span class="fc" id="L439">        mListener = listener;</span>
-<span class="fc" id="L440">    }</span>
+<span class="fc" id="L436">        mListener = listener;</span>
+<span class="fc" id="L437">    }</span>
     
     /**
      * Indicates whether listener has been provided and is available for
@@ -445,7 +442,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L448" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L445" title="All 2 branches covered.">        return mListener != null;</span>
     }
     
     /**
@@ -453,7 +450,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * @return true allows 3 points, false requires 4.
      */
     public boolean isWeakMinimumSizeAllowed() {
-<span class="fc" id="L456">        return mWeakMinimumSizeAllowed;</span>
+<span class="fc" id="L453">        return mWeakMinimumSizeAllowed;</span>
     }
     
     /**
@@ -463,11 +460,11 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public void setWeakMinimumSizeAllowed(boolean weakMinimumSizeAllowed) 
             throws LockedException {
-<span class="fc bfc" id="L466" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L467">            throw new LockedException();</span>
+<span class="fc bfc" id="L463" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L464">            throw new LockedException();</span>
         }
-<span class="fc" id="L469">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
-<span class="fc" id="L470">    }</span>
+<span class="fc" id="L466">        mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L467">    }</span>
     
     /**
      * Required minimum number of point correspondences to start the estimation.
@@ -475,7 +472,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * @return minimum number of point correspondences.
      */
     public int getMinimumPoints() {
-<span class="fc bfc" id="L478" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
+<span class="fc bfc" id="L475" title="All 2 branches covered.">        return mWeakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
     }        
     
     /**
@@ -484,7 +481,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L487">        return mLocked;</span>
+<span class="fc" id="L484">        return mLocked;</span>
     }
     
     /**
@@ -494,7 +491,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L497">        return mProgressDelta;</span>
+<span class="fc" id="L494">        return mProgressDelta;</span>
     }
     
     /**
@@ -509,15 +506,15 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public void setProgressDelta(float progressDelta)
             throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L512" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L513">            throw new LockedException();</span>
+<span class="fc bfc" id="L509" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L510">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L515" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L512" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L517">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L514">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L519">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L520">    }</span>
+<span class="fc" id="L516">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L517">    }</span>
     
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
@@ -527,7 +524,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L530">        return mConfidence;</span>
+<span class="fc" id="L527">        return mConfidence;</span>
     }
     
     /**
@@ -543,14 +540,14 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public void setConfidence(double confidence)
             throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L546" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L547">            throw new LockedException();</span>
+<span class="fc bfc" id="L543" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L544">            throw new LockedException();</span>
         }        
-<span class="fc bfc" id="L549" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L550">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L546" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L547">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L552">        mConfidence = confidence;</span>
-<span class="fc" id="L553">    }</span>
+<span class="fc" id="L549">        mConfidence = confidence;</span>
+<span class="fc" id="L550">    }</span>
     
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
@@ -559,7 +556,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * @return maximum allowed number of itertions.
      */
     public int getMaxIterations() {
-<span class="fc" id="L562">        return mMaxIterations;</span>
+<span class="fc" id="L559">        return mMaxIterations;</span>
     }
     
     /**
@@ -573,21 +570,21 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public void setMaxIterations(int maxIterations) 
             throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L576" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L577">            throw new LockedException();</span>
+<span class="fc bfc" id="L573" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L574">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L579" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L580">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L576" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L577">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L582">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L583">    }</span>
+<span class="fc" id="L579">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L580">    }</span>
     
     /**
      * Gets data related to inliers found after estimation.
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-<span class="fc" id="L590">        return mInliersData;</span>
+<span class="fc" id="L587">        return mInliersData;</span>
     }
     
     /**
@@ -599,7 +596,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-<span class="fc" id="L602">        return mRefineResult;</span>
+<span class="fc" id="L599">        return mRefineResult;</span>
     }    
     
     /**
@@ -610,11 +607,11 @@ public abstract class MetricTransformation3DRobustEstimator {
      * @throws LockedException if estimator is locked.
      */
     public void setResultRefined(boolean refineResult) throws LockedException {
-<span class="pc bpc" id="L613" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L614">            throw new LockedException();</span>
+<span class="pc bpc" id="L610" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L611">            throw new LockedException();</span>
         }
-<span class="fc" id="L616">        mRefineResult = refineResult;</span>
-<span class="fc" id="L617">    }</span>
+<span class="fc" id="L613">        mRefineResult = refineResult;</span>
+<span class="fc" id="L614">    }</span>
     
     /**
      * Indicates whether covariance must be kept after refining result.
@@ -623,7 +620,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * otherwise.
      */
     public boolean isCovarianceKept() {
-<span class="fc" id="L626">        return mKeepCovariance;</span>
+<span class="fc" id="L623">        return mKeepCovariance;</span>
     }
     
     /**
@@ -635,11 +632,11 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public void setCovarianceKept(boolean keepCovariance)
             throws LockedException {
-<span class="pc bpc" id="L638" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L639">            throw new LockedException();</span>
+<span class="pc bpc" id="L635" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L636">            throw new LockedException();</span>
         }
-<span class="fc" id="L641">        mKeepCovariance = keepCovariance;</span>
-<span class="fc" id="L642">    }</span>
+<span class="fc" id="L638">        mKeepCovariance = keepCovariance;</span>
+<span class="fc" id="L639">    }</span>
     
     /**
      * Gets estimated covariance of estimated 3D point if available.
@@ -648,7 +645,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-<span class="fc" id="L651">        return mCovariance;</span>
+<span class="fc" id="L648">        return mCovariance;</span>
     }
     
     /**
@@ -682,18 +679,18 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public static MetricTransformation3DRobustEstimator create(
             RobustEstimatorMethod method) {
-<span class="nc bnc" id="L685" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L682" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L687">                return new LMedSMetricTransformation3DRobustEstimator();</span>
+<span class="nc" id="L684">                return new LMedSMetricTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="nc" id="L689">                return new MSACMetricTransformation3DRobustEstimator();</span>
+<span class="nc" id="L686">                return new MSACMetricTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="nc" id="L691">                return new PROSACMetricTransformation3DRobustEstimator();</span>
+<span class="nc" id="L688">                return new PROSACMetricTransformation3DRobustEstimator();</span>
             case PROMedS:
-<span class="nc" id="L693">                return new PROMedSMetricTransformation3DRobustEstimator();</span>
+<span class="nc" id="L690">                return new PROMedSMetricTransformation3DRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="nc" id="L696">                return new RANSACMetricTransformation3DRobustEstimator();                </span>
+<span class="nc" id="L693">                return new RANSACMetricTransformation3DRobustEstimator();                </span>
         }
     }
     
@@ -713,22 +710,22 @@ public abstract class MetricTransformation3DRobustEstimator {
     public static MetricTransformation3DRobustEstimator create(
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L716" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L713" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L718">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L715">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L721">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L718">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L724">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L721">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L727">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L724">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L731">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L728">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
         }
     }
@@ -745,22 +742,22 @@ public abstract class MetricTransformation3DRobustEstimator {
     public static MetricTransformation3DRobustEstimator create(
             MetricTransformation3DRobustEstimatorListener listener, 
             RobustEstimatorMethod method) {
-<span class="nc bnc" id="L748" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L745" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L750">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L747">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="nc" id="L753">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L750">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="nc" id="L756">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L753">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         listener);
             case PROMedS:
-<span class="nc" id="L759">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L756">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         listener);
             case RANSAC:
             default:
-<span class="nc" id="L763">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L760">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         listener);
         }
     }
@@ -784,22 +781,22 @@ public abstract class MetricTransformation3DRobustEstimator {
             MetricTransformation3DRobustEstimatorListener listener, 
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
             RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L787" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L784" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L789">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L786">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L792">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L789">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L795">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L792">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROMedS:
-<span class="fc" id="L798">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L795">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case RANSAC:
             default:
-<span class="fc" id="L802">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L799">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
         }
     }
@@ -818,20 +815,20 @@ public abstract class MetricTransformation3DRobustEstimator {
     public static MetricTransformation3DRobustEstimator create(
             double[] qualityScores, RobustEstimatorMethod method)
             throws IllegalArgumentException {
-<span class="nc bnc" id="L821" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L818" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L823">                return new LMedSMetricTransformation3DRobustEstimator();</span>
+<span class="nc" id="L820">                return new LMedSMetricTransformation3DRobustEstimator();</span>
             case MSAC:
-<span class="nc" id="L825">                return new MSACMetricTransformation3DRobustEstimator();</span>
+<span class="nc" id="L822">                return new MSACMetricTransformation3DRobustEstimator();</span>
             case PROSAC:
-<span class="nc" id="L827">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L824">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         qualityScores);
             case PROMedS:
-<span class="nc" id="L830">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L827">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="nc" id="L834">                return new RANSACMetricTransformation3DRobustEstimator();                </span>
+<span class="nc" id="L831">                return new RANSACMetricTransformation3DRobustEstimator();                </span>
         }
     }
     
@@ -854,22 +851,22 @@ public abstract class MetricTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             double[] qualityScores, RobustEstimatorMethod method)
             throws IllegalArgumentException {
-<span class="fc bfc" id="L857" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L854" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L859">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L856">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L862">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L859">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L865">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L862">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L868">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L865">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L872">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L869">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints);                
         }
     }
@@ -891,22 +888,22 @@ public abstract class MetricTransformation3DRobustEstimator {
             MetricTransformation3DRobustEstimatorListener listener, 
             double[] qualityScores, RobustEstimatorMethod method)
             throws IllegalArgumentException {
-<span class="nc bnc" id="L894" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L891" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L896">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L893">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         listener);
             case MSAC:
-<span class="nc" id="L899">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L896">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         listener);
             case PROSAC:
-<span class="nc" id="L902">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L899">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         listener, qualityScores);
             case PROMedS:
-<span class="nc" id="L905">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L902">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         listener, qualityScores);
             case RANSAC:
             default:
-<span class="nc" id="L909">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L906">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         listener);                
         }
     }
@@ -933,22 +930,22 @@ public abstract class MetricTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             double[] qualityScores, RobustEstimatorMethod method)
             throws IllegalArgumentException {
-<span class="fc bfc" id="L936" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L933" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L938">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L935">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case MSAC:
-<span class="fc" id="L941">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L938">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);
             case PROSAC:
-<span class="fc" id="L944">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L941">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case PROMedS:
-<span class="fc" id="L947">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L944">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L951">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L948">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints);                
         }
     }
@@ -963,22 +960,22 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public static MetricTransformation3DRobustEstimator create(
             boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
-<span class="nc bnc" id="L966" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L963" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L968">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L965">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L971">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L968">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L974">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L971">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L977">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L974">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L981">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L978">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
         }
     }
@@ -1001,22 +998,22 @@ public abstract class MetricTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) 
             throws IllegalArgumentException {
-<span class="fc bfc" id="L1004" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L1001" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1006">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1003">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1009">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1006">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1012">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1009">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1015">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1012">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1019">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1016">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
         }
     }
@@ -1034,22 +1031,22 @@ public abstract class MetricTransformation3DRobustEstimator {
     public static MetricTransformation3DRobustEstimator create(
             MetricTransformation3DRobustEstimatorListener listener, 
             boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) {
-<span class="nc bnc" id="L1037" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L1034" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L1039">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1036">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L1042">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1039">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L1045">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1042">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L1048">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1045">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L1052">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1049">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
         }
     }
@@ -1075,26 +1072,26 @@ public abstract class MetricTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
             boolean weakMinimumSizeAllowed, RobustEstimatorMethod method) 
             throws IllegalArgumentException {
-<span class="fc bfc" id="L1078" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L1075" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1080">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1077">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1084">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1081">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1088">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1085">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1092">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1089">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1097">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1094">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
         }
@@ -1115,22 +1112,22 @@ public abstract class MetricTransformation3DRobustEstimator {
     public static MetricTransformation3DRobustEstimator create(
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
             RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="nc bnc" id="L1118" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L1115" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L1120">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1117">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L1123">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1120">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L1126">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1123">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         qualityScores, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L1129">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1126">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         qualityScores, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L1133">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1130">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         weakMinimumSizeAllowed);                
         }
     }
@@ -1155,24 +1152,24 @@ public abstract class MetricTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
             RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L1158" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L1155" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1160">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1157">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1163">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1160">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1166">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1163">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores, 
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1170">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1167">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, qualityScores, 
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1175">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1172">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         inputPoints, outputPoints, weakMinimumSizeAllowed);                
         }
     }
@@ -1195,22 +1192,22 @@ public abstract class MetricTransformation3DRobustEstimator {
             MetricTransformation3DRobustEstimatorListener listener, 
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
             RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="nc bnc" id="L1198" title="All 5 branches missed.">        switch (method) {</span>
+<span class="nc bnc" id="L1195" title="All 5 branches missed.">        switch (method) {</span>
             case LMedS:
-<span class="nc" id="L1200">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1197">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case MSAC:
-<span class="nc" id="L1203">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1200">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);
             case PROSAC:
-<span class="nc" id="L1206">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1203">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         listener, qualityScores, weakMinimumSizeAllowed);
             case PROMedS:
-<span class="nc" id="L1209">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1206">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         listener, qualityScores, weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="nc" id="L1213">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="nc" id="L1210">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         listener, weakMinimumSizeAllowed);                
         }
     }
@@ -1238,26 +1235,26 @@ public abstract class MetricTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             double[] qualityScores, boolean weakMinimumSizeAllowed, 
             RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L1241" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L1238" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L1243">                return new LMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1240">                return new LMedSMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case MSAC:
-<span class="fc" id="L1247">                return new MSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1244">                return new MSACMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);
             case PROSAC:
-<span class="fc" id="L1251">                return new PROSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1248">                return new PROSACMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores,
                         weakMinimumSizeAllowed);
             case PROMedS:
-<span class="fc" id="L1255">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1252">                return new PROMedSMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, qualityScores,
                         weakMinimumSizeAllowed);
             case RANSAC:
             default:
-<span class="fc" id="L1260">                return new RANSACMetricTransformation3DRobustEstimator(</span>
+<span class="fc" id="L1257">                return new RANSACMetricTransformation3DRobustEstimator(</span>
                         listener, inputPoints, outputPoints, 
                         weakMinimumSizeAllowed);                
         }
@@ -1269,7 +1266,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * @return an instance of metric 3D transformation estimator.
      */
     public static MetricTransformation3DRobustEstimator create() {
-<span class="nc" id="L1272">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1269">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1286,7 +1283,7 @@ public abstract class MetricTransformation3DRobustEstimator {
     public static MetricTransformation3DRobustEstimator create(
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints)
             throws IllegalArgumentException {
-<span class="fc" id="L1289">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L1286">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1298,7 +1295,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public static MetricTransformation3DRobustEstimator create(
             MetricTransformation3DRobustEstimatorListener listener) {
-<span class="nc" id="L1301">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1298">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1318,7 +1315,7 @@ public abstract class MetricTransformation3DRobustEstimator {
             MetricTransformation3DRobustEstimatorListener listener,
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints)
             throws IllegalArgumentException {
-<span class="fc" id="L1321">        return create(listener, inputPoints, outputPoints, </span>
+<span class="fc" id="L1318">        return create(listener, inputPoints, outputPoints, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1331,7 +1328,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public static MetricTransformation3DRobustEstimator create(
             double[] qualityScores) {
-<span class="nc" id="L1334">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1331">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1349,7 +1346,7 @@ public abstract class MetricTransformation3DRobustEstimator {
     public static MetricTransformation3DRobustEstimator create(
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
             double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L1352">        return create(inputPoints, outputPoints, qualityScores, </span>
+<span class="fc" id="L1349">        return create(inputPoints, outputPoints, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1365,7 +1362,7 @@ public abstract class MetricTransformation3DRobustEstimator {
     public static MetricTransformation3DRobustEstimator create(
             MetricTransformation3DRobustEstimatorListener listener, 
             double[] qualityScores) {
-<span class="nc" id="L1368">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1365">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1387,7 +1384,7 @@ public abstract class MetricTransformation3DRobustEstimator {
             MetricTransformation3DRobustEstimatorListener listener,
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L1390">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
+<span class="fc" id="L1387">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1399,7 +1396,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public static MetricTransformation3DRobustEstimator create(
             boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1402">        return create(weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1399">        return create(weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1418,7 +1415,7 @@ public abstract class MetricTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
             boolean weakMinimumSizeAllowed)
             throws IllegalArgumentException {
-<span class="fc" id="L1421">        return create(inputPoints, outputPoints, weakMinimumSizeAllowed, </span>
+<span class="fc" id="L1418">        return create(inputPoints, outputPoints, weakMinimumSizeAllowed, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1433,7 +1430,7 @@ public abstract class MetricTransformation3DRobustEstimator {
     public static MetricTransformation3DRobustEstimator create(
             MetricTransformation3DRobustEstimatorListener listener, 
             boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1436">        return create(listener, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+<span class="nc" id="L1433">        return create(listener, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -1455,7 +1452,7 @@ public abstract class MetricTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
             boolean weakMinimumSizeAllowed)
             throws IllegalArgumentException {
-<span class="fc" id="L1458">        return create(listener, inputPoints, outputPoints, </span>
+<span class="fc" id="L1455">        return create(listener, inputPoints, outputPoints, </span>
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1469,7 +1466,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public static MetricTransformation3DRobustEstimator create(
             double[] qualityScores, boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1472">        return create(qualityScores, weakMinimumSizeAllowed, </span>
+<span class="nc" id="L1469">        return create(qualityScores, weakMinimumSizeAllowed, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1490,7 +1487,7 @@ public abstract class MetricTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, 
             double[] qualityScores, boolean weakMinimumSizeAllowed) 
             throws IllegalArgumentException {
-<span class="fc" id="L1493">        return create(inputPoints, outputPoints, qualityScores, </span>
+<span class="fc" id="L1490">        return create(inputPoints, outputPoints, qualityScores, </span>
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1507,7 +1504,7 @@ public abstract class MetricTransformation3DRobustEstimator {
     public static MetricTransformation3DRobustEstimator create(
             MetricTransformation3DRobustEstimatorListener listener, 
             double[] qualityScores, boolean weakMinimumSizeAllowed) {
-<span class="nc" id="L1510">        return create(listener, qualityScores, weakMinimumSizeAllowed, </span>
+<span class="nc" id="L1507">        return create(listener, qualityScores, weakMinimumSizeAllowed, </span>
                 DEFAULT_ROBUST_METHOD);
     }
     
@@ -1532,7 +1529,7 @@ public abstract class MetricTransformation3DRobustEstimator {
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
             double[] qualityScores, boolean weakMinimumSizeAllowed) 
             throws IllegalArgumentException {
-<span class="fc" id="L1535">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
+<span class="fc" id="L1532">        return create(listener, inputPoints, outputPoints, qualityScores,</span>
                 weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);
     }
     
@@ -1550,15 +1547,15 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     private void internalSetPoints(List&lt;Point3D&gt; inputPoints, 
             List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException {
-<span class="fc bfc" id="L1553" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc bfc" id="L1550" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L1551">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L1553" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
 <span class="fc" id="L1554">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L1556" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
-<span class="fc" id="L1557">            throw new IllegalArgumentException();</span>
-        }
-<span class="fc" id="L1559">        mInputPoints = inputPoints;</span>
-<span class="fc" id="L1560">        mOutputPoints = outputPoints;        </span>
-<span class="fc" id="L1561">    }        </span>
+<span class="fc" id="L1556">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L1557">        mOutputPoints = outputPoints;        </span>
+<span class="fc" id="L1558">    }        </span>
     
     /**
      * Attempts to refine provided solution if refinement is requested.
@@ -1573,29 +1570,29 @@ public abstract class MetricTransformation3DRobustEstimator {
      */    
     protected MetricTransformation3D attemptRefine(
             MetricTransformation3D transformation) {
-<span class="fc bfc" id="L1576" title="All 2 branches covered.">        if (mRefineResult) {</span>
-<span class="fc" id="L1577">            MetricTransformation3DRefiner refiner =</span>
+<span class="fc bfc" id="L1573" title="All 2 branches covered.">        if (mRefineResult) {</span>
+<span class="fc" id="L1574">            MetricTransformation3DRefiner refiner =</span>
                     new MetricTransformation3DRefiner(transformation, 
-<span class="fc" id="L1579">                    mKeepCovariance, getInliersData(), mInputPoints, </span>
-<span class="fc" id="L1580">                    mOutputPoints, getRefinementStandardDeviation());</span>
+<span class="fc" id="L1576">                    mKeepCovariance, getInliersData(), mInputPoints, </span>
+<span class="fc" id="L1577">                    mOutputPoints, getRefinementStandardDeviation());</span>
             
             try {
-<span class="fc" id="L1583">                MetricTransformation3D result = </span>
+<span class="fc" id="L1580">                MetricTransformation3D result = </span>
                         new MetricTransformation3D();
-<span class="fc" id="L1585">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L1582">                boolean improved = refiner.refine(result);</span>
                 
-<span class="pc bpc" id="L1587" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L1584" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L1589">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L1586">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="fc bfc" id="L1592" title="All 2 branches covered.">                return improved ? result : transformation;</span>
-<span class="nc" id="L1593">            } catch (Exception e) {</span>
+<span class="fc bfc" id="L1589" title="All 2 branches covered.">                return improved ? result : transformation;</span>
+<span class="nc" id="L1590">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="nc" id="L1595">                return transformation;</span>
+<span class="nc" id="L1592">                return transformation;</span>
             }
         } else {
-<span class="fc" id="L1598">            return transformation;</span>
+<span class="fc" id="L1595">            return transformation;</span>
         }
     }
     

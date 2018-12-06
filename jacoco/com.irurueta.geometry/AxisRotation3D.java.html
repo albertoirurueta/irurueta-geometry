@@ -448,22 +448,22 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
 
 <span class="fc bfc" id="L449" title="All 2 branches covered.">        if ((Math.abs(m.getElementAt(0, 1) - m.getElementAt(1, 0)) &lt; epsilon)</span>
 <span class="pc bpc" id="L450" title="1 of 2 branches missed.">	        &amp;&amp; (Math.abs(m.getElementAt(0, 2) - m.getElementAt(2, 0)) &lt; epsilon)</span>
-<span class="pc bpc" id="L451" title="1 of 2 branches missed.">	        &amp;&amp; (Math.abs(m.getElementAt(1, 2) - m.getElementAt(2, 1)) &lt; epsilon)) {</span>
+<span class="nc bnc" id="L451" title="All 2 branches missed.">	        &amp;&amp; (Math.abs(m.getElementAt(1, 2) - m.getElementAt(2, 1)) &lt; epsilon)) {</span>
 		        // singularity found
 		        // first check for identity matrix which must have +1 for all terms
 		        //  in leading diagonaland zero in other terms
-<span class="pc bpc" id="L455" title="1 of 2 branches missed.">		        if ((Math.abs(m.getElementAt(0, 1) +</span>
-<span class="fc" id="L456">                        m.getElementAt(1, 0)) &lt; epsilon2)</span>
-<span class="pc bpc" id="L457" title="1 of 2 branches missed.">		            &amp;&amp; (Math.abs(m.getElementAt(0, 2) +</span>
-<span class="fc" id="L458">                        m.getElementAt(2, 0)) &lt; epsilon2)</span>
-<span class="pc bpc" id="L459" title="1 of 2 branches missed.">		            &amp;&amp; (Math.abs(m.getElementAt(1, 2) +</span>
-<span class="fc" id="L460">                        m.getElementAt(2, 1)) &lt; epsilon2)</span>
-<span class="pc bpc" id="L461" title="1 of 2 branches missed.">		            &amp;&amp; (Math.abs(m.getElementAt(0, 0) + m.getElementAt(1, 1) +</span>
-<span class="fc" id="L462">                        m.getElementAt(2, 2) - 3.0) &lt; epsilon2)) {</span>
+<span class="nc bnc" id="L455" title="All 2 branches missed.">		        if ((Math.abs(m.getElementAt(0, 1) +</span>
+<span class="nc" id="L456">                        m.getElementAt(1, 0)) &lt; epsilon2)</span>
+<span class="nc bnc" id="L457" title="All 2 branches missed.">		            &amp;&amp; (Math.abs(m.getElementAt(0, 2) +</span>
+<span class="nc" id="L458">                        m.getElementAt(2, 0)) &lt; epsilon2)</span>
+<span class="nc bnc" id="L459" title="All 2 branches missed.">		            &amp;&amp; (Math.abs(m.getElementAt(1, 2) +</span>
+<span class="nc" id="L460">                        m.getElementAt(2, 1)) &lt; epsilon2)</span>
+<span class="nc bnc" id="L461" title="All 2 branches missed.">		            &amp;&amp; (Math.abs(m.getElementAt(0, 0) + m.getElementAt(1, 1) +</span>
+<span class="nc" id="L462">                        m.getElementAt(2, 2) - 3.0) &lt; epsilon2)) {</span>
 			        // this singularity is identity matrix so angle = 0
-<span class="fc" id="L464">			        setAxisAndRotation(0.0,0.0,1.0,0.0);  // zero angle,</span>
+<span class="nc" id="L464">			        setAxisAndRotation(0.0,0.0,1.0,0.0);  // zero angle,</span>
                                                                                     //arbitrary axis
-<span class="fc" id="L466">                        return;</span>
+<span class="nc" id="L466">                        return;</span>
 		        }
 		        // otherwise this singularity is angle = 180
 <span class="nc" id="L469">		        angle = Math.PI;</span>

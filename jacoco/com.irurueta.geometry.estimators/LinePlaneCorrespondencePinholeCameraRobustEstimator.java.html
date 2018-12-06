@@ -275,7 +275,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
 <span class="fc" id="L279">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, planes, lines, method);
     }
@@ -293,9 +293,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * smaller than required minimum size (4 samples).
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L298">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L297">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
                 qualityScores, method);
     }
     
@@ -317,8 +316,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines, double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L321">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L320">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
                 planes, lines, qualityScores, method);
     }
     
@@ -338,9 +337,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc" id="L343">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc" id="L341">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, qualityScores, method);
     }
     
@@ -365,8 +363,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines, double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc" id="L369">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
+            RobustEstimatorMethod method) {
+<span class="fc" id="L367">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(</span>
                 listener, planes, lines, qualityScores, method);
     }    
     
@@ -376,7 +374,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * @return an instance of a pinhole camera robust estimator.
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create() {
-<span class="fc" id="L379">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L377">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
             
     /**
@@ -392,9 +390,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * size (4 correspondences).
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines) 
-            throws IllegalArgumentException {
-<span class="fc" id="L397">        return create(planes, lines, DEFAULT_ROBUST_METHOD);</span>
+            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines) {
+<span class="fc" id="L394">        return create(planes, lines, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -406,7 +403,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener) {
-<span class="fc" id="L409">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L406">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -425,9 +422,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
-            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines) 
-            throws IllegalArgumentException {
-<span class="fc" id="L430">        return create(listener, planes, lines, DEFAULT_ROBUST_METHOD);</span>
+            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines) {
+<span class="fc" id="L426">        return create(listener, planes, lines, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -441,8 +437,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * smaller than required minimum size (4 samples).
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L445">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L441">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -460,9 +456,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * required minimum size (4 correspondences).
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines, double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L465">        return create(planes, lines, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines, double[] qualityScores) {
+<span class="fc" id="L460">        return create(planes, lines, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -479,8 +474,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L483">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L478">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -501,9 +496,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
-            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines, double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L506">        return create(listener, planes, lines, qualityScores, </span>
+            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines, double[] qualityScores) {
+<span class="fc" id="L500">        return create(listener, planes, lines, qualityScores, </span>
                 DEFAULT_ROBUST_METHOD);
     }    
     
@@ -515,10 +509,10 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     protected PinholeCamera attemptRefine(PinholeCamera pinholeCamera,
             double weight) {
-<span class="fc bfc" id="L518" title="All 2 branches covered.">        if (mUseFastRefinement) {</span>
-<span class="fc" id="L519">            return attemptFastRefine(pinholeCamera, weight);</span>
+<span class="fc bfc" id="L512" title="All 2 branches covered.">        if (mUseFastRefinement) {</span>
+<span class="fc" id="L513">            return attemptFastRefine(pinholeCamera, weight);</span>
         } else {
-<span class="fc" id="L521">            return attemptSlowRefine(pinholeCamera, weight);</span>
+<span class="fc" id="L515">            return attemptSlowRefine(pinholeCamera, weight);</span>
         }
     }
     
@@ -532,14 +526,14 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
     protected double singleBackprojectionResidual(PinholeCamera pinholeCamera, 
             Line2D line, Plane plane) {
         //backproject line into test plane
-<span class="fc" id="L535">        pinholeCamera.backProject(line, mResidualTestPlane);</span>
-<span class="fc" id="L536">        mResidualTestPlane.normalize();</span>
+<span class="fc" id="L529">        pinholeCamera.backProject(line, mResidualTestPlane);</span>
+<span class="fc" id="L530">        mResidualTestPlane.normalize();</span>
         
-<span class="fc" id="L538">        double dotProduct = Math.abs(plane.getA() * mResidualTestPlane.getA() +</span>
-<span class="fc" id="L539">                plane.getB() * mResidualTestPlane.getB() +</span>
-<span class="fc" id="L540">                plane.getC() * mResidualTestPlane.getC() + </span>
-<span class="fc" id="L541">                plane.getD() * mResidualTestPlane.getD());</span>
-<span class="fc" id="L542">        return 1.0 - dotProduct;</span>
+<span class="fc" id="L532">        double dotProduct = Math.abs(plane.getA() * mResidualTestPlane.getA() +</span>
+<span class="fc" id="L533">                plane.getB() * mResidualTestPlane.getB() +</span>
+<span class="fc" id="L534">                plane.getC() * mResidualTestPlane.getC() + </span>
+<span class="fc" id="L535">                plane.getD() * mResidualTestPlane.getD());</span>
+<span class="fc" id="L536">        return 1.0 - dotProduct;</span>
     }    
     
     /**
@@ -554,16 +548,16 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * (4 samples).
      */
     private void internalSetLinesAndPlanes(List&lt;Plane&gt; planes, 
-            List&lt;Line2D&gt; lines) throws IllegalArgumentException {
-<span class="fc bfc" id="L558" title="All 2 branches covered.">        if (planes.size() &lt; MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES) {</span>
-<span class="fc" id="L559">            throw new IllegalArgumentException();</span>
+            List&lt;Line2D&gt; lines) {
+<span class="fc bfc" id="L552" title="All 2 branches covered.">        if (planes.size() &lt; MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES) {</span>
+<span class="fc" id="L553">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L561" title="All 2 branches covered.">        if (lines.size() != planes.size()) {</span>
-<span class="fc" id="L562">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L555" title="All 2 branches covered.">        if (lines.size() != planes.size()) {</span>
+<span class="fc" id="L556">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L564">        mPlanes = planes;</span>
-<span class="fc" id="L565">        mLines = lines;</span>
-<span class="fc" id="L566">    }</span>
+<span class="fc" id="L558">        mPlanes = planes;</span>
+<span class="fc" id="L559">        mLines = lines;</span>
+<span class="fc" id="L560">    }</span>
     
     /**
      * Attempts to refine provided camera using a slow but more accurate and
@@ -575,58 +569,58 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     private PinholeCamera attemptSlowRefine(PinholeCamera pinholeCamera,
             double weight) {
-<span class="fc" id="L578">        InliersData inliersData = getInliersData();</span>
-<span class="pc bpc" id="L579" title="2 of 6 branches missed.">        if ((mRefineResult || mKeepCovariance) &amp;&amp; inliersData != null) {</span>
-<span class="fc" id="L580">            DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =</span>
+<span class="fc" id="L572">        InliersData inliersData = getInliersData();</span>
+<span class="pc bpc" id="L573" title="2 of 6 branches missed.">        if ((mRefineResult || mKeepCovariance) &amp;&amp; inliersData != null) {</span>
+<span class="fc" id="L574">            DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =</span>
                     new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
                     pinholeCamera, mKeepCovariance, inliersData, mPlanes,
-<span class="fc" id="L583">                    mLines, getRefinementStandardDeviation());</span>
+<span class="fc" id="L577">                    mLines, getRefinementStandardDeviation());</span>
             try {
-<span class="pc bpc" id="L585" title="1 of 2 branches missed.">                if (mRefineResult) {</span>
-<span class="fc" id="L586">                    refiner.setMinSuggestionWeight(weight);</span>
-<span class="fc" id="L587">                    refiner.setMaxSuggestionWeight(weight);</span>
+<span class="pc bpc" id="L579" title="1 of 2 branches missed.">                if (mRefineResult) {</span>
+<span class="fc" id="L580">                    refiner.setMinSuggestionWeight(weight);</span>
+<span class="fc" id="L581">                    refiner.setMaxSuggestionWeight(weight);</span>
                     
-<span class="fc" id="L589">                    refiner.setSuggestSkewnessValueEnabled(</span>
+<span class="fc" id="L583">                    refiner.setSuggestSkewnessValueEnabled(</span>
                             mSuggestSkewnessValueEnabled);
-<span class="fc" id="L591">                    refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);</span>
-<span class="fc" id="L592">                    refiner.setSuggestHorizontalFocalLengthEnabled(</span>
+<span class="fc" id="L585">                    refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);</span>
+<span class="fc" id="L586">                    refiner.setSuggestHorizontalFocalLengthEnabled(</span>
                             mSuggestHorizontalFocalLengthEnabled);
-<span class="fc" id="L594">                    refiner.setSuggestedHorizontalFocalLengthValue(</span>
+<span class="fc" id="L588">                    refiner.setSuggestedHorizontalFocalLengthValue(</span>
                             mSuggestedHorizontalFocalLengthValue);
-<span class="fc" id="L596">                    refiner.setSuggestVerticalFocalLengthEnabled(</span>
+<span class="fc" id="L590">                    refiner.setSuggestVerticalFocalLengthEnabled(</span>
                             mSuggestVerticalFocalLengthEnabled);
-<span class="fc" id="L598">                    refiner.setSuggestedVerticalFocalLengthValue(</span>
+<span class="fc" id="L592">                    refiner.setSuggestedVerticalFocalLengthValue(</span>
                             mSuggestedVerticalFocalLengthValue);
-<span class="fc" id="L600">                    refiner.setSuggestAspectRatioEnabled(</span>
+<span class="fc" id="L594">                    refiner.setSuggestAspectRatioEnabled(</span>
                             mSuggestAspectRatioEnabled);
-<span class="fc" id="L602">                    refiner.setSuggestedAspectRatioValue(</span>
+<span class="fc" id="L596">                    refiner.setSuggestedAspectRatioValue(</span>
                             mSuggestedAspectRatioValue);
-<span class="fc" id="L604">                    refiner.setSuggestPrincipalPointEnabled(</span>
+<span class="fc" id="L598">                    refiner.setSuggestPrincipalPointEnabled(</span>
                             mSuggestPrincipalPointEnabled);
-<span class="fc" id="L606">                    refiner.setSuggestedPrincipalPointValue(</span>
+<span class="fc" id="L600">                    refiner.setSuggestedPrincipalPointValue(</span>
                             mSuggestedPrincipalPointValue);
-<span class="fc" id="L608">                    refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);</span>
-<span class="fc" id="L609">                    refiner.setSuggestedRotationValue(mSuggestedRotationValue);</span>
-<span class="fc" id="L610">                    refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);</span>
-<span class="fc" id="L611">                    refiner.setSuggestedCenterValue(mSuggestedCenterValue);                </span>
+<span class="fc" id="L602">                    refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);</span>
+<span class="fc" id="L603">                    refiner.setSuggestedRotationValue(mSuggestedRotationValue);</span>
+<span class="fc" id="L604">                    refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);</span>
+<span class="fc" id="L605">                    refiner.setSuggestedCenterValue(mSuggestedCenterValue);                </span>
                 }
                 
-<span class="fc" id="L614">                PinholeCamera result = new PinholeCamera();</span>
-<span class="fc" id="L615">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L608">                PinholeCamera result = new PinholeCamera();</span>
+<span class="fc" id="L609">                boolean improved = refiner.refine(result);</span>
             
-<span class="pc bpc" id="L617" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L611" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L619">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L613">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="fc bfc" id="L622" title="All 2 branches covered.">                return improved ? result : pinholeCamera;</span>
+<span class="fc bfc" id="L616" title="All 2 branches covered.">                return improved ? result : pinholeCamera;</span>
                  
-<span class="nc" id="L624">            } catch (Exception e) {</span>
-<span class="nc" id="L625">                return pinholeCamera;   </span>
+<span class="nc" id="L618">            } catch (Exception e) {</span>
+<span class="nc" id="L619">                return pinholeCamera;   </span>
             }            
         } else {
-<span class="fc" id="L628">            mCovariance = null;</span>
-<span class="fc" id="L629">            return pinholeCamera;</span>
+<span class="fc" id="L622">            mCovariance = null;</span>
+<span class="fc" id="L623">            return pinholeCamera;</span>
         }
     }
     
@@ -639,55 +633,55 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     private PinholeCamera attemptFastRefine(PinholeCamera pinholeCamera, 
             final double weight) {
-<span class="fc" id="L642">        InliersData inliersData = getInliersData();</span>
-<span class="pc bpc" id="L643" title="2 of 4 branches missed.">        if (mRefineResult &amp;&amp; inliersData != null) {</span>
-<span class="fc" id="L644">            NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =</span>
+<span class="fc" id="L636">        InliersData inliersData = getInliersData();</span>
+<span class="pc bpc" id="L637" title="2 of 4 branches missed.">        if (mRefineResult &amp;&amp; inliersData != null) {</span>
+<span class="fc" id="L638">            NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =</span>
                     new NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner(
                     pinholeCamera, mKeepCovariance, inliersData, mPlanes,
-<span class="fc" id="L647">                    mLines, getRefinementStandardDeviation());</span>
+<span class="fc" id="L641">                    mLines, getRefinementStandardDeviation());</span>
             
             try {
-<span class="fc" id="L650">                refiner.setSuggestionErrorWeight(weight);</span>
+<span class="fc" id="L644">                refiner.setSuggestionErrorWeight(weight);</span>
             
-<span class="fc" id="L652">                refiner.setSuggestSkewnessValueEnabled(</span>
+<span class="fc" id="L646">                refiner.setSuggestSkewnessValueEnabled(</span>
                         mSuggestSkewnessValueEnabled);
-<span class="fc" id="L654">                refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);</span>
-<span class="fc" id="L655">                refiner.setSuggestHorizontalFocalLengthEnabled(</span>
+<span class="fc" id="L648">                refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);</span>
+<span class="fc" id="L649">                refiner.setSuggestHorizontalFocalLengthEnabled(</span>
                         mSuggestHorizontalFocalLengthEnabled);
-<span class="fc" id="L657">                refiner.setSuggestedHorizontalFocalLengthValue(</span>
+<span class="fc" id="L651">                refiner.setSuggestedHorizontalFocalLengthValue(</span>
                         mSuggestedHorizontalFocalLengthValue);
-<span class="fc" id="L659">                refiner.setSuggestVerticalFocalLengthEnabled(</span>
+<span class="fc" id="L653">                refiner.setSuggestVerticalFocalLengthEnabled(</span>
                         mSuggestVerticalFocalLengthEnabled);
-<span class="fc" id="L661">                refiner.setSuggestedVerticalFocalLengthValue(</span>
+<span class="fc" id="L655">                refiner.setSuggestedVerticalFocalLengthValue(</span>
                         mSuggestedVerticalFocalLengthValue);
-<span class="fc" id="L663">                refiner.setSuggestAspectRatioEnabled(</span>
+<span class="fc" id="L657">                refiner.setSuggestAspectRatioEnabled(</span>
                         mSuggestAspectRatioEnabled);
-<span class="fc" id="L665">                refiner.setSuggestedAspectRatioValue(</span>
+<span class="fc" id="L659">                refiner.setSuggestedAspectRatioValue(</span>
                         mSuggestedAspectRatioValue);
-<span class="fc" id="L667">                refiner.setSuggestPrincipalPointEnabled(</span>
+<span class="fc" id="L661">                refiner.setSuggestPrincipalPointEnabled(</span>
                         mSuggestPrincipalPointEnabled);
-<span class="fc" id="L669">                refiner.setSuggestedPrincipalPointValue(</span>
+<span class="fc" id="L663">                refiner.setSuggestedPrincipalPointValue(</span>
                         mSuggestedPrincipalPointValue);
-<span class="fc" id="L671">                refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);</span>
-<span class="fc" id="L672">                refiner.setSuggestedRotationValue(mSuggestedRotationValue);</span>
-<span class="fc" id="L673">                refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);</span>
-<span class="fc" id="L674">                refiner.setSuggestedCenterValue(mSuggestedCenterValue);                </span>
+<span class="fc" id="L665">                refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);</span>
+<span class="fc" id="L666">                refiner.setSuggestedRotationValue(mSuggestedRotationValue);</span>
+<span class="fc" id="L667">                refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);</span>
+<span class="fc" id="L668">                refiner.setSuggestedCenterValue(mSuggestedCenterValue);                </span>
                 
-<span class="fc" id="L676">                PinholeCamera result = new PinholeCamera();</span>
-<span class="fc" id="L677">                boolean improved = refiner.refine(result);</span>
+<span class="fc" id="L670">                PinholeCamera result = new PinholeCamera();</span>
+<span class="fc" id="L671">                boolean improved = refiner.refine(result);</span>
                 
-<span class="pc bpc" id="L679" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L673" title="1 of 2 branches missed.">                if (mKeepCovariance) {</span>
                     //keep covariance
-<span class="fc" id="L681">                    mCovariance = refiner.getCovariance();</span>
+<span class="fc" id="L675">                    mCovariance = refiner.getCovariance();</span>
                 }
                 
-<span class="fc bfc" id="L684" title="All 2 branches covered.">                return improved ? result : pinholeCamera;                </span>
-<span class="fc" id="L685">            } catch (Exception e) {</span>
+<span class="fc bfc" id="L678" title="All 2 branches covered.">                return improved ? result : pinholeCamera;                </span>
+<span class="fc" id="L679">            } catch (Exception e) {</span>
                 //refinement failed, so we return input value
-<span class="fc" id="L687">                return pinholeCamera;</span>
+<span class="fc" id="L681">                return pinholeCamera;</span>
             }                                   
         } else {
-<span class="nc" id="L690">            return pinholeCamera;</span>
+<span class="nc" id="L684">            return pinholeCamera;</span>
         }        
     }            
 }

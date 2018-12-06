@@ -464,20 +464,22 @@ public class MetricTransformation3DEstimator {
      */
     private static Matrix computeCentroid(List&lt;Point3D&gt; points) 
             throws AlgebraException {        
-<span class="fc" id="L467">        double x = 0.0, y = 0.0, z = 0.0;</span>
-<span class="fc" id="L468">        double n = points.size();</span>
-<span class="fc bfc" id="L469" title="All 2 branches covered.">        for (Point3D p : points) {</span>
-<span class="fc" id="L470">            x += p.getInhomX() / n;</span>
-<span class="fc" id="L471">            y += p.getInhomY() / n;</span>
-<span class="fc" id="L472">            z += p.getInhomZ() / n;</span>
-<span class="fc" id="L473">        }</span>
+<span class="fc" id="L467">        double x = 0.0;</span>
+<span class="fc" id="L468">        double y = 0.0;</span>
+<span class="fc" id="L469">        double z = 0.0;</span>
+<span class="fc" id="L470">        double n = points.size();</span>
+<span class="fc bfc" id="L471" title="All 2 branches covered.">        for (Point3D p : points) {</span>
+<span class="fc" id="L472">            x += p.getInhomX() / n;</span>
+<span class="fc" id="L473">            y += p.getInhomY() / n;</span>
+<span class="fc" id="L474">            z += p.getInhomZ() / n;</span>
+<span class="fc" id="L475">        }</span>
         
-<span class="fc" id="L475">        Matrix result = new Matrix(</span>
+<span class="fc" id="L477">        Matrix result = new Matrix(</span>
                 Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);
-<span class="fc" id="L477">        result.setElementAtIndex(0, x);</span>
-<span class="fc" id="L478">        result.setElementAtIndex(1, y);</span>
-<span class="fc" id="L479">        result.setElementAtIndex(2, z);</span>
-<span class="fc" id="L480">        return result;</span>
+<span class="fc" id="L479">        result.setElementAtIndex(0, x);</span>
+<span class="fc" id="L480">        result.setElementAtIndex(1, y);</span>
+<span class="fc" id="L481">        result.setElementAtIndex(2, z);</span>
+<span class="fc" id="L482">        return result;</span>
     }
     
     /**
@@ -492,15 +494,15 @@ public class MetricTransformation3DEstimator {
      * the same size or their size is smaller than #getMinimumPoints.
      */
     private void internalSetPoints(List&lt;Point3D&gt; inputPoints,
-            List&lt;Point3D&gt; outputPoints) throws IllegalArgumentException {
-<span class="fc bfc" id="L496" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
-<span class="fc" id="L497">            throw new IllegalArgumentException();</span>
+            List&lt;Point3D&gt; outputPoints) {
+<span class="fc bfc" id="L498" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L499">            throw new IllegalArgumentException();</span>
         }
-<span class="fc bfc" id="L499" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
-<span class="fc" id="L500">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L501" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L502">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L502">        mInputPoints = inputPoints;</span>
-<span class="fc" id="L503">        mOutputPoints = outputPoints;        </span>
-<span class="fc" id="L504">    }    </span>
+<span class="fc" id="L504">        mInputPoints = inputPoints;</span>
+<span class="fc" id="L505">        mOutputPoints = outputPoints;        </span>
+<span class="fc" id="L506">    }    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

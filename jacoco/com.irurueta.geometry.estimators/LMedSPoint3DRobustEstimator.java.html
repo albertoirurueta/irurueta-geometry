@@ -84,11 +84,10 @@ public class LMedSPoint3DRobustEstimator extends Point3DRobustEstimator{
      * @throws IllegalArgumentException if provided list of planes doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public LMedSPoint3DRobustEstimator(List&lt;Plane&gt; planes) 
-            throws IllegalArgumentException {
-<span class="fc" id="L89">        super(planes);</span>
-<span class="fc" id="L90">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L91">    }</span>
+    public LMedSPoint3DRobustEstimator(List&lt;Plane&gt; planes) {
+<span class="fc" id="L88">        super(planes);</span>
+<span class="fc" id="L89">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L90">    }</span>
     
     /**
      * Constructor.
@@ -96,9 +95,9 @@ public class LMedSPoint3DRobustEstimator extends Point3DRobustEstimator{
      * starts, ends or its progress significantly changes.
      */
     public LMedSPoint3DRobustEstimator(Point3DRobustEstimatorListener listener) {
-<span class="fc" id="L99">        super(listener);</span>
-<span class="fc" id="L100">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L101">    }</span>
+<span class="fc" id="L98">        super(listener);</span>
+<span class="fc" id="L99">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L100">    }</span>
     
     
     /**
@@ -110,10 +109,10 @@ public class LMedSPoint3DRobustEstimator extends Point3DRobustEstimator{
      * a size greater or equal than MINIMUM_SIZE.
      */
     public LMedSPoint3DRobustEstimator(Point3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; planes) throws IllegalArgumentException {
-<span class="fc" id="L114">        super(listener, planes);</span>
-<span class="fc" id="L115">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
-<span class="fc" id="L116">    }</span>
+            List&lt;Plane&gt; planes) {
+<span class="fc" id="L113">        super(listener, planes);</span>
+<span class="fc" id="L114">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L115">    }</span>
     
     /**
      * Returns threshold to be used to keep the algorithm iterating in case that 
@@ -134,7 +133,7 @@ public class LMedSPoint3DRobustEstimator extends Point3DRobustEstimator{
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-<span class="fc" id="L137">        return mStopThreshold;</span>
+<span class="fc" id="L136">        return mStopThreshold;</span>
     }
     
     /**
@@ -158,17 +157,16 @@ public class LMedSPoint3DRobustEstimator extends Point3DRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L164">            throw new LockedException();</span>
+    public void setStopThreshold(double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L162">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
-<span class="fc" id="L167">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L165">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L170">        mStopThreshold = stopThreshold;</span>
-<span class="fc" id="L171">    }</span>
+<span class="fc" id="L168">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L169">    }</span>
     
             
     /**
@@ -185,101 +183,101 @@ public class LMedSPoint3DRobustEstimator extends Point3DRobustEstimator{
     @Override
     public Point3D estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-<span class="fc bfc" id="L188" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L189">            throw new LockedException();</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L187">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L192">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L190">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L195">        LMedSRobustEstimator&lt;Point3D&gt; innerEstimator =</span>
+<span class="fc" id="L193">        LMedSRobustEstimator&lt;Point3D&gt; innerEstimator =</span>
                 new LMedSRobustEstimator&lt;&gt;(
-<span class="fc" id="L197">                        new LMedSRobustEstimatorListener&lt;Point3D&gt;() {</span>
+<span class="fc" id="L195">                        new LMedSRobustEstimatorListener&lt;Point3D&gt;() {</span>
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L201">                return mPlanes.size();</span>
+<span class="fc" id="L199">                return mPlanes.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L206">                return Point3DRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L204">                return Point3DRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;Point3D&gt; solutions) {
-<span class="fc" id="L212">                Plane plane1 = mPlanes.get(samplesIndices[0]);</span>
-<span class="fc" id="L213">                Plane plane2 = mPlanes.get(samplesIndices[1]);</span>
-<span class="fc" id="L214">                Plane plane3 = mPlanes.get(samplesIndices[2]);</span>
+<span class="fc" id="L210">                Plane plane1 = mPlanes.get(samplesIndices[0]);</span>
+<span class="fc" id="L211">                Plane plane2 = mPlanes.get(samplesIndices[1]);</span>
+<span class="fc" id="L212">                Plane plane3 = mPlanes.get(samplesIndices[2]);</span>
                 
                 try {
-<span class="fc" id="L217">                    Point3D point = plane1.getIntersection(plane2, plane3);</span>
-<span class="fc" id="L218">                    solutions.add(point);</span>
-<span class="nc" id="L219">                } catch (NoIntersectionException e) {</span>
+<span class="fc" id="L215">                    Point3D point = plane1.getIntersection(plane2, plane3);</span>
+<span class="fc" id="L216">                    solutions.add(point);</span>
+<span class="nc" id="L217">                } catch (NoIntersectionException e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L221">                }</span>
-<span class="fc" id="L222">            }</span>
+<span class="fc" id="L219">                }</span>
+<span class="fc" id="L220">            }</span>
 
             @Override
             public double computeResidual(Point3D currentEstimation, int i) {
-<span class="fc" id="L226">                return residual(currentEstimation, mPlanes.get(i));</span>
+<span class="fc" id="L224">                return residual(currentEstimation, mPlanes.get(i));</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L231">                return LMedSPoint3DRobustEstimator.this.isReady();</span>
+<span class="fc" id="L229">                return LMedSPoint3DRobustEstimator.this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(RobustEstimator&lt;Point3D&gt; estimator) {
-<span class="pc bpc" id="L236" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L237">                    mListener.onEstimateStart(LMedSPoint3DRobustEstimator.this);</span>
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L235">                    mListener.onEstimateStart(LMedSPoint3DRobustEstimator.this);</span>
                 }
-<span class="fc" id="L239">            }</span>
+<span class="fc" id="L237">            }</span>
 
             @Override
             public void onEstimateEnd(RobustEstimator&lt;Point3D&gt; estimator) {
-<span class="pc bpc" id="L243" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L244">                    mListener.onEstimateEnd(LMedSPoint3DRobustEstimator.this);</span>
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L242">                    mListener.onEstimateEnd(LMedSPoint3DRobustEstimator.this);</span>
                 }
-<span class="fc" id="L246">            }</span>
+<span class="fc" id="L244">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;Point3D&gt; estimator, int iteration) {
-<span class="pc bpc" id="L251" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L252">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L249" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L250">                    mListener.onEstimateNextIteration(</span>
                             LMedSPoint3DRobustEstimator.this, iteration);
                 }
-<span class="fc" id="L255">            }</span>
+<span class="fc" id="L253">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;Point3D&gt; estimator, float progress) {
-<span class="pc bpc" id="L260" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L261">                    mListener.onEstimateProgressChange(</span>
+<span class="pc bpc" id="L258" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L259">                    mListener.onEstimateProgressChange(</span>
                             LMedSPoint3DRobustEstimator.this, progress);
                 }
-<span class="fc" id="L264">            }</span>
+<span class="fc" id="L262">            }</span>
         });
         
         try {
-<span class="fc" id="L268">            mLocked = true;</span>
-<span class="fc" id="L269">            mInliersData = null;</span>
-<span class="fc" id="L270">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L271">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L272">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L273">            innerEstimator.setStopThreshold(mStopThreshold);            </span>
-<span class="fc" id="L274">            Point3D result = innerEstimator.estimate();</span>
-<span class="fc" id="L275">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L276">            return attemptRefine(result);</span>
-<span class="nc" id="L277">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L278">            throw new LockedException(e);</span>
-<span class="nc" id="L279">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L280">            throw new NotReadyException(e);</span>
+<span class="fc" id="L266">            mLocked = true;</span>
+<span class="fc" id="L267">            mInliersData = null;</span>
+<span class="fc" id="L268">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L269">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L270">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L271">            innerEstimator.setStopThreshold(mStopThreshold);            </span>
+<span class="fc" id="L272">            Point3D result = innerEstimator.estimate();</span>
+<span class="fc" id="L273">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L274">            return attemptRefine(result);</span>
+<span class="nc" id="L275">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L276">            throw new LockedException(e);</span>
+<span class="nc" id="L277">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L278">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L282">            mLocked = false;</span>
+<span class="fc" id="L280">            mLocked = false;</span>
         }
     }
 
@@ -289,7 +287,7 @@ public class LMedSPoint3DRobustEstimator extends Point3DRobustEstimator{
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L292">        return RobustEstimatorMethod.LMedS;</span>
+<span class="fc" id="L290">        return RobustEstimatorMethod.LMedS;</span>
     }               
     
     /**
@@ -304,9 +302,9 @@ public class LMedSPoint3DRobustEstimator extends Point3DRobustEstimator{
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L307">        LMedSRobustEstimator.LMedSInliersData inliersData = </span>
-<span class="fc" id="L308">                (LMedSRobustEstimator.LMedSInliersData)getInliersData();</span>
-<span class="fc" id="L309">        return inliersData.getEstimatedThreshold();</span>
+<span class="fc" id="L305">        LMedSRobustEstimator.LMedSInliersData inliersData = </span>
+<span class="fc" id="L306">                (LMedSRobustEstimator.LMedSInliersData)getInliersData();</span>
+<span class="fc" id="L307">        return inliersData.getEstimatedThreshold();</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
