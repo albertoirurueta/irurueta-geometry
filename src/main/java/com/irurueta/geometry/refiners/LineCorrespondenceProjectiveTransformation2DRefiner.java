@@ -143,7 +143,8 @@ public class LineCorrespondenceProjectiveTransformation2DRefiner extends
             Matrix x = new Matrix(mNumInliers, nDims);
             int nSamples = mInliers.length();
             int pos = 0;
-            Line2D inputLine, outputLine;
+            Line2D inputLine;
+            Line2D outputLine;
             for (int i = 0; i < nSamples; i++) {
                 if (mInliers.get(i)) {
                     //sample is inlier
@@ -285,7 +286,8 @@ public class LineCorrespondenceProjectiveTransformation2DRefiner extends
         double result = 0.0;
         
         int nSamples = mInliers.length();
-        Line2D inputLine, outputLine;
+        Line2D inputLine;
+        Line2D outputLine;
         for (int i = 0; i < nSamples; i++) {
             if (mInliers.get(i)) {
                 //sample is inlier

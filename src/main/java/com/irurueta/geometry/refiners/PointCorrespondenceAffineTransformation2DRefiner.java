@@ -149,7 +149,8 @@ public class PointCorrespondenceAffineTransformation2DRefiner extends
             Matrix x = new Matrix(mNumInliers, nDims);
             int nSamples = mInliers.length();
             int pos = 0;
-            Point2D inputPoint, outputPoint;
+            Point2D inputPoint;
+            Point2D outputPoint;
             for (int i = 0; i < nSamples; i++) {
                 if (mInliers.get(i)) {
                     //sample is inlier
@@ -310,7 +311,8 @@ public class PointCorrespondenceAffineTransformation2DRefiner extends
         double result = 0.0;
         
         int nSamples = mInliers.length();
-        Point2D inputPoint, outputPoint;
+        Point2D inputPoint;
+        Point2D outputPoint;
         for (int i = 0; i < nSamples; i++) {
             if (mInliers.get(i)) {
                 //sample is inlier

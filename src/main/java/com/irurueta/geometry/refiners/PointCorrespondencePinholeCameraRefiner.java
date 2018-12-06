@@ -122,7 +122,8 @@ public abstract class PointCorrespondencePinholeCameraRefiner extends
         //project inlier 3D points into test point
         int nSamples = mInliers.length();
         Point3D point3D;
-        Point2D point2D, projectedPoint2D = Point2D.create();
+        Point2D point2D;
+        Point2D projectedPoint2D = Point2D.create();
         double residual = 0.0;
         for (int i = 0; i < nSamples; i++) {
             if (mInliers.get(i)) {

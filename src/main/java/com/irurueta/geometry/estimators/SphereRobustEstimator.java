@@ -149,8 +149,7 @@ public abstract class SphereRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public SphereRobustEstimator(List<Point3D> points) 
-            throws IllegalArgumentException {
+    public SphereRobustEstimator(List<Point3D> points) {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
         mMaxIterations = DEFAULT_MAX_ITERATIONS; 
@@ -166,7 +165,7 @@ public abstract class SphereRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public SphereRobustEstimator(SphereRobustEstimatorListener listener,
-            List<Point3D> points) throws IllegalArgumentException {
+            List<Point3D> points) {
         mListener = listener;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
@@ -235,8 +234,7 @@ public abstract class SphereRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta) 
-            throws IllegalArgumentException, LockedException {
+    public void setProgressDelta(float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -269,8 +267,7 @@ public abstract class SphereRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -299,8 +296,7 @@ public abstract class SphereRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+    public void setMaxIterations(int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -328,8 +324,7 @@ public abstract class SphereRobustEstimator {
      * @throws LockedException if estimator is locked because a computation is
      * already in progress.
      */
-    public void setPoints(List<Point3D> points) throws IllegalArgumentException,
-            LockedException {
+    public void setPoints(List<Point3D> points) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -368,8 +363,7 @@ public abstract class SphereRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 4 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException { }
+    public void setQualityScores(double[] qualityScores) throws LockedException { }
     
     /**
      * Creates a sphere robust estimator based on 3D point samples and using
@@ -405,7 +399,7 @@ public abstract class SphereRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static SphereRobustEstimator create(List<Point3D> points, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSSphereRobustEstimator(points);
@@ -462,7 +456,7 @@ public abstract class SphereRobustEstimator {
      */
     public static SphereRobustEstimator create(
             SphereRobustEstimatorListener listener, List<Point3D> points,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSSphereRobustEstimator(listener, points);
@@ -489,7 +483,7 @@ public abstract class SphereRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 4 points).
      */
     public static SphereRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSSphereRobustEstimator();
@@ -518,8 +512,7 @@ public abstract class SphereRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static SphereRobustEstimator create(List<Point3D> points, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSSphereRobustEstimator(points);
@@ -549,7 +542,7 @@ public abstract class SphereRobustEstimator {
      */
     public static SphereRobustEstimator create(
             SphereRobustEstimatorListener listener, double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSSphereRobustEstimator(listener);
@@ -581,8 +574,7 @@ public abstract class SphereRobustEstimator {
      */
     public static SphereRobustEstimator create(
             SphereRobustEstimatorListener listener, List<Point3D> points,
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         switch (method) {
             case LMedS:
                 return new LMedSSphereRobustEstimator(listener, points);
@@ -617,8 +609,7 @@ public abstract class SphereRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have a
      * size greater or equal than MINIMUM_SIZE.
      */
-    public static SphereRobustEstimator create(List<Point3D> points) 
-            throws IllegalArgumentException {
+    public static SphereRobustEstimator create(List<Point3D> points) {
         return create(points, DEFAULT_ROBUST_METHOD);
     }
     
@@ -645,8 +636,7 @@ public abstract class SphereRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static SphereRobustEstimator create(
-            SphereRobustEstimatorListener listener, List<Point3D> points) 
-            throws IllegalArgumentException {
+            SphereRobustEstimatorListener listener, List<Point3D> points) {
         return create(listener, points, DEFAULT_ROBUST_METHOD);
     }
     
@@ -658,8 +648,7 @@ public abstract class SphereRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 4 points).
      */
-    public static SphereRobustEstimator create(double[] qualityScores) 
-            throws IllegalArgumentException {
+    public static SphereRobustEstimator create(double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -674,7 +663,7 @@ public abstract class SphereRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static SphereRobustEstimator create(List<Point3D> points, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -689,8 +678,7 @@ public abstract class SphereRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 4 points).
      */
     public static SphereRobustEstimator create(
-            SphereRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
+            SphereRobustEstimatorListener listener, double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -708,7 +696,7 @@ public abstract class SphereRobustEstimator {
      */
     public static SphereRobustEstimator create(
             SphereRobustEstimatorListener listener, List<Point3D> points,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);
     }        
     
@@ -740,8 +728,7 @@ public abstract class SphereRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have
      * a size greater or equal than MINIMUM_SIZE
      */
-    private void internalSetPoints(List<Point3D> points) 
-            throws IllegalArgumentException {
+    private void internalSetPoints(List<Point3D> points) {
         if (points.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

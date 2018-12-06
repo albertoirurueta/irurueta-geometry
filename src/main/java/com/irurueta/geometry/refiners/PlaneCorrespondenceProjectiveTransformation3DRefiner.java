@@ -140,7 +140,8 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
             Matrix x = new Matrix(mNumInliers, nDims);
             int nSamples = mInliers.length();
             int pos = 0;
-            Plane inputPlane, outputPlane;
+            Plane inputPlane;
+            Plane outputPlane;
             for (int i = 0; i < nSamples; i++) {
                 if (mInliers.get(i)) {
                     //sample is inlier
@@ -285,7 +286,8 @@ public class PlaneCorrespondenceProjectiveTransformation3DRefiner extends
         double result = 0.0;
         
         int nSamples = mInliers.length();
-        Plane inputPlane, outputPlane;
+        Plane inputPlane;
+        Plane outputPlane;
         for (int i = 0; i < nSamples; i++) {
             if (mInliers.get(i)) {
                 //sample is inlier
