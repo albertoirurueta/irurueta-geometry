@@ -92,8 +92,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public PROSACPoint2DRobustEstimator(List<Line2D> lines) 
-            throws IllegalArgumentException {
+    public PROSACPoint2DRobustEstimator(List<Line2D> lines) {
         super(lines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -122,7 +121,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public PROSACPoint2DRobustEstimator(Point2DRobustEstimatorListener listener,
-            List<Line2D> lines) throws IllegalArgumentException {
+            List<Line2D> lines) {
         super(listener, lines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -135,8 +134,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
-    public PROSACPoint2DRobustEstimator(double[] qualityScores) 
-            throws IllegalArgumentException {
+    public PROSACPoint2DRobustEstimator(double[] qualityScores) {
         super();
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -153,7 +151,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROSACPoint2DRobustEstimator(List<Line2D> lines,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(lines);
         
         if (qualityScores.length != lines.size()) {
@@ -175,7 +173,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
     public PROSACPoint2DRobustEstimator(Point2DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -195,8 +193,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROSACPoint2DRobustEstimator(Point2DRobustEstimatorListener listener,
-            List<Line2D> lines, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Line2D> lines, double[] qualityScores) {
         super(listener, lines);
         
         if (qualityScores.length != lines.size()) {
@@ -232,8 +229,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -263,8 +259,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 2 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -485,8 +480,7 @@ public class PROSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

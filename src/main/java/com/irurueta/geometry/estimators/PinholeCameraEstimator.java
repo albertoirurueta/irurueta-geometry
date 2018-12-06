@@ -829,8 +829,7 @@ public abstract class PinholeCameraEstimator {
      * or equal than maximum value.
      */
     public void setMinMaxSuggestionWeight(double minSuggestionWeight, 
-            double maxSuggestionWeight) throws LockedException, 
-            IllegalArgumentException {
+            double maxSuggestionWeight) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -867,7 +866,7 @@ public abstract class PinholeCameraEstimator {
      * @throws IllegalArgumentException if provided step is negative or zero.
      */
     public void setSuggestionWeightStep(double suggestionWeightStep) 
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

@@ -121,8 +121,7 @@ public class Point3DNormalizer {
      * @throws IllegalArgumentException if provided collection of points does
      * not contain enough points, which is MIN_POINTS.
      */
-    public Point3DNormalizer(List<Point3D> points)
-            throws IllegalArgumentException {
+    public Point3DNormalizer(List<Point3D> points) {
         internalSetPoints(points);
         reset();
     }
@@ -143,8 +142,7 @@ public class Point3DNormalizer {
      * @throws IllegalArgumentException if provided collection of points does
      * not contain enough points, which is MIN_POINTS.
      */
-    public void setPoints(List<Point3D> points) throws LockedException,
-            IllegalArgumentException {
+    public void setPoints(List<Point3D> points) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -340,22 +338,22 @@ public class Point3DNormalizer {
             mCentroidZ = (mMinInhomZ + mMaxInhomZ) / 2.0;
             
             //transformation to normalize points            
-            Matrix T = new Matrix(
+            Matrix t = new Matrix(
                     ProjectiveTransformation3D.HOM_COORDS,
                     ProjectiveTransformation3D.HOM_COORDS);
 
             //X' = s * X + s * t -->
             //s * X = X' - s * t -->
             //X = 1/s*X' - t            
-            T.setElementAt(0, 0, mScaleX);
-            T.setElementAt(1, 1, mScaleY);
-            T.setElementAt(2, 2, mScaleZ);
-            T.setElementAt(0, 3, -mScaleX * mCentroidX);
-            T.setElementAt(1, 3, -mScaleY * mCentroidY);
-            T.setElementAt(2, 3, -mScaleZ * mCentroidZ);
-            T.setElementAt(3, 3, 1.0);
+            t.setElementAt(0, 0, mScaleX);
+            t.setElementAt(1, 1, mScaleY);
+            t.setElementAt(2, 2, mScaleZ);
+            t.setElementAt(0, 3, -mScaleX * mCentroidX);
+            t.setElementAt(1, 3, -mScaleY * mCentroidY);
+            t.setElementAt(2, 3, -mScaleZ * mCentroidZ);
+            t.setElementAt(3, 3, 1.0);
             
-            mTransformation = new ProjectiveTransformation3D(T);
+            mTransformation = new ProjectiveTransformation3D(t);
             mTransformation.normalize();
             
             //transformation to denormalize points
@@ -417,8 +415,7 @@ public class Point3DNormalizer {
      * @throws IllegalArgumentException if not enough points are provided, which
      * is MIN_POINTS.
      */
-    private void internalSetPoints(List<Point3D> points) 
-            throws IllegalArgumentException {
+    private void internalSetPoints(List<Point3D> points) {
         if (points.size() < MIN_POINTS) {
             throw new IllegalArgumentException();
         }

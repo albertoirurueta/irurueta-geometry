@@ -898,33 +898,31 @@ public abstract class Point2DRobustEstimator {
             Point2DRefiner refiner;
             Point2D result;
             switch (mRefinementCoordinatesType) {
-                case HOMOGENEOUS_COORDINATES: {
-                    HomogeneousPoint2D p;
+                case HOMOGENEOUS_COORDINATES:
+                    HomogeneousPoint2D homP;
                     if (point.getType() == CoordinatesType.HOMOGENEOUS_COORDINATES) {
-                        p = (HomogeneousPoint2D)point;
+                        homP = (HomogeneousPoint2D)point;
                     } else {
-                        p = new HomogeneousPoint2D(point);
+                        homP = new HomogeneousPoint2D(point);
                     }
                     refiner = new HomogeneousPoint2DRefiner(
-                            p, mKeepCovariance, getInliersData(), mLines,
+                            homP, mKeepCovariance, getInliersData(), mLines,
                             getRefinementStandardDeviation());
                     result = new HomogeneousPoint2D();
                     break;
-                }                
                 case INHOMOGENEOUS_COORDINATES:
-                default: {
-                    InhomogeneousPoint2D p;
+                default:
+                    InhomogeneousPoint2D inhomP;
                     if (point.getType() == CoordinatesType.INHOMOGENEOUS_COORDINATES) {
-                        p = (InhomogeneousPoint2D)point;
+                        inhomP = (InhomogeneousPoint2D)point;
                     } else {
-                        p = new InhomogeneousPoint2D(point);
+                        inhomP = new InhomogeneousPoint2D(point);
                     }
-                    refiner = new InhomogeneousPoint2DRefiner(p, 
+                    refiner = new InhomogeneousPoint2DRefiner(inhomP,
                             mKeepCovariance, getInliersData(), mLines,
                             getRefinementStandardDeviation());
                     result = new InhomogeneousPoint2D();
                     break;
-                }                       
             }
             
             try {
