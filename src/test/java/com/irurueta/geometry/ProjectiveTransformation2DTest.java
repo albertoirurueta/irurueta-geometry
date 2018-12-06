@@ -1971,8 +1971,8 @@ public class ProjectiveTransformation2DTest {
         Point2D outPoint2 = transformation.transformAndReturnNew(point2);
 
         //check that transformed points still belong to transformed line
-        assertTrue(outLine.isLocus(outPoint1));
-        assertTrue(outLine.isLocus(outPoint2));
+        assertTrue(outLine.isLocus(outPoint1, ABSOLUTE_ERROR));
+        assertTrue(outLine.isLocus(outPoint2, ABSOLUTE_ERROR));
 
         //check line correctness
         outLine.normalize();
