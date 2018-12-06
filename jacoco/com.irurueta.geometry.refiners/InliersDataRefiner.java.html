@@ -148,23 +148,22 @@ public abstract class InliersDataRefiner&lt;T&gt; extends Refiner&lt;T&gt; {
      * @throws LockedException if estimator is locked.
      * @throws IllegalArgumentException if provided value is zero or negative.
      */
-    public void setNumInliers(int numInliers) throws LockedException, 
-            IllegalArgumentException {
-<span class="fc bfc" id="L153" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L154">            throw new LockedException();</span>
+    public void setNumInliers(int numInliers) throws LockedException {
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L153">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (numInliers &lt;= 0) {</span>
-<span class="fc" id="L157">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (numInliers &lt;= 0) {</span>
+<span class="fc" id="L156">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L159">        mNumInliers = numInliers;</span>
-<span class="fc" id="L160">    }</span>
+<span class="fc" id="L158">        mNumInliers = numInliers;</span>
+<span class="fc" id="L159">    }</span>
     
     /**
      * Gets total number of provided matched samples.
      * @return total number of provided matched samples.
      */
     public int getTotalSamples() {
-<span class="fc bfc" id="L167" title="All 2 branches covered.">        return mResiduals != null ? mResiduals.length : 0;</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        return mResiduals != null ? mResiduals.length : 0;</span>
     }
     
     /**
@@ -174,12 +173,12 @@ public abstract class InliersDataRefiner&lt;T&gt; extends Refiner&lt;T&gt; {
      * @throws LockedException if estimator is locked.
      */
     public void setInliersData(InliersData inliersData) throws LockedException {
-<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L178">            throw new LockedException();</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L177">            throw new LockedException();</span>
         }
-<span class="fc" id="L180">        mInliers = inliersData.getInliers();</span>
-<span class="fc" id="L181">        mResiduals = inliersData.getResiduals();</span>
-<span class="fc" id="L182">        mNumInliers = inliersData.getNumInliers();</span>
-<span class="fc" id="L183">    }    </span>
+<span class="fc" id="L179">        mInliers = inliersData.getInliers();</span>
+<span class="fc" id="L180">        mResiduals = inliersData.getResiduals();</span>
+<span class="fc" id="L181">        mNumInliers = inliersData.getNumInliers();</span>
+<span class="fc" id="L182">    }    </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
