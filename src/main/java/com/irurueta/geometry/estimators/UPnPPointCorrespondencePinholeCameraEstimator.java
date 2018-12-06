@@ -496,7 +496,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             if (mNullspaceDimension2Allowed) {
                 try {
                     generalSolution2();
-                } catch (Exception ignore) { }
+                } catch (Exception ignore) {
+                    //if it fails, solution is not added
+                }
             }
             
             //pick best solution
@@ -646,7 +648,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
 
         
         beta1 = -initialBeta1;
@@ -663,7 +667,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
         
         
         beta1 = initialBeta1;
@@ -680,7 +686,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
 
 
         beta1 = -initialBeta1;
@@ -697,7 +705,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
         
         
         //2nd triplet: [beta11, beta12, betaff12] = [alpha1, alpha2, alpha5]
@@ -717,7 +727,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
         
         
         beta1 = -initialBeta1;
@@ -734,7 +746,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
 
 
         beta1 = initialBeta1;
@@ -751,7 +765,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
 
 
         beta1 = -initialBeta1;
@@ -768,7 +784,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
         
         
         //3rd triplet: [beta11, beta12, betaff22] = [alpha1, alpha2, alpha6]
@@ -788,7 +806,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
 
         
         beta1 = -initialBeta1;
@@ -805,7 +825,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
 
         
         beta1 = initialBeta1;
@@ -822,7 +844,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
 
 
         beta1 = -initialBeta1;
@@ -839,7 +863,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
         
         
         //4th triplet: [beta11, beta22, betaff11] = [alpha1, alpha3, alpha4]
@@ -859,7 +885,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
 
         
         beta1 = -initialBeta1;
@@ -876,7 +904,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
         
         
         beta1 = initialBeta1;
@@ -893,7 +923,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
         
         
         beta1 = -initialBeta1;
@@ -910,7 +942,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     controlCameraPoints, focalLength);        
             mSolutions.add(solution);                
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //if it fails, solution is not added
+        }
     }
     
     /**
@@ -1321,7 +1355,8 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
         int n = mPoints2D.size();
         
         Point3D point3D;
-        Point2D projected = Point2D.create(), point2D;
+        Point2D projected = Point2D.create();
+        Point2D point2D;
         double error = 0.0;
         for (int i = 0; i < n; i++) {
             point3D = mPoints3D.get(i);
@@ -1442,12 +1477,14 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
         
         mM = new Matrix(2 * n, 3 * numControlPoints);
         
-        int row, col;
+        int row;
+        int col;
         
         double alpha;
                 
         Point2D p;
-        double pX, pY;
+        double pX;
+        double pY;
         for (int i = 0; i < n; i++) {
             p = mPoints2D.get(i);
             pX = p.getInhomX();
@@ -1616,8 +1653,15 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
         Point3D centroid = Point3D.centroid(mPoints3D);
         
         //covariance matrix elements, summed up here for speed
-        double c11 = 0.0, c12 = 0.0, c13 = 0.0, c22 = 0.0, c23 = 0.0, c33 = 0.0;
-        double dx, dy, dz;
+        double c11 = 0.0;
+        double c12 = 0.0;
+        double c13 = 0.0;
+        double c22 = 0.0;
+        double c23 = 0.0;
+        double c33 = 0.0;
+        double dx;
+        double dy;
+        double dz;
         int n = mPoints3D.size();
         for (Point3D point : mPoints3D) {
             dx = point.getInhomX() - centroid.getInhomX();
@@ -1681,7 +1725,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
         
         int numDimensions = numControl - 1;
         double k = Math.sqrt(singularValues[0] / n);
-        double vx, vy, vz;
+        double vx;
+        double vy;
+        double vz;
         for (int i = 0; i < numDimensions; i++) {
             vx = v.getElementAt(0, i) * k;
             vy = v.getElementAt(1, i) * k;

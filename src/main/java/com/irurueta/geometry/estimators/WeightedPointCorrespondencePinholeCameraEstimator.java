@@ -96,7 +96,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      */
     public WeightedPointCorrespondencePinholeCameraEstimator(
             List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         super(points3D, points2D);
         mMaxPoints = DEFAULT_MAX_POINTS;
         mSortWeights = DEFAULT_SORT_WEIGHTS;
@@ -116,7 +116,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
     public WeightedPointCorrespondencePinholeCameraEstimator(
             List<Point3D> points3D, List<Point2D> points2D, 
             PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         super(points3D, points2D, listener);
         mMaxPoints = DEFAULT_MAX_POINTS;
         mSortWeights = DEFAULT_SORT_WEIGHTS;
@@ -136,7 +136,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      */
     public WeightedPointCorrespondencePinholeCameraEstimator(
             List<Point3D> points3D, List<Point2D> points2D, double[] weights) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         super();
         mMaxPoints = DEFAULT_MAX_POINTS;
         mSortWeights = DEFAULT_SORT_WEIGHTS;
@@ -160,7 +160,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
     public WeightedPointCorrespondencePinholeCameraEstimator(
             List<Point3D> points3D, List<Point2D> points2D, double[] weights,
             PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         super(listener);
         mMaxPoints = DEFAULT_MAX_POINTS;
         mSortWeights = DEFAULT_SORT_WEIGHTS;
@@ -183,8 +183,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      */
     private void internalSetListsAndWeights(List<Point3D> points3D, 
             List<Point2D> points2D, double[] weights) 
-            throws IllegalArgumentException,
-            WrongListSizesException {
+            throws WrongListSizesException {
         
         if (points3D == null || points2D == null || weights == null) {
             throw new IllegalArgumentException();
@@ -213,8 +212,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      */
     public void setListsAndWeights(List<Point3D> points3D, 
             List<Point2D> points2D, double[] weights)
-            throws LockedException, IllegalArgumentException, 
-            WrongListSizesException {
+            throws LockedException, WrongListSizesException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -283,8 +281,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      * minimum allowed number of point correspondences.
      * @throws LockedException if this instance is locked.
      */
-    public void setMaxPoints(int maxPoints) throws IllegalArgumentException,
-            LockedException {
+    public void setMaxPoints(int maxPoints) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -363,8 +360,13 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
             Point3D point3D;
             int index = 0;
             int nMatches = 0;
-            double homImageX, homImageY, homImageW;
-            double homWorldX, homWorldY, homWorldZ, homWorldW;
+            double homImageX;
+            double homImageY;
+            double homImageW;
+            double homWorldX;
+            double homWorldY;
+            double homWorldZ;
+            double homWorldW;
             double weight;
             double previousNorm = 1.0;
             double rowNorm;

@@ -243,8 +243,7 @@ public class DecomposedPointCorrespondencePinholeCameraRefiner extends
      * or equal than maximum value.
      */
     public void setMinMaxSuggestionWeight(double minSuggestionWeight, 
-            double maxSuggestionWeight) throws LockedException, 
-            IllegalArgumentException {
+            double maxSuggestionWeight) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

@@ -15,7 +15,9 @@
  */
 package com.irurueta.geometry.refiners;
 
+import com.irurueta.algebra.AlgebraException;
 import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.GeometryException;
 import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.PinholeCamera;
 import com.irurueta.geometry.Plane;
@@ -24,6 +26,7 @@ import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
 import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.NumericalException;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
 import com.irurueta.numerical.optimization.PowellMultiOptimizer;
@@ -242,8 +245,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
      * or equal than maximum value.
      */
     public void setMinMaxSuggestionWeight(double minSuggestionWeight, 
-            double maxSuggestionWeight) throws LockedException, 
-            IllegalArgumentException {
+            double maxSuggestionWeight) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -280,7 +282,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
      * @throws IllegalArgumentException if provided step is negative or zero.
      */
     public void setSuggestionWeightStep(double suggestionWeightStep) 
-            throws LockedException, IllegalArgumentException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -489,7 +491,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
                 } while (mCurrentWeight < mMaxSuggestionWeight && improved);
                                                                                 
                 return improvedAtLeastOnce;
-            } catch (Exception e) {
+            } catch (GeometryException | NumericalException | AlgebraException e) {
                 //refinement failed, so we return input value
                 return improvedAtLeastOnce;
             }
@@ -507,11 +509,12 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
      * @param weight suggestion terms weight.
      * @return true if this refinement step decreased projection error in LMSE
      * terms, false otherwise.
-     * @throws Exception if something failed.
+     * @throws GeometryException if something failed.
+     * @throws NumericalException if something failed.
      */
     private boolean refinementStepPowell(PowellMultiOptimizer optimizer, 
             RefinementMultiDimensionFunctionEvaluatorListener listener,
-            double[] startPoint, double weight) throws Exception {
+            double[] startPoint, double weight) throws GeometryException, NumericalException {
         
         listener.weight = weight;
         cameraToParameters(mRefineCamera, startPoint);
@@ -540,7 +543,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
         /**
          * Weight to slowly draw parameters to suggested values.
          */
-        public double weight;
+        double weight;
         
         /**
          * Evaluates cost function
