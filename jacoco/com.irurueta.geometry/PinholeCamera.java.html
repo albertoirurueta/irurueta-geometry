@@ -1751,19 +1751,19 @@ public class PinholeCamera extends Camera implements Serializable {
 <span class="fc" id="L1751">            double[] vDiag = new double[PINHOLE_CAMERA_MATRIX_ROWS];</span>
 <span class="fc" id="L1752">            double[] vDiag2 = new double[PINHOLE_CAMERA_MATRIX_ROWS];</span>
         
-<span class="fc bfc" id="L1754" title="All 2 branches covered.">            if (invNorm * r.getElementAt(0, 0) &gt; 0.0) {</span>
+<span class="pc bpc" id="L1754" title="1 of 2 branches missed.">            if (invNorm * r.getElementAt(0, 0) &gt; 0.0) {</span>
 <span class="fc" id="L1755">                vDiag[0] = invNorm;</span>
 <span class="fc" id="L1756">                vDiag2[0] = norm;</span>
             } else {
-<span class="fc" id="L1758">                vDiag[0] = -invNorm;</span>
-<span class="fc" id="L1759">                vDiag2[0] = -norm;</span>
+<span class="nc" id="L1758">                vDiag[0] = -invNorm;</span>
+<span class="nc" id="L1759">                vDiag2[0] = -norm;</span>
             }
-<span class="fc bfc" id="L1761" title="All 2 branches covered.">            if (invNorm * r.getElementAt(1, 1) &gt; 0.0) {</span>
+<span class="pc bpc" id="L1761" title="1 of 2 branches missed.">            if (invNorm * r.getElementAt(1, 1) &gt; 0.0) {</span>
 <span class="fc" id="L1762">                vDiag[1] = invNorm;</span>
 <span class="fc" id="L1763">                vDiag2[1] = norm;</span>
             } else {
-<span class="fc" id="L1765">                vDiag[1] = -invNorm;</span>
-<span class="fc" id="L1766">                vDiag2[1] = -norm;</span>
+<span class="nc" id="L1765">                vDiag[1] = -invNorm;</span>
+<span class="nc" id="L1766">                vDiag2[1] = -norm;</span>
             }
         
 <span class="fc" id="L1769">            vDiag[2] = invNorm;</span>
@@ -1786,7 +1786,7 @@ public class PinholeCamera extends Camera implements Serializable {
                     Double.POSITIVE_INFINITY);
 <span class="nc" id="L1787">        } catch (AlgebraException e) {</span>
 <span class="nc" id="L1788">            throw new CameraException(e);</span>
-<span class="fc" id="L1789">        } catch (GeometryException ignore) {</span>
+<span class="nc" id="L1789">        } catch (GeometryException ignore) {</span>
             //never happens
 <span class="fc" id="L1791">        }</span>
 <span class="fc" id="L1792">    }</span>

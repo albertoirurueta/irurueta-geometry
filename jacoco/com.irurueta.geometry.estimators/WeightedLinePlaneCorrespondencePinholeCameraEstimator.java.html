@@ -98,13 +98,12 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * don't have the same size and enough correspondences.
      */
     public WeightedLinePlaneCorrespondencePinholeCameraEstimator(
-            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines2D) 
-            throws IllegalArgumentException, WrongListSizesException {
-<span class="fc" id="L103">        super(planes, lines2D);</span>
-<span class="fc" id="L104">        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;</span>
-<span class="fc" id="L105">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
-<span class="fc" id="L106">        mWeights = null;        </span>
-<span class="fc" id="L107">    }</span>
+            List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines2D) throws WrongListSizesException {
+<span class="fc" id="L102">        super(planes, lines2D);</span>
+<span class="fc" id="L103">        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;</span>
+<span class="fc" id="L104">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
+<span class="fc" id="L105">        mWeights = null;        </span>
+<span class="fc" id="L106">    }</span>
     
     /**
      * Constructor.
@@ -118,13 +117,12 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      */
     public WeightedLinePlaneCorrespondencePinholeCameraEstimator(
             List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines2D, 
-            PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
-<span class="fc" id="L123">        super(planes, lines2D, listener);</span>
-<span class="fc" id="L124">        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;</span>
-<span class="fc" id="L125">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
-<span class="fc" id="L126">        mWeights = null;        </span>
-<span class="fc" id="L127">    }    </span>
+            PinholeCameraEstimatorListener listener) throws WrongListSizesException {
+<span class="fc" id="L121">        super(planes, lines2D, listener);</span>
+<span class="fc" id="L122">        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;</span>
+<span class="fc" id="L123">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
+<span class="fc" id="L124">        mWeights = null;        </span>
+<span class="fc" id="L125">    }    </span>
     
     /**
      * Constructor.
@@ -139,13 +137,13 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      */
     public WeightedLinePlaneCorrespondencePinholeCameraEstimator(
             List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines2D, double[] weights) 
-            throws IllegalArgumentException, WrongListSizesException {
-<span class="fc" id="L143">        super();</span>
-<span class="fc" id="L144">        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;</span>
-<span class="fc" id="L145">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
-<span class="fc" id="L146">        mWeights = null;         </span>
-<span class="fc" id="L147">        internalSetListsAndWeights(planes, lines2D, weights);       </span>
-<span class="fc" id="L148">    }</span>
+            throws WrongListSizesException {
+<span class="fc" id="L141">        super();</span>
+<span class="fc" id="L142">        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;</span>
+<span class="fc" id="L143">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
+<span class="fc" id="L144">        mWeights = null;         </span>
+<span class="fc" id="L145">        internalSetListsAndWeights(planes, lines2D, weights);       </span>
+<span class="fc" id="L146">    }</span>
     
     /**
      * Constructor.
@@ -163,13 +161,13 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
     public WeightedLinePlaneCorrespondencePinholeCameraEstimator(
             List&lt;Plane&gt; planes, List&lt;Line2D&gt; lines2D, double[] weights,
             PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
-<span class="fc" id="L167">        super(listener);</span>
-<span class="fc" id="L168">        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;</span>
-<span class="fc" id="L169">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
-<span class="fc" id="L170">        mWeights = null;                </span>
-<span class="fc" id="L171">        internalSetListsAndWeights(planes, lines2D, weights);</span>
-<span class="fc" id="L172">    }</span>
+            throws WrongListSizesException {
+<span class="fc" id="L165">        super(listener);</span>
+<span class="fc" id="L166">        mMaxCorrespondences = DEFAULT_MAX_CORRESPONDENCES;</span>
+<span class="fc" id="L167">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
+<span class="fc" id="L168">        mWeights = null;                </span>
+<span class="fc" id="L169">        internalSetListsAndWeights(planes, lines2D, weights);</span>
+<span class="fc" id="L170">    }</span>
     
     /**
      * Internal method to set list of corresponding points (it does not check
@@ -185,21 +183,20 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      */
     private void internalSetListsAndWeights(List&lt;Plane&gt; planes, 
             List&lt;Line2D&gt; lines2D, double[] weights) 
-            throws IllegalArgumentException,
-            WrongListSizesException {
+            throws WrongListSizesException {
         
-<span class="fc bfc" id="L191" title="All 6 branches covered.">        if (planes == null || lines2D == null || weights == null) {</span>
-<span class="fc" id="L192">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L188" title="All 6 branches covered.">        if (planes == null || lines2D == null || weights == null) {</span>
+<span class="fc" id="L189">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (!areValidListsAndWeights(planes, lines2D, weights)) {</span>
-<span class="fc" id="L196">            throw new WrongListSizesException();</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        if (!areValidListsAndWeights(planes, lines2D, weights)) {</span>
+<span class="fc" id="L193">            throw new WrongListSizesException();</span>
         }
         
-<span class="fc" id="L199">        mPlanes = planes;</span>
-<span class="fc" id="L200">        mLines2D = lines2D;</span>
-<span class="fc" id="L201">        mWeights = weights;</span>
-<span class="fc" id="L202">    }    </span>
+<span class="fc" id="L196">        mPlanes = planes;</span>
+<span class="fc" id="L197">        mLines2D = lines2D;</span>
+<span class="fc" id="L198">        mWeights = weights;</span>
+<span class="fc" id="L199">    }    </span>
     
     /**
      * Sets list of corresponding planes and lines.
@@ -215,14 +212,13 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      */
     public void setListsAndWeights(List&lt;Plane&gt; planes, 
             List&lt;Line2D&gt; lines2D, double[] weights)
-            throws LockedException, IllegalArgumentException, 
-            WrongListSizesException {
-<span class="fc bfc" id="L220" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L221">            throw new LockedException();</span>
+            throws LockedException, WrongListSizesException {
+<span class="fc bfc" id="L216" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L217">            throw new LockedException();</span>
         }
         
-<span class="fc" id="L224">        internalSetListsAndWeights(planes, lines2D, weights);</span>
-<span class="fc" id="L225">    }    </span>
+<span class="fc" id="L220">        internalSetListsAndWeights(planes, lines2D, weights);</span>
+<span class="fc" id="L221">    }    </span>
     
     /**
      * Indicates if lists of corresponding planes and lines are valid.
@@ -238,12 +234,12 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      */
     public static boolean areValidListsAndWeights(List&lt;Plane&gt; planes, 
             List&lt;Line2D&gt; lines2D, double[] weights) {
-<span class="fc bfc" id="L241" title="All 6 branches covered.">        if (planes == null || lines2D == null || weights == null) {</span>
-<span class="fc" id="L242">            return false;</span>
+<span class="fc bfc" id="L237" title="All 6 branches covered.">        if (planes == null || lines2D == null || weights == null) {</span>
+<span class="fc" id="L238">            return false;</span>
         }
-<span class="fc bfc" id="L244" title="All 2 branches covered.">        return planes.size() == lines2D.size() &amp;&amp; </span>
-<span class="fc bfc" id="L245" title="All 2 branches covered.">                lines2D.size() == weights.length &amp;&amp;</span>
-<span class="pc bpc" id="L246" title="1 of 2 branches missed.">                planes.size() &gt;= MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">        return planes.size() == lines2D.size() &amp;&amp; </span>
+<span class="fc bfc" id="L241" title="All 2 branches covered.">                lines2D.size() == weights.length &amp;&amp;</span>
+<span class="pc bpc" id="L242" title="1 of 2 branches missed.">                planes.size() &gt;= MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;</span>
     }
 
     /**
@@ -254,10 +250,10 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * @throws NotAvailableException if weights are not available.
      */
     public double[] getWeights() throws NotAvailableException {
-<span class="fc bfc" id="L257" title="All 2 branches covered.">        if (!areWeightsAvailable()) {</span>
-<span class="fc" id="L258">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">        if (!areWeightsAvailable()) {</span>
+<span class="fc" id="L254">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L260">        return mWeights;</span>
+<span class="fc" id="L256">        return mWeights;</span>
     }
     
     /**
@@ -266,7 +262,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * @return true if weights are available, false otherwise.
      */
     public boolean areWeightsAvailable() {
-<span class="fc bfc" id="L269" title="All 2 branches covered.">        return mWeights != null;</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">        return mWeights != null;</span>
     }    
     
  /**
@@ -275,7 +271,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * @return maximum number of points to be weighted.
      */
     public int getMaxCorrespondences() {
-<span class="fc" id="L278">        return mMaxCorrespondences;</span>
+<span class="fc" id="L274">        return mMaxCorrespondences;</span>
     }
     
     /**
@@ -288,16 +284,16 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * @throws LockedException if this instance is locked.
      */
     public void setMaxCorrespondences(int maxCorrespondences) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L292" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L293">            throw new LockedException();</span>
+            throws LockedException {
+<span class="fc bfc" id="L288" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L289">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L295" title="1 of 2 branches missed.">        if (maxCorrespondences &lt; MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES) {</span>
-<span class="nc" id="L296">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L291" title="1 of 2 branches missed.">        if (maxCorrespondences &lt; MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES) {</span>
+<span class="nc" id="L292">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L299">        mMaxCorrespondences = maxCorrespondences;</span>
-<span class="fc" id="L300">    }</span>
+<span class="fc" id="L295">        mMaxCorrespondences = maxCorrespondences;</span>
+<span class="fc" id="L296">    }</span>
     
     /**
      * Indicates if weights are sorted by so that largest weighted
@@ -305,7 +301,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      * @return true if weights are sorted, false otherwise.
      */
     public boolean isSortWeightsEnabled() {
-<span class="fc" id="L308">        return mSortWeights;</span>
+<span class="fc" id="L304">        return mSortWeights;</span>
     }
     
     /**
@@ -316,12 +312,12 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      */
     public void setSortWeightsEnabled(boolean sortWeights) 
             throws LockedException {
-<span class="fc bfc" id="L319" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L320">            throw new LockedException();</span>
+<span class="fc bfc" id="L315" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L316">            throw new LockedException();</span>
         }
         
-<span class="fc" id="L323">        mSortWeights = sortWeights;</span>
-<span class="fc" id="L324">    }    </span>
+<span class="fc" id="L319">        mSortWeights = sortWeights;</span>
+<span class="fc" id="L320">    }    </span>
     
     /**
      * Indicates if this estimator is ready to start the estimation.
@@ -330,7 +326,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      */    
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L333" title="All 4 branches covered.">        return areListsAvailable() &amp;&amp; areWeightsAvailable();</span>
+<span class="fc bfc" id="L329" title="All 4 branches covered.">        return areListsAvailable() &amp;&amp; areWeightsAvailable();</span>
     }
 
     /**
@@ -345,227 +341,232 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
     public PinholeCamera estimate() throws LockedException, NotReadyException, 
             PinholeCameraEstimatorException {
         
-<span class="pc bpc" id="L348" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L349">            throw new LockedException();</span>
+<span class="pc bpc" id="L344" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L345">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L351" title="All 2 branches covered.">        if (!isReady()) {</span>
-<span class="fc" id="L352">            throw new NotReadyException();</span>
+<span class="fc bfc" id="L347" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L348">            throw new NotReadyException();</span>
         }
         
         try {
-<span class="fc" id="L356">            mLocked = true;</span>
-<span class="pc bpc" id="L357" title="1 of 2 branches missed.">            if(mListener != null) mListener.onEstimateStart(this);</span>
+<span class="fc" id="L352">            mLocked = true;</span>
+<span class="pc bpc" id="L353" title="1 of 2 branches missed.">            if(mListener != null) mListener.onEstimateStart(this);</span>
             
-<span class="fc" id="L359">            WeightSelection selection = WeightSelection.selectWeights(mWeights, </span>
+<span class="fc" id="L355">            WeightSelection selection = WeightSelection.selectWeights(mWeights, </span>
                     mSortWeights, mMaxCorrespondences);
-<span class="fc" id="L361">            boolean[] selected = selection.getSelected();</span>
+<span class="fc" id="L357">            boolean[] selected = selection.getSelected();</span>
             
-<span class="fc" id="L363">            Matrix a = new Matrix(12, 12);</span>
-<span class="fc" id="L364">            Matrix row = new Matrix(3, 12);</span>
-<span class="fc" id="L365">            Matrix transRow = new Matrix(12, 3);</span>
-<span class="fc" id="L366">            Matrix tmp = new Matrix(12, 12);</span>
+<span class="fc" id="L359">            Matrix a = new Matrix(12, 12);</span>
+<span class="fc" id="L360">            Matrix row = new Matrix(3, 12);</span>
+<span class="fc" id="L361">            Matrix transRow = new Matrix(12, 3);</span>
+<span class="fc" id="L362">            Matrix tmp = new Matrix(12, 12);</span>
             
-<span class="fc" id="L368">            Iterator&lt;Line2D&gt; iterator2D = mLines2D.iterator();</span>
-<span class="fc" id="L369">            Iterator&lt;Plane&gt; iterator3D = mPlanes.iterator();</span>
+<span class="fc" id="L364">            Iterator&lt;Line2D&gt; iterator2D = mLines2D.iterator();</span>
+<span class="fc" id="L365">            Iterator&lt;Plane&gt; iterator3D = mPlanes.iterator();</span>
             
             Line2D line2D;
             Plane plane;
-<span class="fc" id="L373">            int index = 0;</span>
-<span class="fc" id="L374">            int nMatches = 0;</span>
-            double la, lb, lc;
-            double A, B, C, D;
+<span class="fc" id="L369">            int index = 0;</span>
+<span class="fc" id="L370">            int nMatches = 0;</span>
+            double la;
+            double lb;
+            double lc;
+            double pA;
+            double pB;
+            double pC;
+            double pD;
             double weight;
-<span class="fc" id="L378">            double previousNorm = 1.0;</span>
+<span class="fc" id="L379">            double previousNorm = 1.0;</span>
             double rowNorm;
-<span class="pc bpc" id="L380" title="1 of 4 branches missed.">            while (iterator2D.hasNext() &amp;&amp; iterator3D.hasNext()) {</span>
-<span class="fc" id="L381">                line2D = iterator2D.next();</span>
-<span class="fc" id="L382">                plane = iterator3D.next();</span>
+<span class="pc bpc" id="L381" title="1 of 4 branches missed.">            while (iterator2D.hasNext() &amp;&amp; iterator3D.hasNext()) {</span>
+<span class="fc" id="L382">                line2D = iterator2D.next();</span>
+<span class="fc" id="L383">                plane = iterator3D.next();</span>
                 
-<span class="fc bfc" id="L384" title="All 2 branches covered.">                if (selected[index]) {</span>
-<span class="fc" id="L385">                    weight = mWeights[index];</span>
+<span class="fc bfc" id="L385" title="All 2 branches covered.">                if (selected[index]) {</span>
+<span class="fc" id="L386">                    weight = mWeights[index];</span>
                     
-<span class="fc bfc" id="L387" title="All 2 branches covered.">                    if (Math.abs(weight) &lt; EPS) {</span>
+<span class="fc bfc" id="L388" title="All 2 branches covered.">                    if (Math.abs(weight) &lt; EPS) {</span>
                         //skip, because weight is too small
-<span class="fc" id="L389">                        index++;</span>
-<span class="fc" id="L390">                        continue;</span>
+<span class="fc" id="L390">                        index++;</span>
+<span class="fc" id="L391">                        continue;</span>
                     }
                     
                     //normalize lines and planes to increase accuracy
-<span class="fc" id="L394">                    line2D.normalize();</span>
-<span class="fc" id="L395">                    plane.normalize();</span>
+<span class="fc" id="L395">                    line2D.normalize();</span>
+<span class="fc" id="L396">                    plane.normalize();</span>
                 
-<span class="fc" id="L397">                    la = line2D.getA();</span>
-<span class="fc" id="L398">                    lb = line2D.getB();</span>
-<span class="fc" id="L399">                    lc = line2D.getC();</span>
+<span class="fc" id="L398">                    la = line2D.getA();</span>
+<span class="fc" id="L399">                    lb = line2D.getB();</span>
+<span class="fc" id="L400">                    lc = line2D.getC();</span>
                 
-<span class="fc" id="L401">                    A = plane.getA();</span>
-<span class="fc" id="L402">                    B = plane.getB();</span>
-<span class="fc" id="L403">                    C = plane.getC();</span>
-<span class="fc" id="L404">                    D = plane.getD();</span>
+<span class="fc" id="L402">                    pA = plane.getA();</span>
+<span class="fc" id="L403">                    pB = plane.getB();</span>
+<span class="fc" id="L404">                    pC = plane.getC();</span>
+<span class="fc" id="L405">                    pD = plane.getD();</span>
                 
                     //first row
-<span class="fc" id="L407">                    row.setElementAt(0, 0, -D * la * weight);</span>
-<span class="fc" id="L408">                    row.setElementAt(0, 1, -D * lb * weight);</span>
-<span class="fc" id="L409">                    row.setElementAt(0, 2, -D * lc * weight);</span>
+<span class="fc" id="L408">                    row.setElementAt(0, 0, -pD * la * weight);</span>
+<span class="fc" id="L409">                    row.setElementAt(0, 1, -pD * lb * weight);</span>
+<span class="fc" id="L410">                    row.setElementAt(0, 2, -pD * lc * weight);</span>
                 
                     //columns 3, 4, 5, 6, 7, 8 are left with zero values
                 
-<span class="fc" id="L413">                    row.setElementAt(0, 9, A * la * weight);</span>
-<span class="fc" id="L414">                    row.setElementAt(0, 10, A * lb * weight);</span>
-<span class="fc" id="L415">                    row.setElementAt(0, 11, A * lc * weight);</span>
+<span class="fc" id="L414">                    row.setElementAt(0, 9, pA * la * weight);</span>
+<span class="fc" id="L415">                    row.setElementAt(0, 10, pA * lb * weight);</span>
+<span class="fc" id="L416">                    row.setElementAt(0, 11, pA * lc * weight);</span>
                     
                     //normalize row
-<span class="fc" id="L418">                    rowNorm = Math.sqrt(</span>
-<span class="fc" id="L419">                            Math.pow(row.getElementAt(0, 0), 2.0) +</span>
-<span class="fc" id="L420">                            Math.pow(row.getElementAt(0, 1), 2.0) +</span>
-<span class="fc" id="L421">                            Math.pow(row.getElementAt(0, 2), 2.0) +</span>
-<span class="fc" id="L422">                            Math.pow(row.getElementAt(0, 9), 2.0) +</span>
-<span class="fc" id="L423">                            Math.pow(row.getElementAt(0, 10), 2.0) +</span>
-<span class="fc" id="L424">                            Math.pow(row.getElementAt(0, 11), 2.0));</span>
+<span class="fc" id="L419">                    rowNorm = Math.sqrt(</span>
+<span class="fc" id="L420">                            Math.pow(row.getElementAt(0, 0), 2.0) +</span>
+<span class="fc" id="L421">                            Math.pow(row.getElementAt(0, 1), 2.0) +</span>
+<span class="fc" id="L422">                            Math.pow(row.getElementAt(0, 2), 2.0) +</span>
+<span class="fc" id="L423">                            Math.pow(row.getElementAt(0, 9), 2.0) +</span>
+<span class="fc" id="L424">                            Math.pow(row.getElementAt(0, 10), 2.0) +</span>
+<span class="fc" id="L425">                            Math.pow(row.getElementAt(0, 11), 2.0));</span>
                     
-<span class="fc" id="L426">                    row.setElementAt(0, 0, row.getElementAt(0, 0) / rowNorm);</span>
-<span class="fc" id="L427">                    row.setElementAt(0, 1, row.getElementAt(0, 1) / rowNorm);</span>
-<span class="fc" id="L428">                    row.setElementAt(0, 2, row.getElementAt(0, 2) / rowNorm);</span>
-<span class="fc" id="L429">                    row.setElementAt(0, 9, row.getElementAt(0, 9) / rowNorm);</span>
-<span class="fc" id="L430">                    row.setElementAt(0, 10, row.getElementAt(0, 10) / rowNorm);</span>
-<span class="fc" id="L431">                    row.setElementAt(0, 11, row.getElementAt(0, 11) / rowNorm);</span>
+<span class="fc" id="L427">                    row.setElementAt(0, 0, row.getElementAt(0, 0) / rowNorm);</span>
+<span class="fc" id="L428">                    row.setElementAt(0, 1, row.getElementAt(0, 1) / rowNorm);</span>
+<span class="fc" id="L429">                    row.setElementAt(0, 2, row.getElementAt(0, 2) / rowNorm);</span>
+<span class="fc" id="L430">                    row.setElementAt(0, 9, row.getElementAt(0, 9) / rowNorm);</span>
+<span class="fc" id="L431">                    row.setElementAt(0, 10, row.getElementAt(0, 10) / rowNorm);</span>
+<span class="fc" id="L432">                    row.setElementAt(0, 11, row.getElementAt(0, 11) / rowNorm);</span>
                 
                     //second row
                 
                     //columns 0, 1, 2 are left with zero values
                 
-<span class="fc" id="L437">                    row.setElementAt(1, 3, -D * la * weight);</span>
-<span class="fc" id="L438">                    row.setElementAt(1, 4, -D * lb * weight);</span>
-<span class="fc" id="L439">                    row.setElementAt(1, 5, -D * lc * weight);</span>
+<span class="fc" id="L438">                    row.setElementAt(1, 3, -pD * la * weight);</span>
+<span class="fc" id="L439">                    row.setElementAt(1, 4, -pD * lb * weight);</span>
+<span class="fc" id="L440">                    row.setElementAt(1, 5, -pD * lc * weight);</span>
                 
                     //columns 6, 7, 8 are left with zero values
                 
-<span class="fc" id="L443">                    row.setElementAt(1, 9, B * la * weight);</span>
-<span class="fc" id="L444">                    row.setElementAt(1, 10, B * lb * weight);</span>
-<span class="fc" id="L445">                    row.setElementAt(1, 11, B * lc * weight);</span>
+<span class="fc" id="L444">                    row.setElementAt(1, 9, pB * la * weight);</span>
+<span class="fc" id="L445">                    row.setElementAt(1, 10, pB * lb * weight);</span>
+<span class="fc" id="L446">                    row.setElementAt(1, 11, pB * lc * weight);</span>
                     
                     //normalize row
-<span class="fc" id="L448">                    rowNorm = Math.sqrt(</span>
-<span class="fc" id="L449">                            Math.pow(row.getElementAt(1, 3), 2.0) +</span>
-<span class="fc" id="L450">                            Math.pow(row.getElementAt(1, 4), 2.0) +</span>
-<span class="fc" id="L451">                            Math.pow(row.getElementAt(1, 5), 2.0) +</span>
-<span class="fc" id="L452">                            Math.pow(row.getElementAt(1, 9), 2.0) +</span>
-<span class="fc" id="L453">                            Math.pow(row.getElementAt(1, 10), 2.0) +</span>
-<span class="fc" id="L454">                            Math.pow(row.getElementAt(1, 11), 2.0));</span>
+<span class="fc" id="L449">                    rowNorm = Math.sqrt(</span>
+<span class="fc" id="L450">                            Math.pow(row.getElementAt(1, 3), 2.0) +</span>
+<span class="fc" id="L451">                            Math.pow(row.getElementAt(1, 4), 2.0) +</span>
+<span class="fc" id="L452">                            Math.pow(row.getElementAt(1, 5), 2.0) +</span>
+<span class="fc" id="L453">                            Math.pow(row.getElementAt(1, 9), 2.0) +</span>
+<span class="fc" id="L454">                            Math.pow(row.getElementAt(1, 10), 2.0) +</span>
+<span class="fc" id="L455">                            Math.pow(row.getElementAt(1, 11), 2.0));</span>
                     
-<span class="fc" id="L456">                    row.setElementAt(1, 3, row.getElementAt(1, 3) / rowNorm);</span>
-<span class="fc" id="L457">                    row.setElementAt(1, 4, row.getElementAt(1, 4) / rowNorm);</span>
-<span class="fc" id="L458">                    row.setElementAt(1, 5, row.getElementAt(1, 5) / rowNorm);</span>
-<span class="fc" id="L459">                    row.setElementAt(1, 9, row.getElementAt(1, 9) / rowNorm);</span>
-<span class="fc" id="L460">                    row.setElementAt(1, 10, row.getElementAt(1, 10) / rowNorm);</span>
-<span class="fc" id="L461">                    row.setElementAt(1, 11, row.getElementAt(1, 11) / rowNorm);</span>
+<span class="fc" id="L457">                    row.setElementAt(1, 3, row.getElementAt(1, 3) / rowNorm);</span>
+<span class="fc" id="L458">                    row.setElementAt(1, 4, row.getElementAt(1, 4) / rowNorm);</span>
+<span class="fc" id="L459">                    row.setElementAt(1, 5, row.getElementAt(1, 5) / rowNorm);</span>
+<span class="fc" id="L460">                    row.setElementAt(1, 9, row.getElementAt(1, 9) / rowNorm);</span>
+<span class="fc" id="L461">                    row.setElementAt(1, 10, row.getElementAt(1, 10) / rowNorm);</span>
+<span class="fc" id="L462">                    row.setElementAt(1, 11, row.getElementAt(1, 11) / rowNorm);</span>
                     
                                 
                     //third row
                 
                     //columns 0, 1, 2, 3, 4, 5 are left with zero values
                 
-<span class="fc" id="L468">                    row.setElementAt(2, 6, -D * la * weight);</span>
-<span class="fc" id="L469">                    row.setElementAt(2, 7, -D * lb * weight);</span>
-<span class="fc" id="L470">                    row.setElementAt(2, 8, -D * lc * weight);</span>
+<span class="fc" id="L469">                    row.setElementAt(2, 6, -pD * la * weight);</span>
+<span class="fc" id="L470">                    row.setElementAt(2, 7, -pD * lb * weight);</span>
+<span class="fc" id="L471">                    row.setElementAt(2, 8, -pD * lc * weight);</span>
                 
-<span class="fc" id="L472">                    row.setElementAt(2, 9, C * la * weight);</span>
-<span class="fc" id="L473">                    row.setElementAt(2, 10, C * lb * weight);</span>
-<span class="fc" id="L474">                    row.setElementAt(2, 11, C * lc * weight);</span>
+<span class="fc" id="L473">                    row.setElementAt(2, 9, pC * la * weight);</span>
+<span class="fc" id="L474">                    row.setElementAt(2, 10, pC * lb * weight);</span>
+<span class="fc" id="L475">                    row.setElementAt(2, 11, pC * lc * weight);</span>
                     
                     //normalize row
-<span class="fc" id="L477">                    rowNorm = Math.sqrt(</span>
-<span class="fc" id="L478">                            Math.pow(row.getElementAt(2, 6), 2.0) +</span>
-<span class="fc" id="L479">                            Math.pow(row.getElementAt(2, 7), 2.0) +</span>
-<span class="fc" id="L480">                            Math.pow(row.getElementAt(2, 8), 2.0) +</span>
-<span class="fc" id="L481">                            Math.pow(row.getElementAt(2, 9), 2.0) +</span>
-<span class="fc" id="L482">                            Math.pow(row.getElementAt(2, 10), 2.0) +</span>
-<span class="fc" id="L483">                            Math.pow(row.getElementAt(2, 11), 2.0));</span>
+<span class="fc" id="L478">                    rowNorm = Math.sqrt(</span>
+<span class="fc" id="L479">                            Math.pow(row.getElementAt(2, 6), 2.0) +</span>
+<span class="fc" id="L480">                            Math.pow(row.getElementAt(2, 7), 2.0) +</span>
+<span class="fc" id="L481">                            Math.pow(row.getElementAt(2, 8), 2.0) +</span>
+<span class="fc" id="L482">                            Math.pow(row.getElementAt(2, 9), 2.0) +</span>
+<span class="fc" id="L483">                            Math.pow(row.getElementAt(2, 10), 2.0) +</span>
+<span class="fc" id="L484">                            Math.pow(row.getElementAt(2, 11), 2.0));</span>
                     
-<span class="fc" id="L485">                    row.setElementAt(2, 6, row.getElementAt(2, 6) / rowNorm);</span>
-<span class="fc" id="L486">                    row.setElementAt(2, 7, row.getElementAt(2, 7) / rowNorm);</span>
-<span class="fc" id="L487">                    row.setElementAt(2, 8, row.getElementAt(2, 8) / rowNorm);</span>
-<span class="fc" id="L488">                    row.setElementAt(2, 9, row.getElementAt(2, 9) / rowNorm);</span>
-<span class="fc" id="L489">                    row.setElementAt(2, 10, row.getElementAt(2, 10) / rowNorm);</span>
-<span class="fc" id="L490">                    row.setElementAt(2, 11, row.getElementAt(2, 11) / rowNorm);</span>
+<span class="fc" id="L486">                    row.setElementAt(2, 6, row.getElementAt(2, 6) / rowNorm);</span>
+<span class="fc" id="L487">                    row.setElementAt(2, 7, row.getElementAt(2, 7) / rowNorm);</span>
+<span class="fc" id="L488">                    row.setElementAt(2, 8, row.getElementAt(2, 8) / rowNorm);</span>
+<span class="fc" id="L489">                    row.setElementAt(2, 9, row.getElementAt(2, 9) / rowNorm);</span>
+<span class="fc" id="L490">                    row.setElementAt(2, 10, row.getElementAt(2, 10) / rowNorm);</span>
+<span class="fc" id="L491">                    row.setElementAt(2, 11, row.getElementAt(2, 11) / rowNorm);</span>
                     
-<span class="fc" id="L492">                    row.transpose(transRow); //transRow = row'</span>
-<span class="fc" id="L493">                    transRow.multiply(row, tmp); //tmp = row' * row</span>
+<span class="fc" id="L493">                    row.transpose(transRow); //transRow = row'</span>
+<span class="fc" id="L494">                    transRow.multiply(row, tmp); //tmp = row' * row</span>
                     
-<span class="fc" id="L495">                    tmp.multiplyByScalar(1.0 / previousNorm);</span>
+<span class="fc" id="L496">                    tmp.multiplyByScalar(1.0 / previousNorm);</span>
                     
                     //a += 1.0 / previousNorm * tmp
-<span class="fc" id="L498">                    a.add(tmp);</span>
+<span class="fc" id="L499">                    a.add(tmp);</span>
                     //normalize
-<span class="fc" id="L500">                    previousNorm = Utils.normF(a);</span>
-<span class="fc" id="L501">                    a.multiplyByScalar(1.0 / previousNorm);</span>
+<span class="fc" id="L501">                    previousNorm = Utils.normF(a);</span>
+<span class="fc" id="L502">                    a.multiplyByScalar(1.0 / previousNorm);</span>
                     
-<span class="fc" id="L503">                    nMatches++;</span>
+<span class="fc" id="L504">                    nMatches++;</span>
                 }
-<span class="fc" id="L505">                index++;</span>
+<span class="fc" id="L506">                index++;</span>
             }
             
-<span class="fc bfc" id="L508" title="All 2 branches covered.">            if (nMatches &lt; MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES) {</span>
-<span class="fc" id="L509">                throw new PinholeCameraEstimatorException();</span>
+<span class="fc bfc" id="L509" title="All 2 branches covered.">            if (nMatches &lt; MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES) {</span>
+<span class="fc" id="L510">                throw new PinholeCameraEstimatorException();</span>
             }
             
-<span class="fc" id="L512">            SingularValueDecomposer decomposer = new SingularValueDecomposer(a);</span>
-<span class="fc" id="L513">            decomposer.decompose();</span>
+<span class="fc" id="L513">            SingularValueDecomposer decomposer = new SingularValueDecomposer(a);</span>
+<span class="fc" id="L514">            decomposer.decompose();</span>
             
-<span class="pc bpc" id="L515" title="1 of 2 branches missed.">            if (decomposer.getNullity() &gt; 1) {</span>
+<span class="fc bfc" id="L516" title="All 2 branches covered.">            if (decomposer.getNullity() &gt; 1) {</span>
                 //line/plane configuration is degenerate and exists a linear 
                 //combination of possible pinhole cameras (i.e. solution is not
                 //unique up to scale)
-<span class="nc" id="L519">                throw new PinholeCameraEstimatorException();</span>
+<span class="fc" id="L520">                throw new PinholeCameraEstimatorException();</span>
             }
             
-<span class="fc" id="L522">            Matrix v = decomposer.getV();</span>
+<span class="fc" id="L523">            Matrix v = decomposer.getV();</span>
             
             //use last column of V as pinhole camera vector
             
             //the last column of V contains pinhole camera matrix ordered by
             //columns as: P11, P21, P31, P12, P22, P32, P13, P23, P33, P14, P24, 
             //P34, hence we reorder p
-<span class="fc" id="L529">            Matrix pinholeCameraMatrix = new Matrix(</span>
+<span class="fc" id="L530">            Matrix pinholeCameraMatrix = new Matrix(</span>
                     PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS,
                     PinholeCamera.PINHOLE_CAMERA_MATRIX_COLS);
             
-<span class="fc" id="L533">            pinholeCameraMatrix.setElementAt(0, 0, v.getElementAt(0, 11));</span>
-<span class="fc" id="L534">            pinholeCameraMatrix.setElementAt(1, 0, v.getElementAt(1, 11));</span>
-<span class="fc" id="L535">            pinholeCameraMatrix.setElementAt(2, 0, v.getElementAt(2, 11));</span>
+<span class="fc" id="L534">            pinholeCameraMatrix.setElementAt(0, 0, v.getElementAt(0, 11));</span>
+<span class="fc" id="L535">            pinholeCameraMatrix.setElementAt(1, 0, v.getElementAt(1, 11));</span>
+<span class="fc" id="L536">            pinholeCameraMatrix.setElementAt(2, 0, v.getElementAt(2, 11));</span>
 
-<span class="fc" id="L537">            pinholeCameraMatrix.setElementAt(0, 1, v.getElementAt(3, 11));</span>
-<span class="fc" id="L538">            pinholeCameraMatrix.setElementAt(1, 1, v.getElementAt(4, 11));</span>
-<span class="fc" id="L539">            pinholeCameraMatrix.setElementAt(2, 1, v.getElementAt(5, 11));</span>
+<span class="fc" id="L538">            pinholeCameraMatrix.setElementAt(0, 1, v.getElementAt(3, 11));</span>
+<span class="fc" id="L539">            pinholeCameraMatrix.setElementAt(1, 1, v.getElementAt(4, 11));</span>
+<span class="fc" id="L540">            pinholeCameraMatrix.setElementAt(2, 1, v.getElementAt(5, 11));</span>
 
-<span class="fc" id="L541">            pinholeCameraMatrix.setElementAt(0, 2, v.getElementAt(6, 11));</span>
-<span class="fc" id="L542">            pinholeCameraMatrix.setElementAt(1, 2, v.getElementAt(7, 11));</span>
-<span class="fc" id="L543">            pinholeCameraMatrix.setElementAt(2, 2, v.getElementAt(8, 11));</span>
+<span class="fc" id="L542">            pinholeCameraMatrix.setElementAt(0, 2, v.getElementAt(6, 11));</span>
+<span class="fc" id="L543">            pinholeCameraMatrix.setElementAt(1, 2, v.getElementAt(7, 11));</span>
+<span class="fc" id="L544">            pinholeCameraMatrix.setElementAt(2, 2, v.getElementAt(8, 11));</span>
 
-<span class="fc" id="L545">            pinholeCameraMatrix.setElementAt(0, 3, v.getElementAt(9, 11));</span>
-<span class="fc" id="L546">            pinholeCameraMatrix.setElementAt(1, 3, v.getElementAt(10, 11));</span>
-<span class="fc" id="L547">            pinholeCameraMatrix.setElementAt(2, 3, v.getElementAt(11, 11));</span>
+<span class="fc" id="L546">            pinholeCameraMatrix.setElementAt(0, 3, v.getElementAt(9, 11));</span>
+<span class="fc" id="L547">            pinholeCameraMatrix.setElementAt(1, 3, v.getElementAt(10, 11));</span>
+<span class="fc" id="L548">            pinholeCameraMatrix.setElementAt(2, 3, v.getElementAt(11, 11));</span>
             
             //because pinholeCameraMatrix has been obtained as the last column 
             //of V, then its frobenius norm will be 1 because SVD already 
             //returns normalized singular vector
             
-<span class="fc" id="L553">            PinholeCamera camera = new PinholeCamera(pinholeCameraMatrix);</span>
+<span class="fc" id="L554">            PinholeCamera camera = new PinholeCamera(pinholeCameraMatrix);</span>
             
-<span class="pc bpc" id="L555" title="1 of 2 branches missed.">            if (mListener != null) {</span>
-<span class="fc" id="L556">                mListener.onEstimateEnd(this);</span>
+<span class="pc bpc" id="L556" title="1 of 2 branches missed.">            if (mListener != null) {</span>
+<span class="fc" id="L557">                mListener.onEstimateEnd(this);</span>
             }
             
-<span class="fc" id="L559">            return attemptRefine(camera);</span>
+<span class="fc" id="L560">            return attemptRefine(camera);</span>
             
-<span class="fc" id="L561">        } catch (PinholeCameraEstimatorException e) {</span>
-<span class="fc" id="L562">            mLocked = false; //ensure it is no longer locked</span>
-<span class="fc" id="L563">            throw e;</span>
-<span class="nc" id="L564">        } catch (Exception e) {</span>
-<span class="nc" id="L565">            mLocked = false; //ensure it is no longer locked</span>
-<span class="nc" id="L566">            throw new PinholeCameraEstimatorException(e);</span>
+<span class="fc" id="L562">        } catch (PinholeCameraEstimatorException e) {</span>
+<span class="fc" id="L563">            mLocked = false; //ensure it is no longer locked</span>
+<span class="fc" id="L564">            throw e;</span>
+<span class="nc" id="L565">        } catch (Exception e) {</span>
+<span class="nc" id="L566">            mLocked = false; //ensure it is no longer locked</span>
+<span class="nc" id="L567">            throw new PinholeCameraEstimatorException(e);</span>
         } finally {
-<span class="fc" id="L568">            mLocked = false;</span>
+<span class="fc" id="L569">            mLocked = false;</span>
         }
     }
 
@@ -575,7 +576,7 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
      */    
     @Override
     public PinholeCameraEstimatorType getType() {
-<span class="fc" id="L578">        return PinholeCameraEstimatorType.</span>
+<span class="fc" id="L579">        return PinholeCameraEstimatorType.</span>
                 WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR;
     }
     

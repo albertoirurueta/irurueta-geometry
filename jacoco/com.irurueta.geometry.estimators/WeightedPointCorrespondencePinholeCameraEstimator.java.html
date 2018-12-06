@@ -96,7 +96,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      */
     public WeightedPointCorrespondencePinholeCameraEstimator(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
 <span class="fc" id="L100">        super(points3D, points2D);</span>
 <span class="fc" id="L101">        mMaxPoints = DEFAULT_MAX_POINTS;</span>
 <span class="fc" id="L102">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
@@ -116,7 +116,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
     public WeightedPointCorrespondencePinholeCameraEstimator(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, 
             PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
 <span class="fc" id="L120">        super(points3D, points2D, listener);</span>
 <span class="fc" id="L121">        mMaxPoints = DEFAULT_MAX_POINTS;</span>
 <span class="fc" id="L122">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
@@ -136,7 +136,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      */
     public WeightedPointCorrespondencePinholeCameraEstimator(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, double[] weights) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
 <span class="fc" id="L140">        super();</span>
 <span class="fc" id="L141">        mMaxPoints = DEFAULT_MAX_POINTS;</span>
 <span class="fc" id="L142">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
@@ -160,7 +160,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
     public WeightedPointCorrespondencePinholeCameraEstimator(
             List&lt;Point3D&gt; points3D, List&lt;Point2D&gt; points2D, double[] weights,
             PinholeCameraEstimatorListener listener) 
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
 <span class="fc" id="L164">        super(listener);</span>
 <span class="fc" id="L165">        mMaxPoints = DEFAULT_MAX_POINTS;</span>
 <span class="fc" id="L166">        mSortWeights = DEFAULT_SORT_WEIGHTS;</span>
@@ -183,21 +183,20 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      */
     private void internalSetListsAndWeights(List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, double[] weights) 
-            throws IllegalArgumentException,
-            WrongListSizesException {
+            throws WrongListSizesException {
         
-<span class="fc bfc" id="L189" title="All 6 branches covered.">        if (points3D == null || points2D == null || weights == null) {</span>
-<span class="fc" id="L190">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L188" title="All 6 branches covered.">        if (points3D == null || points2D == null || weights == null) {</span>
+<span class="fc" id="L189">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (!areValidListsAndWeights(points3D, points2D, weights)) {</span>
-<span class="fc" id="L194">            throw new WrongListSizesException();</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        if (!areValidListsAndWeights(points3D, points2D, weights)) {</span>
+<span class="fc" id="L193">            throw new WrongListSizesException();</span>
         }
         
-<span class="fc" id="L197">        mPoints3D = points3D;</span>
-<span class="fc" id="L198">        mPoints2D = points2D;        </span>
-<span class="fc" id="L199">        mWeights = weights;</span>
-<span class="fc" id="L200">    }    </span>
+<span class="fc" id="L196">        mPoints3D = points3D;</span>
+<span class="fc" id="L197">        mPoints2D = points2D;        </span>
+<span class="fc" id="L198">        mWeights = weights;</span>
+<span class="fc" id="L199">    }    </span>
     
     /**
      * Sets list of corresponding points.
@@ -213,14 +212,13 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      */
     public void setListsAndWeights(List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, double[] weights)
-            throws LockedException, IllegalArgumentException, 
-            WrongListSizesException {
-<span class="fc bfc" id="L218" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L219">            throw new LockedException();</span>
+            throws LockedException, WrongListSizesException {
+<span class="fc bfc" id="L216" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L217">            throw new LockedException();</span>
         }
         
-<span class="fc" id="L222">        internalSetListsAndWeights(points3D, points2D, weights);</span>
-<span class="fc" id="L223">    }    </span>
+<span class="fc" id="L220">        internalSetListsAndWeights(points3D, points2D, weights);</span>
+<span class="fc" id="L221">    }    </span>
     
     /**
      * Indicates if lists of corresponding 2D/3D points are valid.
@@ -235,12 +233,12 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      */
     public static boolean areValidListsAndWeights(List&lt;Point3D&gt; points3D, 
             List&lt;Point2D&gt; points2D, double[] weights) {
-<span class="fc bfc" id="L238" title="All 6 branches covered.">        if (points3D == null || points2D == null || weights == null) {</span>
-<span class="fc" id="L239">            return false;</span>
+<span class="fc bfc" id="L236" title="All 6 branches covered.">        if (points3D == null || points2D == null || weights == null) {</span>
+<span class="fc" id="L237">            return false;</span>
         }
-<span class="fc bfc" id="L241" title="All 2 branches covered.">        return points3D.size() == points2D.size() &amp;&amp; </span>
-<span class="fc bfc" id="L242" title="All 2 branches covered.">                points2D.size() == weights.length &amp;&amp;</span>
-<span class="pc bpc" id="L243" title="1 of 2 branches missed.">                points3D.size() &gt;= MIN_NUMBER_OF_POINT_CORRESPONDENCES;</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        return points3D.size() == points2D.size() &amp;&amp; </span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">                points2D.size() == weights.length &amp;&amp;</span>
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">                points3D.size() &gt;= MIN_NUMBER_OF_POINT_CORRESPONDENCES;</span>
     }
 
     /**
@@ -251,10 +249,10 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      * @throws NotAvailableException if weights are not available.
      */
     public double[] getWeights() throws NotAvailableException {
-<span class="fc bfc" id="L254" title="All 2 branches covered.">        if (!areWeightsAvailable()) {</span>
-<span class="fc" id="L255">            throw new NotAvailableException();</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">        if (!areWeightsAvailable()) {</span>
+<span class="fc" id="L253">            throw new NotAvailableException();</span>
         }
-<span class="fc" id="L257">        return mWeights;</span>
+<span class="fc" id="L255">        return mWeights;</span>
     }
     
     /**
@@ -263,7 +261,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      * @return true if weights are available, false otherwise.
      */
     public boolean areWeightsAvailable() {
-<span class="fc bfc" id="L266" title="All 2 branches covered.">        return mWeights != null;</span>
+<span class="fc bfc" id="L264" title="All 2 branches covered.">        return mWeights != null;</span>
     }
         
     /**
@@ -272,7 +270,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      * @return maximum number of points to be weighted.
      */
     public int getMaxPoints() {
-<span class="fc" id="L275">        return mMaxPoints;</span>
+<span class="fc" id="L273">        return mMaxPoints;</span>
     }
     
     /**
@@ -283,17 +281,16 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      * minimum allowed number of point correspondences.
      * @throws LockedException if this instance is locked.
      */
-    public void setMaxPoints(int maxPoints) throws IllegalArgumentException,
-            LockedException {
-<span class="fc bfc" id="L288" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L289">            throw new LockedException();</span>
+    public void setMaxPoints(int maxPoints) throws LockedException {
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L286">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L291" title="1 of 2 branches missed.">        if (maxPoints &lt; MIN_NUMBER_OF_POINT_CORRESPONDENCES) {</span>
-<span class="nc" id="L292">            throw new IllegalArgumentException();</span>
+<span class="pc bpc" id="L288" title="1 of 2 branches missed.">        if (maxPoints &lt; MIN_NUMBER_OF_POINT_CORRESPONDENCES) {</span>
+<span class="nc" id="L289">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L295">        mMaxPoints = maxPoints;</span>
-<span class="fc" id="L296">    }</span>
+<span class="fc" id="L292">        mMaxPoints = maxPoints;</span>
+<span class="fc" id="L293">    }</span>
     
     /**
      * Indicates if weights are sorted by so that largest weighted
@@ -301,7 +298,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      * @return true if weights are sorted, false otherwise.
      */
     public boolean isSortWeightsEnabled() {
-<span class="fc" id="L304">        return mSortWeights;</span>
+<span class="fc" id="L301">        return mSortWeights;</span>
     }
     
     /**
@@ -312,12 +309,12 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      */
     public void setSortWeightsEnabled(boolean sortWeights) 
             throws LockedException {
-<span class="fc bfc" id="L315" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L316">            throw new LockedException();</span>
+<span class="fc bfc" id="L312" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L313">            throw new LockedException();</span>
         }
         
-<span class="fc" id="L319">        mSortWeights = sortWeights;</span>
-<span class="fc" id="L320">    }</span>
+<span class="fc" id="L316">        mSortWeights = sortWeights;</span>
+<span class="fc" id="L317">    }</span>
     
     /**
      * Indicates if this estimator is ready to start the estimation.
@@ -326,7 +323,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L329" title="All 4 branches covered.">        return areListsAvailable() &amp;&amp; areWeightsAvailable();</span>
+<span class="fc bfc" id="L326" title="All 4 branches covered.">        return areListsAvailable() &amp;&amp; areWeightsAvailable();</span>
     }    
         
     /**
@@ -347,202 +344,207 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
             List&lt;Point2D&gt; points2D) throws PinholeCameraEstimatorException {
         
         try {
-<span class="fc" id="L350">            WeightSelection selection = WeightSelection.selectWeights(mWeights, </span>
+<span class="fc" id="L347">            WeightSelection selection = WeightSelection.selectWeights(mWeights, </span>
                     mSortWeights, mMaxPoints);
-<span class="fc" id="L352">            boolean[] selected = selection.getSelected();</span>
+<span class="fc" id="L349">            boolean[] selected = selection.getSelected();</span>
             
-<span class="fc" id="L354">            Matrix a = new Matrix(12, 12);</span>
-<span class="fc" id="L355">            Matrix row = new Matrix(2, 12);</span>
-<span class="fc" id="L356">            Matrix transRow = new Matrix(12, 2);</span>
-<span class="fc" id="L357">            Matrix tmp = new Matrix(12, 12);</span>
+<span class="fc" id="L351">            Matrix a = new Matrix(12, 12);</span>
+<span class="fc" id="L352">            Matrix row = new Matrix(2, 12);</span>
+<span class="fc" id="L353">            Matrix transRow = new Matrix(12, 2);</span>
+<span class="fc" id="L354">            Matrix tmp = new Matrix(12, 12);</span>
             
-<span class="fc" id="L359">            Iterator&lt;Point2D&gt; iterator2D = points2D.iterator();</span>
-<span class="fc" id="L360">            Iterator&lt;Point3D&gt; iterator3D = points3D.iterator();</span>
+<span class="fc" id="L356">            Iterator&lt;Point2D&gt; iterator2D = points2D.iterator();</span>
+<span class="fc" id="L357">            Iterator&lt;Point3D&gt; iterator3D = points3D.iterator();</span>
             
             Point2D point2D;
             Point3D point3D;
-<span class="fc" id="L364">            int index = 0;</span>
-<span class="fc" id="L365">            int nMatches = 0;</span>
-            double homImageX, homImageY, homImageW;
-            double homWorldX, homWorldY, homWorldZ, homWorldW;
+<span class="fc" id="L361">            int index = 0;</span>
+<span class="fc" id="L362">            int nMatches = 0;</span>
+            double homImageX;
+            double homImageY;
+            double homImageW;
+            double homWorldX;
+            double homWorldY;
+            double homWorldZ;
+            double homWorldW;
             double weight;
-<span class="fc" id="L369">            double previousNorm = 1.0;</span>
+<span class="fc" id="L371">            double previousNorm = 1.0;</span>
             double rowNorm;
-<span class="pc bpc" id="L371" title="1 of 4 branches missed.">            while (iterator2D.hasNext() &amp;&amp; iterator3D.hasNext()) {</span>
-<span class="fc" id="L372">                point2D = iterator2D.next();</span>
-<span class="fc" id="L373">                point3D = iterator3D.next();</span>
+<span class="pc bpc" id="L373" title="1 of 4 branches missed.">            while (iterator2D.hasNext() &amp;&amp; iterator3D.hasNext()) {</span>
+<span class="fc" id="L374">                point2D = iterator2D.next();</span>
+<span class="fc" id="L375">                point3D = iterator3D.next();</span>
                 
-<span class="fc bfc" id="L375" title="All 2 branches covered.">                if (selected[index]) {</span>
-<span class="fc" id="L376">                    weight = mWeights[index];</span>
+<span class="fc bfc" id="L377" title="All 2 branches covered.">                if (selected[index]) {</span>
+<span class="fc" id="L378">                    weight = mWeights[index];</span>
                     
-<span class="pc bpc" id="L378" title="1 of 2 branches missed.">                    if (Math.abs(weight) &lt; EPS) {</span>
+<span class="pc bpc" id="L380" title="1 of 2 branches missed.">                    if (Math.abs(weight) &lt; EPS) {</span>
                         //skip, because weight is too small
-<span class="nc" id="L380">                        index++;</span>
-<span class="nc" id="L381">                        continue;</span>
+<span class="nc" id="L382">                        index++;</span>
+<span class="nc" id="L383">                        continue;</span>
                     }                    
                     
                     //normalize points to increase accuracy
-<span class="fc" id="L385">                    point2D.normalize();</span>
-<span class="fc" id="L386">                    point3D.normalize();</span>
+<span class="fc" id="L387">                    point2D.normalize();</span>
+<span class="fc" id="L388">                    point3D.normalize();</span>
                 
-<span class="fc" id="L388">                    homImageX = point2D.getHomX();</span>
-<span class="fc" id="L389">                    homImageY = point2D.getHomY();</span>
-<span class="fc" id="L390">                    homImageW = point2D.getHomW();</span>
+<span class="fc" id="L390">                    homImageX = point2D.getHomX();</span>
+<span class="fc" id="L391">                    homImageY = point2D.getHomY();</span>
+<span class="fc" id="L392">                    homImageW = point2D.getHomW();</span>
                 
-<span class="fc" id="L392">                    homWorldX = point3D.getHomX();</span>
-<span class="fc" id="L393">                    homWorldY = point3D.getHomY();</span>
-<span class="fc" id="L394">                    homWorldZ = point3D.getHomZ();</span>
-<span class="fc" id="L395">                    homWorldW = point3D.getHomW();                    </span>
+<span class="fc" id="L394">                    homWorldX = point3D.getHomX();</span>
+<span class="fc" id="L395">                    homWorldY = point3D.getHomY();</span>
+<span class="fc" id="L396">                    homWorldZ = point3D.getHomZ();</span>
+<span class="fc" id="L397">                    homWorldW = point3D.getHomW();                    </span>
                     
                     //first row
-<span class="fc" id="L398">                    row.setElementAt(0, 0, homImageW * homWorldX * weight);</span>
-<span class="fc" id="L399">                    row.setElementAt(0, 1, homImageW * homWorldY * weight);</span>
-<span class="fc" id="L400">                    row.setElementAt(0, 2, homImageW * homWorldZ * weight);</span>
-<span class="fc" id="L401">                    row.setElementAt(0, 3, homImageW * homWorldW * weight);</span>
+<span class="fc" id="L400">                    row.setElementAt(0, 0, homImageW * homWorldX * weight);</span>
+<span class="fc" id="L401">                    row.setElementAt(0, 1, homImageW * homWorldY * weight);</span>
+<span class="fc" id="L402">                    row.setElementAt(0, 2, homImageW * homWorldZ * weight);</span>
+<span class="fc" id="L403">                    row.setElementAt(0, 3, homImageW * homWorldW * weight);</span>
 
                     //columns 4, 5, 6, 7 are left with zero values
                 
-<span class="fc" id="L405">                    row.setElementAt(0, 8, -homImageX * homWorldX * weight);</span>
-<span class="fc" id="L406">                    row.setElementAt(0, 9, -homImageX * homWorldY * weight);</span>
-<span class="fc" id="L407">                    row.setElementAt(0, 10, -homImageX * homWorldZ * weight);</span>
-<span class="fc" id="L408">                    row.setElementAt(0, 11, -homImageX * homWorldW * weight);</span>
+<span class="fc" id="L407">                    row.setElementAt(0, 8, -homImageX * homWorldX * weight);</span>
+<span class="fc" id="L408">                    row.setElementAt(0, 9, -homImageX * homWorldY * weight);</span>
+<span class="fc" id="L409">                    row.setElementAt(0, 10, -homImageX * homWorldZ * weight);</span>
+<span class="fc" id="L410">                    row.setElementAt(0, 11, -homImageX * homWorldW * weight);</span>
                     
                     //normalize row
-<span class="fc" id="L411">                    rowNorm = Math.sqrt(</span>
-<span class="fc" id="L412">                        Math.pow(row.getElementAt(0, 0), 2.0) +</span>
-<span class="fc" id="L413">                        Math.pow(row.getElementAt(0, 1), 2.0) +</span>
-<span class="fc" id="L414">                        Math.pow(row.getElementAt(0, 2), 2.0) +</span>
-<span class="fc" id="L415">                        Math.pow(row.getElementAt(0, 3), 2.0) +</span>
-<span class="fc" id="L416">                        Math.pow(row.getElementAt(0, 8), 2.0) +</span>
-<span class="fc" id="L417">                        Math.pow(row.getElementAt(0, 9), 2.0) +</span>
-<span class="fc" id="L418">                        Math.pow(row.getElementAt(0, 10), 2.0) +</span>
-<span class="fc" id="L419">                        Math.pow(row.getElementAt(0, 11), 2.0));</span>
+<span class="fc" id="L413">                    rowNorm = Math.sqrt(</span>
+<span class="fc" id="L414">                        Math.pow(row.getElementAt(0, 0), 2.0) +</span>
+<span class="fc" id="L415">                        Math.pow(row.getElementAt(0, 1), 2.0) +</span>
+<span class="fc" id="L416">                        Math.pow(row.getElementAt(0, 2), 2.0) +</span>
+<span class="fc" id="L417">                        Math.pow(row.getElementAt(0, 3), 2.0) +</span>
+<span class="fc" id="L418">                        Math.pow(row.getElementAt(0, 8), 2.0) +</span>
+<span class="fc" id="L419">                        Math.pow(row.getElementAt(0, 9), 2.0) +</span>
+<span class="fc" id="L420">                        Math.pow(row.getElementAt(0, 10), 2.0) +</span>
+<span class="fc" id="L421">                        Math.pow(row.getElementAt(0, 11), 2.0));</span>
 
-<span class="fc" id="L421">                    row.setElementAt(0, 0, row.getElementAt(0, 0) / </span>
+<span class="fc" id="L423">                    row.setElementAt(0, 0, row.getElementAt(0, 0) / </span>
                         rowNorm);
-<span class="fc" id="L423">                    row.setElementAt(0, 1, row.getElementAt(0, 1) / </span>
+<span class="fc" id="L425">                    row.setElementAt(0, 1, row.getElementAt(0, 1) / </span>
                         rowNorm);
-<span class="fc" id="L425">                    row.setElementAt(0, 2, row.getElementAt(0, 2) / </span>
+<span class="fc" id="L427">                    row.setElementAt(0, 2, row.getElementAt(0, 2) / </span>
                         rowNorm);
-<span class="fc" id="L427">                    row.setElementAt(0, 3, row.getElementAt(0, 3) / </span>
+<span class="fc" id="L429">                    row.setElementAt(0, 3, row.getElementAt(0, 3) / </span>
                         rowNorm);
-<span class="fc" id="L429">                    row.setElementAt(0, 8, row.getElementAt(0, 8) / </span>
+<span class="fc" id="L431">                    row.setElementAt(0, 8, row.getElementAt(0, 8) / </span>
                         rowNorm);
-<span class="fc" id="L431">                    row.setElementAt(0, 9, row.getElementAt(0, 9) / </span>
+<span class="fc" id="L433">                    row.setElementAt(0, 9, row.getElementAt(0, 9) / </span>
                         rowNorm);
-<span class="fc" id="L433">                    row.setElementAt(0, 10, row.getElementAt(0, 10) / </span>
+<span class="fc" id="L435">                    row.setElementAt(0, 10, row.getElementAt(0, 10) / </span>
                         rowNorm);
-<span class="fc" id="L435">                    row.setElementAt(0, 11, row.getElementAt(0, 11) / </span>
+<span class="fc" id="L437">                    row.setElementAt(0, 11, row.getElementAt(0, 11) / </span>
                         rowNorm);
                     
                     //second row
 
                     //columns 0, 1, 2, 3 are left with zero values                
                 
-<span class="fc" id="L442">                    row.setElementAt(1, 4, homImageW * homWorldX * weight);</span>
-<span class="fc" id="L443">                    row.setElementAt(1, 5, homImageW * homWorldY * weight);</span>
-<span class="fc" id="L444">                    row.setElementAt(1, 6, homImageW * homWorldZ * weight);</span>
-<span class="fc" id="L445">                    row.setElementAt(1, 7, homImageW * homWorldW * weight);</span>
+<span class="fc" id="L444">                    row.setElementAt(1, 4, homImageW * homWorldX * weight);</span>
+<span class="fc" id="L445">                    row.setElementAt(1, 5, homImageW * homWorldY * weight);</span>
+<span class="fc" id="L446">                    row.setElementAt(1, 6, homImageW * homWorldZ * weight);</span>
+<span class="fc" id="L447">                    row.setElementAt(1, 7, homImageW * homWorldW * weight);</span>
                 
-<span class="fc" id="L447">                    row.setElementAt(1, 8, -homImageY * homWorldX * weight);</span>
-<span class="fc" id="L448">                    row.setElementAt(1, 9, -homImageY * homWorldY * weight);</span>
-<span class="fc" id="L449">                    row.setElementAt(1, 10, -homImageY * homWorldZ * weight);</span>
-<span class="fc" id="L450">                    row.setElementAt(1, 11, -homImageY * homWorldW * weight);</span>
+<span class="fc" id="L449">                    row.setElementAt(1, 8, -homImageY * homWorldX * weight);</span>
+<span class="fc" id="L450">                    row.setElementAt(1, 9, -homImageY * homWorldY * weight);</span>
+<span class="fc" id="L451">                    row.setElementAt(1, 10, -homImageY * homWorldZ * weight);</span>
+<span class="fc" id="L452">                    row.setElementAt(1, 11, -homImageY * homWorldW * weight);</span>
                     
                     //normalize row
-<span class="fc" id="L453">                    rowNorm = Math.sqrt(</span>
-<span class="fc" id="L454">                        Math.pow(row.getElementAt(1, 4), 2.0) +</span>
-<span class="fc" id="L455">                        Math.pow(row.getElementAt(1, 5), 2.0) +</span>
-<span class="fc" id="L456">                        Math.pow(row.getElementAt(1, 6), 2.0) +</span>
-<span class="fc" id="L457">                        Math.pow(row.getElementAt(1, 7), 2.0) +</span>
-<span class="fc" id="L458">                        Math.pow(row.getElementAt(1, 8), 2.0) +</span>
-<span class="fc" id="L459">                        Math.pow(row.getElementAt(1, 9), 2.0) +</span>
-<span class="fc" id="L460">                        Math.pow(row.getElementAt(1, 10), 2.0) +</span>
-<span class="fc" id="L461">                        Math.pow(row.getElementAt(1, 11), 2.0));</span>
+<span class="fc" id="L455">                    rowNorm = Math.sqrt(</span>
+<span class="fc" id="L456">                        Math.pow(row.getElementAt(1, 4), 2.0) +</span>
+<span class="fc" id="L457">                        Math.pow(row.getElementAt(1, 5), 2.0) +</span>
+<span class="fc" id="L458">                        Math.pow(row.getElementAt(1, 6), 2.0) +</span>
+<span class="fc" id="L459">                        Math.pow(row.getElementAt(1, 7), 2.0) +</span>
+<span class="fc" id="L460">                        Math.pow(row.getElementAt(1, 8), 2.0) +</span>
+<span class="fc" id="L461">                        Math.pow(row.getElementAt(1, 9), 2.0) +</span>
+<span class="fc" id="L462">                        Math.pow(row.getElementAt(1, 10), 2.0) +</span>
+<span class="fc" id="L463">                        Math.pow(row.getElementAt(1, 11), 2.0));</span>
 
-<span class="fc" id="L463">                    row.setElementAt(1, 4, row.getElementAt(1, 4) / </span>
+<span class="fc" id="L465">                    row.setElementAt(1, 4, row.getElementAt(1, 4) / </span>
                         rowNorm);
-<span class="fc" id="L465">                    row.setElementAt(1, 5, row.getElementAt(1, 5) / </span>
+<span class="fc" id="L467">                    row.setElementAt(1, 5, row.getElementAt(1, 5) / </span>
                         rowNorm);
-<span class="fc" id="L467">                    row.setElementAt(1, 6, row.getElementAt(1, 6) / </span>
+<span class="fc" id="L469">                    row.setElementAt(1, 6, row.getElementAt(1, 6) / </span>
                         rowNorm);
-<span class="fc" id="L469">                    row.setElementAt(1, 7, row.getElementAt(1, 7) / </span>
+<span class="fc" id="L471">                    row.setElementAt(1, 7, row.getElementAt(1, 7) / </span>
                         rowNorm);
-<span class="fc" id="L471">                    row.setElementAt(1, 8, row.getElementAt(1, 8) / </span>
+<span class="fc" id="L473">                    row.setElementAt(1, 8, row.getElementAt(1, 8) / </span>
                         rowNorm);
-<span class="fc" id="L473">                    row.setElementAt(1, 9, row.getElementAt(1, 9) / </span>
+<span class="fc" id="L475">                    row.setElementAt(1, 9, row.getElementAt(1, 9) / </span>
                         rowNorm);
-<span class="fc" id="L475">                    row.setElementAt(1, 10, row.getElementAt(1, 10) / </span>
+<span class="fc" id="L477">                    row.setElementAt(1, 10, row.getElementAt(1, 10) / </span>
                         rowNorm);
-<span class="fc" id="L477">                    row.setElementAt(1, 11, row.getElementAt(1, 11) / </span>
+<span class="fc" id="L479">                    row.setElementAt(1, 11, row.getElementAt(1, 11) / </span>
                         rowNorm);
                     
-<span class="fc" id="L480">                    row.transpose(transRow); //transRow = row'</span>
-<span class="fc" id="L481">                    transRow.multiply(row, tmp); //tmp = row' * row</span>
+<span class="fc" id="L482">                    row.transpose(transRow); //transRow = row'</span>
+<span class="fc" id="L483">                    transRow.multiply(row, tmp); //tmp = row' * row</span>
                     
-<span class="fc" id="L483">                    tmp.multiplyByScalar(1.0 / previousNorm);</span>
+<span class="fc" id="L485">                    tmp.multiplyByScalar(1.0 / previousNorm);</span>
                     
                     //a += 1.0 / previousNorm * tmp
-<span class="fc" id="L486">                    a.add(tmp);</span>
+<span class="fc" id="L488">                    a.add(tmp);</span>
                     //normalize
-<span class="fc" id="L488">                    previousNorm = Utils.normF(a);</span>
-<span class="fc" id="L489">                    a.multiplyByScalar(1.0 / previousNorm);</span>
+<span class="fc" id="L490">                    previousNorm = Utils.normF(a);</span>
+<span class="fc" id="L491">                    a.multiplyByScalar(1.0 / previousNorm);</span>
                     
-<span class="fc" id="L491">                    nMatches++;</span>
+<span class="fc" id="L493">                    nMatches++;</span>
                 }
-<span class="fc" id="L493">                index++;</span>
+<span class="fc" id="L495">                index++;</span>
             }
             
-<span class="pc bpc" id="L496" title="1 of 2 branches missed.">            if (nMatches &lt; MIN_NUMBER_OF_POINT_CORRESPONDENCES) {</span>
-<span class="nc" id="L497">                throw new PinholeCameraEstimatorException();</span>
+<span class="pc bpc" id="L498" title="1 of 2 branches missed.">            if (nMatches &lt; MIN_NUMBER_OF_POINT_CORRESPONDENCES) {</span>
+<span class="nc" id="L499">                throw new PinholeCameraEstimatorException();</span>
             }
             
-<span class="fc" id="L500">            SingularValueDecomposer decomposer = new SingularValueDecomposer(a);</span>
-<span class="fc" id="L501">            decomposer.decompose();</span>
+<span class="fc" id="L502">            SingularValueDecomposer decomposer = new SingularValueDecomposer(a);</span>
+<span class="fc" id="L503">            decomposer.decompose();</span>
             
-<span class="pc bpc" id="L503" title="1 of 2 branches missed.">            if (decomposer.getNullity() &gt; 1) {</span>
+<span class="pc bpc" id="L505" title="1 of 2 branches missed.">            if (decomposer.getNullity() &gt; 1) {</span>
                 //point configuration is degenerate and exists a linear 
                 //combination of possible pinhole cameras (i.e. solution is not
                 //unique up to scale)
-<span class="nc" id="L507">                throw new PinholeCameraEstimatorException();</span>
+<span class="nc" id="L509">                throw new PinholeCameraEstimatorException();</span>
             }
             
-<span class="fc" id="L510">            Matrix v = decomposer.getV();</span>
+<span class="fc" id="L512">            Matrix v = decomposer.getV();</span>
             
             //use last column of V as pinhole camera vector
             
             //the last column of V contains pinhole camera matrix ordered by 
             //rows as: P11, P12, P13, P14, P21, P22, P23, P24, P31, P32, P33, 
             //P34, hence we reorder p
-<span class="fc" id="L517">            Matrix pinholeCameraMatrix = new Matrix(</span>
+<span class="fc" id="L519">            Matrix pinholeCameraMatrix = new Matrix(</span>
                     PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS,
                     PinholeCamera.PINHOLE_CAMERA_MATRIX_COLS);
             
-<span class="fc" id="L521">            pinholeCameraMatrix.setElementAt(0, 0, v.getElementAt(0, 11));</span>
-<span class="fc" id="L522">            pinholeCameraMatrix.setElementAt(0, 1, v.getElementAt(1, 11));</span>
-<span class="fc" id="L523">            pinholeCameraMatrix.setElementAt(0, 2, v.getElementAt(2, 11));</span>
-<span class="fc" id="L524">            pinholeCameraMatrix.setElementAt(0, 3, v.getElementAt(3, 11));</span>
+<span class="fc" id="L523">            pinholeCameraMatrix.setElementAt(0, 0, v.getElementAt(0, 11));</span>
+<span class="fc" id="L524">            pinholeCameraMatrix.setElementAt(0, 1, v.getElementAt(1, 11));</span>
+<span class="fc" id="L525">            pinholeCameraMatrix.setElementAt(0, 2, v.getElementAt(2, 11));</span>
+<span class="fc" id="L526">            pinholeCameraMatrix.setElementAt(0, 3, v.getElementAt(3, 11));</span>
             
-<span class="fc" id="L526">            pinholeCameraMatrix.setElementAt(1, 0, v.getElementAt(4, 11));</span>
-<span class="fc" id="L527">            pinholeCameraMatrix.setElementAt(1, 1, v.getElementAt(5, 11));</span>
-<span class="fc" id="L528">            pinholeCameraMatrix.setElementAt(1, 2, v.getElementAt(6, 11));</span>
-<span class="fc" id="L529">            pinholeCameraMatrix.setElementAt(1, 3, v.getElementAt(7, 11));</span>
+<span class="fc" id="L528">            pinholeCameraMatrix.setElementAt(1, 0, v.getElementAt(4, 11));</span>
+<span class="fc" id="L529">            pinholeCameraMatrix.setElementAt(1, 1, v.getElementAt(5, 11));</span>
+<span class="fc" id="L530">            pinholeCameraMatrix.setElementAt(1, 2, v.getElementAt(6, 11));</span>
+<span class="fc" id="L531">            pinholeCameraMatrix.setElementAt(1, 3, v.getElementAt(7, 11));</span>
             
-<span class="fc" id="L531">            pinholeCameraMatrix.setElementAt(2, 0, v.getElementAt(8, 11));</span>
-<span class="fc" id="L532">            pinholeCameraMatrix.setElementAt(2, 1, v.getElementAt(9, 11));</span>
-<span class="fc" id="L533">            pinholeCameraMatrix.setElementAt(2, 2, v.getElementAt(10, 11));</span>
-<span class="fc" id="L534">            pinholeCameraMatrix.setElementAt(2, 3, v.getElementAt(11, 11));</span>
+<span class="fc" id="L533">            pinholeCameraMatrix.setElementAt(2, 0, v.getElementAt(8, 11));</span>
+<span class="fc" id="L534">            pinholeCameraMatrix.setElementAt(2, 1, v.getElementAt(9, 11));</span>
+<span class="fc" id="L535">            pinholeCameraMatrix.setElementAt(2, 2, v.getElementAt(10, 11));</span>
+<span class="fc" id="L536">            pinholeCameraMatrix.setElementAt(2, 3, v.getElementAt(11, 11));</span>
             
             //because pinholeCameraMatrix has been obtained as the last column 
             //of V, then its frobenius norm will be 1 because SVD already 
             //returns normalized singular vector
 
-<span class="fc" id="L540">            return pinholeCameraMatrix;</span>
+<span class="fc" id="L542">            return pinholeCameraMatrix;</span>
             
-<span class="nc" id="L542">        } catch (PinholeCameraEstimatorException e) {</span>
-<span class="nc" id="L543">            throw e;</span>
-<span class="nc" id="L544">        } catch (Exception e) {</span>
-<span class="nc" id="L545">            throw new PinholeCameraEstimatorException(e);</span>
+<span class="nc" id="L544">        } catch (PinholeCameraEstimatorException e) {</span>
+<span class="nc" id="L545">            throw e;</span>
+<span class="nc" id="L546">        } catch (Exception e) {</span>
+<span class="nc" id="L547">            throw new PinholeCameraEstimatorException(e);</span>
         }
     }
     
@@ -552,7 +554,7 @@ public class WeightedPointCorrespondencePinholeCameraEstimator  extends
      */       
     @Override
     public PinholeCameraEstimatorType getType() {
-<span class="fc" id="L555">        return PinholeCameraEstimatorType.</span>
+<span class="fc" id="L557">        return PinholeCameraEstimatorType.</span>
                 WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR;
     }    
 }

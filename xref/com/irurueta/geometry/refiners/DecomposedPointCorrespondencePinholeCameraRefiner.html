@@ -251,321 +251,320 @@
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">     * or equal than maximum value.</em>
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L245" href="#L245">245</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setMinMaxSuggestionWeight(<strong class="jxr_keyword">double</strong> minSuggestionWeight, 
-<a class="jxr_linenumber" name="L246" href="#L246">246</a>             <strong class="jxr_keyword">double</strong> maxSuggestionWeight) <strong class="jxr_keyword">throws</strong> LockedException, 
-<a class="jxr_linenumber" name="L247" href="#L247">247</a>             IllegalArgumentException {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
-<a class="jxr_linenumber" name="L249" href="#L249">249</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/LockedException.html">LockedException</a>();
-<a class="jxr_linenumber" name="L250" href="#L250">250</a>         }
-<a class="jxr_linenumber" name="L251" href="#L251">251</a>         <strong class="jxr_keyword">if</strong> (minSuggestionWeight &gt;= maxSuggestionWeight) {
-<a class="jxr_linenumber" name="L252" href="#L252">252</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L253" href="#L253">253</a>         }
-<a class="jxr_linenumber" name="L254" href="#L254">254</a>         
-<a class="jxr_linenumber" name="L255" href="#L255">255</a>         mMinSuggestionWeight = minSuggestionWeight;
-<a class="jxr_linenumber" name="L256" href="#L256">256</a>         mMaxSuggestionWeight = maxSuggestionWeight;
-<a class="jxr_linenumber" name="L257" href="#L257">257</a>     }
-<a class="jxr_linenumber" name="L258" href="#L258">258</a>     
-<a class="jxr_linenumber" name="L259" href="#L259">259</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">     * Gets step to increase suggestion weight. This weight is used to slowly</em>
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">     * draw original camera parameters into desired suggested values. Suggestion</em>
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">     * weight slowly increases each time Levenberg-Marquardt is used to find a</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">     * solution so that the algorithm can converge into desired value. The </em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">     * faster the weights are increased the less likely that suggested values</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">     * can be converged if they differ too much from the original ones.</em>
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">     * @return step to increase suggestion weight.</em>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L268" href="#L268">268</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> getSuggestionWeightStep() {
-<a class="jxr_linenumber" name="L269" href="#L269">269</a>         <strong class="jxr_keyword">return</strong> mSuggestionWeightStep;
-<a class="jxr_linenumber" name="L270" href="#L270">270</a>     }
-<a class="jxr_linenumber" name="L271" href="#L271">271</a>     
-<a class="jxr_linenumber" name="L272" href="#L272">272</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">     * Sets step to increase suggestion weight. This weight is used to slowly</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">     * draw original camera parameters into desired suggested values. Suggestion</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">     * weight slowly increases each time Levenberg-Marquardt is used to find a</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">     * solution so that the algorithm can converge into desired value. The </em>
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">     * faster the weights are increased the less likely that suggested values</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">     * can be converged if they differ too much from the original ones.</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">     * @param suggestionWeightStep step to increase suggestion weight.</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">     * @throws LockedException if estimator is locked.</em>
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided step is negative or zero.</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L283" href="#L283">283</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSuggestionWeightStep(<strong class="jxr_keyword">double</strong> suggestionWeightStep) 
-<a class="jxr_linenumber" name="L284" href="#L284">284</a>             <strong class="jxr_keyword">throws</strong> LockedException, IllegalArgumentException {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
-<a class="jxr_linenumber" name="L286" href="#L286">286</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/LockedException.html">LockedException</a>();
-<a class="jxr_linenumber" name="L287" href="#L287">287</a>         }
-<a class="jxr_linenumber" name="L288" href="#L288">288</a>         <strong class="jxr_keyword">if</strong> (suggestionWeightStep &lt;= 0.0) {
-<a class="jxr_linenumber" name="L289" href="#L289">289</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L290" href="#L290">290</a>         }
-<a class="jxr_linenumber" name="L291" href="#L291">291</a>         
-<a class="jxr_linenumber" name="L292" href="#L292">292</a>         mSuggestionWeightStep = suggestionWeightStep;
-<a class="jxr_linenumber" name="L293" href="#L293">293</a>     }    
-<a class="jxr_linenumber" name="L294" href="#L294">294</a>     
-<a class="jxr_linenumber" name="L295" href="#L295">295</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">     * Refines provided initial estimation.</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">     * This method always sets a value into provided result instance regardless </em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">     * of the fact that error has actually improved in LMSE terms or not.</em>
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">     * @param result instance where refined estimation will be stored.</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">     * @return true if result improves (decreases) in LMSE terms respect to</em>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">     * initial estimation, false if no improvement has been achieved.</em>
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">     * @throws NotReadyException if not enough input data has been provided.</em>
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">     * @throws LockedException if estimator is locked because refinement is</em>
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">     * already in progress.</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">     * @throws RefinerException if refinement fails for some reason (e.g. unable</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">     * to converge to a result).</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">     */</em>    
-<a class="jxr_linenumber" name="L308" href="#L308">308</a>     @Override
-<a class="jxr_linenumber" name="L309" href="#L309">309</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> refine(<a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> result) <strong class="jxr_keyword">throws</strong> NotReadyException, 
-<a class="jxr_linenumber" name="L310" href="#L310">310</a>             LockedException, <a href="../../../../com/irurueta/geometry/refiners/RefinerException.html">RefinerException</a> {
-<a class="jxr_linenumber" name="L311" href="#L311">311</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/LockedException.html">LockedException</a>();
-<a class="jxr_linenumber" name="L313" href="#L313">313</a>         }
-<a class="jxr_linenumber" name="L314" href="#L314">314</a>         <strong class="jxr_keyword">if</strong> (!isReady()) {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/NotReadyException.html">NotReadyException</a>();
-<a class="jxr_linenumber" name="L316" href="#L316">316</a>         }
-<a class="jxr_linenumber" name="L317" href="#L317">317</a>         
-<a class="jxr_linenumber" name="L318" href="#L318">318</a>         mLocked = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L319" href="#L319">319</a>         
-<a class="jxr_linenumber" name="L320" href="#L320">320</a>         <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L321" href="#L321">321</a>             mListener.onRefineStart(<strong class="jxr_keyword">this</strong>, mInitialEstimation);
-<a class="jxr_linenumber" name="L322" href="#L322">322</a>         }
-<a class="jxr_linenumber" name="L323" href="#L323">323</a>         
-<a class="jxr_linenumber" name="L324" href="#L324">324</a>         <strong class="jxr_keyword">boolean</strong> improved = refinePowell(result);
-<a class="jxr_linenumber" name="L325" href="#L325">325</a>         
-<a class="jxr_linenumber" name="L326" href="#L326">326</a>         <strong class="jxr_keyword">if</strong> (mKeepCovariance) {
-<a class="jxr_linenumber" name="L327" href="#L327">327</a>             mCovariance = estimateCovarianceLevenbergMarquardt(
-<a class="jxr_linenumber" name="L328" href="#L328">328</a>                     improved ? result : mInitialEstimation, 
-<a class="jxr_linenumber" name="L329" href="#L329">329</a>                     mCurrentWeight);
-<a class="jxr_linenumber" name="L330" href="#L330">330</a>         }
-<a class="jxr_linenumber" name="L331" href="#L331">331</a>         
-<a class="jxr_linenumber" name="L332" href="#L332">332</a>         <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L333" href="#L333">333</a>             mListener.onRefineEnd(<strong class="jxr_keyword">this</strong>, mInitialEstimation, result, improved);
-<a class="jxr_linenumber" name="L334" href="#L334">334</a>         }
-<a class="jxr_linenumber" name="L335" href="#L335">335</a>         
-<a class="jxr_linenumber" name="L336" href="#L336">336</a>         mLocked = false;
-<a class="jxr_linenumber" name="L337" href="#L337">337</a>         
-<a class="jxr_linenumber" name="L338" href="#L338">338</a>         <strong class="jxr_keyword">return</strong> improved;
-<a class="jxr_linenumber" name="L339" href="#L339">339</a>     } 
-<a class="jxr_linenumber" name="L340" href="#L340">340</a>     
-<a class="jxr_linenumber" name="L341" href="#L341">341</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">     * Estimates covariance matrix for provided estimated and refined camera</em>
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">     * @param pinholeCamera pinhole camera to estimate covariance for.</em>
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">     * @param weight weight for suggestion residual.</em>
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">     * @return estimated covariance or null if anything fails.</em>
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a>     <strong class="jxr_keyword">private</strong> Matrix estimateCovarianceLevenbergMarquardt(
-<a class="jxr_linenumber" name="L348" href="#L348">348</a>             <a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> pinholeCamera, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> weight) {
-<a class="jxr_linenumber" name="L349" href="#L349">349</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L350" href="#L350">350</a>             pinholeCamera.normalize();
-<a class="jxr_linenumber" name="L351" href="#L351">351</a>             
-<a class="jxr_linenumber" name="L352" href="#L352">352</a>             <em class="jxr_comment">//output values to be fitted/optimized will contain residuals</em>
-<a class="jxr_linenumber" name="L353" href="#L353">353</a>             <strong class="jxr_keyword">double</strong>[] y = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[mNumInliers];
-<a class="jxr_linenumber" name="L354" href="#L354">354</a>             <em class="jxr_comment">//input values will contain 3D point and 2D point to compute </em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a>             <em class="jxr_comment">//residuals</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> nDims = Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH +
-<a class="jxr_linenumber" name="L357" href="#L357">357</a>                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH;
-<a class="jxr_linenumber" name="L358" href="#L358">358</a>             Matrix x = <strong class="jxr_keyword">new</strong> Matrix(mNumInliers, nDims);
-<a class="jxr_linenumber" name="L359" href="#L359">359</a>             <strong class="jxr_keyword">int</strong> nSamples = mInliers.length();
-<a class="jxr_linenumber" name="L360" href="#L360">360</a>             <strong class="jxr_keyword">int</strong> pos = 0;
-<a class="jxr_linenumber" name="L361" href="#L361">361</a>             <a href="../../../../com/irurueta/geometry/Point2D.html">Point2D</a> point2D;
-<a class="jxr_linenumber" name="L362" href="#L362">362</a>             <a href="../../../../com/irurueta/geometry/Point3D.html">Point3D</a> point3D;
-<a class="jxr_linenumber" name="L363" href="#L363">363</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] initParams = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[REFINE_DIMS];
-<a class="jxr_linenumber" name="L364" href="#L364">364</a>             cameraToParameters(pinholeCamera, initParams);
-<a class="jxr_linenumber" name="L365" href="#L365">365</a>             
-<a class="jxr_linenumber" name="L366" href="#L366">366</a>             <strong class="jxr_keyword">double</strong> suggestionResidual = hasSuggestions() ?
-<a class="jxr_linenumber" name="L367" href="#L367">367</a>                     suggestionResidual(initParams, weight) : 0.0;
-<a class="jxr_linenumber" name="L368" href="#L368">368</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; nSamples; i++) {
-<a class="jxr_linenumber" name="L369" href="#L369">369</a>                 <strong class="jxr_keyword">if</strong> (mInliers.get(i)) {
-<a class="jxr_linenumber" name="L370" href="#L370">370</a>                     <em class="jxr_comment">//sample is inlier</em>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a>                     point2D = mSamples2.get(i);
-<a class="jxr_linenumber" name="L372" href="#L372">372</a>                     point3D = mSamples1.get(i);
-<a class="jxr_linenumber" name="L373" href="#L373">373</a>                     point2D.normalize();
-<a class="jxr_linenumber" name="L374" href="#L374">374</a>                     point3D.normalize();
-<a class="jxr_linenumber" name="L375" href="#L375">375</a>                     x.setElementAt(pos, 0, point2D.getHomX());
-<a class="jxr_linenumber" name="L376" href="#L376">376</a>                     x.setElementAt(pos, 1, point2D.getHomY());
-<a class="jxr_linenumber" name="L377" href="#L377">377</a>                     x.setElementAt(pos, 2, point2D.getHomW());
-<a class="jxr_linenumber" name="L378" href="#L378">378</a>                     x.setElementAt(pos, 3, point3D.getHomX());
-<a class="jxr_linenumber" name="L379" href="#L379">379</a>                     x.setElementAt(pos, 4, point3D.getHomY());
-<a class="jxr_linenumber" name="L380" href="#L380">380</a>                     x.setElementAt(pos, 5, point3D.getHomZ());
-<a class="jxr_linenumber" name="L381" href="#L381">381</a>                     x.setElementAt(pos, 6, point3D.getHomW());
-<a class="jxr_linenumber" name="L382" href="#L382">382</a>                         
-<a class="jxr_linenumber" name="L383" href="#L383">383</a>                     y[pos] = Math.pow(mResiduals[i], 2.0) + suggestionResidual;
-<a class="jxr_linenumber" name="L384" href="#L384">384</a>                     pos++;
-<a class="jxr_linenumber" name="L385" href="#L385">385</a>                 }
-<a class="jxr_linenumber" name="L386" href="#L386">386</a>             }
-<a class="jxr_linenumber" name="L387" href="#L387">387</a>             
-<a class="jxr_linenumber" name="L388" href="#L388">388</a>             LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
-<a class="jxr_linenumber" name="L389" href="#L389">389</a>                     <strong class="jxr_keyword">new</strong> LevenbergMarquardtMultiDimensionFunctionEvaluator() {
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>                         
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>                 <strong class="jxr_keyword">private</strong> <a href="../../../../com/irurueta/geometry/Point2D.html">Point2D</a> mPoint2D = Point2D.create(
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>                         CoordinatesType.HOMOGENEOUS_COORDINATES);
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>                 
-<a class="jxr_linenumber" name="L394" href="#L394">394</a>                 <strong class="jxr_keyword">private</strong> <a href="../../../../com/irurueta/geometry/Point3D.html">Point3D</a> mPoint3D = Point3D.create(
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>                         CoordinatesType.HOMOGENEOUS_COORDINATES);
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>                 
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>                 <strong class="jxr_keyword">private</strong> <a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> mPinholeCamera = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a>();
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>                 
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>                 <strong class="jxr_keyword">private</strong> GradientEstimator mGradientEstimator =
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>                         <strong class="jxr_keyword">new</strong> GradientEstimator(
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>                                 <strong class="jxr_keyword">new</strong> MultiDimensionFunctionEvaluatorListener() {
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>                     @Override
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>                     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> evaluate(<strong class="jxr_keyword">double</strong>[] params) {
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>                         
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>                         parametersToCamera(params, mPinholeCamera);
-<a class="jxr_linenumber" name="L406" href="#L406">406</a>                         <strong class="jxr_keyword">return</strong> residualLevenbergMarquardt(mPinholeCamera, 
-<a class="jxr_linenumber" name="L407" href="#L407">407</a>                                 mPoint3D, mPoint2D, params, weight);
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>                     }
-<a class="jxr_linenumber" name="L409" href="#L409">409</a>                 });
-<a class="jxr_linenumber" name="L410" href="#L410">410</a>                 
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>                 @Override
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>                 <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getNumberOfDimensions() {
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>                     <strong class="jxr_keyword">return</strong> nDims;
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>                 }
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>                 @Override
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>                 <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong>[] createInitialParametersArray() {
-<a class="jxr_linenumber" name="L418" href="#L418">418</a>                     <strong class="jxr_keyword">return</strong> initParams;
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>                 }
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>                 @Override
-<a class="jxr_linenumber" name="L422" href="#L422">422</a>                 <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> evaluate(<strong class="jxr_keyword">int</strong> i, <strong class="jxr_keyword">double</strong>[] point, <strong class="jxr_keyword">double</strong>[] params, 
-<a class="jxr_linenumber" name="L423" href="#L423">423</a>                         <strong class="jxr_keyword">double</strong>[] derivatives) <strong class="jxr_keyword">throws</strong> EvaluationException {
-<a class="jxr_linenumber" name="L424" href="#L424">424</a>                     mPoint2D.setHomogeneousCoordinates(point[0], point[1], 
-<a class="jxr_linenumber" name="L425" href="#L425">425</a>                             point[2]);
-<a class="jxr_linenumber" name="L426" href="#L426">426</a>                     mPoint3D.setHomogeneousCoordinates(point[3], point[4], 
-<a class="jxr_linenumber" name="L427" href="#L427">427</a>                             point[5], point[6]);
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
-<a class="jxr_linenumber" name="L429" href="#L429">429</a>                     parametersToCamera(params, mPinholeCamera);
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>                     <strong class="jxr_keyword">double</strong> y = residualLevenbergMarquardt(mPinholeCamera, 
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>                             mPoint3D, mPoint2D, params, weight);                      
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>                     mGradientEstimator.gradient(params, derivatives);
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>                         
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>                     <strong class="jxr_keyword">return</strong> y;
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>                 }
-<a class="jxr_linenumber" name="L436" href="#L436">436</a>             };
-<a class="jxr_linenumber" name="L437" href="#L437">437</a>             
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>             LevenbergMarquardtMultiDimensionFitter fitter =
-<a class="jxr_linenumber" name="L439" href="#L439">439</a>                     <strong class="jxr_keyword">new</strong> LevenbergMarquardtMultiDimensionFitter(evaluator, 
-<a class="jxr_linenumber" name="L440" href="#L440">440</a>                     x, y, getRefinementStandardDeviation());
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>                 
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>             fitter.fit();
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>             <em class="jxr_comment">//obtain covariance</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>             <strong class="jxr_keyword">return</strong> fitter.getCovar();
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>             
-<a class="jxr_linenumber" name="L447" href="#L447">447</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L448" href="#L448">448</a>             <em class="jxr_comment">//estimation failed, so we return null</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>         }
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>     }
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>         
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">     * Refines camera using Powell optimization to minimize a cost function</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">     * consisting on the sum of squared projection residuals plus the</em>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">     * suggestion residual for any suggested terms.</em>
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">     * @param result instance where refined estimation will be stored.</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">     * @return true if result improves (decreases) in LMSE terms respect to</em>
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">     * initial estimation, false if no improvement has been achieved.</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">     */</em>    
-<a class="jxr_linenumber" name="L461" href="#L461">461</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> refinePowell(<a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> result) {
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>         <strong class="jxr_keyword">boolean</strong> improvedAtLeastOnce = false;
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>         mCurrentWeight = mMinSuggestionWeight;    
-<a class="jxr_linenumber" name="L464" href="#L464">464</a>         
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>         <strong class="jxr_keyword">if</strong> (hasSuggestions()) {
-<a class="jxr_linenumber" name="L466" href="#L466">466</a>             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L467" href="#L467">467</a>                 <em class="jxr_comment">//copy camera into a new instance</em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a>                 mRefineCamera = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a>(
-<a class="jxr_linenumber" name="L469" href="#L469">469</a>                         mInitialEstimation.getInternalMatrix().clone());
-<a class="jxr_linenumber" name="L470" href="#L470">470</a>                 mRefineCamera.normalize();
-<a class="jxr_linenumber" name="L471" href="#L471">471</a>                 
-<a class="jxr_linenumber" name="L472" href="#L472">472</a>                 <strong class="jxr_keyword">double</strong>[] startPoint = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[REFINE_DIMS];
-<a class="jxr_linenumber" name="L473" href="#L473">473</a>                 <a href="../../../../com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a> listener =
-<a class="jxr_linenumber" name="L474" href="#L474">474</a>                         <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a>();
-<a class="jxr_linenumber" name="L475" href="#L475">475</a>                 PowellMultiOptimizer optimizer = <strong class="jxr_keyword">new</strong> PowellMultiOptimizer(
-<a class="jxr_linenumber" name="L476" href="#L476">476</a>                         listener,
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>                         PowellMultiOptimizer.DEFAULT_TOLERANCE);
-<a class="jxr_linenumber" name="L478" href="#L478">478</a>                 
-<a class="jxr_linenumber" name="L479" href="#L479">479</a>                 <strong class="jxr_keyword">boolean</strong> improved;
-<a class="jxr_linenumber" name="L480" href="#L480">480</a>                 <strong class="jxr_keyword">do</strong> {           
-<a class="jxr_linenumber" name="L481" href="#L481">481</a>                     improved = refinementStepPowell(optimizer, listener, 
-<a class="jxr_linenumber" name="L482" href="#L482">482</a>                             startPoint, mCurrentWeight);
-<a class="jxr_linenumber" name="L483" href="#L483">483</a>                     
-<a class="jxr_linenumber" name="L484" href="#L484">484</a>                     <strong class="jxr_keyword">if</strong>(improved) {
-<a class="jxr_linenumber" name="L485" href="#L485">485</a>                         <em class="jxr_comment">//update result</em>
-<a class="jxr_linenumber" name="L486" href="#L486">486</a>                         result.setInternalMatrix(
-<a class="jxr_linenumber" name="L487" href="#L487">487</a>                                 mRefineCamera.getInternalMatrix().clone());
-<a class="jxr_linenumber" name="L488" href="#L488">488</a>                         improvedAtLeastOnce = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L489" href="#L489">489</a>                     }
-<a class="jxr_linenumber" name="L490" href="#L490">490</a>                     
-<a class="jxr_linenumber" name="L491" href="#L491">491</a>                     mCurrentWeight += mSuggestionWeightStep;
-<a class="jxr_linenumber" name="L492" href="#L492">492</a>                 } <strong class="jxr_keyword">while</strong> (mCurrentWeight &lt; mMaxSuggestionWeight &amp;&amp; improved);
-<a class="jxr_linenumber" name="L493" href="#L493">493</a>                                                                                 
-<a class="jxr_linenumber" name="L494" href="#L494">494</a>                 <strong class="jxr_keyword">return</strong> improvedAtLeastOnce;
-<a class="jxr_linenumber" name="L495" href="#L495">495</a>             } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L496" href="#L496">496</a>                 <em class="jxr_comment">//refinement failed, so we return input value</em>
-<a class="jxr_linenumber" name="L497" href="#L497">497</a>                 <strong class="jxr_keyword">return</strong> improvedAtLeastOnce;
-<a class="jxr_linenumber" name="L498" href="#L498">498</a>             }
-<a class="jxr_linenumber" name="L499" href="#L499">499</a>         }
-<a class="jxr_linenumber" name="L500" href="#L500">500</a>         <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L501" href="#L501">501</a>     }
-<a class="jxr_linenumber" name="L502" href="#L502">502</a>     
-<a class="jxr_linenumber" name="L503" href="#L503">503</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">     * Computes one refinement step using Powell optimizer for a given weight</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">     * on suggestion terms.</em>
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">     * @param optimizer Powell optimizer to be reused.</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">     * @param listener Powell optimizer listener to be reused.</em>
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">     * @param startPoint starting point for powell optimization. This array is</em>
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">     * passed only for reuse purposes.</em>
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">     * @param weight suggestion terms weight.</em>
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">     * @return true if this refinement step decreased projection error in LMSE</em>
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">     * terms, false otherwise.</em>
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">     * @throws Exception if something failed.</em>
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L515" href="#L515">515</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> refinementStepPowell(PowellMultiOptimizer optimizer, 
-<a class="jxr_linenumber" name="L516" href="#L516">516</a>             <a href="../../../../com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a> listener,
-<a class="jxr_linenumber" name="L517" href="#L517">517</a>             <strong class="jxr_keyword">double</strong>[] startPoint, <strong class="jxr_keyword">double</strong> weight) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L518" href="#L518">518</a>         
-<a class="jxr_linenumber" name="L519" href="#L519">519</a>         listener.weight = weight;
-<a class="jxr_linenumber" name="L520" href="#L520">520</a>         cameraToParameters(mRefineCamera, startPoint);
-<a class="jxr_linenumber" name="L521" href="#L521">521</a>         <strong class="jxr_keyword">double</strong> initResidual = residualPowell(mRefineCamera, startPoint, weight);
-<a class="jxr_linenumber" name="L522" href="#L522">522</a>                     
-<a class="jxr_linenumber" name="L523" href="#L523">523</a>         optimizer.setStartPoint(startPoint);                
-<a class="jxr_linenumber" name="L524" href="#L524">524</a>         optimizer.minimize();
-<a class="jxr_linenumber" name="L525" href="#L525">525</a>                     
-<a class="jxr_linenumber" name="L526" href="#L526">526</a>         <strong class="jxr_keyword">double</strong>[] resultParams = optimizer.getResult();
-<a class="jxr_linenumber" name="L527" href="#L527">527</a>         parametersToCamera(resultParams, mRefineCamera);
-<a class="jxr_linenumber" name="L528" href="#L528">528</a>         
-<a class="jxr_linenumber" name="L529" href="#L529">529</a>         <strong class="jxr_keyword">double</strong> finalResidual = residualPowell(mRefineCamera, resultParams, 
-<a class="jxr_linenumber" name="L530" href="#L530">530</a>                 weight);
-<a class="jxr_linenumber" name="L531" href="#L531">531</a>         
-<a class="jxr_linenumber" name="L532" href="#L532">532</a>         <strong class="jxr_keyword">return</strong> finalResidual &lt; initResidual;
-<a class="jxr_linenumber" name="L533" href="#L533">533</a>     }
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 
-<a class="jxr_linenumber" name="L535" href="#L535">535</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">     * Listener for powell optimizer to minimize cost function during </em>
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">     * refinement.</em>
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">     * A weight can be provided so that required parameters are slowly drawn</em>
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">     * to suggested values.</em>
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L541" href="#L541">541</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a> 
-<a class="jxr_linenumber" name="L542" href="#L542">542</a>             <strong class="jxr_keyword">implements</strong> MultiDimensionFunctionEvaluatorListener {
-<a class="jxr_linenumber" name="L543" href="#L543">543</a>         <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">         * Weight to slowly draw parameters to suggested values.</em>
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> <em class="jxr_javadoccomment">         */</em>
-<a class="jxr_linenumber" name="L546" href="#L546">546</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> weight;
-<a class="jxr_linenumber" name="L547" href="#L547">547</a>         
-<a class="jxr_linenumber" name="L548" href="#L548">548</a>         <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">         * Evaluates cost function</em>
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">         * @param point parameters to evaluate cost function.</em>
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">         * @return cost value.</em>
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">         * @throws EvaluationException if anything fails.</em>
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">         */</em>
-<a class="jxr_linenumber" name="L554" href="#L554">554</a>         @Override
-<a class="jxr_linenumber" name="L555" href="#L555">555</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> evaluate(<strong class="jxr_keyword">double</strong>[] point) <strong class="jxr_keyword">throws</strong> EvaluationException {
-<a class="jxr_linenumber" name="L556" href="#L556">556</a>             parametersToCamera(point, mRefineCamera);
-<a class="jxr_linenumber" name="L557" href="#L557">557</a>             <strong class="jxr_keyword">return</strong> residualPowell(mRefineCamera, point, weight);
-<a class="jxr_linenumber" name="L558" href="#L558">558</a>         }        
-<a class="jxr_linenumber" name="L559" href="#L559">559</a>     }
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> }
+<a class="jxr_linenumber" name="L246" href="#L246">246</a>             <strong class="jxr_keyword">double</strong> maxSuggestionWeight) <strong class="jxr_keyword">throws</strong> LockedException {
+<a class="jxr_linenumber" name="L247" href="#L247">247</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
+<a class="jxr_linenumber" name="L248" href="#L248">248</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/LockedException.html">LockedException</a>();
+<a class="jxr_linenumber" name="L249" href="#L249">249</a>         }
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>         <strong class="jxr_keyword">if</strong> (minSuggestionWeight &gt;= maxSuggestionWeight) {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>         }
+<a class="jxr_linenumber" name="L253" href="#L253">253</a>         
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>         mMinSuggestionWeight = minSuggestionWeight;
+<a class="jxr_linenumber" name="L255" href="#L255">255</a>         mMaxSuggestionWeight = maxSuggestionWeight;
+<a class="jxr_linenumber" name="L256" href="#L256">256</a>     }
+<a class="jxr_linenumber" name="L257" href="#L257">257</a>     
+<a class="jxr_linenumber" name="L258" href="#L258">258</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">     * Gets step to increase suggestion weight. This weight is used to slowly</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">     * draw original camera parameters into desired suggested values. Suggestion</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">     * weight slowly increases each time Levenberg-Marquardt is used to find a</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">     * solution so that the algorithm can converge into desired value. The </em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">     * faster the weights are increased the less likely that suggested values</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">     * can be converged if they differ too much from the original ones.</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">     * @return step to increase suggestion weight.</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> getSuggestionWeightStep() {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a>         <strong class="jxr_keyword">return</strong> mSuggestionWeightStep;
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>     }
+<a class="jxr_linenumber" name="L270" href="#L270">270</a>     
+<a class="jxr_linenumber" name="L271" href="#L271">271</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">     * Sets step to increase suggestion weight. This weight is used to slowly</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">     * draw original camera parameters into desired suggested values. Suggestion</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">     * weight slowly increases each time Levenberg-Marquardt is used to find a</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">     * solution so that the algorithm can converge into desired value. The </em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">     * faster the weights are increased the less likely that suggested values</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">     * can be converged if they differ too much from the original ones.</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">     * @param suggestionWeightStep step to increase suggestion weight.</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">     * @throws LockedException if estimator is locked.</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException if provided step is negative or zero.</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSuggestionWeightStep(<strong class="jxr_keyword">double</strong> suggestionWeightStep) 
+<a class="jxr_linenumber" name="L283" href="#L283">283</a>             <strong class="jxr_keyword">throws</strong> LockedException, IllegalArgumentException {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
+<a class="jxr_linenumber" name="L285" href="#L285">285</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/LockedException.html">LockedException</a>();
+<a class="jxr_linenumber" name="L286" href="#L286">286</a>         }
+<a class="jxr_linenumber" name="L287" href="#L287">287</a>         <strong class="jxr_keyword">if</strong> (suggestionWeightStep &lt;= 0.0) {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>         }
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>         
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>         mSuggestionWeightStep = suggestionWeightStep;
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>     }    
+<a class="jxr_linenumber" name="L293" href="#L293">293</a>     
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">     * Refines provided initial estimation.</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">     * This method always sets a value into provided result instance regardless </em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">     * of the fact that error has actually improved in LMSE terms or not.</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">     * @param result instance where refined estimation will be stored.</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">     * @return true if result improves (decreases) in LMSE terms respect to</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">     * initial estimation, false if no improvement has been achieved.</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">     * @throws NotReadyException if not enough input data has been provided.</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">     * @throws LockedException if estimator is locked because refinement is</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">     * already in progress.</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">     * @throws RefinerException if refinement fails for some reason (e.g. unable</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">     * to converge to a result).</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">     */</em>    
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>     @Override
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> refine(<a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> result) <strong class="jxr_keyword">throws</strong> NotReadyException, 
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>             LockedException, <a href="../../../../com/irurueta/geometry/refiners/RefinerException.html">RefinerException</a> {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>         <strong class="jxr_keyword">if</strong> (isLocked()) {
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/LockedException.html">LockedException</a>();
+<a class="jxr_linenumber" name="L312" href="#L312">312</a>         }
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>         <strong class="jxr_keyword">if</strong> (!isReady()) {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/estimators/NotReadyException.html">NotReadyException</a>();
+<a class="jxr_linenumber" name="L315" href="#L315">315</a>         }
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>         
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>         mLocked = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>         
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>         <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a>             mListener.onRefineStart(<strong class="jxr_keyword">this</strong>, mInitialEstimation);
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>         }
+<a class="jxr_linenumber" name="L322" href="#L322">322</a>         
+<a class="jxr_linenumber" name="L323" href="#L323">323</a>         <strong class="jxr_keyword">boolean</strong> improved = refinePowell(result);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a>         
+<a class="jxr_linenumber" name="L325" href="#L325">325</a>         <strong class="jxr_keyword">if</strong> (mKeepCovariance) {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a>             mCovariance = estimateCovarianceLevenbergMarquardt(
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>                     improved ? result : mInitialEstimation, 
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>                     mCurrentWeight);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>         }
+<a class="jxr_linenumber" name="L330" href="#L330">330</a>         
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>         <strong class="jxr_keyword">if</strong> (mListener != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a>             mListener.onRefineEnd(<strong class="jxr_keyword">this</strong>, mInitialEstimation, result, improved);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a>         }
+<a class="jxr_linenumber" name="L334" href="#L334">334</a>         
+<a class="jxr_linenumber" name="L335" href="#L335">335</a>         mLocked = false;
+<a class="jxr_linenumber" name="L336" href="#L336">336</a>         
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>         <strong class="jxr_keyword">return</strong> improved;
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>     } 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>     
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">     * Estimates covariance matrix for provided estimated and refined camera</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">     * @param pinholeCamera pinhole camera to estimate covariance for.</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">     * @param weight weight for suggestion residual.</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">     * @return estimated covariance or null if anything fails.</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a>     <strong class="jxr_keyword">private</strong> Matrix estimateCovarianceLevenbergMarquardt(
+<a class="jxr_linenumber" name="L347" href="#L347">347</a>             <a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> pinholeCamera, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> weight) {
+<a class="jxr_linenumber" name="L348" href="#L348">348</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a>             pinholeCamera.normalize();
+<a class="jxr_linenumber" name="L350" href="#L350">350</a>             
+<a class="jxr_linenumber" name="L351" href="#L351">351</a>             <em class="jxr_comment">//output values to be fitted/optimized will contain residuals</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a>             <strong class="jxr_keyword">double</strong>[] y = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[mNumInliers];
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>             <em class="jxr_comment">//input values will contain 3D point and 2D point to compute </em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>             <em class="jxr_comment">//residuals</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> nDims = Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH +
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>                     Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH;
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>             Matrix x = <strong class="jxr_keyword">new</strong> Matrix(mNumInliers, nDims);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a>             <strong class="jxr_keyword">int</strong> nSamples = mInliers.length();
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>             <strong class="jxr_keyword">int</strong> pos = 0;
+<a class="jxr_linenumber" name="L360" href="#L360">360</a>             <a href="../../../../com/irurueta/geometry/Point2D.html">Point2D</a> point2D;
+<a class="jxr_linenumber" name="L361" href="#L361">361</a>             <a href="../../../../com/irurueta/geometry/Point3D.html">Point3D</a> point3D;
+<a class="jxr_linenumber" name="L362" href="#L362">362</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong>[] initParams = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[REFINE_DIMS];
+<a class="jxr_linenumber" name="L363" href="#L363">363</a>             cameraToParameters(pinholeCamera, initParams);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a>             
+<a class="jxr_linenumber" name="L365" href="#L365">365</a>             <strong class="jxr_keyword">double</strong> suggestionResidual = hasSuggestions() ?
+<a class="jxr_linenumber" name="L366" href="#L366">366</a>                     suggestionResidual(initParams, weight) : 0.0;
+<a class="jxr_linenumber" name="L367" href="#L367">367</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; nSamples; i++) {
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>                 <strong class="jxr_keyword">if</strong> (mInliers.get(i)) {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>                     <em class="jxr_comment">//sample is inlier</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>                     point2D = mSamples2.get(i);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>                     point3D = mSamples1.get(i);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a>                     point2D.normalize();
+<a class="jxr_linenumber" name="L373" href="#L373">373</a>                     point3D.normalize();
+<a class="jxr_linenumber" name="L374" href="#L374">374</a>                     x.setElementAt(pos, 0, point2D.getHomX());
+<a class="jxr_linenumber" name="L375" href="#L375">375</a>                     x.setElementAt(pos, 1, point2D.getHomY());
+<a class="jxr_linenumber" name="L376" href="#L376">376</a>                     x.setElementAt(pos, 2, point2D.getHomW());
+<a class="jxr_linenumber" name="L377" href="#L377">377</a>                     x.setElementAt(pos, 3, point3D.getHomX());
+<a class="jxr_linenumber" name="L378" href="#L378">378</a>                     x.setElementAt(pos, 4, point3D.getHomY());
+<a class="jxr_linenumber" name="L379" href="#L379">379</a>                     x.setElementAt(pos, 5, point3D.getHomZ());
+<a class="jxr_linenumber" name="L380" href="#L380">380</a>                     x.setElementAt(pos, 6, point3D.getHomW());
+<a class="jxr_linenumber" name="L381" href="#L381">381</a>                         
+<a class="jxr_linenumber" name="L382" href="#L382">382</a>                     y[pos] = Math.pow(mResiduals[i], 2.0) + suggestionResidual;
+<a class="jxr_linenumber" name="L383" href="#L383">383</a>                     pos++;
+<a class="jxr_linenumber" name="L384" href="#L384">384</a>                 }
+<a class="jxr_linenumber" name="L385" href="#L385">385</a>             }
+<a class="jxr_linenumber" name="L386" href="#L386">386</a>             
+<a class="jxr_linenumber" name="L387" href="#L387">387</a>             LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
+<a class="jxr_linenumber" name="L388" href="#L388">388</a>                     <strong class="jxr_keyword">new</strong> LevenbergMarquardtMultiDimensionFunctionEvaluator() {
+<a class="jxr_linenumber" name="L389" href="#L389">389</a>                         
+<a class="jxr_linenumber" name="L390" href="#L390">390</a>                 <strong class="jxr_keyword">private</strong> <a href="../../../../com/irurueta/geometry/Point2D.html">Point2D</a> mPoint2D = Point2D.create(
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>                         CoordinatesType.HOMOGENEOUS_COORDINATES);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>                 
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>                 <strong class="jxr_keyword">private</strong> <a href="../../../../com/irurueta/geometry/Point3D.html">Point3D</a> mPoint3D = Point3D.create(
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>                         CoordinatesType.HOMOGENEOUS_COORDINATES);
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>                 
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>                 <strong class="jxr_keyword">private</strong> <a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> mPinholeCamera = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a>();
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>                 
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>                 <strong class="jxr_keyword">private</strong> GradientEstimator mGradientEstimator =
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>                         <strong class="jxr_keyword">new</strong> GradientEstimator(
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>                                 <strong class="jxr_keyword">new</strong> MultiDimensionFunctionEvaluatorListener() {
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>                     @Override
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>                     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> evaluate(<strong class="jxr_keyword">double</strong>[] params) {
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>                         
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>                         parametersToCamera(params, mPinholeCamera);
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>                         <strong class="jxr_keyword">return</strong> residualLevenbergMarquardt(mPinholeCamera, 
+<a class="jxr_linenumber" name="L406" href="#L406">406</a>                                 mPoint3D, mPoint2D, params, weight);
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>                     }
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>                 });
+<a class="jxr_linenumber" name="L409" href="#L409">409</a>                 
+<a class="jxr_linenumber" name="L410" href="#L410">410</a>                 @Override
+<a class="jxr_linenumber" name="L411" href="#L411">411</a>                 <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getNumberOfDimensions() {
+<a class="jxr_linenumber" name="L412" href="#L412">412</a>                     <strong class="jxr_keyword">return</strong> nDims;
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>                 }
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>                 @Override
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>                 <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong>[] createInitialParametersArray() {
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>                     <strong class="jxr_keyword">return</strong> initParams;
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>                 }
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>                 @Override
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>                 <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> evaluate(<strong class="jxr_keyword">int</strong> i, <strong class="jxr_keyword">double</strong>[] point, <strong class="jxr_keyword">double</strong>[] params, 
+<a class="jxr_linenumber" name="L422" href="#L422">422</a>                         <strong class="jxr_keyword">double</strong>[] derivatives) <strong class="jxr_keyword">throws</strong> EvaluationException {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>                     mPoint2D.setHomogeneousCoordinates(point[0], point[1], 
+<a class="jxr_linenumber" name="L424" href="#L424">424</a>                             point[2]);
+<a class="jxr_linenumber" name="L425" href="#L425">425</a>                     mPoint3D.setHomogeneousCoordinates(point[3], point[4], 
+<a class="jxr_linenumber" name="L426" href="#L426">426</a>                             point[5], point[6]);
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 
+<a class="jxr_linenumber" name="L428" href="#L428">428</a>                     parametersToCamera(params, mPinholeCamera);
+<a class="jxr_linenumber" name="L429" href="#L429">429</a>                     <strong class="jxr_keyword">double</strong> y = residualLevenbergMarquardt(mPinholeCamera, 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a>                             mPoint3D, mPoint2D, params, weight);                      
+<a class="jxr_linenumber" name="L431" href="#L431">431</a>                     mGradientEstimator.gradient(params, derivatives);
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>                         
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>                     <strong class="jxr_keyword">return</strong> y;
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>                 }
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>             };
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>             
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>             LevenbergMarquardtMultiDimensionFitter fitter =
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>                     <strong class="jxr_keyword">new</strong> LevenbergMarquardtMultiDimensionFitter(evaluator, 
+<a class="jxr_linenumber" name="L439" href="#L439">439</a>                     x, y, getRefinementStandardDeviation());
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>                 
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>             fitter.fit();
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>             <em class="jxr_comment">//obtain covariance</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>             <strong class="jxr_keyword">return</strong> fitter.getCovar();
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>             
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>             <em class="jxr_comment">//estimation failed, so we return null</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>         }
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>     }
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>         
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">     * Refines camera using Powell optimization to minimize a cost function</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">     * consisting on the sum of squared projection residuals plus the</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">     * suggestion residual for any suggested terms.</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">     * @param result instance where refined estimation will be stored.</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">     * @return true if result improves (decreases) in LMSE terms respect to</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">     * initial estimation, false if no improvement has been achieved.</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">     */</em>    
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> refinePowell(<a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> result) {
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>         <strong class="jxr_keyword">boolean</strong> improvedAtLeastOnce = false;
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>         mCurrentWeight = mMinSuggestionWeight;    
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>         
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>         <strong class="jxr_keyword">if</strong> (hasSuggestions()) {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>             <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L466" href="#L466">466</a>                 <em class="jxr_comment">//copy camera into a new instance</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>                 mRefineCamera = <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a>(
+<a class="jxr_linenumber" name="L468" href="#L468">468</a>                         mInitialEstimation.getInternalMatrix().clone());
+<a class="jxr_linenumber" name="L469" href="#L469">469</a>                 mRefineCamera.normalize();
+<a class="jxr_linenumber" name="L470" href="#L470">470</a>                 
+<a class="jxr_linenumber" name="L471" href="#L471">471</a>                 <strong class="jxr_keyword">double</strong>[] startPoint = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[REFINE_DIMS];
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>                 <a href="../../../../com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a> listener =
+<a class="jxr_linenumber" name="L473" href="#L473">473</a>                         <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a>();
+<a class="jxr_linenumber" name="L474" href="#L474">474</a>                 PowellMultiOptimizer optimizer = <strong class="jxr_keyword">new</strong> PowellMultiOptimizer(
+<a class="jxr_linenumber" name="L475" href="#L475">475</a>                         listener,
+<a class="jxr_linenumber" name="L476" href="#L476">476</a>                         PowellMultiOptimizer.DEFAULT_TOLERANCE);
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>                 
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>                 <strong class="jxr_keyword">boolean</strong> improved;
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>                 <strong class="jxr_keyword">do</strong> {           
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>                     improved = refinementStepPowell(optimizer, listener, 
+<a class="jxr_linenumber" name="L481" href="#L481">481</a>                             startPoint, mCurrentWeight);
+<a class="jxr_linenumber" name="L482" href="#L482">482</a>                     
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>                     <strong class="jxr_keyword">if</strong>(improved) {
+<a class="jxr_linenumber" name="L484" href="#L484">484</a>                         <em class="jxr_comment">//update result</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a>                         result.setInternalMatrix(
+<a class="jxr_linenumber" name="L486" href="#L486">486</a>                                 mRefineCamera.getInternalMatrix().clone());
+<a class="jxr_linenumber" name="L487" href="#L487">487</a>                         improvedAtLeastOnce = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L488" href="#L488">488</a>                     }
+<a class="jxr_linenumber" name="L489" href="#L489">489</a>                     
+<a class="jxr_linenumber" name="L490" href="#L490">490</a>                     mCurrentWeight += mSuggestionWeightStep;
+<a class="jxr_linenumber" name="L491" href="#L491">491</a>                 } <strong class="jxr_keyword">while</strong> (mCurrentWeight &lt; mMaxSuggestionWeight &amp;&amp; improved);
+<a class="jxr_linenumber" name="L492" href="#L492">492</a>                                                                                 
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>                 <strong class="jxr_keyword">return</strong> improvedAtLeastOnce;
+<a class="jxr_linenumber" name="L494" href="#L494">494</a>             } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L495" href="#L495">495</a>                 <em class="jxr_comment">//refinement failed, so we return input value</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a>                 <strong class="jxr_keyword">return</strong> improvedAtLeastOnce;
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>             }
+<a class="jxr_linenumber" name="L498" href="#L498">498</a>         }
+<a class="jxr_linenumber" name="L499" href="#L499">499</a>         <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L500" href="#L500">500</a>     }
+<a class="jxr_linenumber" name="L501" href="#L501">501</a>     
+<a class="jxr_linenumber" name="L502" href="#L502">502</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">     * Computes one refinement step using Powell optimizer for a given weight</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">     * on suggestion terms.</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">     * @param optimizer Powell optimizer to be reused.</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">     * @param listener Powell optimizer listener to be reused.</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">     * @param startPoint starting point for powell optimization. This array is</em>
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">     * passed only for reuse purposes.</em>
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">     * @param weight suggestion terms weight.</em>
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">     * @return true if this refinement step decreased projection error in LMSE</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">     * terms, false otherwise.</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">     * @throws Exception if something failed.</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> refinementStepPowell(PowellMultiOptimizer optimizer, 
+<a class="jxr_linenumber" name="L515" href="#L515">515</a>             <a href="../../../../com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a> listener,
+<a class="jxr_linenumber" name="L516" href="#L516">516</a>             <strong class="jxr_keyword">double</strong>[] startPoint, <strong class="jxr_keyword">double</strong> weight) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L517" href="#L517">517</a>         
+<a class="jxr_linenumber" name="L518" href="#L518">518</a>         listener.weight = weight;
+<a class="jxr_linenumber" name="L519" href="#L519">519</a>         cameraToParameters(mRefineCamera, startPoint);
+<a class="jxr_linenumber" name="L520" href="#L520">520</a>         <strong class="jxr_keyword">double</strong> initResidual = residualPowell(mRefineCamera, startPoint, weight);
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>                     
+<a class="jxr_linenumber" name="L522" href="#L522">522</a>         optimizer.setStartPoint(startPoint);                
+<a class="jxr_linenumber" name="L523" href="#L523">523</a>         optimizer.minimize();
+<a class="jxr_linenumber" name="L524" href="#L524">524</a>                     
+<a class="jxr_linenumber" name="L525" href="#L525">525</a>         <strong class="jxr_keyword">double</strong>[] resultParams = optimizer.getResult();
+<a class="jxr_linenumber" name="L526" href="#L526">526</a>         parametersToCamera(resultParams, mRefineCamera);
+<a class="jxr_linenumber" name="L527" href="#L527">527</a>         
+<a class="jxr_linenumber" name="L528" href="#L528">528</a>         <strong class="jxr_keyword">double</strong> finalResidual = residualPowell(mRefineCamera, resultParams, 
+<a class="jxr_linenumber" name="L529" href="#L529">529</a>                 weight);
+<a class="jxr_linenumber" name="L530" href="#L530">530</a>         
+<a class="jxr_linenumber" name="L531" href="#L531">531</a>         <strong class="jxr_keyword">return</strong> finalResidual &lt; initResidual;
+<a class="jxr_linenumber" name="L532" href="#L532">532</a>     }
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 
+<a class="jxr_linenumber" name="L534" href="#L534">534</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">     * Listener for powell optimizer to minimize cost function during </em>
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">     * refinement.</em>
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">     * A weight can be provided so that required parameters are slowly drawn</em>
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">     * to suggested values.</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a> 
+<a class="jxr_linenumber" name="L541" href="#L541">541</a>             <strong class="jxr_keyword">implements</strong> MultiDimensionFunctionEvaluatorListener {
+<a class="jxr_linenumber" name="L542" href="#L542">542</a>         <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">         * Weight to slowly draw parameters to suggested values.</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">         */</em>
+<a class="jxr_linenumber" name="L545" href="#L545">545</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> weight;
+<a class="jxr_linenumber" name="L546" href="#L546">546</a>         
+<a class="jxr_linenumber" name="L547" href="#L547">547</a>         <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">         * Evaluates cost function</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">         * @param point parameters to evaluate cost function.</em>
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">         * @return cost value.</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">         * @throws EvaluationException if anything fails.</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">         */</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a>         @Override
+<a class="jxr_linenumber" name="L554" href="#L554">554</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> evaluate(<strong class="jxr_keyword">double</strong>[] point) <strong class="jxr_keyword">throws</strong> EvaluationException {
+<a class="jxr_linenumber" name="L555" href="#L555">555</a>             parametersToCamera(point, mRefineCamera);
+<a class="jxr_linenumber" name="L556" href="#L556">556</a>             <strong class="jxr_keyword">return</strong> residualPowell(mRefineCamera, point, weight);
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>         }        
+<a class="jxr_linenumber" name="L558" href="#L558">558</a>     }
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>
