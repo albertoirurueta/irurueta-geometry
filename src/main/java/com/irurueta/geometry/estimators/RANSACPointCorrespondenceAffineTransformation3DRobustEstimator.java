@@ -97,8 +97,7 @@ public class RANSACPointCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         super(inputPoints, outputPoints);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -135,8 +134,7 @@ public class RANSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public RANSACPointCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         super(listener, inputPoints, outputPoints);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -167,8 +165,7 @@ public class RANSACPointCorrespondenceAffineTransformation3DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

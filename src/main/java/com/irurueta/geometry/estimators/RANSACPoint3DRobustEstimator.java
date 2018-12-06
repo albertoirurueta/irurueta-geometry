@@ -86,8 +86,7 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public RANSACPoint3DRobustEstimator(List<Plane> planes) 
-            throws IllegalArgumentException {
+    public RANSACPoint3DRobustEstimator(List<Plane> planes) {
         super(planes);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -116,7 +115,7 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public RANSACPoint3DRobustEstimator(Point3DRobustEstimatorListener listener,
-            List<Plane> planes) throws IllegalArgumentException {
+            List<Plane> planes) {
         super(listener, planes);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -146,8 +145,7 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
