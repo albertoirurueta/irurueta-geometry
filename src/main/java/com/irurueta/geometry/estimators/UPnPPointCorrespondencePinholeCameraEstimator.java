@@ -494,7 +494,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
         //general case
         try {
             generalSolution1();
-        } catch (AlgebraException ignore) { }
+        } catch (AlgebraException ignore) {
+            //if it fails, solution is not added
+        }
         if (mNullspaceDimension2Allowed) {
             try {
                 generalSolution2();
@@ -1139,7 +1141,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
         //add solution with opposite beta sign
         ArrayUtils.multiplyByScalar(v, -beta, finalV);
         denormalizeV(finalV, focalLength);
-        
+
         finalControlCameraPoints = controlPointsFromV(finalV);
                 
         try {
