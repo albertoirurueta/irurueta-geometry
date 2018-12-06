@@ -82,8 +82,7 @@ public class LMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public LMedSLine2DRobustEstimator(List<Point2D> points) 
-            throws IllegalArgumentException {
+    public LMedSLine2DRobustEstimator(List<Point2D> points) {
         super(points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -108,7 +107,7 @@ public class LMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public LMedSLine2DRobustEstimator(Line2DRobustEstimatorListener listener,
-            List<Point2D> points) throws IllegalArgumentException {
+            List<Point2D> points) {
         super(listener, points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -157,7 +156,7 @@ public class LMedSLine2DRobustEstimator extends Line2DRobustEstimator {
      * estimation is already in progress.
      */
     public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

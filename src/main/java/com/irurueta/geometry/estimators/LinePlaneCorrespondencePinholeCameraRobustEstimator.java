@@ -275,7 +275,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             List<Plane> planes, List<Line2D> lines,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 listener, planes, lines, method);
     }
@@ -293,8 +293,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * smaller than required minimum size (4 samples).
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 qualityScores, method);
     }
@@ -317,7 +316,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             List<Plane> planes, List<Line2D> lines, double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 planes, lines, qualityScores, method);
     }
@@ -338,8 +337,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 listener, qualityScores, method);
     }
@@ -365,7 +363,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
             List<Plane> planes, List<Line2D> lines, double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(
                 listener, planes, lines, qualityScores, method);
     }    
@@ -392,8 +390,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * size (4 correspondences).
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            List<Plane> planes, List<Line2D> lines) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         return create(planes, lines, DEFAULT_ROBUST_METHOD);
     }
     
@@ -425,8 +422,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
-            List<Plane> planes, List<Line2D> lines) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         return create(listener, planes, lines, DEFAULT_ROBUST_METHOD);
     }
     
@@ -441,7 +437,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * smaller than required minimum size (4 samples).
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -460,8 +456,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * required minimum size (4 correspondences).
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            List<Plane> planes, List<Line2D> lines, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines, double[] qualityScores) {
         return create(planes, lines, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -479,7 +474,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
     
@@ -501,8 +496,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
             PinholeCameraRobustEstimatorListener listener,
-            List<Plane> planes, List<Line2D> lines, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines, double[] qualityScores) {
         return create(listener, planes, lines, qualityScores, 
                 DEFAULT_ROBUST_METHOD);
     }    
@@ -554,7 +548,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator
      * (4 samples).
      */
     private void internalSetLinesAndPlanes(List<Plane> planes, 
-            List<Line2D> lines) throws IllegalArgumentException {
+            List<Line2D> lines) {
         if (planes.size() < MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES) {
             throw new IllegalArgumentException();
         }

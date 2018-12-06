@@ -82,8 +82,7 @@ public class LMedSPlaneRobustEstimator extends PlaneRobustEstimator{
      * @throws IllegalArgumentException if provided list of points doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public LMedSPlaneRobustEstimator(List<Point3D> points) 
-            throws IllegalArgumentException {
+    public LMedSPlaneRobustEstimator(List<Point3D> points) {
         super(points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -108,7 +107,7 @@ public class LMedSPlaneRobustEstimator extends PlaneRobustEstimator{
      * a size greater or equal than MINIMUM_SIZE.
      */
     public LMedSPlaneRobustEstimator(PlaneRobustEstimatorListener listener,
-            List<Point3D> points) throws IllegalArgumentException {
+            List<Point3D> points) {
         super(listener, points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -156,8 +155,7 @@ public class LMedSPlaneRobustEstimator extends PlaneRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

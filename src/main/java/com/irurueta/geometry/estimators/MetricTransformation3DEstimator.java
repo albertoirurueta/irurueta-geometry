@@ -464,7 +464,9 @@ public class MetricTransformation3DEstimator {
      */
     private static Matrix computeCentroid(List<Point3D> points) 
             throws AlgebraException {        
-        double x = 0.0, y = 0.0, z = 0.0;
+        double x = 0.0;
+        double y = 0.0;
+        double z = 0.0;
         double n = points.size();
         for (Point3D p : points) {
             x += p.getInhomX() / n;
@@ -492,7 +494,7 @@ public class MetricTransformation3DEstimator {
      * the same size or their size is smaller than #getMinimumPoints.
      */
     private void internalSetPoints(List<Point3D> inputPoints,
-            List<Point3D> outputPoints) throws IllegalArgumentException {
+            List<Point3D> outputPoints) {
         if (inputPoints.size() < getMinimumPoints()) {
             throw new IllegalArgumentException();
         }

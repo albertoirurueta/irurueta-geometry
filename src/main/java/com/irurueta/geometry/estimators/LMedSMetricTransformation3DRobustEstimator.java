@@ -89,8 +89,7 @@ public class LMedSMetricTransformation3DRobustEstimator extends
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSMetricTransformation3DRobustEstimator(
-            List<Point3D> inputPoints, List<Point3D> outputPoints)
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         super(inputPoints, outputPoints);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -123,8 +122,7 @@ public class LMedSMetricTransformation3DRobustEstimator extends
      */
     public LMedSMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
-            List<Point3D> inputPoints, List<Point3D> outputPoints)
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         super(listener, inputPoints, outputPoints);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -155,7 +153,7 @@ public class LMedSMetricTransformation3DRobustEstimator extends
      */
     public LMedSMetricTransformation3DRobustEstimator(
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         super(inputPoints, outputPoints, weakMinimumSizeAllowed);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -192,7 +190,7 @@ public class LMedSMetricTransformation3DRobustEstimator extends
     public LMedSMetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -240,8 +238,7 @@ public class LMedSMetricTransformation3DRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress
      */
-    public void setStopThreshold(double stopThreshold)
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

@@ -26,7 +26,7 @@ import java.util.List;
  * Finds the best 2D point for provided collection of 2D lines using RANSAC
  * algorithm.
  */
-public class LMedSPoint2DRobustEstimator extends Point2DRobustEstimator{
+public class LMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
     
     /**
      * Default value to be used for stop threshold. Stop threshold can be used 
@@ -83,8 +83,7 @@ public class LMedSPoint2DRobustEstimator extends Point2DRobustEstimator{
      * @throws IllegalArgumentException if provided list of lines don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public LMedSPoint2DRobustEstimator(List<Line2D> lines) 
-            throws IllegalArgumentException {
+    public LMedSPoint2DRobustEstimator(List<Line2D> lines) {
         super(lines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -109,7 +108,7 @@ public class LMedSPoint2DRobustEstimator extends Point2DRobustEstimator{
      * a size greater or equal than MINIMUM_SIZE.
      */
     public LMedSPoint2DRobustEstimator(Point2DRobustEstimatorListener listener,
-            List<Line2D> lines) throws IllegalArgumentException {
+            List<Line2D> lines) {
         super(listener, lines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -157,8 +156,7 @@ public class LMedSPoint2DRobustEstimator extends Point2DRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

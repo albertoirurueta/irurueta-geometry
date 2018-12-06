@@ -99,8 +99,7 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * (6 correspondences).
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            List<Point3D> points3D, List<Point2D> points2D)
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(points3D, points2D);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -137,8 +136,7 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(listener, points3D, points2D);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -153,7 +151,7 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super();
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -177,7 +175,7 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
             List<Point3D> points3D, List<Point2D> points2D,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(points3D, points2D);
 
         if (qualityScores.length != points3D.size()) {
@@ -201,7 +199,7 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -229,7 +227,7 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
             List<Point3D> points3D, List<Point2D> points2D,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener, points3D, points2D);
         
         if (qualityScores.length != points3D.size()) {
@@ -270,7 +268,7 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException {
+            List<Point2D> points2D) {
         super(intrinsic, points3D, points2D);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -311,7 +309,7 @@ public class PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     public PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
             PinholeCameraIntrinsicParameters intrinsic, List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException {
+            List<Point2D> points2D) {
         super(listener, intrinsic, points3D, points2D);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;

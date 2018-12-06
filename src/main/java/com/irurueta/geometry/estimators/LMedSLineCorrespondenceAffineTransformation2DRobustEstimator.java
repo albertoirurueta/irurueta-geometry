@@ -94,8 +94,7 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-            List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException {
+            List<Line2D> inputLines, List<Line2D> outputLines) {
         super(inputLines, outputLines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -128,8 +127,7 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     public LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
-            List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException {
+            List<Line2D> inputLines, List<Line2D> outputLines) {
         super(listener, inputLines, outputLines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -177,8 +175,7 @@ public class LMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

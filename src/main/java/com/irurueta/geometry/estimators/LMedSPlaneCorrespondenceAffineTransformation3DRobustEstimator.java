@@ -94,8 +94,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         super(inputPlanes, outputPlanes);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -128,8 +127,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
-            List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         super(listener, inputPlanes, outputPlanes);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -177,8 +175,7 @@ public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

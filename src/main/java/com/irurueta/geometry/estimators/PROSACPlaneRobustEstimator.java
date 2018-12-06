@@ -69,8 +69,7 @@ public class PROSACPlaneRobustEstimator extends PlaneRobustEstimator{
      * @throws IllegalArgumentException if provided list of points doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public PROSACPlaneRobustEstimator(List<Point3D> points) 
-            throws IllegalArgumentException {
+    public PROSACPlaneRobustEstimator(List<Point3D> points) {
         super(points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -95,7 +94,7 @@ public class PROSACPlaneRobustEstimator extends PlaneRobustEstimator{
      * a size greater or equal than MINIMUM_SIZE.
      */
     public PROSACPlaneRobustEstimator(PlaneRobustEstimatorListener listener,
-            List<Point3D> points) throws IllegalArgumentException {
+            List<Point3D> points) {
         super(listener, points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -106,8 +105,7 @@ public class PROSACPlaneRobustEstimator extends PlaneRobustEstimator{
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 3 points).
      */
-    public PROSACPlaneRobustEstimator(double[] qualityScores) 
-            throws IllegalArgumentException {
+    public PROSACPlaneRobustEstimator(double[] qualityScores) {
         super();
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -122,8 +120,7 @@ public class PROSACPlaneRobustEstimator extends PlaneRobustEstimator{
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROSACPlaneRobustEstimator(List<Point3D> points,
-            double[] qualityScores) 
-            throws IllegalArgumentException {
+            double[] qualityScores) {
         super(points);
         
         if (qualityScores.length != points.size()) {
@@ -143,7 +140,7 @@ public class PROSACPlaneRobustEstimator extends PlaneRobustEstimator{
      * smaller than MINIMUM_SIZE (i.e. 3 points).
      */
     public PROSACPlaneRobustEstimator(PlaneRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mThreshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -161,8 +158,7 @@ public class PROSACPlaneRobustEstimator extends PlaneRobustEstimator{
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROSACPlaneRobustEstimator(PlaneRobustEstimatorListener listener,
-            List<Point3D> points, double[] qualityScores) 
-            throws IllegalArgumentException {
+            List<Point3D> points, double[] qualityScores) {
         super(listener, points);
         
         if (qualityScores.length != points.size()) {
@@ -196,8 +192,7 @@ public class PROSACPlaneRobustEstimator extends PlaneRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -227,8 +222,7 @@ public class PROSACPlaneRobustEstimator extends PlaneRobustEstimator{
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -383,8 +377,7 @@ public class PROSACPlaneRobustEstimator extends PlaneRobustEstimator{
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }

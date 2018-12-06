@@ -225,7 +225,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public MetricTransformation3DRobustEstimator(List<Point3D> inputPoints,
-            List<Point3D> outputPoints) throws IllegalArgumentException {
+            List<Point3D> outputPoints) {
         this();
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -247,8 +247,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      */
     public MetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         this(listener);
         internalSetPoints(inputPoints, outputPoints);
     }
@@ -292,8 +291,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public MetricTransformation3DRobustEstimator(List<Point3D> inputPoints,
-            List<Point3D> outputPoints, boolean weakMinimumSizeAllowed) 
-            throws IllegalArgumentException {
+            List<Point3D> outputPoints, boolean weakMinimumSizeAllowed) {
         this();
         mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
         internalSetPoints(inputPoints, outputPoints);
@@ -318,7 +316,7 @@ public abstract class MetricTransformation3DRobustEstimator {
     public MetricTransformation3DRobustEstimator(
             MetricTransformation3DRobustEstimatorListener listener,
             List<Point3D> inputPoints, List<Point3D> outputPoints,
-            boolean weakMinimumSizeAllowed) throws IllegalArgumentException {
+            boolean weakMinimumSizeAllowed) {
         this(listener);
         mWeakMinimumSizeAllowed = weakMinimumSizeAllowed;
         internalSetPoints(inputPoints, outputPoints);
@@ -368,8 +366,7 @@ public abstract class MetricTransformation3DRobustEstimator {
      * already in progress.
      */
     public void setPoints(List<Point3D> inputPoints, 
-            List<Point3D> outputPoints) throws IllegalArgumentException,
-            LockedException {
+            List<Point3D> outputPoints) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
