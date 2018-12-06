@@ -86,13 +86,12 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public RANSACPoint3DRobustEstimator(List&lt;Plane&gt; planes) 
-            throws IllegalArgumentException {
-<span class="fc" id="L91">        super(planes);</span>
-<span class="fc" id="L92">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L93">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L94">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L95">    }</span>
+    public RANSACPoint3DRobustEstimator(List&lt;Plane&gt; planes) {
+<span class="fc" id="L90">        super(planes);</span>
+<span class="fc" id="L91">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L92">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L93">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L94">    }</span>
     
     /**
      * Constructor.
@@ -100,11 +99,11 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * starts, ends or its progress significantly changes.
      */
     public RANSACPoint3DRobustEstimator(Point3DRobustEstimatorListener listener) {
-<span class="fc" id="L103">        super(listener);</span>
-<span class="fc" id="L104">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L105">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L106">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L107">    }</span>
+<span class="fc" id="L102">        super(listener);</span>
+<span class="fc" id="L103">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L104">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L105">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L106">    }</span>
     
     
     /**
@@ -116,12 +115,12 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public RANSACPoint3DRobustEstimator(Point3DRobustEstimatorListener listener,
-            List&lt;Plane&gt; planes) throws IllegalArgumentException {
-<span class="fc" id="L120">        super(listener, planes);</span>
-<span class="fc" id="L121">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L122">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L123">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L124">    }</span>
+            List&lt;Plane&gt; planes) {
+<span class="fc" id="L119">        super(listener, planes);</span>
+<span class="fc" id="L120">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L121">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L122">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L123">    }</span>
     
     /**
      * Returns threshold to determine whether planes are inliers or not when 
@@ -132,7 +131,7 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-<span class="fc" id="L135">        return mThreshold;</span>
+<span class="fc" id="L134">        return mThreshold;</span>
     }
     
     /**
@@ -146,16 +145,15 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L152">            throw new LockedException();</span>
+    public void setThreshold(double threshold) throws LockedException {
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L150">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L154" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L155">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L153">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L157">        mThreshold = threshold;</span>
-<span class="fc" id="L158">    }</span>
+<span class="fc" id="L155">        mThreshold = threshold;</span>
+<span class="fc" id="L156">    }</span>
     
     /**
      * Indicates whether inliers must be computed and kept.
@@ -163,7 +161,7 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-<span class="fc" id="L166">        return mComputeAndKeepInliers;</span>
+<span class="fc" id="L164">        return mComputeAndKeepInliers;</span>
     }
     
     /**
@@ -174,11 +172,11 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      */
     public void setComputeAndKeepInliersEnabled(boolean computeAndKeepInliers) 
             throws LockedException {
-<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L178">            throw new LockedException();</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L176">            throw new LockedException();</span>
         }
-<span class="fc" id="L180">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
-<span class="fc" id="L181">    }</span>
+<span class="fc" id="L178">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L179">    }</span>
     
     /**
      * Indicates whether residuals must be computed and kept.
@@ -186,7 +184,7 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-<span class="fc" id="L189">        return mComputeAndKeepResiduals;</span>
+<span class="fc" id="L187">        return mComputeAndKeepResiduals;</span>
     }
     
     /**
@@ -197,11 +195,11 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      */
     public void setComputeAndKeepResidualsEnabled(
             boolean computeAndKeepResiduals) throws LockedException {
-<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L201">            throw new LockedException();</span>
+<span class="fc bfc" id="L198" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L199">            throw new LockedException();</span>
         }
-<span class="fc" id="L203">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
-<span class="fc" id="L204">    }    </span>
+<span class="fc" id="L201">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L202">    }    </span>
             
     /**
      * Estimates a 3D point using a robust estimator and the best set of 3D 
@@ -217,110 +215,110 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
     @Override
     public Point3D estimate() throws LockedException, NotReadyException, 
             RobustEstimatorException {
-<span class="fc bfc" id="L220" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L221">            throw new LockedException();</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L219">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L223" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L224">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L222">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L227">        RANSACRobustEstimator&lt;Point3D&gt; innerEstimator =</span>
+<span class="fc" id="L225">        RANSACRobustEstimator&lt;Point3D&gt; innerEstimator =</span>
                 new RANSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L229">                        new RANSACRobustEstimatorListener&lt;Point3D&gt;() {</span>
+<span class="fc" id="L227">                        new RANSACRobustEstimatorListener&lt;Point3D&gt;() {</span>
 
             @Override
             public double getThreshold() {
-<span class="fc" id="L233">                return mThreshold;</span>
+<span class="fc" id="L231">                return mThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L238">                return mPlanes.size();</span>
+<span class="fc" id="L236">                return mPlanes.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L243">                return Point3DRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L241">                return Point3DRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;Point3D&gt; solutions) {
-<span class="fc" id="L249">                Plane plane1 = mPlanes.get(samplesIndices[0]);</span>
-<span class="fc" id="L250">                Plane plane2 = mPlanes.get(samplesIndices[1]);</span>
-<span class="fc" id="L251">                Plane plane3 = mPlanes.get(samplesIndices[2]);</span>
+<span class="fc" id="L247">                Plane plane1 = mPlanes.get(samplesIndices[0]);</span>
+<span class="fc" id="L248">                Plane plane2 = mPlanes.get(samplesIndices[1]);</span>
+<span class="fc" id="L249">                Plane plane3 = mPlanes.get(samplesIndices[2]);</span>
                 
                 try {
-<span class="fc" id="L254">                    Point3D point = plane1.getIntersection(plane2, plane3);</span>
-<span class="fc" id="L255">                    solutions.add(point);</span>
-<span class="nc" id="L256">                } catch (NoIntersectionException e) {</span>
+<span class="fc" id="L252">                    Point3D point = plane1.getIntersection(plane2, plane3);</span>
+<span class="fc" id="L253">                    solutions.add(point);</span>
+<span class="nc" id="L254">                } catch (NoIntersectionException e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L258">                }</span>
-<span class="fc" id="L259">            }</span>
+<span class="fc" id="L256">                }</span>
+<span class="fc" id="L257">            }</span>
 
             @Override
             public double computeResidual(Point3D currentEstimation, int i) {
-<span class="fc" id="L263">                return residual(currentEstimation, mPlanes.get(i));</span>
+<span class="fc" id="L261">                return residual(currentEstimation, mPlanes.get(i));</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L268">                return RANSACPoint3DRobustEstimator.this.isReady();</span>
+<span class="fc" id="L266">                return RANSACPoint3DRobustEstimator.this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(RobustEstimator&lt;Point3D&gt; estimator) {
-<span class="fc bfc" id="L273" title="All 2 branches covered.">                if (mListener != null) {</span>
-<span class="fc" id="L274">                    mListener.onEstimateStart(</span>
+<span class="fc bfc" id="L271" title="All 2 branches covered.">                if (mListener != null) {</span>
+<span class="fc" id="L272">                    mListener.onEstimateStart(</span>
                             RANSACPoint3DRobustEstimator.this);
                 }
-<span class="fc" id="L277">            }</span>
+<span class="fc" id="L275">            }</span>
 
             @Override
             public void onEstimateEnd(RobustEstimator&lt;Point3D&gt; estimator) {
-<span class="fc bfc" id="L281" title="All 2 branches covered.">                if (mListener != null) {</span>
-<span class="fc" id="L282">                    mListener.onEstimateEnd(RANSACPoint3DRobustEstimator.this);</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">                if (mListener != null) {</span>
+<span class="fc" id="L280">                    mListener.onEstimateEnd(RANSACPoint3DRobustEstimator.this);</span>
                 }
-<span class="fc" id="L284">            }</span>
+<span class="fc" id="L282">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;Point3D&gt; estimator, int iteration) {
-<span class="fc bfc" id="L289" title="All 2 branches covered.">                if (mListener != null) {</span>
-<span class="fc" id="L290">                    mListener.onEstimateNextIteration(</span>
+<span class="fc bfc" id="L287" title="All 2 branches covered.">                if (mListener != null) {</span>
+<span class="fc" id="L288">                    mListener.onEstimateNextIteration(</span>
                             RANSACPoint3DRobustEstimator.this, iteration);
                 }
-<span class="fc" id="L293">            }</span>
+<span class="fc" id="L291">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;Point3D&gt; estimator, float progress) {
-<span class="fc bfc" id="L298" title="All 2 branches covered.">                if (mListener != null) {</span>
-<span class="fc" id="L299">                    mListener.onEstimateProgressChange(</span>
+<span class="fc bfc" id="L296" title="All 2 branches covered.">                if (mListener != null) {</span>
+<span class="fc" id="L297">                    mListener.onEstimateProgressChange(</span>
                             RANSACPoint3DRobustEstimator.this, progress);
                 }
-<span class="fc" id="L302">            }</span>
+<span class="fc" id="L300">            }</span>
         });
         
         try {
-<span class="fc" id="L306">            mLocked = true;</span>
-<span class="fc" id="L307">            mInliersData = null;</span>
-<span class="pc bpc" id="L308" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
+<span class="fc" id="L304">            mLocked = true;</span>
+<span class="fc" id="L305">            mInliersData = null;</span>
+<span class="pc bpc" id="L306" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
                     mComputeAndKeepInliers || mRefineResult);
-<span class="pc bpc" id="L310" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
+<span class="pc bpc" id="L308" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
                     mComputeAndKeepResiduals || mRefineResult);
-<span class="fc" id="L312">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L313">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L314">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L315">            Point3D result = innerEstimator.estimate();</span>
-<span class="fc" id="L316">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L317">            return attemptRefine(result);</span>
-<span class="nc" id="L318">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L319">            throw new LockedException(e);</span>
-<span class="nc" id="L320">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L321">            throw new NotReadyException(e);</span>
+<span class="fc" id="L310">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L311">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L312">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L313">            Point3D result = innerEstimator.estimate();</span>
+<span class="fc" id="L314">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L315">            return attemptRefine(result);</span>
+<span class="nc" id="L316">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L317">            throw new LockedException(e);</span>
+<span class="nc" id="L318">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L319">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L323">            mLocked = false;</span>
+<span class="fc" id="L321">            mLocked = false;</span>
         }
     }
 
@@ -330,7 +328,7 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L333">        return RobustEstimatorMethod.RANSAC;</span>
+<span class="fc" id="L331">        return RobustEstimatorMethod.RANSAC;</span>
     }       
     
     /**
@@ -345,7 +343,7 @@ public class RANSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L348">        return mThreshold;</span>
+<span class="fc" id="L346">        return mThreshold;</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

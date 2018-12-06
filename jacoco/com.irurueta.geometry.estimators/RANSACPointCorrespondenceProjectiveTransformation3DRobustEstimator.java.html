@@ -97,13 +97,12 @@ public class RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L102">        super(inputPoints, outputPoints);</span>
-<span class="fc" id="L103">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L104">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L105">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L106">    }</span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L101">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L102">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L103">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L104">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L105">    }</span>
     
     /**
      * Constructor.
@@ -112,11 +111,11 @@ public class RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     public RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L115">        super(listener);</span>
-<span class="fc" id="L116">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L117">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L118">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L114">        super(listener);</span>
+<span class="fc" id="L115">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L116">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L117">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L118">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate a
@@ -135,13 +134,12 @@ public class RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     public RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator(
             ProjectiveTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L140">        super(listener, inputPoints, outputPoints);</span>
-<span class="fc" id="L141">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L142">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L143">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L144">    }</span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L138">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L139">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L140">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L141">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L142">    }</span>
     
     /**
      * Returns threshold to determine whether points are inliers or not when 
@@ -152,7 +150,7 @@ public class RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-<span class="fc" id="L155">        return mThreshold;</span>
+<span class="fc" id="L153">        return mThreshold;</span>
     }
     
     /**
@@ -167,16 +165,15 @@ public class RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L173">            throw new LockedException();</span>
+    public void setThreshold(double threshold) throws LockedException {
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L170">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L175" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L176">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L173">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L178">        mThreshold = threshold;</span>
-<span class="fc" id="L179">    }</span>
+<span class="fc" id="L175">        mThreshold = threshold;</span>
+<span class="fc" id="L176">    }</span>
     
     /**
      * Indicates whether inliers must be computed and kept.
@@ -184,7 +181,7 @@ public class RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-<span class="fc" id="L187">        return mComputeAndKeepInliers;</span>
+<span class="fc" id="L184">        return mComputeAndKeepInliers;</span>
     }
     
     /**
@@ -195,11 +192,11 @@ public class RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     public void setComputeAndKeepInliersEnabled(boolean computeAndKeepInliers)
             throws LockedException {
-<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L199">            throw new LockedException();</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L196">            throw new LockedException();</span>
         }
-<span class="fc" id="L201">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
-<span class="fc" id="L202">    }    </span>
+<span class="fc" id="L198">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L199">    }    </span>
     
     /**
      * Indicates whether residuals must be computed and kept.
@@ -207,7 +204,7 @@ public class RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-<span class="fc" id="L210">        return mComputeAndKeepResiduals;</span>
+<span class="fc" id="L207">        return mComputeAndKeepResiduals;</span>
     }
     
     /**
@@ -218,11 +215,11 @@ public class RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     public void setComputeAndKeepResidualsEnabled(
             boolean computeAndKeepResiduals) throws LockedException {
-<span class="pc bpc" id="L221" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L222">            throw new LockedException();</span>
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L219">            throw new LockedException();</span>
         }
-<span class="fc" id="L224">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
-<span class="fc" id="L225">    }    </span>
+<span class="fc" id="L221">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L222">    }    </span>
         
     /**
      * Estimates a projective 3D transformation using a robust estimator and
@@ -239,141 +236,141 @@ public class RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator
     @Override
     public ProjectiveTransformation3D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L242" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L243">            throw new LockedException();</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L240">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L246">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L242" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L243">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L249">        RANSACRobustEstimator&lt;ProjectiveTransformation3D&gt; innerEstimator = </span>
+<span class="fc" id="L246">        RANSACRobustEstimator&lt;ProjectiveTransformation3D&gt; innerEstimator = </span>
                 new RANSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L251">                    new RANSACRobustEstimatorListener&lt;ProjectiveTransformation3D&gt;() {</span>
+<span class="fc" id="L248">                    new RANSACRobustEstimatorListener&lt;ProjectiveTransformation3D&gt;() {</span>
                     
             //point to be reused when computing residuals
-<span class="fc" id="L254">            private Point3D mTestPoint = Point3D.create(</span>
+<span class="fc" id="L251">            private Point3D mTestPoint = Point3D.create(</span>
                     CoordinatesType.HOMOGENEOUS_COORDINATES);
             
             @Override
             public double getThreshold() {
-<span class="fc" id="L259">                return mThreshold;</span>
+<span class="fc" id="L256">                return mThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L264">                return mInputPoints.size();</span>
+<span class="fc" id="L261">                return mInputPoints.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L269">                return ProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L266">                return ProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;ProjectiveTransformation3D&gt; solutions) {
-<span class="fc" id="L275">                Point3D inputPoint1 = mInputPoints.get(samplesIndices[0]);                </span>
-<span class="fc" id="L276">                Point3D inputPoint2 = mInputPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L277">                Point3D inputPoint3 = mInputPoints.get(samplesIndices[2]);</span>
-<span class="fc" id="L278">                Point3D inputPoint4 = mInputPoints.get(samplesIndices[3]);</span>
-<span class="fc" id="L279">                Point3D inputPoint5 = mInputPoints.get(samplesIndices[4]);</span>
+<span class="fc" id="L272">                Point3D inputPoint1 = mInputPoints.get(samplesIndices[0]);                </span>
+<span class="fc" id="L273">                Point3D inputPoint2 = mInputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L274">                Point3D inputPoint3 = mInputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L275">                Point3D inputPoint4 = mInputPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L276">                Point3D inputPoint5 = mInputPoints.get(samplesIndices[4]);</span>
                 
-<span class="fc" id="L281">                Point3D outputPoint1 = mOutputPoints.get(samplesIndices[0]);                </span>
-<span class="fc" id="L282">                Point3D outputPoint2 = mOutputPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L283">                Point3D outputPoint3 = mOutputPoints.get(samplesIndices[2]);</span>
-<span class="fc" id="L284">                Point3D outputPoint4 = mOutputPoints.get(samplesIndices[3]);</span>
-<span class="fc" id="L285">                Point3D outputPoint5 = mOutputPoints.get(samplesIndices[4]);</span>
+<span class="fc" id="L278">                Point3D outputPoint1 = mOutputPoints.get(samplesIndices[0]);                </span>
+<span class="fc" id="L279">                Point3D outputPoint2 = mOutputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L280">                Point3D outputPoint3 = mOutputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L281">                Point3D outputPoint4 = mOutputPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L282">                Point3D outputPoint5 = mOutputPoints.get(samplesIndices[4]);</span>
 
                 try {
-<span class="fc" id="L288">                    ProjectiveTransformation3D transformation = </span>
+<span class="fc" id="L285">                    ProjectiveTransformation3D transformation = </span>
                         new ProjectiveTransformation3D(inputPoint1, inputPoint2, 
                         inputPoint3, inputPoint4, inputPoint5, outputPoint1, 
                         outputPoint2, outputPoint3, outputPoint4, outputPoint5);
-<span class="fc" id="L292">                    solutions.add(transformation);</span>
-<span class="fc" id="L293">                } catch (CoincidentPointsException e) {</span>
+<span class="fc" id="L289">                    solutions.add(transformation);</span>
+<span class="nc" id="L290">                } catch (CoincidentPointsException e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L295">                }</span>
-<span class="fc" id="L296">            }</span>
+<span class="fc" id="L292">                }</span>
+<span class="fc" id="L293">            }</span>
 
             @Override
             public double computeResidual(
                     ProjectiveTransformation3D currentEstimation, int i) {
-<span class="fc" id="L301">                Point3D inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L302">                Point3D outputPoint = mOutputPoints.get(i);</span>
+<span class="fc" id="L298">                Point3D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L299">                Point3D outputPoint = mOutputPoints.get(i);</span>
                 
                 //transform input point and store result in mTestPoint
-<span class="fc" id="L305">                currentEstimation.transform(inputPoint, mTestPoint);</span>
+<span class="fc" id="L302">                currentEstimation.transform(inputPoint, mTestPoint);</span>
                 
-<span class="fc" id="L307">                return outputPoint.distanceTo(mTestPoint);</span>
+<span class="fc" id="L304">                return outputPoint.distanceTo(mTestPoint);</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L312">                return RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator.</span>
-<span class="fc" id="L313">                        this.isReady();</span>
+<span class="fc" id="L309">                return RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator.</span>
+<span class="fc" id="L310">                        this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(
                     RobustEstimator&lt;ProjectiveTransformation3D&gt; estimator) {
-<span class="fc bfc" id="L319" title="All 2 branches covered.">                if (mListener != null) {</span>
-<span class="fc" id="L320">                    mListener.onEstimateStart(</span>
+<span class="fc bfc" id="L316" title="All 2 branches covered.">                if (mListener != null) {</span>
+<span class="fc" id="L317">                    mListener.onEstimateStart(</span>
                             RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator.this);
                 }
-<span class="fc" id="L323">            }</span>
+<span class="fc" id="L320">            }</span>
 
             @Override
             public void onEstimateEnd(
                     RobustEstimator&lt;ProjectiveTransformation3D&gt; estimator) {
-<span class="fc bfc" id="L328" title="All 2 branches covered.">                if (mListener != null) {</span>
-<span class="fc" id="L329">                    mListener.onEstimateEnd(</span>
+<span class="fc bfc" id="L325" title="All 2 branches covered.">                if (mListener != null) {</span>
+<span class="fc" id="L326">                    mListener.onEstimateEnd(</span>
                             RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator.this);
                 }
-<span class="fc" id="L332">            }</span>
+<span class="fc" id="L329">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;ProjectiveTransformation3D&gt; estimator, 
                     int iteration) {
-<span class="fc bfc" id="L338" title="All 2 branches covered.">                if (mListener != null) {</span>
-<span class="fc" id="L339">                    mListener.onEstimateNextIteration(</span>
+<span class="fc bfc" id="L335" title="All 2 branches covered.">                if (mListener != null) {</span>
+<span class="fc" id="L336">                    mListener.onEstimateNextIteration(</span>
                             RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator.this, 
                             iteration);
                 }
-<span class="fc" id="L343">            }</span>
+<span class="fc" id="L340">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;ProjectiveTransformation3D&gt; estimator, 
                     float progress) {
-<span class="fc bfc" id="L349" title="All 2 branches covered.">                if (mListener != null) {</span>
-<span class="fc" id="L350">                    mListener.onEstimateProgressChange(</span>
+<span class="fc bfc" id="L346" title="All 2 branches covered.">                if (mListener != null) {</span>
+<span class="fc" id="L347">                    mListener.onEstimateProgressChange(</span>
                             RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator.this, 
                             progress);
                 }
-<span class="fc" id="L354">            }</span>
+<span class="fc" id="L351">            }</span>
         });
         
         try {
-<span class="fc" id="L358">            mLocked = true;</span>
-<span class="fc" id="L359">            mInliersData = null;</span>
-<span class="pc bpc" id="L360" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
+<span class="fc" id="L355">            mLocked = true;</span>
+<span class="fc" id="L356">            mInliersData = null;</span>
+<span class="pc bpc" id="L357" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
                     mComputeAndKeepInliers || mRefineResult);
-<span class="pc bpc" id="L362" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
+<span class="pc bpc" id="L359" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
                     mComputeAndKeepResiduals || mRefineResult);            
-<span class="fc" id="L364">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L365">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L366">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L367">            ProjectiveTransformation3D transformation = </span>
-<span class="fc" id="L368">                    innerEstimator.estimate();</span>
-<span class="fc" id="L369">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L370">            return attemptRefine(transformation);</span>
-<span class="nc" id="L371">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L372">            throw new LockedException(e);</span>
-<span class="nc" id="L373">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L374">            throw new NotReadyException(e);</span>
+<span class="fc" id="L361">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L362">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L363">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L364">            ProjectiveTransformation3D transformation = </span>
+<span class="fc" id="L365">                    innerEstimator.estimate();</span>
+<span class="fc" id="L366">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L367">            return attemptRefine(transformation);</span>
+<span class="nc" id="L368">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L369">            throw new LockedException(e);</span>
+<span class="nc" id="L370">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L371">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L376">            mLocked = false;</span>
+<span class="fc" id="L373">            mLocked = false;</span>
         }
     }
 
@@ -383,7 +380,7 @@ public class RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L386">        return RobustEstimatorMethod.RANSAC;</span>
+<span class="fc" id="L383">        return RobustEstimatorMethod.RANSAC;</span>
     }    
     
     /**
@@ -398,7 +395,7 @@ public class RANSACPointCorrespondenceProjectiveTransformation3DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L401">        return mThreshold;</span>
+<span class="fc" id="L398">        return mThreshold;</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
