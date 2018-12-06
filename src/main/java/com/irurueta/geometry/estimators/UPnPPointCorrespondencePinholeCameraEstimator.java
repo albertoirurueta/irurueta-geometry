@@ -202,8 +202,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * the same size and enough points.
      */
     public UPnPPointCorrespondencePinholeCameraEstimator(List<Point3D> points3D,
-            List<Point2D> points2D) throws IllegalArgumentException,
-            WrongListSizesException {
+            List<Point2D> points2D) throws WrongListSizesException {
         super();
         internalSetLists(points3D, points2D);
     }
@@ -220,7 +219,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      */
     public UPnPPointCorrespondencePinholeCameraEstimator(List<Point3D> points3D,
             List<Point2D> points2D, PinholeCameraEstimatorListener listener)
-            throws IllegalArgumentException, WrongListSizesException {
+            throws WrongListSizesException {
         super(listener);
         internalSetLists(points3D, points2D);
     }
@@ -236,8 +235,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      */
     @Override
     public void setLists(List<Point3D> points3D, List<Point2D> points2D)
-            throws LockedException, IllegalArgumentException, 
-            WrongListSizesException {
+            throws LockedException, WrongListSizesException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -326,7 +324,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * @throws LockedException if estimator is locked.
      */
     public void setPlanarThreshold(double planarThreshold) 
-            throws IllegalArgumentException, LockedException {
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -481,43 +479,42 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             if (mListener != null) {
                 mListener.onEstimateStart(this);
             }
-            
+
             computeWorldControlPointsAndPointConfiguration();
             computeBarycentricCoordinates();
             buildM();
             solveNullspace();
-            
-            mSolutions = new ArrayList<>();
-            
-            //general case
-            try {
-                generalSolution1();
-            } catch (Exception ignore) { }
-            if (mNullspaceDimension2Allowed) {
-                try {
-                    generalSolution2();
-                } catch (Exception ignore) {
-                    //if it fails, solution is not added
-                }
-            }
-            
-            //pick best solution
-            Solution bestSolution = pickBestSolution();
-            
-            if (mListener != null) {
-                mListener.onEstimateEnd(this);
-            }
-            
-            if (bestSolution == null) {
-                throw new PinholeCameraEstimatorException();
-            }
-            
-            return attemptRefine(bestSolution.camera);            
         } catch (AlgebraException e) {
-            throw new PinholeCameraEstimatorException(e);
-        } finally {
             mLocked = false;
+            throw new PinholeCameraEstimatorException(e);
         }
+            
+        mSolutions = new ArrayList<>();
+
+        //general case
+        try {
+            generalSolution1();
+        } catch (AlgebraException ignore) { }
+        if (mNullspaceDimension2Allowed) {
+            try {
+                generalSolution2();
+            } catch (AlgebraException ignore) {
+                //if it fails, solution is not added
+            }
+        }
+            
+        //pick best solution
+        Solution bestSolution = pickBestSolution();
+            
+        if (mListener != null) {
+            mListener.onEstimateEnd(this);
+        }
+            
+        if (bestSolution == null) {
+            throw new PinholeCameraEstimatorException();
+        }
+        mLocked = false;
+        return attemptRefine(bestSolution.camera);
     }
     
     /**
@@ -556,8 +553,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
      * the same size and enough points.
      */
     private void internalSetLists(List<Point3D> points3D, 
-            List<Point2D> points2D) throws IllegalArgumentException,
-            WrongListSizesException {
+            List<Point2D> points2D) throws WrongListSizesException {
         
         if (points3D == null || points2D == null) {
             throw new IllegalArgumentException();
@@ -626,8 +622,11 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
         //[beta11, beta12, betaff22]
         //[beta11, beta22, betaff11]
         //the solution with the smallest reprojection error will be picked
-        double beta1, beta2, focalLength;
-        double initialBeta1, initialBeta2;
+        double beta1;
+        double beta2;
+        double focalLength;
+        double initialBeta1;
+        double initialBeta2;
         
                 
         //1st triplet: [beta11, beta12, betaff11] = [alpha1, alpha2, alpha4]
@@ -1133,7 +1132,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     finalControlCameraPoints, focalLength);        
             mSolutions.add(solution);
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //it it fails, solution is not added
+        }
         
         //add solution with opposite beta sign
         ArrayUtils.multiplyByScalar(v, -beta, finalV);
@@ -1145,7 +1146,9 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
             solution = computePossibleSolutionWithPoseAndReprojectionError(
                     finalControlCameraPoints, focalLength);        
             mSolutions.add(solution);        
-        } catch (Exception ignore) { }
+        } catch (GeometryException ignore) {
+            //it it fails, solution is not added
+        }
     }
     
     /**

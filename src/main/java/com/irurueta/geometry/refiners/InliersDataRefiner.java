@@ -148,8 +148,7 @@ public abstract class InliersDataRefiner<T> extends Refiner<T> {
      * @throws LockedException if estimator is locked.
      * @throws IllegalArgumentException if provided value is zero or negative.
      */
-    public void setNumInliers(int numInliers) throws LockedException, 
-            IllegalArgumentException {
+    public void setNumInliers(int numInliers) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

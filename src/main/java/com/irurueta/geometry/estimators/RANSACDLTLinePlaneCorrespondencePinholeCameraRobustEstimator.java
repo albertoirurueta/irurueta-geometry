@@ -104,8 +104,7 @@ public class RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * size or their size is smaller than required minimum size (4 matches).
      */
     public RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            List<Plane> planes, List<Line2D> lines) 
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         super(planes, lines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -142,8 +141,7 @@ public class RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List<Plane> planes, List<Line2D> lines)
-            throws IllegalArgumentException {
+            List<Plane> planes, List<Line2D> lines) {
         super(listener, planes, lines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -193,8 +191,7 @@ public class RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
