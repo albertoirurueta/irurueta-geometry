@@ -145,119 +145,120 @@ public class PointCorrespondenceProjectiveTransformation2DRefiner extends
 <span class="fc" id="L145">            Matrix x = new Matrix(mNumInliers, nDims);</span>
 <span class="fc" id="L146">            int nSamples = mInliers.length();</span>
 <span class="fc" id="L147">            int pos = 0;</span>
-            Point2D inputPoint, outputPoint;
-<span class="fc bfc" id="L149" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L150" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
+            Point2D inputPoint;
+            Point2D outputPoint;
+<span class="fc bfc" id="L150" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
                     //sample is inlier
-<span class="fc" id="L152">                    inputPoint = mSamples1.get(i);</span>
-<span class="fc" id="L153">                    outputPoint = mSamples2.get(i);</span>
-<span class="fc" id="L154">                    inputPoint.normalize();</span>
-<span class="fc" id="L155">                    outputPoint.normalize();</span>
-<span class="fc" id="L156">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
-<span class="fc" id="L157">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
-<span class="fc" id="L158">                    x.setElementAt(pos, 2, inputPoint.getHomW());</span>
-<span class="fc" id="L159">                    x.setElementAt(pos, 3, outputPoint.getHomX());</span>
-<span class="fc" id="L160">                    x.setElementAt(pos, 4, outputPoint.getHomY());</span>
-<span class="fc" id="L161">                    x.setElementAt(pos, 5, outputPoint.getHomW());</span>
+<span class="fc" id="L153">                    inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L154">                    outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L155">                    inputPoint.normalize();</span>
+<span class="fc" id="L156">                    outputPoint.normalize();</span>
+<span class="fc" id="L157">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
+<span class="fc" id="L158">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
+<span class="fc" id="L159">                    x.setElementAt(pos, 2, inputPoint.getHomW());</span>
+<span class="fc" id="L160">                    x.setElementAt(pos, 3, outputPoint.getHomX());</span>
+<span class="fc" id="L161">                    x.setElementAt(pos, 4, outputPoint.getHomY());</span>
+<span class="fc" id="L162">                    x.setElementAt(pos, 5, outputPoint.getHomW());</span>
                     
-<span class="fc" id="L163">                    y[pos] = mResiduals[i];</span>
-<span class="fc" id="L164">                    pos++;</span>
+<span class="fc" id="L164">                    y[pos] = mResiduals[i];</span>
+<span class="fc" id="L165">                    pos++;</span>
                 }
             }
             
-<span class="fc" id="L168">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
-<span class="fc" id="L169">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+<span class="fc" id="L169">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
+<span class="fc" id="L170">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
                         
-<span class="fc" id="L171">                private Point2D mInputPoint = Point2D.create(</span>
+<span class="fc" id="L172">                private Point2D mInputPoint = Point2D.create(</span>
                         CoordinatesType.HOMOGENEOUS_COORDINATES);
                 
-<span class="fc" id="L174">                private Point2D mOutputPoint = Point2D.create(</span>
+<span class="fc" id="L175">                private Point2D mOutputPoint = Point2D.create(</span>
                         CoordinatesType.HOMOGENEOUS_COORDINATES);
                 
-<span class="fc" id="L177">                private ProjectiveTransformation2D mTransformation =</span>
+<span class="fc" id="L178">                private ProjectiveTransformation2D mTransformation =</span>
                         new ProjectiveTransformation2D();
                 
-<span class="fc" id="L180">                private GradientEstimator mGradientEstimator =</span>
+<span class="fc" id="L181">                private GradientEstimator mGradientEstimator =</span>
                         new GradientEstimator(
-<span class="fc" id="L182">                                new MultiDimensionFunctionEvaluatorListener() {</span>
+<span class="fc" id="L183">                                new MultiDimensionFunctionEvaluatorListener() {</span>
                     @Override
                     public double evaluate(double[] params) {
                         //copy values
-<span class="fc" id="L186">                        System.arraycopy(params, 0, </span>
-<span class="fc" id="L187">                                mTransformation.getT().getBuffer(), 0, </span>
+<span class="fc" id="L187">                        System.arraycopy(params, 0, </span>
+<span class="fc" id="L188">                                mTransformation.getT().getBuffer(), 0, </span>
                                 params.length);
                         
-<span class="fc" id="L190">                        return residual(mTransformation, mInputPoint, </span>
-<span class="fc" id="L191">                                mOutputPoint);</span>
+<span class="fc" id="L191">                        return residual(mTransformation, mInputPoint, </span>
+<span class="fc" id="L192">                                mOutputPoint);</span>
                     }
                 });
                         
                 @Override
                 public int getNumberOfDimensions() {
-<span class="fc" id="L197">                    return nDims;</span>
+<span class="fc" id="L198">                    return nDims;</span>
                 }
 
                 @Override
                 public double[] createInitialParametersArray() {
-<span class="fc" id="L202">                    return initParams;</span>
+<span class="fc" id="L203">                    return initParams;</span>
                 }
 
                 @Override
                 public double evaluate(int i, double[] point, double[] params, 
                         double[] derivatives) throws EvaluationException {
-<span class="fc" id="L208">                    mInputPoint.setHomogeneousCoordinates(point[0], point[1], </span>
+<span class="fc" id="L209">                    mInputPoint.setHomogeneousCoordinates(point[0], point[1], </span>
                             point[2]);
-<span class="fc" id="L210">                    mOutputPoint.setHomogeneousCoordinates(point[3], point[4], </span>
+<span class="fc" id="L211">                    mOutputPoint.setHomogeneousCoordinates(point[3], point[4], </span>
                             point[5]);
                     
                     //copy values
-<span class="fc" id="L214">                    System.arraycopy(params, 0, </span>
-<span class="fc" id="L215">                            mTransformation.getT().getBuffer(), 0, </span>
+<span class="fc" id="L215">                    System.arraycopy(params, 0, </span>
+<span class="fc" id="L216">                            mTransformation.getT().getBuffer(), 0, </span>
                             params.length);
                     
-<span class="fc" id="L218">                    double y = residual(mTransformation, mInputPoint, </span>
+<span class="fc" id="L219">                    double y = residual(mTransformation, mInputPoint, </span>
                             mOutputPoint);
-<span class="fc" id="L220">                    mGradientEstimator.gradient(params, derivatives);</span>
+<span class="fc" id="L221">                    mGradientEstimator.gradient(params, derivatives);</span>
                     
-<span class="fc" id="L222">                    return y;</span>
+<span class="fc" id="L223">                    return y;</span>
 
                 }
             };
             
-<span class="fc" id="L227">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
+<span class="fc" id="L228">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-<span class="fc" id="L229">                    getRefinementStandardDeviation());</span>
+<span class="fc" id="L230">                    getRefinementStandardDeviation());</span>
             
-<span class="fc" id="L231">            fitter.fit();</span>
+<span class="fc" id="L232">            fitter.fit();</span>
             
             //obtain estimated params
-<span class="fc" id="L234">            double[] params = fitter.getA();</span>
+<span class="fc" id="L235">            double[] params = fitter.getA();</span>
             
             //update transformation
                     
             //copy values 
-<span class="fc" id="L239">            System.arraycopy(params, 0, result.getT().getBuffer(), 0, </span>
+<span class="fc" id="L240">            System.arraycopy(params, 0, result.getT().getBuffer(), 0, </span>
                     params.length);
             
-<span class="pc bpc" id="L242" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
                 //keep covariance
-<span class="fc" id="L244">                mCovariance = fitter.getCovar();</span>
+<span class="fc" id="L245">                mCovariance = fitter.getCovar();</span>
             }
             
-<span class="fc" id="L247">            double finalTotalResidual = totalResidual(result);</span>
-<span class="fc bfc" id="L248" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
+<span class="fc" id="L248">            double finalTotalResidual = totalResidual(result);</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
             
-<span class="fc bfc" id="L250" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L251">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L252">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
                         errorDecreased);
             }
             
-<span class="fc" id="L255">            return errorDecreased;</span>
+<span class="fc" id="L256">            return errorDecreased;</span>
             
-<span class="fc" id="L257">        } catch (Exception e) {</span>
-<span class="fc" id="L258">            throw new RefinerException(e);</span>
+<span class="fc" id="L258">        } catch (Exception e) {</span>
+<span class="fc" id="L259">            throw new RefinerException(e);</span>
         } finally {
-<span class="fc" id="L260">            mLocked = false;</span>
+<span class="fc" id="L261">            mLocked = false;</span>
         }        
     }
     
@@ -271,11 +272,11 @@ public class PointCorrespondenceProjectiveTransformation2DRefiner extends
      */
     private double residual(ProjectiveTransformation2D transformation, 
             Point2D inputPoint, Point2D outputPoint) {
-<span class="fc" id="L274">        inputPoint.normalize();</span>
-<span class="fc" id="L275">        outputPoint.normalize();</span>
+<span class="fc" id="L275">        inputPoint.normalize();</span>
+<span class="fc" id="L276">        outputPoint.normalize();</span>
         
-<span class="fc" id="L277">        transformation.transform(inputPoint, mResidualTestPoint);        </span>
-<span class="fc" id="L278">        return mResidualTestPoint.distanceTo(outputPoint);</span>
+<span class="fc" id="L278">        transformation.transform(inputPoint, mResidualTestPoint);        </span>
+<span class="fc" id="L279">        return mResidualTestPoint.distanceTo(outputPoint);</span>
     }
     
     /**
@@ -284,22 +285,23 @@ public class PointCorrespondenceProjectiveTransformation2DRefiner extends
      * @return total residual.
      */
     private double totalResidual(ProjectiveTransformation2D transformation) {
-<span class="fc" id="L287">        double result = 0.0;</span>
+<span class="fc" id="L288">        double result = 0.0;</span>
         
-<span class="fc" id="L289">        int nSamples = mInliers.length();</span>
-        Point2D inputPoint, outputPoint;
-<span class="fc bfc" id="L291" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L292" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
+<span class="fc" id="L290">        int nSamples = mInliers.length();</span>
+        Point2D inputPoint;
+        Point2D outputPoint;
+<span class="fc bfc" id="L293" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L294" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
                 //sample is inlier
-<span class="fc" id="L294">                inputPoint = mSamples1.get(i);</span>
-<span class="fc" id="L295">                outputPoint = mSamples2.get(i);</span>
-<span class="fc" id="L296">                inputPoint.normalize();</span>
-<span class="fc" id="L297">                outputPoint.normalize();</span>
-<span class="fc" id="L298">                result += residual(transformation, inputPoint, outputPoint);</span>
+<span class="fc" id="L296">                inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L297">                outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L298">                inputPoint.normalize();</span>
+<span class="fc" id="L299">                outputPoint.normalize();</span>
+<span class="fc" id="L300">                result += residual(transformation, inputPoint, outputPoint);</span>
             }
         }
         
-<span class="fc" id="L302">        return result;</span>
+<span class="fc" id="L304">        return result;</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

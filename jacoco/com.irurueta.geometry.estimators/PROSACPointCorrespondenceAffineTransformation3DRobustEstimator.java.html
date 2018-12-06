@@ -103,13 +103,12 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L108">        super(inputPoints, outputPoints);</span>
-<span class="fc" id="L109">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L110">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L111">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;                </span>
-<span class="fc" id="L112">    }</span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L107">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L108">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L109">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L110">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;                </span>
+<span class="fc" id="L111">    }</span>
     
     /**
      * Constructor.
@@ -118,11 +117,11 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener) {
-<span class="fc" id="L121">        super(listener);</span>
-<span class="fc" id="L122">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L123">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L124">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L125">    }</span>
+<span class="fc" id="L120">        super(listener);</span>
+<span class="fc" id="L121">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L122">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L123">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L124">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
@@ -141,13 +140,12 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
-            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) 
-            throws IllegalArgumentException {
-<span class="fc" id="L146">        super(listener, inputPoints, outputPoints);</span>
-<span class="fc" id="L147">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L148">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L149">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L150">    }</span>
+            List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L144">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L145">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L146">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L147">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L148">    }</span>
 
     /**
      * Constructor.
@@ -157,13 +155,13 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L161">        super();</span>
-<span class="fc" id="L162">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L163">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L164">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L165">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L166">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L159">        super();</span>
+<span class="fc" id="L160">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L161">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L162">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L163">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L164">    }</span>
     
     /**
      * Constructor with lists of points to be used to estimate an affine 3D 
@@ -183,18 +181,18 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L187">        super(inputPoints, outputPoints);</span>
+            double[] qualityScores) {
+<span class="fc" id="L185">        super(inputPoints, outputPoints);</span>
 
-<span class="fc bfc" id="L189" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
-<span class="fc" id="L190">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L188">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L193">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L194">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L195">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L196">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L197">    }</span>
+<span class="fc" id="L191">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L192">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L193">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L194">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L195">    }</span>
     
     /**
      * Constructor.
@@ -207,13 +205,13 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L211">        super(listener);</span>
-<span class="fc" id="L212">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L213">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L214">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L215">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L216">    }</span>
+            double[] qualityScores) {
+<span class="fc" id="L209">        super(listener);</span>
+<span class="fc" id="L210">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L211">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L212">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L213">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L214">    }</span>
     
     /**
      * Constructor with listener and lists of points to be used to estimate an
@@ -235,18 +233,18 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
     public PROSACPointCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
             List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L239">        super(listener, inputPoints, outputPoints);</span>
+            double[] qualityScores) {
+<span class="fc" id="L237">        super(listener, inputPoints, outputPoints);</span>
         
-<span class="fc bfc" id="L241" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
-<span class="fc" id="L242">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L240">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L245">        mThreshold = DEFAULT_THRESHOLD;</span>
-<span class="fc" id="L246">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L247">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
-<span class="fc" id="L248">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
-<span class="fc" id="L249">    }</span>
+<span class="fc" id="L243">        mThreshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L244">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L245">        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L246">        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;        </span>
+<span class="fc" id="L247">    }</span>
     
     /**
      * Returns threshold to determine whether points are inliers or not when 
@@ -257,7 +255,7 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-<span class="fc" id="L260">        return mThreshold;</span>
+<span class="fc" id="L258">        return mThreshold;</span>
     }
     
     /**
@@ -272,16 +270,15 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
-<span class="fc bfc" id="L277" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L278">            throw new LockedException();</span>
+    public void setThreshold(double threshold) throws LockedException {
+<span class="fc bfc" id="L274" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L275">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L280" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
-<span class="fc" id="L281">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L278">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L283">        mThreshold = threshold;</span>
-<span class="fc" id="L284">    }</span>
+<span class="fc" id="L280">        mThreshold = threshold;</span>
+<span class="fc" id="L281">    }</span>
     
     /**
      * Returns quality scores corresponding to each pair of matched points.
@@ -290,7 +287,7 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     @Override
     public double[] getQualityScores() {
-<span class="fc" id="L293">        return mQualityScores;</span>
+<span class="fc" id="L290">        return mQualityScores;</span>
     }
     
     /**
@@ -304,13 +301,12 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
-<span class="fc bfc" id="L309" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L310">            throw new LockedException();</span>
+    public void setQualityScores(double[] qualityScores) throws LockedException {
+<span class="fc bfc" id="L305" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L306">            throw new LockedException();</span>
         }
-<span class="fc" id="L312">        internalSetQualityScores(qualityScores);</span>
-<span class="fc" id="L313">    }</span>
+<span class="fc" id="L308">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L309">    }</span>
         
     /**
      * Indicates if estimator is ready to start the affine 3D transformation
@@ -321,8 +317,8 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     @Override
     public boolean isReady() {
-<span class="fc bfc" id="L324" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
-<span class="pc bpc" id="L325" title="1 of 2 branches missed.">                mQualityScores.length == mInputPoints.size();</span>
+<span class="fc bfc" id="L320" title="All 4 branches covered.">        return super.isReady() &amp;&amp; mQualityScores != null &amp;&amp; </span>
+<span class="pc bpc" id="L321" title="1 of 2 branches missed.">                mQualityScores.length == mInputPoints.size();</span>
     }
     
     /**
@@ -331,7 +327,7 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-<span class="fc" id="L334">        return mComputeAndKeepInliers;</span>
+<span class="fc" id="L330">        return mComputeAndKeepInliers;</span>
     }
     
     /**
@@ -342,11 +338,11 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public void setComputeAndKeepInliersEnabled(boolean computeAndKeepInliers)
             throws LockedException {
-<span class="pc bpc" id="L345" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L346">            throw new LockedException();</span>
+<span class="pc bpc" id="L341" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L342">            throw new LockedException();</span>
         }
-<span class="fc" id="L348">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
-<span class="fc" id="L349">    }</span>
+<span class="fc" id="L344">        mComputeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L345">    }</span>
     
     /**
      * Indicates whether residuals must be computed and kept.
@@ -354,7 +350,7 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-<span class="fc" id="L357">        return mComputeAndKeepResiduals;</span>
+<span class="fc" id="L353">        return mComputeAndKeepResiduals;</span>
     }
     
     /**
@@ -365,11 +361,11 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     public void setComputeAndKeepResidualsEnabled(
             boolean computeAndKeepResiduals) throws LockedException {
-<span class="pc bpc" id="L368" title="1 of 2 branches missed.">        if (isLocked()) {</span>
-<span class="nc" id="L369">            throw new LockedException();</span>
+<span class="pc bpc" id="L364" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L365">            throw new LockedException();</span>
         }
-<span class="fc" id="L371">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
-<span class="fc" id="L372">    }</span>
+<span class="fc" id="L367">        mComputeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L368">    }</span>
     
     /**
      * Estimates an affine 3D transformation using a robust estimator and
@@ -386,143 +382,143 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
     @Override
     public AffineTransformation3D estimate() throws LockedException, 
             NotReadyException, RobustEstimatorException {
-<span class="fc bfc" id="L389" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L390">            throw new LockedException();</span>
+<span class="fc bfc" id="L385" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L386">            throw new LockedException();</span>
         }
-<span class="pc bpc" id="L392" title="1 of 2 branches missed.">        if (!isReady()) {</span>
-<span class="nc" id="L393">            throw new NotReadyException();</span>
+<span class="pc bpc" id="L388" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L389">            throw new NotReadyException();</span>
         }
         
-<span class="fc" id="L396">        PROSACRobustEstimator&lt;AffineTransformation3D&gt; innerEstimator = </span>
+<span class="fc" id="L392">        PROSACRobustEstimator&lt;AffineTransformation3D&gt; innerEstimator = </span>
                 new PROSACRobustEstimator&lt;&gt;(
-<span class="fc" id="L398">                    new PROSACRobustEstimatorListener&lt;AffineTransformation3D&gt;() {</span>
+<span class="fc" id="L394">                    new PROSACRobustEstimatorListener&lt;AffineTransformation3D&gt;() {</span>
                     
             //point to be reused when computing residuals
-<span class="fc" id="L401">            private Point3D mTestPoint = Point3D.create(</span>
+<span class="fc" id="L397">            private Point3D mTestPoint = Point3D.create(</span>
                     CoordinatesType.HOMOGENEOUS_COORDINATES);
             
             @Override
             public double getThreshold() {
-<span class="fc" id="L406">                return mThreshold;</span>
+<span class="fc" id="L402">                return mThreshold;</span>
             }
 
             @Override
             public int getTotalSamples() {
-<span class="fc" id="L411">                return mInputPoints.size();</span>
+<span class="fc" id="L407">                return mInputPoints.size();</span>
             }
 
             @Override
             public int getSubsetSize() {
-<span class="fc" id="L416">                return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
+<span class="fc" id="L412">                return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
             }
 
             @Override
             public void estimatePreliminarSolutions(int[] samplesIndices, 
                     List&lt;AffineTransformation3D&gt; solutions) {
-<span class="fc" id="L422">                Point3D inputPoint1 = mInputPoints.get(samplesIndices[0]);                </span>
-<span class="fc" id="L423">                Point3D inputPoint2 = mInputPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L424">                Point3D inputPoint3 = mInputPoints.get(samplesIndices[2]);</span>
-<span class="fc" id="L425">                Point3D inputPoint4 = mInputPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L418">                Point3D inputPoint1 = mInputPoints.get(samplesIndices[0]);                </span>
+<span class="fc" id="L419">                Point3D inputPoint2 = mInputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L420">                Point3D inputPoint3 = mInputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L421">                Point3D inputPoint4 = mInputPoints.get(samplesIndices[3]);</span>
                 
-<span class="fc" id="L427">                Point3D outputPoint1 = mOutputPoints.get(samplesIndices[0]);                </span>
-<span class="fc" id="L428">                Point3D outputPoint2 = mOutputPoints.get(samplesIndices[1]);</span>
-<span class="fc" id="L429">                Point3D outputPoint3 = mOutputPoints.get(samplesIndices[2]);</span>
-<span class="fc" id="L430">                Point3D outputPoint4 = mOutputPoints.get(samplesIndices[3]);</span>
+<span class="fc" id="L423">                Point3D outputPoint1 = mOutputPoints.get(samplesIndices[0]);                </span>
+<span class="fc" id="L424">                Point3D outputPoint2 = mOutputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L425">                Point3D outputPoint3 = mOutputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L426">                Point3D outputPoint4 = mOutputPoints.get(samplesIndices[3]);</span>
 
                 try {
-<span class="fc" id="L433">                    AffineTransformation3D transformation = </span>
+<span class="fc" id="L429">                    AffineTransformation3D transformation = </span>
                         new AffineTransformation3D(inputPoint1, inputPoint2, 
                         inputPoint3, inputPoint4, outputPoint1, outputPoint2, 
                         outputPoint3, outputPoint4);
-<span class="fc" id="L437">                    solutions.add(transformation);</span>
-<span class="nc" id="L438">                } catch (CoincidentPointsException e) {</span>
+<span class="fc" id="L433">                    solutions.add(transformation);</span>
+<span class="nc" id="L434">                } catch (CoincidentPointsException e) {</span>
                     //if points are coincident, no solution is added
-<span class="fc" id="L440">                }</span>
-<span class="fc" id="L441">            }</span>
+<span class="fc" id="L436">                }</span>
+<span class="fc" id="L437">            }</span>
 
             @Override
             public double computeResidual(
                     AffineTransformation3D currentEstimation, int i) {
-<span class="fc" id="L446">                Point3D inputPoint = mInputPoints.get(i);</span>
-<span class="fc" id="L447">                Point3D outputPoint = mOutputPoints.get(i);</span>
+<span class="fc" id="L442">                Point3D inputPoint = mInputPoints.get(i);</span>
+<span class="fc" id="L443">                Point3D outputPoint = mOutputPoints.get(i);</span>
                 
                 //transform input point and store result in mTestPoint
-<span class="fc" id="L450">                currentEstimation.transform(inputPoint, mTestPoint);</span>
+<span class="fc" id="L446">                currentEstimation.transform(inputPoint, mTestPoint);</span>
                 
-<span class="fc" id="L452">                return outputPoint.distanceTo(mTestPoint);</span>
+<span class="fc" id="L448">                return outputPoint.distanceTo(mTestPoint);</span>
             }
 
             @Override
             public boolean isReady() {
-<span class="fc" id="L457">                return PROSACPointCorrespondenceAffineTransformation3DRobustEstimator.</span>
-<span class="fc" id="L458">                        this.isReady();</span>
+<span class="fc" id="L453">                return PROSACPointCorrespondenceAffineTransformation3DRobustEstimator.</span>
+<span class="fc" id="L454">                        this.isReady();</span>
             }
 
             @Override
             public void onEstimateStart(
                     RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L464" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L465">                    mListener.onEstimateStart(</span>
+<span class="pc bpc" id="L460" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L461">                    mListener.onEstimateStart(</span>
                             PROSACPointCorrespondenceAffineTransformation3DRobustEstimator.this);
                 }
-<span class="fc" id="L468">            }</span>
+<span class="fc" id="L464">            }</span>
 
             @Override
             public void onEstimateEnd(
                     RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
-<span class="pc bpc" id="L473" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L474">                    mListener.onEstimateEnd(</span>
+<span class="pc bpc" id="L469" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L470">                    mListener.onEstimateEnd(</span>
                             PROSACPointCorrespondenceAffineTransformation3DRobustEstimator.this);
                 }
-<span class="fc" id="L477">            }</span>
+<span class="fc" id="L473">            }</span>
 
             @Override
             public void onEstimateNextIteration(
                     RobustEstimator&lt;AffineTransformation3D&gt; estimator, 
                     int iteration) {
-<span class="pc bpc" id="L483" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L484">                    mListener.onEstimateNextIteration(</span>
+<span class="pc bpc" id="L479" title="1 of 2 branches missed.">                if (mListener != null) {</span>
+<span class="fc" id="L480">                    mListener.onEstimateNextIteration(</span>
                             PROSACPointCorrespondenceAffineTransformation3DRobustEstimator.this, 
                             iteration);
                 }
-<span class="fc" id="L488">            }</span>
+<span class="fc" id="L484">            }</span>
 
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;AffineTransformation3D&gt; estimator, 
                     float progress) {
-<span class="nc bnc" id="L494" title="All 2 branches missed.">                if (mListener != null) {</span>
-<span class="nc" id="L495">                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L490" title="All 2 branches missed.">                if (mListener != null) {</span>
+<span class="nc" id="L491">                    mListener.onEstimateProgressChange(</span>
                             PROSACPointCorrespondenceAffineTransformation3DRobustEstimator.this, 
                             progress);
                 }
-<span class="nc" id="L499">            }</span>
+<span class="nc" id="L495">            }</span>
 
             @Override
             public double[] getQualityScores() {
-<span class="fc" id="L503">                return mQualityScores;</span>
+<span class="fc" id="L499">                return mQualityScores;</span>
             }
         });
         
         try {
-<span class="fc" id="L508">            mLocked = true;</span>
-<span class="fc" id="L509">            mInliersData = null;</span>
-<span class="pc bpc" id="L510" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
+<span class="fc" id="L504">            mLocked = true;</span>
+<span class="fc" id="L505">            mInliersData = null;</span>
+<span class="pc bpc" id="L506" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(</span>
                     mComputeAndKeepInliers || mRefineResult);
-<span class="pc bpc" id="L512" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
+<span class="pc bpc" id="L508" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(</span>
                     mComputeAndKeepResiduals || mRefineResult);            
-<span class="fc" id="L514">            innerEstimator.setConfidence(mConfidence);</span>
-<span class="fc" id="L515">            innerEstimator.setMaxIterations(mMaxIterations);</span>
-<span class="fc" id="L516">            innerEstimator.setProgressDelta(mProgressDelta);</span>
-<span class="fc" id="L517">            AffineTransformation3D transformation = innerEstimator.estimate();</span>
-<span class="fc" id="L518">            mInliersData = innerEstimator.getInliersData();</span>
-<span class="fc" id="L519">            return attemptRefine(transformation);            </span>
-<span class="nc" id="L520">        } catch (com.irurueta.numerical.LockedException e) {</span>
-<span class="nc" id="L521">            throw new LockedException(e);</span>
-<span class="nc" id="L522">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
-<span class="nc" id="L523">            throw new NotReadyException(e);</span>
+<span class="fc" id="L510">            innerEstimator.setConfidence(mConfidence);</span>
+<span class="fc" id="L511">            innerEstimator.setMaxIterations(mMaxIterations);</span>
+<span class="fc" id="L512">            innerEstimator.setProgressDelta(mProgressDelta);</span>
+<span class="fc" id="L513">            AffineTransformation3D transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L514">            mInliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L515">            return attemptRefine(transformation);            </span>
+<span class="nc" id="L516">        } catch (com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L517">            throw new LockedException(e);</span>
+<span class="nc" id="L518">        } catch (com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L519">            throw new NotReadyException(e);</span>
         } finally {
-<span class="fc" id="L525">            mLocked = false;</span>
+<span class="fc" id="L521">            mLocked = false;</span>
         }
     }
 
@@ -532,7 +528,7 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */    
     @Override
     public RobustEstimatorMethod getMethod() {
-<span class="fc" id="L535">        return RobustEstimatorMethod.PROSAC;</span>
+<span class="fc" id="L531">        return RobustEstimatorMethod.PROSAC;</span>
     }    
     
     /**
@@ -547,7 +543,7 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-<span class="fc" id="L550">        return mThreshold;</span>
+<span class="fc" id="L546">        return mThreshold;</span>
     }
     
     /**
@@ -558,13 +554,12 @@ public class PROSACPointCorrespondenceAffineTransformation3DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L563" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L564">            throw new IllegalArgumentException();</span>
+    private void internalSetQualityScores(double[] qualityScores) {
+<span class="fc bfc" id="L558" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L559">            throw new IllegalArgumentException();</span>
         }
         
-<span class="fc" id="L567">        mQualityScores = qualityScores;        </span>
-<span class="fc" id="L568">    }        </span>
+<span class="fc" id="L562">        mQualityScores = qualityScores;        </span>
+<span class="fc" id="L563">    }        </span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

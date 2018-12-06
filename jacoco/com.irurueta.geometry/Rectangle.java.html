@@ -4267,15 +4267,15 @@ public class Rectangle implements Serializable {
                 //pick left side
 <span class="fc" id="L4268">                result.setInhomogeneousCoordinates(left2, y);</span>
                 
-<span class="pc bpc" id="L4270" title="4 of 6 branches missed.">            } else if (topDist &lt; leftDist &amp;&amp; topDist &lt; rightDist &amp;&amp;</span>
+<span class="pc bpc" id="L4270" title="3 of 6 branches missed.">            } else if (topDist &lt; leftDist &amp;&amp; topDist &lt; rightDist &amp;&amp;</span>
                     topDist &lt; bottomDist) {
                 //pick top side
-<span class="nc" id="L4273">                result.setInhomogeneousCoordinates(x, top2);</span>
+<span class="fc" id="L4273">                result.setInhomogeneousCoordinates(x, top2);</span>
                 
-<span class="pc bpc" id="L4275" title="3 of 6 branches missed.">            } else if (rightDist &lt; leftDist &amp;&amp; rightDist &lt; topDist &amp;&amp;</span>
+<span class="nc bnc" id="L4275" title="All 6 branches missed.">            } else if (rightDist &lt; leftDist &amp;&amp; rightDist &lt; topDist &amp;&amp;</span>
                     rightDist &lt; bottomDist) {
                 //pick right side
-<span class="fc" id="L4278">                result.setInhomogeneousCoordinates(right2, y);</span>
+<span class="nc" id="L4278">                result.setInhomogeneousCoordinates(right2, y);</span>
                 
             } else {
                 //pick bottom side

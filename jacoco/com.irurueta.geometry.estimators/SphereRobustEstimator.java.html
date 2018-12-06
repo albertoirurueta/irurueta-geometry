@@ -149,13 +149,12 @@ public abstract class SphereRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public SphereRobustEstimator(List&lt;Point3D&gt; points) 
-<span class="fc" id="L153">            throws IllegalArgumentException {</span>
-<span class="fc" id="L154">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L155">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L156">        mMaxIterations = DEFAULT_MAX_ITERATIONS; </span>
-<span class="fc" id="L157">        internalSetPoints(points);</span>
-<span class="fc" id="L158">    }</span>
+<span class="fc" id="L152">    public SphereRobustEstimator(List&lt;Point3D&gt; points) {</span>
+<span class="fc" id="L153">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L154">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L155">        mMaxIterations = DEFAULT_MAX_ITERATIONS; </span>
+<span class="fc" id="L156">        internalSetPoints(points);</span>
+<span class="fc" id="L157">    }</span>
     
     /**
      * Constructor.
@@ -166,13 +165,13 @@ public abstract class SphereRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public SphereRobustEstimator(SphereRobustEstimatorListener listener,
-<span class="fc" id="L169">            List&lt;Point3D&gt; points) throws IllegalArgumentException {</span>
-<span class="fc" id="L170">        mListener = listener;</span>
-<span class="fc" id="L171">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
-<span class="fc" id="L172">        mConfidence = DEFAULT_CONFIDENCE;</span>
-<span class="fc" id="L173">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
-<span class="fc" id="L174">        internalSetPoints(points);</span>
-<span class="fc" id="L175">    }</span>
+<span class="fc" id="L168">            List&lt;Point3D&gt; points) {</span>
+<span class="fc" id="L169">        mListener = listener;</span>
+<span class="fc" id="L170">        mProgressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L171">        mConfidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L172">        mMaxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L173">        internalSetPoints(points);</span>
+<span class="fc" id="L174">    }</span>
     
     
     /**
@@ -181,7 +180,7 @@ public abstract class SphereRobustEstimator {
      * @return listener to be notified of events.
      */
     public SphereRobustEstimatorListener getListener() {
-<span class="fc" id="L184">        return mListener;</span>
+<span class="fc" id="L183">        return mListener;</span>
     }
     
     /**
@@ -192,11 +191,11 @@ public abstract class SphereRobustEstimator {
      */
     public void setListener(SphereRobustEstimatorListener listener) 
             throws LockedException {
-<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L196">            throw new LockedException();</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L195">            throw new LockedException();</span>
         }
-<span class="fc" id="L198">        mListener = listener;</span>
-<span class="fc" id="L199">    }</span>
+<span class="fc" id="L197">        mListener = listener;</span>
+<span class="fc" id="L198">    }</span>
     
     /**
      * Indicates whether listener has been provided and is available for 
@@ -204,7 +203,7 @@ public abstract class SphereRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-<span class="fc bfc" id="L207" title="All 2 branches covered.">        return mListener != null;</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        return mListener != null;</span>
     }
     
     /**
@@ -212,7 +211,7 @@ public abstract class SphereRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-<span class="fc" id="L215">        return mLocked;</span>
+<span class="fc" id="L214">        return mLocked;</span>
     }
 
     /**
@@ -222,7 +221,7 @@ public abstract class SphereRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-<span class="fc" id="L225">        return mProgressDelta;</span>
+<span class="fc" id="L224">        return mProgressDelta;</span>
     }
     
     /**
@@ -235,17 +234,16 @@ public abstract class SphereRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L241">            throw new LockedException();</span>
+    public void setProgressDelta(float progressDelta) throws LockedException {
+<span class="fc bfc" id="L238" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L239">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L243" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
+<span class="fc bfc" id="L241" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA ||</span>
                 progressDelta &gt; MAX_PROGRESS_DELTA) {
-<span class="fc" id="L245">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L243">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L247">        mProgressDelta = progressDelta;</span>
-<span class="fc" id="L248">    }</span>
+<span class="fc" id="L245">        mProgressDelta = progressDelta;</span>
+<span class="fc" id="L246">    }</span>
     
     /**
      * Returns amount of confidence expressed as a value between 0.0 and 1.0
@@ -255,7 +253,7 @@ public abstract class SphereRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-<span class="fc" id="L258">        return mConfidence;</span>
+<span class="fc" id="L256">        return mConfidence;</span>
     }
     
     /**
@@ -269,16 +267,15 @@ public abstract class SphereRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L274" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L275">            throw new LockedException();</span>
+    public void setConfidence(double confidence) throws LockedException {
+<span class="fc bfc" id="L271" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L272">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L277" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
-<span class="fc" id="L278">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L274" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L275">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L280">        mConfidence = confidence;</span>
-<span class="fc" id="L281">    }</span>
+<span class="fc" id="L277">        mConfidence = confidence;</span>
+<span class="fc" id="L278">    }</span>
     
     /**
      * Returns maximum allowed number of iterations. If maximum allowed number
@@ -287,7 +284,7 @@ public abstract class SphereRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-<span class="fc" id="L290">        return mMaxIterations;</span>
+<span class="fc" id="L287">        return mMaxIterations;</span>
     }
     
     /**
@@ -299,16 +296,15 @@ public abstract class SphereRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
-<span class="fc bfc" id="L304" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L305">            throw new LockedException();</span>
+    public void setMaxIterations(int maxIterations) throws LockedException {
+<span class="fc bfc" id="L300" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L301">            throw new LockedException();</span>
         }
-<span class="fc bfc" id="L307" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
-<span class="fc" id="L308">            throw new IllegalArgumentException();</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L304">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L310">        mMaxIterations = maxIterations;</span>
-<span class="fc" id="L311">    }  </span>
+<span class="fc" id="L306">        mMaxIterations = maxIterations;</span>
+<span class="fc" id="L307">    }  </span>
     
     /**
      * Returns list of points to be used to estimate a sphere.
@@ -316,7 +312,7 @@ public abstract class SphereRobustEstimator {
      * @return list of points to be used to estimate a sphere.
      */
     public List&lt;Point3D&gt; getPoints() {
-<span class="fc" id="L319">        return mPoints;</span>
+<span class="fc" id="L315">        return mPoints;</span>
     }
     
     /**
@@ -328,13 +324,12 @@ public abstract class SphereRobustEstimator {
      * @throws LockedException if estimator is locked because a computation is
      * already in progress.
      */
-    public void setPoints(List&lt;Point3D&gt; points) throws IllegalArgumentException,
-            LockedException {
-<span class="fc bfc" id="L333" title="All 2 branches covered.">        if (isLocked()) {</span>
-<span class="fc" id="L334">            throw new LockedException();</span>
+    public void setPoints(List&lt;Point3D&gt; points) throws LockedException {
+<span class="fc bfc" id="L328" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L329">            throw new LockedException();</span>
         }
-<span class="fc" id="L336">        internalSetPoints(points);</span>
-<span class="fc" id="L337">    }</span>
+<span class="fc" id="L331">        internalSetPoints(points);</span>
+<span class="fc" id="L332">    }</span>
     
     /**
      * Indicates if estimator is ready to start the sphere estimation.
@@ -342,7 +337,7 @@ public abstract class SphereRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-<span class="fc bfc" id="L345" title="All 4 branches covered.">        return mPoints != null &amp;&amp; mPoints.size() &gt;= MINIMUM_SIZE;</span>
+<span class="fc bfc" id="L340" title="All 4 branches covered.">        return mPoints != null &amp;&amp; mPoints.size() &gt;= MINIMUM_SIZE;</span>
     }
     
     /**
@@ -353,7 +348,7 @@ public abstract class SphereRobustEstimator {
      * @return quality scores corresponding to each point.
      */
     public double[] getQualityScores() {
-<span class="fc" id="L356">        return null;</span>
+<span class="fc" id="L351">        return null;</span>
     }
     
     /**
@@ -368,8 +363,7 @@ public abstract class SphereRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 4 samples).
      */
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-<span class="fc" id="L372">            IllegalArgumentException { }</span>
+<span class="fc" id="L366">    public void setQualityScores(double[] qualityScores) throws LockedException { }</span>
     
     /**
      * Creates a sphere robust estimator based on 3D point samples and using
@@ -379,18 +373,18 @@ public abstract class SphereRobustEstimator {
      * @return an instance of a sphere robust estimator.
      */
     public static SphereRobustEstimator create(RobustEstimatorMethod method) {
-<span class="fc bfc" id="L382" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L376" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L384">                return new LMedSSphereRobustEstimator();</span>
+<span class="fc" id="L378">                return new LMedSSphereRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L386">                return new MSACSphereRobustEstimator();</span>
+<span class="fc" id="L380">                return new MSACSphereRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L388">                return new PROSACSphereRobustEstimator();</span>
+<span class="fc" id="L382">                return new PROSACSphereRobustEstimator();</span>
             case PROMedS:
-<span class="fc" id="L390">                return new PROMedSSphereRobustEstimator();</span>
+<span class="fc" id="L384">                return new PROMedSSphereRobustEstimator();</span>
             case RANSAC:
             default:
-<span class="fc" id="L393">                return new RANSACSphereRobustEstimator();</span>
+<span class="fc" id="L387">                return new RANSACSphereRobustEstimator();</span>
         }
     }
     
@@ -405,19 +399,19 @@ public abstract class SphereRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static SphereRobustEstimator create(List&lt;Point3D&gt; points, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L409" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L403" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L411">                return new LMedSSphereRobustEstimator(points);</span>
+<span class="fc" id="L405">                return new LMedSSphereRobustEstimator(points);</span>
             case MSAC:
-<span class="fc" id="L413">                return new MSACSphereRobustEstimator(points);</span>
+<span class="fc" id="L407">                return new MSACSphereRobustEstimator(points);</span>
             case PROSAC:
-<span class="fc" id="L415">                return new PROSACSphereRobustEstimator(points);</span>
+<span class="fc" id="L409">                return new PROSACSphereRobustEstimator(points);</span>
             case PROMedS:
-<span class="fc" id="L417">                return new PROMedSSphereRobustEstimator(points);</span>
+<span class="fc" id="L411">                return new PROMedSSphereRobustEstimator(points);</span>
             case RANSAC:
             default:
-<span class="fc" id="L420">                return new RANSACSphereRobustEstimator(points);</span>
+<span class="fc" id="L414">                return new RANSACSphereRobustEstimator(points);</span>
         }
     }
     
@@ -433,18 +427,18 @@ public abstract class SphereRobustEstimator {
     public static SphereRobustEstimator create(
             SphereRobustEstimatorListener listener, 
             RobustEstimatorMethod method) {
-<span class="fc bfc" id="L436" title="All 5 branches covered.">        switch (method) {</span>
+<span class="fc bfc" id="L430" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L438">                return new LMedSSphereRobustEstimator(listener);</span>
+<span class="fc" id="L432">                return new LMedSSphereRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L440">                return new MSACSphereRobustEstimator(listener);</span>
+<span class="fc" id="L434">                return new MSACSphereRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L442">                return new PROSACSphereRobustEstimator(listener);</span>
+<span class="fc" id="L436">                return new PROSACSphereRobustEstimator(listener);</span>
             case PROMedS:
-<span class="fc" id="L444">                return new PROMedSSphereRobustEstimator(listener);</span>
+<span class="fc" id="L438">                return new PROMedSSphereRobustEstimator(listener);</span>
             case RANSAC:
             default:
-<span class="fc" id="L447">                return new RANSACSphereRobustEstimator(listener);</span>
+<span class="fc" id="L441">                return new RANSACSphereRobustEstimator(listener);</span>
         }
     }
     
@@ -462,19 +456,19 @@ public abstract class SphereRobustEstimator {
      */
     public static SphereRobustEstimator create(
             SphereRobustEstimatorListener listener, List&lt;Point3D&gt; points,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L466" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L460" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L468">                return new LMedSSphereRobustEstimator(listener, points);</span>
+<span class="fc" id="L462">                return new LMedSSphereRobustEstimator(listener, points);</span>
             case MSAC:
-<span class="fc" id="L470">                return new MSACSphereRobustEstimator(listener, points);</span>
+<span class="fc" id="L464">                return new MSACSphereRobustEstimator(listener, points);</span>
             case PROSAC:
-<span class="fc" id="L472">                return new PROSACSphereRobustEstimator(listener, points);</span>
+<span class="fc" id="L466">                return new PROSACSphereRobustEstimator(listener, points);</span>
             case PROMedS:
-<span class="fc" id="L474">                return new PROMedSSphereRobustEstimator(listener, points);</span>
+<span class="fc" id="L468">                return new PROMedSSphereRobustEstimator(listener, points);</span>
             case RANSAC:
             default:
-<span class="fc" id="L477">                return new RANSACSphereRobustEstimator(listener, points);</span>
+<span class="fc" id="L471">                return new RANSACSphereRobustEstimator(listener, points);</span>
         }
     }
     
@@ -489,19 +483,19 @@ public abstract class SphereRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 4 points).
      */
     public static SphereRobustEstimator create(double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L493" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L487" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L495">                return new LMedSSphereRobustEstimator();</span>
+<span class="fc" id="L489">                return new LMedSSphereRobustEstimator();</span>
             case MSAC:
-<span class="fc" id="L497">                return new MSACSphereRobustEstimator();</span>
+<span class="fc" id="L491">                return new MSACSphereRobustEstimator();</span>
             case PROSAC:
-<span class="fc" id="L499">                return new PROSACSphereRobustEstimator(qualityScores);</span>
+<span class="fc" id="L493">                return new PROSACSphereRobustEstimator(qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L501">                return new PROMedSSphereRobustEstimator(qualityScores);</span>
+<span class="fc" id="L495">                return new PROMedSSphereRobustEstimator(qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L504">                return new RANSACSphereRobustEstimator();</span>
+<span class="fc" id="L498">                return new RANSACSphereRobustEstimator();</span>
         }
     }
     
@@ -518,20 +512,19 @@ public abstract class SphereRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static SphereRobustEstimator create(List&lt;Point3D&gt; points, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L523" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L516" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L525">                return new LMedSSphereRobustEstimator(points);</span>
+<span class="fc" id="L518">                return new LMedSSphereRobustEstimator(points);</span>
             case MSAC:
-<span class="fc" id="L527">                return new MSACSphereRobustEstimator(points);</span>
+<span class="fc" id="L520">                return new MSACSphereRobustEstimator(points);</span>
             case PROSAC:
-<span class="fc" id="L529">                return new PROSACSphereRobustEstimator(points, qualityScores);</span>
+<span class="fc" id="L522">                return new PROSACSphereRobustEstimator(points, qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L531">                return new PROMedSSphereRobustEstimator(points, qualityScores);</span>
+<span class="fc" id="L524">                return new PROMedSSphereRobustEstimator(points, qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L534">                return new RANSACSphereRobustEstimator(points);</span>
+<span class="fc" id="L527">                return new RANSACSphereRobustEstimator(points);</span>
         }
     }
     
@@ -549,19 +542,19 @@ public abstract class SphereRobustEstimator {
      */
     public static SphereRobustEstimator create(
             SphereRobustEstimatorListener listener, double[] qualityScores,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
-<span class="fc bfc" id="L553" title="All 5 branches covered.">        switch (method) {</span>
+            RobustEstimatorMethod method) {
+<span class="fc bfc" id="L546" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L555">                return new LMedSSphereRobustEstimator(listener);</span>
+<span class="fc" id="L548">                return new LMedSSphereRobustEstimator(listener);</span>
             case MSAC:
-<span class="fc" id="L557">                return new MSACSphereRobustEstimator(listener);</span>
+<span class="fc" id="L550">                return new MSACSphereRobustEstimator(listener);</span>
             case PROSAC:
-<span class="fc" id="L559">                return new PROSACSphereRobustEstimator(listener, qualityScores);</span>
+<span class="fc" id="L552">                return new PROSACSphereRobustEstimator(listener, qualityScores);</span>
             case PROMedS:
-<span class="fc" id="L561">                return new PROMedSSphereRobustEstimator(listener, qualityScores);</span>
+<span class="fc" id="L554">                return new PROMedSSphereRobustEstimator(listener, qualityScores);</span>
             case RANSAC:
             default:
-<span class="fc" id="L564">                return new RANSACSphereRobustEstimator(listener);</span>
+<span class="fc" id="L557">                return new RANSACSphereRobustEstimator(listener);</span>
         }
     }
     
@@ -581,22 +574,21 @@ public abstract class SphereRobustEstimator {
      */
     public static SphereRobustEstimator create(
             SphereRobustEstimatorListener listener, List&lt;Point3D&gt; points,
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L586" title="All 5 branches covered.">        switch (method) {</span>
+            double[] qualityScores, RobustEstimatorMethod method) {
+<span class="fc bfc" id="L578" title="All 5 branches covered.">        switch (method) {</span>
             case LMedS:
-<span class="fc" id="L588">                return new LMedSSphereRobustEstimator(listener, points);</span>
+<span class="fc" id="L580">                return new LMedSSphereRobustEstimator(listener, points);</span>
             case MSAC:
-<span class="fc" id="L590">                return new MSACSphereRobustEstimator(listener, points);</span>
+<span class="fc" id="L582">                return new MSACSphereRobustEstimator(listener, points);</span>
             case PROSAC:
-<span class="fc" id="L592">                return new PROSACSphereRobustEstimator(listener, points, </span>
+<span class="fc" id="L584">                return new PROSACSphereRobustEstimator(listener, points, </span>
                         qualityScores);
             case PROMedS:
-<span class="fc" id="L595">                return new PROMedSSphereRobustEstimator(listener, points, </span>
+<span class="fc" id="L587">                return new PROMedSSphereRobustEstimator(listener, points, </span>
                         qualityScores);
             case RANSAC:
             default:
-<span class="fc" id="L599">                return new RANSACSphereRobustEstimator(listener, points);</span>
+<span class="fc" id="L591">                return new RANSACSphereRobustEstimator(listener, points);</span>
         }
     }    
     
@@ -606,7 +598,7 @@ public abstract class SphereRobustEstimator {
      * @return an instance of a sphere robust estimator.
      */
     public static SphereRobustEstimator create() {
-<span class="fc" id="L609">        return create(DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L601">        return create(DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -617,9 +609,8 @@ public abstract class SphereRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have a
      * size greater or equal than MINIMUM_SIZE.
      */
-    public static SphereRobustEstimator create(List&lt;Point3D&gt; points) 
-            throws IllegalArgumentException {
-<span class="fc" id="L622">        return create(points, DEFAULT_ROBUST_METHOD);</span>
+    public static SphereRobustEstimator create(List&lt;Point3D&gt; points) {
+<span class="fc" id="L613">        return create(points, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -631,7 +622,7 @@ public abstract class SphereRobustEstimator {
      */
     public static SphereRobustEstimator create(
             SphereRobustEstimatorListener listener) {
-<span class="fc" id="L634">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+<span class="fc" id="L625">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -645,9 +636,8 @@ public abstract class SphereRobustEstimator {
      * size greater or equal than MINIMUM_SIZE.
      */
     public static SphereRobustEstimator create(
-            SphereRobustEstimatorListener listener, List&lt;Point3D&gt; points) 
-            throws IllegalArgumentException {
-<span class="fc" id="L650">        return create(listener, points, DEFAULT_ROBUST_METHOD);</span>
+            SphereRobustEstimatorListener listener, List&lt;Point3D&gt; points) {
+<span class="fc" id="L640">        return create(listener, points, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -658,9 +648,8 @@ public abstract class SphereRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 4 points).
      */
-    public static SphereRobustEstimator create(double[] qualityScores) 
-            throws IllegalArgumentException {
-<span class="fc" id="L663">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    public static SphereRobustEstimator create(double[] qualityScores) {
+<span class="fc" id="L652">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -674,8 +663,8 @@ public abstract class SphereRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public static SphereRobustEstimator create(List&lt;Point3D&gt; points, 
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L678">        return create(points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L667">        return create(points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -689,9 +678,8 @@ public abstract class SphereRobustEstimator {
      * smaller than MINIMUM_SIZE (i.e. 4 points).
      */
     public static SphereRobustEstimator create(
-            SphereRobustEstimatorListener listener, double[] qualityScores)
-            throws IllegalArgumentException {
-<span class="fc" id="L694">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            SphereRobustEstimatorListener listener, double[] qualityScores) {
+<span class="fc" id="L682">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }
     
     /**
@@ -708,8 +696,8 @@ public abstract class SphereRobustEstimator {
      */
     public static SphereRobustEstimator create(
             SphereRobustEstimatorListener listener, List&lt;Point3D&gt; points,
-            double[] qualityScores) throws IllegalArgumentException {
-<span class="fc" id="L712">        return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+            double[] qualityScores) {
+<span class="fc" id="L700">        return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
     }        
     
     /**
@@ -740,13 +728,12 @@ public abstract class SphereRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have
      * a size greater or equal than MINIMUM_SIZE
      */
-    private void internalSetPoints(List&lt;Point3D&gt; points) 
-            throws IllegalArgumentException {
-<span class="fc bfc" id="L745" title="All 2 branches covered.">        if (points.size() &lt; MINIMUM_SIZE) {</span>
-<span class="fc" id="L746">            throw new IllegalArgumentException();</span>
+    private void internalSetPoints(List&lt;Point3D&gt; points) {
+<span class="fc bfc" id="L732" title="All 2 branches covered.">        if (points.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L733">            throw new IllegalArgumentException();</span>
         }
-<span class="fc" id="L748">        mPoints = points;</span>
-<span class="fc" id="L749">    }</span>
+<span class="fc" id="L735">        mPoints = points;</span>
+<span class="fc" id="L736">    }</span>
     
     /**
      * Computes the residual between a sphere and a point.
@@ -755,9 +742,9 @@ public abstract class SphereRobustEstimator {
      * @return residual.
      */
     protected double residual(Sphere c, Point3D point) {
-<span class="fc" id="L758">        point.normalize();</span>
+<span class="fc" id="L745">        point.normalize();</span>
         
-<span class="fc" id="L760">        return c.getDistance(point);</span>
+<span class="fc" id="L747">        return c.getDistance(point);</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

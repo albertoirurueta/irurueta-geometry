@@ -122,25 +122,26 @@ public abstract class PointCorrespondencePinholeCameraRefiner extends
         //project inlier 3D points into test point
 <span class="fc" id="L123">        int nSamples = mInliers.length();</span>
         Point3D point3D;
-<span class="fc" id="L125">        Point2D point2D, projectedPoint2D = Point2D.create();</span>
-<span class="fc" id="L126">        double residual = 0.0;</span>
-<span class="fc bfc" id="L127" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L128" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
-<span class="fc" id="L129">                point3D = mSamples1.get(i);</span>
-<span class="fc" id="L130">                point2D = mSamples2.get(i);</span>
+        Point2D point2D;
+<span class="fc" id="L126">        Point2D projectedPoint2D = Point2D.create();</span>
+<span class="fc" id="L127">        double residual = 0.0;</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
+<span class="fc" id="L130">                point3D = mSamples1.get(i);</span>
+<span class="fc" id="L131">                point2D = mSamples2.get(i);</span>
                 
-<span class="fc" id="L132">                point3D.normalize();</span>
-<span class="fc" id="L133">                point2D.normalize();</span>
+<span class="fc" id="L133">                point3D.normalize();</span>
+<span class="fc" id="L134">                point2D.normalize();</span>
                 
-<span class="fc" id="L135">                pinholeCamera.project(point3D, projectedPoint2D);</span>
+<span class="fc" id="L136">                pinholeCamera.project(point3D, projectedPoint2D);</span>
                 
-<span class="fc" id="L137">                projectedPoint2D.normalize();</span>
+<span class="fc" id="L138">                projectedPoint2D.normalize();</span>
                 
-<span class="fc" id="L139">                residual += Math.pow(projectedPoint2D.distanceTo(point2D), 2.0);</span>
+<span class="fc" id="L140">                residual += Math.pow(projectedPoint2D.distanceTo(point2D), 2.0);</span>
             }                        
         }
         
-<span class="fc" id="L143">        return residual;        </span>
+<span class="fc" id="L144">        return residual;        </span>
     }   
 
     /**
@@ -158,12 +159,12 @@ public abstract class PointCorrespondencePinholeCameraRefiner extends
      */
     protected double residualLevenbergMarquardt(PinholeCamera pinholeCamera, 
             Point3D point3D, Point2D point2D, double[] params, double weight) {
-<span class="fc" id="L161">        double residual = singleProjectionResidual(pinholeCamera, point3D, </span>
+<span class="fc" id="L162">        double residual = singleProjectionResidual(pinholeCamera, point3D, </span>
                 point2D);
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (hasSuggestions()) {</span>
-<span class="fc" id="L164">            residual += suggestionResidual(params, weight);</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (hasSuggestions()) {</span>
+<span class="fc" id="L165">            residual += suggestionResidual(params, weight);</span>
         }
-<span class="fc" id="L166">        return residual;                </span>
+<span class="fc" id="L167">        return residual;                </span>
     }     
     
     /**
@@ -176,10 +177,10 @@ public abstract class PointCorrespondencePinholeCameraRefiner extends
     private double singleProjectionResidual(PinholeCamera pinholeCamera, 
             Point3D point3D, Point2D point2D) {
         //project point3D into test point
-<span class="fc" id="L179">        pinholeCamera.project(point3D, mResidualTestPoint);</span>
+<span class="fc" id="L180">        pinholeCamera.project(point3D, mResidualTestPoint);</span>
                 
         //compare test point and 2D point
-<span class="fc" id="L182">        return mResidualTestPoint.distanceTo(point2D);                </span>
+<span class="fc" id="L183">        return mResidualTestPoint.distanceTo(point2D);                </span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

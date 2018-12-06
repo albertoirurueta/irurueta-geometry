@@ -147,138 +147,139 @@ public class PlaneCorrespondenceAffineTransformation3DRefiner extends
 <span class="fc" id="L147">            Matrix x = new Matrix(mNumInliers, nDims);</span>
 <span class="fc" id="L148">            int nSamples = mInliers.length();</span>
 <span class="fc" id="L149">            int pos = 0;</span>
-            Plane inputPlane, outputPlane;
-<span class="fc bfc" id="L151" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L152" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
+            Plane inputPlane;
+            Plane outputPlane;
+<span class="fc bfc" id="L152" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
                     //sample is inlier
-<span class="fc" id="L154">                    inputPlane = mSamples1.get(i);</span>
-<span class="fc" id="L155">                    outputPlane = mSamples2.get(i);</span>
-<span class="fc" id="L156">                    inputPlane.normalize();</span>
-<span class="fc" id="L157">                    outputPlane.normalize();</span>
-<span class="fc" id="L158">                    x.setElementAt(pos, 0, inputPlane.getA());</span>
-<span class="fc" id="L159">                    x.setElementAt(pos, 1, inputPlane.getB());</span>
-<span class="fc" id="L160">                    x.setElementAt(pos, 2, inputPlane.getC());</span>
-<span class="fc" id="L161">                    x.setElementAt(pos, 3, inputPlane.getD());</span>
-<span class="fc" id="L162">                    x.setElementAt(pos, 4, outputPlane.getA());</span>
-<span class="fc" id="L163">                    x.setElementAt(pos, 5, outputPlane.getB());</span>
-<span class="fc" id="L164">                    x.setElementAt(pos, 6, outputPlane.getC());</span>
-<span class="fc" id="L165">                    x.setElementAt(pos, 7, outputPlane.getD());</span>
+<span class="fc" id="L155">                    inputPlane = mSamples1.get(i);</span>
+<span class="fc" id="L156">                    outputPlane = mSamples2.get(i);</span>
+<span class="fc" id="L157">                    inputPlane.normalize();</span>
+<span class="fc" id="L158">                    outputPlane.normalize();</span>
+<span class="fc" id="L159">                    x.setElementAt(pos, 0, inputPlane.getA());</span>
+<span class="fc" id="L160">                    x.setElementAt(pos, 1, inputPlane.getB());</span>
+<span class="fc" id="L161">                    x.setElementAt(pos, 2, inputPlane.getC());</span>
+<span class="fc" id="L162">                    x.setElementAt(pos, 3, inputPlane.getD());</span>
+<span class="fc" id="L163">                    x.setElementAt(pos, 4, outputPlane.getA());</span>
+<span class="fc" id="L164">                    x.setElementAt(pos, 5, outputPlane.getB());</span>
+<span class="fc" id="L165">                    x.setElementAt(pos, 6, outputPlane.getC());</span>
+<span class="fc" id="L166">                    x.setElementAt(pos, 7, outputPlane.getD());</span>
                     
-<span class="fc" id="L167">                    y[pos] = mResiduals[i];</span>
-<span class="fc" id="L168">                    pos++;</span>
+<span class="fc" id="L168">                    y[pos] = mResiduals[i];</span>
+<span class="fc" id="L169">                    pos++;</span>
                 }
             }
             
-<span class="fc" id="L172">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
-<span class="fc" id="L173">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+<span class="fc" id="L173">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
+<span class="fc" id="L174">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
                         
-<span class="fc" id="L175">                private Plane mInputPlane = new Plane();</span>
+<span class="fc" id="L176">                private Plane mInputPlane = new Plane();</span>
                 
-<span class="fc" id="L177">                private Plane mOutputPlane = new Plane();</span>
+<span class="fc" id="L178">                private Plane mOutputPlane = new Plane();</span>
                 
-<span class="fc" id="L179">                private AffineTransformation3D mTransformation =</span>
+<span class="fc" id="L180">                private AffineTransformation3D mTransformation =</span>
                         new AffineTransformation3D();
                 
-<span class="fc" id="L182">                private GradientEstimator mGradientEstimator =</span>
+<span class="fc" id="L183">                private GradientEstimator mGradientEstimator =</span>
                         new GradientEstimator(
-<span class="fc" id="L184">                                new MultiDimensionFunctionEvaluatorListener() {</span>
+<span class="fc" id="L185">                                new MultiDimensionFunctionEvaluatorListener() {</span>
                     @Override
                     public double evaluate(double[] params) {
                         //copy values for A matrix
-<span class="fc" id="L188">                        System.arraycopy(params, 0, </span>
-<span class="fc" id="L189">                                mTransformation.getA().getBuffer(), 0, </span>
+<span class="fc" id="L189">                        System.arraycopy(params, 0, </span>
+<span class="fc" id="L190">                                mTransformation.getA().getBuffer(), 0, </span>
                                 AffineTransformation3D.INHOM_COORDS*
                                 AffineTransformation3D.INHOM_COORDS);
                         //copy values for translation
-<span class="fc" id="L193">                        System.arraycopy(params, </span>
+<span class="fc" id="L194">                        System.arraycopy(params, </span>
                                 AffineTransformation3D.INHOM_COORDS*
                                 AffineTransformation3D.INHOM_COORDS, 
-<span class="fc" id="L196">                                mTransformation.getTranslation(), 0, </span>
+<span class="fc" id="L197">                                mTransformation.getTranslation(), 0, </span>
                                 AffineTransformation3D.NUM_TRANSLATION_COORDS);
                         
-<span class="fc" id="L199">                        return residual(mTransformation, mInputPlane, </span>
-<span class="fc" id="L200">                                mOutputPlane);</span>
+<span class="fc" id="L200">                        return residual(mTransformation, mInputPlane, </span>
+<span class="fc" id="L201">                                mOutputPlane);</span>
                     }
                 });
                 
                 @Override
                 public int getNumberOfDimensions() {
-<span class="fc" id="L206">                    return nDims;</span>
+<span class="fc" id="L207">                    return nDims;</span>
                 }
 
                 @Override
                 public double[] createInitialParametersArray() {
-<span class="fc" id="L211">                    return initParams;</span>
+<span class="fc" id="L212">                    return initParams;</span>
                 }
 
                 @Override
                 public double evaluate(int i, double[] point, double[] params, 
                         double[] derivatives) throws EvaluationException {
-<span class="fc" id="L217">                    mInputPlane.setParameters(point[0], point[1], point[2], </span>
+<span class="fc" id="L218">                    mInputPlane.setParameters(point[0], point[1], point[2], </span>
                             point[3]);
-<span class="fc" id="L219">                    mOutputPlane.setParameters(point[4], point[5], point[6], </span>
+<span class="fc" id="L220">                    mOutputPlane.setParameters(point[4], point[5], point[6], </span>
                             point[7]);
                     
                     //copy values for A matrix
-<span class="fc" id="L223">                    System.arraycopy(params, 0, </span>
-<span class="fc" id="L224">                            mTransformation.getA().getBuffer(), 0, </span>
+<span class="fc" id="L224">                    System.arraycopy(params, 0, </span>
+<span class="fc" id="L225">                            mTransformation.getA().getBuffer(), 0, </span>
                             AffineTransformation3D.INHOM_COORDS*
                             AffineTransformation3D.INHOM_COORDS);
                     //copy values for translation
-<span class="fc" id="L228">                    System.arraycopy(params, </span>
+<span class="fc" id="L229">                    System.arraycopy(params, </span>
                             AffineTransformation3D.INHOM_COORDS*
                             AffineTransformation3D.INHOM_COORDS, 
-<span class="fc" id="L231">                            mTransformation.getTranslation(), 0, </span>
+<span class="fc" id="L232">                            mTransformation.getTranslation(), 0, </span>
                             AffineTransformation3D.NUM_TRANSLATION_COORDS);
                     
-<span class="fc" id="L234">                    double y = residual(mTransformation, mInputPlane, </span>
+<span class="fc" id="L235">                    double y = residual(mTransformation, mInputPlane, </span>
                             mOutputPlane);
-<span class="fc" id="L236">                    mGradientEstimator.gradient(params, derivatives);</span>
+<span class="fc" id="L237">                    mGradientEstimator.gradient(params, derivatives);</span>
                     
-<span class="fc" id="L238">                    return y;</span>
+<span class="fc" id="L239">                    return y;</span>
                 }
             };
             
-<span class="fc" id="L242">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
+<span class="fc" id="L243">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-<span class="fc" id="L244">                    getRefinementStandardDeviation());</span>
+<span class="fc" id="L245">                    getRefinementStandardDeviation());</span>
             
-<span class="fc" id="L246">            fitter.fit();</span>
+<span class="fc" id="L247">            fitter.fit();</span>
             
             //obtain estimated params
-<span class="fc" id="L249">            double[] params = fitter.getA();</span>
+<span class="fc" id="L250">            double[] params = fitter.getA();</span>
             
             //update transformation
             
             //copy values for A matrix
-<span class="fc" id="L254">            System.arraycopy(params, 0, result.getA().getBuffer(), 0, </span>
+<span class="fc" id="L255">            System.arraycopy(params, 0, result.getA().getBuffer(), 0, </span>
                     AffineTransformation3D.INHOM_COORDS*
                     AffineTransformation3D.INHOM_COORDS);
             //copy values for translation
-<span class="fc" id="L258">            System.arraycopy(params, AffineTransformation3D.INHOM_COORDS*</span>
+<span class="fc" id="L259">            System.arraycopy(params, AffineTransformation3D.INHOM_COORDS*</span>
                     AffineTransformation3D.INHOM_COORDS, 
-<span class="fc" id="L260">                    result.getTranslation(), 0, </span>
+<span class="fc" id="L261">                    result.getTranslation(), 0, </span>
                     AffineTransformation3D.NUM_TRANSLATION_COORDS);
             
-<span class="pc bpc" id="L263" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
                 //keep covariance
-<span class="fc" id="L265">                mCovariance = fitter.getCovar();</span>
+<span class="fc" id="L266">                mCovariance = fitter.getCovar();</span>
             }
             
-<span class="fc" id="L268">            double finalTotalResidual = totalResidual(result);</span>
-<span class="fc bfc" id="L269" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
+<span class="fc" id="L269">            double finalTotalResidual = totalResidual(result);</span>
+<span class="fc bfc" id="L270" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
             
-<span class="fc bfc" id="L271" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L272">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
+<span class="fc bfc" id="L272" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L273">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
                         errorDecreased);
             }
             
-<span class="fc" id="L276">            return errorDecreased;</span>
+<span class="fc" id="L277">            return errorDecreased;</span>
                         
-<span class="nc" id="L278">        } catch (Exception e) {</span>
-<span class="nc" id="L279">            throw new RefinerException(e);</span>
+<span class="nc" id="L279">        } catch (Exception e) {</span>
+<span class="nc" id="L280">            throw new RefinerException(e);</span>
         } finally {
-<span class="fc" id="L281">            mLocked = false;</span>
+<span class="fc" id="L282">            mLocked = false;</span>
         }
     }
     
@@ -293,13 +294,13 @@ public class PlaneCorrespondenceAffineTransformation3DRefiner extends
     private double residual(AffineTransformation3D transformation, 
             Plane inputPlane, Plane outputPlane) {
         try {
-<span class="fc" id="L296">            inputPlane.normalize();</span>
-<span class="fc" id="L297">            outputPlane.normalize();</span>
+<span class="fc" id="L297">            inputPlane.normalize();</span>
+<span class="fc" id="L298">            outputPlane.normalize();</span>
         
-<span class="fc" id="L299">            transformation.transform(inputPlane, mResidualTestPlane);</span>
-<span class="fc" id="L300">            return 1.0 - Math.abs(outputPlane.dotProduct(mResidualTestPlane));</span>
-<span class="nc" id="L301">        } catch (AlgebraException e) {</span>
-<span class="nc" id="L302">            return 1.0;</span>
+<span class="fc" id="L300">            transformation.transform(inputPlane, mResidualTestPlane);</span>
+<span class="fc" id="L301">            return 1.0 - Math.abs(outputPlane.dotProduct(mResidualTestPlane));</span>
+<span class="nc" id="L302">        } catch (AlgebraException e) {</span>
+<span class="nc" id="L303">            return 1.0;</span>
         }
     }
     
@@ -309,22 +310,23 @@ public class PlaneCorrespondenceAffineTransformation3DRefiner extends
      * @return total residual.
      */
     private double totalResidual(AffineTransformation3D transformation) {
-<span class="fc" id="L312">        double result = 0.0;</span>
+<span class="fc" id="L313">        double result = 0.0;</span>
         
-<span class="fc" id="L314">        int nSamples = mInliers.length();</span>
-        Plane inputPlane, outputPlane;
-<span class="fc bfc" id="L316" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L317" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
+<span class="fc" id="L315">        int nSamples = mInliers.length();</span>
+        Plane inputPlane;
+        Plane outputPlane;
+<span class="fc bfc" id="L318" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L319" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
                 //sample is inlier
-<span class="fc" id="L319">                inputPlane = mSamples1.get(i);</span>
-<span class="fc" id="L320">                outputPlane = mSamples2.get(i);</span>
-<span class="fc" id="L321">                inputPlane.normalize();</span>
-<span class="fc" id="L322">                outputPlane.normalize();</span>
-<span class="fc" id="L323">                result += residual(transformation, inputPlane, outputPlane);</span>
+<span class="fc" id="L321">                inputPlane = mSamples1.get(i);</span>
+<span class="fc" id="L322">                outputPlane = mSamples2.get(i);</span>
+<span class="fc" id="L323">                inputPlane.normalize();</span>
+<span class="fc" id="L324">                outputPlane.normalize();</span>
+<span class="fc" id="L325">                result += residual(transformation, inputPlane, outputPlane);</span>
             }
         }
         
-<span class="fc" id="L327">        return result;</span>
+<span class="fc" id="L329">        return result;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

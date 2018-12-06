@@ -149,141 +149,142 @@ public class PointCorrespondenceAffineTransformation3DRefiner extends
 <span class="fc" id="L149">            Matrix x = new Matrix(mNumInliers, nDims);</span>
 <span class="fc" id="L150">            int nSamples = mInliers.length();</span>
 <span class="fc" id="L151">            int pos = 0;</span>
-            Point3D inputPoint, outputPoint;
-<span class="fc bfc" id="L153" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L154" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
+            Point3D inputPoint;
+            Point3D outputPoint;
+<span class="fc bfc" id="L154" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
                     //sample is inlier
-<span class="fc" id="L156">                    inputPoint = mSamples1.get(i);</span>
-<span class="fc" id="L157">                    outputPoint = mSamples2.get(i);</span>
-<span class="fc" id="L158">                    inputPoint.normalize();</span>
-<span class="fc" id="L159">                    outputPoint.normalize();</span>
-<span class="fc" id="L160">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
-<span class="fc" id="L161">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
-<span class="fc" id="L162">                    x.setElementAt(pos, 2, inputPoint.getHomZ());</span>
-<span class="fc" id="L163">                    x.setElementAt(pos, 3, inputPoint.getHomW());</span>
-<span class="fc" id="L164">                    x.setElementAt(pos, 4, outputPoint.getHomX());</span>
-<span class="fc" id="L165">                    x.setElementAt(pos, 5, outputPoint.getHomY());</span>
-<span class="fc" id="L166">                    x.setElementAt(pos, 6, outputPoint.getHomZ());</span>
-<span class="fc" id="L167">                    x.setElementAt(pos, 7, outputPoint.getHomW());</span>
+<span class="fc" id="L157">                    inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L158">                    outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L159">                    inputPoint.normalize();</span>
+<span class="fc" id="L160">                    outputPoint.normalize();</span>
+<span class="fc" id="L161">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
+<span class="fc" id="L162">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
+<span class="fc" id="L163">                    x.setElementAt(pos, 2, inputPoint.getHomZ());</span>
+<span class="fc" id="L164">                    x.setElementAt(pos, 3, inputPoint.getHomW());</span>
+<span class="fc" id="L165">                    x.setElementAt(pos, 4, outputPoint.getHomX());</span>
+<span class="fc" id="L166">                    x.setElementAt(pos, 5, outputPoint.getHomY());</span>
+<span class="fc" id="L167">                    x.setElementAt(pos, 6, outputPoint.getHomZ());</span>
+<span class="fc" id="L168">                    x.setElementAt(pos, 7, outputPoint.getHomW());</span>
                     
-<span class="fc" id="L169">                    y[pos] = mResiduals[i];</span>
-<span class="fc" id="L170">                    pos++;</span>
+<span class="fc" id="L170">                    y[pos] = mResiduals[i];</span>
+<span class="fc" id="L171">                    pos++;</span>
                 }
             }
             
-<span class="fc" id="L174">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
-<span class="fc" id="L175">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+<span class="fc" id="L175">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
+<span class="fc" id="L176">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
                         
-<span class="fc" id="L177">                private Point3D mInputPoint = Point3D.create(</span>
+<span class="fc" id="L178">                private Point3D mInputPoint = Point3D.create(</span>
                         CoordinatesType.HOMOGENEOUS_COORDINATES);
                 
-<span class="fc" id="L180">                private Point3D mOutputPoint = Point3D.create(</span>
+<span class="fc" id="L181">                private Point3D mOutputPoint = Point3D.create(</span>
                         CoordinatesType.HOMOGENEOUS_COORDINATES);
                 
-<span class="fc" id="L183">                private AffineTransformation3D mTransformation = </span>
+<span class="fc" id="L184">                private AffineTransformation3D mTransformation = </span>
                         new AffineTransformation3D();
                 
-<span class="fc" id="L186">                private GradientEstimator mGradientEstimator =</span>
+<span class="fc" id="L187">                private GradientEstimator mGradientEstimator =</span>
                         new GradientEstimator(
-<span class="fc" id="L188">                                new MultiDimensionFunctionEvaluatorListener() {</span>
+<span class="fc" id="L189">                                new MultiDimensionFunctionEvaluatorListener() {</span>
                     @Override
                     public double evaluate(double[] params) {
                         //copy values for A matrix
-<span class="fc" id="L192">                        System.arraycopy(params, 0, </span>
-<span class="fc" id="L193">                                mTransformation.getA().getBuffer(), 0, </span>
+<span class="fc" id="L193">                        System.arraycopy(params, 0, </span>
+<span class="fc" id="L194">                                mTransformation.getA().getBuffer(), 0, </span>
                                 AffineTransformation3D.INHOM_COORDS*
                                 AffineTransformation3D.INHOM_COORDS);
                         //copy values for translation
-<span class="fc" id="L197">                        System.arraycopy(params, </span>
+<span class="fc" id="L198">                        System.arraycopy(params, </span>
                                 AffineTransformation3D.INHOM_COORDS*
                                 AffineTransformation3D.INHOM_COORDS, 
-<span class="fc" id="L200">                                mTransformation.getTranslation(), 0, </span>
+<span class="fc" id="L201">                                mTransformation.getTranslation(), 0, </span>
                                 AffineTransformation3D.NUM_TRANSLATION_COORDS);
                         
-<span class="fc" id="L203">                        return residual(mTransformation, mInputPoint, </span>
-<span class="fc" id="L204">                                mOutputPoint);</span>
+<span class="fc" id="L204">                        return residual(mTransformation, mInputPoint, </span>
+<span class="fc" id="L205">                                mOutputPoint);</span>
 
                     }
                 });
                         
                 @Override
                 public int getNumberOfDimensions() {
-<span class="fc" id="L211">                    return nDims;</span>
+<span class="fc" id="L212">                    return nDims;</span>
                 }
 
                 @Override
                 public double[] createInitialParametersArray() {
-<span class="fc" id="L216">                    return initParams;</span>
+<span class="fc" id="L217">                    return initParams;</span>
                 }
 
                 @Override
                 public double evaluate(int i, double[] point, double[] params, 
                         double[] derivatives) throws EvaluationException {
-<span class="fc" id="L222">                    mInputPoint.setHomogeneousCoordinates(point[0], point[1], </span>
+<span class="fc" id="L223">                    mInputPoint.setHomogeneousCoordinates(point[0], point[1], </span>
                             point[2], point[3]);
-<span class="fc" id="L224">                    mOutputPoint.setHomogeneousCoordinates(point[4], point[5], </span>
+<span class="fc" id="L225">                    mOutputPoint.setHomogeneousCoordinates(point[4], point[5], </span>
                             point[6], point[7]);
                     
                     //copy values for A matrix
-<span class="fc" id="L228">                    System.arraycopy(params, 0, </span>
-<span class="fc" id="L229">                            mTransformation.getA().getBuffer(), 0, </span>
+<span class="fc" id="L229">                    System.arraycopy(params, 0, </span>
+<span class="fc" id="L230">                            mTransformation.getA().getBuffer(), 0, </span>
                             AffineTransformation3D.INHOM_COORDS*
                             AffineTransformation3D.INHOM_COORDS);
                     //copy values for translation
-<span class="fc" id="L233">                    System.arraycopy(params, </span>
+<span class="fc" id="L234">                    System.arraycopy(params, </span>
                             AffineTransformation3D.INHOM_COORDS*
                             AffineTransformation3D.INHOM_COORDS, 
-<span class="fc" id="L236">                            mTransformation.getTranslation(), 0, </span>
+<span class="fc" id="L237">                            mTransformation.getTranslation(), 0, </span>
                             AffineTransformation3D.NUM_TRANSLATION_COORDS);
                     
-<span class="fc" id="L239">                    double y = residual(mTransformation, mInputPoint, </span>
+<span class="fc" id="L240">                    double y = residual(mTransformation, mInputPoint, </span>
                             mOutputPoint);
-<span class="fc" id="L241">                    mGradientEstimator.gradient(params, derivatives);</span>
+<span class="fc" id="L242">                    mGradientEstimator.gradient(params, derivatives);</span>
                     
-<span class="fc" id="L243">                    return y;</span>
+<span class="fc" id="L244">                    return y;</span>
                 }
             };
             
-<span class="fc" id="L247">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
+<span class="fc" id="L248">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-<span class="fc" id="L249">                    getRefinementStandardDeviation());</span>
+<span class="fc" id="L250">                    getRefinementStandardDeviation());</span>
             
-<span class="fc" id="L251">            fitter.fit();</span>
+<span class="fc" id="L252">            fitter.fit();</span>
             
             //obtain estimated params
-<span class="fc" id="L254">            double[] params = fitter.getA();</span>
+<span class="fc" id="L255">            double[] params = fitter.getA();</span>
             
             //update transformation
             
             //copy values for A matrix
-<span class="fc" id="L259">            System.arraycopy(params, 0, result.getA().getBuffer(), 0, </span>
+<span class="fc" id="L260">            System.arraycopy(params, 0, result.getA().getBuffer(), 0, </span>
                     AffineTransformation3D.INHOM_COORDS*
                     AffineTransformation3D.INHOM_COORDS);
             //copy values for translation
-<span class="fc" id="L263">            System.arraycopy(params, AffineTransformation3D.INHOM_COORDS*</span>
+<span class="fc" id="L264">            System.arraycopy(params, AffineTransformation3D.INHOM_COORDS*</span>
                     AffineTransformation3D.INHOM_COORDS, 
-<span class="fc" id="L265">                    result.getTranslation(), 0, </span>
+<span class="fc" id="L266">                    result.getTranslation(), 0, </span>
                     AffineTransformation3D.NUM_TRANSLATION_COORDS);
             
-<span class="pc bpc" id="L268" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L269" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
                 //keep covariance
-<span class="fc" id="L270">                mCovariance = fitter.getCovar();</span>
+<span class="fc" id="L271">                mCovariance = fitter.getCovar();</span>
             }
             
-<span class="fc" id="L273">            double finalTotalResidual = totalResidual(result);</span>
-<span class="fc bfc" id="L274" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
+<span class="fc" id="L274">            double finalTotalResidual = totalResidual(result);</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
             
-<span class="fc bfc" id="L276" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L277">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
+<span class="fc bfc" id="L277" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L278">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
                         errorDecreased);
             }
             
-<span class="fc" id="L281">            return errorDecreased;</span>
+<span class="fc" id="L282">            return errorDecreased;</span>
                         
-<span class="nc" id="L283">        } catch (Exception e) {</span>
-<span class="nc" id="L284">            throw new RefinerException(e);</span>
+<span class="nc" id="L284">        } catch (Exception e) {</span>
+<span class="nc" id="L285">            throw new RefinerException(e);</span>
         } finally {
-<span class="fc" id="L286">            mLocked = false;</span>
+<span class="fc" id="L287">            mLocked = false;</span>
         }        
     }
     
@@ -297,11 +298,11 @@ public class PointCorrespondenceAffineTransformation3DRefiner extends
      */
     private double residual(AffineTransformation3D transformation, 
             Point3D inputPoint, Point3D outputPoint) {
-<span class="fc" id="L300">        inputPoint.normalize();</span>
-<span class="fc" id="L301">        outputPoint.normalize();</span>
+<span class="fc" id="L301">        inputPoint.normalize();</span>
+<span class="fc" id="L302">        outputPoint.normalize();</span>
             
-<span class="fc" id="L303">        transformation.transform(inputPoint, mResidualTestPoint);</span>
-<span class="fc" id="L304">        return mResidualTestPoint.distanceTo(outputPoint);</span>
+<span class="fc" id="L304">        transformation.transform(inputPoint, mResidualTestPoint);</span>
+<span class="fc" id="L305">        return mResidualTestPoint.distanceTo(outputPoint);</span>
     }
     
     /**
@@ -310,22 +311,23 @@ public class PointCorrespondenceAffineTransformation3DRefiner extends
      * @return total residual.
      */
     private double totalResidual(AffineTransformation3D transformation) {
-<span class="fc" id="L313">        double result = 0.0;</span>
+<span class="fc" id="L314">        double result = 0.0;</span>
         
-<span class="fc" id="L315">        int nSamples = mInliers.length();</span>
-        Point3D inputPoint, outputPoint;
-<span class="fc bfc" id="L317" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L318" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
+<span class="fc" id="L316">        int nSamples = mInliers.length();</span>
+        Point3D inputPoint;
+        Point3D outputPoint;
+<span class="fc bfc" id="L319" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
                 //sample is inlier
-<span class="fc" id="L320">                inputPoint = mSamples1.get(i);</span>
-<span class="fc" id="L321">                outputPoint = mSamples2.get(i);</span>
-<span class="fc" id="L322">                inputPoint.normalize();</span>
-<span class="fc" id="L323">                outputPoint.normalize();</span>
-<span class="fc" id="L324">                result += residual(transformation, inputPoint, outputPoint);</span>
+<span class="fc" id="L322">                inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L323">                outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L324">                inputPoint.normalize();</span>
+<span class="fc" id="L325">                outputPoint.normalize();</span>
+<span class="fc" id="L326">                result += residual(transformation, inputPoint, outputPoint);</span>
             }
         }
         
-<span class="fc" id="L328">        return result;</span>
+<span class="fc" id="L330">        return result;</span>
     }    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

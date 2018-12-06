@@ -226,139 +226,140 @@ public class MetricTransformation3DRefiner extends
 <span class="fc" id="L226">            Matrix x = new Matrix(mNumInliers, nDims);</span>
 <span class="fc" id="L227">            int nSamples = mInliers.length();</span>
 <span class="fc" id="L228">            int pos = 0;</span>
-            Point3D inputPoint, outputPoint;
-<span class="fc bfc" id="L230" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L231" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
+            Point3D inputPoint;
+            Point3D outputPoint;
+<span class="fc bfc" id="L231" title="All 2 branches covered.">            for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">                if (mInliers.get(i)) {</span>
                     //sample is inlier
-<span class="fc" id="L233">                    inputPoint = mSamples1.get(i);</span>
-<span class="fc" id="L234">                    outputPoint = mSamples2.get(i);</span>
-<span class="fc" id="L235">                    inputPoint.normalize();</span>
-<span class="fc" id="L236">                    outputPoint.normalize();</span>
-<span class="fc" id="L237">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
-<span class="fc" id="L238">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
-<span class="fc" id="L239">                    x.setElementAt(pos, 2, inputPoint.getHomZ());</span>
-<span class="fc" id="L240">                    x.setElementAt(pos, 3, inputPoint.getHomW());</span>
-<span class="fc" id="L241">                    x.setElementAt(pos, 4, outputPoint.getHomX());</span>
-<span class="fc" id="L242">                    x.setElementAt(pos, 5, outputPoint.getHomY());</span>
-<span class="fc" id="L243">                    x.setElementAt(pos, 6, outputPoint.getHomZ());</span>
-<span class="fc" id="L244">                    x.setElementAt(pos, 7, outputPoint.getHomW());</span>
+<span class="fc" id="L234">                    inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L235">                    outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L236">                    inputPoint.normalize();</span>
+<span class="fc" id="L237">                    outputPoint.normalize();</span>
+<span class="fc" id="L238">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
+<span class="fc" id="L239">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
+<span class="fc" id="L240">                    x.setElementAt(pos, 2, inputPoint.getHomZ());</span>
+<span class="fc" id="L241">                    x.setElementAt(pos, 3, inputPoint.getHomW());</span>
+<span class="fc" id="L242">                    x.setElementAt(pos, 4, outputPoint.getHomX());</span>
+<span class="fc" id="L243">                    x.setElementAt(pos, 5, outputPoint.getHomY());</span>
+<span class="fc" id="L244">                    x.setElementAt(pos, 6, outputPoint.getHomZ());</span>
+<span class="fc" id="L245">                    x.setElementAt(pos, 7, outputPoint.getHomW());</span>
                     
-<span class="fc" id="L246">                    y[pos] = mResiduals[i];</span>
-<span class="fc" id="L247">                    pos++;</span>
+<span class="fc" id="L247">                    y[pos] = mResiduals[i];</span>
+<span class="fc" id="L248">                    pos++;</span>
                 }
             }
             
-<span class="fc" id="L251">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
-<span class="fc" id="L252">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+<span class="fc" id="L252">            LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =</span>
+<span class="fc" id="L253">                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
                         
-<span class="fc" id="L254">                private Point3D mInputPoint = Point3D.create(</span>
+<span class="fc" id="L255">                private Point3D mInputPoint = Point3D.create(</span>
                         CoordinatesType.HOMOGENEOUS_COORDINATES);
                 
-<span class="fc" id="L257">                private Point3D mOutputPoint = Point3D.create(</span>
+<span class="fc" id="L258">                private Point3D mOutputPoint = Point3D.create(</span>
                         CoordinatesType.HOMOGENEOUS_COORDINATES);
                 
-<span class="fc" id="L260">                private MetricTransformation3D mTransformation = </span>
+<span class="fc" id="L261">                private MetricTransformation3D mTransformation = </span>
                         new MetricTransformation3D();
                 
-<span class="fc" id="L263">                private GradientEstimator mGradientEstimator =</span>
+<span class="fc" id="L264">                private GradientEstimator mGradientEstimator =</span>
                         new GradientEstimator(
-<span class="fc" id="L265">                                new MultiDimensionFunctionEvaluatorListener() {</span>
+<span class="fc" id="L266">                                new MultiDimensionFunctionEvaluatorListener() {</span>
                     @Override
                     public double evaluate(double[] params) {
                         //copy values
-<span class="fc" id="L269">                        mTransformation.setScale(params[0]);</span>
-<span class="fc" id="L270">                        mQuaternion.setA(params[1]);</span>
-<span class="fc" id="L271">                        mQuaternion.setB(params[2]);</span>
-<span class="fc" id="L272">                        mQuaternion.setC(params[3]);</span>
-<span class="fc" id="L273">                        mQuaternion.setD(params[4]);</span>
-<span class="fc" id="L274">                        mTransformation.setRotation(mQuaternion);</span>
+<span class="fc" id="L270">                        mTransformation.setScale(params[0]);</span>
+<span class="fc" id="L271">                        mQuaternion.setA(params[1]);</span>
+<span class="fc" id="L272">                        mQuaternion.setB(params[2]);</span>
+<span class="fc" id="L273">                        mQuaternion.setC(params[3]);</span>
+<span class="fc" id="L274">                        mQuaternion.setD(params[4]);</span>
+<span class="fc" id="L275">                        mTransformation.setRotation(mQuaternion);</span>
                                                
-<span class="fc" id="L276">                        System.arraycopy(params, 1 + Quaternion.N_PARAMS, </span>
-<span class="fc" id="L277">                            mTransformation.getTranslation(), 0, </span>
+<span class="fc" id="L277">                        System.arraycopy(params, 1 + Quaternion.N_PARAMS, </span>
+<span class="fc" id="L278">                            mTransformation.getTranslation(), 0, </span>
                             MetricTransformation3D.NUM_TRANSLATION_COORDS);
 
-<span class="fc" id="L280">                        return residual(mTransformation, mInputPoint, </span>
-<span class="fc" id="L281">                                mOutputPoint);</span>
+<span class="fc" id="L281">                        return residual(mTransformation, mInputPoint, </span>
+<span class="fc" id="L282">                                mOutputPoint);</span>
                     }
                 });
                 
                 @Override
                 public int getNumberOfDimensions() {
-<span class="fc" id="L287">                    return nDims;</span>
+<span class="fc" id="L288">                    return nDims;</span>
                 }
 
                 @Override
                 public double[] createInitialParametersArray() {
-<span class="fc" id="L292">                    return initParams;</span>
+<span class="fc" id="L293">                    return initParams;</span>
                 }
 
                 @Override
                 public double evaluate(int i, double[] point, double[] params, 
                         double[] derivatives) throws EvaluationException {
-<span class="fc" id="L298">                    mInputPoint.setHomogeneousCoordinates(point[0], point[1], </span>
+<span class="fc" id="L299">                    mInputPoint.setHomogeneousCoordinates(point[0], point[1], </span>
                             point[2], point[3]);
-<span class="fc" id="L300">                    mOutputPoint.setHomogeneousCoordinates(point[4], point[5], </span>
+<span class="fc" id="L301">                    mOutputPoint.setHomogeneousCoordinates(point[4], point[5], </span>
                             point[6], point[7]);
                     
                     //copy values
-<span class="fc" id="L304">                    mTransformation.setScale(params[0]);</span>
-<span class="fc" id="L305">                    mQuaternion.setA(params[1]);</span>
-<span class="fc" id="L306">                    mQuaternion.setB(params[2]);</span>
-<span class="fc" id="L307">                    mQuaternion.setC(params[3]);</span>
-<span class="fc" id="L308">                    mQuaternion.setD(params[4]);</span>
-<span class="fc" id="L309">                    mTransformation.setRotation(mQuaternion);</span>
+<span class="fc" id="L305">                    mTransformation.setScale(params[0]);</span>
+<span class="fc" id="L306">                    mQuaternion.setA(params[1]);</span>
+<span class="fc" id="L307">                    mQuaternion.setB(params[2]);</span>
+<span class="fc" id="L308">                    mQuaternion.setC(params[3]);</span>
+<span class="fc" id="L309">                    mQuaternion.setD(params[4]);</span>
+<span class="fc" id="L310">                    mTransformation.setRotation(mQuaternion);</span>
                     
-<span class="fc" id="L311">                    System.arraycopy(params, 1 + Quaternion.N_PARAMS, </span>
-<span class="fc" id="L312">                        mTransformation.getTranslation(), 0, </span>
+<span class="fc" id="L312">                    System.arraycopy(params, 1 + Quaternion.N_PARAMS, </span>
+<span class="fc" id="L313">                        mTransformation.getTranslation(), 0, </span>
                         MetricTransformation3D.NUM_TRANSLATION_COORDS);
 
-<span class="fc" id="L315">                    double y = residual(mTransformation, mInputPoint, </span>
+<span class="fc" id="L316">                    double y = residual(mTransformation, mInputPoint, </span>
                             mOutputPoint);
-<span class="fc" id="L317">                    mGradientEstimator.gradient(params, derivatives);</span>
+<span class="fc" id="L318">                    mGradientEstimator.gradient(params, derivatives);</span>
                     
-<span class="fc" id="L319">                    return y;</span>
+<span class="fc" id="L320">                    return y;</span>
                 }
             };
             
-<span class="fc" id="L323">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
+<span class="fc" id="L324">            LevenbergMarquardtMultiDimensionFitter fitter =</span>
                     new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-<span class="fc" id="L325">                    getRefinementStandardDeviation());</span>
+<span class="fc" id="L326">                    getRefinementStandardDeviation());</span>
             
-<span class="fc" id="L327">            fitter.fit();</span>
+<span class="fc" id="L328">            fitter.fit();</span>
             
             //obtain estimated params
-<span class="fc" id="L330">            double[] params = fitter.getA();</span>
+<span class="fc" id="L331">            double[] params = fitter.getA();</span>
             
             //update transformation
-<span class="fc" id="L333">            result.setScale(params[0]);</span>
-<span class="fc" id="L334">            mQuaternion.setA(params[1]);</span>
-<span class="fc" id="L335">            mQuaternion.setB(params[2]);</span>
-<span class="fc" id="L336">            mQuaternion.setC(params[3]);</span>
-<span class="fc" id="L337">            mQuaternion.setD(params[4]);</span>
-<span class="fc" id="L338">            result.setRotation(mQuaternion);</span>
-<span class="fc" id="L339">            System.arraycopy(params, 1 + Quaternion.N_PARAMS, </span>
-<span class="fc" id="L340">                    result.getTranslation(), 0, </span>
+<span class="fc" id="L334">            result.setScale(params[0]);</span>
+<span class="fc" id="L335">            mQuaternion.setA(params[1]);</span>
+<span class="fc" id="L336">            mQuaternion.setB(params[2]);</span>
+<span class="fc" id="L337">            mQuaternion.setC(params[3]);</span>
+<span class="fc" id="L338">            mQuaternion.setD(params[4]);</span>
+<span class="fc" id="L339">            result.setRotation(mQuaternion);</span>
+<span class="fc" id="L340">            System.arraycopy(params, 1 + Quaternion.N_PARAMS, </span>
+<span class="fc" id="L341">                    result.getTranslation(), 0, </span>
                     MetricTransformation3D.NUM_TRANSLATION_COORDS);
             
-<span class="pc bpc" id="L343" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
+<span class="pc bpc" id="L344" title="1 of 2 branches missed.">            if (mKeepCovariance) {</span>
                 //keep covariance
-<span class="fc" id="L345">                mCovariance = fitter.getCovar();</span>
+<span class="fc" id="L346">                mCovariance = fitter.getCovar();</span>
             }
             
-<span class="fc" id="L348">            double finalTotalResidual = totalResidual(result);</span>
-<span class="fc bfc" id="L349" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
+<span class="fc" id="L349">            double finalTotalResidual = totalResidual(result);</span>
+<span class="fc bfc" id="L350" title="All 2 branches covered.">            boolean errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
             
-<span class="fc bfc" id="L351" title="All 2 branches covered.">            if (mListener != null) {</span>
-<span class="fc" id="L352">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
+<span class="fc bfc" id="L352" title="All 2 branches covered.">            if (mListener != null) {</span>
+<span class="fc" id="L353">                mListener.onRefineEnd(this, mInitialEstimation, result, </span>
                         errorDecreased);
             }
             
-<span class="fc" id="L356">            return errorDecreased;</span>
+<span class="fc" id="L357">            return errorDecreased;</span>
             
-<span class="nc" id="L358">        } catch (Exception e) {</span>
-<span class="nc" id="L359">            throw new RefinerException(e);</span>
+<span class="nc" id="L359">        } catch (Exception e) {</span>
+<span class="nc" id="L360">            throw new RefinerException(e);</span>
         } finally {
-<span class="fc" id="L361">            mLocked = false;</span>
+<span class="fc" id="L362">            mLocked = false;</span>
         }        
         
     }
@@ -373,11 +374,11 @@ public class MetricTransformation3DRefiner extends
      */
     private double residual (MetricTransformation3D transformation, 
             Point3D inputPoint, Point3D outputPoint) {
-<span class="fc" id="L376">        inputPoint.normalize();</span>
-<span class="fc" id="L377">        outputPoint.normalize();</span>
+<span class="fc" id="L377">        inputPoint.normalize();</span>
+<span class="fc" id="L378">        outputPoint.normalize();</span>
         
-<span class="fc" id="L379">        transformation.transform(inputPoint, mResidualTestPoint);</span>
-<span class="fc" id="L380">        return mResidualTestPoint.distanceTo(outputPoint);</span>
+<span class="fc" id="L380">        transformation.transform(inputPoint, mResidualTestPoint);</span>
+<span class="fc" id="L381">        return mResidualTestPoint.distanceTo(outputPoint);</span>
     }
     
     /**
@@ -386,22 +387,23 @@ public class MetricTransformation3DRefiner extends
      * @return total residual.
      */
     private double totalResidual(MetricTransformation3D transformation) {
-<span class="fc" id="L389">        double result = 0.0;</span>
+<span class="fc" id="L390">        double result = 0.0;</span>
         
-<span class="fc" id="L391">        int nSamples = mInliers.length();</span>
-        Point3D inputPoint, outputPoint;
-<span class="fc bfc" id="L393" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
-<span class="fc bfc" id="L394" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
+<span class="fc" id="L392">        int nSamples = mInliers.length();</span>
+        Point3D inputPoint;
+        Point3D outputPoint;
+<span class="fc bfc" id="L395" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L396" title="All 2 branches covered.">            if (mInliers.get(i)) {</span>
                 //sample is inlier
-<span class="fc" id="L396">                inputPoint = mSamples1.get(i);</span>
-<span class="fc" id="L397">                outputPoint = mSamples2.get(i);</span>
-<span class="fc" id="L398">                inputPoint.normalize();</span>
-<span class="fc" id="L399">                outputPoint.normalize();</span>
-<span class="fc" id="L400">                result += residual(transformation, inputPoint, outputPoint);</span>
+<span class="fc" id="L398">                inputPoint = mSamples1.get(i);</span>
+<span class="fc" id="L399">                outputPoint = mSamples2.get(i);</span>
+<span class="fc" id="L400">                inputPoint.normalize();</span>
+<span class="fc" id="L401">                outputPoint.normalize();</span>
+<span class="fc" id="L402">                result += residual(transformation, inputPoint, outputPoint);</span>
             }
         }
         
-<span class="fc" id="L404">        return result;        </span>
+<span class="fc" id="L406">        return result;        </span>
     }        
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
