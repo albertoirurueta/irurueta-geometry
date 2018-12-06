@@ -679,8 +679,7 @@ public class PROMedSEuclideanTransformation3DRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < getMinimumPoints()) {
             throw new IllegalArgumentException();
         }

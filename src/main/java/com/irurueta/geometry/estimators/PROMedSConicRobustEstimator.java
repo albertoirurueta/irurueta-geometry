@@ -88,8 +88,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSConicRobustEstimator(List<Point2D> points) 
-            throws IllegalArgumentException {
+    public PROMedSConicRobustEstimator(List<Point2D> points) {
         super(points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -114,7 +113,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public PROMedSConicRobustEstimator(ConicRobustEstimatorListener listener,
-            List<Point2D> points) throws IllegalArgumentException {
+            List<Point2D> points) {
         super(listener, points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -125,8 +124,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE (i.e. 5 points).
      */
-    public PROMedSConicRobustEstimator(double[] qualityScores)
-            throws IllegalArgumentException {
+    public PROMedSConicRobustEstimator(double[] qualityScores) {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -141,7 +139,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      * is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSConicRobustEstimator(List<Point2D> points,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(points);
         
         if (qualityScores.length != points.size()) {

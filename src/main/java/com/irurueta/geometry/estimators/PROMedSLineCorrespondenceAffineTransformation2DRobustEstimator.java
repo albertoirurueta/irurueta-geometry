@@ -99,8 +99,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-            List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException {
+            List<Line2D> inputLines, List<Line2D> outputLines) {
         super(inputLines, outputLines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -133,8 +132,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
-            List<Line2D> inputLines, List<Line2D> outputLines) 
-            throws IllegalArgumentException {
+            List<Line2D> inputLines, List<Line2D> outputLines) {
         super(listener, inputLines, outputLines);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -147,7 +145,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super();
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -171,7 +169,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
             List<Line2D> inputLines, List<Line2D> outputLines, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(inputLines, outputLines);
         
         if(qualityScores.length != inputLines.size())
@@ -192,7 +190,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
@@ -218,7 +216,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
     public PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
             AffineTransformation2DRobustEstimatorListener listener,
             List<Line2D> inputLines, List<Line2D> outputLines,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         super(listener, inputLines, outputLines);
         
         if (qualityScores.length != inputLines.size()) {
@@ -272,8 +270,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setStopThreshold(double stopThreshold) 
-            throws IllegalArgumentException, LockedException {
+    public void setStopThreshold(double stopThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -305,8 +302,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     @Override
-    public void setQualityScores(double[] qualityScores) throws LockedException,
-            IllegalArgumentException {
+    public void setQualityScores(double[] qualityScores) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -516,8 +512,7 @@ public class PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      * smaller than MINIMUM_SIZE.
      */
-    private void internalSetQualityScores(double[] qualityScores) 
-            throws IllegalArgumentException {
+    private void internalSetQualityScores(double[] qualityScores) {
         if (qualityScores.length < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
