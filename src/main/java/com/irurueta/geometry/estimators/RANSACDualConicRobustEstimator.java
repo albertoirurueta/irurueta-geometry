@@ -66,8 +66,7 @@ public class RANSACDualConicRobustEstimator extends DualConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public RANSACDualConicRobustEstimator(List<Line2D> lines) 
-            throws IllegalArgumentException {
+    public RANSACDualConicRobustEstimator(List<Line2D> lines) {
         super(lines);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -94,7 +93,7 @@ public class RANSACDualConicRobustEstimator extends DualConicRobustEstimator {
      */
     public RANSACDualConicRobustEstimator(
             DualConicRobustEstimatorListener listener,
-            List<Line2D> lines) throws IllegalArgumentException {
+            List<Line2D> lines) {
         super(listener, lines);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -122,8 +121,7 @@ public class RANSACDualConicRobustEstimator extends DualConicRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

@@ -239,8 +239,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setProgressDelta(float progressDelta) 
-            throws IllegalArgumentException, LockedException {
+    public void setProgressDelta(float progressDelta) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -273,8 +272,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimator 
      * is being computed.
      */
-    public void setConfidence(double confidence)
-            throws IllegalArgumentException, LockedException {
+    public void setConfidence(double confidence) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -303,8 +301,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      * @throws LockedException if this estimator is locked because an estimation
      * is being computed.
      */
-    public void setMaxIterations(int maxIterations) 
-            throws IllegalArgumentException, LockedException {
+    public void setMaxIterations(int maxIterations) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -419,7 +416,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPoints(
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPoints, outputPoints, method);
     }            
@@ -442,7 +439,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
     public static ProjectiveTransformation3DRobustEstimator createFromPoints(
             ProjectiveTransformation3DRobustEstimatorListener listener, 
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPoints, outputPoints, method);
     }            
@@ -464,8 +461,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPoints(
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPoints, outputPoints, qualityScores, method);
     }            
@@ -490,8 +486,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
     public static ProjectiveTransformation3DRobustEstimator createFromPoints(
             ProjectiveTransformation3DRobustEstimatorListener listener, 
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores, RobustEstimatorMethod method) 
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPoints, outputPoints, qualityScores, 
                 method);
@@ -509,8 +504,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPoints(
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPoints, outputPoints);
     }            
@@ -530,8 +524,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPoints(
             ProjectiveTransformation3DRobustEstimatorListener listener, 
-            List<Point3D> inputPoints, List<Point3D> outputPoints) 
-            throws IllegalArgumentException {
+            List<Point3D> inputPoints, List<Point3D> outputPoints) {
         return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPoints, outputPoints);
     }            
@@ -551,7 +544,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPoints(
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPoints, outputPoints, qualityScores);
     }            
@@ -574,7 +567,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
     public static ProjectiveTransformation3DRobustEstimator createFromPoints(
             ProjectiveTransformation3DRobustEstimatorListener listener, 
             List<Point3D> inputPoints, List<Point3D> outputPoints, 
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return PointCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPoints, outputPoints, qualityScores);
     }     
@@ -594,7 +587,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes, method);
     }
@@ -617,7 +610,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
             ProjectiveTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            RobustEstimatorMethod method) throws IllegalArgumentException {
+            RobustEstimatorMethod method) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes, method);
     }
@@ -639,8 +632,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes, qualityScores, method);
     }
@@ -665,8 +657,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
             ProjectiveTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores, RobustEstimatorMethod method)
-            throws IllegalArgumentException {
+            double[] qualityScores, RobustEstimatorMethod method) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes, qualityScores, 
                 method);
@@ -684,8 +675,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
-            List<Plane> inputPlanes, List<Plane> outputPlanes)
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes);
     }
@@ -705,8 +695,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
             ProjectiveTransformation3DRobustEstimatorListener listener,
-            List<Plane> inputPlanes, List<Plane> outputPlanes)
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes);
     }
@@ -726,7 +715,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
      */
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(inputPlanes, outputPlanes, qualityScores);
     }
@@ -749,7 +738,7 @@ public abstract class ProjectiveTransformation3DRobustEstimator {
     public static ProjectiveTransformation3DRobustEstimator createFromPlanes(
             ProjectiveTransformation3DRobustEstimatorListener listener,
             List<Plane> inputPlanes, List<Plane> outputPlanes,
-            double[] qualityScores) throws IllegalArgumentException {
+            double[] qualityScores) {
         return PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
                 create(listener, inputPlanes, outputPlanes, qualityScores);
     }     

@@ -63,8 +63,7 @@ public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public RANSACPlaneRobustEstimator(List<Point3D> points) 
-            throws IllegalArgumentException {
+    public RANSACPlaneRobustEstimator(List<Point3D> points) {
         super(points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -89,7 +88,7 @@ public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator {
      * a size greater or equal than MINIMUM_SIZE.
      */
     public RANSACPlaneRobustEstimator(PlaneRobustEstimatorListener listener,
-            List<Point3D> points) throws IllegalArgumentException {
+            List<Point3D> points) {
         super(listener, points);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -117,8 +116,7 @@ public class RANSACPlaneRobustEstimator extends PlaneRobustEstimator {
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

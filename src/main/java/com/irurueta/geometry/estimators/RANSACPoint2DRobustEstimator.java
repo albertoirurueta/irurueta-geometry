@@ -86,8 +86,7 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator{
      * @throws IllegalArgumentException if provided list of lines don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public RANSACPoint2DRobustEstimator(List<Line2D> lines) 
-            throws IllegalArgumentException {
+    public RANSACPoint2DRobustEstimator(List<Line2D> lines) {
         super(lines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -116,7 +115,7 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator{
      * a size greater or equal than MINIMUM_SIZE.
      */
     public RANSACPoint2DRobustEstimator(Point2DRobustEstimatorListener listener,
-            List<Line2D> lines) throws IllegalArgumentException {
+            List<Line2D> lines) {
         super(listener, lines);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -146,8 +145,7 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator{
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

@@ -104,8 +104,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * the same size or their size is smaller than MINIMUM_SIZE.
      */
     public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-            List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         super(inputPlanes, outputPlanes);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -142,8 +141,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             AffineTransformation3DRobustEstimatorListener listener,
-            List<Plane> inputPlanes, List<Plane> outputPlanes) 
-            throws IllegalArgumentException {
+            List<Plane> inputPlanes, List<Plane> outputPlanes) {
         super(listener, inputPlanes, outputPlanes);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -189,8 +187,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

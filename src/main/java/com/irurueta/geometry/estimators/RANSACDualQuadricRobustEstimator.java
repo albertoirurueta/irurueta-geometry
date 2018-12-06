@@ -67,8 +67,7 @@ public class RANSACDualQuadricRobustEstimator extends
      * @throws IllegalArgumentException if provided list of planes don't have 
      * a size greater or equal than MINIMUM_SIZE.
      */
-    public RANSACDualQuadricRobustEstimator(List<Plane> planes) 
-            throws IllegalArgumentException {
+    public RANSACDualQuadricRobustEstimator(List<Plane> planes) {
         super(planes);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -95,7 +94,7 @@ public class RANSACDualQuadricRobustEstimator extends
      */
     public RANSACDualQuadricRobustEstimator(
             DualQuadricRobustEstimatorListener listener,
-            List<Plane> planes) throws IllegalArgumentException {
+            List<Plane> planes) {
         super(listener, planes);
         mThreshold = DEFAULT_THRESHOLD;
     }
@@ -123,8 +122,7 @@ public class RANSACDualQuadricRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }

@@ -96,8 +96,7 @@ public class RANSACDLTPointCorrespondencePinholeCameraRobustEstimator extends
      * (6 correspondences).
      */
     public RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(
-            List<Point3D> points3D, List<Point2D> points2D) 
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(points3D, points2D);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -134,8 +133,7 @@ public class RANSACDLTPointCorrespondencePinholeCameraRobustEstimator extends
      */
     public RANSACDLTPointCorrespondencePinholeCameraRobustEstimator(
             PinholeCameraRobustEstimatorListener listener,
-            List<Point3D> points3D, List<Point2D> points2D)
-            throws IllegalArgumentException {
+            List<Point3D> points3D, List<Point2D> points2D) {
         super(listener, points3D, points2D);
         mThreshold = DEFAULT_THRESHOLD;
         mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
@@ -165,8 +163,7 @@ public class RANSACDLTPointCorrespondencePinholeCameraRobustEstimator extends
      * @throws LockedException if robust estimator is locked because an 
      * estimation is already in progress.
      */
-    public void setThreshold(double threshold) throws IllegalArgumentException, 
-            LockedException {
+    public void setThreshold(double threshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
