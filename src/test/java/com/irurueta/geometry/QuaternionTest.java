@@ -39,6 +39,8 @@ public class QuaternionTest {
     private static final double ABSOLUTE_ERROR = 1e-6;
     
     private static final double JACOBIAN_ERROR = 1e-6;
+
+    private static final int TIMES = 50;
     
     public QuaternionTest() { }
     
@@ -2693,5 +2695,100 @@ public class QuaternionTest {
             q1.normalize(new Matrix(1,1));
             fail("IllegalArgumentException expected but not thrown");
         } catch (IllegalArgumentException ignore) { }
+    }
+
+    @Test
+    public void testSlerp() throws RotationException {
+        for(int i = 0; i < TIMES; i++) {
+            UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            double roll1 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
+                    2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double pitch1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double yaw1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
+                    2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+
+            double roll2 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
+                    2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double pitch2 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
+                    2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            double yaw2 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
+                    2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+
+            Quaternion q1 = new Quaternion(roll1, pitch1, yaw1);
+            Quaternion q2 = new Quaternion(roll2, pitch2, yaw2);
+
+
+            Quaternion q3a = q1.slerpAndReturnNew(q2, 0.0);
+            Quaternion q3b = new Quaternion();
+            q1.slerp(q2, 0.0, q3b);
+            Quaternion q3c = Quaternion.slerpAndReturnNew(q1, q2, 0.0);
+            Quaternion q3d = new Quaternion();
+            Quaternion.slerp(q1, q2, 0.0, q3d);
+
+            assertTrue(q3a.equals(q1, ABSOLUTE_ERROR));
+            assertTrue(q3b.equals(q1, ABSOLUTE_ERROR));
+            assertTrue(q3c.equals(q1, ABSOLUTE_ERROR));
+            assertTrue(q3d.equals(q1, ABSOLUTE_ERROR));
+
+            Quaternion q4a = q1.slerpAndReturnNew(q2, 1.0);
+            Quaternion q4b = new Quaternion();
+            q1.slerp(q2, 1.0, q4b);
+            Quaternion q4c = Quaternion.slerpAndReturnNew(q1, q2, 1.0);
+            Quaternion q4d = new Quaternion();
+            Quaternion.slerp(q1, q2, 1.0, q4d);
+
+            assertTrue(q4a.equals(q2, ABSOLUTE_ERROR));
+            assertTrue(q4b.equals(q2, ABSOLUTE_ERROR));
+            assertTrue(q4c.equals(q2, ABSOLUTE_ERROR));
+            assertTrue(q4d.equals(q2, ABSOLUTE_ERROR));
+
+            Quaternion q5a = q2.slerpAndReturnNew(q1, 0.0);
+            Quaternion q5b = new Quaternion();
+            q2.slerp(q1, 0.0, q5b);
+            Quaternion q5c = Quaternion.slerpAndReturnNew(q2, q1, 0.0);
+            Quaternion q5d = new Quaternion();
+            Quaternion.slerp(q2, q1, 0.0, q5d);
+
+            assertTrue(q5a.equals(q2, ABSOLUTE_ERROR));
+            assertTrue(q5b.equals(q2, ABSOLUTE_ERROR));
+            assertTrue(q5c.equals(q2, ABSOLUTE_ERROR));
+            assertTrue(q5d.equals(q2, ABSOLUTE_ERROR));
+
+            Quaternion q6a = q2.slerpAndReturnNew(q1, 1.0);
+            Quaternion q6b = new Quaternion();
+            q2.slerp(q1, 1.0, q6b);
+            Quaternion q6c = Quaternion.slerpAndReturnNew(q2, q1, 1.0);
+            Quaternion q6d = new Quaternion();
+            Quaternion.slerp(q2, q1, 1.0, q6d);
+
+            assertTrue(q6a.equals(q1, ABSOLUTE_ERROR));
+            assertTrue(q6b.equals(q1, ABSOLUTE_ERROR));
+            assertTrue(q6c.equals(q1, ABSOLUTE_ERROR));
+            assertTrue(q6d.equals(q1, ABSOLUTE_ERROR));
+
+            Quaternion result = new Quaternion();
+
+            // use equal quaternions
+            Quaternion.slerp(q1, q1, 0.0, result);
+            assertTrue(result.equals(q1));
+
+            Quaternion.slerp(q1, q1, 1.0, result);
+            assertTrue(result.equals(q1));
+
+            // force IllegalArgumentException
+            result = new Quaternion();
+            try {
+                Quaternion.slerp(q1, q2, -1.0, result);
+                fail("IllegalArgumentException expected");
+            } catch (IllegalArgumentException ignore) {
+            }
+            try {
+                Quaternion.slerp(q1, q2, 2.0, result);
+                fail("IllegalArgumentException expected");
+            } catch (IllegalArgumentException ignore) {
+            }
+            assertTrue(result.equals(new Quaternion()));
+        }
     }
 }

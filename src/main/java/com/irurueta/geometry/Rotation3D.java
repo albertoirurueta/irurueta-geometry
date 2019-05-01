@@ -576,7 +576,8 @@ public abstract class Rotation3D {
             }
             
             //compare difference of angles
-            return Math.abs(thisAngle - otherAngle) <= threshold;
+            return Math.abs(thisAngle - otherAngle) <= threshold ||
+                    Math.abs(thisAngle - otherAngle - 2 * Math.PI) <= threshold;
         } else {
             //axis might be reversed, hence also angle is reversed
             double sumX = thisAxis[0] + otherAxis[0];
@@ -589,7 +590,8 @@ public abstract class Rotation3D {
             }
             
             //compare sum of angles (because rotation angle is also reversed)
-            return Math.abs(thisAngle + otherAngle) <= threshold;
+            return Math.abs(thisAngle + otherAngle) <= threshold ||
+                    Math.abs(thisAngle + otherAngle - 2 * Math.PI) <= threshold;
         }
     }
 

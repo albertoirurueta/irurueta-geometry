@@ -2186,6 +2186,130 @@ public class Quaternion extends Rotation3D implements Serializable {
             jacobian.setElementAt(3, 3, (a * a + b * b + c * c) / norm3);
         }        
     }
+
+    /**
+     * Computes a linear interpolation between this quaternion and provided quaternion using
+     * provided value as the interpolation ratio.
+     *
+     * @param q quaternion to interpolate.
+     * @param t interpolation ratio. Must be a value between 0.0 and 1.0, both
+     *          included. The closer the value is to 0.0, the more similar result will
+     *          be to this instance. Conversely, the closer the value is to 1.0, the
+     *          more similar result will be to q.
+     * @return a new interpolated quaternion instance.
+     * @throws IllegalArgumentException if provided interpolation ratio is not between 0.0
+     * and 1.0, both included.
+     */
+    public Quaternion slerpAndReturnNew(Quaternion q, double t) {
+        Quaternion result = new Quaternion();
+        slerp(q, t, result);
+        return result;
+    }
+
+    /**
+     * Computes a linear interpolation between this quaternion and provided quaternion using
+     * provided value as the interpolation ratio and stores the result into provided result
+     * quaternion.
+     *
+     * @param q         quaternion to interpolate.
+     * @param t         interpolation ratio. Must be a value between 0.0 and 1.0, both
+     *                  included. The closer the value is to 0.0, the more similar result will
+     *                  be to this instance. Conversely, the closer the value is to 1.0, the
+     *                  more similar result will be to q.
+     * @param result    instance where interpolated quaternion will be stored.
+     * @throws IllegalArgumentException if provided interpolation ratio is not between 0.0
+     * and 1.0, both included.
+     */
+    public void slerp(Quaternion q, double t, Quaternion result) {
+        slerp(this, q, t, result);
+    }
+
+    /**
+     * Computes a linear interpolation between provided quaternions using provided value
+     * as the interpolation ratio.
+     *
+     * @param q1    1st quaternion to interpolate.
+     * @param q2    2nd quaternion to interpolate.
+     * @param t     interpolation ratio. Must be a value between 0.0 and 1.0, both
+     *              included. The closer the value is to 0.0, the more similar result will
+     *              be to q1. Conversely, the closer the value is to 1.0, the more similar
+     *              result will be to q2.
+     * @return      a new interpolated quaternion instance.
+     * @throws IllegalArgumentException if provided interpolation ratio is not between 0.0
+     * and 1.0, both included.
+     */
+    public static Quaternion slerpAndReturnNew(Quaternion q1, Quaternion q2, double t) {
+        Quaternion result = new Quaternion();
+        slerp(q1, q2, t, result);
+        return result;
+    }
+
+    /**
+     * Computes a linear interpolation between provided quaternions using provided value
+     * as the interpolation ratio, and stores the result into provided result quaternion.
+     *
+     * @param q1    1st quaternion to interpolate.
+     * @param q2    2nd quaternion to interpolate.
+     * @param t     interpolation ratio. Must be a value between 0.0 and 1.0, both
+     *              included. The closer the value is to 0.0, the more similar result will
+     *              be to q1. Conversely, the closer the value is to 1.0, the more similar
+     *              result will be to q2.
+     * @param result instance where interpolated quaternion will be stored.
+     * @throws IllegalArgumentException if provided interpolation ratio is not between 0.0
+     * and 1.0, both included.
+     */
+    public static void slerp(Quaternion q1, Quaternion q2, double t, Quaternion result) {
+        if (t < 0.0 || t > 1.0) {
+            throw new IllegalArgumentException();
+        }
+
+        // only unit quaternions are valid rotations.
+        // normalize to avoid undefined behavior.
+        q1.normalize();
+        q2.normalize();
+
+        // calculate angle between input quaternions
+        double dot = q1.mA * q2.mA +
+                q1.mB * q2.mB +
+                q1.mC * q2.mC +
+                q1.mD * q2.mD;
+
+        // if q1 = q2 or q1 = -q2 (both quaternions are equal), then the angle
+        // between input quaternions is theta0 = 0.
+        // To avoid singularity caused by sinTheta0, we return q1
+        if (Math.abs(dot) >= 1.0) {
+            result.mA = q1.mA;
+            result.mB = q1.mB;
+            result.mC = q1.mC;
+            result.mD = q1.mD;
+            return;
+        }
+
+        // if the dot product is negative, slerp won't take the shorter path.
+        // note that q2 and -q2 are equivalent when the negation is applied to all four
+        // components. Fix by reversing one quaternion.
+        Quaternion q2b;
+        if (dot < 0.0) {
+            q2b = new Quaternion(-q2.mA, -q2.mB, -q2.mC, -q2.mD);
+            dot = -dot;
+        } else {
+            q2b = q2;
+        }
+
+        double theta0 = Math.acos(dot);
+        double theta = theta0 * t;
+        double sinTheta = Math.sin(theta);
+        double sinTheta0 = Math.sin(theta0);
+
+        double s2 = sinTheta / sinTheta0;
+        // line below is equal to sin(theta0 - theta) / sinTheta0
+        double s1 = Math.cos(theta) - dot * s2;
+
+        result.mA = s1 * q1.mA + s2 * q2b.mA;
+        result.mB = s1 * q1.mB + s2 * q2b.mB;
+        result.mC = s1 * q1.mC + s2 * q2b.mC;
+        result.mD = s1 * q1.mD + s2 * q2b.mD;
+    }
     
     /**
      * Normalizes this quaternion if not already normalized.
