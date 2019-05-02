@@ -27,6 +27,8 @@ import java.util.Arrays;
  * than in matrix notation.
  * This implementation of a quaternion contains values in the basis 1, i, j, k
  * expressed as (a, b, c, d).
+ * a value is related only to the rotation angle, while b, c, d values are related
+ * both to the rotation axis and the rotation angle.
  */
 @SuppressWarnings("WeakerAccess")
 public class Quaternion extends Rotation3D implements Serializable {
@@ -92,6 +94,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Constructor.
+     *
      * @param a value corresponding to real numbers basis.
      * @param b value corresponding to basis i.
      * @param c value corresponding to basis j.
@@ -106,6 +109,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Constructor.
+     *
      * @param quaternion quaternion to be copied from.
      */
     public Quaternion(Quaternion quaternion) {
@@ -114,8 +118,9 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Constructor.
-     * @param values values to be stored in the quaternion expressed in the 
-     * basis (1, i, j, k)
+     *
+     * @param values    values to be stored in the quaternion expressed in the
+     *                  basis (1, i, j, k)
      * @throws IllegalArgumentException if provided array does not have length 
      * 4.
      */
@@ -125,7 +130,8 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Constructor.
-     * @param axis a rotation axis.
+     *
+     * @param axis  a rotation axis.
      * @param theta a rotation angle expressed in radians.
      * @throws IllegalArgumentException if provided axis array does not have 
      * length 3.
@@ -136,6 +142,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Constructor from and axis 3D rotation.
+     *
      * @param axisRotation an axis 3D rotation.
      */
     public Quaternion(AxisRotation3D axisRotation) {
@@ -144,9 +151,10 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Constructor from euler angles.
-     * @param roll roll angle expressed in radians.
+     *
+     * @param roll  roll angle expressed in radians.
      * @param pitch pitch angle expressed in radians.
-     * @param yaw yaw angle expressed in radians.
+     * @param yaw   yaw angle expressed in radians.
      */
     public Quaternion(double roll, double pitch, double yaw) {
         setFromEulerAngles(roll, pitch, yaw);
@@ -154,6 +162,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Constructor from matrix rotation.
+     *
      * @param matrixRotation matrix rotation.
      */
     public Quaternion(MatrixRotation3D matrixRotation) {
@@ -162,6 +171,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Gets value corresponding to real numbers basis.
+     *
      * @return value corresponding to real numbers basis.
      */
     public double getA() {
@@ -170,6 +180,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets value corresponding to real numbers basis.
+     *
      * @param a value corresponding to real numbers basis.
      */
     public void setA(double a) {
@@ -179,6 +190,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Gets value corresponding to basis i.
+     *
      * @return value corresponding to basis i.
      */
     public double getB() {
@@ -187,6 +199,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets value corresponding to basis i.
+     *
      * @param b value corresponding to basis i.
      */
     public void setB(double b) {
@@ -196,6 +209,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Gets value corresponding to basis j.
+     *
      * @return value corresponding to basis j.
      */
     public double getC() {
@@ -204,6 +218,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets value corresponding to basis j.
+     *
      * @param c value corresponding to basis j.
      */
     public void setC(double c) {
@@ -213,6 +228,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Gets value corresponding to basis k.
+     *
      * @return value corresponding to basis k.
      */
     public double getD() {
@@ -221,6 +237,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets value corresponding to basis k.
+     *
      * @param d value corresponding to basis k.
      */
     public void setD(double d) {
@@ -230,6 +247,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Gets values that parameterize this quaternion.
+     *
      * @return values of this quaternion.
      */
     public double[] getValues() {
@@ -240,6 +258,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Stores values that parameterize this quaternion into provided array.
+     *
      * @param result array where quaternion parameters will be stored.
      * @throws IllegalArgumentException if length of provided array is not 4.
      */
@@ -256,8 +275,9 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets values that parameterize this quaternion in basis (1, i, j ,k).
-     * @param values values that parameterize this quaternion in basis (1, i, j, 
-     * k).
+     *
+     * @param values    values that parameterize this quaternion in basis (1, i, j,
+     *                  k).
      * @throws IllegalArgumentException if provided array length is not 4.
      */
     public final void setValues(double[] values) {
@@ -274,6 +294,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Copies values from provided quaternion into this instance.
+     *
      * @param quaternion quaternion to copy from.
      */
     public final void fromQuaternion(Quaternion quaternion) {
@@ -287,6 +308,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Returns a new quaternion instance containing the same data as this 
      * instance.
+     *
      * @return a copy of this quaternion instance.
      */
     @Override
@@ -297,6 +319,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Copies this instance data into provided quaternion instance.
+     *
      * @param output destination instance where data is copied to.
      */
     public void copyTo(Quaternion output) {
@@ -309,6 +332,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets quaternion parameters from axis and rotation values.
+     *
      * @param axisX x coordinate of rotation axis.
      * @param axisY y coordinate of rotation axis.
      * @param axisZ z coordinate of rotation axis.
@@ -321,14 +345,15 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets quaternion parameters from axis and rotation values.
-     * @param axisX x coordinate of rotation axis.
-     * @param axisY y coordinate of rotation axis.
-     * @param axisZ z coordinate of rotation axis.
-     * @param theta rotation angle expressed in radians.
-     * @param jacobianOfTheta if provided, matrix where jacobian of rotation
-     * angle will be stored. Must be a 4x1 matrix.
-     * @param jacobianOfAxis if provided, matrix where jacobian of rotation axis
-     * will be stored. Must be a 4x3 matrix.
+     *
+     * @param axisX             x coordinate of rotation axis.
+     * @param axisY             y coordinate of rotation axis.
+     * @param axisZ             z coordinate of rotation axis.
+     * @param theta             rotation angle expressed in radians.
+     * @param jacobianOfTheta   if provided, matrix where jacobian of rotation
+     *                          angle will be stored. Must be a 4x1 matrix.
+     * @param jacobianOfAxis    if provided, matrix where jacobian of rotation axis
+     *                          will be stored. Must be a 4x3 matrix.
      * @throws IllegalArgumentException if any of the provided jacobian matrices
      * does not have proper size.
      * @see <a href="https://github.com/joansola/slamtb">au2q.m at https://github.com/joansola/slamtb</a>
@@ -380,7 +405,8 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets quaternion parameters from axis and rotation values.
-     * @param axis axis values.
+     *
+     * @param axis  axis values.
      * @param theta rotation angle expressed in radians.
      * @throws IllegalArgumentException if provided axis array does not have 
      * length 3.
@@ -391,12 +417,13 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets quaternion parameters from axis and rotation values.
-     * @param axis axis values.
-     * @param theta rotation angle expressed in radians.
-     * @param jacobianOfTheta if provided, matrix where jacobian of rotation
-     * angle will be stored. Must be a 4x1 matrix.
-     * @param jacobianOfAxis if provided, matrix where jacobian of rotation axis
-     * will be stored. Must be a 4x4 matrix.
+     *
+     * @param axis              axis values.
+     * @param theta             rotation angle expressed in radians.
+     * @param jacobianOfTheta   if provided, matrix where jacobian of rotation
+     *                          angle will be stored. Must be a 4x1 matrix.
+     * @param jacobianOfAxis    if provided, matrix where jacobian of rotation axis
+     *                          will be stored. Must be a 4x4 matrix.
      * @throws IllegalArgumentException if provided axis array does not have 
      * length 3 or if if any of the provided jacobian matrices
      * does not have proper size.
@@ -413,6 +440,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets quaternion parameters from an axis 3D rotation.
+     *
      * @param axisRotation an axis 3D rotation.
      */
     public final void setFromAxisAndRotation(AxisRotation3D axisRotation) {
@@ -421,11 +449,12 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets quaternion parameters from an axis 3D rotation.
-     * @param axisRotation an axis 3D rotation.
-     * @param jacobianOfTheta if provided, matrix where jacobian of rotation
-     * angle will be stored. Must be a 4x1 matrix.
-     * @param jacobianOfAxis if provided, matrix where jacobian of rotation axis
-     * will be stored. Must be a 4x4 matrix.
+     *
+     * @param axisRotation      an axis 3D rotation.
+     * @param jacobianOfTheta   if provided, matrix where jacobian of rotation
+     *                          angle will be stored. Must be a 4x1 matrix.
+     * @param jacobianOfAxis    if provided, matrix where jacobian of rotation axis
+     *                          will be stored. Must be a 4x4 matrix.
      * @throws IllegalArgumentException if any of the provided jacobian matrices
      * does not have proper size.
      */
@@ -442,6 +471,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Multiplies this quaternion with provided one and stores the result in
      * this instance.
+     *
      * @param q quaternion to multiply with.
      */
     public void multiply(Quaternion q) {
@@ -451,6 +481,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Multiplies this quaternion with provided one and returns the result as a
      * new quaternion instance.
+     *
      * @param q quaternion to multiply with.
      * @return obtained result.
      */
@@ -463,8 +494,9 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Multiplies this quaternion with provided one and stores the result into
      * provided instance.
-     * @param q quaternion to multiply with.
-     * @param result instance where result is stored.
+     *
+     * @param q         quaternion to multiply with.
+     * @param result    instance where result is stored.
      */
     public void multiply(Quaternion q, Quaternion result) {
         product(this, q, result);
@@ -473,9 +505,10 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Multiplies quaternion q1 with quaternion q2 and stores the result into
      * provided instance.
-     * @param q1 1st product operator of quaternions.
-     * @param q2 2nd product operator of quaternions.
-     * @param result instance where result of product is stored.
+     *
+     * @param q1        1st product operator of quaternions.
+     * @param q2        2nd product operator of quaternions.
+     * @param result    instance where result of product is stored.
      */
     public static void product(Quaternion q1, Quaternion q2, Quaternion result) {
         product(q1, q2, result, null, null);
@@ -485,11 +518,12 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Multiplies quaternion q1 with quaternion q2 and stores the result into
      * provided instance. This method also computes the Jacobians wrt of Q1 and
      * Q2 if provided.
-     * @param q1 1st productor operator of quaternions.
-     * @param q2 2nd productor operator of quaternions.
-     * @param result instance where result of product is stored.
-     * @param jacobianQ1 instance where jacobian of q1 is stored.
-     * @param jacobianQ2 instance where jacobian of q2 is stored.
+     *
+     * @param q1            1st productor operator of quaternions.
+     * @param q2            2nd productor operator of quaternions.
+     * @param result        instance where result of product is stored.
+     * @param jacobianQ1    instance where jacobian of q1 is stored.
+     * @param jacobianQ2    instance where jacobian of q2 is stored.
      * @throws IllegalArgumentException if any of the provided jacobian matrices
      * is not 4x4.
      * @see <a href="https://github.com/joansola/slamtb">qProd.m at https://github.com/joansola/slamtb</a>
@@ -568,10 +602,11 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets quaternion from euler angles (roll, pitch and yaw).
-     * @param roll roll angle expressed in radians. Rotation around x axis.
-     * @param pitch pitch angle expressed in radians. Rotation around y axis.
-     * @param yaw yaw angle expressed in radians. Rotation around z axis.
-     * @param jacobian matrix where jacobian will be stored if provided.
+     *
+     * @param roll      roll angle expressed in radians. Rotation around x axis.
+     * @param pitch     pitch angle expressed in radians. Rotation around y axis.
+     * @param yaw       yaw angle expressed in radians. Rotation around z axis.
+     * @param jacobian  matrix where jacobian will be stored if provided.
      * @throws IllegalArgumentException if provided jacobian matrix does not 
      * have size 4x3
      * @see <a href="https://github.com/joansola/slamtb">e2q.m at https://github.com/joansola/slamtb</a>
@@ -619,17 +654,18 @@ public class Quaternion extends Rotation3D implements Serializable {
             jacobian.setElementAt(3, 1, 0.5 * (-cy * cp * sr - sy * sp * cr));
             
             jacobian.setElementAt(0, 2, 0.5 * (-sy * cp * cr + cy * sp * sr));
-            jacobian.setElementAt(1, 2, 0.5 * (-sy * cp * sr - cy * sp * cr));
+            jacobian.setElementAt(1, 2, jacobian.getElementAt(3, 0));
             jacobian.setElementAt(2, 2, 0.5 * (-sy * sp * cr + cy * cp * sr));
-            jacobian.setElementAt(3, 2, 0.5 * (cy * cp * cr + sy * sp * sr));
+            jacobian.setElementAt(3, 2, jacobian.getElementAt(1, 0));
         }
     }
     
     /**
      * Sets quaternion from euler angles (roll, pitch and yaw).
-     * @param roll roll angle expressed in radians. Rotation around x axis.
+     *
+     * @param roll  roll angle expressed in radians. Rotation around x axis.
      * @param pitch pitch angle expressed in radians. Rotation around y axis.
-     * @param yaw yaw angle expressed in radians. Rotation around z axis.
+     * @param yaw   yaw angle expressed in radians. Rotation around z axis.
      * @see <a href="https://github.com/joansola/slamtb">e2q.m at https://github.com/joansola/slamtb</a>
      */
     public final void setFromEulerAngles(double roll, double pitch, double yaw) {
@@ -638,9 +674,10 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets quaternion from euler angles.
-     * @param angles euler angles expressed in radians in the following order:
-     * roll, pitch and yaw.
-     * @param jacobian matrix where jacobian will be stored if provided.
+     *
+     * @param angles    euler angles expressed in radians in the following order:
+     *                  roll, pitch and yaw.
+     * @param jacobian  matrix where jacobian will be stored if provided.
      * @throws IllegalArgumentException if provided array does not have length 
      * 3.
      */
@@ -654,8 +691,9 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets quaternion from euler angles (roll, pitch and yaw).
-     * @param angles euler angles expressed in radians in the following order:
-     * roll, pitch and yaw.
+     *
+     * @param angles    euler angles expressed in radians in the following order:
+     *                  roll, pitch and yaw.
      * @throws IllegalArgumentException if provided array does not have length 
      * 3.
      */
@@ -666,11 +704,12 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Computes the rotation matrix body-to-world corresponding to the body
      * orientation given by the Euler angles (roll, pitch, yaw).
-     * @param roll roll angle expressed in radians. Rotation around x axis.
-     * @param pitch pitch angle expressed in radians. Rotation around y axis.
-     * @param yaw yaw angle expressed in radians. Rotation around z axis.
-     * @param result instance where computed rotation will be stored.
-     * @param jacobian jacobian of computed rotation (optional).
+     *
+     * @param roll      roll angle expressed in radians. Rotation around x axis.
+     * @param pitch     pitch angle expressed in radians. Rotation around y axis.
+     * @param yaw       yaw angle expressed in radians. Rotation around z axis.
+     * @param result    instance where computed rotation will be stored.
+     * @param jacobian  jacobian of computed rotation (optional).
      * @throws IllegalArgumentException if provided jacobian is not 9x3.
      * @see <a href="https://github.com/joansola/slamtb">e2R.m at https://github.com/joansola/slamtb</a>
      */
@@ -727,10 +766,11 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Computes the rotation matrix body-to-world corresponding to the body
      * orientation given by the Euler angles (roll, pitch, yaw).
-     * @param roll roll angle expressed in radians. Rotation around x axis.
-     * @param pitch pitch angle expressed in radians. Rotation around y axis.
-     * @param yaw yaw angle expressed in radians. Rotation around z axis.
-     * @param result instance where computed rotation will be stored.
+     *
+     * @param roll      roll angle expressed in radians. Rotation around x axis.
+     * @param pitch     pitch angle expressed in radians. Rotation around y axis.
+     * @param yaw       yaw angle expressed in radians. Rotation around z axis.
+     * @param result    instance where computed rotation will be stored.
      * @see <a href="https://github.com/joansola/slamtb">e2R.m at https://github.com/joansola/slamtb</a>
      */
     public static void eulerToMatrixRotation(double roll, double pitch,
@@ -741,9 +781,10 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Computes the rotation matrix body-to-world corresponding to the body
      * orientation given by the Euler angles (roll, pitch, yaw).
-     * @param angles array containing roll, pitch and yaw angles.
-     * @param result instance where computed rotation will be stored.
-     * @param jacobian jacobian of computed rotation (optional).
+     *
+     * @param angles    array containing roll, pitch and yaw angles.
+     * @param result    instance where computed rotation will be stored.
+     * @param jacobian  jacobian of computed rotation (optional).
      * @throws IllegalArgumentException if provided angles length is not 3, or 
      * if provided jacobian is not 9x3.
      * @see <a href="https://github.com/joansola/slamtb">e2R.m at https://github.com/joansola/slamtb</a>
@@ -761,6 +802,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Computes the rotation matrix body-to-world corresponding to the body
      * orientation given by the Euler angles (roll, pitch, yaw).
+     *
      * @param angles array containing roll, pitch and yaw angles.
      * @param result instance where computed rotation will be stored.
      * @throws IllegalArgumentException if provided angles length is not 3.
@@ -773,11 +815,12 @@ public class Quaternion extends Rotation3D implements Serializable {
             
     /**
      * Computes rotation angle and axis of this instance.
-     * @param axis array where normalized rotation axis will be stored.
+     *
+     * @param axis          array where normalized rotation axis will be stored.
      * @param jacobianAngle matrix where jacobian of angle will be stored, if
-     * provided. Must be 1x4.
-     * @param jacobianAxis matrix where jacobian of axis will be stored, if 
-     * provided. Must be 3x4.
+     *                      provided. Must be 1x4.
+     * @param jacobianAxis  matrix where jacobian of axis will be stored, if
+     *                      provided. Must be 3x4.
      * @return rotation angle expressed in radians.
      * @throws IllegalArgumentException if length of axis or size of provided
      * jacobians is not correct.
@@ -856,6 +899,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Computes rotation angle and axis.
+     *
      * @param axis normalized rotation axis.
      * @return rotation angle expressed in radians.
      * @throws IllegalArgumentException if length of axis is not 3.
@@ -867,6 +911,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Converts this quaternion into an axis 3D rotation and stores the result
      * into provided rotation instance.
+     *
      * @param result rotation instance where result will be stored.
      */
     @Override
@@ -878,6 +923,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Converts this quaternion into an axis 3D rotation.
+     *
      * @return a new axis 3D rotation equivalent to this quaternion.
      */
     @Override
@@ -890,9 +936,10 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Computes rotation vector, which is equivalent to the rotation axis but
      * having a norm equal to the rotation angle.
-     * @param result array where rotation vector is stored.
-     * @param jacobian matrix where jacobian of vector will be stored, if 
-     * provided.
+     *
+     * @param result    array where rotation vector is stored.
+     * @param jacobian  matrix where jacobian of vector will be stored, if
+     *                  provided.
      * @throws IllegalArgumentException if length of result is not 3 or size of 
      * provided jacobian is not 3x4.
      * @see <a href="https://github.com/joansola/slamtb">q2v.m at https://github.com/joansola/slamtb</a>
@@ -946,6 +993,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Computes rotation vector, which is equivalent to the rotation axis but 
      * having a norm equal to the rotation angle.
+     *
      * @param result array where rotation vector is stored.
      * @throws IllegalArgumentException if length of result is not 3.
      */
@@ -957,8 +1005,9 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Computes the euler angles (roll, pitch, yaw) equivalent to this 
      * quaternion rotation and stores the result into provided array.
      * If provided, this method also computes the jacobian matrix.
-     * @param angles euler angles (roll, pitch, yaw).
-     * @param jacobian matrix where jacobian is stored, if provided.
+     *
+     * @param angles    euler angles (roll, pitch, yaw).
+     * @param jacobian  matrix where jacobian is stored, if provided.
      * @throws IllegalArgumentException if provided angles array length is not 3
      * or if provided jacobian matrix is not 3x4.
      * @see <a href="https://github.com/joansola/slamtb">q2e.m at https://github.com/joansola/slamtb</a>
@@ -1024,6 +1073,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Computes the euler angles (roll, pitch, yaw) equivalent to this 
      * quaternion rotation and stores the result into provided array.
+     *
      * @param angles euler angles (roll, pitch, yaw).
      * @throws IllegalArgumentException if provided angles array length is not 
      * 3.
@@ -1035,6 +1085,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Computes the euler angles (roll, pitch, yaw) resulting in an equivalent
      * rotation to this quaternion.
+     *
      * @return euler angles (roll, pitch, yaw)
      */
     public double[] toEulerAngles() {
@@ -1047,6 +1098,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Converts this quaternion into a quaternion matrix so that the quaternion
      * product q1 x q2 is equivalent to the matrix product: 
      * q1.toQuaternionMatrix().multiplyAndReturnNew(q2.toQuaternionMatrix())
+     *
      * @param result matrix where result will be stored.
      * @throws IllegalArgumentException if provided matrix is not 4x4.
      * @see <a href="https://github.com/joansola/slamtb">q2Q.m at https://github.com/joansola/slamtb</a>
@@ -1081,6 +1133,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Converts this quaternion into a quaternion matrix so that quaternion
      * product q1 x q2 is equivalent to the matrix product: 
      * q1.toQuaternionMatrix().multiplyAndReturnNew(q2.toQuaternionMatrix())
+     *
      * @return the quaternion matrix.
      * @see <a href="https://github.com/joansola/slamtb">q2Q.m at https://github.com/joansola/slamtb</a>
      */
@@ -1088,16 +1141,17 @@ public class Quaternion extends Rotation3D implements Serializable {
         Matrix result = null;
         try{
             result = new Matrix(N_PARAMS, N_PARAMS);
+            quaternionMatrix(result);
         }catch(WrongSizeException ignore){ /* never thrown */ }
-        quaternionMatrix(result);
         return result;
     }
         
     /**
      * Computes the conjugate of this quaternion and stores the result into 
      * provided instance.
-     * @param result instance where result is stored.
-     * @param jacobian matrix where jacobian is stored.
+     *
+     * @param result    instance where result is stored.
+     * @param jacobian  matrix where jacobian is stored.
      * @throws IllegalArgumentException if provided jacobian matrix is not 4x4.
      * @see <a href="https://github.com/joansola/slamtb">q2qc.m at https://github.com/joansola/slamtb</a>
      */
@@ -1125,6 +1179,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Computes the conjugate of this quaternion and stores the result into 
      * provided instance.
+     *
      * @param result instance where result is stored.
      * @see <a href="https://github.com/joansola/slamtb">q2qc.m at https://github.com/joansola/slamtb</a>
      */    
@@ -1134,6 +1189,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Computes the conjugate of this quaternion.
+     *
      * @return conjugate of this quaternion.
      * @see <a href="https://github.com/joansola/slamtb">q2qc.m at https://github.com/joansola/slamtb</a>
      */
@@ -1149,6 +1205,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * q2.toQuaternionMatrixN().multiplyAndReturnNew(q1.toQuaternionMatrixN()).
      * Notice that matrix order in the product is the opposite as the order used
      * when multiplying matrices obtained by method #toQuaternionMatrix().
+     *
      * @param result matrix where result will be stored.
      * @throws IllegalArgumentException if provided matrix is not 4x4.
      * @see <a href="https://github.com/joansola/slamtb">q2Qn.m at https://github.com/joansola/slamtb</a>
@@ -1185,6 +1242,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * q2.toQuaternionMatrixN().multiplyAndReturnNew(q1.toQuaternionMatrixN()).
      * Notice that matrix order in the product is the opposite as the order used
      * when multiplying matrices obtained by method #toQuaternionMatrix().
+     *
      * @return the quaternion matrix.
      * @see <a href="https://github.com/joansola/slamtb">q2Qn.m at https://github.com/joansola/slamtb</a>
      */
@@ -1192,15 +1250,16 @@ public class Quaternion extends Rotation3D implements Serializable {
         Matrix result = null;
         try {
             result = new Matrix(N_PARAMS, N_PARAMS);
+            quaternionMatrixN(result);
         } catch (WrongSizeException ignore){ /* never thrown */ }
-        quaternionMatrixN(result);
         return result;
     }
     
     /**
      * Computes the matrix representing this quaternion rotation.
-     * @param result matrix where rotation data will be stored.
-     * @param jacobian jacobian wrt of this quaternion.
+     *
+     * @param result    matrix where rotation data will be stored.
+     * @param jacobian  jacobian wrt of this quaternion.
      * @throws IllegalArgumentException if provided result matrix is not 3x3 o
      * jacobian matrix is not 9x4.
      * @see <a href="https://github.com/joansola/slamtb">q2R.m at https://github.com/joansola/slamtb</a>
@@ -1288,6 +1347,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Computes the matrix representing this quaternion rotation.
+     *
      * @param result matrix where rotation data will be stored.
      * @throws IllegalArgumentException if provided result matrix is not 3x3.
      * @see <a href="https://github.com/joansola/slamtb">q2R.m at https://github.com/joansola/slamtb</a>
@@ -1298,6 +1358,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Converts this quaternion into a 3D matrix rotation.
+     *
      * @param result matrix rotation instance where result will be stored.
      * @see <a href="https://github.com/joansola/slamtb">q2R.m at https://github.com/joansola/slamtb</a>
      */
@@ -1308,6 +1369,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Converts this quaternion into a 3D matrix rotation.
+     *
      * @return a 3D matrix rotation.
      * @see <a href="https://github.com/joansola/slamtb">q2R.m at https://github.com/joansola/slamtb</a>
      */
@@ -1323,11 +1385,12 @@ public class Quaternion extends Rotation3D implements Serializable {
      * rotation.
      * Point will be rotated by the amount of rotation contained in provided
      * quaternion.
-     * @param q a quaternion.
-     * @param inputPoint input point to be rotated.
-     * @param resultPoint rotated point.
-     * @param jacobianPoint jacobian wrt of point.
-     * @param jacobianQuaternion jacobian wrt of quaternion.
+     *
+     * @param q                     a quaternion.
+     * @param inputPoint            input point to be rotated.
+     * @param resultPoint           rotated point.
+     * @param jacobianPoint         jacobian wrt of point.
+     * @param jacobianQuaternion    jacobian wrt of quaternion.
      * @throws IllegalArgumentException if jacobian of point is not 3x3 or
      * jacobian of quaternoin is not 3x4.
      * @see <a href="https://github.com/joansola/slamtb">qRot.m at https://github.com/joansola/slamtb</a>
@@ -1397,10 +1460,11 @@ public class Quaternion extends Rotation3D implements Serializable {
      * rotation.
      * Point will be rotated by the amount of rotation contained in this 
      * quaternion instance.
-     * @param inputPoint input point to be rotated.
-     * @param resultPoint rotated point.
-     * @param jacobianPoint jacobian wrt of point.
-     * @param jacobianQuaternion jacobian wrt of quaternion.
+     *
+     * @param inputPoint            input point to be rotated.
+     * @param resultPoint           rotated point.
+     * @param jacobianPoint         jacobian wrt of point.
+     * @param jacobianQuaternion    jacobian wrt of quaternion.
      * @throws IllegalArgumentException if jacobian of point is not 3x3 or
      * jacobian of quaternion is no 3x4.
      * @see <a href="https://github.com/joansola/slamtb">qRot.m at https://github.com/joansola/slamtb</a>
@@ -1418,8 +1482,9 @@ public class Quaternion extends Rotation3D implements Serializable {
      * rotation.
      * Point will be rotated by the amount of rotation contained in this 
      * quaternion instance.
-     * @param inputPoint Input point to be rotated.
-     * @param resultPoint Rotated point.
+     *
+     * @param inputPoint    Input point to be rotated.
+     * @param resultPoint   Rotated point.
      * @see <a href="https://github.com/joansola/slamtb">qRot.m at https://github.com/joansola/slamtb</a>
      */ 
     @Override
@@ -1433,6 +1498,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * rotation.
      * Point will be rotated by the amount of rotation contained in this 
      * quaternion instance.
+     *
      * @param point Point to be rotated.
      * @return Rotated point.
      * @see <a href="https://github.com/joansola/slamtb">qRot.m at https://github.com/joansola/slamtb</a>
@@ -1446,8 +1512,9 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Converts rotation matrix into a quaternion.
-     * @param r a rotation matrix to be converted from.
-     * @param result quaternion where result is stored.
+     *
+     * @param r         a rotation matrix to be converted from.
+     * @param result    quaternion where result is stored.
      * @throws IllegalArgumentException if provided matrix is not 3x3
      * @see <a href="https://github.com/joansola/slamtb">R2q.m at https://github.com/joansola/slamtb</a>
      */
@@ -1515,8 +1582,9 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Converts 3D matrix rotation into a quaternion.
-     * @param rotation a 3D matrix rotation to be converted from.
-     * @param result quaternion where result is stored.
+     *
+     * @param rotation  a 3D matrix rotation to be converted from.
+     * @param result    quaternion where result is stored.
      * @see <a href="https://github.com/joansola/slamtb">R2q.m at https://github.com/joansola/slamtb</a>
      */
     public static void matrixRotationToQuaternion(MatrixRotation3D rotation,
@@ -1526,6 +1594,7 @@ public class Quaternion extends Rotation3D implements Serializable {
         
     /**
      * Sets quaternion values associated to provided rotation.
+     *
      * @param matrix a rotation matrix.
      * @throws IllegalArgumentException if provided matrix is not 3x3. 
      * @see <a href="https://github.com/joansola/slamtb">R2q.m at https://github.com/joansola/slamtb</a>
@@ -1536,6 +1605,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets quaternion values associated to provided rotation.
+     *
      * @param rotation a rotation to be converted into a quaternion.
      * @see <a href="https://github.com/joansola/slamtb">R2q.m at https://github.com/joansola/slamtb</a>
      */
@@ -1547,10 +1617,11 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Converts a rotation vector (rotation axis having a norm equal to the 
      * rotation angle) into a normalized rotation axis and its corresponding 
      * rotation angle.
-     * @param rotationVector input rotation vector to be converted.
-     * @param axis obtained normalized rotation axis.
-     * @param jacobianAlpha jacobian wrt of angle.
-     * @param jacobianRotationVector jacobian wrt of rotation vector.
+     *
+     * @param rotationVector            input rotation vector to be converted.
+     * @param axis                      obtained normalized rotation axis.
+     * @param jacobianAlpha             jacobian wrt of angle.
+     * @param jacobianRotationVector    jacobian wrt of rotation vector.
      * @return rotation angle.
      * @throws IllegalArgumentException if provided rotation vector length is 
      * not 3, jacobian of angle is not 1x3 or jacobian of rotation vector is
@@ -1630,8 +1701,9 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Converts a rotation vector (rotation axis having a norm equal to the
      * rotation angle) into a normalized rotation axis and its corresponding
      * rotation angle.
-     * @param rotationVector input rotation vector to be converted.
-     * @param axis obtained normalized rotation axis.
+     *
+     * @param rotationVector    input rotation vector to be converted.
+     * @param axis              obtained normalized rotation axis.
      * @return rotation angle.
      * @throws IllegalArgumentException if provided rotation vector length is 
      * not 3.
@@ -1647,10 +1719,11 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Converts a rotation vector (rotation axis having a norm equal to the 
      * rotation angle) into a quaternion, and stores the corresponding jacobian
      * of the quaternion respect to the vector if provided.
-     * @param rotationVector input rotation vector to be converted.
-     * @param result quaternion where result will be stored.
-     * @param jacobian if provided, matrix where jacobian of the quaternion 
-     * respect to the vector will be stored. Must be 4x3.
+     *
+     * @param rotationVector    input rotation vector to be converted.
+     * @param result            quaternion where result will be stored.
+     * @param jacobian          if provided, matrix where jacobian of the quaternion
+     *                          respect to the vector will be stored. Must be 4x3.
      * @throws IllegalArgumentException if provided rotation vector is not 
      * length 3 or if provided jacobian matrix is not 4x3.
      * @see <a href="https://github.com/joansola/slamtb">v2q.m at https://github.com/joansola/slamtb</a>
@@ -1731,8 +1804,9 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Converts a rotation vector (rotation axis having a norm equal to the
      * rotation angle) into a quaternion.
-     * @param rotationVector input rotation vector to be converted.
-     * @param result quaternioln where result will be stored.
+     *
+     * @param rotationVector    input rotation vector to be converted.
+     * @param result            quaternioln where result will be stored.
      * @throws IllegalArgumentException if provided rotation vector is not 
      * length 3.
      * @see <a href="https://github.com/joansola/slamtb">v2q.m at https://github.com/joansola/slamtb</a>
@@ -1746,8 +1820,9 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Sets values of this quaternion from provided rotation vector.
      * A rotation vector is a rotation axis having a norm equal to the rotation
      * angle.
-     * @param rotationVector input rotation vector to obtain quaternion values 
-     * from.
+     *
+     * @param rotationVector    input rotation vector to obtain quaternion values
+     *                          from.
      * @throws IllegalArgumentException if provided rotation vector does not 
      * have length 3.
      * @see <a href="https://github.com/joansola/slamtb">v2q.m at https://github.com/joansola/slamtb</a>
@@ -1760,9 +1835,10 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Converts a rotation vector into a rotation matrix.
      * A rotation vector is a rotation axis having a norm equal to the rotation
      * angle.
-     * @param rotationVector a rotation vector to be converted into a 3D matrix
-     * rotation.
-     * @param result matrix where result is stored.
+     *
+     * @param rotationVector    a rotation vector to be converted into a 3D matrix
+     *                          rotation.
+     * @param result            matrix where result is stored.
      * @throws IllegalArgumentException if provided rotation vector does not
      * have length 3.
      * @see <a href="https://github.com/joansola/slamtb">v2R.m at https://github.com/joansola/slamtb</a>
@@ -1780,9 +1856,10 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Converts a rotation vector into a rotation matrix.
      * A rotation vector is a rotation axis having a norm equal to the rotation
      * angle.
-     * @param rotationVector a rotation vector to be converted into a 3D matrix 
-     * rotation.
-     * @param result 3D matrix rotation where result is stored.
+     *
+     * @param rotationVector    a rotation vector to be converted into a 3D matrix
+     *                          rotation.
+     * @param result            3D matrix rotation where result is stored.
      * @throws IllegalArgumentException if provided rotation vector does not 
      * have length 3.
      * @see <a href="https://github.com/joansola/slamtb">v2R.m at https://github.com/joansola/slamtb</a>
@@ -1794,6 +1871,7 @@ public class Quaternion extends Rotation3D implements Serializable {
 
     /**
      * Returns type of this rotation.
+     *
      * @return Type of this rotation.
      */    
     @Override
@@ -1807,6 +1885,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * provided rotation angle in radians.
      * Note: to avoid numerical instabilities and improve accuracy, axis
      * coordinates should be normalized (e.g. norm equal to 1).
+     *
      * @param axisX X coordinate of rotation axis.
      * @param axisY Y coordinate of rotation axis.
      * @param axisZ Z coordinate of rotation axis.
@@ -1821,6 +1900,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Returns rotation axis corresponding to this instance.
      * Result is stored in provided axis array, which must have length 3.
+     *
      * @param axis Array where axis coordinates will be stored.
      * @throws IllegalArgumentException Raised if provided array does not have
      * length 3.
@@ -1833,6 +1913,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Returns rotation amount or angle in radians around the rotation axis
      * associated to this instance.
+     *
      * @return Rotation angle in radians.
      */        
     @Override
@@ -1846,6 +1927,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Returns this 3D rotation instance expressed as a 3x3 inhomogeneous 
      * matrix.
      * This is equivalent to call getInternalMatrix().
+     *
      * @return Rotation matrix expressed in inhomogeneous coordinates.
      */        
     @Override
@@ -1862,6 +1944,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Sets into provided Matrix instance this 3D rotation expressed as a
      * 3x3 inhomogeneous matrix.
+     *
      * @param result Matrix where rotation will be set.
      * @throws IllegalArgumentException Raised if provided instance does not
      * have size 3x3.
@@ -1873,6 +1956,7 @@ public class Quaternion extends Rotation3D implements Serializable {
 
     /**
      * Returns this 3D rotation instance expressed as a 4x4 homogeneous matrix.
+     *
      * @return Rotation matrix expressed in homogeneous coordinates.
      */            
     @Override
@@ -1888,6 +1972,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Sets into provided Matrix instance this 3D rotation expressed as a
      * 4x4 homogeneous matrix.
+     *
      * @param result Matrix where rotation will be set.
      * @throws IllegalArgumentException Raised if provided instance does not
      * have size 4x4.
@@ -1905,7 +1990,8 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
      * transpose must be it's inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 3x3.
-     * @param m Provided rotation matrix.
+     *
+     * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws IllegalArgumentException Raised if provided threshold is
      * negative.
@@ -1922,7 +2008,8 @@ public class Quaternion extends Rotation3D implements Serializable {
      * transpose must be it's inverse) and must have determinant equal to 1.
      * Provided matrix must also have size 4x4, and its last row and column must
      * be zero, except for element in last row and column which must be 1.
-     * @param m Provided rotation matrix.
+     *
+     * @param m         Provided rotation matrix.
      * @param threshold Threshold to determine whether matrix is orthonormal.
      * @throws IllegalArgumentException Raised if provided threshold is
      * negative.
@@ -1936,8 +2023,9 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Inverts a quaternion so that q * q^-1 = 1.
-     * @param q quaternion to be inverted.
-     * @param result quaternion instance where the result will be stored.
+     *
+     * @param q         quaternion to be inverted.
+     * @param result    quaternion instance where the result will be stored.
      */
     public static void inverse(Quaternion q, Quaternion result) {
         //the inverse is the conjugate divided by the quaternion square norm
@@ -1952,6 +2040,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Inverts a quaternion so that q * q^-1 = 1.
+     *
      * @param q quaternion to be inverted.
      * @return a new quaternion containing the inverse.
      */
@@ -1963,6 +2052,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Inverts this quaternion instance so that q * q^-1 = 1.
+     *
      * @param result instance where quaternion inverse is stored.
      */
     public void inverse(Quaternion result) {
@@ -1971,6 +2061,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Inverts this quaternion instance so that q * q^-1 = 1.
+     *
      * @return a new quaternion containing the inverse of this quaternion.
      */
     public Quaternion inverseAndReturnNew() {
@@ -1990,6 +2081,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Returns a 3D rotation which is inverse to this instance.
      * In other words, the combination of this rotation with its inverse 
      * produces no change.
+     *
      * @return Inverse 3D rotation.
      */    
     @Override
@@ -2001,6 +2093,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Inverts this quaternion instance so that q * q^-1 = 1.
+     *
      * @param result instance where quaternion inverse is stored.
      */
     public void inverseRotation(Quaternion result) {
@@ -2011,6 +2104,7 @@ public class Quaternion extends Rotation3D implements Serializable {
      * Sets into provided Rotation3D instance a rotation inverse to this 
      * instance.
      * The combination of this rotation with its inverse produces no change.
+     *
      * @param result Instance where inverse rotation will be set.
      */        
     @Override
@@ -2030,9 +2124,10 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Combines provided quaternions q1 and q2 to produce a resulting quaternion 
      * equivalent to the combined rotation of both quaternions.
-     * @param q1 1st quaternion.
-     * @param q2 2nd quaternion.
-     * @param result combined quaternion where result is stored.
+     *
+     * @param q1        1st quaternion.
+     * @param q2        2nd quaternion.
+     * @param result    combined quaternion where result is stored.
      */
     public static void combine(Quaternion q1, Quaternion q2, Quaternion result) {
         product(q1, q2, result);
@@ -2041,6 +2136,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Combines provided quaternion with this quaternion and returns the result
      * as a new quaternion instance.
+     *
      * @param q input quaternion to be combined.
      * @return combined quaternion, which is equal to the multiplication of
      * quaternions.
@@ -2054,6 +2150,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Combines provided quaternion into this quaternion, resulting in the
      * multiplication of both quaternion representations.
+     *
      * @param q input quaternion to be combined.
      */
     public void combine(Quaternion q) {
@@ -2063,6 +2160,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Combines provided rotation with this quaternion and returns the result as
      * a new quaternion instance.
+     *
      * @param rotation input rotation to be combined.
      * @return combined rotation, which is equal to the multiplication of the
      * internal quaternion representations.
@@ -2075,6 +2173,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Combines provided rotation into this quaternion, resulting in the 
      * multiplication of both quaternion representations.
+     *
      * @param rotation input rotation to be combined.
      */
     @Override
@@ -2084,6 +2183,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets values of this rotation from a 3D matrix rotation.
+     *
      * @param rot 3D matrix rotation to set values from.
      */
     @Override
@@ -2093,6 +2193,7 @@ public class Quaternion extends Rotation3D implements Serializable {
 
     /**
      * Sets values of this rotation from a 3D axis rotation.
+     *
      * @param rot an axis rotation to set values from.
      */
     @Override
@@ -2102,6 +2203,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Sets values of this rotation from a quaternion.
+     *
      * @param q a quaternion to set values from.
      */
     @Override    
@@ -2116,6 +2218,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Converts this 3D rotation into a quaternion storing the result into
      * provided instance.
+     *
      * @param result instance where result will be stored.
      */
     @Override
@@ -2125,6 +2228,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Indicates whether quaternion is already normalized or not.
+     *
      * @return true if quaternion is normalized, false otherwise.
      */
     public boolean isNormalized() {
@@ -2144,8 +2248,9 @@ public class Quaternion extends Rotation3D implements Serializable {
     /**
      * Normalizes this quaternion if not already normalized and stores the
      * corresponding jacobian into provided matrix (if provided).
-     * @param jacobian matrix where jacobian will be stored (if provided). Must 
-     * be 4x4.
+     *
+     * @param jacobian  matrix where jacobian will be stored (if provided). Must
+     *                  be 4x4.
      * @throws IllegalArgumentException if provided jacobian is not 4x4.
      */
     public void normalize(Matrix jacobian) {
@@ -2313,6 +2418,7 @@ public class Quaternion extends Rotation3D implements Serializable {
     
     /**
      * Normalizes this quaternion if not already normalized.
+     *
      * @param norm norm to normalize this quaternion with.
      */
     private void internalNormalize(double norm) {
