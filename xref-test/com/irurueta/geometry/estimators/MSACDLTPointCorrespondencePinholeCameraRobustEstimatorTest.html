@@ -2189,7 +2189,7 @@
 <a class="jxr_linenumber" name="L2181" href="#L2181">2181</a>             CameraException, NotAvailableException {
 <a class="jxr_linenumber" name="L2182" href="#L2182">2182</a>         <strong class="jxr_keyword">int</strong> numCovariances = 0;
 <a class="jxr_linenumber" name="L2183" href="#L2183">2183</a>         <strong class="jxr_keyword">int</strong> numValid = 0;        
-<a class="jxr_linenumber" name="L2184" href="#L2184">2184</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> t = 0; t &lt; TIMES; t++) {
+<a class="jxr_linenumber" name="L2184" href="#L2184">2184</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> t = 0; t &lt; 2*TIMES; t++) {
 <a class="jxr_linenumber" name="L2185" href="#L2185">2185</a>             UniformRandomizer randomizer = <strong class="jxr_keyword">new</strong> UniformRandomizer(<strong class="jxr_keyword">new</strong> Random());
 <a class="jxr_linenumber" name="L2186" href="#L2186">2186</a>             <strong class="jxr_keyword">double</strong> horizontalFocalLength = randomizer.nextDouble(
 <a class="jxr_linenumber" name="L2187" href="#L2187">2187</a>                     MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
@@ -5662,6 +5662,6 @@
 <a class="jxr_linenumber" name="L5654" href="#L5654">5654</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017&#x2013;2018. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017&#x2013;2019. All rights reserved.</div>
 </body>
 </html>

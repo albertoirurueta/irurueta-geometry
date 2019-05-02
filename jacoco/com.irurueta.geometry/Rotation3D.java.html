@@ -576,20 +576,22 @@ public abstract class Rotation3D {
             }
             
             //compare difference of angles
-<span class="fc bfc" id="L579" title="All 2 branches covered.">            return Math.abs(thisAngle - otherAngle) &lt;= threshold;</span>
+<span class="fc bfc" id="L579" title="All 2 branches covered.">            return Math.abs(thisAngle - otherAngle) &lt;= threshold ||</span>
+<span class="pc bpc" id="L580" title="1 of 2 branches missed.">                    Math.abs(thisAngle - otherAngle - 2 * Math.PI) &lt;= threshold;</span>
         } else {
             //axis might be reversed, hence also angle is reversed
-<span class="fc" id="L582">            double sumX = thisAxis[0] + otherAxis[0];</span>
-<span class="fc" id="L583">            double sumY = thisAxis[1] + otherAxis[1];</span>
-<span class="fc" id="L584">            double sumZ = thisAxis[2] + otherAxis[2];</span>
-<span class="fc" id="L585">            double sqrNormSum = sumX * sumX + sumY * sumY + sumZ * sumZ;</span>
+<span class="fc" id="L583">            double sumX = thisAxis[0] + otherAxis[0];</span>
+<span class="fc" id="L584">            double sumY = thisAxis[1] + otherAxis[1];</span>
+<span class="fc" id="L585">            double sumZ = thisAxis[2] + otherAxis[2];</span>
+<span class="fc" id="L586">            double sqrNormSum = sumX * sumX + sumY * sumY + sumZ * sumZ;</span>
             
-<span class="pc bpc" id="L587" title="1 of 2 branches missed.">            if (sqrNormSum &gt; threshold) {</span>
-<span class="nc" id="L588">                return false; //axes are not equal</span>
+<span class="pc bpc" id="L588" title="1 of 2 branches missed.">            if (sqrNormSum &gt; threshold) {</span>
+<span class="nc" id="L589">                return false; //axes are not equal</span>
             }
             
             //compare sum of angles (because rotation angle is also reversed)
-<span class="pc bpc" id="L592" title="1 of 2 branches missed.">            return Math.abs(thisAngle + otherAngle) &lt;= threshold;</span>
+<span class="fc bfc" id="L593" title="All 2 branches covered.">            return Math.abs(thisAngle + otherAngle) &lt;= threshold ||</span>
+<span class="pc bpc" id="L594" title="1 of 2 branches missed.">                    Math.abs(thisAngle + otherAngle - 2 * Math.PI) &lt;= threshold;</span>
         }
     }
 
@@ -601,9 +603,9 @@ public abstract class Rotation3D {
      */
     public boolean equals(Rotation3D other) {
         try {
-<span class="fc" id="L604">            return equals(other, DEFAULT_COMPARISON_THRESHOLD);</span>
-<span class="nc" id="L605">        } catch (RotationException e) {</span>
-<span class="nc" id="L606">            return false;</span>
+<span class="fc" id="L606">            return equals(other, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="nc" id="L607">        } catch (RotationException e) {</span>
+<span class="nc" id="L608">            return false;</span>
         }
     }
     
@@ -615,14 +617,14 @@ public abstract class Rotation3D {
      */
     @Override
     public boolean equals(Object obj) {
-<span class="fc bfc" id="L618" title="All 2 branches covered.">        if (obj == this) {</span>
-<span class="fc" id="L619">            return true;</span>
+<span class="fc bfc" id="L620" title="All 2 branches covered.">        if (obj == this) {</span>
+<span class="fc" id="L621">            return true;</span>
         }
-<span class="pc bpc" id="L621" title="1 of 2 branches missed.">        if (!(obj instanceof Rotation3D)) {</span>
-<span class="nc" id="L622">            return false;</span>
+<span class="pc bpc" id="L623" title="1 of 2 branches missed.">        if (!(obj instanceof Rotation3D)) {</span>
+<span class="nc" id="L624">            return false;</span>
         }
 
-<span class="fc" id="L625">        return equals((Rotation3D)obj);</span>
+<span class="fc" id="L627">        return equals((Rotation3D)obj);</span>
     }
 
     /**
@@ -631,7 +633,7 @@ public abstract class Rotation3D {
      */    
     @Override
     public int hashCode() {
-<span class="nc" id="L634">        return 5;</span>
+<span class="nc" id="L636">        return 5;</span>
     }
     
     /**
@@ -640,18 +642,18 @@ public abstract class Rotation3D {
      */
     public void fromRotation(MatrixRotation3D rot) {
         try {
-<span class="nc" id="L643">            fromInhomogeneousMatrix(rot.internalMatrix);</span>
-<span class="nc" id="L644">        } catch (InvalidRotationMatrixException ignore) { /* never thrown */ }</span>
-<span class="nc" id="L645">    }</span>
+<span class="nc" id="L645">            fromInhomogeneousMatrix(rot.internalMatrix);</span>
+<span class="nc" id="L646">        } catch (InvalidRotationMatrixException ignore) { /* never thrown */ }</span>
+<span class="nc" id="L647">    }</span>
     
     /**
      * Sets values of this rotation from a 3D axis rotation.
      * @param rot an axis rotation to set values from.
      */
     public void fromRotation(AxisRotation3D rot) {
-<span class="fc" id="L652">        setAxisAndRotation(rot.getAxisX(), rot.getAxisY(), rot.getAxisZ(),</span>
-<span class="fc" id="L653">                rot.getRotationAngle());</span>
-<span class="fc" id="L654">    }</span>
+<span class="fc" id="L654">        setAxisAndRotation(rot.getAxisX(), rot.getAxisY(), rot.getAxisZ(),</span>
+<span class="fc" id="L655">                rot.getRotationAngle());</span>
+<span class="fc" id="L656">    }</span>
     
     /**
      * Sets values of this rotation from a quaternion.
@@ -668,20 +670,20 @@ public abstract class Rotation3D {
      * {@link Rotation3DType#QUATERNION} are supported.
      */
     public void fromRotation(Rotation3D rot) {
-<span class="nc bnc" id="L671" title="All 4 branches missed.">        switch (rot.getType()) {</span>
+<span class="nc bnc" id="L673" title="All 4 branches missed.">        switch (rot.getType()) {</span>
             case AXIS_ROTATION3D:
-<span class="nc" id="L673">                fromRotation((AxisRotation3D)rot);</span>
-<span class="nc" id="L674">                break;</span>
+<span class="nc" id="L675">                fromRotation((AxisRotation3D)rot);</span>
+<span class="nc" id="L676">                break;</span>
             case MATRIX_ROTATION3D:
-<span class="nc" id="L676">                fromRotation((MatrixRotation3D)rot);</span>
-<span class="nc" id="L677">                break;</span>
+<span class="nc" id="L678">                fromRotation((MatrixRotation3D)rot);</span>
+<span class="nc" id="L679">                break;</span>
             case QUATERNION:
-<span class="nc" id="L679">                fromRotation((Quaternion)rot);</span>
-<span class="nc" id="L680">                break;</span>
+<span class="nc" id="L681">                fromRotation((Quaternion)rot);</span>
+<span class="nc" id="L682">                break;</span>
             default:
-<span class="nc" id="L682">                throw new IllegalArgumentException();</span>
+<span class="nc" id="L684">                throw new IllegalArgumentException();</span>
         }
-<span class="nc" id="L684">    }</span>
+<span class="nc" id="L686">    }</span>
     
     /**
      * Converts this 3D rotation into a matrix rotation storing the result
@@ -689,8 +691,8 @@ public abstract class Rotation3D {
      * @param result instance where result wil be stored.
      */
     public void toMatrixRotation(MatrixRotation3D result) {
-<span class="nc" id="L692">        result.fromRotation(this);</span>
-<span class="nc" id="L693">    }</span>
+<span class="nc" id="L694">        result.fromRotation(this);</span>
+<span class="nc" id="L695">    }</span>
     
     /**
      * Converts this 3D rotation into a matrix rotation an returns the result
@@ -698,9 +700,9 @@ public abstract class Rotation3D {
      * @return a new 3D matrix rotation equivalent to this rotation.
      */
     public MatrixRotation3D toMatrixRotation() {
-<span class="fc" id="L701">        MatrixRotation3D r = new MatrixRotation3D();</span>
-<span class="fc" id="L702">        toMatrixRotation(r);</span>
-<span class="fc" id="L703">        return r;</span>
+<span class="fc" id="L703">        MatrixRotation3D r = new MatrixRotation3D();</span>
+<span class="fc" id="L704">        toMatrixRotation(r);</span>
+<span class="fc" id="L705">        return r;</span>
     }
     
     /**
@@ -709,8 +711,8 @@ public abstract class Rotation3D {
      * @param result instance where result will be stored.
      */
     public void toAxisRotation(AxisRotation3D result) {
-<span class="nc" id="L712">        result.fromRotation(this);</span>
-<span class="nc" id="L713">    }</span>
+<span class="nc" id="L714">        result.fromRotation(this);</span>
+<span class="nc" id="L715">    }</span>
     
     /**
      * Converts this 3D rotation into an axis rotation and returns the result
@@ -718,9 +720,9 @@ public abstract class Rotation3D {
      * @return a new axis rotation equivalent to this rotation.
      */
     public AxisRotation3D toAxisRotation() {
-<span class="fc" id="L721">        AxisRotation3D r = new AxisRotation3D();</span>
-<span class="fc" id="L722">        toAxisRotation(r);</span>
-<span class="fc" id="L723">        return r;</span>
+<span class="fc" id="L723">        AxisRotation3D r = new AxisRotation3D();</span>
+<span class="fc" id="L724">        toAxisRotation(r);</span>
+<span class="fc" id="L725">        return r;</span>
     }
     
     /**
@@ -729,8 +731,8 @@ public abstract class Rotation3D {
      * @param result instance where result will be stored.
      */
     public void toQuaternion(Quaternion result) {
-<span class="nc" id="L732">        result.fromRotation(this);</span>
-<span class="nc" id="L733">    }</span>
+<span class="nc" id="L734">        result.fromRotation(this);</span>
+<span class="nc" id="L735">    }</span>
     
     /**
      * Converts this 3D rotation into a quaternion and returns the result as a 
@@ -738,9 +740,9 @@ public abstract class Rotation3D {
      * @return a new quaternion equivalent to this rotation.
      */
     public Quaternion toQuaternion() {
-<span class="fc" id="L741">        Quaternion q = new Quaternion();</span>
-<span class="fc" id="L742">        toQuaternion(q);</span>
-<span class="fc" id="L743">        return q;</span>
+<span class="fc" id="L743">        Quaternion q = new Quaternion();</span>
+<span class="fc" id="L744">        toQuaternion(q);</span>
+<span class="fc" id="L745">        return q;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
