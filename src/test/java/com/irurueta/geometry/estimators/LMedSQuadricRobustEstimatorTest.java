@@ -440,7 +440,7 @@ public class LMedSQuadricRobustEstimatorTest implements
             //check correctness of estimation by checking that all points
             //are within the estimated quadric locus
             for (Point3D p : points) {
-                assertTrue(quadric2.isLocus(p, ABSOLUTE_ERROR));
+                assertTrue(quadric2.isLocus(p, 10.0 * ABSOLUTE_ERROR));
             }
         }
     }

@@ -829,7 +829,7 @@ public class AffineTransformation3DTest {
 
             //check correctness
             assertEquals(Math.abs(transformation.getRotation().getRotationAngle()),
-                    Math.abs(combinedRotation.getRotationAngle()), ABSOLUTE_ERROR);
+                    Math.abs(combinedRotation.getRotationAngle()), 5.0 * ABSOLUTE_ERROR);
             assertEquals(
                     Math.abs(transformation.getRotation().getRotationAxis()[0]),
                     Math.abs(combinedRotation.getRotationAxis()[0]),

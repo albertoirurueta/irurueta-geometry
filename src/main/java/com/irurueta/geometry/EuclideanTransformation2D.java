@@ -345,6 +345,8 @@ public class EuclideanTransformation2D extends Transformation2D
         if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
             throw new IllegalArgumentException();
         }
+
+        m.initialize(0.0);
         
         //set rotation        
         m.setSubmatrix(0, 0, 

@@ -399,13 +399,13 @@ public abstract class Rotation3D {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        
+
         try {
-            return Utils.isOrthogonal(m, threshold) && 
-                (Math.abs(Utils.det(m)) - 1.0) < threshold;
+            return Utils.isOrthogonal(m, threshold) &&
+                Math.abs(Math.abs(Utils.det(m)) - 1.0) < threshold;
         } catch (AlgebraException e) {
             return false;
-        }        
+        }
     }
     
     /**

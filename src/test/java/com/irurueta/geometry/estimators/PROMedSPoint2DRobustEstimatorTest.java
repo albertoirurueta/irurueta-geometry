@@ -689,7 +689,7 @@ public class PROMedSPoint2DRobustEstimatorTest implements
             }
             
             //check that both points are equal
-            assertEquals(point.distanceTo(point2), 0.0, ABSOLUTE_ERROR);
+            assertEquals(point.distanceTo(point2), 0.0, 2.0 * ABSOLUTE_ERROR);
         }
     }
 
