@@ -395,367 +395,369 @@
 <a class="jxr_linenumber" name="L387" href="#L387">387</a>         <strong class="jxr_keyword">if</strong> (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {
 <a class="jxr_linenumber" name="L388" href="#L388">388</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
 <a class="jxr_linenumber" name="L389" href="#L389">389</a>         }
-<a class="jxr_linenumber" name="L390" href="#L390">390</a>         
-<a class="jxr_linenumber" name="L391" href="#L391">391</a>         <em class="jxr_comment">//set rotation        </em>
-<a class="jxr_linenumber" name="L392" href="#L392">392</a>         m.setSubmatrix(0, 0, 
-<a class="jxr_linenumber" name="L393" href="#L393">393</a>                 Rotation3D.INHOM_COORDS - 1,
-<a class="jxr_linenumber" name="L394" href="#L394">394</a>                 Rotation3D.INHOM_COORDS - 1,
-<a class="jxr_linenumber" name="L395" href="#L395">395</a>                 rotation.asInhomogeneousMatrix());
-<a class="jxr_linenumber" name="L396" href="#L396">396</a>         
-<a class="jxr_linenumber" name="L397" href="#L397">397</a>         <em class="jxr_comment">//set translation</em>
-<a class="jxr_linenumber" name="L398" href="#L398">398</a>         m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
-<a class="jxr_linenumber" name="L399" href="#L399">399</a>                 HOM_COORDS - 1, translation);
-<a class="jxr_linenumber" name="L400" href="#L400">400</a>         
-<a class="jxr_linenumber" name="L401" href="#L401">401</a>         <em class="jxr_comment">//set last element</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>         m.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);        
-<a class="jxr_linenumber" name="L403" href="#L403">403</a>     }
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">     * Transforms input point using this transformation and stores the result</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">     * in provided output points.</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">     * @param inputPoint point to be transformed.</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">     * @param outputPoint instance where transformed point data will be stored.</em>
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L411" href="#L411">411</a>     @Override
-<a class="jxr_linenumber" name="L412" href="#L412">412</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transform(<a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint) {
-<a class="jxr_linenumber" name="L413" href="#L413">413</a>         inputPoint.normalize();
-<a class="jxr_linenumber" name="L414" href="#L414">414</a>         rotation.rotate(inputPoint, outputPoint);
-<a class="jxr_linenumber" name="L415" href="#L415">415</a>         outputPoint.setInhomogeneousCoordinates(
-<a class="jxr_linenumber" name="L416" href="#L416">416</a>                 outputPoint.getInhomX() + translation[0], 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a>                 outputPoint.getInhomY() + translation[1], 
-<a class="jxr_linenumber" name="L418" href="#L418">418</a>                 outputPoint.getInhomZ() + translation[2]);
-<a class="jxr_linenumber" name="L419" href="#L419">419</a>     }
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
-<a class="jxr_linenumber" name="L421" href="#L421">421</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">     * Transforms a quadric using this transformation and stores the result into</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">     * provided output quadric.</em>
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">     * @param inputQuadric Quadric to be transformed.</em>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">     * @param outputQuadric instance where data of transformed quadric will be </em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">     * stored.</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">     * @throws NonSymmetricMatrixException raised if due to numerical precision</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">     * the resulting output quadric matrix is not considered to be symmetric.</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">     */</em>        
-<a class="jxr_linenumber" name="L430" href="#L430">430</a>     @Override
-<a class="jxr_linenumber" name="L431" href="#L431">431</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transform(<a href="../../../com/irurueta/geometry/Quadric.html">Quadric</a> inputQuadric, <a href="../../../com/irurueta/geometry/Quadric.html">Quadric</a> outputQuadric) 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a>             <strong class="jxr_keyword">throws</strong> <a href="../../../com/irurueta/geometry/NonSymmetricMatrixException.html">NonSymmetricMatrixException</a> {
-<a class="jxr_linenumber" name="L433" href="#L433">433</a>         <em class="jxr_comment">//point' * quadric * point = 0</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a>         <em class="jxr_comment">//point' * T' * transformedQuadric * T * point = 0</em>
-<a class="jxr_linenumber" name="L435" href="#L435">435</a>         <em class="jxr_comment">//where:</em>
-<a class="jxr_linenumber" name="L436" href="#L436">436</a>         <em class="jxr_comment">// - transformedPoint = T * point</em>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
-<a class="jxr_linenumber" name="L438" href="#L438">438</a>         <em class="jxr_comment">//Hence:</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a>         <em class="jxr_comment">// transformedQuadric = T^-1' * quadric * T^-1</em>
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
-<a class="jxr_linenumber" name="L441" href="#L441">441</a>         inputQuadric.normalize();
-<a class="jxr_linenumber" name="L442" href="#L442">442</a>         
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>         Matrix q = inputQuadric.asMatrix();
-<a class="jxr_linenumber" name="L444" href="#L444">444</a>         Matrix invT = inverseAndReturnNew().asMatrix();
-<a class="jxr_linenumber" name="L445" href="#L445">445</a>         <em class="jxr_comment">//normalize transformation matrix invT to increase accuracy</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a>         <strong class="jxr_keyword">double</strong> norm = Utils.normF(invT);
-<a class="jxr_linenumber" name="L447" href="#L447">447</a>         invT.multiplyByScalar(1.0 / norm);
-<a class="jxr_linenumber" name="L448" href="#L448">448</a>         
-<a class="jxr_linenumber" name="L449" href="#L449">449</a>         Matrix m = invT.transposeAndReturnNew();
-<a class="jxr_linenumber" name="L450" href="#L450">450</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L451" href="#L451">451</a>             m.multiply(q);
-<a class="jxr_linenumber" name="L452" href="#L452">452</a>             m.multiply(invT);
-<a class="jxr_linenumber" name="L453" href="#L453">453</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) {
-<a class="jxr_linenumber" name="L454" href="#L454">454</a>             <em class="jxr_comment">//never happens</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a>         }
-<a class="jxr_linenumber" name="L456" href="#L456">456</a>         
-<a class="jxr_linenumber" name="L457" href="#L457">457</a>         <em class="jxr_comment">//normalize resulting m matrix to increase accuracy so that it can be</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a>         <em class="jxr_comment">//considered symmetric</em>
-<a class="jxr_linenumber" name="L459" href="#L459">459</a>         norm = Utils.normF(m);
-<a class="jxr_linenumber" name="L460" href="#L460">460</a>         m.multiplyByScalar(1.0 / norm);
-<a class="jxr_linenumber" name="L461" href="#L461">461</a>         
-<a class="jxr_linenumber" name="L462" href="#L462">462</a>         outputQuadric.setParameters(m);
-<a class="jxr_linenumber" name="L463" href="#L463">463</a>     }
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
-<a class="jxr_linenumber" name="L465" href="#L465">465</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">     * Transforms a dual quadric using this transformation and stores the result</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">     * into provided output dual quadric.</em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">     * @param inputDualQuadric dual quadric to be transformed.</em>
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">     * @param outputDualQuadric instance where data of transformed dual quadric </em>
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">     * will be stored.</em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">     * @throws NonSymmetricMatrixException raised if due to numerical precision.</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">     * the resulting output dual quadric matrix is not considered to be </em>
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">     * symmetric.</em>
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">     */</em>        
-<a class="jxr_linenumber" name="L475" href="#L475">475</a>     @Override
-<a class="jxr_linenumber" name="L476" href="#L476">476</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transform(<a href="../../../com/irurueta/geometry/DualQuadric.html">DualQuadric</a> inputDualQuadric, 
-<a class="jxr_linenumber" name="L477" href="#L477">477</a>             <a href="../../../com/irurueta/geometry/DualQuadric.html">DualQuadric</a> outputDualQuadric) <strong class="jxr_keyword">throws</strong> NonSymmetricMatrixException {
-<a class="jxr_linenumber" name="L478" href="#L478">478</a>         <em class="jxr_comment">//plane' * dualQuadric * plane = 0</em>
-<a class="jxr_linenumber" name="L479" href="#L479">479</a>         <em class="jxr_comment">//plane' * T^-1 * T * dualQuadric * T' * T^-1'*plane</em>
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 
-<a class="jxr_linenumber" name="L481" href="#L481">481</a>         <em class="jxr_comment">//Hence:</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a>         <em class="jxr_comment">//transformed plane: T^-1'*plane</em>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a>         <em class="jxr_comment">//transformed dual quadric: T * dualQuadric * T'</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 
-<a class="jxr_linenumber" name="L485" href="#L485">485</a>         inputDualQuadric.normalize();
-<a class="jxr_linenumber" name="L486" href="#L486">486</a>         
-<a class="jxr_linenumber" name="L487" href="#L487">487</a>         Matrix dualQ = inputDualQuadric.asMatrix();
-<a class="jxr_linenumber" name="L488" href="#L488">488</a>         Matrix t = asMatrix();
-<a class="jxr_linenumber" name="L489" href="#L489">489</a>         <em class="jxr_comment">//normalize transformation matrix T to increase accuracy</em>
-<a class="jxr_linenumber" name="L490" href="#L490">490</a>         <strong class="jxr_keyword">double</strong> norm = Utils.normF(t);
-<a class="jxr_linenumber" name="L491" href="#L491">491</a>         t.multiplyByScalar(1.0 / norm);
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 
-<a class="jxr_linenumber" name="L493" href="#L493">493</a>         Matrix transT = t.transposeAndReturnNew();
-<a class="jxr_linenumber" name="L494" href="#L494">494</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L495" href="#L495">495</a>             t.multiply(dualQ);
-<a class="jxr_linenumber" name="L496" href="#L496">496</a>             t.multiply(transT);
-<a class="jxr_linenumber" name="L497" href="#L497">497</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) {
-<a class="jxr_linenumber" name="L498" href="#L498">498</a>             <em class="jxr_comment">//never happens</em>
-<a class="jxr_linenumber" name="L499" href="#L499">499</a>         }
-<a class="jxr_linenumber" name="L500" href="#L500">500</a>         
-<a class="jxr_linenumber" name="L501" href="#L501">501</a>         <em class="jxr_comment">//normalize resulting m matrix to increase accuracy so that it can be</em>
-<a class="jxr_linenumber" name="L502" href="#L502">502</a>         <em class="jxr_comment">//considered symmetric</em>
-<a class="jxr_linenumber" name="L503" href="#L503">503</a>         norm = Utils.normF(t);
-<a class="jxr_linenumber" name="L504" href="#L504">504</a>         t.multiplyByScalar(1.0 / norm);
-<a class="jxr_linenumber" name="L505" href="#L505">505</a>         
-<a class="jxr_linenumber" name="L506" href="#L506">506</a>         outputDualQuadric.setParameters(t);
-<a class="jxr_linenumber" name="L507" href="#L507">507</a>     }
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 
-<a class="jxr_linenumber" name="L509" href="#L509">509</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">     * Transforms provided input plane using this transformation and stores the</em>
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">     * result into provided output plane instance.</em>
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">     * @param inputPlane plane to be transformed.</em>
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">     * @param outputPlane instance where data of transformed plane will be </em>
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">     * stored.</em>
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">     */</em>        
-<a class="jxr_linenumber" name="L516" href="#L516">516</a>     @Override
-<a class="jxr_linenumber" name="L517" href="#L517">517</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transform(<a href="../../../com/irurueta/geometry/Plane.html">Plane</a> inputPlane, <a href="../../../com/irurueta/geometry/Plane.html">Plane</a> outputPlane) {
-<a class="jxr_linenumber" name="L518" href="#L518">518</a>         <em class="jxr_comment">//plane' * point = 0 --&gt; plane' * T^-1 * T * point</em>
-<a class="jxr_linenumber" name="L519" href="#L519">519</a>         <em class="jxr_comment">//(plane' * T^-1)*(T*point) = (T^-1'*plane)'*(T*point)</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a>         <em class="jxr_comment">//where:</em>
-<a class="jxr_linenumber" name="L521" href="#L521">521</a>         <em class="jxr_comment">//- transformedPlane = T^-1'*plane</em>
-<a class="jxr_linenumber" name="L522" href="#L522">522</a>         <em class="jxr_comment">//- transformedpoint = T*point</em>
-<a class="jxr_linenumber" name="L523" href="#L523">523</a>         
-<a class="jxr_linenumber" name="L524" href="#L524">524</a>         inputPlane.normalize();
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a>         m.initialize(0.0);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a>         
+<a class="jxr_linenumber" name="L393" href="#L393">393</a>         <em class="jxr_comment">//set rotation        </em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a>         m.setSubmatrix(0, 0, 
+<a class="jxr_linenumber" name="L395" href="#L395">395</a>                 Rotation3D.INHOM_COORDS - 1,
+<a class="jxr_linenumber" name="L396" href="#L396">396</a>                 Rotation3D.INHOM_COORDS - 1,
+<a class="jxr_linenumber" name="L397" href="#L397">397</a>                 rotation.asInhomogeneousMatrix());
+<a class="jxr_linenumber" name="L398" href="#L398">398</a>         
+<a class="jxr_linenumber" name="L399" href="#L399">399</a>         <em class="jxr_comment">//set translation</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a>         m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, 
+<a class="jxr_linenumber" name="L401" href="#L401">401</a>                 HOM_COORDS - 1, translation);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a>         
+<a class="jxr_linenumber" name="L403" href="#L403">403</a>         <em class="jxr_comment">//set last element</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>         m.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);        
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>     }
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
+<a class="jxr_linenumber" name="L407" href="#L407">407</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">     * Transforms input point using this transformation and stores the result</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">     * in provided output points.</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">     * @param inputPoint point to be transformed.</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">     * @param outputPoint instance where transformed point data will be stored.</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a>     @Override
+<a class="jxr_linenumber" name="L414" href="#L414">414</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transform(<a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint) {
+<a class="jxr_linenumber" name="L415" href="#L415">415</a>         inputPoint.normalize();
+<a class="jxr_linenumber" name="L416" href="#L416">416</a>         rotation.rotate(inputPoint, outputPoint);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a>         outputPoint.setInhomogeneousCoordinates(
+<a class="jxr_linenumber" name="L418" href="#L418">418</a>                 outputPoint.getInhomX() + translation[0], 
+<a class="jxr_linenumber" name="L419" href="#L419">419</a>                 outputPoint.getInhomY() + translation[1], 
+<a class="jxr_linenumber" name="L420" href="#L420">420</a>                 outputPoint.getInhomZ() + translation[2]);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a>     }
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 
+<a class="jxr_linenumber" name="L423" href="#L423">423</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">     * Transforms a quadric using this transformation and stores the result into</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">     * provided output quadric.</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">     * @param inputQuadric Quadric to be transformed.</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">     * @param outputQuadric instance where data of transformed quadric will be </em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">     * stored.</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">     * @throws NonSymmetricMatrixException raised if due to numerical precision</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">     * the resulting output quadric matrix is not considered to be symmetric.</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">     */</em>        
+<a class="jxr_linenumber" name="L432" href="#L432">432</a>     @Override
+<a class="jxr_linenumber" name="L433" href="#L433">433</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transform(<a href="../../../com/irurueta/geometry/Quadric.html">Quadric</a> inputQuadric, <a href="../../../com/irurueta/geometry/Quadric.html">Quadric</a> outputQuadric) 
+<a class="jxr_linenumber" name="L434" href="#L434">434</a>             <strong class="jxr_keyword">throws</strong> <a href="../../../com/irurueta/geometry/NonSymmetricMatrixException.html">NonSymmetricMatrixException</a> {
+<a class="jxr_linenumber" name="L435" href="#L435">435</a>         <em class="jxr_comment">//point' * quadric * point = 0</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a>         <em class="jxr_comment">//point' * T' * transformedQuadric * T * point = 0</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a>         <em class="jxr_comment">//where:</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a>         <em class="jxr_comment">// - transformedPoint = T * point</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
+<a class="jxr_linenumber" name="L440" href="#L440">440</a>         <em class="jxr_comment">//Hence:</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a>         <em class="jxr_comment">// transformedQuadric = T^-1' * quadric * T^-1</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>         inputQuadric.normalize();
+<a class="jxr_linenumber" name="L444" href="#L444">444</a>         
+<a class="jxr_linenumber" name="L445" href="#L445">445</a>         Matrix q = inputQuadric.asMatrix();
+<a class="jxr_linenumber" name="L446" href="#L446">446</a>         Matrix invT = inverseAndReturnNew().asMatrix();
+<a class="jxr_linenumber" name="L447" href="#L447">447</a>         <em class="jxr_comment">//normalize transformation matrix invT to increase accuracy</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a>         <strong class="jxr_keyword">double</strong> norm = Utils.normF(invT);
+<a class="jxr_linenumber" name="L449" href="#L449">449</a>         invT.multiplyByScalar(1.0 / norm);
+<a class="jxr_linenumber" name="L450" href="#L450">450</a>         
+<a class="jxr_linenumber" name="L451" href="#L451">451</a>         Matrix m = invT.transposeAndReturnNew();
+<a class="jxr_linenumber" name="L452" href="#L452">452</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L453" href="#L453">453</a>             m.multiply(q);
+<a class="jxr_linenumber" name="L454" href="#L454">454</a>             m.multiply(invT);
+<a class="jxr_linenumber" name="L455" href="#L455">455</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) {
+<a class="jxr_linenumber" name="L456" href="#L456">456</a>             <em class="jxr_comment">//never happens</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a>         }
+<a class="jxr_linenumber" name="L458" href="#L458">458</a>         
+<a class="jxr_linenumber" name="L459" href="#L459">459</a>         <em class="jxr_comment">//normalize resulting m matrix to increase accuracy so that it can be</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a>         <em class="jxr_comment">//considered symmetric</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a>         norm = Utils.normF(m);
+<a class="jxr_linenumber" name="L462" href="#L462">462</a>         m.multiplyByScalar(1.0 / norm);
+<a class="jxr_linenumber" name="L463" href="#L463">463</a>         
+<a class="jxr_linenumber" name="L464" href="#L464">464</a>         outputQuadric.setParameters(m);
+<a class="jxr_linenumber" name="L465" href="#L465">465</a>     }
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 
+<a class="jxr_linenumber" name="L467" href="#L467">467</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">     * Transforms a dual quadric using this transformation and stores the result</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">     * into provided output dual quadric.</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">     * @param inputDualQuadric dual quadric to be transformed.</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">     * @param outputDualQuadric instance where data of transformed dual quadric </em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">     * will be stored.</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">     * @throws NonSymmetricMatrixException raised if due to numerical precision.</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">     * the resulting output dual quadric matrix is not considered to be </em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">     * symmetric.</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">     */</em>        
+<a class="jxr_linenumber" name="L477" href="#L477">477</a>     @Override
+<a class="jxr_linenumber" name="L478" href="#L478">478</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transform(<a href="../../../com/irurueta/geometry/DualQuadric.html">DualQuadric</a> inputDualQuadric, 
+<a class="jxr_linenumber" name="L479" href="#L479">479</a>             <a href="../../../com/irurueta/geometry/DualQuadric.html">DualQuadric</a> outputDualQuadric) <strong class="jxr_keyword">throws</strong> NonSymmetricMatrixException {
+<a class="jxr_linenumber" name="L480" href="#L480">480</a>         <em class="jxr_comment">//plane' * dualQuadric * plane = 0</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a>         <em class="jxr_comment">//plane' * T^-1 * T * dualQuadric * T' * T^-1'*plane</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 
+<a class="jxr_linenumber" name="L483" href="#L483">483</a>         <em class="jxr_comment">//Hence:</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a>         <em class="jxr_comment">//transformed plane: T^-1'*plane</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a>         <em class="jxr_comment">//transformed dual quadric: T * dualQuadric * T'</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 
+<a class="jxr_linenumber" name="L487" href="#L487">487</a>         inputDualQuadric.normalize();
+<a class="jxr_linenumber" name="L488" href="#L488">488</a>         
+<a class="jxr_linenumber" name="L489" href="#L489">489</a>         Matrix dualQ = inputDualQuadric.asMatrix();
+<a class="jxr_linenumber" name="L490" href="#L490">490</a>         Matrix t = asMatrix();
+<a class="jxr_linenumber" name="L491" href="#L491">491</a>         <em class="jxr_comment">//normalize transformation matrix T to increase accuracy</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a>         <strong class="jxr_keyword">double</strong> norm = Utils.normF(t);
+<a class="jxr_linenumber" name="L493" href="#L493">493</a>         t.multiplyByScalar(1.0 / norm);
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 
+<a class="jxr_linenumber" name="L495" href="#L495">495</a>         Matrix transT = t.transposeAndReturnNew();
+<a class="jxr_linenumber" name="L496" href="#L496">496</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L497" href="#L497">497</a>             t.multiply(dualQ);
+<a class="jxr_linenumber" name="L498" href="#L498">498</a>             t.multiply(transT);
+<a class="jxr_linenumber" name="L499" href="#L499">499</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) {
+<a class="jxr_linenumber" name="L500" href="#L500">500</a>             <em class="jxr_comment">//never happens</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a>         }
+<a class="jxr_linenumber" name="L502" href="#L502">502</a>         
+<a class="jxr_linenumber" name="L503" href="#L503">503</a>         <em class="jxr_comment">//normalize resulting m matrix to increase accuracy so that it can be</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a>         <em class="jxr_comment">//considered symmetric</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a>         norm = Utils.normF(t);
+<a class="jxr_linenumber" name="L506" href="#L506">506</a>         t.multiplyByScalar(1.0 / norm);
+<a class="jxr_linenumber" name="L507" href="#L507">507</a>         
+<a class="jxr_linenumber" name="L508" href="#L508">508</a>         outputDualQuadric.setParameters(t);
+<a class="jxr_linenumber" name="L509" href="#L509">509</a>     }
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 
+<a class="jxr_linenumber" name="L511" href="#L511">511</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">     * Transforms provided input plane using this transformation and stores the</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">     * result into provided output plane instance.</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">     * @param inputPlane plane to be transformed.</em>
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">     * @param outputPlane instance where data of transformed plane will be </em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">     * stored.</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">     */</em>        
+<a class="jxr_linenumber" name="L518" href="#L518">518</a>     @Override
+<a class="jxr_linenumber" name="L519" href="#L519">519</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transform(<a href="../../../com/irurueta/geometry/Plane.html">Plane</a> inputPlane, <a href="../../../com/irurueta/geometry/Plane.html">Plane</a> outputPlane) {
+<a class="jxr_linenumber" name="L520" href="#L520">520</a>         <em class="jxr_comment">//plane' * point = 0 --&gt; plane' * T^-1 * T * point</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a>         <em class="jxr_comment">//(plane' * T^-1)*(T*point) = (T^-1'*plane)'*(T*point)</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a>         <em class="jxr_comment">//where:</em>
+<a class="jxr_linenumber" name="L523" href="#L523">523</a>         <em class="jxr_comment">//- transformedPlane = T^-1'*plane</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a>         <em class="jxr_comment">//- transformedpoint = T*point</em>
 <a class="jxr_linenumber" name="L525" href="#L525">525</a>         
-<a class="jxr_linenumber" name="L526" href="#L526">526</a>         Matrix invT = inverseAndReturnNew().asMatrix();        
-<a class="jxr_linenumber" name="L527" href="#L527">527</a>         Matrix plane = Matrix.newFromArray(inputPlane.asArray());
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 
-<a class="jxr_linenumber" name="L529" href="#L529">529</a>         <em class="jxr_comment">//normalize transformation matrix T to increase accuracy</em>
-<a class="jxr_linenumber" name="L530" href="#L530">530</a>         <strong class="jxr_keyword">double</strong> norm = Utils.normF(invT);
-<a class="jxr_linenumber" name="L531" href="#L531">531</a>         invT.multiplyByScalar(1.0 / norm);
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 
-<a class="jxr_linenumber" name="L533" href="#L533">533</a>         invT.transpose();
-<a class="jxr_linenumber" name="L534" href="#L534">534</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L535" href="#L535">535</a>             invT.multiply(plane);
-<a class="jxr_linenumber" name="L536" href="#L536">536</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) {
-<a class="jxr_linenumber" name="L537" href="#L537">537</a>             <em class="jxr_comment">//never happens</em>
-<a class="jxr_linenumber" name="L538" href="#L538">538</a>         }
-<a class="jxr_linenumber" name="L539" href="#L539">539</a>         
-<a class="jxr_linenumber" name="L540" href="#L540">540</a>         outputPlane.setParameters(invT.getBuffer());
-<a class="jxr_linenumber" name="L541" href="#L541">541</a>     }
-<a class="jxr_linenumber" name="L542" href="#L542">542</a>     
-<a class="jxr_linenumber" name="L543" href="#L543">543</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">     * Transforms a camera using this transformation and stores the result into</em>
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> <em class="jxr_javadoccomment">     * provided output camera.</em>
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">     * @param inputCamera camera to be transformed.</em>
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">     * @param outputCamera instance where data of transformed camera will be </em>
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">     * stored.</em>
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L550" href="#L550">550</a>     @Override
-<a class="jxr_linenumber" name="L551" href="#L551">551</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transform(<a href="../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> inputCamera,
-<a class="jxr_linenumber" name="L552" href="#L552">552</a>             <a href="../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> outputCamera) {
-<a class="jxr_linenumber" name="L553" href="#L553">553</a>         
-<a class="jxr_linenumber" name="L554" href="#L554">554</a>         inputCamera.normalize();
+<a class="jxr_linenumber" name="L526" href="#L526">526</a>         inputPlane.normalize();
+<a class="jxr_linenumber" name="L527" href="#L527">527</a>         
+<a class="jxr_linenumber" name="L528" href="#L528">528</a>         Matrix invT = inverseAndReturnNew().asMatrix();        
+<a class="jxr_linenumber" name="L529" href="#L529">529</a>         Matrix plane = Matrix.newFromArray(inputPlane.asArray());
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 
+<a class="jxr_linenumber" name="L531" href="#L531">531</a>         <em class="jxr_comment">//normalize transformation matrix T to increase accuracy</em>
+<a class="jxr_linenumber" name="L532" href="#L532">532</a>         <strong class="jxr_keyword">double</strong> norm = Utils.normF(invT);
+<a class="jxr_linenumber" name="L533" href="#L533">533</a>         invT.multiplyByScalar(1.0 / norm);
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 
+<a class="jxr_linenumber" name="L535" href="#L535">535</a>         invT.transpose();
+<a class="jxr_linenumber" name="L536" href="#L536">536</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L537" href="#L537">537</a>             invT.multiply(plane);
+<a class="jxr_linenumber" name="L538" href="#L538">538</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) {
+<a class="jxr_linenumber" name="L539" href="#L539">539</a>             <em class="jxr_comment">//never happens</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a>         }
+<a class="jxr_linenumber" name="L541" href="#L541">541</a>         
+<a class="jxr_linenumber" name="L542" href="#L542">542</a>         outputPlane.setParameters(invT.getBuffer());
+<a class="jxr_linenumber" name="L543" href="#L543">543</a>     }
+<a class="jxr_linenumber" name="L544" href="#L544">544</a>     
+<a class="jxr_linenumber" name="L545" href="#L545">545</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">     * Transforms a camera using this transformation and stores the result into</em>
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">     * provided output camera.</em>
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">     * @param inputCamera camera to be transformed.</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">     * @param outputCamera instance where data of transformed camera will be </em>
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">     * stored.</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a>     @Override
+<a class="jxr_linenumber" name="L553" href="#L553">553</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> transform(<a href="../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> inputCamera,
+<a class="jxr_linenumber" name="L554" href="#L554">554</a>             <a href="../../../com/irurueta/geometry/PinholeCamera.html">PinholeCamera</a> outputCamera) {
 <a class="jxr_linenumber" name="L555" href="#L555">555</a>         
-<a class="jxr_linenumber" name="L556" href="#L556">556</a>         Matrix invT = inverseAndReturnNew().asMatrix();
-<a class="jxr_linenumber" name="L557" href="#L557">557</a>         Matrix c = inputCamera.getInternalMatrix();
-<a class="jxr_linenumber" name="L558" href="#L558">558</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L559" href="#L559">559</a>             c.multiply(invT);
-<a class="jxr_linenumber" name="L560" href="#L560">560</a>             outputCamera.setInternalMatrix(c);
-<a class="jxr_linenumber" name="L561" href="#L561">561</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) { <em class="jxr_comment">/* never thrown */</em> }        
-<a class="jxr_linenumber" name="L562" href="#L562">562</a>     }
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 
-<a class="jxr_linenumber" name="L564" href="#L564">564</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">     * Converts this transformation into a metric transformation.</em>
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">     * @return this transformation converted into a metric transformation.</em>
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">     */</em>    
-<a class="jxr_linenumber" name="L568" href="#L568">568</a>     <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/geometry/MetricTransformation3D.html">MetricTransformation3D</a> toMetric() {
-<a class="jxr_linenumber" name="L569" href="#L569">569</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/MetricTransformation3D.html">MetricTransformation3D</a>(rotation, translation, 
-<a class="jxr_linenumber" name="L570" href="#L570">570</a>                 MetricTransformation3D.DEFAULT_SCALE);
-<a class="jxr_linenumber" name="L571" href="#L571">571</a>     }
-<a class="jxr_linenumber" name="L572" href="#L572">572</a>     
-<a class="jxr_linenumber" name="L573" href="#L573">573</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">     * Inverses this transformation.</em>
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L576" href="#L576">576</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> inverse() {
-<a class="jxr_linenumber" name="L577" href="#L577">577</a>         inverse(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L578" href="#L578">578</a>     }
-<a class="jxr_linenumber" name="L579" href="#L579">579</a>     
-<a class="jxr_linenumber" name="L580" href="#L580">580</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">     * Computes the inverse of this transformation and returns the result as a</em>
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> <em class="jxr_javadoccomment">     * new transformation instance.</em>
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">     * @return inverse transformation.</em>
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L585" href="#L585">585</a>     <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/geometry/Transformation3D.html">Transformation3D</a> inverseAndReturnNew() {
-<a class="jxr_linenumber" name="L586" href="#L586">586</a>         <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> result = <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a>();
-<a class="jxr_linenumber" name="L587" href="#L587">587</a>         inverse(result);
-<a class="jxr_linenumber" name="L588" href="#L588">588</a>         <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L589" href="#L589">589</a>     }
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 
-<a class="jxr_linenumber" name="L591" href="#L591">591</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> <em class="jxr_javadoccomment">     * Combines this transformation with provided transformation.</em>
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> <em class="jxr_javadoccomment">     * The combination is equivalent to multiplying the matrix of this </em>
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> <em class="jxr_javadoccomment">     * transformation with the matrix of provided transformation.</em>
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> <em class="jxr_javadoccomment">     * @param transformation Transformation to be combined with.</em>
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L597" href="#L597">597</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> combine(<a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> transformation) {
-<a class="jxr_linenumber" name="L598" href="#L598">598</a>         combine(transformation, <strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L599" href="#L599">599</a>     }
-<a class="jxr_linenumber" name="L600" href="#L600">600</a>     
-<a class="jxr_linenumber" name="L601" href="#L601">601</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> <em class="jxr_javadoccomment">     * Combines this transformation with provided transformation and returns</em>
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> <em class="jxr_javadoccomment">     * the result as a new transformation instance.</em>
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> <em class="jxr_javadoccomment">     * The combination is equivalent to multiplying the matrix of this</em>
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> <em class="jxr_javadoccomment">     * transformation with the matrix pf provided transformation.</em>
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> <em class="jxr_javadoccomment">     * @param transformation Transformation to be combined with.</em>
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> <em class="jxr_javadoccomment">     * @return A new transformation resulting of the combination with this</em>
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">     * transformation and provided transformation.</em>
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L610" href="#L610">610</a>     <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> combineAndReturnNew(
-<a class="jxr_linenumber" name="L611" href="#L611">611</a>             <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> transformation) {
-<a class="jxr_linenumber" name="L612" href="#L612">612</a>         
-<a class="jxr_linenumber" name="L613" href="#L613">613</a>         <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> result = <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a>();
-<a class="jxr_linenumber" name="L614" href="#L614">614</a>         combine(transformation, result);
-<a class="jxr_linenumber" name="L615" href="#L615">615</a>         <strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L616" href="#L616">616</a>     }
-<a class="jxr_linenumber" name="L617" href="#L617">617</a>     
-<a class="jxr_linenumber" name="L618" href="#L618">618</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">     * Estimates this transformation internal parameters by using 4 </em>
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">     * corresponding original and transformed points.</em>
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">     * @param inputPoint1 1st input point.</em>
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">     * @param inputPoint2 2nd input point.</em>
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">     * @param inputPoint3 3rd input point.</em>
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> <em class="jxr_javadoccomment">     * @param inputPoint4 4th input point.</em>
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> <em class="jxr_javadoccomment">     * @param outputPoint1 1st transformed point corresponding to 1st input </em>
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> <em class="jxr_javadoccomment">     * point.</em>
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> <em class="jxr_javadoccomment">     * @param outputPoint2 2nd transformed point corresponding to 2nd input </em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a>         inputCamera.normalize();
+<a class="jxr_linenumber" name="L557" href="#L557">557</a>         
+<a class="jxr_linenumber" name="L558" href="#L558">558</a>         Matrix invT = inverseAndReturnNew().asMatrix();
+<a class="jxr_linenumber" name="L559" href="#L559">559</a>         Matrix c = inputCamera.getInternalMatrix();
+<a class="jxr_linenumber" name="L560" href="#L560">560</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L561" href="#L561">561</a>             c.multiply(invT);
+<a class="jxr_linenumber" name="L562" href="#L562">562</a>             outputCamera.setInternalMatrix(c);
+<a class="jxr_linenumber" name="L563" href="#L563">563</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) { <em class="jxr_comment">/* never thrown */</em> }        
+<a class="jxr_linenumber" name="L564" href="#L564">564</a>     }
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 
+<a class="jxr_linenumber" name="L566" href="#L566">566</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">     * Converts this transformation into a metric transformation.</em>
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> <em class="jxr_javadoccomment">     * @return this transformation converted into a metric transformation.</em>
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> <em class="jxr_javadoccomment">     */</em>    
+<a class="jxr_linenumber" name="L570" href="#L570">570</a>     <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/geometry/MetricTransformation3D.html">MetricTransformation3D</a> toMetric() {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/MetricTransformation3D.html">MetricTransformation3D</a>(rotation, translation, 
+<a class="jxr_linenumber" name="L572" href="#L572">572</a>                 MetricTransformation3D.DEFAULT_SCALE);
+<a class="jxr_linenumber" name="L573" href="#L573">573</a>     }
+<a class="jxr_linenumber" name="L574" href="#L574">574</a>     
+<a class="jxr_linenumber" name="L575" href="#L575">575</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">     * Inverses this transformation.</em>
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> inverse() {
+<a class="jxr_linenumber" name="L579" href="#L579">579</a>         inverse(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L580" href="#L580">580</a>     }
+<a class="jxr_linenumber" name="L581" href="#L581">581</a>     
+<a class="jxr_linenumber" name="L582" href="#L582">582</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">     * Computes the inverse of this transformation and returns the result as a</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">     * new transformation instance.</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">     * @return inverse transformation.</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a>     <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/geometry/Transformation3D.html">Transformation3D</a> inverseAndReturnNew() {
+<a class="jxr_linenumber" name="L588" href="#L588">588</a>         <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> result = <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a>();
+<a class="jxr_linenumber" name="L589" href="#L589">589</a>         inverse(result);
+<a class="jxr_linenumber" name="L590" href="#L590">590</a>         <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L591" href="#L591">591</a>     }
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 
+<a class="jxr_linenumber" name="L593" href="#L593">593</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> <em class="jxr_javadoccomment">     * Combines this transformation with provided transformation.</em>
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> <em class="jxr_javadoccomment">     * The combination is equivalent to multiplying the matrix of this </em>
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">     * transformation with the matrix of provided transformation.</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">     * @param transformation Transformation to be combined with.</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L599" href="#L599">599</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> combine(<a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> transformation) {
+<a class="jxr_linenumber" name="L600" href="#L600">600</a>         combine(transformation, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L601" href="#L601">601</a>     }
+<a class="jxr_linenumber" name="L602" href="#L602">602</a>     
+<a class="jxr_linenumber" name="L603" href="#L603">603</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> <em class="jxr_javadoccomment">     * Combines this transformation with provided transformation and returns</em>
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> <em class="jxr_javadoccomment">     * the result as a new transformation instance.</em>
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> <em class="jxr_javadoccomment">     * The combination is equivalent to multiplying the matrix of this</em>
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> <em class="jxr_javadoccomment">     * transformation with the matrix pf provided transformation.</em>
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">     * @param transformation Transformation to be combined with.</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">     * @return A new transformation resulting of the combination with this</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">     * transformation and provided transformation.</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a>     <strong class="jxr_keyword">public</strong> <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> combineAndReturnNew(
+<a class="jxr_linenumber" name="L613" href="#L613">613</a>             <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> transformation) {
+<a class="jxr_linenumber" name="L614" href="#L614">614</a>         
+<a class="jxr_linenumber" name="L615" href="#L615">615</a>         <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> result = <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a>();
+<a class="jxr_linenumber" name="L616" href="#L616">616</a>         combine(transformation, result);
+<a class="jxr_linenumber" name="L617" href="#L617">617</a>         <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L618" href="#L618">618</a>     }
+<a class="jxr_linenumber" name="L619" href="#L619">619</a>     
+<a class="jxr_linenumber" name="L620" href="#L620">620</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">     * Estimates this transformation internal parameters by using 4 </em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">     * corresponding original and transformed points.</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">     * @param inputPoint1 1st input point.</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> <em class="jxr_javadoccomment">     * @param inputPoint2 2nd input point.</em>
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> <em class="jxr_javadoccomment">     * @param inputPoint3 3rd input point.</em>
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> <em class="jxr_javadoccomment">     * @param inputPoint4 4th input point.</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> <em class="jxr_javadoccomment">     * @param outputPoint1 1st transformed point corresponding to 1st input </em>
 <a class="jxr_linenumber" name="L628" href="#L628">628</a> <em class="jxr_javadoccomment">     * point.</em>
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> <em class="jxr_javadoccomment">     * @param outputPoint3 3rd transformed point corresponding to 3rd input</em>
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> <em class="jxr_javadoccomment">     * @param outputPoint2 2nd transformed point corresponding to 2nd input </em>
 <a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">     * point.</em>
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">     * @param outputPoint4 4th transformed point corresponding to 4th input</em>
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">     * @param outputPoint3 3rd transformed point corresponding to 3rd input</em>
 <a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">     * point.</em>
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">     * @throws CoincidentPointsException raised if transformation cannot be</em>
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">     * estimated for some reason (point configuration degeneracy, duplicate</em>
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">     * points or numerical instabilities).</em>
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L637" href="#L637">637</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTransformationFromPoints(<a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint1, 
-<a class="jxr_linenumber" name="L638" href="#L638">638</a>             <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint2, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint3, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint4,
-<a class="jxr_linenumber" name="L639" href="#L639">639</a>             <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint1, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint2, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint3,
-<a class="jxr_linenumber" name="L640" href="#L640">640</a>             <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint4) <strong class="jxr_keyword">throws</strong> CoincidentPointsException {
-<a class="jxr_linenumber" name="L641" href="#L641">641</a>         internalSetTransformationFromPoints(inputPoint1, inputPoint2, 
-<a class="jxr_linenumber" name="L642" href="#L642">642</a>                 inputPoint3, inputPoint4, outputPoint1, outputPoint2, 
-<a class="jxr_linenumber" name="L643" href="#L643">643</a>                 outputPoint3, outputPoint4);
-<a class="jxr_linenumber" name="L644" href="#L644">644</a>     }
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 
-<a class="jxr_linenumber" name="L646" href="#L646">646</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">     * Computes the inverse of this transformation and stores the result in</em>
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> <em class="jxr_javadoccomment">     * provided instance.</em>
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> <em class="jxr_javadoccomment">     * @param result instance where inverse transformation will be stored.</em>
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L651" href="#L651">651</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> inverse(<a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> result) {
-<a class="jxr_linenumber" name="L652" href="#L652">652</a>         <em class="jxr_comment">//Transformation is as follows: x' = R* x + t</em>
-<a class="jxr_linenumber" name="L653" href="#L653">653</a>         <em class="jxr_comment">//Then inverse transformation is: R'* x' = R' * R * x + R'*t = x + R'*t</em>
-<a class="jxr_linenumber" name="L654" href="#L654">654</a>         <em class="jxr_comment">//--&gt; x = R'*x' - R'*t</em>
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 
-<a class="jxr_linenumber" name="L656" href="#L656">656</a>         <em class="jxr_comment">//reverse rotation</em>
-<a class="jxr_linenumber" name="L657" href="#L657">657</a>         result.rotation = rotation.inverseRotationAndReturnNew();
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 
-<a class="jxr_linenumber" name="L659" href="#L659">659</a>         <em class="jxr_comment">//reverse translation</em>
-<a class="jxr_linenumber" name="L660" href="#L660">660</a>         Matrix t = Matrix.newFromArray(translation, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L661" href="#L661">661</a>         t.multiplyByScalar(-1.0);
-<a class="jxr_linenumber" name="L662" href="#L662">662</a>         Matrix invRot = result.rotation.asInhomogeneousMatrix();
-<a class="jxr_linenumber" name="L663" href="#L663">663</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L664" href="#L664">664</a>             invRot.multiply(t);
-<a class="jxr_linenumber" name="L665" href="#L665">665</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) {
-<a class="jxr_linenumber" name="L666" href="#L666">666</a>             <em class="jxr_comment">//never happens</em>
-<a class="jxr_linenumber" name="L667" href="#L667">667</a>         }
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 
-<a class="jxr_linenumber" name="L669" href="#L669">669</a>         result.translation = invRot.toArray();
-<a class="jxr_linenumber" name="L670" href="#L670">670</a>     }
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 
-<a class="jxr_linenumber" name="L672" href="#L672">672</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">     * Combines this transformation with provided input transformation and </em>
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">     * stores the result into provided output transformation.</em>
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">     * The combination is equivalent to multiplying the matrix of this </em>
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">     * transformation with the matrix of provided input transformation.</em>
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">     * @param inputTransformation transformation to be combined with.</em>
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">     * @param outputTransformation transformation where result will be stored.</em>
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">     */</em>    
-<a class="jxr_linenumber" name="L680" href="#L680">680</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> combine(<a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> inputTransformation, 
-<a class="jxr_linenumber" name="L681" href="#L681">681</a>             <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> outputTransformation) {
-<a class="jxr_linenumber" name="L682" href="#L682">682</a>         <em class="jxr_comment">//combination in matrix representation is:</em>
-<a class="jxr_linenumber" name="L683" href="#L683">683</a>         <em class="jxr_comment">//[R1 t1] * [R2 t2] = [R1*R2 + t1*0T  R1*t2 + t1*1] = [R1*R2 R1*t2 + t1]</em>
-<a class="jxr_linenumber" name="L684" href="#L684">684</a>         <em class="jxr_comment">//[0T 1 ]   [0T 1 ]   [0T*R2 + 1*0T   0T*t2 + 1*1 ]   [0T    1         ]</em>
-<a class="jxr_linenumber" name="L685" href="#L685">685</a>         
-<a class="jxr_linenumber" name="L686" href="#L686">686</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L687" href="#L687">687</a>             <em class="jxr_comment">//we do translation first, because this.rotation might change later</em>
-<a class="jxr_linenumber" name="L688" href="#L688">688</a>             Matrix r1 = <strong class="jxr_keyword">this</strong>.rotation.asInhomogeneousMatrix();
-<a class="jxr_linenumber" name="L689" href="#L689">689</a>             Matrix t2 = Matrix.newFromArray(inputTransformation.translation, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L690" href="#L690">690</a>             r1.multiply(t2); <em class="jxr_comment">//this is R1 * t2</em>
-<a class="jxr_linenumber" name="L691" href="#L691">691</a>                   
-<a class="jxr_linenumber" name="L692" href="#L692">692</a>             ArrayUtils.sum(r1.toArray(), <strong class="jxr_keyword">this</strong>.translation,
-<a class="jxr_linenumber" name="L693" href="#L693">693</a>                     outputTransformation.translation);
-<a class="jxr_linenumber" name="L694" href="#L694">694</a>             
-<a class="jxr_linenumber" name="L695" href="#L695">695</a>             outputTransformation.rotation = <strong class="jxr_keyword">this</strong>.rotation.combineAndReturnNew(
-<a class="jxr_linenumber" name="L696" href="#L696">696</a>                     inputTransformation.rotation);
-<a class="jxr_linenumber" name="L697" href="#L697">697</a>         
-<a class="jxr_linenumber" name="L698" href="#L698">698</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) {
-<a class="jxr_linenumber" name="L699" href="#L699">699</a>             <em class="jxr_comment">//never happens</em>
-<a class="jxr_linenumber" name="L700" href="#L700">700</a>         }
-<a class="jxr_linenumber" name="L701" href="#L701">701</a>     }  
-<a class="jxr_linenumber" name="L702" href="#L702">702</a>     
-<a class="jxr_linenumber" name="L703" href="#L703">703</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">     * Estimates this transformation internal parameters by using 4 </em>
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">     * corresponding original and transformed points.</em>
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">     * @param inputPoint1 1st input point.</em>
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">     * @param inputPoint2 2nd input point.</em>
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">     * @param inputPoint3 3rd input point.</em>
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">     * @param inputPoint4 4th input point.</em>
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> <em class="jxr_javadoccomment">     * @param outputPoint1 1st transformed point corresponding to 1st input </em>
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> <em class="jxr_javadoccomment">     * point.</em>
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">     * @param outputPoint2 2nd transformed point corresponding to 2nd input </em>
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">     * @param outputPoint4 4th transformed point corresponding to 4th input</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">     * point.</em>
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">     * @throws CoincidentPointsException raised if transformation cannot be</em>
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">     * estimated for some reason (point configuration degeneracy, duplicate</em>
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> <em class="jxr_javadoccomment">     * points or numerical instabilities).</em>
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L639" href="#L639">639</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTransformationFromPoints(<a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint1, 
+<a class="jxr_linenumber" name="L640" href="#L640">640</a>             <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint2, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint3, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint4,
+<a class="jxr_linenumber" name="L641" href="#L641">641</a>             <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint1, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint2, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint3,
+<a class="jxr_linenumber" name="L642" href="#L642">642</a>             <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint4) <strong class="jxr_keyword">throws</strong> CoincidentPointsException {
+<a class="jxr_linenumber" name="L643" href="#L643">643</a>         internalSetTransformationFromPoints(inputPoint1, inputPoint2, 
+<a class="jxr_linenumber" name="L644" href="#L644">644</a>                 inputPoint3, inputPoint4, outputPoint1, outputPoint2, 
+<a class="jxr_linenumber" name="L645" href="#L645">645</a>                 outputPoint3, outputPoint4);
+<a class="jxr_linenumber" name="L646" href="#L646">646</a>     }
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 
+<a class="jxr_linenumber" name="L648" href="#L648">648</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> <em class="jxr_javadoccomment">     * Computes the inverse of this transformation and stores the result in</em>
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> <em class="jxr_javadoccomment">     * provided instance.</em>
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">     * @param result instance where inverse transformation will be stored.</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L653" href="#L653">653</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> inverse(<a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> result) {
+<a class="jxr_linenumber" name="L654" href="#L654">654</a>         <em class="jxr_comment">//Transformation is as follows: x' = R* x + t</em>
+<a class="jxr_linenumber" name="L655" href="#L655">655</a>         <em class="jxr_comment">//Then inverse transformation is: R'* x' = R' * R * x + R'*t = x + R'*t</em>
+<a class="jxr_linenumber" name="L656" href="#L656">656</a>         <em class="jxr_comment">//--&gt; x = R'*x' - R'*t</em>
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 
+<a class="jxr_linenumber" name="L658" href="#L658">658</a>         <em class="jxr_comment">//reverse rotation</em>
+<a class="jxr_linenumber" name="L659" href="#L659">659</a>         result.rotation = rotation.inverseRotationAndReturnNew();
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 
+<a class="jxr_linenumber" name="L661" href="#L661">661</a>         <em class="jxr_comment">//reverse translation</em>
+<a class="jxr_linenumber" name="L662" href="#L662">662</a>         Matrix t = Matrix.newFromArray(translation, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L663" href="#L663">663</a>         t.multiplyByScalar(-1.0);
+<a class="jxr_linenumber" name="L664" href="#L664">664</a>         Matrix invRot = result.rotation.asInhomogeneousMatrix();
+<a class="jxr_linenumber" name="L665" href="#L665">665</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L666" href="#L666">666</a>             invRot.multiply(t);
+<a class="jxr_linenumber" name="L667" href="#L667">667</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) {
+<a class="jxr_linenumber" name="L668" href="#L668">668</a>             <em class="jxr_comment">//never happens</em>
+<a class="jxr_linenumber" name="L669" href="#L669">669</a>         }
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 
+<a class="jxr_linenumber" name="L671" href="#L671">671</a>         result.translation = invRot.toArray();
+<a class="jxr_linenumber" name="L672" href="#L672">672</a>     }
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 
+<a class="jxr_linenumber" name="L674" href="#L674">674</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">     * Combines this transformation with provided input transformation and </em>
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">     * stores the result into provided output transformation.</em>
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">     * The combination is equivalent to multiplying the matrix of this </em>
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">     * transformation with the matrix of provided input transformation.</em>
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">     * @param inputTransformation transformation to be combined with.</em>
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">     * @param outputTransformation transformation where result will be stored.</em>
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">     */</em>    
+<a class="jxr_linenumber" name="L682" href="#L682">682</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> combine(<a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> inputTransformation, 
+<a class="jxr_linenumber" name="L683" href="#L683">683</a>             <a href="../../../com/irurueta/geometry/EuclideanTransformation3D.html">EuclideanTransformation3D</a> outputTransformation) {
+<a class="jxr_linenumber" name="L684" href="#L684">684</a>         <em class="jxr_comment">//combination in matrix representation is:</em>
+<a class="jxr_linenumber" name="L685" href="#L685">685</a>         <em class="jxr_comment">//[R1 t1] * [R2 t2] = [R1*R2 + t1*0T  R1*t2 + t1*1] = [R1*R2 R1*t2 + t1]</em>
+<a class="jxr_linenumber" name="L686" href="#L686">686</a>         <em class="jxr_comment">//[0T 1 ]   [0T 1 ]   [0T*R2 + 1*0T   0T*t2 + 1*1 ]   [0T    1         ]</em>
+<a class="jxr_linenumber" name="L687" href="#L687">687</a>         
+<a class="jxr_linenumber" name="L688" href="#L688">688</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L689" href="#L689">689</a>             <em class="jxr_comment">//we do translation first, because this.rotation might change later</em>
+<a class="jxr_linenumber" name="L690" href="#L690">690</a>             Matrix r1 = <strong class="jxr_keyword">this</strong>.rotation.asInhomogeneousMatrix();
+<a class="jxr_linenumber" name="L691" href="#L691">691</a>             Matrix t2 = Matrix.newFromArray(inputTransformation.translation, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L692" href="#L692">692</a>             r1.multiply(t2); <em class="jxr_comment">//this is R1 * t2</em>
+<a class="jxr_linenumber" name="L693" href="#L693">693</a>                   
+<a class="jxr_linenumber" name="L694" href="#L694">694</a>             ArrayUtils.sum(r1.toArray(), <strong class="jxr_keyword">this</strong>.translation,
+<a class="jxr_linenumber" name="L695" href="#L695">695</a>                     outputTransformation.translation);
+<a class="jxr_linenumber" name="L696" href="#L696">696</a>             
+<a class="jxr_linenumber" name="L697" href="#L697">697</a>             outputTransformation.rotation = <strong class="jxr_keyword">this</strong>.rotation.combineAndReturnNew(
+<a class="jxr_linenumber" name="L698" href="#L698">698</a>                     inputTransformation.rotation);
+<a class="jxr_linenumber" name="L699" href="#L699">699</a>         
+<a class="jxr_linenumber" name="L700" href="#L700">700</a>         } <strong class="jxr_keyword">catch</strong> (WrongSizeException ignore) {
+<a class="jxr_linenumber" name="L701" href="#L701">701</a>             <em class="jxr_comment">//never happens</em>
+<a class="jxr_linenumber" name="L702" href="#L702">702</a>         }
+<a class="jxr_linenumber" name="L703" href="#L703">703</a>     }  
+<a class="jxr_linenumber" name="L704" href="#L704">704</a>     
+<a class="jxr_linenumber" name="L705" href="#L705">705</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">     * Estimates this transformation internal parameters by using 4 </em>
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">     * corresponding original and transformed points.</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">     * @param inputPoint1 1st input point.</em>
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">     * @param inputPoint2 2nd input point.</em>
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> <em class="jxr_javadoccomment">     * @param inputPoint3 3rd input point.</em>
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> <em class="jxr_javadoccomment">     * @param inputPoint4 4th input point.</em>
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">     * @param outputPoint1 1st transformed point corresponding to 1st input </em>
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">     * point.</em>
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> <em class="jxr_javadoccomment">     * @param outputPoint3 3rd transformed point corresponding to 3rd input</em>
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> <em class="jxr_javadoccomment">     * @param outputPoint2 2nd transformed point corresponding to 2nd input </em>
 <a class="jxr_linenumber" name="L715" href="#L715">715</a> <em class="jxr_javadoccomment">     * point.</em>
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> <em class="jxr_javadoccomment">     * @param outputPoint4 4th transformed point corresponding to 4th input</em>
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> <em class="jxr_javadoccomment">     * @param outputPoint3 3rd transformed point corresponding to 3rd input</em>
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> <em class="jxr_javadoccomment">     * point.</em>
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> <em class="jxr_javadoccomment">     * @throws CoincidentPointsException raised if transformation cannot be</em>
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">     * estimated for some reason (point configuration degeneracy, duplicate</em>
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">     * points or numerical instabilities).</em>
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L722" href="#L722">722</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetTransformationFromPoints(<a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint1, 
-<a class="jxr_linenumber" name="L723" href="#L723">723</a>             <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint2, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint3, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint4,
-<a class="jxr_linenumber" name="L724" href="#L724">724</a>             <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint1, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint2, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint3,
-<a class="jxr_linenumber" name="L725" href="#L725">725</a>             <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint4) <strong class="jxr_keyword">throws</strong> CoincidentPointsException {
-<a class="jxr_linenumber" name="L726" href="#L726">726</a>         List&lt;Point3D&gt; inputPoints = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L727" href="#L727">727</a>         inputPoints.add(inputPoint1);
-<a class="jxr_linenumber" name="L728" href="#L728">728</a>         inputPoints.add(inputPoint2);
-<a class="jxr_linenumber" name="L729" href="#L729">729</a>         inputPoints.add(inputPoint3);
-<a class="jxr_linenumber" name="L730" href="#L730">730</a>         inputPoints.add(inputPoint4);
-<a class="jxr_linenumber" name="L731" href="#L731">731</a>         
-<a class="jxr_linenumber" name="L732" href="#L732">732</a>         List&lt;Point3D&gt; outputPoints = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L733" href="#L733">733</a>         outputPoints.add(outputPoint1);
-<a class="jxr_linenumber" name="L734" href="#L734">734</a>         outputPoints.add(outputPoint2);
-<a class="jxr_linenumber" name="L735" href="#L735">735</a>         outputPoints.add(outputPoint3);
-<a class="jxr_linenumber" name="L736" href="#L736">736</a>         outputPoints.add(outputPoint4);
-<a class="jxr_linenumber" name="L737" href="#L737">737</a>         
-<a class="jxr_linenumber" name="L738" href="#L738">738</a>         <a href="../../../com/irurueta/geometry/estimators/EuclideanTransformation3DEstimator.html">EuclideanTransformation3DEstimator</a> estimator =
-<a class="jxr_linenumber" name="L739" href="#L739">739</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/estimators/EuclideanTransformation3DEstimator.html">EuclideanTransformation3DEstimator</a>(inputPoints,
-<a class="jxr_linenumber" name="L740" href="#L740">740</a>                 outputPoints);
-<a class="jxr_linenumber" name="L741" href="#L741">741</a>         
-<a class="jxr_linenumber" name="L742" href="#L742">742</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L743" href="#L743">743</a>             estimator.estimate(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L744" href="#L744">744</a>         } <strong class="jxr_keyword">catch</strong> (LockedException | NotReadyException ignore) {
-<a class="jxr_linenumber" name="L745" href="#L745">745</a>             <em class="jxr_comment">//never thrown</em>
-<a class="jxr_linenumber" name="L746" href="#L746">746</a>         }        
-<a class="jxr_linenumber" name="L747" href="#L747">747</a>     }
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> }
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> <em class="jxr_javadoccomment">     * @param outputPoint4 4th transformed point corresponding to 4th input</em>
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">     * point.</em>
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">     * @throws CoincidentPointsException raised if transformation cannot be</em>
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">     * estimated for some reason (point configuration degeneracy, duplicate</em>
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> <em class="jxr_javadoccomment">     * points or numerical instabilities).</em>
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L724" href="#L724">724</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> internalSetTransformationFromPoints(<a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint1, 
+<a class="jxr_linenumber" name="L725" href="#L725">725</a>             <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint2, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint3, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> inputPoint4,
+<a class="jxr_linenumber" name="L726" href="#L726">726</a>             <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint1, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint2, <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint3,
+<a class="jxr_linenumber" name="L727" href="#L727">727</a>             <a href="../../../com/irurueta/geometry/Point3D.html">Point3D</a> outputPoint4) <strong class="jxr_keyword">throws</strong> CoincidentPointsException {
+<a class="jxr_linenumber" name="L728" href="#L728">728</a>         List&lt;Point3D&gt; inputPoints = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L729" href="#L729">729</a>         inputPoints.add(inputPoint1);
+<a class="jxr_linenumber" name="L730" href="#L730">730</a>         inputPoints.add(inputPoint2);
+<a class="jxr_linenumber" name="L731" href="#L731">731</a>         inputPoints.add(inputPoint3);
+<a class="jxr_linenumber" name="L732" href="#L732">732</a>         inputPoints.add(inputPoint4);
+<a class="jxr_linenumber" name="L733" href="#L733">733</a>         
+<a class="jxr_linenumber" name="L734" href="#L734">734</a>         List&lt;Point3D&gt; outputPoints = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L735" href="#L735">735</a>         outputPoints.add(outputPoint1);
+<a class="jxr_linenumber" name="L736" href="#L736">736</a>         outputPoints.add(outputPoint2);
+<a class="jxr_linenumber" name="L737" href="#L737">737</a>         outputPoints.add(outputPoint3);
+<a class="jxr_linenumber" name="L738" href="#L738">738</a>         outputPoints.add(outputPoint4);
+<a class="jxr_linenumber" name="L739" href="#L739">739</a>         
+<a class="jxr_linenumber" name="L740" href="#L740">740</a>         <a href="../../../com/irurueta/geometry/estimators/EuclideanTransformation3DEstimator.html">EuclideanTransformation3DEstimator</a> estimator =
+<a class="jxr_linenumber" name="L741" href="#L741">741</a>                 <strong class="jxr_keyword">new</strong> <a href="../../../com/irurueta/geometry/estimators/EuclideanTransformation3DEstimator.html">EuclideanTransformation3DEstimator</a>(inputPoints,
+<a class="jxr_linenumber" name="L742" href="#L742">742</a>                 outputPoints);
+<a class="jxr_linenumber" name="L743" href="#L743">743</a>         
+<a class="jxr_linenumber" name="L744" href="#L744">744</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L745" href="#L745">745</a>             estimator.estimate(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L746" href="#L746">746</a>         } <strong class="jxr_keyword">catch</strong> (LockedException | NotReadyException ignore) {
+<a class="jxr_linenumber" name="L747" href="#L747">747</a>             <em class="jxr_comment">//never thrown</em>
+<a class="jxr_linenumber" name="L748" href="#L748">748</a>         }        
+<a class="jxr_linenumber" name="L749" href="#L749">749</a>     }
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017&#x2013;2019. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017&#x2013;2020. All rights reserved.</div>
 </body>
 </html>

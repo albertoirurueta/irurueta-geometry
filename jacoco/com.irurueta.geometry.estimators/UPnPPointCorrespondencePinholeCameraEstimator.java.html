@@ -785,7 +785,7 @@ public class UPnPPointCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L785">            solution = computePossibleSolutionWithPoseAndReprojectionError(</span>
                     controlCameraPoints, focalLength);        
 <span class="fc" id="L787">            mSolutions.add(solution);        </span>
-<span class="fc" id="L788">        } catch (GeometryException ignore) {</span>
+<span class="nc" id="L788">        } catch (GeometryException ignore) {</span>
             //if it fails, solution is not added
 <span class="fc" id="L790">        }</span>
         

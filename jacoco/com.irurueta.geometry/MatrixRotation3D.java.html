@@ -853,8 +853,8 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
 <span class="pc bpc" id="L853" title="1 of 2 branches missed.">                m.getColumns() != ROTATION3D_HOM_MATRIX_COLS) {</span>
 <span class="fc" id="L854">            throw new InvalidRotationMatrixException();</span>
         }
-<span class="pc bpc" id="L856" title="1 of 2 branches missed.">        if (!isValidRotationMatrix(m, threshold)) {</span>
-<span class="nc" id="L857">            throw new InvalidRotationMatrixException();</span>
+<span class="fc bfc" id="L856" title="All 2 branches covered.">        if (!isValidRotationMatrix(m, threshold)) {</span>
+<span class="fc" id="L857">            throw new InvalidRotationMatrixException();</span>
         }
 <span class="pc bpc" id="L859" title="1 of 2 branches missed.">        if (Math.abs(m.getElementAt(3, 0)) &gt; threshold ||</span>
 <span class="pc bpc" id="L860" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 1)) &gt; threshold ||</span>
@@ -862,8 +862,8 @@ public class MatrixRotation3D extends Rotation3D implements Serializable {
 <span class="pc bpc" id="L862" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(0, 3)) &gt; threshold ||</span>
 <span class="pc bpc" id="L863" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(1, 3)) &gt; threshold ||</span>
 <span class="pc bpc" id="L864" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(2, 3)) &gt; threshold ||</span>
-<span class="fc bfc" id="L865" title="All 2 branches covered.">                Math.abs(m.getElementAt(3, 3) - 1.0) &gt; threshold) {</span>
-<span class="fc" id="L866">            throw new InvalidRotationMatrixException();</span>
+<span class="pc bpc" id="L865" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 3) - 1.0) &gt; threshold) {</span>
+<span class="nc" id="L866">            throw new InvalidRotationMatrixException();</span>
         }
         
 <span class="fc" id="L869">        internalMatrix = m.getSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1, </span>

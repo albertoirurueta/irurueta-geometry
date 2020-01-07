@@ -23,7 +23,7 @@ under the License.
     <link>https://github.com/albertoirurueta/irurueta-geometry</link>
     <description>com.irurueta:irurueta-geometry - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2017 - 2019</copyright>
+    <copyright>&#169;2017 - 2020</copyright>
     <item>
       <title>File: 339,
              Errors: 11341,
@@ -144,20 +144,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  59
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator.java">com/irurueta/geometry/estimators/RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator.java</a>
                 </td>
                 <td>
@@ -168,6 +154,20 @@ under the License.
                 </td>
                 <td>
                   70
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  59
                 </td>
               </tr>
                           <tr>
@@ -382,20 +382,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.ProjectiveTransformation2DRefiner.java">com/irurueta/geometry/refiners/ProjectiveTransformation2DRefiner.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.java">com/irurueta/geometry/estimators/PROSACUPnPPointCorrespondencePinholeCameraRobustEstimator.java</a>
                 </td>
                 <td>
@@ -410,7 +396,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.NonDecomposedPointCorrespondencePinholeCameraRefiner.java">com/irurueta/geometry/refiners/NonDecomposedPointCorrespondencePinholeCameraRefiner.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.ProjectiveTransformation2DRefiner.java">com/irurueta/geometry/refiners/ProjectiveTransformation2DRefiner.java</a>
                 </td>
                 <td>
                   0
@@ -419,7 +405,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  14
+                  1
                 </td>
               </tr>
                           <tr>
@@ -434,6 +420,20 @@ under the License.
                 </td>
                 <td>
                   56
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.NonDecomposedPointCorrespondencePinholeCameraRefiner.java">com/irurueta/geometry/refiners/NonDecomposedPointCorrespondencePinholeCameraRefiner.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  14
                 </td>
               </tr>
                           <tr>
@@ -466,20 +466,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.java">com/irurueta/geometry/estimators/PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  65
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.Box2D.java">com/irurueta/geometry/Box2D.java</a>
                 </td>
                 <td>
@@ -504,6 +490,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.java">com/irurueta/geometry/estimators/PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  65
                 </td>
               </tr>
                           <tr>
@@ -732,20 +732,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PointCorrespondenceProjectiveTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/PointCorrespondenceProjectiveTransformation2DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.MSACConicRobustEstimator.java">com/irurueta/geometry/estimators/MSACConicRobustEstimator.java</a>
                 </td>
                 <td>
@@ -756,6 +742,20 @@ under the License.
                 </td>
                 <td>
                   52
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PointCorrespondenceProjectiveTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/PointCorrespondenceProjectiveTransformation2DRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -1012,6 +1012,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.TriangulatorException.java">com/irurueta/geometry/TriangulatorException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.Triangle2D.java">com/irurueta/geometry/Triangle2D.java</a>
                 </td>
                 <td>
@@ -1041,20 +1055,6 @@ under the License.
                           <tr>
                 <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.DualQuadricRobustEstimatorListener.java">com/irurueta/geometry/estimators/DualQuadricRobustEstimatorListener.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.TriangulatorException.java">com/irurueta/geometry/TriangulatorException.java</a>
                 </td>
                 <td>
                   0
@@ -1418,20 +1418,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.InliersDataRefiner.java">com/irurueta/geometry/refiners/InliersDataRefiner.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.MSACPointCorrespondenceAffineTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/MSACPointCorrespondenceAffineTransformation2DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -1442,6 +1428,20 @@ under the License.
                 </td>
                 <td>
                   53
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.InliersDataRefiner.java">com/irurueta/geometry/refiners/InliersDataRefiner.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -1488,6 +1488,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  68
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.LMedSEuclideanTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/LMedSEuclideanTransformation3DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -1512,20 +1526,6 @@ under the License.
                 </td>
                 <td>
                   1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/PROMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  68
                 </td>
               </tr>
                           <tr>
@@ -1581,7 +1581,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  5
+                  6
                 </td>
               </tr>
                           <tr>
@@ -1642,20 +1642,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.HomogeneousPoint2DRefiner.java">com/irurueta/geometry/refiners/HomogeneousPoint2DRefiner.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  5
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.Transformation3D.java">com/irurueta/geometry/Transformation3D.java</a>
                 </td>
                 <td>
@@ -1680,6 +1666,20 @@ under the License.
                 </td>
                 <td>
                   95
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.HomogeneousPoint2DRefiner.java">com/irurueta/geometry/refiners/HomogeneousPoint2DRefiner.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
                 </td>
               </tr>
                           <tr>
@@ -1726,20 +1726,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.EuclideanTransformation3DRefiner.java">com/irurueta/geometry/refiners/EuclideanTransformation3DRefiner.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  28
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.Rectangle.java">com/irurueta/geometry/Rectangle.java</a>
                 </td>
                 <td>
@@ -1768,7 +1754,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.RANSACConicRobustEstimator.java">com/irurueta/geometry/estimators/RANSACConicRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.EuclideanTransformation3DRefiner.java">com/irurueta/geometry/refiners/EuclideanTransformation3DRefiner.java</a>
                 </td>
                 <td>
                   0
@@ -1777,7 +1763,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  52
+                  27
                 </td>
               </tr>
                           <tr>
@@ -1792,6 +1778,20 @@ under the License.
                 </td>
                 <td>
                   7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.RANSACConicRobustEstimator.java">com/irurueta/geometry/estimators/RANSACConicRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  52
                 </td>
               </tr>
                           <tr>
@@ -1894,7 +1894,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.RANSACSphereRobustEstimator.java">com/irurueta/geometry/estimators/RANSACSphereRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.Point3D.java">com/irurueta/geometry/Point3D.java</a>
                 </td>
                 <td>
                   0
@@ -1903,7 +1903,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  49
+                  2
                 </td>
               </tr>
                           <tr>
@@ -1922,7 +1922,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.Point3D.java">com/irurueta/geometry/Point3D.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.RANSACSphereRobustEstimator.java">com/irurueta/geometry/estimators/RANSACSphereRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -1931,21 +1931,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROMedSMetricTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/PROMedSMetricTransformation2DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  59
+                  49
                 </td>
               </tr>
                           <tr>
@@ -1960,6 +1946,20 @@ under the License.
                 </td>
                 <td>
                   57
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROMedSMetricTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/PROMedSMetricTransformation2DRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  59
                 </td>
               </tr>
                           <tr>
@@ -2244,20 +2244,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.RANSACPoint3DRobustEstimator.java">com/irurueta/geometry/estimators/RANSACPoint3DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  46
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -2272,7 +2258,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.MetricTransformation2DRobustEstimatorListener.java">com/irurueta/geometry/estimators/MetricTransformation2DRobustEstimatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.RANSACPoint3DRobustEstimator.java">com/irurueta/geometry/estimators/RANSACPoint3DRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -2281,7 +2267,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  46
                 </td>
               </tr>
                           <tr>
@@ -2296,6 +2282,20 @@ under the License.
                 </td>
                 <td>
                   1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.MetricTransformation2DRobustEstimatorListener.java">com/irurueta/geometry/estimators/MetricTransformation2DRobustEstimatorListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -2510,20 +2510,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.PinholeCameraRefiner.java">com/irurueta/geometry/refiners/PinholeCameraRefiner.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  44
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.AxisRotation3D.java">com/irurueta/geometry/AxisRotation3D.java</a>
                 </td>
                 <td>
@@ -2534,6 +2520,20 @@ under the License.
                 </td>
                 <td>
                   121
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.PinholeCameraRefiner.java">com/irurueta/geometry/refiners/PinholeCameraRefiner.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  44
                 </td>
               </tr>
                           <tr>
@@ -2552,20 +2552,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.NormalizerException.java">com/irurueta/geometry/estimators/NormalizerException.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.EuclideanTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/EuclideanTransformation3DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -2576,6 +2562,20 @@ under the License.
                 </td>
                 <td>
                   1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.NormalizerException.java">com/irurueta/geometry/estimators/NormalizerException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -2734,6 +2734,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.Triangulator2D.java">com/irurueta/geometry/Triangulator2D.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROMedSMetricTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/PROMedSMetricTransformation3DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -2758,20 +2772,6 @@ under the License.
                 </td>
                 <td>
                   0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.Triangulator2D.java">com/irurueta/geometry/Triangulator2D.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
                 </td>
               </tr>
                           <tr>
@@ -2860,20 +2860,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROMedSPoint2DRobustEstimator.java">com/irurueta/geometry/estimators/PROMedSPoint2DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  48
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.EuclideanTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/EuclideanTransformation2DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -2898,6 +2884,20 @@ under the License.
                 </td>
                 <td>
                   2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROMedSPoint2DRobustEstimator.java">com/irurueta/geometry/estimators/PROMedSPoint2DRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  48
                 </td>
               </tr>
                           <tr>
@@ -2944,20 +2944,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.LineCorrespondenceProjectiveTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/LineCorrespondenceProjectiveTransformation2DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.EuclideanTransformation2D.java">com/irurueta/geometry/EuclideanTransformation2D.java</a>
                 </td>
                 <td>
@@ -2968,6 +2954,20 @@ under the License.
                 </td>
                 <td>
                   11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.LineCorrespondenceProjectiveTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/LineCorrespondenceProjectiveTransformation2DRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -3014,20 +3014,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROMedSLine2DRobustEstimator.java">com/irurueta/geometry/estimators/PROMedSLine2DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  48
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -3038,6 +3024,20 @@ under the License.
                 </td>
                 <td>
                   60
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROMedSLine2DRobustEstimator.java">com/irurueta/geometry/estimators/PROMedSLine2DRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  48
                 </td>
               </tr>
                           <tr>
@@ -3098,7 +3098,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.DLTPointCorrespondencePinholeCameraRobustEstimator.java">com/irurueta/geometry/estimators/DLTPointCorrespondencePinholeCameraRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.EuclideanTransformation2DEstimatorListener.java">com/irurueta/geometry/estimators/EuclideanTransformation2DEstimatorListener.java</a>
                 </td>
                 <td>
                   0
@@ -3112,7 +3112,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.EuclideanTransformation2DEstimatorListener.java">com/irurueta/geometry/estimators/EuclideanTransformation2DEstimatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.DLTPointCorrespondencePinholeCameraRobustEstimator.java">com/irurueta/geometry/estimators/DLTPointCorrespondencePinholeCameraRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -3224,20 +3224,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.RefinerListener.java">com/irurueta/geometry/refiners/RefinerListener.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.MSACMetricTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/MSACMetricTransformation3DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -3252,7 +3238,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.java">com/irurueta/geometry/estimators/PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.RefinerListener.java">com/irurueta/geometry/refiners/RefinerListener.java</a>
                 </td>
                 <td>
                   0
@@ -3261,7 +3247,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  73
+                  0
                 </td>
               </tr>
                           <tr>
@@ -3276,6 +3262,20 @@ under the License.
                 </td>
                 <td>
                   49
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.java">com/irurueta/geometry/estimators/PROMedSDLTPointCorrespondencePinholeCameraRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  73
                 </td>
               </tr>
                           <tr>
@@ -3364,20 +3364,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.java">com/irurueta/geometry/estimators/MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  72
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.Rotation3D.java">com/irurueta/geometry/Rotation3D.java</a>
                 </td>
                 <td>
@@ -3392,7 +3378,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.PointCorrespondenceAffineTransformation2DRefiner.java">com/irurueta/geometry/refiners/PointCorrespondenceAffineTransformation2DRefiner.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.java">com/irurueta/geometry/estimators/MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -3401,7 +3387,21 @@ under the License.
                   0
                 </td>
                 <td>
-                  22
+                  72
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.Polygon2D.java">com/irurueta/geometry/Polygon2D.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  16
                 </td>
               </tr>
                           <tr>
@@ -3420,7 +3420,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.Polygon2D.java">com/irurueta/geometry/Polygon2D.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.PointCorrespondenceAffineTransformation2DRefiner.java">com/irurueta/geometry/refiners/PointCorrespondenceAffineTransformation2DRefiner.java</a>
                 </td>
                 <td>
                   0
@@ -3429,7 +3429,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  16
+                  22
                 </td>
               </tr>
                           <tr>
@@ -3616,20 +3616,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.PairMatchesAndInliersDataRefiner.java">com/irurueta/geometry/refiners/PairMatchesAndInliersDataRefiner.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -3644,7 +3630,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.Ellipse.java">com/irurueta/geometry/Ellipse.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.PairMatchesAndInliersDataRefiner.java">com/irurueta/geometry/refiners/PairMatchesAndInliersDataRefiner.java</a>
                 </td>
                 <td>
                   0
@@ -3653,7 +3639,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  447
+                  0
                 </td>
               </tr>
                           <tr>
@@ -3668,6 +3654,20 @@ under the License.
                 </td>
                 <td>
                   4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.Ellipse.java">com/irurueta/geometry/Ellipse.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  447
                 </td>
               </tr>
                           <tr>
@@ -3826,20 +3826,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROSACEuclideanTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/PROSACEuclideanTransformation2DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  59
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/LMedSPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -3854,6 +3840,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROSACEuclideanTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/PROSACEuclideanTransformation2DRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  59
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.java">com/irurueta/geometry/estimators/MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.java</a>
                 </td>
                 <td>
@@ -3864,6 +3864,20 @@ under the License.
                 </td>
                 <td>
                   72
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.DualQuadric.java">com/irurueta/geometry/DualQuadric.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  178
                 </td>
               </tr>
                           <tr>
@@ -3896,7 +3910,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.DualQuadric.java">com/irurueta/geometry/DualQuadric.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java</a>
                 </td>
                 <td>
                   0
@@ -3905,7 +3919,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  178
+                  65
                 </td>
               </tr>
                           <tr>
@@ -3920,20 +3934,6 @@ under the License.
                 </td>
                 <td>
                   12
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/RANSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  65
                 </td>
               </tr>
                           <tr>
@@ -3980,20 +3980,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.AffineTransformation3DRefiner.java">com/irurueta/geometry/refiners/AffineTransformation3DRefiner.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROMedSCircleRobustEstimator.java">com/irurueta/geometry/estimators/PROMedSCircleRobustEstimator.java</a>
                 </td>
                 <td>
@@ -4004,6 +3990,20 @@ under the License.
                 </td>
                 <td>
                   50
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.SphereRobustEstimatorListener.java">com/irurueta/geometry/estimators/SphereRobustEstimatorListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -4022,7 +4022,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.SphereRobustEstimatorListener.java">com/irurueta/geometry/estimators/SphereRobustEstimatorListener.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.AffineTransformation3DRefiner.java">com/irurueta/geometry/refiners/AffineTransformation3DRefiner.java</a>
                 </td>
                 <td>
                   0
@@ -4031,7 +4031,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  1
                 </td>
               </tr>
                           <tr>
@@ -4120,20 +4120,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.MSACLineCorrespondenceAffineTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/MSACLineCorrespondenceAffineTransformation2DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  57
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/PROSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -4144,6 +4130,20 @@ under the License.
                 </td>
                 <td>
                   64
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.MSACLineCorrespondenceAffineTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/MSACLineCorrespondenceAffineTransformation2DRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  57
                 </td>
               </tr>
                           <tr>
@@ -4162,20 +4162,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.Point3DRobustEstimator.java">com/irurueta/geometry/estimators/Point3DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -4186,6 +4172,20 @@ under the License.
                 </td>
                 <td>
                   61
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.Point3DRobustEstimator.java">com/irurueta/geometry/estimators/Point3DRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
                 </td>
               </tr>
                           <tr>
@@ -4274,20 +4274,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.LMedSPointCorrespondenceAffineTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/LMedSPointCorrespondenceAffineTransformation3DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  55
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/MSACPointCorrespondenceProjectiveTransformation3DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -4298,6 +4284,20 @@ under the License.
                 </td>
                 <td>
                   63
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.LMedSPointCorrespondenceAffineTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/LMedSPointCorrespondenceAffineTransformation3DRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  55
                 </td>
               </tr>
                           <tr>
@@ -4456,20 +4456,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.LineCorrespondenceProjectiveTransformation2DRefiner.java">com/irurueta/geometry/refiners/LineCorrespondenceProjectiveTransformation2DRefiner.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  12
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.SamplesAndInliersDataRefiner.java">com/irurueta/geometry/refiners/SamplesAndInliersDataRefiner.java</a>
                 </td>
                 <td>
@@ -4480,6 +4466,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.LineCorrespondenceProjectiveTransformation2DRefiner.java">com/irurueta/geometry/refiners/LineCorrespondenceProjectiveTransformation2DRefiner.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
                 </td>
               </tr>
                           <tr>
@@ -4526,7 +4526,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.MetricTransformation2DRefiner.java">com/irurueta/geometry/refiners/MetricTransformation2DRefiner.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.InvalidPinholeCameraIntrinsicParametersException.java">com/irurueta/geometry/InvalidPinholeCameraIntrinsicParametersException.java</a>
                 </td>
                 <td>
                   0
@@ -4535,7 +4535,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  16
+                  0
                 </td>
               </tr>
                           <tr>
@@ -4554,7 +4554,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.InvalidPinholeCameraIntrinsicParametersException.java">com/irurueta/geometry/InvalidPinholeCameraIntrinsicParametersException.java</a>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.MetricTransformation2DRefiner.java">com/irurueta/geometry/refiners/MetricTransformation2DRefiner.java</a>
                 </td>
                 <td>
                   0
@@ -4563,7 +4563,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  0
+                  16
                 </td>
               </tr>
                           <tr>
@@ -4638,20 +4638,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROSACMetricTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/PROSACMetricTransformation3DRobustEstimator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  61
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PinholeCameraRobustEstimator.java">com/irurueta/geometry/estimators/PinholeCameraRobustEstimator.java</a>
                 </td>
                 <td>
@@ -4662,6 +4648,20 @@ under the License.
                 </td>
                 <td>
                   45
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.PROSACMetricTransformation3DRobustEstimator.java">com/irurueta/geometry/estimators/PROSACMetricTransformation3DRobustEstimator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  61
                 </td>
               </tr>
                           <tr>
@@ -4694,20 +4694,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.PointCorrespondenceAffineTransformation3DRefiner.java">com/irurueta/geometry/refiners/PointCorrespondenceAffineTransformation3DRefiner.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  26
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.ProjectiveTransformation2D.java">com/irurueta/geometry/ProjectiveTransformation2D.java</a>
                 </td>
                 <td>
@@ -4718,6 +4704,20 @@ under the License.
                 </td>
                 <td>
                   168
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.PointCorrespondenceAffineTransformation3DRefiner.java">com/irurueta/geometry/refiners/PointCorrespondenceAffineTransformation3DRefiner.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  26
                 </td>
               </tr>
                           <tr>
@@ -4764,20 +4764,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.DecomposedLinePlaneCorrespondencePinholeCameraRefiner.java">com/irurueta/geometry/refiners/DecomposedLinePlaneCorrespondencePinholeCameraRefiner.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  19
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.estimators.LineCorrespondenceAffineTransformation2DRobustEstimator.java">com/irurueta/geometry/estimators/LineCorrespondenceAffineTransformation2DRobustEstimator.java</a>
                 </td>
                 <td>
@@ -4788,6 +4774,20 @@ under the License.
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://github.com/albertoirurueta/irurueta-geometry/checkstyle.html#com.irurueta.geometry.refiners.DecomposedLinePlaneCorrespondencePinholeCameraRefiner.java">com/irurueta/geometry/refiners/DecomposedLinePlaneCorrespondencePinholeCameraRefiner.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  19
                 </td>
               </tr>
                       </tbody>

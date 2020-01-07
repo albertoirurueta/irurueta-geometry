@@ -477,8 +477,8 @@
 <a class="jxr_linenumber" name="L469" href="#L469">469</a>                 mRefineCamera.normalize();
 <a class="jxr_linenumber" name="L470" href="#L470">470</a>                 
 <a class="jxr_linenumber" name="L471" href="#L471">471</a>                 <strong class="jxr_keyword">double</strong>[] startPoint = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[REFINE_DIMS];
-<a class="jxr_linenumber" name="L472" href="#L472">472</a>                 <a href="../../../../com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a> listener =
-<a class="jxr_linenumber" name="L473" href="#L473">473</a>                         <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a>();
+<a class="jxr_linenumber" name="L472" href="#L472">472</a>                 <a href="../../../../com/irurueta/geometry/refiners/DecomposedLinePlaneCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a> listener =
+<a class="jxr_linenumber" name="L473" href="#L473">473</a>                         <strong class="jxr_keyword">new</strong> <a href="../../../../com/irurueta/geometry/refiners/DecomposedLinePlaneCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a>();
 <a class="jxr_linenumber" name="L474" href="#L474">474</a>                 PowellMultiOptimizer optimizer = <strong class="jxr_keyword">new</strong> PowellMultiOptimizer(
 <a class="jxr_linenumber" name="L475" href="#L475">475</a>                         listener,
 <a class="jxr_linenumber" name="L476" href="#L476">476</a>                         PowellMultiOptimizer.DEFAULT_TOLERANCE);
@@ -521,7 +521,7 @@
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">     * @throws NumericalException if something failed.</em>
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L515" href="#L515">515</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> refinementStepPowell(PowellMultiOptimizer optimizer, 
-<a class="jxr_linenumber" name="L516" href="#L516">516</a>             <a href="../../../../com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a> listener,
+<a class="jxr_linenumber" name="L516" href="#L516">516</a>             <a href="../../../../com/irurueta/geometry/refiners/DecomposedLinePlaneCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a> listener,
 <a class="jxr_linenumber" name="L517" href="#L517">517</a>             <strong class="jxr_keyword">double</strong>[] startPoint, <strong class="jxr_keyword">double</strong> weight) <strong class="jxr_keyword">throws</strong> GeometryException, NumericalException {
 <a class="jxr_linenumber" name="L518" href="#L518">518</a>         
 <a class="jxr_linenumber" name="L519" href="#L519">519</a>         listener.weight = weight;
@@ -546,7 +546,7 @@
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">     * A weight can be provided so that required parameters are slowly drawn</em>
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">     * to suggested values.</em>
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L541" href="#L541">541</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/irurueta/geometry/refiners/DecomposedPointCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a> 
+<a class="jxr_linenumber" name="L541" href="#L541">541</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/irurueta/geometry/refiners/DecomposedLinePlaneCorrespondencePinholeCameraRefiner.html">RefinementMultiDimensionFunctionEvaluatorListener</a> 
 <a class="jxr_linenumber" name="L542" href="#L542">542</a>             <strong class="jxr_keyword">implements</strong> MultiDimensionFunctionEvaluatorListener {
 <a class="jxr_linenumber" name="L543" href="#L543">543</a>         <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">         * Weight to slowly draw parameters to suggested values.</em>
@@ -568,6 +568,6 @@
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017&#x2013;2019. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017&#x2013;2020. All rights reserved.</div>
 </body>
 </html>

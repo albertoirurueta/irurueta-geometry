@@ -837,7 +837,7 @@
 <a class="jxr_linenumber" name="L829" href="#L829">829</a> 
 <a class="jxr_linenumber" name="L830" href="#L830">830</a>             <em class="jxr_comment">//check correctness</em>
 <a class="jxr_linenumber" name="L831" href="#L831">831</a>             assertEquals(Math.abs(transformation.getRotation().getRotationAngle()),
-<a class="jxr_linenumber" name="L832" href="#L832">832</a>                     Math.abs(combinedRotation.getRotationAngle()), ABSOLUTE_ERROR);
+<a class="jxr_linenumber" name="L832" href="#L832">832</a>                     Math.abs(combinedRotation.getRotationAngle()), 5.0 * ABSOLUTE_ERROR);
 <a class="jxr_linenumber" name="L833" href="#L833">833</a>             assertEquals(
 <a class="jxr_linenumber" name="L834" href="#L834">834</a>                     Math.abs(transformation.getRotation().getRotationAxis()[0]),
 <a class="jxr_linenumber" name="L835" href="#L835">835</a>                     Math.abs(combinedRotation.getRotationAxis()[0]),
@@ -5470,6 +5470,6 @@
 <a class="jxr_linenumber" name="L5462" href="#L5462">5462</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017&#x2013;2019. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017&#x2013;2020. All rights reserved.</div>
 </body>
 </html>

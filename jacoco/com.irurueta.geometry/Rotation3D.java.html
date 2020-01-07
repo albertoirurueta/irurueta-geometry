@@ -399,13 +399,13 @@ public abstract class Rotation3D {
 <span class="fc bfc" id="L399" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
 <span class="fc" id="L400">            throw new IllegalArgumentException();</span>
         }
-        
+
         try {
-<span class="fc bfc" id="L404" title="All 2 branches covered.">            return Utils.isOrthogonal(m, threshold) &amp;&amp; </span>
-<span class="fc bfc" id="L405" title="All 2 branches covered.">                (Math.abs(Utils.det(m)) - 1.0) &lt; threshold;</span>
+<span class="fc bfc" id="L404" title="All 2 branches covered.">            return Utils.isOrthogonal(m, threshold) &amp;&amp;</span>
+<span class="fc bfc" id="L405" title="All 2 branches covered.">                Math.abs(Math.abs(Utils.det(m)) - 1.0) &lt; threshold;</span>
 <span class="nc" id="L406">        } catch (AlgebraException e) {</span>
 <span class="nc" id="L407">            return false;</span>
-        }        
+        }
     }
     
     /**

@@ -407,13 +407,13 @@
 <a class="jxr_linenumber" name="L399" href="#L399">399</a>         <strong class="jxr_keyword">if</strong> (threshold &lt; MIN_THRESHOLD) {
 <a class="jxr_linenumber" name="L400" href="#L400">400</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
 <a class="jxr_linenumber" name="L401" href="#L401">401</a>         }
-<a class="jxr_linenumber" name="L402" href="#L402">402</a>         
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
 <a class="jxr_linenumber" name="L403" href="#L403">403</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L404" href="#L404">404</a>             <strong class="jxr_keyword">return</strong> Utils.isOrthogonal(m, threshold) &amp;&amp; 
-<a class="jxr_linenumber" name="L405" href="#L405">405</a>                 (Math.abs(Utils.det(m)) - 1.0) &lt; threshold;
+<a class="jxr_linenumber" name="L404" href="#L404">404</a>             <strong class="jxr_keyword">return</strong> Utils.isOrthogonal(m, threshold) &amp;&amp;
+<a class="jxr_linenumber" name="L405" href="#L405">405</a>                 Math.abs(Math.abs(Utils.det(m)) - 1.0) &lt; threshold;
 <a class="jxr_linenumber" name="L406" href="#L406">406</a>         } <strong class="jxr_keyword">catch</strong> (AlgebraException e) {
 <a class="jxr_linenumber" name="L407" href="#L407">407</a>             <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L408" href="#L408">408</a>         }        
+<a class="jxr_linenumber" name="L408" href="#L408">408</a>         }
 <a class="jxr_linenumber" name="L409" href="#L409">409</a>     }
 <a class="jxr_linenumber" name="L410" href="#L410">410</a>     
 <a class="jxr_linenumber" name="L411" href="#L411">411</a>     <em class="jxr_javadoccomment">/**</em>
@@ -755,6 +755,6 @@
 <a class="jxr_linenumber" name="L747" href="#L747">747</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017&#x2013;2019. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017&#x2013;2020. All rights reserved.</div>
 </body>
 </html>

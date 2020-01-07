@@ -554,8 +554,8 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
 <span class="pc bpc" id="L554" title="1 of 2 branches missed.">                m.getColumns() != HOM_COORDS) {</span>
 <span class="fc" id="L555">            throw new InvalidRotationMatrixException();</span>
         }
-<span class="pc bpc" id="L557" title="1 of 2 branches missed.">        if (!MatrixRotation3D.isValidRotationMatrix(m, threshold)) {</span>
-<span class="nc" id="L558">            throw new InvalidRotationMatrixException();</span>
+<span class="fc bfc" id="L557" title="All 2 branches covered.">        if (!MatrixRotation3D.isValidRotationMatrix(m, threshold)) {</span>
+<span class="fc" id="L558">            throw new InvalidRotationMatrixException();</span>
         }
 <span class="pc bpc" id="L560" title="1 of 2 branches missed.">        if (Math.abs(m.getElementAt(3, 0)) &gt; threshold ||</span>
 <span class="pc bpc" id="L561" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 1)) &gt; threshold ||</span>
@@ -563,8 +563,8 @@ public class AxisRotation3D extends Rotation3D implements Serializable {
 <span class="pc bpc" id="L563" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(0, 3)) &gt; threshold ||</span>
 <span class="pc bpc" id="L564" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(1, 3)) &gt; threshold ||</span>
 <span class="pc bpc" id="L565" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(2, 3)) &gt; threshold ||</span>
-<span class="fc bfc" id="L566" title="All 2 branches covered.">                Math.abs(m.getElementAt(3, 3) - 1.0) &gt; threshold) {</span>
-<span class="fc" id="L567">            throw new InvalidRotationMatrixException();</span>
+<span class="pc bpc" id="L566" title="1 of 2 branches missed.">                Math.abs(m.getElementAt(3, 3) - 1.0) &gt; threshold) {</span>
+<span class="nc" id="L567">            throw new InvalidRotationMatrixException();</span>
         }
         
 <span class="fc" id="L570">        fromInhomogeneousMatrix(m.getSubmatrix(0, 0, INHOM_COORDS - 1, </span>

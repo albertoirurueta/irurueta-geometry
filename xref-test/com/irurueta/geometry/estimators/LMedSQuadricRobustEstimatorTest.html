@@ -448,7 +448,7 @@
 <a class="jxr_linenumber" name="L440" href="#L440">440</a>             <em class="jxr_comment">//check correctness of estimation by checking that all points</em>
 <a class="jxr_linenumber" name="L441" href="#L441">441</a>             <em class="jxr_comment">//are within the estimated quadric locus</em>
 <a class="jxr_linenumber" name="L442" href="#L442">442</a>             <strong class="jxr_keyword">for</strong> (Point3D p : points) {
-<a class="jxr_linenumber" name="L443" href="#L443">443</a>                 assertTrue(quadric2.isLocus(p, ABSOLUTE_ERROR));
+<a class="jxr_linenumber" name="L443" href="#L443">443</a>                 assertTrue(quadric2.isLocus(p, 10.0 * ABSOLUTE_ERROR));
 <a class="jxr_linenumber" name="L444" href="#L444">444</a>             }
 <a class="jxr_linenumber" name="L445" href="#L445">445</a>         }
 <a class="jxr_linenumber" name="L446" href="#L446">446</a>     }
@@ -521,6 +521,6 @@
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2017&#x2013;2019. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2017&#x2013;2020. All rights reserved.</div>
 </body>
 </html>

@@ -387,20 +387,22 @@ public class EuclideanTransformation3D extends Transformation3D
 <span class="pc bpc" id="L387" title="1 of 4 branches missed.">        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {</span>
 <span class="fc" id="L388">            throw new IllegalArgumentException();</span>
         }
+
+<span class="fc" id="L391">        m.initialize(0.0);</span>
         
         //set rotation        
-<span class="fc" id="L392">        m.setSubmatrix(0, 0, </span>
+<span class="fc" id="L394">        m.setSubmatrix(0, 0, </span>
                 Rotation3D.INHOM_COORDS - 1,
                 Rotation3D.INHOM_COORDS - 1,
-<span class="fc" id="L395">                rotation.asInhomogeneousMatrix());</span>
+<span class="fc" id="L397">                rotation.asInhomogeneousMatrix());</span>
         
         //set translation
-<span class="fc" id="L398">        m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
+<span class="fc" id="L400">        m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1, </span>
                 HOM_COORDS - 1, translation);
         
         //set last element
-<span class="fc" id="L402">        m.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);        </span>
-<span class="fc" id="L403">    }</span>
+<span class="fc" id="L404">        m.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);        </span>
+<span class="fc" id="L405">    }</span>
 
     /**
      * Transforms input point using this transformation and stores the result
@@ -410,13 +412,13 @@ public class EuclideanTransformation3D extends Transformation3D
      */
     @Override
     public void transform(Point3D inputPoint, Point3D outputPoint) {
-<span class="fc" id="L413">        inputPoint.normalize();</span>
-<span class="fc" id="L414">        rotation.rotate(inputPoint, outputPoint);</span>
-<span class="fc" id="L415">        outputPoint.setInhomogeneousCoordinates(</span>
-<span class="fc" id="L416">                outputPoint.getInhomX() + translation[0], </span>
-<span class="fc" id="L417">                outputPoint.getInhomY() + translation[1], </span>
-<span class="fc" id="L418">                outputPoint.getInhomZ() + translation[2]);</span>
-<span class="fc" id="L419">    }</span>
+<span class="fc" id="L415">        inputPoint.normalize();</span>
+<span class="fc" id="L416">        rotation.rotate(inputPoint, outputPoint);</span>
+<span class="fc" id="L417">        outputPoint.setInhomogeneousCoordinates(</span>
+<span class="fc" id="L418">                outputPoint.getInhomX() + translation[0], </span>
+<span class="fc" id="L419">                outputPoint.getInhomY() + translation[1], </span>
+<span class="fc" id="L420">                outputPoint.getInhomZ() + translation[2]);</span>
+<span class="fc" id="L421">    }</span>
 
     /**
      * Transforms a quadric using this transformation and stores the result into
@@ -438,29 +440,29 @@ public class EuclideanTransformation3D extends Transformation3D
         //Hence:
         // transformedQuadric = T^-1' * quadric * T^-1
 
-<span class="fc" id="L441">        inputQuadric.normalize();</span>
+<span class="fc" id="L443">        inputQuadric.normalize();</span>
         
-<span class="fc" id="L443">        Matrix q = inputQuadric.asMatrix();</span>
-<span class="fc" id="L444">        Matrix invT = inverseAndReturnNew().asMatrix();</span>
+<span class="fc" id="L445">        Matrix q = inputQuadric.asMatrix();</span>
+<span class="fc" id="L446">        Matrix invT = inverseAndReturnNew().asMatrix();</span>
         //normalize transformation matrix invT to increase accuracy
-<span class="fc" id="L446">        double norm = Utils.normF(invT);</span>
-<span class="fc" id="L447">        invT.multiplyByScalar(1.0 / norm);</span>
+<span class="fc" id="L448">        double norm = Utils.normF(invT);</span>
+<span class="fc" id="L449">        invT.multiplyByScalar(1.0 / norm);</span>
         
-<span class="fc" id="L449">        Matrix m = invT.transposeAndReturnNew();</span>
+<span class="fc" id="L451">        Matrix m = invT.transposeAndReturnNew();</span>
         try {
-<span class="fc" id="L451">            m.multiply(q);</span>
-<span class="fc" id="L452">            m.multiply(invT);</span>
-<span class="nc" id="L453">        } catch (WrongSizeException ignore) {</span>
+<span class="fc" id="L453">            m.multiply(q);</span>
+<span class="fc" id="L454">            m.multiply(invT);</span>
+<span class="nc" id="L455">        } catch (WrongSizeException ignore) {</span>
             //never happens
-<span class="fc" id="L455">        }</span>
+<span class="fc" id="L457">        }</span>
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
-<span class="fc" id="L459">        norm = Utils.normF(m);</span>
-<span class="fc" id="L460">        m.multiplyByScalar(1.0 / norm);</span>
+<span class="fc" id="L461">        norm = Utils.normF(m);</span>
+<span class="fc" id="L462">        m.multiplyByScalar(1.0 / norm);</span>
         
-<span class="fc" id="L462">        outputQuadric.setParameters(m);</span>
-<span class="fc" id="L463">    }</span>
+<span class="fc" id="L464">        outputQuadric.setParameters(m);</span>
+<span class="fc" id="L465">    }</span>
 
     /**
      * Transforms a dual quadric using this transformation and stores the result
@@ -482,29 +484,29 @@ public class EuclideanTransformation3D extends Transformation3D
         //transformed plane: T^-1'*plane
         //transformed dual quadric: T * dualQuadric * T'
 
-<span class="fc" id="L485">        inputDualQuadric.normalize();</span>
+<span class="fc" id="L487">        inputDualQuadric.normalize();</span>
         
-<span class="fc" id="L487">        Matrix dualQ = inputDualQuadric.asMatrix();</span>
-<span class="fc" id="L488">        Matrix t = asMatrix();</span>
+<span class="fc" id="L489">        Matrix dualQ = inputDualQuadric.asMatrix();</span>
+<span class="fc" id="L490">        Matrix t = asMatrix();</span>
         //normalize transformation matrix T to increase accuracy
-<span class="fc" id="L490">        double norm = Utils.normF(t);</span>
-<span class="fc" id="L491">        t.multiplyByScalar(1.0 / norm);</span>
+<span class="fc" id="L492">        double norm = Utils.normF(t);</span>
+<span class="fc" id="L493">        t.multiplyByScalar(1.0 / norm);</span>
 
-<span class="fc" id="L493">        Matrix transT = t.transposeAndReturnNew();</span>
+<span class="fc" id="L495">        Matrix transT = t.transposeAndReturnNew();</span>
         try {
-<span class="fc" id="L495">            t.multiply(dualQ);</span>
-<span class="fc" id="L496">            t.multiply(transT);</span>
-<span class="nc" id="L497">        } catch (WrongSizeException ignore) {</span>
+<span class="fc" id="L497">            t.multiply(dualQ);</span>
+<span class="fc" id="L498">            t.multiply(transT);</span>
+<span class="nc" id="L499">        } catch (WrongSizeException ignore) {</span>
             //never happens
-<span class="fc" id="L499">        }</span>
+<span class="fc" id="L501">        }</span>
         
         //normalize resulting m matrix to increase accuracy so that it can be
         //considered symmetric
-<span class="fc" id="L503">        norm = Utils.normF(t);</span>
-<span class="fc" id="L504">        t.multiplyByScalar(1.0 / norm);</span>
+<span class="fc" id="L505">        norm = Utils.normF(t);</span>
+<span class="fc" id="L506">        t.multiplyByScalar(1.0 / norm);</span>
         
-<span class="fc" id="L506">        outputDualQuadric.setParameters(t);</span>
-<span class="fc" id="L507">    }</span>
+<span class="fc" id="L508">        outputDualQuadric.setParameters(t);</span>
+<span class="fc" id="L509">    }</span>
 
     /**
      * Transforms provided input plane using this transformation and stores the
@@ -521,24 +523,24 @@ public class EuclideanTransformation3D extends Transformation3D
         //- transformedPlane = T^-1'*plane
         //- transformedpoint = T*point
         
-<span class="fc" id="L524">        inputPlane.normalize();</span>
+<span class="fc" id="L526">        inputPlane.normalize();</span>
         
-<span class="fc" id="L526">        Matrix invT = inverseAndReturnNew().asMatrix();        </span>
-<span class="fc" id="L527">        Matrix plane = Matrix.newFromArray(inputPlane.asArray());</span>
+<span class="fc" id="L528">        Matrix invT = inverseAndReturnNew().asMatrix();        </span>
+<span class="fc" id="L529">        Matrix plane = Matrix.newFromArray(inputPlane.asArray());</span>
 
         //normalize transformation matrix T to increase accuracy
-<span class="fc" id="L530">        double norm = Utils.normF(invT);</span>
-<span class="fc" id="L531">        invT.multiplyByScalar(1.0 / norm);</span>
+<span class="fc" id="L532">        double norm = Utils.normF(invT);</span>
+<span class="fc" id="L533">        invT.multiplyByScalar(1.0 / norm);</span>
 
-<span class="fc" id="L533">        invT.transpose();</span>
+<span class="fc" id="L535">        invT.transpose();</span>
         try {
-<span class="fc" id="L535">            invT.multiply(plane);</span>
-<span class="nc" id="L536">        } catch (WrongSizeException ignore) {</span>
+<span class="fc" id="L537">            invT.multiply(plane);</span>
+<span class="nc" id="L538">        } catch (WrongSizeException ignore) {</span>
             //never happens
-<span class="fc" id="L538">        }</span>
+<span class="fc" id="L540">        }</span>
         
-<span class="fc" id="L540">        outputPlane.setParameters(invT.getBuffer());</span>
-<span class="fc" id="L541">    }</span>
+<span class="fc" id="L542">        outputPlane.setParameters(invT.getBuffer());</span>
+<span class="fc" id="L543">    }</span>
     
     /**
      * Transforms a camera using this transformation and stores the result into
@@ -551,22 +553,22 @@ public class EuclideanTransformation3D extends Transformation3D
     public void transform(PinholeCamera inputCamera,
             PinholeCamera outputCamera) {
         
-<span class="fc" id="L554">        inputCamera.normalize();</span>
+<span class="fc" id="L556">        inputCamera.normalize();</span>
         
-<span class="fc" id="L556">        Matrix invT = inverseAndReturnNew().asMatrix();</span>
-<span class="fc" id="L557">        Matrix c = inputCamera.getInternalMatrix();</span>
+<span class="fc" id="L558">        Matrix invT = inverseAndReturnNew().asMatrix();</span>
+<span class="fc" id="L559">        Matrix c = inputCamera.getInternalMatrix();</span>
         try {
-<span class="fc" id="L559">            c.multiply(invT);</span>
-<span class="fc" id="L560">            outputCamera.setInternalMatrix(c);</span>
-<span class="pc" id="L561">        } catch (WrongSizeException ignore) { /* never thrown */ }        </span>
-<span class="fc" id="L562">    }</span>
+<span class="fc" id="L561">            c.multiply(invT);</span>
+<span class="fc" id="L562">            outputCamera.setInternalMatrix(c);</span>
+<span class="pc" id="L563">        } catch (WrongSizeException ignore) { /* never thrown */ }        </span>
+<span class="fc" id="L564">    }</span>
 
     /**
      * Converts this transformation into a metric transformation.
      * @return this transformation converted into a metric transformation.
      */    
     public MetricTransformation3D toMetric() {
-<span class="fc" id="L569">        return new MetricTransformation3D(rotation, translation, </span>
+<span class="fc" id="L571">        return new MetricTransformation3D(rotation, translation, </span>
                 MetricTransformation3D.DEFAULT_SCALE);
     }
     
@@ -574,8 +576,8 @@ public class EuclideanTransformation3D extends Transformation3D
      * Inverses this transformation.
      */
     public void inverse() {
-<span class="fc" id="L577">        inverse(this);</span>
-<span class="fc" id="L578">    }</span>
+<span class="fc" id="L579">        inverse(this);</span>
+<span class="fc" id="L580">    }</span>
     
     /**
      * Computes the inverse of this transformation and returns the result as a
@@ -583,9 +585,9 @@ public class EuclideanTransformation3D extends Transformation3D
      * @return inverse transformation.
      */
     public Transformation3D inverseAndReturnNew() {
-<span class="fc" id="L586">        EuclideanTransformation3D result = new EuclideanTransformation3D();</span>
-<span class="fc" id="L587">        inverse(result);</span>
-<span class="fc" id="L588">        return result;</span>
+<span class="fc" id="L588">        EuclideanTransformation3D result = new EuclideanTransformation3D();</span>
+<span class="fc" id="L589">        inverse(result);</span>
+<span class="fc" id="L590">        return result;</span>
     }
 
     /**
@@ -595,8 +597,8 @@ public class EuclideanTransformation3D extends Transformation3D
      * @param transformation Transformation to be combined with.
      */
     public void combine(EuclideanTransformation3D transformation) {
-<span class="fc" id="L598">        combine(transformation, this);</span>
-<span class="fc" id="L599">    }</span>
+<span class="fc" id="L600">        combine(transformation, this);</span>
+<span class="fc" id="L601">    }</span>
     
     /**
      * Combines this transformation with provided transformation and returns
@@ -610,9 +612,9 @@ public class EuclideanTransformation3D extends Transformation3D
     public EuclideanTransformation3D combineAndReturnNew(
             EuclideanTransformation3D transformation) {
         
-<span class="fc" id="L613">        EuclideanTransformation3D result = new EuclideanTransformation3D();</span>
-<span class="fc" id="L614">        combine(transformation, result);</span>
-<span class="fc" id="L615">        return result;</span>
+<span class="fc" id="L615">        EuclideanTransformation3D result = new EuclideanTransformation3D();</span>
+<span class="fc" id="L616">        combine(transformation, result);</span>
+<span class="fc" id="L617">        return result;</span>
     }
     
     /**
@@ -638,10 +640,10 @@ public class EuclideanTransformation3D extends Transformation3D
             Point3D inputPoint2, Point3D inputPoint3, Point3D inputPoint4,
             Point3D outputPoint1, Point3D outputPoint2, Point3D outputPoint3,
             Point3D outputPoint4) throws CoincidentPointsException {
-<span class="fc" id="L641">        internalSetTransformationFromPoints(inputPoint1, inputPoint2, </span>
+<span class="fc" id="L643">        internalSetTransformationFromPoints(inputPoint1, inputPoint2, </span>
                 inputPoint3, inputPoint4, outputPoint1, outputPoint2, 
                 outputPoint3, outputPoint4);
-<span class="fc" id="L644">    }</span>
+<span class="fc" id="L646">    }</span>
 
     /**
      * Computes the inverse of this transformation and stores the result in
@@ -654,20 +656,20 @@ public class EuclideanTransformation3D extends Transformation3D
         //--&gt; x = R'*x' - R'*t
 
         //reverse rotation
-<span class="fc" id="L657">        result.rotation = rotation.inverseRotationAndReturnNew();</span>
+<span class="fc" id="L659">        result.rotation = rotation.inverseRotationAndReturnNew();</span>
 
         //reverse translation
-<span class="fc" id="L660">        Matrix t = Matrix.newFromArray(translation, true);</span>
-<span class="fc" id="L661">        t.multiplyByScalar(-1.0);</span>
-<span class="fc" id="L662">        Matrix invRot = result.rotation.asInhomogeneousMatrix();</span>
+<span class="fc" id="L662">        Matrix t = Matrix.newFromArray(translation, true);</span>
+<span class="fc" id="L663">        t.multiplyByScalar(-1.0);</span>
+<span class="fc" id="L664">        Matrix invRot = result.rotation.asInhomogeneousMatrix();</span>
         try {
-<span class="fc" id="L664">            invRot.multiply(t);</span>
-<span class="nc" id="L665">        } catch (WrongSizeException ignore) {</span>
+<span class="fc" id="L666">            invRot.multiply(t);</span>
+<span class="nc" id="L667">        } catch (WrongSizeException ignore) {</span>
             //never happens
-<span class="fc" id="L667">        }</span>
+<span class="fc" id="L669">        }</span>
 
-<span class="fc" id="L669">        result.translation = invRot.toArray();</span>
-<span class="fc" id="L670">    }</span>
+<span class="fc" id="L671">        result.translation = invRot.toArray();</span>
+<span class="fc" id="L672">    }</span>
 
     /**
      * Combines this transformation with provided input transformation and 
@@ -685,20 +687,20 @@ public class EuclideanTransformation3D extends Transformation3D
         
         try {
             //we do translation first, because this.rotation might change later
-<span class="fc" id="L688">            Matrix r1 = this.rotation.asInhomogeneousMatrix();</span>
-<span class="fc" id="L689">            Matrix t2 = Matrix.newFromArray(inputTransformation.translation, true);</span>
-<span class="fc" id="L690">            r1.multiply(t2); //this is R1 * t2</span>
+<span class="fc" id="L690">            Matrix r1 = this.rotation.asInhomogeneousMatrix();</span>
+<span class="fc" id="L691">            Matrix t2 = Matrix.newFromArray(inputTransformation.translation, true);</span>
+<span class="fc" id="L692">            r1.multiply(t2); //this is R1 * t2</span>
                   
-<span class="fc" id="L692">            ArrayUtils.sum(r1.toArray(), this.translation,</span>
+<span class="fc" id="L694">            ArrayUtils.sum(r1.toArray(), this.translation,</span>
                     outputTransformation.translation);
             
-<span class="fc" id="L695">            outputTransformation.rotation = this.rotation.combineAndReturnNew(</span>
+<span class="fc" id="L697">            outputTransformation.rotation = this.rotation.combineAndReturnNew(</span>
                     inputTransformation.rotation);
         
-<span class="nc" id="L698">        } catch (WrongSizeException ignore) {</span>
+<span class="nc" id="L700">        } catch (WrongSizeException ignore) {</span>
             //never happens
-<span class="fc" id="L700">        }</span>
-<span class="fc" id="L701">    }  </span>
+<span class="fc" id="L702">        }</span>
+<span class="fc" id="L703">    }  </span>
     
     /**
      * Estimates this transformation internal parameters by using 4 
@@ -723,27 +725,27 @@ public class EuclideanTransformation3D extends Transformation3D
             Point3D inputPoint2, Point3D inputPoint3, Point3D inputPoint4,
             Point3D outputPoint1, Point3D outputPoint2, Point3D outputPoint3,
             Point3D outputPoint4) throws CoincidentPointsException {
-<span class="fc" id="L726">        List&lt;Point3D&gt; inputPoints = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L727">        inputPoints.add(inputPoint1);</span>
-<span class="fc" id="L728">        inputPoints.add(inputPoint2);</span>
-<span class="fc" id="L729">        inputPoints.add(inputPoint3);</span>
-<span class="fc" id="L730">        inputPoints.add(inputPoint4);</span>
+<span class="fc" id="L728">        List&lt;Point3D&gt; inputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L729">        inputPoints.add(inputPoint1);</span>
+<span class="fc" id="L730">        inputPoints.add(inputPoint2);</span>
+<span class="fc" id="L731">        inputPoints.add(inputPoint3);</span>
+<span class="fc" id="L732">        inputPoints.add(inputPoint4);</span>
         
-<span class="fc" id="L732">        List&lt;Point3D&gt; outputPoints = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L733">        outputPoints.add(outputPoint1);</span>
-<span class="fc" id="L734">        outputPoints.add(outputPoint2);</span>
-<span class="fc" id="L735">        outputPoints.add(outputPoint3);</span>
-<span class="fc" id="L736">        outputPoints.add(outputPoint4);</span>
+<span class="fc" id="L734">        List&lt;Point3D&gt; outputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L735">        outputPoints.add(outputPoint1);</span>
+<span class="fc" id="L736">        outputPoints.add(outputPoint2);</span>
+<span class="fc" id="L737">        outputPoints.add(outputPoint3);</span>
+<span class="fc" id="L738">        outputPoints.add(outputPoint4);</span>
         
-<span class="fc" id="L738">        EuclideanTransformation3DEstimator estimator =</span>
+<span class="fc" id="L740">        EuclideanTransformation3DEstimator estimator =</span>
                 new EuclideanTransformation3DEstimator(inputPoints,
                 outputPoints);
         
         try {
-<span class="fc" id="L743">            estimator.estimate(this);</span>
-<span class="nc" id="L744">        } catch (LockedException | NotReadyException ignore) {</span>
+<span class="fc" id="L745">            estimator.estimate(this);</span>
+<span class="nc" id="L746">        } catch (LockedException | NotReadyException ignore) {</span>
             //never thrown
-<span class="fc" id="L746">        }        </span>
-<span class="fc" id="L747">    }</span>
+<span class="fc" id="L748">        }        </span>
+<span class="fc" id="L749">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
