@@ -254,11 +254,11 @@ public class LMedSPlaneRobustEstimator extends PlaneRobustEstimator{
             @Override
             public void onEstimateProgressChange(
                     RobustEstimator&lt;Plane&gt; estimator, float progress) {
-<span class="pc bpc" id="L257" title="1 of 2 branches missed.">                if (mListener != null) {</span>
-<span class="fc" id="L258">                    mListener.onEstimateProgressChange(</span>
+<span class="nc bnc" id="L257" title="All 2 branches missed.">                if (mListener != null) {</span>
+<span class="nc" id="L258">                    mListener.onEstimateProgressChange(</span>
                             LMedSPlaneRobustEstimator.this, progress);
                 }
-<span class="fc" id="L261">            }</span>
+<span class="nc" id="L261">            }</span>
         });
         
         try {

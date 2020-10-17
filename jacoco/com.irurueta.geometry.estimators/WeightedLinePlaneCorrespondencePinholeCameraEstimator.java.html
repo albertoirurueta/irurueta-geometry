@@ -513,11 +513,11 @@ public class WeightedLinePlaneCorrespondencePinholeCameraEstimator extends
 <span class="fc" id="L513">            SingularValueDecomposer decomposer = new SingularValueDecomposer(a);</span>
 <span class="fc" id="L514">            decomposer.decompose();</span>
             
-<span class="pc bpc" id="L516" title="1 of 2 branches missed.">            if (decomposer.getNullity() &gt; 1) {</span>
+<span class="fc bfc" id="L516" title="All 2 branches covered.">            if (decomposer.getNullity() &gt; 1) {</span>
                 //line/plane configuration is degenerate and exists a linear 
                 //combination of possible pinhole cameras (i.e. solution is not
                 //unique up to scale)
-<span class="nc" id="L520">                throw new PinholeCameraEstimatorException();</span>
+<span class="fc" id="L520">                throw new PinholeCameraEstimatorException();</span>
             }
             
 <span class="fc" id="L523">            Matrix v = decomposer.getV();</span>
