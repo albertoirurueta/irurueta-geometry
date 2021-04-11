@@ -152,7 +152,7 @@ public abstract class CircleRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public CircleRobustEstimator(final List<Point2D> points) {
+    protected CircleRobustEstimator(final List<Point2D> points) {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
         mMaxIterations = DEFAULT_MAX_ITERATIONS;
@@ -168,7 +168,7 @@ public abstract class CircleRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public CircleRobustEstimator(final CircleRobustEstimatorListener listener,
+    protected CircleRobustEstimator(final CircleRobustEstimatorListener listener,
                                  final List<Point2D> points) {
         mListener = listener;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;

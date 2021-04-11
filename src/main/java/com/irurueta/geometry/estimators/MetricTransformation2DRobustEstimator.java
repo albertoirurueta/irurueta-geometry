@@ -297,7 +297,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public MetricTransformation2DRobustEstimator(
+    protected MetricTransformation2DRobustEstimator(
             final List<Point2D> inputPoints, final List<Point2D> outputPoints,
             final boolean weakMinimumSizeAllowed) {
         this();
@@ -322,7 +322,7 @@ public abstract class MetricTransformation2DRobustEstimator {
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public MetricTransformation2DRobustEstimator(
+    protected MetricTransformation2DRobustEstimator(
             final MetricTransformation2DRobustEstimatorListener listener,
             final List<Point2D> inputPoints, final List<Point2D> outputPoints,
             final boolean weakMinimumSizeAllowed) {

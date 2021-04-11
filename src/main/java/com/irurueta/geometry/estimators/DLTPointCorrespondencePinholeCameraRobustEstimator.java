@@ -62,7 +62,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    public DLTPointCorrespondencePinholeCameraRobustEstimator(
+    protected DLTPointCorrespondencePinholeCameraRobustEstimator(
             final PinholeCameraRobustEstimatorListener listener) {
         super(listener);
     }
@@ -83,7 +83,7 @@ public abstract class DLTPointCorrespondencePinholeCameraRobustEstimator
      *                                  the same size or their size is smaller than required minimum size
      *                                  (6 correspondences).
      */
-    public DLTPointCorrespondencePinholeCameraRobustEstimator(
+    protected DLTPointCorrespondencePinholeCameraRobustEstimator(
             final PinholeCameraRobustEstimatorListener listener,
             final List<Point3D> points3D, final List<Point2D> points2D) {
         super(listener, points3D, points2D);

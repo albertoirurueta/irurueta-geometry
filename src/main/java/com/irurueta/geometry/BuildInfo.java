@@ -15,7 +15,6 @@
  */
 package com.irurueta.geometry;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.text.SimpleDateFormat;

@@ -109,7 +109,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public PointCorrespondenceProjectiveTransformation3DRobustEstimator(
+    protected PointCorrespondenceProjectiveTransformation3DRobustEstimator(
             final ProjectiveTransformation3DRobustEstimatorListener listener,
             final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
         super(listener);
@@ -639,6 +639,7 @@ public abstract class PointCorrespondenceProjectiveTransformation3DRobustEstimat
      * @return solution after refinement (if requested) or the provided
      * non-refined solution if not requested or refinement failed.
      */
+    @SuppressWarnings("DuplicatedCode")
     protected ProjectiveTransformation3D attemptRefine(
             final ProjectiveTransformation3D transformation) {
         if (mRefineResult) {

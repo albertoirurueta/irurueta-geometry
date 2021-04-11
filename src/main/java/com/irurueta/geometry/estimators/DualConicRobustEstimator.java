@@ -167,7 +167,7 @@ public abstract class DualConicRobustEstimator {
      * @throws IllegalArgumentException if provided lsit of lines don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public DualConicRobustEstimator(final List<Line2D> lines) {
+    protected DualConicRobustEstimator(final List<Line2D> lines) {
         mProgressDelta = DEFAULT_PROGRESS_DELTA;
         mConfidence = DEFAULT_CONFIDENCE;
         mMaxIterations = DEFAULT_MAX_ITERATIONS;
@@ -183,7 +183,7 @@ public abstract class DualConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have a
      *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public DualConicRobustEstimator(final DualConicRobustEstimatorListener listener,
+    protected DualConicRobustEstimator(final DualConicRobustEstimatorListener listener,
                                     final List<Line2D> lines) {
         mListener = listener;
         mProgressDelta = DEFAULT_PROGRESS_DELTA;

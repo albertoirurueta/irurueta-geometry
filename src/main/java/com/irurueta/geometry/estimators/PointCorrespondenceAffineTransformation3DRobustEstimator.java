@@ -109,7 +109,7 @@ public abstract class PointCorrespondenceAffineTransformation3DRobustEstimator
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    public PointCorrespondenceAffineTransformation3DRobustEstimator(
+    protected PointCorrespondenceAffineTransformation3DRobustEstimator(
             final AffineTransformation3DRobustEstimatorListener listener,
             final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
         super(listener);

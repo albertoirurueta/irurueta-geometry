@@ -93,7 +93,7 @@ public abstract class ProjectiveTransformation3DRefiner<S1, S2> extends
      * @param refinementStandardDeviation standard deviation used for
      *                                    Levenberg-Marquardt fitting.
      */
-    public ProjectiveTransformation3DRefiner(
+    protected ProjectiveTransformation3DRefiner(
             final ProjectiveTransformation3D initialEstimation,
             final boolean keepCovariance, final InliersData inliersData, final List<S1> samples1,
             final List<S2> samples2, final double refinementStandardDeviation) {
